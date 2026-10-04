@@ -1,70 +1,94 @@
 # Chạy dự án local
 
-Redis và RabbitMQ chạy bằng Docker. Backend, admin, storefront, AI service và visual-search service chạy trực tiếp trong các cửa sổ PowerShell riêng.
+Tài liệu này mô tả runtime mặc định theo kiến trúc V2. Trong giai đoạn database mới còn trắng, không bật Flyway, seed, hybrid search hoặc visual search cho tới khi baseline migration V2 được duyệt.
 
-## Chuẩn bị lần đầu
+## Phạm vi runtime
 
-Mở Docker Desktop, sau đó chạy:
+Core stack:
+
+- `backend`: Commerce Core, cổng `8082`.
+- `frontend/storefront`: Storefront, cổng `3000`.
+- `frontend/admin`: Admin, cổng `3001`.
+- Redis và RabbitMQ từ Docker Compose.
+
+Legacy AI đang được giữ để chuyển đổi dần:
+
+- `chatbot-service`: Assistant hiện tại đồng thời chứa một phần hybrid text search.
+- `visual-search-service`: image embedding và visual search hiện tại.
+
+Experimental, không chạy mặc định và không phải dependency của core stack:
+
+- `ai_forecasting_service`.
+- `chatbot-admin-service`.
+- Các màn hình Admin Copilot/AI Insights, được khóa bởi `NEXT_PUBLIC_ADMIN_AI_WORKSPACES_ENABLED=false`.
+
+## Chuẩn bị cấu hình
+
+Không commit file chứa secret. Tạo file local từ các mẫu:
 
 ```powershell
-.\setup-local-tools.cmd
+Copy-Item backend/.env.example backend/.env
+Copy-Item frontend/admin/.env.local.example frontend/admin/.env.local
+Copy-Item frontend/storefront/.env.local.example frontend/storefront/.env.local
+Copy-Item chatbot-service/.env.example chatbot-service/.env
+Copy-Item visual-search-service/.env.example visual-search-service/.env
 ```
 
-Cấu hình local được đọc từ:
+Trong thời gian chưa có baseline V2, giữ:
 
-- `backend/.env`
-- `frontend/admin/.env.local`
-- `frontend/storefront/.env.local`
+```dotenv
+SPRING_FLYWAY_ENABLED=false
+APP_SEED_ENABLED=false
+PRODUCT_HYBRID_SEARCH_ENABLED=false
+VISUAL_SEARCH_ENABLED=false
+NEXT_PUBLIC_ADMIN_AI_WORKSPACES_ENABLED=false
+```
 
-Các file này chứa thông tin riêng và không được commit. Các file `*.example` là cấu hình mẫu an toàn để đưa lên Git.
+`backend/.env` có thể chứa kết nối Supabase integration/demo, nhưng test tự động và phát triển schema phải dùng PostgreSQL local/Testcontainers. Không chạy test hoặc reset dữ liệu trên Supabase dùng chung.
 
-## Chạy từng tác vụ
-
-### 1. Redis và RabbitMQ
+## Chạy hạ tầng local
 
 ```powershell
 docker compose up -d redis rabbitmq
+docker compose ps
 ```
 
-Dừng hạ tầng local:
+RabbitMQ Management: <http://127.0.0.1:15672>. Credential mặc định trong Compose chỉ dành cho máy local; phải đổi khi triển khai ra môi trường khác.
+
+## Chạy core stack
+
+Mỗi tiến trình chạy trong một cửa sổ PowerShell riêng:
 
 ```powershell
-docker compose stop redis rabbitmq
-```
-
-### 2. Backend
-
-Mở một cửa sổ PowerShell riêng:
-
-```powershell
+.\setup-local-tools.cmd
 .\start-backend.cmd
-```
-
-### 3. Admin
-
-Mở một cửa sổ PowerShell riêng:
-
-```powershell
 .\start-admin.cmd
-```
-
-### 4. Storefront
-
-Mở một cửa sổ PowerShell riêng:
-
-```powershell
 .\start-storefront.cmd
 ```
 
-### 5. AI forecasting (khi cần)
+Địa chỉ:
+
+- Storefront: <http://localhost:3000>
+- Admin: <http://localhost:3001>
+- Backend: <http://localhost:8082>
+- Backend health: <http://localhost:8082/actuator/health>
+
+Lưu ý: backend chưa thể khởi động nghiệp vụ trên Supabase trắng khi `ddl-auto=validate` mà baseline V2 chưa tồn tại. Đây là trạng thái chủ động trong giai đoạn thiết kế database.
+
+## Chạy các AI service legacy khi cần đối chiếu
+
+### Chatbot và hybrid text search
+
+Chỉ bật sau khi database/migration legacy tương ứng đã sẵn sàng và token nội bộ khớp giữa backend với service:
 
 ```powershell
-.\start-ai-service.ps1
+.\start-chatbot-service.ps1
+.\start-product-search-indexer.ps1
 ```
 
-### 6. Visual search (khi cần)
+Giữ `PRODUCT_HYBRID_SEARCH_ENABLED=false` cho tới khi coverage embedding và benchmark acceptance đạt yêu cầu.
 
-Sao chép `visual-search-service/.env.example` thành `visual-search-service/.env`, điền cấu hình local và chỉ đặt `VISUAL_SEARCH_ENABLED=true` sau khi các giá trị bắt buộc đã có. Sau đó:
+### Visual search
 
 ```powershell
 cd visual-search-service
@@ -73,59 +97,28 @@ python -m venv .venv
 .\.venv\Scripts\python scripts\run_api.py
 ```
 
-Mở thêm một cửa sổ PowerShell cho worker (bắt buộc với index/backfill):
+Worker chạy trong cửa sổ khác:
 
 ```powershell
 cd visual-search-service
-python -m app.worker
+.\.venv\Scripts\python -m app.worker
 ```
 
-Sau khi backend publisher và worker đều healthy, kiểm tra backfill ở chế độ dry-run
-trước khi enqueue. Không chạy lại backfill production nếu coverage đã đầy đủ:
+Không chạy backfill có ghi dữ liệu trước khi kiểm tra đúng database, model version, Cloudinary allowlist và chế độ dry-run.
+
+## Experimental services
+
+Forecasting và Admin Copilot chỉ được khởi động khi thực hiện thí nghiệm riêng:
 
 ```powershell
-cd visual-search-service
-python scripts/backfill_embeddings.py
+.\start-ai-service.ps1
+.\start-chatbot-admin-service.ps1
 ```
 
-Quy trình benchmark, rollout theo nhóm nhỏ và rollback nằm tại
-`docs/visual-search-rollout.md`.
+Chúng không được thêm vào quy trình khởi động mặc định, smoke test bắt buộc hoặc tiêu chí demo chính.
 
-RabbitMQ Management chỉ được bind vào loopback cho môi trường local: <http://127.0.0.1:15672>. Tài khoản mặc định local là `visual_search` / `change-me`; hãy đặt `RABBITMQ_DEFAULT_USER` và `RABBITMQ_DEFAULT_PASS` khác khi dùng ngoài máy phát triển.
+## Dừng dịch vụ
 
-RabbitMQ tự nạp topology từ `rabbitmq/definitions.json`: exchange `catalog.events`, main queue, ba retry queue và DLQ. Nếu thay đổi topology trên một volume đã tồn tại, hãy dùng Management UI để kiểm tra trước; không xóa volume chứa message nếu chưa sao lưu hoặc chưa xác nhận dữ liệu có thể bỏ.
-
-Dừng backend, admin, storefront hoặc AI service bằng `Ctrl+C` trong đúng cửa sổ đang chạy tác vụ đó.
-
-## Địa chỉ local
-
-- Storefront: <http://localhost:3000>
-- Admin: <http://localhost:3001>
-- AI forecasting: <http://localhost:8081>
-- Backend: <http://localhost:8082>
-- Backend health: <http://localhost:8082/actuator/health>
-- Redis: `localhost:6379`
-- RabbitMQ AMQP: `localhost:5672`
-- RabbitMQ Management: <http://127.0.0.1:15672>
-- Visual search: <http://localhost:8090/health/ready>
-
-Dữ liệu chính nằm trên Supabase. Docker Compose không chạy PostgreSQL, backend, frontend hoặc visual-search service.
-# Product hybrid search
-
-Product hybrid search requires Redis and RabbitMQ from Docker, the customer
-chatbot service, its indexing worker, and the Spring backend.
-
-```powershell
-docker compose up -d redis rabbitmq
-.\start-chatbot-service.ps1
-.\start-product-search-indexer.ps1
-.\start-backend.ps1
-```
-
-Use the corresponding `.cmd` launchers when starting from Command Prompt.
-`PRODUCT_SEARCH_INTERNAL_TOKEN` must be present and identical in
-`backend/.env` and `chatbot-service/.env`. Keep
-`PRODUCT_HYBRID_SEARCH_ENABLED=false` until migrations, embedding coverage,
-the queue consumer, and the acceptance benchmark have been verified.
-For local development, keep `PRODUCT_SEARCH_TIMEOUT_SECONDS=12` in
-`backend/.env` so a cold semantic-search request has enough time to finish.
+- Dừng tiến trình ứng dụng bằng `Ctrl+C` trong đúng terminal.
+- Dừng hạ tầng bằng `docker compose stop redis rabbitmq`.
+- Không xóa Docker volume hoặc dữ liệu Supabase/Cloudinary khi chưa xác nhận phạm vi và có backup.

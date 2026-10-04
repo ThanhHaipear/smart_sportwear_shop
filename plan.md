@@ -903,10 +903,10 @@ Tiêu chí hoàn thành:
 
 ### Giai đoạn 1 - Thu gọn phạm vi và chuẩn hóa môi trường
 
-- [ ] Chuyển `ai_forecasting_service` sang khu vực experimental hoặc tắt khỏi runtime mặc định.
-- [ ] Chuyển `chatbot-admin-service` sang experimental hoặc tắt khỏi runtime mặc định.
-- [ ] Dọn log/runtime artifacts khỏi root và cập nhật `.gitignore`.
-- [ ] Chuẩn hóa `.env.example` cho từng service.
+- [x] Đánh dấu `ai_forecasting_service` là experimental và loại khỏi runtime mặc định; tạm giữ đường dẫn legacy để tránh path-only change lớn.
+- [x] Đánh dấu `chatbot-admin-service` là experimental và loại khỏi runtime mặc định.
+- [x] Dọn log/runtime artifacts khỏi root; `.gitignore` đã chặn `*.log` và build/cache artifacts.
+- [x] Chuẩn hóa `.env.example` cho core backend, Admin và các AI service đang được đối chiếu; feature AI/seed/migration mặc định tắt.
 - [ ] Loại bỏ secret mặc định nguy hiểm.
 - [ ] Chuẩn hóa phiên bản Node/Next cho hai frontend nếu khả thi.
 - [ ] Tạo Dockerfile chuẩn cho các service chính.
