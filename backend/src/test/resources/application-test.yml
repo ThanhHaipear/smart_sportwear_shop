@@ -25,17 +25,6 @@ spring:
 # PaymentIntegrationTest), so only a deterministic, non-blank secret matters
 # here, not a real merchant credential.
 app:
-  jwt:
-    access-secret: test-only-access-secret-at-least-32-bytes-long
-    refresh-secret: test-only-refresh-secret-at-least-32-bytes-long
-  ai:
-    sync-secret: test-only-ai-sync-secret
-  product-search:
-    internal-token: test-only-product-search-token
-  visual-search:
-    internal-token: test-only-visual-search-token
-  seed:
-    demo-password: test-only-demo-password
   # Never let a developer's backend/.env route automated tests to real SMTP.
   # Notification integration tests verify persisted delivery state using the
   # deterministic logging provider.

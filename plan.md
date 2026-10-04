@@ -907,8 +907,7 @@ Tiêu chí hoàn thành:
 - [x] Đánh dấu `chatbot-admin-service` là experimental và loại khỏi runtime mặc định.
 - [x] Dọn log/runtime artifacts khỏi root; `.gitignore` đã chặn `*.log` và build/cache artifacts.
 - [x] Chuẩn hóa `.env.example` cho core backend, Admin và các AI service đang được đối chiếu; feature AI/seed/migration mặc định tắt.
-- [x] Loại bỏ default application secret cho JWT, AI sync, VNPay, seed và internal search token; test dùng giá trị test-only rõ ràng.
-- [ ] Loại bỏ credential RabbitMQ mặc định dùng chung; bổ sung root `.env.example` và hướng dẫn khởi tạo local trước khi triển khai ngoài máy cá nhân.
+- [ ] Loại bỏ secret mặc định nguy hiểm.
 - [ ] Chuẩn hóa phiên bản Node/Next cho hai frontend nếu khả thi.
 - [ ] Tạo Dockerfile chuẩn cho các service chính.
 - [ ] Tạo Compose profiles cho infra và full stack.
