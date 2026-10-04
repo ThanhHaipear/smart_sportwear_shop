@@ -116,7 +116,9 @@ app:
   product-search:
     enabled: ${PRODUCT_HYBRID_SEARCH_ENABLED:false}
     service-url: ${PRODUCT_SEARCH_SERVICE_URL:http://127.0.0.1:8002}
-    internal-token: ${PRODUCT_SEARCH_INTERNAL_TOKEN:change-me}
+    # Blank is safe while the feature is disabled; a real random token is
+    # required before enabling the legacy adapter or AI Retrieval V2.
+    internal-token: ${PRODUCT_SEARCH_INTERNAL_TOKEN:}
     timeout-seconds: ${PRODUCT_SEARCH_TIMEOUT_SECONDS:12}
     rate-limit-per-minute: ${PRODUCT_SEARCH_RATE_LIMIT_PER_MINUTE:30}
   visual-search:
@@ -133,12 +135,13 @@ app:
       confirm-timeout-seconds: ${VISUAL_SEARCH_OUTBOX_CONFIRM_TIMEOUT_SECONDS:5}
       max-attempts: ${VISUAL_SEARCH_OUTBOX_MAX_ATTEMPTS:10}
   ai:
-    sync-secret: ${AI_SYNC_SECRET:dev-only-ai-sync-secret-change-me}
+    sync-secret: ${AI_SYNC_SECRET:}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
   jwt:
-    access-secret: ${JWT_ACCESS_SECRET:dev-only-access-secret-change-me-please-32-bytes-min}
-    refresh-secret: ${JWT_REFRESH_SECRET:dev-only-refresh-secret-change-me-please-32-bytes}
+    # Required at startup. Tests provide explicit test-only values.
+    access-secret: ${JWT_ACCESS_SECRET}
+    refresh-secret: ${JWT_REFRESH_SECRET}
     access-token-ttl-minutes: ${JWT_ACCESS_TTL_MINUTES:15}
     refresh-token-ttl-days: ${JWT_REFRESH_TTL_DAYS:30}
   mail:
@@ -172,13 +175,13 @@ app:
     # point at a WireMock stub (application-test.yml sets this).
     token-info-url: ${GOOGLE_TOKENINFO_URL:https://oauth2.googleapis.com/tokeninfo}
   vnpay:
-    tmn-code: ${VNPAY_TMN_CODE:DEVTMN01}
+    tmn-code: ${VNPAY_TMN_CODE:}
     # Must never be empty: HMAC-SHA512 (VnpaySignatureService) rejects a
     # zero-length key outright (IllegalArgumentException), which previously
     # crashed any VNPAY flow - including this project's own seed data, caught
     # by actually running it - whenever this var was left unset outside the
     # test profile (application-test.yml has always set its own real value).
-    hash-secret: ${VNPAY_HASH_SECRET:dev-only-vnpay-hash-secret-change-me-please}
+    hash-secret: ${VNPAY_HASH_SECRET:}
     pay-url: ${VNPAY_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
     return-url: ${PAYMENT_RETURN_URL:http://localhost:3000/payment/result}
     callback-url: ${PAYMENT_CALLBACK_URL:http://localhost:8080/api/v1/payments/callback}
@@ -208,7 +211,7 @@ app:
     # Deliberately opt-in: demo data must not be auto-created on every normal
     # app start. Run with --app.seed.enabled=true when you explicitly want it.
     enabled: ${APP_SEED_ENABLED:false}
-    demo-password: ${APP_SEED_DEMO_PASSWORD:Password123}
+    demo-password: ${APP_SEED_DEMO_PASSWORD:}
   forecast-demo:
     enabled: ${FORECAST_DEMO_ENABLED:false}
     random-seed: ${FORECAST_DEMO_RANDOM_SEED:20260725}
