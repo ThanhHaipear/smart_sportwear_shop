@@ -165,7 +165,6 @@ Xem file [.env.example](./.env.example). Các biến quan trọng nhất:
 - Flyway tự chạy migration khi app start
 - `spring.jpa.hibernate.ddl-auto=validate`
 - Schema được quản lý bằng migration, không dùng auto-create/auto-update
-- **Lưu ý:** Hiện tại dự án đang chạy ở chế độ **shared-database**, nghĩa là `backend` và `ai_forecasting_service` dùng chung một Supabase project nhưng phân chia ownership rõ ràng ở mức code/read-model. Hãy giữ `SPRING_FLYWAY_ENABLED=false` cho AI service trên production nếu chưa có phương án cutover.
 
 Migration hiện có:
 

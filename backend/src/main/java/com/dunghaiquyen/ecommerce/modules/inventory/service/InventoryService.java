@@ -199,11 +199,6 @@ public class InventoryService {
                 actor,
                 request.note());
 
-        if (request.note() != null && request.note().contains("[AI_REPLENISHMENT:")) {
-            log.info("[AUDIT] AI Replenishment IMPORT by user {}: variant={}, qty={}, note={}",
-                    actor != null ? actor.getId() : "system", variant.getId(), request.quantity(), request.note());
-        }
-
         return toItemResponse(variant);
     }
 

@@ -10,7 +10,7 @@ alter table orders
 
 update orders
 set data_source = 'DEMO'
-where note = '[FORECAST_DEMO_V2]' or note like '[SEED]%';
+where note like '[SEED]%';
 
 create index if not exists idx_orders_data_source_created_at
     on orders(data_source, created_at);

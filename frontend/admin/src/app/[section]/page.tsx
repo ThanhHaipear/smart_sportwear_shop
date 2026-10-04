@@ -5,7 +5,6 @@ const sectionTitles: Record<string, string> = {
   inventory: "Tồn kho",
   customers: "Khách hàng",
   reports: "Báo cáo",
-  "chatbot-config": "Cấu hình chatbot",
   "users-roles": "Phân quyền",
   "system-config": "Hệ thống",
 };

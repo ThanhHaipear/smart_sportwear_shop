@@ -6,7 +6,6 @@ import { ApiRequestError } from "@/modules/api/common";
 import { adjustStock, exportStock, importStock, listInventoryPage, listInventoryTransactionPage } from "@/modules/inventory/browser-api";
 import type { InventoryItemResponse, InventoryPage, InventoryTransactionResponse } from "@/modules/inventory/types";
 import { NO_IMAGE } from "@/modules/ui/placeholder";
-import type { InventoryImportDraft } from "./InventoryWorkspace";
 
 function extractError(error: unknown, fallback: string) {
   if (error instanceof ApiRequestError) {
@@ -151,12 +150,10 @@ function VariantCombobox({
 
 export function AdminInventoryClient({
   initialItemsPage,
-  initialTransactionsPage,
-  importDraft
+  initialTransactionsPage
 }: {
   initialItemsPage: InventoryPage<InventoryItemResponse>;
   initialTransactionsPage: InventoryPage<InventoryTransactionResponse>;
-  importDraft: InventoryImportDraft | null;
 }) {
   const [items, setItems] = useState(initialItemsPage.items);
   const [itemsMeta, setItemsMeta] = useState(initialItemsPage.meta);
@@ -174,18 +171,6 @@ export function AdminInventoryClient({
   const [itemsLoading, setItemsLoading] = useState(false);
   const [transactionsLoading, setTransactionsLoading] = useState(false);
   const initialSearchRender = useRef(true);
-
-  useEffect(() => {
-    if (!importDraft) return;
-    setVariantId(importDraft.variantId);
-    const importedItem = initialItemsPage.items.find((item) => item.variantId === importDraft.variantId);
-    if (importedItem) setSelectedInventoryItem(importedItem);
-    setQuantity(Math.max(1, importDraft.quantity));
-    setActionType("IMPORT");
-    setNote(`[AI_REPLENISHMENT:${importDraft.recommendationId}] ${importDraft.sku}`);
-    setMessage("Đã điền đề xuất AI vào form. Hãy kiểm tra số lượng rồi nhấn Xác nhận để nhập kho.");
-    document.getElementById("inventory-action-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [importDraft, initialItemsPage.items]);
 
   async function loadItems(page: number, keyword = deferredSearch.trim()) {
     setItemsLoading(true);

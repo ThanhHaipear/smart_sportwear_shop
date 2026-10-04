@@ -1,1 +1,0 @@
-ALTER TABLE forecast_runs ADD COLUMN daily_forecast jsonb;

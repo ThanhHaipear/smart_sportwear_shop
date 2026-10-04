@@ -56,13 +56,7 @@ Mở một cửa sổ PowerShell riêng:
 .\start-storefront.cmd
 ```
 
-### 5. AI forecasting (khi cần)
-
-```powershell
-.\start-ai-service.ps1
-```
-
-### 6. Visual search (khi cần)
+### 5. Visual search (khi cần)
 
 Sao chép `visual-search-service/.env.example` thành `visual-search-service/.env`, điền cấu hình local và chỉ đặt `VISUAL_SEARCH_ENABLED=true` sau khi các giá trị bắt buộc đã có. Sau đó:
 
@@ -95,13 +89,12 @@ RabbitMQ Management chỉ được bind vào loopback cho môi trường local: 
 
 RabbitMQ tự nạp topology từ `rabbitmq/definitions.json`: exchange `catalog.events`, main queue, ba retry queue và DLQ. Nếu thay đổi topology trên một volume đã tồn tại, hãy dùng Management UI để kiểm tra trước; không xóa volume chứa message nếu chưa sao lưu hoặc chưa xác nhận dữ liệu có thể bỏ.
 
-Dừng backend, admin, storefront hoặc AI service bằng `Ctrl+C` trong đúng cửa sổ đang chạy tác vụ đó.
+Dừng backend, admin, storefront hoặc visual-search service bằng `Ctrl+C` trong đúng cửa sổ đang chạy tác vụ đó.
 
 ## Địa chỉ local
 
 - Storefront: <http://localhost:3000>
 - Admin: <http://localhost:3001>
-- AI forecasting: <http://localhost:8081>
 - Backend: <http://localhost:8082>
 - Backend health: <http://localhost:8082/actuator/health>
 - Redis: `localhost:6379`

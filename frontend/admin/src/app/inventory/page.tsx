@@ -1,17 +1,14 @@
 import { InventoryWorkspace } from "@/components/inventory/InventoryWorkspace";
 import { listInventoryItems, listInventoryTransactions } from "@/modules/inventory/api";
-import { listSuggestions } from "@/modules/replenishment/api";
 
 export default async function InventoryPage() {
-  const [itemsResult, transactionsResult, suggestionsResult] = await Promise.allSettled([
+  const [itemsResult, transactionsResult] = await Promise.allSettled([
     listInventoryItems(),
-    listInventoryTransactions(),
-    listSuggestions()
+    listInventoryTransactions()
   ]);
 
   const itemsPage = itemsResult.status === "fulfilled" ? itemsResult.value : { items: [], meta: { page: 1, limit: 25, total: 0, totalPages: 0 } };
   const transactionsPage = transactionsResult.status === "fulfilled" ? transactionsResult.value : { items: [], meta: { page: 1, limit: 20, total: 0, totalPages: 0 } };
-  const suggestionsPage = suggestionsResult.status === "fulfilled" ? suggestionsResult.value : { content: [] };
   const loadFailed = itemsResult.status === "rejected";
 
   return (
@@ -31,7 +28,7 @@ export default async function InventoryPage() {
         </section>
       ) : (
         <>
-          <InventoryWorkspace initialItemsPage={itemsPage} initialTransactionsPage={transactionsPage} initialSuggestions={suggestionsPage.content} />
+          <InventoryWorkspace initialItemsPage={itemsPage} initialTransactionsPage={transactionsPage} />
         </>
       )}
     </main>

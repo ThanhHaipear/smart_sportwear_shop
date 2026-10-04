@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ACCESS_TOKEN_COOKIE, USER_ROLE_COOKIE } from "@/modules/auth/session";
-import { ADMIN_AI_WORKSPACES_ENABLED, isAdminAiWorkspaceRoute } from "@/config/feature-flags";
 
 /**
  * A non-empty cookie is NOT enough: the access-token JWT expires in ~15 minutes
@@ -51,13 +50,6 @@ export function middleware(request: NextRequest) {
   const isLoggedIn = isSessionValid(token);
   const isLoginPage = pathname === "/login";
   const role = request.cookies.get(USER_ROLE_COOKIE)?.value ?? getTokenRole(token);
-
-  if (!ADMIN_AI_WORKSPACES_ENABLED && isAdminAiWorkspaceRoute(pathname)) {
-    const dashboardUrl = request.nextUrl.clone();
-    dashboardUrl.pathname = "/";
-    dashboardUrl.search = "";
-    return NextResponse.redirect(dashboardUrl);
-  }
 
   if (!isLoggedIn && !isLoginPage) {
     const loginUrl = request.nextUrl.clone();

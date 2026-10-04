@@ -2,7 +2,6 @@
 
 import {
   ArrowCounterClockwise,
-  Brain,
   Books,
   ChartLineUp,
   FileText,
@@ -13,7 +12,6 @@ import {
   MagnifyingGlass,
   Package,
   Receipt,
-  Robot,
   Scroll,
   ShieldCheck,
   SignOut,
@@ -30,7 +28,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { adminLogout } from "@/modules/auth/api";
 import { clearAuthSession, getBrowserRefreshToken, getBrowserUserRole } from "@/modules/auth/session";
-import { ADMIN_AI_WORKSPACES_ENABLED } from "@/config/feature-flags";
 import { AdminNotificationBell } from "@/components/ui/AdminNotificationBell";
 
 type NavItem = {
@@ -51,11 +48,9 @@ const navGroups: NavGroup[] = [
       { label: "Tổng quan", href: "/", icon: House },
       { label: "Đơn hàng", href: "/orders", icon: Receipt },
       { label: "Tồn kho", href: "/inventory", icon: Package },
-      { label: "AI Insights", href: "/inventory/ai-insights", icon: Brain },
       { label: "Visual Search", href: "/visual-search", icon: ImageSquare },
       { label: "Khách hàng", href: "/customers", icon: Users },
       { label: "Báo cáo", href: "/reports", icon: ChartLineUp },
-      { label: "Admin Copilot", href: "/admin-copilot", icon: Robot },
       { label: "Đổi trả", href: "/returns", icon: ArrowCounterClockwise },
       { label: "Đánh giá", href: "/reviews", icon: Star },
     ],
@@ -77,18 +72,11 @@ const navGroups: NavGroup[] = [
     items: [
       { label: "Nội dung", href: "/pages", icon: FileText },
       { label: "Nhật ký", href: "/audit-logs", icon: Scroll },
-      { label: "Chatbot", href: "/chatbot-config", icon: Robot },
       { label: "Phân quyền", href: "/users-roles", icon: ShieldCheck },
       { label: "Cấu hình", href: "/system-config", icon: GearSix },
     ],
   },
 ];
-
-const disabledAiRoutes = new Set([
-  "/inventory/ai-insights",
-  "/admin-copilot",
-  "/chatbot-config",
-]);
 
 function getPageMeta(pathname: string) {
   const metaByPrefix = [
@@ -105,8 +93,6 @@ function getPageMeta(pathname: string) {
     { prefix: "/customers", title: "Khách hàng", subtitle: "Theo dõi tình trạng tài khoản và phân loại người dùng." },
     { prefix: "/pages", title: "Nội dung", subtitle: "Biên tập các trang tĩnh và nội dung truyền thông của hệ thống." },
     { prefix: "/reports", title: "Báo cáo", subtitle: "Xem snapshot kinh doanh theo thời gian thực từ backend." },
-    { prefix: "/admin-copilot", title: "Admin Copilot", subtitle: "Hỏi đáp vận hành bằng tool read-only, có trace đã redact và nguồn dữ liệu rõ ràng." },
-    { prefix: "/chatbot-config", title: "Cấu hình chatbot", subtitle: "Quan sát provider, prompt, role policy, evaluation và run history của Admin Copilot." },
     { prefix: "/audit-logs", title: "Nhật ký", subtitle: "Theo dõi mọi thao tác nhạy cảm để kiểm soát vận hành." },
     { prefix: "/reviews", title: "Đánh giá", subtitle: "Duyệt, ẩn hoặc xử lý nội dung review từ khách hàng." },
     { prefix: "/returns", title: "Đổi trả", subtitle: "Xử lý hoàn hàng, hoàn tiền và các case hậu mãi." },
@@ -151,7 +137,6 @@ export function Sidebar() {
             <p className="side-nav-title">{group.title}</p>
             <div className="side-nav-list">
               {group.items.filter((item) => {
-                if (!ADMIN_AI_WORKSPACES_ENABLED && disabledAiRoutes.has(item.href)) return false;
                 return item.href !== "/inventory" || role !== "SALES_STAFF";
               }).map((item) => {
                 const Icon = item.icon;

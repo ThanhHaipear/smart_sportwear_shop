@@ -83,12 +83,11 @@ Phạm vi được ưu tiên theo `MUST/SHOULD/COULD` để nhóm hoàn thành �
 
 ### 3.3. COULD/Experimental - không nằm trên đường găng
 
-Các phần sau được giữ nếu đã hoạt động, hoặc chuyển sang khu vực thử nghiệm; không phải dependency bắt buộc khi demo:
+Các phần sau không nằm trên đường găng. Chức năng thương mại đã chạy ổn được giữ lại nếu không cản trở kiến trúc; mã thử nghiệm lệch trọng tâm được loại khỏi nhánh triển khai:
 
 - Khuyến mãi, combo, CMS/banner/page nâng cao.
-- AI Forecasting và replenishment nâng cao.
-- Admin Copilot và cơ chế agent approval.
 - Các workflow AI quản trị không liên quan trực tiếp đến tìm kiếm, tư vấn và recommendation.
+- AI Forecasting/replenishment nâng cao và Admin Copilot/agent approval đã được xóa; khi cần đối chiếu có thể khôi phục từ tag `legacy/pre-v2-prune-20261004`.
 
 ### 3.4. Workstream nghiên cứu và luận văn
 
@@ -219,14 +218,11 @@ smart-sportswear-shop/
 │   ├── postgres/
 │   ├── rabbitmq/
 │   └── monitoring/
-├── docs/
+└── docs/
 │   ├── architecture/
 │   ├── diagrams/
 │   ├── adr/
 │   └── thesis/
-└── experiments/
-    ├── forecasting/
-    └── admin-copilot/
 ```
 
 Không di chuyển toàn bộ thư mục ngay trong một commit. Thực hiện sau khi API và ownership đã ổn định để tránh xung đột merge lớn.
@@ -885,8 +881,8 @@ Việc tiếp theo ưu tiên: hoàn thành bảo toàn code/dữ liệu cũ, sau
 
 Mục tiêu: có điểm phục hồi trước khi tái cấu trúc.
 
-- [ ] Tạo tag Git cho phiên bản hiện tại.
-- [ ] Ghi nhận file đang thay đổi chưa commit và chủ sở hữu.
+- [x] Tạo tag Git `legacy/pre-v2-prune-20261004` cho phiên bản trước khi tinh gọn.
+- [x] Ghi nhận `frontend/storefront/src/modules/visual-search/VisualSearchDialog.tsx` là thay đổi có sẵn của thành viên, không thuộc đợt tinh gọn.
 - [ ] Backup database hiện tại và giữ project cũ read-only.
 - [x] Tạo một Supabase project mới trắng ở cấp ứng dụng.
 - [ ] Export schema và danh sách Flyway history.
@@ -903,9 +899,9 @@ Tiêu chí hoàn thành:
 
 ### Giai đoạn 1 - Thu gọn phạm vi và chuẩn hóa môi trường
 
-- [ ] Chuyển `ai_forecasting_service` sang khu vực experimental hoặc tắt khỏi runtime mặc định.
-- [ ] Chuyển `chatbot-admin-service` sang experimental hoặc tắt khỏi runtime mặc định.
-- [ ] Dọn log/runtime artifacts khỏi root và cập nhật `.gitignore`.
+- [x] Xóa `ai_forecasting_service` cùng adapter forecasting/replenishment khỏi runtime V2; mã cũ còn tại recovery tag.
+- [x] Xóa `chatbot-admin-service` và Admin Copilot khỏi runtime V2; mã cũ còn tại recovery tag.
+- [x] Dọn log/runtime artifacts khỏi root; quy tắc bỏ qua đã có trong `.gitignore`.
 - [ ] Chuẩn hóa `.env.example` cho từng service.
 - [ ] Loại bỏ secret mặc định nguy hiểm.
 - [ ] Chuẩn hóa phiên bản Node/Next cho hai frontend nếu khả thi.
@@ -1530,7 +1526,7 @@ Không commit API key, PII hoặc ảnh benchmark không có quyền phân phố
 - Tạo một tập user demo không chứa PII thật.
 - Sinh đơn hàng theo các trạng thái hợp lệ và theo thời gian để phục vụ báo cáo.
 - Thanh toán demo chỉ dùng COD hoặc VNPAY sandbox; không lưu thông tin thẻ.
-- Mọi đơn hàng, interaction và forecast giả phải có `data_source='DEMO'` hoặc metadata tương đương.
+- Mọi đơn hàng và interaction giả phải có `data_source='DEMO'` hoặc metadata tương đương.
 - Không trộn DEMO với REAL trong báo cáo/evaluation mà không có bộ lọc.
 
 ### 21.9. Dữ liệu recommendation

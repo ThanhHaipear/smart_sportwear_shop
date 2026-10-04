@@ -17,17 +17,14 @@ public class SeedDataRunner implements CommandLineRunner {
     private final SeedDataService seedDataService;
     private final FashionProductSeeder fashionProductSeeder;
     private final RealRunningCatalogSeeder realRunningCatalogSeeder;
-    private final ForecastDemoDataSeeder forecastDemoDataSeeder;
 
     public SeedDataRunner(
             SeedDataService seedDataService,
             FashionProductSeeder fashionProductSeeder,
-            RealRunningCatalogSeeder realRunningCatalogSeeder,
-            @org.springframework.beans.factory.annotation.Autowired(required = false) ForecastDemoDataSeeder forecastDemoDataSeeder) {
+            RealRunningCatalogSeeder realRunningCatalogSeeder) {
         this.seedDataService = seedDataService;
         this.fashionProductSeeder = fashionProductSeeder;
         this.realRunningCatalogSeeder = realRunningCatalogSeeder;
-        this.forecastDemoDataSeeder = forecastDemoDataSeeder;
     }
 
     @Override
@@ -43,10 +40,6 @@ public class SeedDataRunner implements CommandLineRunner {
                 summary.products(),
                 summary.variants(),
                 summary.orders());
-
-        if (forecastDemoDataSeeder != null) {
-            forecastDemoDataSeeder.seed();
-        }
 
         log.info(
                 "Demo credentials: {} / {}",

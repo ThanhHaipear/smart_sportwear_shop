@@ -1,3 +1,0 @@
-variant_id,sku,demand_profile,policy,initial_stock,lead_time_days,stockout_days,stockout_rate,units_short,fill_rate,average_on_hand,total_orders,total_units_ordered
-d9ed1299-67c9-41d7-8ca1-13170676a83c,MOCK-SKU-1,SEASONAL,Baseline,50,7,3,0.0250,7,0.9786,41.24,4,330
-d9ed1299-67c9-41d7-8ca1-13170676a83c,MOCK-SKU-1,SEASONAL,Proposed,50,7,3,0.0250,7,0.9786,41.24,4,330
