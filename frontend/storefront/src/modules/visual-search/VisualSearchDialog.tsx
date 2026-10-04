@@ -55,6 +55,7 @@ function errorMessage(error: unknown): string {
 
 export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) => ReactNode } = {}) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const openerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -138,7 +139,10 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
   async function startCamera(mode: "user" | "environment" = facingMode) {
     setError(undefined);
     if (!navigator.mediaDevices?.getUserMedia) {
-      setError("Trình duyệt này không hỗ trợ camera. Hãy dùng Chrome hoặc Edge trên localhost/HTTPS.");
+      // getUserMedia is unavailable on insecure LAN origins (http://<ip>).
+      // A capture-enabled file input still opens the native camera on phones
+      // and provides a usable file-picker fallback on desktop browsers.
+      cameraInputRef.current?.click();
       return;
     }
     stopCamera();
@@ -293,7 +297,8 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
               </div>
             )}
             {error ? <p role="alert" className="mt-5 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
-            <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" className="sr-only" onChange={(event) => { chooseFile(event.target.files?.[0]); event.target.value = ""; }} />
+            <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={(event) => { chooseFile(event.target.files?.[0]); event.target.value = ""; }} />
+            <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="sr-only" onChange={(event) => { chooseFile(event.target.files?.[0]); event.target.value = ""; }} />
           </section>
         </div>
       ) : null}
