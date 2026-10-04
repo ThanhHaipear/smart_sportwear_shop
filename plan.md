@@ -32,30 +32,34 @@ Mục tiêu của kế hoạch:
 10. Mọi thí nghiệm AI phải lưu dataset version, model version, cấu hình và kết quả.
 11. `main` luôn phải build và chạy được.
 12. Không đưa secret thật vào Git, log, tài liệu hoặc dữ liệu benchmark.
+13. Ưu tiên giải pháp mã nguồn mở/chạy local cho embedding và benchmark; API trả phí phải có budget guard, cache và số liệu chi phí.
+14. Tài liệu phân tích thiết kế và protocol đánh giá phải có trước implementation tương ứng; không vẽ sơ đồ hoặc tạo ground truth hồi cứu chỉ để khớp code đã viết.
 
 ---
 
 ## 3. Phạm vi sản phẩm cuối cùng
 
-### 3.1. Commerce
+Phạm vi được ưu tiên theo `MUST/SHOULD/COULD` để nhóm hoàn thành đúng trọng tâm đề tài trước khi mở rộng. Chức năng đã có trong code cũ nhưng không thuộc `MUST` được giữ nếu không cản trở kiến trúc; không mặc nhiên trở thành đường găng của đồ án.
+
+### 3.1. MUST - bắt buộc cho nghiệm thu
+
+#### Commerce
 
 - Đăng ký, đăng nhập, đăng xuất và làm mới phiên.
-- Đăng nhập Google nếu tiếp tục sử dụng.
 - Quản lý hồ sơ và địa chỉ.
 - Danh mục, thương hiệu, sản phẩm, biến thể và ảnh.
 - Thuộc tính đặc trưng của trang phục thể thao.
 - Tìm kiếm theo bộ lọc có cấu trúc.
-- Giỏ hàng và wishlist.
+- Giỏ hàng.
 - Checkout và tạo đơn hàng.
 - Thanh toán COD và VNPAY.
 - Theo dõi, hủy và xử lý đơn hàng.
-- Giao hàng, đổi trả và hoàn tiền.
 - Quản lý tồn kho, nhập, xuất và điều chỉnh.
 - Cảnh báo tồn kho thấp.
-- Khuyến mãi, combo, review và notification.
+- Quản trị sản phẩm, danh mục, người dùng và tham số hệ thống.
 - Báo cáo doanh thu, khách hàng, sản phẩm, đơn hàng và tồn kho.
 
-### 3.2. AI
+#### AI và đánh giá
 
 - Phân tích truy vấn ngôn ngữ tự nhiên.
 - Trích xuất loại sản phẩm, giới tính, môn thể thao, mục đích, màu, size và giá.
@@ -69,13 +73,38 @@ Mục tiêu của kế hoạch:
 - Thu thập interaction event phục vụ recommendation.
 - Đánh giá text search, image search và recommendation.
 
-### 3.3. Ngoài phạm vi bản chính
+### 3.2. SHOULD - thực hiện sau khi luồng bắt buộc ổn định
 
-Các phần sau được giữ làm thử nghiệm hoặc hướng phát triển, không phải dependency bắt buộc khi demo:
+- Wishlist, review và notification.
+- Giao hàng, yêu cầu hủy, đổi trả và hoàn tiền ở mức đủ xử lý phát sinh đơn hàng.
+- Size advisor.
+- Google login nếu không làm chậm luồng authentication chính.
+- Admin theo dõi indexing job và evaluation run.
 
+### 3.3. COULD/Experimental - không nằm trên đường găng
+
+Các phần sau được giữ nếu đã hoạt động, hoặc chuyển sang khu vực thử nghiệm; không phải dependency bắt buộc khi demo:
+
+- Khuyến mãi, combo, CMS/banner/page nâng cao.
 - AI Forecasting và replenishment nâng cao.
 - Admin Copilot và cơ chế agent approval.
 - Các workflow AI quản trị không liên quan trực tiếp đến tìm kiếm, tư vấn và recommendation.
+
+### 3.4. Workstream nghiên cứu và luận văn
+
+Workstream này chạy song song với implementation và phải tạo ra tài liệu có trích dẫn, câu hỏi nghiên cứu, giả thuyết, cấu hình thí nghiệm và kết luận:
+
+- Tổng quan thương mại điện tử và nghiệp vụ kinh doanh trang phục thể thao.
+- Đặc trưng sản phẩm: loại, giới tính, màu, size, chất liệu, thương hiệu, môn thể thao, mục đích và giá.
+- Tìm kiếm ngôn ngữ tự nhiên, semantic search, vector embedding và các độ đo tương đồng.
+- LLM, prompt engineering, structured output và so sánh GPT với mô hình/provider tương đương.
+- Tìm kiếm ảnh và các mô hình image embedding.
+- RAG cho tư vấn sản phẩm, chính sách và hướng dẫn chọn size.
+- Recommendation: popularity, content-based, association/behavior và hybrid.
+- Kiến trúc Spring Boot microservices, Next.js/React, RabbitMQ, Python, PostgreSQL/pgvector.
+- Giới hạn nghiên cứu, rủi ro dữ liệu, quyền sử dụng ảnh, chi phí và khả năng tái lập.
+
+Mỗi bảng/biểu đồ trong luận văn phải truy ngược được tới dataset version, Git commit, model/prompt version và evaluation run.
 
 ---
 
@@ -92,7 +121,6 @@ Admin (Next.js) ─────┘              │
                                     │              ▼
                                     └──────► AI Retrieval Service (FastAPI)
                                                    ├── Supabase/ai_retrieval
-                                                   ├── Supabase/visual_search
                                                    ├── Supabase/evaluation
                                                    └── pgvector
 
@@ -217,16 +245,16 @@ Supabase cũ được giữ read-only làm nguồn đối chiếu và chuyển d
 
 | Schema | Chủ sở hữu | Nội dung |
 |---|---|---|
-| `public` | Commerce Core | Toàn bộ nghiệp vụ hiện tại và `chat_messages` |
-| `visual_search` | AI Retrieval | Image embeddings, model versions, indexing jobs |
-| `ai_retrieval` | AI Retrieval | Search read model, text embeddings, recommendation |
+| `public` | Commerce Core | Identity, catalog, sales, inventory, fulfillment, reporting và outbox |
+| `ai_retrieval` | AI Retrieval | Search read model, text/image embeddings, indexing và recommendation |
 | `evaluation` | AI Retrieval | Dataset metadata, ground truth, runs và metrics |
+| `assistant` | Assistant Service | Chat session/message, summary, feedback và tool audit |
 
 Giai đoạn đầu, các backend có thể dùng connection hiện tại để giảm cấu hình. Trước bản demo cuối, tạo role riêng nếu thời gian cho phép:
 
 - `commerce_app`: ghi các bảng nghiệp vụ trong `public`.
-- `ai_retrieval_app`: ghi `visual_search`, `ai_retrieval` và `evaluation`.
-- `assistant_app`: ghi các bảng chat được chỉ định.
+- `ai_retrieval_app`: ghi `ai_retrieval` và `evaluation`, chỉ đọc những view/API được cấp để đối chiếu catalog khi cần.
+- `assistant_app`: ghi `assistant`; không có quyền đọc trực tiếp bảng Commerce trong `public`.
 - Frontend không được nhận database password hoặc kết nối trực tiếp PostgreSQL.
 - Không service runtime nào nên dùng database owner/superuser sau giai đoạn hardening.
 
@@ -236,27 +264,34 @@ Giai đoạn đầu, các backend có thể dùng connection hiện tại để 
 - Không cho Supabase mới chạy thư mục `classpath:db/migration` hiện tại vì nó chứa 52 migration của hệ thống cũ.
 - Tạo location mới, ví dụ `classpath:db/v2-migration`, và chỉ chuyển `spring.flyway.locations` sang location này sau khi baseline V2 được duyệt.
 - Baseline đầu tiên của Commerce tạo các bảng nghiệp vụ cần giữ trong `public`; không tái tạo bảng ngoài phạm vi chỉ vì chúng từng tồn tại.
-- AI Retrieval quản lý migration của `visual_search`, `ai_retrieval` và `evaluation` trong chính service AI hoặc location tách biệt.
+- AI Retrieval quản lý migration của `ai_retrieval` và `evaluation` trong chính service AI hoặc location tách biệt. Các bảng `visual_search` cũ được xem là nguồn tham khảo và được ánh xạ vào `ai_retrieval`, không tái tạo thành một schema runtime riêng.
 - Không dùng chung số thứ tự migration giữa Commerce và AI nếu hai service có Flyway/Alembic history riêng.
-- Assistant tiếp tục dùng `chat_messages` hiện tại để giảm thay đổi; chưa bắt buộc tạo schema `assistant`.
+- Assistant quản lý migration của schema `assistant` và là service duy nhất được ghi các bảng chat bền vững.
 - Chỉ một người được phân công hoặc một CI job được chạy migration lên Supabase chung.
 - Không chỉnh schema trực tiếp trên Dashboard mà không tạo migration tương ứng.
 - Test migration trên PostgreSQL local/database tạm trước khi áp dụng lên Supabase.
 
 ### 6.3. Dữ liệu Commerce
 
-Giữ hoặc tái cấu trúc các nhóm bảng:
+Baseline V2 ưu tiên nhóm `MUST`; nhóm `SHOULD/COULD` chỉ được đưa vào baseline khi code giữ lại thực sự phụ thuộc hoặc nhóm xác nhận sẽ demo. Không sao chép đủ 52 migration legacy chỉ để giữ mọi bảng cũ.
+
+Nhóm `MUST`:
 
 - Identity: `users`, `refresh_tokens`, `password_reset_tokens`, `addresses`.
-- Catalog: `categories`, `brands`, `products`, `product_variants`, `product_images`, `collections`.
+- Catalog: `categories`, `brands`, `products`, `product_variants`, `product_images` và taxonomy thể thao.
 - Sales: `carts`, `cart_items`, `orders`, `order_items`, `payments`.
 - Inventory: `inventory_transactions` và quantity trên variant hoặc bảng balance riêng.
-- Fulfillment: `shipping_methods`, `shipments`, `returns`, `return_items`, `refunds`.
-- Engagement: `wishlists`, `wishlist_items`, `product_reviews`, `notifications`.
-- Content: `banners`, `banner_items`, `pages`, `site_settings`.
-- Marketing: `promotions`, `promotion_products`, `combos`, `combo_products`.
-- Operations: `audit_logs`, `email_logs`, `integration_outbox`.
+- System: `site_settings` hoặc bảng tham số hệ thống tương đương.
+- Operations: `audit_logs`, `integration_outbox`.
 - AI input: `user_interactions`.
+
+Nhóm `SHOULD/COULD` cần review dependency trước khi giữ:
+
+- Fulfillment nâng cao: `shipping_methods`, `shipments`, `returns`, `return_items`, `refunds`.
+- Engagement: `wishlists`, `wishlist_items`, `product_reviews`, `notifications`.
+- Content: `collections`, `banners`, `banner_items`, `pages`.
+- Marketing: `promotions`, `promotion_products`, `combos`, `combo_products`.
+- Vận hành phụ trợ: `email_logs` và các bảng chỉ phục vụ tính năng ngoài đường găng.
 
 ### 6.4. Thuộc tính trang phục thể thao
 
@@ -298,6 +333,9 @@ Các bảng mục tiêu:
 - `product_text_embeddings`
 - `image_embedding_models`
 - `product_image_embeddings`
+- `knowledge_documents`
+- `knowledge_chunks`
+- `knowledge_embeddings`
 - `indexing_jobs`
 - `indexing_job_items`
 - `processed_events`
@@ -313,6 +351,13 @@ Yêu cầu:
 - Chỉ có một model active theo loại embedding.
 - Consumer idempotent thông qua `processed_events`.
 - Có trạng thái `PENDING`, `PROCESSING`, `READY`, `FAILED`.
+
+Ownership recommendation được chốt như sau:
+
+- Commerce chỉ sở hữu giao dịch gốc và ghi nhận/phát interaction, cart, wishlist và purchase event.
+- AI Retrieval sở hữu thuật toán, association rule/model, candidate score, recommendation response log và evaluation.
+- Commerce hydrate kết quả bằng product ID và kiểm tra lại trạng thái, giá, tồn kho trước khi trả ra frontend.
+- Module recommendation hiện có trong Spring là nguồn tham khảo/compatibility tạm thời; sau khi AI Retrieval đạt parity, không duy trì hai recommendation engine cùng là nguồn chuẩn.
 
 ### 6.6. Evaluation schema
 
@@ -341,14 +386,15 @@ Mỗi evaluation run lưu tối thiểu:
 
 ### 6.7. Dữ liệu Assistant
 
-Để giảm thay đổi, giữ `chat_messages` trong `public`. Chỉ bổ sung khi có yêu cầu thực tế:
+Tạo schema `assistant` vì database V2 đang trắng và cần ownership rõ ràng:
 
 - `chat_sessions`
+- `chat_messages`
 - `conversation_summaries`
 - `assistant_feedback`
 - `tool_execution_logs` nếu cần audit.
 
-Chưa tách schema `assistant` trong phiên bản đồ án hiện tại.
+Không sao chép lịch sử chat cũ mặc định. Assistant chỉ nhận dữ liệu Commerce qua REST/OpenAPI và dữ liệu retrieval qua AI Retrieval API.
 
 Redis chỉ lưu:
 
@@ -379,6 +425,7 @@ AI Retrieval cung cấp:
 
 - `POST /internal/v1/search/text`
 - `POST /internal/v1/search/image`
+- `POST /internal/v1/retrieval/knowledge`
 - `POST /internal/v1/recommendations`
 - `POST /internal/v1/indexing/reindex`
 - `GET /internal/v1/indexing/jobs/{id}`
@@ -459,6 +506,16 @@ Các mode bắt buộc để đánh giá:
 - Hybrid không rerank.
 - Hybrid có rerank.
 
+Thí nghiệm phân tích truy vấn/prompt engineering:
+
+- Rule-based baseline không dùng LLM.
+- LLM zero-shot với structured JSON output.
+- LLM few-shot với cùng schema đầu ra.
+- Hybrid rule + LLM fallback cho truy vấn khó hoặc mơ hồ.
+- Version hóa system prompt, few-shot examples, JSON schema, temperature và provider/model.
+- Đo intent accuracy; exact match/micro-F1 theo từng thuộc tính; tỷ lệ output JSON hợp lệ; latency; token và chi phí.
+- Không để LLM tự tạo giá trị taxonomy: giá trị trích xuất phải được map/validate với code hợp lệ hoặc đánh dấu `UNKNOWN`.
+
 ### 8.2. Image search pipeline
 
 ```text
@@ -488,6 +545,8 @@ Triển khai theo ba mức:
 1. Popularity baseline.
 2. Content-based similarity.
 3. Behavior/association-based recommendation.
+
+Không triển khai collaborative filtering phức tạp khi dữ liệu hành vi chưa đủ. Popularity là baseline bắt buộc; content-based xử lý cold-start; association/behavior chỉ được chọn làm cấu hình chính nếu kết quả split theo thời gian tốt hơn baseline.
 
 Interaction types:
 
@@ -532,7 +591,19 @@ Các nhóm knowledge:
 - Chăm sóc sản phẩm.
 - FAQ.
 
+Knowledge document/chunk và embedding do AI Retrieval sở hữu. Assistant gọi retrieval API để lấy evidence; không tự tạo vector index thứ hai và không đọc trực tiếp bảng `ai_retrieval`.
+
 Hành động thay đổi dữ liệu phải yêu cầu confirmation khi phù hợp, đặc biệt hủy đơn và thao tác giỏ hàng có tác động rõ ràng.
+
+### 8.5. Chiến lược mô hình và chi phí
+
+- Ưu tiên một baseline text embedding đa ngôn ngữ chạy local và một cấu hình API để so sánh nếu ngân sách cho phép.
+- Ưu tiên CLIP/SigLIP hoặc mô hình image embedding mã nguồn mở chạy batch; không gọi API ảnh trả phí cho mỗi lần reindex nếu không cần thiết.
+- LLM trả phí chỉ dùng cho query parsing khó, RAG generation hoặc thí nghiệm đối chứng; luồng structured filter/keyword vẫn hoạt động khi provider lỗi.
+- Cache theo input hash + model/prompt version; không sinh lại embedding khi document/image checksum không đổi.
+- Mỗi evaluation run lưu số request, token, thời gian chạy và chi phí ước tính.
+- Cấu hình budget tối đa theo ngày/run; khi vượt budget phải dừng hoặc fallback thay vì tiếp tục âm thầm.
+- Demo chuẩn bị sẵn index và dataset đã duyệt để không phụ thuộc vào việc gọi API hàng loạt tại thời điểm trình bày.
 
 ---
 
@@ -565,8 +636,8 @@ Hành động thay đổi dữ liệu phải yêu cầu confirmation khi phù h�
 | Thành viên 1 | Commerce Core, dữ liệu nghiệp vụ trong `public`, auth |
 | Thành viên 2 | Storefront và trải nghiệm tìm kiếm/chat/checkout |
 | Thành viên 3 | Admin, catalog, order, inventory, reports |
-| Thành viên 4 | AI Retrieval, text/image search và indexing |
-| Thành viên 5 | Assistant, recommendation, evaluation và integration |
+| Thành viên 4 | AI Retrieval, text/image search, recommendation và indexing |
+| Thành viên 5 | Assistant/RAG, dataset/evaluation, tài liệu nghiên cứu và integration |
 
 Mỗi phần phải có người review ngoài người viết.
 
@@ -701,6 +772,13 @@ Dataset phải có:
 - Sản phẩm liên quan và relevance grade.
 - Nhóm truy vấn: exact, attribute, need-based, ambiguous, typo và long-tail.
 
+Đánh giá riêng bước phân tích truy vấn:
+
+- Intent accuracy.
+- Exact match và micro/macro-F1 cho product type, gender, sport, use case, color, size và price range.
+- Tỷ lệ structured output hợp lệ và tỷ lệ giá trị map được vào taxonomy.
+- So sánh rule-based, zero-shot, few-shot và hybrid rule + LLM trên cùng một tập query cố định.
+
 Chỉ số:
 
 - Precision@5, Precision@10.
@@ -715,6 +793,8 @@ So sánh:
 - Semantic-only.
 - Hybrid.
 - Hybrid + rerank.
+
+Tập development dùng để chỉnh prompt/weight phải tách khỏi tập test cuối. Không sửa prompt theo lỗi của test set rồi báo cáo lại trên chính test set đó.
 
 ### 13.2. Image search
 
@@ -790,7 +870,7 @@ Chưa hoàn thành hoặc chưa được xác minh:
 
 - [ ] Backup/export database cũ và Flyway history.
 - [ ] Tạo tag Git cho phiên bản code cũ.
-- [ ] Commit `plan.md`; file hiện vẫn chưa được Git theo dõi.
+- [x] Commit phiên bản đầu của `plan.md` tại commit `e74ce68` (`docs: add v2 architecture and data rebuild plan`).
 - [ ] Xác định chủ sở hữu thay đổi chưa commit tại `VisualSearchDialog.tsx`.
 - [ ] Chạy toàn bộ test và lưu baseline report.
 - [ ] Thiết kế ERD/data dictionary cho database mới.
@@ -837,25 +917,35 @@ Tiêu chí hoàn thành:
 - Hệ thống chính chạy mà không cần Forecasting/Admin Copilot.
 - Một thành viên mới có thể khởi động dự án từ tài liệu.
 
-### Giai đoạn 2 - Chốt domain và database design
+### Giai đoạn 2 - Phân tích thiết kế, domain, dữ liệu và database
 
 - [ ] Vẽ Context diagram.
 - [ ] Vẽ Container diagram.
+- [ ] Vẽ Use Case tổng thể và xác định actor/quyền hạn.
+- [ ] Vẽ domain/Class diagram cho các aggregate chính.
+- [ ] Vẽ Sequence cho đặt hàng/thanh toán, text search, image search, recommendation và chatbot RAG.
 - [ ] Vẽ ERD nghiệp vụ trong schema `public`.
 - [ ] Vẽ ERD schema AI Retrieval/Evaluation.
+- [ ] Vẽ ERD schema `assistant`.
 - [ ] Chốt taxonomy môn thể thao, mục đích, chất liệu và công nghệ.
 - [ ] Chốt dữ liệu bắt buộc/tùy chọn của sản phẩm.
+- [ ] Viết data dictionary V2 và mapping dữ liệu cũ sang V2.
 - [ ] Chốt data retention cho chat và interaction.
 - [ ] Tạo database roles và permission matrix.
 - [ ] Backup và kiểm kê Supabase cũ để làm nguồn đối chiếu.
 - [x] Chưa chạy migration cũ lên Supabase mới; đã xác nhận `public` có 0 bảng ứng dụng.
 - [ ] Chốt ERD và tạo baseline migration mới từ thiết kế đã duyệt.
+- [ ] Đóng băng/checksum raw catalog hiện có và tạo pilot normalized dataset 30-50 sản phẩm.
+- [ ] Viết evaluation protocol trước khi tối ưu mô hình; tạo development set và test set tách biệt phiên bản đầu.
+- [ ] Chuẩn bị tập query/ảnh pilot đủ để kiểm tra ERD, indexing và metric end-to-end.
 
 Tiêu chí hoàn thành:
 
 - Mỗi bảng có owner.
 - Không còn bảng “dùng chung nhưng không ai chịu trách nhiệm”.
-- ERD và migration plan được cả nhóm review.
+- Use Case, Class, Sequence, ERD, data dictionary và migration plan được cả nhóm review.
+- Baseline migration dựng được database local sạch; pilot dataset import được và có validation report.
+- Evaluation protocol được chốt trước khi dùng test set để lựa chọn mô hình.
 
 ### Giai đoạn 3 - Tái cấu trúc Commerce Core
 
@@ -868,6 +958,7 @@ Tiêu chí hoàn thành:
 - [ ] Phát catalog và order events.
 - [ ] Bổ sung low-stock threshold/alert trong Commerce.
 - [ ] Loại bỏ migration sở hữu bởi AI service.
+- [ ] Chuyển recommendation Spring hiện tại thành compatibility adapter tạm thời hoặc tắt sau khi AI Retrieval đạt parity; không duy trì hai nguồn recommendation chuẩn.
 - [ ] Viết migration/import script.
 
 Tiêu chí hoàn thành:
@@ -880,16 +971,15 @@ Tiêu chí hoàn thành:
 
 - [ ] Tạo skeleton service và migration riêng.
 - [ ] Tạo search document read model.
-- [ ] Chuyển keyword search.
-- [ ] Chuyển text embedding/indexer.
-- [ ] Chuyển vector search.
-- [ ] Chuyển RRF và reranker.
-- [ ] Chuyển image pipeline và visual search.
+- [ ] Vertical slice 4A: query normalization, structured attribute extraction, keyword search và metric pilot.
+- [ ] Vertical slice 4B: text embedding/indexer, vector search, RRF/reranker và metric pilot.
+- [ ] Vertical slice 4C: image preprocessing/embedding, visual search và metric pilot.
+- [ ] Vertical slice 4D: popularity/content/behavior recommendation và metric pilot.
+- [ ] Vertical slice 4E: ingest/chunk/embed tài liệu chính sách và knowledge retrieval có citation metadata.
 - [ ] Tạo model registry thống nhất.
 - [ ] Tạo indexing job model thống nhất.
 - [ ] Tạo event consumer idempotent.
 - [ ] Tạo retry/DLQ/reconciliation.
-- [ ] Bổ sung recommendation API.
 - [ ] Bổ sung evaluation API/runner.
 
 Tiêu chí hoàn thành:
@@ -897,6 +987,7 @@ Tiêu chí hoàn thành:
 - AI Retrieval không ghi các bảng nghiệp vụ do Commerce sở hữu trong `public`.
 - Full reindex có thể chạy từ event/backfill.
 - Text/image search đạt hoặc vượt baseline.
+- Recommendation được đánh giá trên split theo thời gian và có phương án cold-start.
 - Provider lỗi không làm Commerce ngừng hoạt động.
 
 ### Giai đoạn 5 - Tái cấu trúc Assistant Service
@@ -906,7 +997,7 @@ Tiêu chí hoàn thành:
 - [ ] Tạo AI Retrieval API client typed.
 - [ ] Chuẩn hóa tool registry.
 - [ ] Giữ confirmation cho hành động thay đổi dữ liệu.
-- [ ] Thiết kế lại bảng chat do Assistant sở hữu trong `public`; chưa tạo schema `assistant`.
+- [ ] Tạo migration và repository cho các bảng chat do Assistant sở hữu trong schema `assistant`.
 - [ ] Giữ Redis cho context tạm.
 - [ ] Thêm citation/evidence vào câu trả lời.
 - [ ] Thêm feedback API.
@@ -938,14 +1029,16 @@ Tiêu chí hoàn thành:
 
 ### Giai đoạn 7 - Dataset và evaluation
 
-- [ ] Làm sạch/version hóa catalog dataset.
-- [ ] Xây tập text queries và ground truth.
-- [ ] Xây tập image queries độc lập.
+- [ ] Mở rộng và chốt version catalog từ pilot Giai đoạn 2.
+- [ ] Mở rộng, review và khóa tập text queries/ground truth; giữ test set chưa dùng để tuning.
+- [ ] Mở rộng và khóa tập image queries độc lập.
 - [ ] Xây recommendation split theo thời gian.
 - [ ] Chạy các baseline.
 - [ ] Chạy từng mô hình/chiến lược.
+- [ ] Chạy ma trận prompt rule-based/zero-shot/few-shot/hybrid cho query understanding.
 - [ ] Lưu kết quả vào database và export JSON/CSV.
 - [ ] Phân tích failure cases.
+- [ ] Báo cáo latency, token/API usage và chi phí ước tính cho từng cấu hình.
 - [ ] Chốt cấu hình cuối dựa trên số liệu.
 
 Tiêu chí hoàn thành:
@@ -960,7 +1053,7 @@ Tiêu chí hoàn thành:
 - [ ] Kiểm tra backup/restore.
 - [ ] Kiểm tra DLQ và replay.
 - [ ] Kiểm tra model rollback.
-- [ ] Hoàn thiện Use Case, Class, Sequence, ERD và deployment diagrams.
+- [ ] Cập nhật Use Case, Class, Sequence, ERD và deployment diagrams đã thiết kế từ Giai đoạn 2 theo implementation cuối.
 - [ ] Hoàn thiện mô tả thuật toán và công thức metric.
 - [ ] Chuẩn bị demo script và dữ liệu demo ổn định.
 - [ ] Tạo release tag cuối.
@@ -975,26 +1068,28 @@ Tiêu chí hoàn thành:
 
 ## 15. Thứ tự pull request khuyến nghị
 
-1. `docs: add target architecture and ownership ADR`
-2. `chore: isolate experimental services from default runtime`
-3. `infra: add full local compose and health checks`
-4. `db: introduce service-owned schemas and roles`
-5. `commerce: add sportswear taxonomy`
-6. `commerce: add user interaction events`
-7. `commerce: standardize catalog transactional outbox`
-8. `contracts: publish catalog event v2`
-9. `ai-retrieval: create service skeleton and migrations`
-10. `ai-retrieval: consume catalog events and build read model`
-11. `ai-retrieval: migrate hybrid text search`
-12. `ai-retrieval: migrate visual search`
-13. `ai-retrieval: implement recommendation pipeline`
-14. `ai-retrieval: implement evaluation storage and runner`
-15. `assistant: remove direct commerce database access`
-16. `assistant: integrate retrieval and commerce clients`
-17. `security: migrate refresh flow to HttpOnly cookie`
-18. `storefront: integrate unified search and assistant`
-19. `admin: integrate AI operations and evaluation screens`
-20. `test: add cross-service E2E suite`
+1. `docs: freeze MVP scope and add target architecture/ownership ADR`
+2. `docs: add use cases, domain/sequence diagrams, data dictionary and evaluation protocol`
+3. `chore: isolate experimental services from default runtime`
+4. `infra: add full local compose and health checks`
+5. `db: add reviewed V2 baseline, service-owned schemas and roles`
+6. `data: add taxonomy and versioned pilot catalog pipeline`
+7. `commerce: adapt core modules to V2 baseline`
+8. `commerce: add user interaction events`
+9. `commerce: standardize catalog transactional outbox`
+10. `contracts: publish catalog event v2 and OpenAPI contracts`
+11. `ai-retrieval: create service skeleton and migrations`
+12. `ai-retrieval: consume catalog events and build read model`
+13. `ai-retrieval: migrate structured and hybrid text search`
+14. `ai-retrieval: migrate visual search into ai_retrieval schema`
+15. `ai-retrieval: implement recommendation pipeline`
+16. `ai-retrieval: implement evaluation storage and runner`
+17. `assistant: add assistant schema and remove direct commerce database access`
+18. `assistant: integrate retrieval and commerce clients`
+19. `security: migrate refresh flow to HttpOnly cookie`
+20. `storefront: integrate unified search and assistant`
+21. `admin: integrate AI operations and evaluation screens`
+22. `test: add cross-service E2E suite and reproducible benchmark runner`
 
 ---
 
@@ -1012,6 +1107,9 @@ Tiêu chí hoàn thành:
 | Team merge conflict | PR nhỏ, CODEOWNERS, module ownership |
 | Thiếu dữ liệu recommendation | Interaction logging sớm, baseline rõ ràng |
 | Benchmark bị leakage | Query/ảnh độc lập, split theo thời gian |
+| Prompt overfit vào test set | Tách development/test, khóa test set và version hóa prompt |
+| Chi phí API vượt ngân sách | Local baseline, cache theo hash, budget guard và báo cáo cost/run |
+| Hết connection Supabase Free | Pool nhỏ theo service, local DB cho dev/test, theo dõi connection |
 | Scope creep | Forecasting/Admin Copilot để experimental |
 | Secret bị lộ | Secret scanning, `.env.example`, rotate credential |
 
@@ -1025,13 +1123,13 @@ Tiêu chí hoàn thành:
 - Chatbot tư vấn được sản phẩm, size và chính sách dựa trên dữ liệu có nguồn.
 - Recommendation xuất hiện trên các vị trí đã định và ghi nhận impression/click.
 - Người dùng đặt hàng và thanh toán COD/VNPAY.
-- Admin quản lý catalog, đơn hàng, tồn kho và báo cáo.
+- Admin quản lý catalog, người dùng, tham số hệ thống, đơn hàng, tồn kho và báo cáo.
 
 ### Kiến trúc
 
 - Không service AI nào ghi trực tiếp bảng Commerce.
 - Không còn migration AI thuộc Commerce Core.
-- Mỗi schema có role và owner rõ ràng.
+- Mỗi schema/bảng có đúng một write owner; Assistant không đọc trực tiếp bảng Commerce.
 - Event consumer idempotent và có DLQ.
 - Commerce vẫn hoạt động khi AI provider tạm thời lỗi.
 
@@ -1040,7 +1138,9 @@ Tiêu chí hoàn thành:
 - Có dataset versioned cho ba bài toán.
 - Có baseline và mô hình đề xuất.
 - Có Precision/Recall/MRR/NDCG/Hit Rate phù hợp.
+- Có kết quả query understanding/prompt engineering trên test set tách biệt.
 - Có latency và failure analysis.
+- Có model/prompt version, token/API usage và chi phí ước tính.
 - Kết quả có thể tái lập bằng script và configuration đã lưu.
 
 ### Chất lượng
@@ -1050,6 +1150,7 @@ Tiêu chí hoàn thành:
 - Không có secret trong Git.
 - Có backup/restore và hướng dẫn cài đặt.
 - Có tài liệu kiến trúc, ERD và sequence diagrams cập nhật.
+- Có phần tổng quan lý thuyết, lựa chọn phương pháp và giới hạn nghiên cứu liên kết với bằng chứng thực nghiệm.
 
 ---
 
@@ -1060,11 +1161,13 @@ Tiêu chí hoàn thành:
 - [ ] Có giữ Google login trong phạm vi cuối hay không.
 - [ ] Embedding provider cuối cho text và image.
 - [ ] LLM provider chính và fallback.
+- [ ] Baseline local/mã nguồn mở và ma trận mô hình/prompt cần so sánh.
 - [ ] Bộ taxonomy sản phẩm thể thao.
 - [ ] Quy mô dataset benchmark.
 - [ ] Chính sách lưu chat và interaction data.
 - [x] Không tạo staging riêng trong phạm vi đồ án; Supabase chung là integration/demo.
 - [ ] Mức ngân sách API AI tối đa.
+- [ ] Ngưỡng nghiệm thu metric/latency sau khi có baseline, không đặt số tùy ý trước dữ liệu.
 
 Không bắt đầu di chuyển schema hoặc xóa service trước khi hoàn thành các quyết định trên và Giai đoạn 0.
 
@@ -1078,10 +1181,9 @@ Không bắt đầu di chuyển schema hoặc xóa service trước khi hoàn th
 - Một PostgreSQL database.
 - Bật extension `vector` để dùng `pgvector`.
 - Giữ bảng nghiệp vụ trong `public`.
-- Giữ schema `visual_search` hiện tại.
-- Tạo thêm `ai_retrieval` và `evaluation` bằng migration khi bắt đầu các module tương ứng.
+- Tạo `ai_retrieval`, `evaluation` và `assistant` bằng migration. Image embedding nằm trong `ai_retrieval`; không tạo schema `visual_search` mới.
 - Storefront/Admin chỉ gọi backend API, không gọi trực tiếp Data API của Supabase.
-- Không thêm `visual_search`, `ai_retrieval`, `evaluation` vào danh sách Exposed schemas nếu frontend không cần truy cập trực tiếp.
+- Không thêm `ai_retrieval`, `evaluation`, `assistant` vào danh sách Exposed schemas nếu frontend không cần truy cập trực tiếp.
 
 ### 19.2. Chiến lược tạo trắng
 
@@ -1094,7 +1196,7 @@ Thực hiện theo thứ tự:
 3. Giữ project cũ ở chế độ read-only về mặt quy trình nhóm.
 4. Tạo Supabase project mới tại Singapore.
 5. Lưu credential mới vào secret store/`.env` cục bộ, không commit Git.
-6. Chưa đổi `backend/.env` sang project mới nếu baseline schema chưa tồn tại, vì backend đang dùng `ddl-auto=validate` và sẽ không khởi động trên database chưa có bảng.
+6. `backend/.env` hiện đã trỏ tới project mới nhưng phải giữ Flyway, seed và các feature AI ở trạng thái tắt; không khởi động luồng nghiệp vụ vào database trắng trước khi baseline schema tồn tại.
 7. Thiết kế ERD, ownership, constraint và index.
 8. Tạo baseline migration mới trên một PostgreSQL local sạch.
 9. Review migration bằng pull request.
@@ -1137,16 +1239,17 @@ Không chạy trực tiếp trên database chung cho đến khi SQL này đượ
 ```sql
 create schema if not exists ai_retrieval;
 create schema if not exists evaluation;
+create schema if not exists assistant;
 ```
 
-Không tạo lại `visual_search` nếu schema đã tồn tại.
+Schema `visual_search` chỉ thuộc hệ thống cũ. Nếu gặp trong database nguồn thì export để đối chiếu/mapping; không tái tạo trên database V2.
 
 Kiểm tra:
 
 ```sql
 select schema_name
 from information_schema.schemata
-where schema_name in ('public', 'visual_search', 'ai_retrieval', 'evaluation')
+where schema_name in ('public', 'ai_retrieval', 'evaluation', 'assistant')
 order by schema_name;
 ```
 
@@ -1291,8 +1394,8 @@ Nếu sau này upload trực tiếp từ trình duyệt:
 
 - [x] Một Supabase project mới hoạt động và kết nối Session Pooler thành công.
 - [ ] Bật và kiểm tra extension `pgvector` sau khi thiết kế vector schema.
-- [ ] Migration hiện tại chạy/validate thành công.
-- [ ] Các schema `public`, `visual_search`, `ai_retrieval`, `evaluation` đúng ownership.
+- [ ] Baseline migration V2 chạy/validate thành công trên PostgreSQL local sạch và Supabase mới; không chạy chuỗi 52 migration legacy.
+- [ ] Các schema `public`, `ai_retrieval`, `evaluation`, `assistant` đúng ownership.
 - [ ] Local/test database không trỏ vào Supabase chung.
 - [x] Cloudinary credential xác thực thành công bằng API chỉ đọc.
 - [ ] Backend upload và xóa ảnh Cloudinary thành công.
@@ -1346,6 +1449,7 @@ Kết luận: nguồn hiện tại có thể tái sử dụng làm **raw input**
 | Đơn hàng/thanh toán | Sinh kịch bản demo có nhãn | Không giả làm dữ liệu thật |
 | Interaction | Sinh/thu thập theo event schema mới | Tạo mới |
 | Text/image embeddings | Index lại sau khi catalog ổn định | Không chuyển vector cũ |
+| Knowledge/RAG | Viết/duyệt chính sách và FAQ, lưu nguồn + version rồi chunk/index lại | Chuyển có biên tập |
 | Chat history | Bắt đầu mới | Không chuyển mặc định |
 | Evaluation ground truth | Gán nhãn và version độc lập | Tạo mới |
 
@@ -1390,10 +1494,12 @@ datasets/
 ├── normalized/
 │   ├── catalog-v2.json
 │   ├── taxonomy-v1.json
+│   ├── knowledge-v1.json
 │   └── validation-report.json
 ├── seed/
 │   ├── reference-data/
 │   ├── catalog/
+│   ├── knowledge/
 │   └── demo-transactions/
 └── evaluation/
     ├── text-search/
@@ -1486,6 +1592,7 @@ Trước mỗi lần import, pipeline phải kiểm tra:
 - [ ] Bổ sung sản phẩm để đạt độ đa dạng đã chốt.
 - [ ] Kiểm tra quyền sử dụng và upload ảnh lên Cloudinary.
 - [ ] Seed taxonomy, catalog, variants và inventory.
+- [ ] Biên soạn/version hóa chính sách, FAQ, hướng dẫn size/chăm sóc và index knowledge cho RAG.
 - [ ] Seed user/transaction demo an toàn.
 - [ ] Ghi interaction data theo schema mới.
 - [ ] Sinh lại text/image embeddings.
