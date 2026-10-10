@@ -257,7 +257,7 @@ Giai đoạn đầu, các backend có thể dùng connection hiện tại để 
 ### 6.2. Migration ownership
 
 - Giữ migration cũ trong Git tag/nhánh legacy để phục vụ đối chiếu; không sửa lịch sử của database cũ.
-- Không cho Supabase mới chạy thư mục `classpath:db/migration` hiện tại vì nó chứa 52 migration của hệ thống cũ.
+- Supabase mới chỉ chạy chuỗi chính thức `classpath:db/v2-migration`; chuỗi migration legacy đã được loại khỏi runtime và chỉ còn trong lịch sử Git.
 - Tạo location mới, ví dụ `classpath:db/v2-migration`, và chỉ chuyển `spring.flyway.locations` sang location này sau khi baseline V2 được duyệt.
 - Baseline đầu tiên của Commerce tạo các bảng nghiệp vụ cần giữ trong `public`; không tái tạo bảng ngoài phạm vi chỉ vì chúng từng tồn tại.
 - AI Retrieval quản lý migration của `ai_retrieval` và `evaluation` trong chính service AI hoặc location tách biệt. Các bảng `visual_search` cũ được xem là nguồn tham khảo và được ánh xạ vào `ai_retrieval`, không tái tạo thành một schema runtime riêng.
@@ -875,9 +875,9 @@ Mục tiêu: có điểm phục hồi trước khi tái cấu trúc.
 
 - [x] Tạo tag Git `legacy/pre-v2-prune-20261004` cho phiên bản trước khi tinh gọn.
 - [x] Ghi nhận `frontend/storefront/src/modules/visual-search/VisualSearchDialog.tsx` là thay đổi có sẵn của thành viên, không thuộc đợt tinh gọn.
-- [x] Không có dữ liệu database cũ cần backup/chuyển; giữ code/migration legacy trong Git để đối chiếu.
+- [x] Không có dữ liệu database cũ cần backup/chuyển; migration legacy chỉ giữ trong lịch sử Git để đối chiếu.
 - [x] Tạo một Supabase project mới trắng ở cấp ứng dụng.
-- [x] Không dùng Flyway history cũ cho V2; 52 migration legacy chỉ là tài liệu tham khảo trong repository.
+- [x] Không dùng Flyway history cũ cho V2; migration legacy chỉ là tài liệu tham khảo trong lịch sử Git.
 - [ ] Chạy toàn bộ test hiện có và lưu báo cáo.
 - [ ] Chạy smoke test các luồng chính.
 - [ ] Lưu benchmark text/image hiện tại làm baseline.
@@ -1180,7 +1180,7 @@ Không bắt đầu di chuyển schema hoặc xóa service trước khi hoàn th
 Thực hiện theo thứ tự:
 
 1. Xác nhận database ứng dụng đích đang trắng và không có dữ liệu cũ cần chuyển.
-2. Giữ code, migration và Flyway history legacy trong Git chỉ để đối chiếu; không chạy lên V2.
+2. Giữ migration và Flyway history legacy trong lịch sử Git chỉ để đối chiếu; không chạy lên V2.
 3. Tạo Supabase project mới tại Singapore.
 4. Lưu credential mới vào secret store/`.env` cục bộ, không commit Git.
 5. `backend/.env` hiện đã trỏ tới project mới nhưng phải giữ Flyway, seed và các feature AI ở trạng thái tắt; không khởi động luồng nghiệp vụ vào database trắng trước khi baseline schema tồn tại.

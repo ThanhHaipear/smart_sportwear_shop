@@ -12,7 +12,7 @@ Không tự huấn luyện model. Provider mặc định là Voyage `voyage-mult
 - Storefront: Next.js trong `frontend/storefront/`.
 - Admin: Next.js trong `frontend/admin/`.
 - AI chatbot hiện tại: FastAPI/Python trong `chatbot-service/`; không đặt visual search vào module này.
-- Database: Supabase PostgreSQL có pgvector và Flyway migrations trong `backend/src/main/resources/db/migration/`.
+- Database: Supabase PostgreSQL có pgvector và Flyway migrations chính thức trong `backend/src/main/resources/db/v2-migration/`.
 - Ảnh ACTIVE hiện gồm 442 URL `cdn.shopify.com` và 134 URL `res.cloudinary.com`; 142 ảnh thiếu `public_id`. Không giả định mọi ảnh đều nằm trên Cloudinary.
 - `product_embeddings vector(1536)` hiện dành cho OpenAI text embedding; không sửa, xóa hoặc dùng bảng này cho ảnh.
 - Dữ liệu đã đo: 228 sản phẩm, 107 ACTIVE, 676 ảnh, trong đó 576 ảnh thuộc sản phẩm ACTIVE; chỉ 102 sản phẩm ACTIVE có ảnh và 5 sản phẩm ACTIVE chưa có ảnh.

@@ -306,7 +306,7 @@ Các view tối thiểu: `report_sales_by_period`, `report_sales_by_customer`, `
 ## 12. Thứ tự triển khai và kiểm tra nghiệm thu schema
 
 1. Taxonomy v1, quy tắc size, model/dimension vector, retention O01 và định nghĩa doanh thu O02 đã chốt; tiếp tục review ERD và phạm vi migration.
-2. Tạo schema/role/extension cần thiết trên PostgreSQL local sạch (`vector`; `pg_trgm`/`unaccent` nếu dùng). Tách lịch sử migration theo owner. Không chạy thư mục `backend/src/main/resources/db/migration` legacy lên Supabase V2.
+2. Tạo schema/role/extension cần thiết trên PostgreSQL local sạch (`vector`; `pg_trgm`/`unaccent` nếu dùng). Tách lịch sử migration theo owner. Chỉ chạy chuỗi chính thức `backend/src/main/resources/db/v2-migration` lên Supabase V2; migration legacy chỉ còn trong lịch sử Git.
 3. Migration Commerce: identity → taxonomy → catalog dataset/product/variant/image → cart/order/payment → inventory/fulfillment → settings/audit/outbox/interaction.
 4. Migration AI: `ai_retrieval` read model/model/vector/knowledge/query prompt/recommendation → `evaluation` datasets/prompt artifacts/cases/labels/splits/runs/results/metrics. Migration Assistant: `assistant_prompt_versions` → session/message/evidence/feedback/tool audit.
 5. Seed taxonomy trước; import pilot catalog 30–50 sản phẩm có nguồn/ảnh hợp lệ qua dataset manifest; kiểm tra checksum, UQ, FK, `CHECK`, giá, tồn, ảnh primary và mapping size.
