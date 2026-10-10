@@ -12,9 +12,7 @@ import com.dunghaiquyen.ecommerce.modules.cart.entity.Cart;
 import com.dunghaiquyen.ecommerce.modules.cart.entity.CartItem;
 import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
 import com.dunghaiquyen.ecommerce.modules.cart.repository.CartRepository;
-import com.dunghaiquyen.ecommerce.modules.combo.service.ComboService;
 import com.dunghaiquyen.ecommerce.modules.inventory.service.InventoryService;
-import com.dunghaiquyen.ecommerce.modules.notification.service.NotificationService;
 import com.dunghaiquyen.ecommerce.modules.order.dto.AdminOrderListQuery;
 import com.dunghaiquyen.ecommerce.modules.order.dto.AdminOrderResponse;
 import com.dunghaiquyen.ecommerce.modules.order.dto.CreateOrderRequest;
@@ -42,7 +40,6 @@ import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.Payment;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentProvider;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
-import com.dunghaiquyen.ecommerce.modules.promotion.service.PromotionService;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
 import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
@@ -102,9 +99,6 @@ public class OrderService {
     private final com.dunghaiquyen.ecommerce.modules.inventory.repository.InventoryTransactionRepository
             inventoryTransactionRepository;
     private final OrderMapper orderMapper;
-    private final ComboService comboService;
-    private final PromotionService promotionService;
-    private final NotificationService notificationService;
     private final AppShippingProperties shippingProperties;
 
     public OrderService(
@@ -122,9 +116,6 @@ public class OrderService {
             com.dunghaiquyen.ecommerce.modules.inventory.repository.InventoryTransactionRepository
                     inventoryTransactionRepository,
             OrderMapper orderMapper,
-            ComboService comboService,
-            PromotionService promotionService,
-            NotificationService notificationService,
             AppShippingProperties shippingProperties) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
@@ -139,9 +130,6 @@ public class OrderService {
         this.inventoryService = inventoryService;
         this.inventoryTransactionRepository = inventoryTransactionRepository;
         this.orderMapper = orderMapper;
-        this.comboService = comboService;
-        this.promotionService = promotionService;
-        this.notificationService = notificationService;
         this.shippingProperties = shippingProperties;
     }
 
@@ -217,9 +205,7 @@ public class OrderService {
         BigDecimal subtotal = BigDecimal.ZERO;
         for (ValidatedLine line : validated) {
             ProductVariant variant = line.variant();
-            // Same effective price (variant markdown vs active promotion, whichever
-            // discount is bigger) the customer was just shown on the product page
-            // and in the checkout preview - see effectiveUnitPrice's javadoc.
+            // Read the current SKU price while the variant is locked.
             BigDecimal unitPrice = effectiveUnitPrice(variant);
             BigDecimal lineTotal = unitPrice.multiply(BigDecimal.valueOf(line.quantity()));
             subtotal = subtotal.add(lineTotal);
@@ -244,15 +230,8 @@ public class OrderService {
         // so preview and the real order always agree on this number.
         order.setShippingFee(calculateShippingFee(subtotal));
 
-        // Combo (bundle) discount: every active combo whose full product set is
-        // present in this cart takes its flat amount off. Computed BEFORE the
-        // order is written, same "decide the final numbers before persisting"
-        // discipline as the stock checks above. Clamped to the subtotal so the
-        // total can never go negative.
-        java.util.Set<UUID> comboProductIds = order.getItems().stream()
-                .map(item -> item.getProduct().getId())
-                .collect(java.util.stream.Collectors.toSet());
-        BigDecimal discount = comboService.calculateDiscount(comboProductIds).totalDiscount().min(subtotal);
+        // Combo/promotion pricing is deferred until its V2 schema exists.
+        BigDecimal discount = BigDecimal.ZERO;
         order.setDiscountAmount(discount);
         order.setTotalAmount(subtotal.add(order.getShippingFee()).subtract(discount));
 
@@ -289,11 +268,6 @@ public class OrderService {
         if (!buyNow) {
             cartItemRepository.deleteAll(cartItems);
         }
-
-        // Phase O: confirmation email. Runs inside this same transaction and
-        // never throws (see NotificationService's class javadoc) - a failed
-        // send is recorded but must not undo the order that was just created.
-        notificationService.notifyOrderCreated(order);
 
         return assembleResponse(order);
     }
@@ -585,18 +559,6 @@ public class OrderService {
         order = orderRepository.save(order);
         appendStatusHistory(order, current, target, actor, null);
 
-        // Phase O: fires for CANCELLED regardless of who triggered it (admin or
-        // the customer themselves, both reach this shared method) - the order's
-        // own customer should hear about a cancellation either way.
-        if (target == OrderStatus.CANCELLED) {
-            notificationService.notifyOrderCancelled(order);
-            notificationService.notifyAdminsOrderCancelled(order);
-        } else if (target == OrderStatus.DELIVERED) {
-            notificationService.notifyOrderDelivered(order);
-        } else if (ADMIN_EDITABLE_STATUSES.contains(target)) {
-            notificationService.notifyOrderStatusUpdated(order,
-                    orderStatusLabel(current), orderStatusLabel(target));
-        }
         return order;
     }
 
@@ -613,17 +575,6 @@ public class OrderService {
         history.setActorUser(actor);
         history.setReason(reason);
         orderStatusHistoryRepository.save(history);
-    }
-
-    private String orderStatusLabel(OrderStatus status) {
-        return switch (status) {
-            case PENDING_CONFIRMATION -> "Chờ xác nhận";
-            case CONFIRMED -> "Đã xác nhận";
-            case PACKING -> "Đang đóng gói";
-            case SHIPPING -> "Đang giao";
-            case DELIVERED -> "Đã giao";
-            case CANCELLED -> "Đã hủy";
-        };
     }
 
     private record ValidatedLine(int quantity, ProductVariant variant) {
@@ -682,17 +633,10 @@ public class OrderService {
     }
 
     /**
-     * What this variant actually costs right now, including any active product
-     * promotion - see PromotionService.effectivePrice for the "which discount
-     * wins" rule. Used everywhere a price is computed for the customer (cart
-     * preview, checkout preview, and the real order) so none of them can drift
-     * from what the product detail page shows while browsing.
+     * Baseline SKU price shared by cart preview and order creation.
      */
     private BigDecimal effectiveUnitPrice(ProductVariant variant) {
-        Integer promoPercent = promotionService
-                .activePercentDiscountByProduct(List.of(variant.getProduct().getId()))
-                .get(variant.getProduct().getId());
-        return promotionService.effectivePrice(variant.getPrice(), variant.getCompareAtPrice(), promoPercent).price();
+        return variant.getPrice();
     }
 
     private int requireBuyNowQuantity(Integer quantity) {

@@ -1,13 +1,13 @@
 package com.dunghaiquyen.ecommerce.modules.auth.service;
 
 import com.dunghaiquyen.ecommerce.common.exception.InvalidTokenException;
+import com.dunghaiquyen.ecommerce.common.mail.MailService;
 import com.dunghaiquyen.ecommerce.common.security.TokenHasher;
 import com.dunghaiquyen.ecommerce.config.AppPasswordResetProperties;
 import com.dunghaiquyen.ecommerce.modules.auth.entity.PasswordResetToken;
 import com.dunghaiquyen.ecommerce.modules.auth.entity.RefreshTokenRevocationReason;
 import com.dunghaiquyen.ecommerce.modules.auth.repository.PasswordResetTokenRepository;
 import com.dunghaiquyen.ecommerce.modules.auth.repository.RefreshTokenRepository;
-import com.dunghaiquyen.ecommerce.modules.notification.service.NotificationService;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserStatus;
 import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
@@ -16,6 +16,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PasswordResetService {
 
+    private static final Logger log = LoggerFactory.getLogger(PasswordResetService.class);
     private static final int DEFAULT_TTL_MINUTES = 15;
     private static final int TOKEN_BYTE_LENGTH = 32;
 
@@ -38,7 +41,7 @@ public class PasswordResetService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenHasher tokenHasher;
     private final PasswordEncoder passwordEncoder;
-    private final NotificationService notificationService;
+    private final MailService mailService;
     private final AppPasswordResetProperties properties;
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -48,14 +51,14 @@ public class PasswordResetService {
             RefreshTokenRepository refreshTokenRepository,
             TokenHasher tokenHasher,
             PasswordEncoder passwordEncoder,
-            NotificationService notificationService,
+            MailService mailService,
             AppPasswordResetProperties properties) {
         this.userRepository = userRepository;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.tokenHasher = tokenHasher;
         this.passwordEncoder = passwordEncoder;
-        this.notificationService = notificationService;
+        this.mailService = mailService;
         this.properties = properties;
     }
 
@@ -94,11 +97,17 @@ public class PasswordResetService {
         }
 
         String link = properties.resetUrl() + "?token=" + rawToken;
-        // Phase O: routed through NotificationService (not MailService directly)
-        // so forgot-password is recorded in the same notification history as
-        // order emails, and a failed send never rolls back the token just
-        // issued above - see NotificationService's class javadoc.
-        notificationService.notifyPasswordReset(user, link, tokenTtlMinutes());
+        // Delivery failure must not roll back the one-time token just issued.
+        try {
+            mailService.send(
+                    user.getEmail(),
+                    "Đặt lại mật khẩu",
+                    "Mở liên kết sau để đặt lại mật khẩu: " + link
+                            + "\nLiên kết hết hạn sau " + tokenTtlMinutes() + " phút.");
+        } catch (RuntimeException ex) {
+            // Email delivery must not roll back the reset token that was issued.
+            log.warn("Password reset email delivery failed: {}", ex.getClass().getSimpleName());
+        }
     }
 
     /**

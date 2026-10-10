@@ -170,3 +170,12 @@ Review thiết kế từng bảng đã hoàn thành và được Chủ dự án 
 4. Viết baseline migration theo 1A → 1B → 1C → 1D và không chạy migration legacy.
 5. Chạy migration từ PostgreSQL local sạch; chạy negative/concurrency/idempotency/retention test đã liệt kê.
 6. Chỉ sau khi review kết quả test và rollback plan mới chạy một lần lên Supabase demo.
+
+### 9.1. Rà soát runtime sau khi bỏ migration legacy (10/10/2026)
+
+- Đã giới hạn JPA vào đúng entity/repository thuộc baseline 1A–1B; Spring context không còn yêu cầu các bảng legacy ngoài V1–V3.
+- Các module `banner`, `collection`, `combo`, `notification`, `page`, `promotion`, `recommendation`, `review`, `shipping`, `wishlist` và seed cũ được giữ trong mã nguồn nhưng loại khỏi runtime. Chỉ bật lại sau khi có migration, owner và test riêng.
+- Luồng lõi đã bỏ phụ thuộc vào combo/promotion/collection/review/notification: checkout dùng giá SKU hiện tại và discount bằng 0; password reset gửi qua `MailService`; sản phẩm chưa trả review/collection/promotion legacy.
+- Đã xóa repository aggregate review đặt nhầm trong module product và các endpoint gắn collection khỏi controller baseline.
+- Bằng chứng: backend compile và `OrderFinancialPolicyTest` thành công; PostgreSQL Testcontainers sạch chạy Flyway `V1 → V3`, validate 3 migration, Hibernate validate, `EcommerceBackendApplicationTests.contextLoads` và 8/8 ca `ForgotPasswordIntegrationTest` thành công.
+- Bộ integration test nghiệp vụ cũ cần chuyển fixture sang quy tắc 1A: sản phẩm chỉ được `ACTIVE` sau khi có variant bán được và ảnh chính upload đủ checksum/kích thước/định dạng/provenance. Các ca combo/promotion/notification và module đợt 2 không còn thuộc baseline test.

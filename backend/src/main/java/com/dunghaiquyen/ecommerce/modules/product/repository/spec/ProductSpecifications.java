@@ -1,6 +1,5 @@
 package com.dunghaiquyen.ecommerce.modules.product.repository.spec;
 
-import com.dunghaiquyen.ecommerce.modules.collection.entity.ProductCollection;
 import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderItem;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatus;
@@ -120,18 +119,6 @@ public final class ProductSpecifications {
      * same EXISTS pattern used for variant-based facets above - avoids the
      * duplicate-row problem that a JOIN would introduce when paginating.
      */
-    public static Specification<Product> inCollection(UUID collectionId) {
-        return (root, query, cb) -> {
-            Subquery<Long> sub = query.subquery(Long.class);
-            var pcRoot = sub.from(ProductCollection.class);
-            sub.select(cb.literal(1L));
-            sub.where(
-                    cb.equal(pcRoot.get("product"), root),
-                    cb.equal(pcRoot.get("collection").get("id"), collectionId));
-            return cb.exists(sub);
-        };
-    }
-
     public static Specification<Product> keywordMatches(String keyword) {
         return (root, query, cb) -> {
             String pattern = "%" + keyword.toLowerCase() + "%";

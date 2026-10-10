@@ -9,6 +9,7 @@ import com.dunghaiquyen.ecommerce.common.mail.MailService;
 import com.dunghaiquyen.ecommerce.common.security.TokenHasher;
 import com.dunghaiquyen.ecommerce.modules.auth.repository.PasswordResetTokenRepository;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MvcResult;
 
 class ForgotPasswordIntegrationTest extends AbstractIntegrationTest {
@@ -32,6 +34,9 @@ class ForgotPasswordIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private TokenHasher tokenHasher;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     /**
      * Overrides the real LoggingMailService with a capturing fake so tests can
@@ -166,8 +171,10 @@ class ForgotPasswordIntegrationTest extends AbstractIntegrationTest {
         String token = mailService.lastTokenFor(email);
 
         var resetToken = passwordResetTokenRepository.findByTokenHash(tokenHasher.hash(token)).orElseThrow();
-        resetToken.setExpiresAt(Instant.now().minusSeconds(60));
-        passwordResetTokenRepository.save(resetToken);
+        Instant now = Instant.now();
+        jdbcTemplate.update(
+                "update password_reset_tokens set created_at = ?, expires_at = ? where id = ?",
+                Timestamp.from(now.minusSeconds(120)), Timestamp.from(now.minusSeconds(60)), resetToken.getId());
 
         MvcResult result = resetPassword(token, "NewPassword456");
         assertThat(result.getResponse().getStatus()).isEqualTo(401);

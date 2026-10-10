@@ -19,7 +19,6 @@ import com.dunghaiquyen.ecommerce.modules.product.dto.ProductListQuery;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ProductSuggestionResponse;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ProductUpdateRequest;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ProductVariantResponse;
-import com.dunghaiquyen.ecommerce.modules.product.dto.ReviewAggregateProjection;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ReviewSummaryResponse;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Gender;
@@ -30,15 +29,12 @@ import com.dunghaiquyen.ecommerce.modules.product.entity.VariantStatus;
 import com.dunghaiquyen.ecommerce.modules.product.mapper.ProductMapper;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductReviewAggregateRepository;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepository;
 import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
-import com.dunghaiquyen.ecommerce.modules.collection.repository.CollectionRepository;
 import com.dunghaiquyen.ecommerce.modules.inventory.repository.InventoryTransactionRepository;
 import com.dunghaiquyen.ecommerce.modules.order.repository.OrderItemRepository;
 import com.dunghaiquyen.ecommerce.modules.product.repository.spec.ProductSpecifications;
 import com.dunghaiquyen.ecommerce.modules.product.util.ThumbnailResolver;
-import com.dunghaiquyen.ecommerce.modules.review.entity.ReviewStatus;
 import com.dunghaiquyen.ecommerce.visualsearch.outbox.CatalogEventType;
 import com.dunghaiquyen.ecommerce.visualsearch.outbox.CatalogOutboxService;
 import java.math.BigDecimal;
@@ -77,13 +73,10 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
     private final ProductMapper productMapper;
-    private final ProductReviewAggregateRepository reviewAggregateRepository;
-    private final CollectionRepository collectionRepository;
     private final CartItemRepository cartItemRepository;
     private final InventoryTransactionRepository inventoryTransactionRepository;
     private final OrderItemRepository orderItemRepository;
     private final CatalogOutboxService catalogOutboxService;
-    private final com.dunghaiquyen.ecommerce.modules.promotion.service.PromotionService promotionService;
     private final CatalogReferenceService catalogReferenceService;
 
     public ProductService(
@@ -93,23 +86,17 @@ public class ProductService {
             CategoryRepository categoryRepository,
             BrandRepository brandRepository,
             ProductMapper productMapper,
-            ProductReviewAggregateRepository reviewAggregateRepository,
-            CollectionRepository collectionRepository,
             CartItemRepository cartItemRepository,
             InventoryTransactionRepository inventoryTransactionRepository,
             OrderItemRepository orderItemRepository,
             CatalogOutboxService catalogOutboxService,
-            com.dunghaiquyen.ecommerce.modules.promotion.service.PromotionService promotionService,
             CatalogReferenceService catalogReferenceService) {
-        this.promotionService = promotionService;
         this.productRepository = productRepository;
         this.variantRepository = variantRepository;
         this.imageRepository = imageRepository;
         this.categoryRepository = categoryRepository;
         this.brandRepository = brandRepository;
         this.productMapper = productMapper;
-        this.reviewAggregateRepository = reviewAggregateRepository;
-        this.collectionRepository = collectionRepository;
         this.cartItemRepository = cartItemRepository;
         this.inventoryTransactionRepository = inventoryTransactionRepository;
         this.orderItemRepository = orderItemRepository;
@@ -517,30 +504,16 @@ public class ProductService {
             spec = spec.and(ProductSpecifications.hasVariantPriceLte(q.maxPrice()));
         }
         if (q.discount() != null && !q.discount().isBlank()) {
-            // "any" also surfaces products discounted only via an active Promotion
-            // (no compareAtPrice set on the variant) - e.g. the homepage flash sale.
             Specification<Product> discountSpec = ProductSpecifications.hasVariantDiscountBand(q.discount().trim());
-            if ("any".equalsIgnoreCase(q.discount().trim())) {
-                List<UUID> promoProductIds = promotionService.activePromotionProductIds();
-                if (!promoProductIds.isEmpty()) {
-                    discountSpec = discountSpec.or(ProductSpecifications.hasIdIn(promoProductIds));
-                }
-            }
             spec = spec.and(discountSpec);
         }
         if (q.productType() != null) {
             spec = spec.and(ProductSpecifications.hasProductType(q.productType()));
         }
         if (q.collection() != null && !q.collection().isBlank()) {
-            UUID collectionId = collectionRepository.findBySlug(q.collection().trim())
-                    .map(c -> c.getId())
-                    .orElse(null);
-            if (collectionId != null) {
-                spec = spec.and(ProductSpecifications.inCollection(collectionId));
-            } else {
-                // Unknown collection slug → empty result set (same pattern as unknown category/brand slug).
-                spec = spec.and((root, query, cb) -> cb.disjunction());
-            }
+            // Collections are deferred; an explicit collection filter must not
+            // silently return products from the unfiltered catalog.
+            spec = spec.and((root, query, cb) -> cb.disjunction());
         }
         if (q.featured() != null) {
             spec = spec.and(ProductSpecifications.isFeatured(q.featured()));
@@ -655,19 +628,16 @@ public class ProductService {
                 .collect(Collectors.groupingBy(v -> v.getProduct().getId()));
         Map<UUID, List<ProductImage>> imagesByProduct = imageRepository.findAllByProductIdIn(ids).stream()
                 .collect(Collectors.groupingBy(i -> i.getProduct().getId()));
-        Map<UUID, Integer> promoByProduct = promotionService.activePercentDiscountByProduct(ids);
-
         return products.stream()
                 .map(p -> toListItem(
                         p,
                         variantsByProduct.getOrDefault(p.getId(), List.of()),
-                        imagesByProduct.getOrDefault(p.getId(), List.of()),
-                        promoByProduct.get(p.getId())))
+                        imagesByProduct.getOrDefault(p.getId(), List.of())))
                 .toList();
     }
 
     private ProductListItemResponse toListItem(
-            Product product, List<ProductVariant> variants, List<ProductImage> images, Integer promoPercent) {
+            Product product, List<ProductVariant> variants, List<ProductImage> images) {
         List<BigDecimal> visiblePrices = variants.stream()
                 .filter(v -> v.getStatus() != VariantStatus.INACTIVE)
                 .map(ProductVariant::getPrice)
@@ -691,17 +661,6 @@ public class ProductService {
                         .divide(compareAtPrice, 0, java.math.RoundingMode.HALF_UP)
                         .intValue()
                 : null;
-
-        // Active product promotion overrides variant-based pricing when it offers a
-        // bigger discount: sale = minPrice * (1 - promo%), compareAt = minPrice.
-        if (promoPercent != null && promoPercent > 0 && minPrice != null
-                && (discountPercent == null || promoPercent > discountPercent)) {
-            compareAtPrice = minPrice;
-            salePrice = minPrice
-                    .multiply(BigDecimal.valueOf(100 - promoPercent))
-                    .divide(BigDecimal.valueOf(100), 0, java.math.RoundingMode.HALF_UP);
-            discountPercent = promoPercent;
-        }
 
         return new ProductListItemResponse(
                 product.getId(),
@@ -776,18 +735,10 @@ public class ProductService {
             variants = variants.stream().filter(v -> v.getStatus() != VariantStatus.INACTIVE).toList();
         }
 
-        ReviewSummaryResponse reviewSummary = visibleOnly ? buildReviewSummary(product.getId()) : null;
+        ReviewSummaryResponse reviewSummary = null;
         List<ProductListItemResponse> relatedProducts = visibleOnly ? findRelatedProducts(product) : List.of();
 
         List<ProductVariantResponse> variantResponses = variants.stream().map(productMapper::toVariantResponse).toList();
-        if (visibleOnly) {
-            // Public view only - admins editing a product need to see what they
-            // actually stored, not a promo-adjusted display price.
-            Integer promoPercent = promotionService
-                    .activePercentDiscountByProduct(List.of(product.getId()))
-                    .get(product.getId());
-            variantResponses = variantResponses.stream().map(v -> applyPromo(v, promoPercent)).toList();
-        }
 
         return new ProductDetailResponse(
                 product.getId(),
@@ -807,31 +758,6 @@ public class ProductService {
                 product.getAttributes(),
                 reviewSummary,
                 relatedProducts);
-    }
-
-    /**
-     * Applies the same discount rule OrderService charges at checkout (see
-     * PromotionService.effectivePrice) to the variant response shown on the
-     * product detail page, so a customer never sees a price here that checkout
-     * would then charge differently.
-     */
-    private ProductVariantResponse applyPromo(ProductVariantResponse variant, Integer promoPercent) {
-        var effective = promotionService.effectivePrice(variant.price(), variant.compareAtPrice(), promoPercent);
-        if (effective.price().compareTo(variant.price()) == 0
-                && java.util.Objects.equals(effective.compareAtPrice(), variant.compareAtPrice())) {
-            return variant;
-        }
-        return new ProductVariantResponse(
-                variant.id(), variant.sku(), variant.size(), variant.color(),
-                effective.price(), effective.compareAtPrice(), variant.availableQuantity(), variant.status());
-    }
-
-    /** APPROVED only - pending/rejected reviews must never influence what the public sees (Phase N4). */
-    private ReviewSummaryResponse buildReviewSummary(UUID productId) {
-        ReviewAggregateProjection aggregate = reviewAggregateRepository.aggregateForProduct(productId, ReviewStatus.APPROVED);
-        double avg = aggregate.getAvgRating() != null ? aggregate.getAvgRating() : 0.0;
-        long count = aggregate.getReviewCount() != null ? aggregate.getReviewCount() : 0L;
-        return new ReviewSummaryResponse(avg, count);
     }
 
     /**

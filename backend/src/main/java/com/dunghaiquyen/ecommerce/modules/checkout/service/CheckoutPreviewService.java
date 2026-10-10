@@ -6,13 +6,10 @@ import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
 import com.dunghaiquyen.ecommerce.modules.checkout.dto.CheckoutItemPreview;
 import com.dunghaiquyen.ecommerce.modules.checkout.dto.CheckoutPreviewRequest;
 import com.dunghaiquyen.ecommerce.modules.checkout.dto.CheckoutPreviewResponse;
-import com.dunghaiquyen.ecommerce.modules.combo.service.ComboService;
 import com.dunghaiquyen.ecommerce.modules.order.service.OrderService;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * A thin, read-only preview of what checkout will charge, computed from the exact
  * same rules the real order uses: OrderService.checkCartLines for line validity,
- * ComboService.calculateDiscount for the combo (bundle) discount, and
  * OrderService.calculateShippingFee for shipping — so preview and
  * createOrderFromCart can never disagree on a number.
  */
@@ -28,13 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class CheckoutPreviewService {
 
     private final OrderService orderService;
-    private final ComboService comboService;
     private final AddressRepository addressRepository;
 
-    public CheckoutPreviewService(
-            OrderService orderService, ComboService comboService, AddressRepository addressRepository) {
+    public CheckoutPreviewService(OrderService orderService, AddressRepository addressRepository) {
         this.orderService = orderService;
-        this.comboService = comboService;
         this.addressRepository = addressRepository;
     }
 
@@ -65,13 +58,8 @@ public class CheckoutPreviewService {
         boolean allItemsValid = linesResult.allValid();
         BigDecimal subtotal = linesResult.validSubtotal();
 
-        // Combo (bundle) discount — same valid lines the real order uses; clamped
-        // to the subtotal so the total can't go negative.
-        Set<UUID> comboProductIds = linesResult.lines().stream()
-                .filter(OrderService.CartLineCheck::valid)
-                .map(OrderService.CartLineCheck::productId)
-                .collect(Collectors.toSet());
-        BigDecimal discount = comboService.calculateDiscount(comboProductIds).totalDiscount().min(subtotal);
+        // Combo/promotion pricing is deferred until its V2 schema exists.
+        BigDecimal discount = BigDecimal.ZERO;
 
         BigDecimal shippingFee = orderService.calculateShippingFee(subtotal);
         BigDecimal total = subtotal.add(shippingFee).subtract(discount);

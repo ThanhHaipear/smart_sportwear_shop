@@ -1,8 +1,6 @@
 package com.dunghaiquyen.ecommerce.modules.product.controller;
 
 import com.dunghaiquyen.ecommerce.common.response.ApiResponse;
-import com.dunghaiquyen.ecommerce.modules.collection.dto.AddProductToCollectionRequest;
-import com.dunghaiquyen.ecommerce.modules.collection.service.CollectionService;
 import com.dunghaiquyen.ecommerce.modules.product.dto.AdminProductListItemResponse;
 import com.dunghaiquyen.ecommerce.modules.product.dto.AdminProductListQuery;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ImageCreateRequest;
@@ -43,17 +41,14 @@ public class AdminProductController {
     private final ProductService productService;
     private final ProductVariantService productVariantService;
     private final ProductImageService productImageService;
-    private final CollectionService collectionService;
 
     public AdminProductController(
             ProductService productService,
             ProductVariantService productVariantService,
-            ProductImageService productImageService,
-            CollectionService collectionService) {
+            ProductImageService productImageService) {
         this.productService = productService;
         this.productVariantService = productVariantService;
         this.productImageService = productImageService;
-        this.collectionService = collectionService;
     }
 
     /** Full data set (DRAFT/ACTIVE/INACTIVE) - deliberately a separate query/response shape from the public listing, not a thin reuse of it. */
@@ -117,29 +112,6 @@ public class AdminProductController {
     @PatchMapping("/{id}/images/{imageId}/primary")
     public ApiResponse<List<ProductImageResponse>> setPrimaryImage(@PathVariable UUID id, @PathVariable UUID imageId) {
         return ApiResponse.ok("Primary image updated", productImageService.setPrimary(id, imageId));
-    }
-
-    @GetMapping("/{id}/collections")
-    public ApiResponse<List<com.dunghaiquyen.ecommerce.modules.collection.dto.CollectionResponse>> listCollections(@PathVariable UUID id) {
-        return ApiResponse.ok(collectionService.listCollectionsForProduct(id));
-    }
-
-    /** Catalog V2: link this product to an existing collection. 409 if the link already exists. */
-    @PostMapping("/{id}/collections")
-    public ResponseEntity<ApiResponse<Void>> addToCollection(
-            @PathVariable UUID id, @Valid @RequestBody AddProductToCollectionRequest request) {
-        collectionService.linkProduct(id, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok("Product linked to collection", null));
-    }
-
-    /**
-     * Catalog V2: remove a product from a collection. Idempotent - returns 200
-     * even if the link did not exist (desired post-condition is already satisfied).
-     */
-    @DeleteMapping("/{id}/collections/{collectionId}")
-    public ApiResponse<Void> removeFromCollection(@PathVariable UUID id, @PathVariable UUID collectionId) {
-        collectionService.unlinkProduct(id, collectionId);
-        return ApiResponse.ok("Product removed from collection", null);
     }
 
     @DeleteMapping("/{id}")
