@@ -95,11 +95,13 @@
 
 ### 4.1. Kết quả triển khai và review migration 1B (10/10/2026)
 
+- Tương thích runtime: thêm `V56__align_runtime_with_1a_1b_entities.sql` để chuỗi Flyway legacy hiện tại khởi động được với entity 1A/1B trong giai đoạn chuyển tiếp; migration bổ sung/đổi tên cột, bảng taxonomy/catalog và các bảng Commerce mới mà không thay đổi baseline V2 độc lập.
 - DDL: `backend/src/main/resources/db/v2-migration/V3__create_1b_commerce_core.sql`, tạo đủ 15 bảng Commerce Core và các FK/UQ/CHECK/index/trigger đã chốt; fact log, payment event, history, inventory, audit, outbox và interaction được bảo vệ append-only theo phạm vi phù hợp.
 - Runtime: entity/service đã ánh xạ schema 1B; COD có payment `UNPAID` từ checkout và `PAID` khi giao; VNPay callback được ghi idempotent với payload redacted; hủy đi thẳng `CANCELLED` và tạo refund độc lập; partial/full refund đồng bộ `PARTIALLY_REFUNDED`/`REFUNDED`; return và inventory có row lock, counter và idempotency key.
 - Giao diện: admin/storefront không còn sử dụng `CANCELLATION_REQUESTED` hoặc `CANCELLATION_APPROVED`; đơn đã hủy và refund được theo dõi riêng.
 - Kiểm thử: Flyway `clean → migrate → validate → migrate lại`, Hibernate schema validation và negative test constraint/idempotency/append-only đạt **5/5 test 1B** trên PostgreSQL local 18.4. Bộ xác nhận gồm 1A, 1B và financial policy đạt **13/13 test**; backend compile và TypeScript typecheck của admin/storefront đều đạt.
-- Kết luận: **migration và entity/service 1B đã hoàn thành local**. Chưa bật Flyway V2 cho runtime và chưa chạy Supabase; integration/concurrency Commerce đầy đủ vẫn là cổng bắt buộc trước triển khai.
+- Kiểm thử integration: `OrderIntegrationTest` 26/26, `PaymentIntegrationTest` 23/23, `InventoryIntegrationTest` 16/16 và `ReturnRefundIntegrationTest` 15/15; tổng **80/80** trên PostgreSQL Testcontainers. Các ca bao phủ checkout cạnh tranh, callback lặp/muộn, hủy đồng thời, giữ/trừ/nhả/hoàn tồn, trả hàng và hoàn tiền.
+- Kết luận: **migration, entity/service và integration/concurrency Commerce 1B đã hoàn thành local**. Baseline V2 độc lập tiếp tục đạt **13/13** test 1A/1B/financial policy trên PostgreSQL 16.15. Chưa triển khai Supabase và chưa chuyển runtime chính thức sang location V2; `V56` chỉ là cầu nối an toàn cho runtime legacy hiện tại.
 
 ## 5. Review 1C — AI Retrieval (`ai_retrieval`, owner `ai_retrieval_app`)
 

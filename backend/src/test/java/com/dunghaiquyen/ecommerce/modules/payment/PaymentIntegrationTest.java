@@ -79,7 +79,7 @@ class PaymentIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"DRAFT\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -94,7 +94,13 @@ class PaymentIntegrationTest extends AbstractIntegrationTest {
                                 .formatted(UUID.randomUUID(), price, stockQuantity)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        mockMvc.perform(patch("/api/v1/admin/products/" + productId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"status\":\"ACTIVE\"}"))
+                .andExpect(status().isOk());
+        return variantId;
     }
 
     private void addToCart(String token, String variantId, int quantity) throws Exception {

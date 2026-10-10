@@ -81,7 +81,7 @@ class ReturnRefundIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"DRAFT\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -96,7 +96,13 @@ class ReturnRefundIntegrationTest extends AbstractIntegrationTest {
                                 .formatted(UUID.randomUUID(), price)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        mockMvc.perform(patch("/api/v1/admin/products/" + productId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"status\":\"ACTIVE\"}"))
+                .andExpect(status().isOk());
+        return variantId;
     }
 
     private void addToCart(String token, String variantId, int quantity) throws Exception {
@@ -201,7 +207,7 @@ class ReturnRefundIntegrationTest extends AbstractIntegrationTest {
         String refundId = refundBody.at("/data/id").asText();
         assertThat(refundBody.at("/data/amount").asDouble()).isEqualTo(100000.0);
         assertThat(refundBody.at("/data/status").asText()).isEqualTo("PENDING");
-        assertThat(refundBody.at("/data/provider").asText()).isEqualTo("MANUAL");
+        assertThat(refundBody.at("/data/provider").asText()).isEqualTo("COD");
 
         // Completing the refund cascades the return to REFUNDED.
         mockMvc.perform(patch("/api/v1/admin/refunds/" + refundId + "/status")
@@ -261,6 +267,7 @@ class ReturnRefundIntegrationTest extends AbstractIntegrationTest {
 
         var orderEntity = orderRepository.findById(UUID.fromString(order.orderId())).orElseThrow();
         orderEntity.setDeliveredAt(Instant.now().minus(10, ChronoUnit.DAYS));
+        orderEntity.setReturnEligibleUntil(Instant.now().minus(3, ChronoUnit.DAYS));
         orderRepository.save(orderEntity);
 
         MvcResult result = mockMvc.perform(post("/api/v1/returns")

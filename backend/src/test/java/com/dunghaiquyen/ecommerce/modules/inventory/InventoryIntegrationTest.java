@@ -67,7 +67,7 @@ class InventoryIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"DRAFT\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -82,7 +82,13 @@ class InventoryIntegrationTest extends AbstractIntegrationTest {
                                 .formatted(UUID.randomUUID(), price, stockQuantity)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        mockMvc.perform(patch("/api/v1/admin/products/" + productId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"status\":\"ACTIVE\"}"))
+                .andExpect(status().isOk());
+        return variantId;
     }
 
     private String registerWarehouseStaffAndGetAccessToken(String email) throws Exception {
@@ -214,7 +220,7 @@ class InventoryIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/inventory/export")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + warehouseToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"variantId\":\"" + variantId + "\",\"quantity\":10}"))
+                        .content("{\"variantId\":\"" + variantId + "\",\"quantity\":10,\"note\":\"Insufficient stock test\"}"))
                 .andReturn();
         assertThat(result.getResponse().getStatus()).isEqualTo(422);
         assertThat(json(result.getResponse().getContentAsString()).at("/message").asText())
@@ -559,17 +565,17 @@ class InventoryIntegrationTest extends AbstractIntegrationTest {
         mockMvc.perform(post("/api/v1/admin/inventory/import")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + warehouseToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"variantId\":\"" + variantId1 + "\",\"quantity\":5}"))
+                        .content("{\"variantId\":\"" + variantId1 + "\",\"quantity\":5,\"note\":\"History import one\"}"))
                 .andExpect(status().isCreated());
         mockMvc.perform(post("/api/v1/admin/inventory/export")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + warehouseToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"variantId\":\"" + variantId1 + "\",\"quantity\":2}"))
+                        .content("{\"variantId\":\"" + variantId1 + "\",\"quantity\":2,\"note\":\"History export\"}"))
                 .andExpect(status().isCreated());
         mockMvc.perform(post("/api/v1/admin/inventory/import")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + warehouseToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"variantId\":\"" + variantId2 + "\",\"quantity\":9}"))
+                        .content("{\"variantId\":\"" + variantId2 + "\",\"quantity\":9,\"note\":\"History import two\"}"))
                 .andExpect(status().isCreated());
 
         // Filter by variantId: only variant1's 2 transactions (IMPORT + EXPORT).
