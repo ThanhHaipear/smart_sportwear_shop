@@ -17,11 +17,9 @@ final class OrderFinancialPolicy {
     }
 
     static void validateTransition(Order order, OrderStatus target) {
-        if (target == OrderStatus.CANCELLED && order.getPaymentStatus() == PaymentStatus.PAID) {
-            throw new BusinessRuleException(
-                    HttpStatus.CONFLICT,
-                    "Paid order must be refunded before cancellation");
-        }
+        // Fulfilment and money movement are separate lifecycles. A paid order
+        // may be cancelled immediately; payment remains PAID until its refund
+        // reaches COMPLETED.
         if ((target == OrderStatus.CONFIRMED
                 || target == OrderStatus.PACKING
                 || target == OrderStatus.SHIPPING

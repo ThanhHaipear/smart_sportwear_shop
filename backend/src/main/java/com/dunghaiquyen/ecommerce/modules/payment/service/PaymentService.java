@@ -17,6 +17,7 @@ import com.dunghaiquyen.ecommerce.modules.payment.entity.Payment;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentProvider;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
+import com.dunghaiquyen.ecommerce.modules.returns.service.ReturnService;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -49,18 +50,21 @@ public class PaymentService {
     private final VnpaySignatureService signatureService;
     private final AppVnpayProperties vnpayProperties;
     private final AppOrderProperties orderProperties;
+    private final ReturnService returnService;
 
     public PaymentService(
             OrderRepository orderRepository,
             PaymentRepository paymentRepository,
             VnpaySignatureService signatureService,
             AppVnpayProperties vnpayProperties,
-            AppOrderProperties orderProperties) {
+            AppOrderProperties orderProperties,
+            ReturnService returnService) {
         this.orderRepository = orderRepository;
         this.paymentRepository = paymentRepository;
         this.signatureService = signatureService;
         this.vnpayProperties = vnpayProperties;
         this.orderProperties = orderProperties;
+        this.returnService = returnService;
     }
 
     /**
@@ -229,13 +233,16 @@ public class PaymentService {
         payment.setBankCode(params.get("vnp_BankCode"));
         paymentRepository.save(payment);
 
-        if (order.getOrderStatus() != OrderStatus.CANCELLED) {
-            order.setPaymentStatus(resolvedStatus);
-        } else if (resolvedStatus == PaymentStatus.PAID) {
+        order.setPaymentStatus(resolvedStatus);
+        if (order.getOrderStatus() == OrderStatus.CANCELLED && resolvedStatus == PaymentStatus.PAID) {
             order.setInternalNote("VNPay paid after order cancellation - refund required. TxnRef: "
                     + payment.getTransactionRef());
         }
         orderRepository.save(order);
+        if (order.getOrderStatus() == OrderStatus.CANCELLED && resolvedStatus == PaymentStatus.PAID) {
+            returnService.ensurePendingCancellationRefund(
+                    order.getId(), "VNPay paid after order cancellation", null);
+        }
         return ipnResponse("00", "Confirm Success");
     }
 

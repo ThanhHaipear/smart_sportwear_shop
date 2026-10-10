@@ -210,6 +210,48 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void buyNow_twoCustomersRaceForLastUnit_onlyOneOrderReservesStock() throws Exception {
+        AdminContext ctx = setUpAdmin();
+        String productId = createActiveProduct(ctx, "Last Unit Jersey");
+        String variantId = createVariant(ctx, productId, 250000, 1);
+
+        String firstEmail = uniqueEmail("race-first");
+        String secondEmail = uniqueEmail("race-second");
+        TokenPair firstBuyer = registerUser(firstEmail);
+        TokenPair secondBuyer = registerUser(secondEmail);
+        String firstAddress = createAddressForUser(firstEmail);
+        String secondAddress = createAddressForUser(secondEmail);
+
+        Callable<MvcResult> firstCheckout = () -> mockMvc.perform(post("/api/v1/orders")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + firstBuyer.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"addressId\":\"" + firstAddress
+                                + "\",\"paymentMethod\":\"COD\",\"buyNowVariantId\":\"" + variantId
+                                + "\",\"buyNowQuantity\":1}"))
+                .andReturn();
+        Callable<MvcResult> secondCheckout = () -> mockMvc.perform(post("/api/v1/orders")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + secondBuyer.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"addressId\":\"" + secondAddress
+                                + "\",\"paymentMethod\":\"COD\",\"buyNowVariantId\":\"" + variantId
+                                + "\",\"buyNowQuantity\":1}"))
+                .andReturn();
+
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+        List<Future<MvcResult>> futures = pool.invokeAll(List.of(firstCheckout, secondCheckout));
+        pool.shutdown();
+
+        List<Integer> statuses = new java.util.ArrayList<>();
+        for (Future<MvcResult> future : futures) {
+            statuses.add(future.get().getResponse().getStatus());
+        }
+        assertThat(statuses).containsExactlyInAnyOrder(201, 422);
+        var variant = variantRepository.findById(UUID.fromString(variantId)).orElseThrow();
+        assertThat(variant.getReservedQuantity()).isEqualTo(1);
+        assertThat(variant.getStockQuantity()).isEqualTo(1);
+    }
+
+    @Test
     void checkoutPreview_withApplicableCombo_returnsDiscountedTotal() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId1 = createActiveProduct(ctx, "Combo Shirt");
@@ -653,10 +695,10 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
         assertThat(variant.getReservedQuantity()).isEqualTo(0);
     }
 
-    // ===== admin may freely correct status until DELIVERED becomes final =====
+    // ===== admin may freely correct operational status; cancellation remains a separate workflow =====
 
     @Test
-    void adminUpdateStatus_allowsCorrectionUntilDelivered_thenRejectsFurtherChanges() throws Exception {
+    void adminUpdateStatus_allowsCorrectionAcrossOperationalStatuses() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx, "Belt");
         String variantId = createVariant(ctx, productId, 30000, 10);
@@ -698,13 +740,23 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"status\":\"PACKING\"}"))
-                .andExpect(status().isConflict());
+                .andExpect(status().isOk());
 
-        mockMvc.perform(post("/api/v1/admin/orders/" + orderId + "/cancel")
+        MvcResult corrected = mockMvc.perform(get("/api/v1/admin/orders/" + orderId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token()))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(json(corrected.getResponse().getContentAsString()).at("/data/orderStatus").asText())
+                .isEqualTo("PACKING");
+
+        MvcResult cancellation = mockMvc.perform(post("/api/v1/admin/orders/" + orderId + "/cancel")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"reason\":\"too late\"}"))
-                .andExpect(status().isConflict());
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(json(cancellation.getResponse().getContentAsString()).at("/data/orderStatus").asText())
+                .isEqualTo("CANCELLED");
     }
 
     // ===== cancel from PENDING_CONFIRMATION releases the reservation =====
@@ -897,10 +949,10 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
         assertThat(variant.getReservedQuantity()).isEqualTo(1);
     }
 
-    // ===== customer cannot cancel once stock has actually been deducted (CONFIRMED+) =====
+    // ===== confirmed cancellation is immediate and restores stock =====
 
     @Test
-    void customerCancel_afterConfirmed_returns409_stockStaysDeducted() throws Exception {
+    void customerCancel_afterConfirmed_cancelsImmediately_andRestoresStock() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx, "Backpack");
         String variantId = createVariant(ctx, productId, 150000, 10);
@@ -933,23 +985,25 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"reason\":\"too late\"}"))
                 .andReturn();
-        assertThat(cancelResult.getResponse().getStatus()).isEqualTo(409);
+        assertThat(cancelResult.getResponse().getStatus()).isEqualTo(200);
+        assertThat(json(cancelResult.getResponse().getContentAsString()).at("/data/orderStatus").asText())
+                .isEqualTo("CANCELLED");
 
         var afterCancelAttempt = variantRepository.findById(UUID.fromString(variantId)).orElseThrow();
-        assertThat(afterCancelAttempt.getStockQuantity()).isEqualTo(8);
+        assertThat(afterCancelAttempt.getStockQuantity()).isEqualTo(10);
         assertThat(afterCancelAttempt.getReservedQuantity()).isEqualTo(0);
 
         MvcResult detail = mockMvc.perform(get("/api/v1/orders/" + orderId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + buyer.accessToken()))
                 .andReturn();
         assertThat(json(detail.getResponse().getContentAsString()).at("/data/orderStatus").asText())
-                .isEqualTo("CONFIRMED");
+                .isEqualTo("CANCELLED");
     }
 
-    // ===== customer cannot cancel once SHIPPING (explicit spec example) =====
+    // ===== without a carrier integration, SHIPPING can still be cancelled =====
 
     @Test
-    void customerCancel_atShipping_returns409() throws Exception {
+    void customerCancel_atShipping_cancelsImmediately() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx, "Sunglasses");
         String variantId = createVariant(ctx, productId, 90000, 10);
@@ -980,7 +1034,9 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"reason\":\"too late\"}"))
                 .andReturn();
-        assertThat(cancelResult.getResponse().getStatus()).isEqualTo(409);
+        assertThat(cancelResult.getResponse().getStatus()).isEqualTo(200);
+        assertThat(json(cancelResult.getResponse().getContentAsString()).at("/data/orderStatus").asText())
+                .isEqualTo("CANCELLED");
     }
 
     @Test

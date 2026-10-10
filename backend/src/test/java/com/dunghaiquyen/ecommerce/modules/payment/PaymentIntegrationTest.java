@@ -622,7 +622,7 @@ class PaymentIntegrationTest extends AbstractIntegrationTest {
     // ===== callback success arriving after the order was independently cancelled =====
 
     @Test
-    void callback_success_afterOrderAlreadyCancelled_recordsPaymentButDoesNotPullOrderToPaid() throws Exception {
+    void callback_success_afterOrderAlreadyCancelled_recordsPaymentAndCreatesRefund() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx, "Late Callback Cap");
         String variantId = createVariant(ctx, productId, 95000, 10);
@@ -645,8 +645,6 @@ class PaymentIntegrationTest extends AbstractIntegrationTest {
 
         var orderBeforeCallback = orderRepository.findById(UUID.fromString(orderId)).orElseThrow();
         assertThat(orderBeforeCallback.getOrderStatus().name()).isEqualTo("CANCELLED");
-        var paymentStatusBeforeCallback = orderBeforeCallback.getPaymentStatus();
-
         MvcResult callbackResult = sendCallback(buildSignedCallbackParams(txnRef, "00"));
         assertThat(callbackResult.getResponse().getStatus()).isEqualTo(200);
         assertThat(json(callbackResult.getResponse().getContentAsString()).at("/RspCode").asText())
@@ -663,20 +661,27 @@ class PaymentIntegrationTest extends AbstractIntegrationTest {
                 .as("orderStatus must remain CANCELLED - the callback never touches it")
                 .isEqualTo("CANCELLED");
         assertThat(orderAfterCallback.getPaymentStatus())
-                .as("Order.paymentStatus must NOT be pulled to PAID once the order is cancelled - "
-                        + "this is the deliberate rule (no refund flow exists to safely represent it), not a missed update")
-                .isEqualTo(paymentStatusBeforeCallback);
+                .as("the cancelled order still records the financial truth until refund completes")
+                .isEqualTo(com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus.PAID);
+        Integer pendingRefunds = jdbcTemplate.queryForObject(
+                "select count(*) from refunds where order_id = ? and status = 'PENDING'",
+                Integer.class, UUID.fromString(orderId));
+        assertThat(pendingRefunds).isEqualTo(1);
 
         // Still idempotent in this exact scenario: a duplicate delivery of the
         // same callback must not flip anything a second time either.
         MvcResult secondDelivery = sendCallback(buildSignedCallbackParams(txnRef, "00"));
         assertThat(secondDelivery.getResponse().getStatus()).isEqualTo(200);
         var orderAfterDuplicate = orderRepository.findById(UUID.fromString(orderId)).orElseThrow();
-        assertThat(orderAfterDuplicate.getPaymentStatus()).isEqualTo(paymentStatusBeforeCallback);
+        assertThat(orderAfterDuplicate.getPaymentStatus().name()).isEqualTo("PAID");
+        Integer refundsAfterDuplicate = jdbcTemplate.queryForObject(
+                "select count(*) from refunds where order_id = ? and status = 'PENDING'",
+                Integer.class, UUID.fromString(orderId));
+        assertThat(refundsAfterDuplicate).isEqualTo(1);
     }
 
     @Test
-    void paidOrder_cancelBecomesRefundRequest_withoutCancellingOrLosingPaidState() throws Exception {
+    void paidOrder_cancelsImmediately_andCreatesPendingRefund() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx, "Paid Cancel Guard");
         String variantId = createVariant(ctx, productId, 125000, 10);
@@ -693,8 +698,44 @@ class PaymentIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(status().isOk());
 
         var order = orderRepository.findById(UUID.fromString(orderId)).orElseThrow();
-        assertThat(order.getOrderStatus().name()).isEqualTo("CANCELLATION_REQUESTED");
+        assertThat(order.getOrderStatus().name()).isEqualTo("CANCELLED");
         assertThat(order.getPaymentStatus().name()).isEqualTo("PAID");
+        Integer pendingRefunds = jdbcTemplate.queryForObject(
+                "select count(*) from refunds where order_id = ? and status = 'PENDING'",
+                Integer.class, UUID.fromString(orderId));
+        assertThat(pendingRefunds).isEqualTo(1);
+    }
+
+    @Test
+    void paidOrder_cancelledConcurrently_createsExactlyOnePendingRefund() throws Exception {
+        AdminContext ctx = setUpAdmin();
+        String productId = createActiveProduct(ctx, "Concurrent Refund Jersey");
+        String variantId = createVariant(ctx, productId, 175000, 10);
+        String email = uniqueEmail("concurrent-refund");
+        TokenPair buyer = registerUser(email);
+        addToCart(buyer.accessToken(), variantId, 1);
+        String orderId = createOrder(buyer.accessToken(), createAddressForUser(email), "VNPAY");
+        String txnRef = json(createPaymentSession(buyer.accessToken(), orderId).getResponse().getContentAsString())
+                .at("/data/transactionRef").asText();
+        mockMvc.perform(callbackRequest(buildSignedCallbackParams(txnRef, "00"))).andExpect(status().isOk());
+        Callable<MvcResult> cancel = () -> mockMvc.perform(
+                        post("/api/v1/orders/" + orderId + "/cancel")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + buyer.accessToken()))
+                .andReturn();
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+        List<Future<MvcResult>> results = pool.invokeAll(List.of(cancel, cancel));
+        pool.shutdown();
+
+        for (Future<MvcResult> result : results) {
+            assertThat(result.get().getResponse().getStatus()).isEqualTo(200);
+        }
+        var order = orderRepository.findById(UUID.fromString(orderId)).orElseThrow();
+        assertThat(order.getOrderStatus().name()).isEqualTo("CANCELLED");
+        assertThat(order.getPaymentStatus().name()).isEqualTo("PAID");
+        Integer pendingRefunds = jdbcTemplate.queryForObject(
+                "select count(*) from refunds where order_id = ? and status = 'PENDING'",
+                Integer.class, UUID.fromString(orderId));
+        assertThat(pendingRefunds).isEqualTo(1);
     }
 
     @Test

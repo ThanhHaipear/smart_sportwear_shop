@@ -72,6 +72,10 @@ export async function refreshVnpayRefund(id: string) {
   return browserApiRequest<OrderRefundResponse>(adminEndpoints.adminRefundRefresh(id), { method: "POST" });
 }
 
+export async function submitVnpayRefund(id: string) {
+  return browserApiRequest<OrderRefundResponse>(adminEndpoints.adminRefundSubmit(id), { method: "POST" });
+}
+
 export async function confirmManualRefund(id: string, reference: string, note?: string) {
   return browserApiRequest<OrderRefundResponse>(adminEndpoints.adminRefundManualConfirmation(id), {
     method: "POST",

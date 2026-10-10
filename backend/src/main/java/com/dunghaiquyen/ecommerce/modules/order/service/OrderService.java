@@ -75,25 +75,11 @@ public class OrderService {
     private static final java.util.regex.Pattern TAX_CODE_PATTERN =
             java.util.regex.Pattern.compile("^\\d{10}(-\\d{3})?$");
 
-    /**
-     * An order sitting in one of these still has an unresolved cancellation in
-     * flight (or is already cancelled outright) - not a completed sale, so no
-     * invoice can be issued even if paymentStatus happens to still read PAID
-     * (e.g. refund not settled yet).
-     */
+    /** Legacy cancellation states remain readable; V2 writes CANCELLED directly. */
     private static final java.util.Set<OrderStatus> INVOICE_BLOCKED_STATUSES = java.util.Set.of(
             OrderStatus.CANCELLATION_REQUESTED, OrderStatus.CANCELLATION_APPROVED, OrderStatus.CANCELLED);
 
-    /**
-     * confirm -> pack -> ship -> deliver, plus cancellation exits. Cancellation
-     * is reachable up through PACKING (not SHIPPING/DELIVERED - once stock has
-     * left for the carrier, undoing it is a logistics problem, not just a stock
-     * one): CONFIRMED and PACKING both had their stock really deducted
-     * (ORDER_CONFIRM_DEDUCT), so their only way out is CANCELLATION_REQUESTED ->
-     * CANCELLATION_APPROVED -> CANCELLED, same as a paid PENDING_CONFIRMATION
-     * order - applyStatusTransition tells the two cases apart via the
-     * inventory transaction log and restocks (not just releases) accordingly.
-     */
+    /** Staff-editable operational states; cancellation uses its dedicated endpoint. */
     private static final java.util.Set<OrderStatus> ADMIN_EDITABLE_STATUSES = java.util.Set.of(
             OrderStatus.PENDING_CONFIRMATION, OrderStatus.CONFIRMED, OrderStatus.PACKING,
             OrderStatus.SHIPPING, OrderStatus.DELIVERED);
@@ -430,17 +416,18 @@ public class OrderService {
             @CacheEvict(value = CacheConfig.REPORT_PRODUCTS, allEntries = true)
     })
     public AdminOrderResponse updateOrderStatus(UUID orderId, UpdateOrderStatusRequest request, User actor) {
-        // Locked, not a plain read: two concurrent status-update calls for the
-        // same order (admin double-click, or admin-confirm racing a
-        // customer-cancel) could otherwise both read the same PENDING_CONFIRMATION
-        // snapshot and both pass the transition check, double-deducting or
-        // double-releasing stock. The second call blocks here until the first
-        // commits, then re-reads the now-advanced status and is correctly
-        // rejected by applyStatusTransition's ALLOWED_TRANSITIONS check.
+        // Serialize corrections with checkout/cancellation/refund side effects.
+        // Staff may correct freely between operational states, but cancellation
+        // states are owned by the explicit request/approve/reject workflow.
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        if (order.getOrderStatus() == OrderStatus.DELIVERED || order.getOrderStatus() == OrderStatus.CANCELLED) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "Delivered or cancelled order is final and cannot be updated");
+        if (order.getOrderStatus() == OrderStatus.CANCELLED) {
+            throw new BusinessRuleException(HttpStatus.CONFLICT, "Cancelled order is final and cannot be updated");
+        }
+        if (order.getOrderStatus() == OrderStatus.CANCELLATION_REQUESTED
+                || order.getOrderStatus() == OrderStatus.CANCELLATION_APPROVED) {
+            throw new BusinessRuleException(HttpStatus.CONFLICT,
+                    "Approve or reject the cancellation request before changing operational status");
         }
         if (!ADMIN_EDITABLE_STATUSES.contains(request.status())) {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Use the cancellation workflow to cancel an order");
@@ -453,16 +440,7 @@ public class OrderService {
         return assembleAdminResponse(order);
     }
 
-    /**
-     * Customer-initiated cancel (API_SPEC_PHASE1.md 7.4 / TASK_BREAKDOWN_PHASE1.md
-     * G4), allowed through PACKING (not SHIPPING/DELIVERED - once the order has
-     * left for the carrier it is out of the shop's hands). The target status
-     * depends on how far the order has progressed, not just payment: only an
-     * unpaid order still in PENDING_CONFIRMATION goes straight to CANCELLED
-     * (stock is still just reserved there); everything else - paid, or already
-     * CONFIRMED/PACKING with real stock deducted - must go through
-     * CANCELLATION_REQUESTED so staff can approve the refund/restock.
-     */
+    /** Customer cancellation is immediate before DELIVERED; refund is separate. */
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = CacheConfig.REPORT_OVERVIEW, allEntries = true),
@@ -470,90 +448,54 @@ public class OrderService {
             @CacheEvict(value = CacheConfig.REPORT_PRODUCTS, allEntries = true)
     })
     public OrderResponse cancelOwnOrder(UUID orderId, UUID customerId, String reason) {
-        // Same race-prevention reasoning as updateOrderStatus - lock before
-        // reading the status this decision depends on.
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         if (!order.getUser().getId().equals(customerId)) {
             throw new ResourceNotFoundException("Order not found");
         }
         OrderStatus current = order.getOrderStatus();
-        if (current != OrderStatus.PENDING_CONFIRMATION
-                && current != OrderStatus.CONFIRMED
-                && current != OrderStatus.PACKING) {
+        if (current == OrderStatus.CANCELLED) {
+            return assembleResponse(order);
+        }
+        if (!ADMIN_EDITABLE_STATUSES.contains(current) || current == OrderStatus.DELIVERED) {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Order can no longer be cancelled");
         }
         User actor = order.getUser();
-        OrderStatus target = current == OrderStatus.PENDING_CONFIRMATION && order.getPaymentStatus() != PaymentStatus.PAID
-                ? OrderStatus.CANCELLED
-                : OrderStatus.CANCELLATION_REQUESTED;
-        order = applyStatusTransition(order, target, actor);
-        if (target == OrderStatus.CANCELLATION_REQUESTED) {
-            order.setCancellationRequestedBy(com.dunghaiquyen.ecommerce.modules.order.entity.CancellationRequestedBy.CUSTOMER);
-            order.setCancellationReason(reason == null || reason.isBlank() ? "Khách hàng yêu cầu hủy đơn" : reason.trim());
-            order.setCancellationRequestedAt(java.time.Instant.now());
-        }
+        order = applyStatusTransition(order, OrderStatus.CANCELLED, actor, true);
+        order.setCancellationRequestedBy(
+                com.dunghaiquyen.ecommerce.modules.order.entity.CancellationRequestedBy.CUSTOMER);
+        order.setCancellationReason(reason == null || reason.isBlank() ? "Customer cancelled order" : reason.trim());
+        order.setCancellationRequestedAt(java.time.Instant.now());
         if (reason != null && !reason.isBlank()) {
-            // No dedicated "cancel reason" column exists (no migration warranted for
-            // this patch) - internalNote is staff-visible metadata about the order's
-            // lifecycle, which is exactly what this is, and customer-facing `note`
-            // must not be overwritten (it holds whatever the customer set at checkout).
-            String prefix = target == OrderStatus.CANCELLATION_REQUESTED
-                    ? "Cancellation/refund requested by customer: "
-                    : "Cancelled by customer: ";
-            order.setInternalNote(prefix + reason.trim());
+            order.setInternalNote("Cancelled by customer: " + reason.trim());
             order = orderRepository.save(order);
-        }
-        if (target == OrderStatus.CANCELLATION_REQUESTED) {
-            notificationService.notifyAdminsOrderCancelled(order);
         }
         return assembleResponse(order);
     }
 
-    /** Staff-initiated cancellation is allowed until delivery becomes final. */
+    /** Staff cancellation is immediate until delivery; refund is tracked separately. */
     @Transactional
     public AdminOrderResponse cancelOrderByStaff(UUID orderId, String reason, User actor) {
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         OrderStatus current = order.getOrderStatus();
-        if (current == OrderStatus.DELIVERED || current == OrderStatus.CANCELLED
-                || current == OrderStatus.CANCELLATION_REQUESTED
-                || current == OrderStatus.CANCELLATION_APPROVED) {
+        if (current == OrderStatus.CANCELLED) {
+            return assembleAdminResponse(order);
+        }
+        if (!ADMIN_EDITABLE_STATUSES.contains(current) || current == OrderStatus.DELIVERED) {
             throw new BusinessRuleException(HttpStatus.CONFLICT,
                     "Order can no longer be cancelled by staff");
         }
-        boolean requiresRefund = order.getPaymentStatus() == PaymentStatus.PAID;
-        // PENDING_CONFIRMATION + unpaid: nothing to undo but the reservation, so
-        // cancel outright. Everything else (paid, or CONFIRMED/PACKING which always
-        // deducted real stock regardless of payment) needs the CANCELLATION_REQUESTED
-        // -> CANCELLATION_APPROVED -> CANCELLED state sequence so a paid refund can
-        // actually be submitted; AdminOrderController.cancelByStaff drives that
-        // sequence automatically right after this call returns, since staff already
-        // made the cancel decision and there is nobody left to "approve" it.
-        boolean needsApproval = current != OrderStatus.PENDING_CONFIRMATION || requiresRefund;
-        order = applyStatusTransition(order,
-                needsApproval ? OrderStatus.CANCELLATION_REQUESTED : OrderStatus.CANCELLED, actor, true);
+        order = applyStatusTransition(order, OrderStatus.CANCELLED, actor, true);
         order.setCancellationRequestedBy(
                 com.dunghaiquyen.ecommerce.modules.order.entity.CancellationRequestedBy.STAFF);
         order.setCancellationReason(reason == null || reason.isBlank() ? "Cửa hàng chủ động hủy đơn" : reason.trim());
         order.setCancellationRequestedAt(java.time.Instant.now());
-        String notePrefix = !needsApproval
-                ? "Cancelled by staff: "
-                : requiresRefund
-                        ? "Staff cancellation awaiting refund: "
-                        : "Staff cancellation awaiting restock approval: ";
-        order.setInternalNote(notePrefix + order.getCancellationReason());
+        order.setInternalNote("Cancelled by staff: " + order.getCancellationReason());
         return assembleAdminResponse(orderRepository.save(order));
     }
 
-    /**
-     * Shared by admin status updates and customer self-cancel: validates the
-     * transition against ALLOWED_TRANSITIONS, applies the matching inventory
-     * side effect (deduct on CONFIRMED, release on CANCELLED), and persists the
-     * new status. Both callers must see the exact same rule set - splitting this
-     * into two independently-maintained checks would risk them silently
-     * diverging (e.g. one path allowing a cancel the other forbids).
-     */
+    /** Applies the inventory side effect and persists one order-status change. */
     private Order applyStatusTransition(Order order, OrderStatus target, User actor) {
         return applyStatusTransition(order, target, actor, false);
     }
@@ -602,7 +544,9 @@ public class OrderService {
         order.setOrderStatus(target);
         if (target == OrderStatus.DELIVERED) {
             // Returns module's return-window eligibility check reads this - see Order.deliveredAt's javadoc.
-            order.setDeliveredAt(java.time.Instant.now());
+            if (order.getDeliveredAt() == null) {
+                order.setDeliveredAt(java.time.Instant.now());
+            }
             if (order.getPaymentMethod() == PaymentMethod.COD) {
                 order.setPaymentStatus(PaymentStatus.PAID);
             }
@@ -683,6 +627,9 @@ public class OrderService {
     public OrderResponse completeCancellationAfterRefund(UUID orderId, User actor) {
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        if (order.getOrderStatus() == OrderStatus.CANCELLED) {
+            return assembleResponse(order);
+        }
         if (order.getOrderStatus() != OrderStatus.CANCELLATION_APPROVED) {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Cancellation has not been approved");
         }
@@ -701,7 +648,8 @@ public class OrderService {
     public AdminOrderResponse approveCancellationForRefund(UUID orderId, User actor) {
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        if (order.getOrderStatus() == OrderStatus.CANCELLATION_APPROVED) {
+        if (order.getOrderStatus() == OrderStatus.CANCELLATION_APPROVED
+                || order.getOrderStatus() == OrderStatus.CANCELLED) {
             return assembleAdminResponse(order);
         }
         if (order.getOrderStatus() != OrderStatus.CANCELLATION_REQUESTED) {

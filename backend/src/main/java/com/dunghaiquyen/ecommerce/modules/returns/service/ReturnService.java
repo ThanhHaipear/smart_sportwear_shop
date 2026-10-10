@@ -7,6 +7,8 @@ import com.dunghaiquyen.ecommerce.modules.audit.service.AuditLogService;
 import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderItem;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatus;
+import com.dunghaiquyen.ecommerce.modules.order.dto.AdminOrderResponse;
+import com.dunghaiquyen.ecommerce.modules.order.dto.OrderResponse;
 import com.dunghaiquyen.ecommerce.modules.order.repository.OrderItemRepository;
 import com.dunghaiquyen.ecommerce.modules.order.repository.OrderRepository;
 import com.dunghaiquyen.ecommerce.modules.order.service.OrderService;
@@ -144,6 +146,65 @@ public class ReturnService {
     }
 
     public record ListResult<T>(List<T> items, PageMeta meta) {
+    }
+
+    /**
+     * Cancels the order and creates the money-side work item in one transaction.
+     * The order lock taken by OrderService serializes duplicate/concurrent cancel
+     * calls, so stock is restored and a refund is created at most once.
+     */
+    @Transactional
+    public OrderResponse cancelOwnOrder(UUID orderId, UUID customerId, String reason) {
+        OrderResponse response = orderService.cancelOwnOrder(orderId, customerId, reason);
+        User actor = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"))
+                .getUser();
+        ensurePendingCancellationRefund(orderId, reason, actor);
+        return response;
+    }
+
+    @Transactional
+    public AdminOrderResponse cancelOrderByStaff(UUID orderId, String reason, User actor) {
+        AdminOrderResponse response = orderService.cancelOrderByStaff(orderId, reason, actor);
+        ensurePendingCancellationRefund(orderId, reason, actor);
+        return response;
+    }
+
+    public void ensurePendingCancellationRefund(UUID orderId, String reason, User actor) {
+        Order order = orderRepository.findByIdForUpdate(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        if (order.getOrderStatus() != OrderStatus.CANCELLED || order.getPaymentStatus() != PaymentStatus.PAID) {
+            return;
+        }
+        if (refundRepository.existsByOrderIdAndStatusIn(orderId,
+                Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING, RefundStatus.COMPLETED))) {
+            return;
+        }
+        Payment payment = null;
+        RefundProvider provider = RefundProvider.MANUAL;
+        BigDecimal amount = order.getTotalAmount();
+        if (order.getPaymentMethod() == com.dunghaiquyen.ecommerce.modules.order.entity.PaymentMethod.VNPAY) {
+            payment = paymentRepository
+                    .findFirstByOrderIdAndStatusOrderByCreatedAtDesc(orderId, PaymentStatus.PAID)
+                    .orElseThrow(() -> new BusinessRuleException(HttpStatus.CONFLICT,
+                            "Paid VNPay transaction not found"));
+            provider = RefundProvider.VNPAY;
+            amount = payment.getAmount();
+        }
+        Refund refund = new Refund();
+        refund.setOrder(order);
+        refund.setPayment(payment);
+        refund.setRefundCode(generateCode("RFD"));
+        refund.setAmount(amount);
+        refund.setProvider(provider);
+        refund.setStatus(RefundStatus.PENDING);
+        refund.setReason(reason == null || reason.isBlank() ? "Cancelled order" : reason.trim());
+        refund.setCreatedBy(actor);
+        refund = saveRefundWithCodeRetry(refund);
+        if (actor != null) {
+            auditLogService.record(actor, "CANCELLATION_REFUND_CREATED", "Refund", refund.getId().toString(), null,
+                    Map.of("orderId", orderId.toString(), "status", RefundStatus.PENDING.name()));
+        }
     }
 
     @Transactional
@@ -446,6 +507,13 @@ public class ReturnService {
     public RefundResponse refundCancellation(UUID orderId, String reason, User actor, String ipAddress) {
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        if (order.getOrderStatus() == OrderStatus.CANCELLED) {
+            return refundRepository.findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
+                            orderId, Set.of(RefundStatus.COMPLETED))
+                    .map(this::toRefundResponse)
+                    .orElseThrow(() -> new BusinessRuleException(HttpStatus.CONFLICT,
+                            "Order is cancelled but no completed refund was found"));
+        }
         if (order.getOrderStatus() != OrderStatus.CANCELLATION_APPROVED) {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Cancellation must be approved before refund");
         }
@@ -512,34 +580,6 @@ public class ReturnService {
         return refundRepository.findAllByOrderIdOrderByCreatedAtDesc(orderId).stream()
                 .map(this::toRefundResponse)
                 .toList();
-    }
-
-    @Transactional
-    public void rejectCancellationRequest(UUID orderId, String reason, User actor) {
-        Order order = orderRepository.findByIdForUpdate(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        if (order.getOrderStatus() != OrderStatus.CANCELLATION_REQUESTED
-                || order.getCancellationRequestedBy()
-                != com.dunghaiquyen.ecommerce.modules.order.entity.CancellationRequestedBy.CUSTOMER) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT,
-                    "Only a customer cancellation request can be rejected");
-        }
-        if (refundRepository.existsByOrderIdAndStatusIn(orderId,
-                Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING, RefundStatus.COMPLETED))) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT,
-                    "Không thể từ chối vì giao dịch hoàn tiền đã bắt đầu xử lý");
-        }
-        order.setOrderStatus(OrderStatus.PENDING_CONFIRMATION);
-        order.setCancellationRequestedBy(null);
-        order.setCancellationReason(null);
-        order.setCancellationRequestedAt(null);
-        order.setInternalNote(reason == null || reason.isBlank()
-                ? "Cancellation request rejected by staff" : "Cancellation request rejected: " + reason.trim());
-        orderRepository.save(order);
-        notificationService.notifyCancellationRejected(order, reason);
-        auditLogService.record(actor, "CANCELLATION_REQUEST_REJECT", "Order", orderId.toString(),
-                Map.of("status", OrderStatus.CANCELLATION_REQUESTED.name()),
-                Map.of("status", OrderStatus.PENDING_CONFIRMATION.name()));
     }
 
     @Transactional

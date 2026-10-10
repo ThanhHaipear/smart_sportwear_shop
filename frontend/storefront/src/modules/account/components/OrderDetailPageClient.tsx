@@ -153,8 +153,8 @@ export function OrderDetailPageClient({ orderId }: { orderId: string }) {
                       : order.orderStatus === "PENDING_CONFIRMATION" && order.paymentStatus !== "PAID"
                         ? "Hủy đơn"
                         : order.paymentStatus === "PAID"
-                          ? "Yêu cầu hủy & hoàn tiền"
-                          : "Yêu cầu hủy đơn"}
+                          ? "Hủy đơn & hoàn tiền"
+                          : "Hủy đơn"}
                   </button>
                 ) : null}
                 {canPay ? (

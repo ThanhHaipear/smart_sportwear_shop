@@ -13,12 +13,11 @@ import org.junit.jupiter.api.Test;
 class OrderFinancialPolicyTest {
 
     @Test
-    void paidOrderCannotBeCancelledWithoutRefund() {
+    void paidOrderCanBeCancelledBeforeRefundCompletes() {
         Order order = order(PaymentMethod.VNPAY, PaymentStatus.PAID);
 
-        assertThatThrownBy(() -> OrderFinancialPolicy.validateTransition(order, OrderStatus.CANCELLED))
-                .isInstanceOf(BusinessRuleException.class)
-                .hasMessage("Paid order must be refunded before cancellation");
+        assertThatCode(() -> OrderFinancialPolicy.validateTransition(order, OrderStatus.CANCELLED))
+                .doesNotThrowAnyException();
     }
 
     @Test

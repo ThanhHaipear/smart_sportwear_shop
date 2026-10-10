@@ -62,20 +62,17 @@ export function OrderHistoryPageClient() {
     const target = orders.find((order) => order.id === id);
     if (!target) return;
     const paid = target.paymentStatus === "PAID";
-    const immediate = target.orderStatus === "PENDING_CONFIRMATION" && !paid;
-    if (!window.confirm(immediate
-      ? "Bạn chắc chắn muốn hủy đơn này?"
-      : paid
-        ? "Gửi yêu cầu hủy đơn và hoàn lại toàn bộ tiền qua VNPay? Đơn chỉ được hủy sau khi hoàn tiền thành công."
-        : "Gửi yêu cầu hủy đơn? Cửa hàng sẽ xem xét và xác nhận.")) return;
+    if (!window.confirm(paid
+      ? "Hủy đơn ngay? Giao dịch hoàn tiền VNPay sẽ được tạo để cửa hàng xử lý."
+      : "Bạn chắc chắn muốn hủy đơn này?")) return;
     setCancellingId(id);
     setError(null);
     setSuccess(null);
     try {
       const updated = await cancelOrder(id, paid ? "Khách hàng yêu cầu hủy và hoàn tiền" : "Khách hàng yêu cầu hủy");
       await loadOrders();
-      setSuccess(updated.orderStatus === "CANCELLATION_REQUESTED"
-        ? "Đã gửi yêu cầu hủy và hoàn tiền. Cửa hàng sẽ hoàn tiền VNPay trước khi hủy đơn."
+      setSuccess(paid
+        ? "Đơn hàng đã được hủy. Giao dịch hoàn tiền VNPay đang chờ cửa hàng xử lý."
         : "Đơn hàng đã được hủy.");
     } catch (err) {
       setError(getApiErrorMessage(err, "Không thể hủy đơn hàng."));
@@ -152,9 +149,9 @@ export function OrderHistoryPageClient() {
                             ? "Đang xử lý..."
                             : order.orderStatus === "PENDING_CONFIRMATION" && order.paymentStatus !== "PAID"
                               ? "Hủy đơn"
-                              : order.paymentStatus === "PAID"
-                                ? "Yêu cầu hủy & hoàn tiền"
-                                : "Yêu cầu hủy đơn"}
+                            : order.paymentStatus === "PAID"
+                                ? "Hủy đơn & hoàn tiền"
+                                : "Hủy đơn"}
                         </button>
                       ) : null}
                     </div>

@@ -472,15 +472,10 @@ class InventoryIntegrationTest extends AbstractIntegrationTest {
         List<Future<Integer>> results = pool.invokeAll(List.of(cancelCall, cancelCall));
         pool.shutdown();
 
-        int successCount = 0;
         for (Future<Integer> f : results) {
             int statusCode = f.get();
-            assertThat(statusCode).as("loser must fail in a controlled way, never 500").isIn(200, 409);
-            if (statusCode == 200) {
-                successCount++;
-            }
+            assertThat(statusCode).as("repeated cancel is idempotent, never 500").isEqualTo(200);
         }
-        assertThat(successCount).as("exactly one of the two concurrent cancels must succeed").isEqualTo(1);
 
         var variant = variantRepository.findById(UUID.fromString(variantId)).orElseThrow();
         assertThat(variant.getReservedQuantity())

@@ -4,7 +4,7 @@ import { Fragment, memo, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ApiRequestError } from "@/modules/api/common";
-import { cancelOrderByStaff, confirmManualRefund, fetchOrderDetail, fetchOrderRefunds, processCancellationRefund, refreshVnpayRefund, rejectCancellationRequest, updateOrderStatus } from "@/modules/orders/browser-api";
+import { cancelOrderByStaff, confirmManualRefund, fetchOrderDetail, fetchOrderRefunds, processCancellationRefund, refreshVnpayRefund, rejectCancellationRequest, submitVnpayRefund, updateOrderStatus } from "@/modules/orders/browser-api";
 import type { OrderRefundResponse } from "@/modules/orders/browser-api";
 import type { AdminOrderResponse, PageMeta } from "@/modules/orders/types";
 import { fetchOrderShipment, updateOrderShipment } from "@/modules/shipping/browser-api";
@@ -219,9 +219,11 @@ const OrderRow = memo(function OrderRow({
                   {refund.refundCode} · {refund.provider} · {Math.round(refund.amount).toLocaleString("vi-VN")}₫ · <strong>{refund.status}</strong>
                   {refund.gatewayTransactionNo ? ` · GD: ${refund.gatewayTransactionNo}` : ""}
                 </span>
-                {["PENDING", "PROCESSING"].includes(refund.status) ? (
+                {refund.provider === "VNPAY" && ["PENDING", "PROCESSING"].includes(refund.status) ? (
                   <button className="admin-btn secondary" type="button" onClick={() => onRefreshRefund(refund.id)} disabled={savingId === `refresh-refund:${refund.id}`}>
-                    {savingId === `refresh-refund:${refund.id}` ? "Đang kiểm tra..." : "Kiểm tra VNPay"}
+                    {savingId === `refresh-refund:${refund.id}`
+                      ? "Đang xử lý..."
+                      : refund.status === "PENDING" ? "Gửi hoàn tiền VNPay" : "Kiểm tra VNPay"}
                   </button>
                 ) : null}
                 {!['COMPLETED', 'CANCELLED'].includes(refund.status) ? (
@@ -310,7 +312,8 @@ export function AdminOrdersClient({
   const [showPackingModal, setShowPackingModal] = useState(false);
   const orderDetailCacheRef = useRef<Record<string, AdminOrderResponse>>({});
   const shipmentCacheRef = useRef<Record<string, ShipmentResponse | null>>({});
-  const pendingCancellationCount = orders.filter((order) => order.orderStatus === "CANCELLATION_REQUESTED").length;
+  const pendingCancellationCount = orders.filter((order) =>
+    order.orderStatus === "CANCELLED" && order.paymentStatus === "PAID").length;
 
   useEffect(() => {
     setOrders(initialOrders);
@@ -334,7 +337,8 @@ export function AdminOrdersClient({
 
   useEffect(() => {
     const cancellationOrders = initialOrders.filter((order) =>
-      ["CANCELLATION_REQUESTED", "CANCELLATION_APPROVED"].includes(order.orderStatus));
+      ["CANCELLATION_REQUESTED", "CANCELLATION_APPROVED"].includes(order.orderStatus)
+      || (order.orderStatus === "CANCELLED" && order.paymentStatus === "PAID"));
     if (!cancellationOrders.length) return;
     void Promise.all(cancellationOrders.map(async (order) => {
       const refunds = await fetchOrderRefunds(order.id);
@@ -459,8 +463,8 @@ export function AdminOrdersClient({
       setOrders((current) => current.map((item) => item.id === id ? updated : item));
       setOrderDetails((current) => ({ ...current, [id]: updated }));
       setStatusDrafts((current) => ({ ...current, [id]: updated.orderStatus }));
-      setMessage(updated.orderStatus === "CANCELLATION_APPROVED"
-        ? `Đã hủy đơn ${updated.orderCode}, đang xử lý hoàn tiền.`
+      setMessage(updated.paymentStatus === "PAID"
+        ? `Đã hủy đơn ${updated.orderCode}; giao dịch hoàn tiền đang chờ xử lý.`
         : `Cửa hàng đã hủy đơn ${updated.orderCode}.`);
     } catch (error) {
       setMessage(extractError(error, "Không hủy được đơn hàng"));
@@ -473,7 +477,10 @@ export function AdminOrdersClient({
     try {
       setSavingId(`refresh-refund:${refundId}`);
       setMessage(null);
-      const refund = await refreshVnpayRefund(refundId);
+      const currentRefund = refundsByOrder[orderId]?.find((item) => item.id === refundId);
+      const refund = currentRefund?.status === "PENDING"
+        ? await submitVnpayRefund(refundId)
+        : await refreshVnpayRefund(refundId);
       const updated = await fetchOrderDetail(orderId);
       setRefundsByOrder((current) => ({
         ...current,
@@ -575,7 +582,7 @@ export function AdminOrdersClient({
           <h2>Danh sách đơn hàng</h2>
           {pendingCancellationCount > 0 ? (
             <p style={{ marginTop: 8, color: "#b45309", fontWeight: 700 }}>
-              Có {pendingCancellationCount} yêu cầu hủy đang chờ xử lý trên trang này.
+              Có {pendingCancellationCount} đơn đã hủy đang chờ hoàn tiền trên trang này.
             </p>
           ) : null}
         </div>

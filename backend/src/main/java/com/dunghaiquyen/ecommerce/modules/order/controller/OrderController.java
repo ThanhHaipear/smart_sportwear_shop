@@ -69,12 +69,7 @@ public class OrderController {
         return ApiResponse.ok(response);
     }
 
-    /**
-     * API_SPEC_PHASE1.md 7.4: only the order's own customer can cancel it, and
-     * only through PACKING (not once it has shipped) - see OrderService.cancelOwnOrder
-     * for the exact rule and why a cancellation past PENDING_CONFIRMATION always
-     * needs staff approval.
-     */
+    /** The owner may cancel immediately before DELIVERED; refund is separate. */
     @PostMapping("/{id}/cancel")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ApiResponse<OrderResponse> cancel(
@@ -82,11 +77,10 @@ public class OrderController {
             @PathVariable UUID id,
             @RequestBody(required = false) CancelOrderRequest request) {
         String reason = request != null ? request.reason() : null;
-        OrderResponse response = orderService.cancelOwnOrder(id, principal.getUserId(), reason);
-        String message = response.orderStatus() == com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatus.CANCELLATION_REQUESTED
-                ? "Cancellation and refund requested"
-                : "Order cancelled";
-        return ApiResponse.ok(message, response);
+        OrderResponse response = returnService.cancelOwnOrder(id, principal.getUserId(), reason);
+        return ApiResponse.ok(response.paymentStatus() == com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus.PAID
+                ? "Order cancelled; refund is pending"
+                : "Order cancelled", response);
     }
 
     /**
