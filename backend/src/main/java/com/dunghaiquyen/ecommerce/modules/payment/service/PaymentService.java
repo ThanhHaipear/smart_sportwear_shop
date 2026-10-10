@@ -14,17 +14,22 @@ import com.dunghaiquyen.ecommerce.modules.payment.dto.CreatePaymentRequest;
 import com.dunghaiquyen.ecommerce.modules.payment.dto.CreatePaymentResponse;
 import com.dunghaiquyen.ecommerce.modules.payment.dto.PaymentResponse;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.Payment;
+import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentEvent;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentProvider;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
+import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentEventRepository;
 import com.dunghaiquyen.ecommerce.modules.returns.service.ReturnService;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,6 +52,7 @@ public class PaymentService {
 
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
+    private final PaymentEventRepository paymentEventRepository;
     private final VnpaySignatureService signatureService;
     private final AppVnpayProperties vnpayProperties;
     private final AppOrderProperties orderProperties;
@@ -55,12 +61,14 @@ public class PaymentService {
     public PaymentService(
             OrderRepository orderRepository,
             PaymentRepository paymentRepository,
+            PaymentEventRepository paymentEventRepository,
             VnpaySignatureService signatureService,
             AppVnpayProperties vnpayProperties,
             AppOrderProperties orderProperties,
             ReturnService returnService) {
         this.orderRepository = orderRepository;
         this.paymentRepository = paymentRepository;
+        this.paymentEventRepository = paymentEventRepository;
         this.signatureService = signatureService;
         this.vnpayProperties = vnpayProperties;
         this.orderProperties = orderProperties;
@@ -217,6 +225,20 @@ public class PaymentService {
             };
         }
 
+        String providerEventKey = providerEventKey(params);
+        if (paymentEventRepository.existsByProviderAndProviderEventKey(PaymentProvider.VNPAY, providerEventKey)) {
+            return ipnResponse("02", "Payment event already processed");
+        }
+        Map<String, Object> redactedPayload = redactedCallbackPayload(params);
+        PaymentEvent event = new PaymentEvent();
+        event.setPayment(payment);
+        event.setProvider(PaymentProvider.VNPAY);
+        event.setProviderEventKey(providerEventKey);
+        event.setEventType("IPN_CALLBACK");
+        event.setVerified(true);
+        event.setPayloadRedacted(redactedPayload);
+        paymentEventRepository.save(event);
+
         if (payment.getStatus() != PaymentStatus.PENDING) {
             return ipnResponse("02", "Payment already confirmed");
         }
@@ -228,7 +250,7 @@ public class PaymentService {
         if (resolvedStatus == PaymentStatus.PAID) {
             payment.setPaidAt(Instant.now());
         }
-        payment.setRawPayloadJson(new LinkedHashMap<>(params));
+        payment.setRawPayloadJson(redactedPayload);
         payment.setGatewayTransactionNo(params.get("vnp_TransactionNo"));
         payment.setBankCode(params.get("vnp_BankCode"));
         paymentRepository.save(payment);
@@ -267,6 +289,40 @@ public class PaymentService {
 
     private Map<String, String> ipnResponse(String code, String message) {
         return Map.of("RspCode", code, "Message", message);
+    }
+
+    private String providerEventKey(Map<String, String> params) {
+        String canonical = String.join("|",
+                value(params, "vnp_TmnCode"),
+                value(params, "vnp_TxnRef"),
+                value(params, "vnp_TransactionNo"),
+                value(params, "vnp_ResponseCode"),
+                value(params, "vnp_TransactionStatus"),
+                value(params, "vnp_Amount"),
+                value(params, "vnp_PayDate"));
+        try {
+            return HexFormat.of().formatHex(
+                    MessageDigest.getInstance("SHA-256").digest(canonical.getBytes(StandardCharsets.UTF_8)));
+        } catch (java.security.NoSuchAlgorithmException ex) {
+            throw new IllegalStateException("SHA-256 is unavailable", ex);
+        }
+    }
+
+    private Map<String, Object> redactedCallbackPayload(Map<String, String> params) {
+        Map<String, Object> redacted = new LinkedHashMap<>();
+        for (String key : List.of(
+                "vnp_TmnCode", "vnp_TxnRef", "vnp_TransactionNo", "vnp_ResponseCode",
+                "vnp_TransactionStatus", "vnp_Amount", "vnp_PayDate", "vnp_BankCode")) {
+            if (params.get(key) != null) {
+                redacted.put(key, params.get(key));
+            }
+        }
+        return redacted;
+    }
+
+    private String value(Map<String, String> params, String key) {
+        String value = params.get(key);
+        return value == null || value.isBlank() ? "-" : value;
     }
 
     private PaymentStatus resolveStatus(String responseCode, String transactionStatus) {

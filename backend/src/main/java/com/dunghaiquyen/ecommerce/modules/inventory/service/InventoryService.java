@@ -20,6 +20,7 @@ import com.dunghaiquyen.ecommerce.modules.inventory.repository.spec.InventoryVar
 import com.dunghaiquyen.ecommerce.modules.brand.entity.Brand;
 import com.dunghaiquyen.ecommerce.modules.category.entity.Category;
 import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.Return;
 import com.dunghaiquyen.ecommerce.modules.product.dto.CatalogRefResponse;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductImage;
@@ -96,6 +97,10 @@ public class InventoryService {
             @CacheEvict(value = CacheConfig.REPORT_INVENTORY, allEntries = true)
     })
     public void recordReserve(ProductVariant lockedVariant, int quantity, Order order, User actor) {
+        String key = orderKey(InventoryTransactionType.ORDER_RESERVE, order, lockedVariant.getId());
+        if (transactionRepository.existsByIdempotencyKey(key)) {
+            return;
+        }
         int beforeStock = lockedVariant.getStockQuantity();
         int beforeReserved = lockedVariant.getReservedQuantity();
         lockedVariant.setReservedQuantity(beforeReserved + quantity);
@@ -109,7 +114,7 @@ public class InventoryService {
                 beforeReserved,
                 lockedVariant.getReservedQuantity(),
                 actor,
-                "Order " + order.getOrderCode() + " reserved stock");
+                null, key, "Order " + order.getOrderCode() + " reserved stock");
     }
 
     @Transactional
@@ -119,6 +124,10 @@ public class InventoryService {
     })
     public void confirmDeduct(UUID variantId, int quantity, Order order, User actor) {
         ProductVariant variant = lockVariant(variantId);
+        String key = orderKey(InventoryTransactionType.ORDER_CONFIRM_DEDUCT, order, variantId);
+        if (transactionRepository.existsByIdempotencyKey(key)) {
+            return;
+        }
         int beforeStock = variant.getStockQuantity();
         int beforeReserved = variant.getReservedQuantity();
         variant.setStockQuantity(beforeStock - quantity);
@@ -133,7 +142,7 @@ public class InventoryService {
                 beforeReserved,
                 variant.getReservedQuantity(),
                 actor,
-                "Order " + order.getOrderCode() + " confirmed - stock deducted");
+                null, key, "Order " + order.getOrderCode() + " confirmed - stock deducted");
     }
 
     @Transactional
@@ -143,6 +152,10 @@ public class InventoryService {
     })
     public void release(UUID variantId, int quantity, Order order, User actor) {
         ProductVariant variant = lockVariant(variantId);
+        String key = orderKey(InventoryTransactionType.ORDER_RELEASE, order, variantId);
+        if (transactionRepository.existsByIdempotencyKey(key)) {
+            return;
+        }
         int beforeStock = variant.getStockQuantity();
         int beforeReserved = variant.getReservedQuantity();
         variant.setReservedQuantity(beforeReserved - quantity);
@@ -156,7 +169,7 @@ public class InventoryService {
                 beforeReserved,
                 variant.getReservedQuantity(),
                 actor,
-                "Order " + order.getOrderCode() + " cancelled - reserved stock released");
+                null, key, "Order " + order.getOrderCode() + " cancelled - reserved stock released");
     }
 
     @Transactional
@@ -165,14 +178,40 @@ public class InventoryService {
             @CacheEvict(value = CacheConfig.REPORT_INVENTORY, allEntries = true),
             @CacheEvict(value = CacheConfig.REPORT_PRODUCTS, allEntries = true)
     })
-    public void restockReturn(UUID variantId, int quantity, Order order, User actor) {
+    public void restockCancelledOrder(UUID variantId, int quantity, Order order, User actor) {
         ProductVariant variant = lockVariant(variantId);
+        String key = orderKey(InventoryTransactionType.ORDER_CANCEL_RESTOCK, order, variantId);
+        if (transactionRepository.existsByIdempotencyKey(key)) {
+            return;
+        }
         int beforeStock = variant.getStockQuantity();
         int beforeReserved = variant.getReservedQuantity();
         variant.setStockQuantity(beforeStock + quantity);
         variantRepository.save(variant);
-        log(variant, order, InventoryTransactionType.RETURN_RESTOCK, quantity,
-                beforeStock, beforeReserved, beforeReserved, actor,
+        log(variant, order, InventoryTransactionType.ORDER_CANCEL_RESTOCK, quantity,
+                beforeStock, beforeReserved, beforeReserved, actor, null, key,
+                "Cancelled order restocked");
+    }
+
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CacheConfig.REPORT_OVERVIEW, allEntries = true),
+            @CacheEvict(value = CacheConfig.REPORT_INVENTORY, allEntries = true),
+            @CacheEvict(value = CacheConfig.REPORT_PRODUCTS, allEntries = true)
+    })
+    public void restockReturn(
+            UUID variantId, int quantity, Return returnRequest, UUID returnItemId, User actor) {
+        ProductVariant variant = lockVariant(variantId);
+        String key = "RETURN_RESTOCK:" + returnRequest.getId() + ":" + returnItemId;
+        if (transactionRepository.existsByIdempotencyKey(key)) {
+            return;
+        }
+        int beforeStock = variant.getStockQuantity();
+        int beforeReserved = variant.getReservedQuantity();
+        variant.setStockQuantity(beforeStock + quantity);
+        variantRepository.save(variant);
+        log(variant, returnRequest.getOrder(), InventoryTransactionType.RETURN_RESTOCK, quantity,
+                beforeStock, beforeReserved, beforeReserved, actor, returnRequest, key,
                 "Accepted customer return restocked");
     }
 
@@ -184,6 +223,10 @@ public class InventoryService {
     })
     public InventoryItemResponse importStock(ImportStockRequest request, User actor) {
         ProductVariant variant = lockVariant(request.variantId());
+        String key = manualKey(InventoryTransactionType.IMPORT, request.requestId());
+        if (transactionRepository.existsByIdempotencyKey(key)) {
+            return toItemResponse(variant);
+        }
         int beforeStock = variant.getStockQuantity();
         int beforeReserved = variant.getReservedQuantity();
         variant.setStockQuantity(beforeStock + request.quantity());
@@ -197,7 +240,7 @@ public class InventoryService {
                 beforeReserved,
                 beforeReserved,
                 actor,
-                request.note());
+                null, key, request.note());
 
         return toItemResponse(variant);
     }
@@ -218,6 +261,10 @@ public class InventoryService {
     })
     public InventoryItemResponse exportStock(ExportStockRequest request, User actor) {
         ProductVariant variant = lockVariant(request.variantId());
+        String key = manualKey(InventoryTransactionType.EXPORT, request.requestId());
+        if (transactionRepository.existsByIdempotencyKey(key)) {
+            return toItemResponse(variant);
+        }
         int beforeStock = variant.getStockQuantity();
         int beforeReserved = variant.getReservedQuantity();
         int available = beforeStock - beforeReserved;
@@ -236,7 +283,7 @@ public class InventoryService {
                 beforeReserved,
                 beforeReserved,
                 actor,
-                request.note());
+                null, key, request.note());
         return toItemResponse(variant);
     }
 
@@ -259,6 +306,10 @@ public class InventoryService {
             throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid adjustment type");
         }
         ProductVariant variant = lockVariant(request.variantId());
+        String key = manualKey(request.type(), request.requestId());
+        if (transactionRepository.existsByIdempotencyKey(key)) {
+            return toItemResponse(variant);
+        }
         int beforeStock = variant.getStockQuantity();
         int beforeReserved = variant.getReservedQuantity();
 
@@ -282,7 +333,7 @@ public class InventoryService {
                 beforeReserved,
                 beforeReserved,
                 actor,
-                request.note());
+                null, key, request.note());
         return toItemResponse(variant);
     }
 
@@ -439,10 +490,13 @@ public class InventoryService {
             int beforeReserved,
             int afterReserved,
             User actor,
+            Return returnRequest,
+            String idempotencyKey,
             String note) {
         InventoryTransaction tx = new InventoryTransaction();
         tx.setVariant(variant);
         tx.setOrder(order);
+        tx.setReturnRequest(returnRequest);
         tx.setType(type);
         tx.setQuantity(quantity);
         tx.setBeforeStockQuantity(beforeStock);
@@ -451,7 +505,17 @@ public class InventoryService {
         tx.setAfterReservedQuantity(afterReserved);
         tx.setNote(note);
         tx.setCreatedBy(actor);
+        tx.setIdempotencyKey(idempotencyKey);
         transactionRepository.save(tx);
         realtimeService.publishAfterCommit(variant);
+    }
+
+    private String orderKey(InventoryTransactionType type, Order order, UUID variantId) {
+        return type + ":" + order.getId() + ":" + variantId;
+    }
+
+    private String manualKey(InventoryTransactionType type, UUID requestId) {
+        UUID effectiveRequestId = requestId == null ? UUID.randomUUID() : requestId;
+        return type + ":MANUAL:" + effectiveRequestId;
     }
 }

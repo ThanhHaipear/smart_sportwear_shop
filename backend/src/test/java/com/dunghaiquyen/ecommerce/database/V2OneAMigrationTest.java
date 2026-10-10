@@ -47,7 +47,7 @@ class V2OneAMigrationTest {
                 .load();
 
         flyway.clean();
-        assertEquals(2, flyway.migrate().migrationsExecuted);
+        assertEquals(3, flyway.migrate().migrationsExecuted);
         flyway.validate();
         assertEquals(0, flyway.migrate().migrationsExecuted, "Migration phải idempotent qua Flyway");
     }

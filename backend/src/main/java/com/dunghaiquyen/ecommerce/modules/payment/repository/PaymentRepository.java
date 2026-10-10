@@ -4,6 +4,7 @@ import com.dunghaiquyen.ecommerce.modules.payment.entity.Payment;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import jakarta.persistence.LockModeType;
 import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,9 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
     Optional<Payment> findFirstByOrderIdOrderByCreatedAtDesc(UUID orderId);
 
     Optional<Payment> findFirstByOrderIdAndStatusOrderByCreatedAtDesc(UUID orderId, PaymentStatus status);
+
+    Optional<Payment> findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
+            UUID orderId, Collection<PaymentStatus> statuses);
 
     /** Plain (unlocked) lookup - for read-only callers outside a write transaction. */
     Optional<Payment> findByTransactionRef(String transactionRef);

@@ -47,12 +47,24 @@ public class OrderItem extends AbstractEntity {
     @Column(name = "color_snapshot", nullable = false, length = 50)
     private String colorSnapshot;
 
-    @Column(name = "unit_price_snapshot", nullable = false, precision = 12, scale = 2)
+    @Column(name = "unit_price_snapshot", nullable = false, precision = 14, scale = 2)
     private BigDecimal unitPriceSnapshot;
 
     @Column(nullable = false)
     private int quantity;
 
-    @Column(name = "line_total", nullable = false, precision = 12, scale = 2)
+    @Column(name = "line_total", nullable = false, precision = 14, scale = 2)
     private BigDecimal lineTotal;
+
+    @Column(name = "discount_allocated", nullable = false, precision = 14, scale = 2)
+    private BigDecimal discountAllocated = BigDecimal.ZERO;
+
+    @Column(name = "net_line_amount", nullable = false, precision = 14, scale = 2)
+    private BigDecimal netLineAmount;
+
+    @Column(name = "return_pending_quantity", nullable = false)
+    private int returnPendingQuantity;
+
+    @Column(name = "returned_quantity", nullable = false)
+    private int returnedQuantity;
 }

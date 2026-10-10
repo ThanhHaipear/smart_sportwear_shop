@@ -21,10 +21,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * returnRequest is nullable (V3's schema) for a future standalone-refund
- * case (e.g. goodwill refund with no return), but this phase only ever
- * creates one FROM a Return (see ReturnService.createRefund) - every Refund
- * row written by this phase's code has returnRequest set.
+ * returnRequest is nullable because cancellation refunds belong directly to
+ * an order; post-delivery merchandise refunds reference a Return.
  */
 @Getter
 @Setter
@@ -47,8 +45,11 @@ public class Refund extends AbstractAuditEntity {
     @Column(name = "refund_code", nullable = false, unique = true, length = 50)
     private String refundCode;
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column(nullable = false, precision = 14, scale = 2)
     private BigDecimal amount;
+
+    @Column(name = "shipping_refund_amount", nullable = false, precision = 14, scale = 2)
+    private BigDecimal shippingRefundAmount = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

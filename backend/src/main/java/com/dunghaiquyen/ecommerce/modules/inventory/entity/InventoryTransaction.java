@@ -3,6 +3,7 @@ package com.dunghaiquyen.ecommerce.modules.inventory.entity;
 import com.dunghaiquyen.ecommerce.common.entity.AbstractCreatedAtEntity;
 import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductVariant;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.Return;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +35,10 @@ public class InventoryTransaction extends AbstractCreatedAtEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "return_id")
+    private Return returnRequest;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private InventoryTransactionType type;
@@ -53,10 +58,13 @@ public class InventoryTransaction extends AbstractCreatedAtEntity {
     @Column(name = "after_reserved_quantity", nullable = false)
     private int afterReservedQuantity;
 
-    @Column(columnDefinition = "text")
+    @Column(name = "reason", columnDefinition = "text")
     private String note;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by")
+    @JoinColumn(name = "actor_user_id")
     private User createdBy;
+
+    @Column(name = "idempotency_key", nullable = false, length = 200, updatable = false)
+    private String idempotencyKey;
 }

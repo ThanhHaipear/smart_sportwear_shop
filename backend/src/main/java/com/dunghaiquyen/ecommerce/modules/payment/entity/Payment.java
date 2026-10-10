@@ -19,9 +19,9 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 /**
- * transactionRef is unique so callback handling can be idempotent: look the row
- * up by transactionRef, lock it (SELECT ... FOR UPDATE), and no-op if already
- * processed. One order may have several payment rows (retries / re-created sessions).
+ * The pair (provider, transactionRef) is unique. Callback handling locks the
+ * matching row and no-ops after the terminal result has already been applied.
+ * One order may have several payment rows (retries / re-created sessions).
  */
 @Getter
 @Setter
@@ -37,10 +37,10 @@ public class Payment extends AbstractAuditEntity {
     @Column(nullable = false, length = 20)
     private PaymentProvider provider;
 
-    @Column(name = "transaction_ref", nullable = false, unique = true, length = 150)
+    @Column(name = "transaction_ref", nullable = false, length = 150)
     private String transactionRef;
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column(nullable = false, precision = 14, scale = 2)
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)

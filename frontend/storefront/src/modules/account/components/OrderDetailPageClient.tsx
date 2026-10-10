@@ -168,16 +168,6 @@ export function OrderDetailPageClient({ orderId }: { orderId: string }) {
                   </button>
                 ) : null}
               </div>
-              {order.orderStatus === "CANCELLATION_REQUESTED" ? (
-                <p className="mt-4 max-w-[300px] text-[13px] leading-5 text-[#A86516]">
-                  Đang chờ hoàn tiền VNPay. Đơn sẽ tự động hủy khi giao dịch hoàn tiền thành công.
-                </p>
-              ) : null}
-              {order.orderStatus === "CANCELLATION_APPROVED" ? (
-                <p className="mt-4 max-w-[300px] text-[13px] leading-5 text-[#A86516]">
-                  Cửa hàng đã duyệt hủy và đang xử lý hoàn tiền VNPay cho bạn.
-                </p>
-              ) : null}
             </div>
           </div>
 

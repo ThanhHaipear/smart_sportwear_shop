@@ -21,4 +21,6 @@ public interface InventoryTransactionRepository
      * restockReturn() is the correct undo there. See OrderService.applyStatusTransition.
      */
     boolean existsByOrder_IdAndType(UUID orderId, InventoryTransactionType type);
+
+    boolean existsByIdempotencyKey(String idempotencyKey);
 }

@@ -70,29 +70,15 @@ public class AdminOrderController {
         return ApiResponse.ok(returnService.listOrderRefundsForAdmin(id));
     }
 
-    /**
-     * Approves a cancellation request. A PAID order actually holds the
-     * customer's money, so this also submits the VNPay refund and returns it;
-     * an UNPAID order (COD never charged, whether cancelled pre-confirmation
-     * or after CONFIRMED/PACKING) has nothing to refund and finalizes straight
-     * to CANCELLED instead - there is no separate "nothing to refund" endpoint
-     * to remember to call.
-     */
+    /** Completes the refund work item created when a paid order was cancelled. */
     @PostMapping("/{id}/cancellation-refund")
     public ApiResponse<Object> refundCancellation(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id,
             HttpServletRequest request) {
-        // This transaction commits before the external gateway call below, so
-        // a VNPay outage cannot erase the admin's approval decision.
-        AdminOrderResponse approved = orderService.approveCancellationForRefund(id, principal.getUser());
-        if (approved.paymentStatus() != com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus.PAID) {
-            orderService.completeCancellationAfterRefund(id, principal.getUser());
-            return ApiResponse.ok("Cancellation finalized (nothing to refund)", orderService.getOrderDetailForAdmin(id));
-        }
         String ipAddress = request.getRemoteAddr();
         RefundResponse response = returnService.refundCancellation(
-                id, "Approved cancellation request", principal.getUser(), ipAddress);
+                id, "Refund for cancelled order", principal.getUser(), ipAddress);
         return ApiResponse.ok("Cancellation refund completed", response);
     }
 

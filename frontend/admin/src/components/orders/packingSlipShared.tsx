@@ -2,8 +2,6 @@ import type { AdminOrderResponse } from "@/modules/orders/types";
 
 export const orderStatusLabels: Record<string, string> = {
   PENDING_CONFIRMATION: "Chờ xác nhận",
-  CANCELLATION_REQUESTED: "Chờ xử lý hủy",
-  CANCELLATION_APPROVED: "Đã duyệt hủy – đang hoàn tiền",
   CONFIRMED: "Đã xác nhận",
   PACKING: "Đang đóng gói",
   SHIPPING: "Đang giao",

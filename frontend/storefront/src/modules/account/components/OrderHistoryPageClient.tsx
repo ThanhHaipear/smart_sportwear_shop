@@ -155,16 +155,6 @@ export function OrderHistoryPageClient() {
                         </button>
                       ) : null}
                     </div>
-                    {order.orderStatus === "CANCELLATION_REQUESTED" ? (
-                      <p className="mt-4 max-w-[260px] text-[13px] leading-5 text-[#A86516]">
-                        Đang chờ cửa hàng hoàn tiền VNPay. Đơn sẽ tự động hủy sau khi hoàn tiền thành công.
-                      </p>
-                    ) : null}
-                    {order.orderStatus === "CANCELLATION_APPROVED" ? (
-                      <p className="mt-4 max-w-[260px] text-[13px] leading-5 text-[#A86516]">
-                        Cửa hàng đã duyệt yêu cầu hủy và đang xử lý hoàn tiền VNPay.
-                      </p>
-                    ) : null}
                   </div>
                 </div>
 

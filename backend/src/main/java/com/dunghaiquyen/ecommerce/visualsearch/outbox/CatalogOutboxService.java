@@ -41,10 +41,12 @@ public class CatalogOutboxService {
 
         jdbcTemplate.update("""
                 insert into integration_outbox
-                    (id, event_type, event_version, aggregate_type, aggregate_id, payload)
-                values (?, ?, ?, 'PRODUCT', ?, cast(? as jsonb))
+                    (id, idempotency_key, event_type, event_version, aggregate_type,
+                     aggregate_id, aggregate_version, payload)
+                values (?, ?, ?, ?, 'PRODUCT', ?, 0, cast(? as jsonb))
                 """,
-                eventId, type.name(), EVENT_VERSION, productId, toJson(payload));
+                eventId, type.name() + ":" + productId + ":" + eventId,
+                type.name(), EVENT_VERSION, productId, toJson(payload));
         return eventId;
     }
 

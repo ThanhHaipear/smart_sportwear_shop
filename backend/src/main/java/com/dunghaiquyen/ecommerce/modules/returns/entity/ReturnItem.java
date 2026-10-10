@@ -2,6 +2,7 @@ package com.dunghaiquyen.ecommerce.modules.returns.entity;
 
 import com.dunghaiquyen.ecommerce.common.entity.AbstractCreatedAtEntity;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderItem;
+import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,6 +32,10 @@ public class ReturnItem extends AbstractCreatedAtEntity {
     private Return returnRequest;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_item_id", nullable = false)
     private OrderItem orderItem;
 
@@ -48,7 +53,7 @@ public class ReturnItem extends AbstractCreatedAtEntity {
     @Column(length = 30)
     private ReturnItemResolution resolution;
 
-    @Column(name = "refund_amount", precision = 12, scale = 2)
+    @Column(name = "refund_amount", precision = 14, scale = 2)
     private BigDecimal refundAmount;
 
     @Column(nullable = false)

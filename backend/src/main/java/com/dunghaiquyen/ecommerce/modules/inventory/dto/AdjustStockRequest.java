@@ -12,8 +12,9 @@ import java.util.UUID;
  * no clean way to restrict an enum to a subset, so this is a service-layer check).
  */
 public record AdjustStockRequest(
+        UUID requestId,
         @NotNull(message = "Variant is required") UUID variantId,
         @NotNull(message = "Adjustment type is required") InventoryTransactionType type,
         @Positive(message = "Quantity must be greater than 0") int quantity,
-        String note) {
+        @jakarta.validation.constraints.NotBlank(message = "Reason is required") String note) {
 }

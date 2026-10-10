@@ -25,10 +25,12 @@ import com.dunghaiquyen.ecommerce.modules.order.dto.UpdateOrderStatusRequest;
 import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderItem;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatus;
+import com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatusHistory;
 import com.dunghaiquyen.ecommerce.modules.order.entity.PaymentMethod;
 import com.dunghaiquyen.ecommerce.modules.order.mapper.OrderMapper;
 import com.dunghaiquyen.ecommerce.modules.order.repository.OrderItemRepository;
 import com.dunghaiquyen.ecommerce.modules.order.repository.OrderRepository;
+import com.dunghaiquyen.ecommerce.modules.order.repository.OrderStatusHistoryRepository;
 import com.dunghaiquyen.ecommerce.modules.order.repository.spec.OrderSpecifications;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductVariant;
@@ -37,6 +39,9 @@ import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepos
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
 import com.dunghaiquyen.ecommerce.modules.product.util.ThumbnailResolver;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
+import com.dunghaiquyen.ecommerce.modules.payment.entity.Payment;
+import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentProvider;
+import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
 import com.dunghaiquyen.ecommerce.modules.promotion.service.PromotionService;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
@@ -75,9 +80,8 @@ public class OrderService {
     private static final java.util.regex.Pattern TAX_CODE_PATTERN =
             java.util.regex.Pattern.compile("^\\d{10}(-\\d{3})?$");
 
-    /** Legacy cancellation states remain readable; V2 writes CANCELLED directly. */
-    private static final java.util.Set<OrderStatus> INVOICE_BLOCKED_STATUSES = java.util.Set.of(
-            OrderStatus.CANCELLATION_REQUESTED, OrderStatus.CANCELLATION_APPROVED, OrderStatus.CANCELLED);
+    private static final java.util.Set<OrderStatus> INVOICE_BLOCKED_STATUSES =
+            java.util.Set.of(OrderStatus.CANCELLED);
 
     /** Staff-editable operational states; cancellation uses its dedicated endpoint. */
     private static final java.util.Set<OrderStatus> ADMIN_EDITABLE_STATUSES = java.util.Set.of(
@@ -89,6 +93,8 @@ public class OrderService {
     private final AddressRepository addressRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderStatusHistoryRepository orderStatusHistoryRepository;
+    private final PaymentRepository paymentRepository;
     private final ProductVariantRepository variantRepository;
     private final ProductImageRepository productImageRepository;
     private final UserRepository userRepository;
@@ -107,6 +113,8 @@ public class OrderService {
             AddressRepository addressRepository,
             OrderRepository orderRepository,
             OrderItemRepository orderItemRepository,
+            OrderStatusHistoryRepository orderStatusHistoryRepository,
+            PaymentRepository paymentRepository,
             ProductVariantRepository variantRepository,
             ProductImageRepository productImageRepository,
             UserRepository userRepository,
@@ -123,6 +131,8 @@ public class OrderService {
         this.addressRepository = addressRepository;
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
+        this.orderStatusHistoryRepository = orderStatusHistoryRepository;
+        this.paymentRepository = paymentRepository;
         this.variantRepository = variantRepository;
         this.productImageRepository = productImageRepository;
         this.userRepository = userRepository;
@@ -225,6 +235,7 @@ public class OrderService {
             orderItem.setUnitPriceSnapshot(unitPrice);
             orderItem.setQuantity(line.quantity());
             orderItem.setLineTotal(lineTotal);
+            orderItem.setNetLineAmount(lineTotal);
             order.getItems().add(orderItem);
         }
 
@@ -245,7 +256,27 @@ public class OrderService {
         order.setDiscountAmount(discount);
         order.setTotalAmount(subtotal.add(order.getShippingFee()).subtract(discount));
 
+        // Allocate the exact order discount deterministically across immutable
+        // item snapshots. The final item absorbs any scale remainder.
+        BigDecimal remainingDiscount = discount;
+        for (OrderItem item : order.getItems()) {
+            BigDecimal allocated = remainingDiscount.min(item.getLineTotal());
+            item.setDiscountAllocated(allocated);
+            item.setNetLineAmount(item.getLineTotal().subtract(allocated));
+            remainingDiscount = remainingDiscount.subtract(allocated);
+        }
+
         order = orderRepository.save(order);
+        appendStatusHistory(order, null, OrderStatus.PENDING_CONFIRMATION, user, "Order placed");
+        if (order.getPaymentMethod() == PaymentMethod.COD) {
+            Payment payment = new Payment();
+            payment.setOrder(order);
+            payment.setProvider(PaymentProvider.COD);
+            payment.setTransactionRef("COD:" + order.getId());
+            payment.setAmount(order.getTotalAmount());
+            payment.setStatus(PaymentStatus.UNPAID);
+            paymentRepository.save(payment);
+        }
 
         // Phase 3: reserve stock for every line, reusing the SAME locked variant
         // entities from Phase 1 (still locked for the rest of this transaction).
@@ -424,15 +455,10 @@ public class OrderService {
         if (order.getOrderStatus() == OrderStatus.CANCELLED) {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Cancelled order is final and cannot be updated");
         }
-        if (order.getOrderStatus() == OrderStatus.CANCELLATION_REQUESTED
-                || order.getOrderStatus() == OrderStatus.CANCELLATION_APPROVED) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT,
-                    "Approve or reject the cancellation request before changing operational status");
-        }
         if (!ADMIN_EDITABLE_STATUSES.contains(request.status())) {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Use the cancellation workflow to cancel an order");
         }
-        order = applyStatusTransition(order, request.status(), actor, true);
+        order = applyStatusTransition(order, request.status(), actor);
         if (request.note() != null) {
             order.setInternalNote(request.note());
             order = orderRepository.save(order);
@@ -461,7 +487,7 @@ public class OrderService {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Order can no longer be cancelled");
         }
         User actor = order.getUser();
-        order = applyStatusTransition(order, OrderStatus.CANCELLED, actor, true);
+        order = applyStatusTransition(order, OrderStatus.CANCELLED, actor);
         order.setCancellationRequestedBy(
                 com.dunghaiquyen.ecommerce.modules.order.entity.CancellationRequestedBy.CUSTOMER);
         order.setCancellationReason(reason == null || reason.isBlank() ? "Customer cancelled order" : reason.trim());
@@ -486,7 +512,7 @@ public class OrderService {
             throw new BusinessRuleException(HttpStatus.CONFLICT,
                     "Order can no longer be cancelled by staff");
         }
-        order = applyStatusTransition(order, OrderStatus.CANCELLED, actor, true);
+        order = applyStatusTransition(order, OrderStatus.CANCELLED, actor);
         order.setCancellationRequestedBy(
                 com.dunghaiquyen.ecommerce.modules.order.entity.CancellationRequestedBy.STAFF);
         order.setCancellationReason(reason == null || reason.isBlank() ? "Cửa hàng chủ động hủy đơn" : reason.trim());
@@ -497,17 +523,9 @@ public class OrderService {
 
     /** Applies the inventory side effect and persists one order-status change. */
     private Order applyStatusTransition(Order order, OrderStatus target, User actor) {
-        return applyStatusTransition(order, target, actor, false);
-    }
-
-    private Order applyStatusTransition(Order order, OrderStatus target, User actor, boolean adminOverride) {
         OrderStatus current = order.getOrderStatus();
         if (current == target) {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Order already has status " + target);
-        }
-        if (!adminOverride && !isWorkflowTransition(current, target)) {
-            throw new BusinessRuleException(
-                    HttpStatus.CONFLICT, "Cannot transition order from " + current + " to " + target);
         }
         OrderFinancialPolicy.validateTransition(order, target);
 
@@ -534,7 +552,7 @@ public class OrderService {
             // that case, release() would incorrectly touch reservedQuantity again.
             for (OrderItem item : sortedItems) {
                 if (wasEverDeducted) {
-                    inventoryService.restockReturn(item.getVariant().getId(), item.getQuantity(), order, actor);
+                    inventoryService.restockCancelledOrder(item.getVariant().getId(), item.getQuantity(), order, actor);
                 } else {
                     inventoryService.release(item.getVariant().getId(), item.getQuantity(), order, actor);
                 }
@@ -545,13 +563,27 @@ public class OrderService {
         if (target == OrderStatus.DELIVERED) {
             // Returns module's return-window eligibility check reads this - see Order.deliveredAt's javadoc.
             if (order.getDeliveredAt() == null) {
-                order.setDeliveredAt(java.time.Instant.now());
+                java.time.Instant deliveredAt = java.time.Instant.now();
+                order.setDeliveredAt(deliveredAt);
+                order.setReturnEligibleUntil(deliveredAt.plus(7, java.time.temporal.ChronoUnit.DAYS));
             }
             if (order.getPaymentMethod() == PaymentMethod.COD) {
                 order.setPaymentStatus(PaymentStatus.PAID);
+                Payment payment = paymentRepository.findFirstByOrderIdOrderByCreatedAtDesc(order.getId())
+                        .orElseThrow(() -> new BusinessRuleException(
+                                HttpStatus.CONFLICT, "COD payment record not found"));
+                if (payment.getProvider() != PaymentProvider.COD) {
+                    throw new BusinessRuleException(HttpStatus.CONFLICT, "Invalid COD payment record");
+                }
+                if (payment.getStatus() == PaymentStatus.UNPAID) {
+                    payment.setStatus(PaymentStatus.PAID);
+                    payment.setPaidAt(java.time.Instant.now());
+                    paymentRepository.save(payment);
+                }
             }
         }
         order = orderRepository.save(order);
+        appendStatusHistory(order, current, target, actor, null);
 
         // Phase O: fires for CANCELLED regardless of who triggered it (admin or
         // the customer themselves, both reach this shared method) - the order's
@@ -561,36 +593,36 @@ public class OrderService {
             notificationService.notifyAdminsOrderCancelled(order);
         } else if (target == OrderStatus.DELIVERED) {
             notificationService.notifyOrderDelivered(order);
-        } else if (adminOverride && ADMIN_EDITABLE_STATUSES.contains(target)) {
+        } else if (ADMIN_EDITABLE_STATUSES.contains(target)) {
             notificationService.notifyOrderStatusUpdated(order,
                     orderStatusLabel(current), orderStatusLabel(target));
         }
         return order;
     }
 
+    private void appendStatusHistory(
+            Order order,
+            OrderStatus from,
+            OrderStatus to,
+            User actor,
+            String reason) {
+        OrderStatusHistory history = new OrderStatusHistory();
+        history.setOrder(order);
+        history.setFromStatus(from);
+        history.setToStatus(to);
+        history.setActorUser(actor);
+        history.setReason(reason);
+        orderStatusHistoryRepository.save(history);
+    }
+
     private String orderStatusLabel(OrderStatus status) {
         return switch (status) {
             case PENDING_CONFIRMATION -> "Chờ xác nhận";
-            case CANCELLATION_REQUESTED -> "Chờ xử lý hủy";
-            case CANCELLATION_APPROVED -> "Đã duyệt hủy";
             case CONFIRMED -> "Đã xác nhận";
             case PACKING -> "Đang đóng gói";
             case SHIPPING -> "Đang giao";
             case DELIVERED -> "Đã giao";
             case CANCELLED -> "Đã hủy";
-        };
-    }
-
-    private boolean isWorkflowTransition(OrderStatus current, OrderStatus target) {
-        return switch (current) {
-            case PENDING_CONFIRMATION -> java.util.Set.of(OrderStatus.CONFIRMED, OrderStatus.CANCELLED,
-                    OrderStatus.CANCELLATION_REQUESTED).contains(target);
-            case CANCELLATION_REQUESTED -> target == OrderStatus.CANCELLATION_APPROVED;
-            case CANCELLATION_APPROVED -> target == OrderStatus.CANCELLED;
-            case CONFIRMED -> java.util.Set.of(OrderStatus.PACKING, OrderStatus.CANCELLATION_REQUESTED).contains(target);
-            case PACKING -> java.util.Set.of(OrderStatus.SHIPPING, OrderStatus.CANCELLATION_REQUESTED).contains(target);
-            case SHIPPING -> target == OrderStatus.DELIVERED;
-            case DELIVERED, CANCELLED -> false;
         };
     }
 
@@ -615,51 +647,6 @@ public class OrderService {
     private LineCheck checkLine(CartItem cartItem, boolean lockForUpdate) {
         VariantCheck check = checkVariant(cartItem.getVariant().getId(), cartItem.getQuantity(), lockForUpdate);
         return new LineCheck(cartItem, check.variant(), check.lineTotal(), check.errorStatus(), check.errorMessage());
-    }
-
-    /**
-     * Finalizes an approved cancellation. A still-PAID order must be refunded
-     * first (VNPAY money is actually held); an UNPAID order (COD that was
-     * cancelled before collection, or CONFIRMED/PACKING COD - never charged)
-     * has nothing to refund and can finalize directly.
-     */
-    @Transactional
-    public OrderResponse completeCancellationAfterRefund(UUID orderId, User actor) {
-        Order order = orderRepository.findByIdForUpdate(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        if (order.getOrderStatus() == OrderStatus.CANCELLED) {
-            return assembleResponse(order);
-        }
-        if (order.getOrderStatus() != OrderStatus.CANCELLATION_APPROVED) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "Cancellation has not been approved");
-        }
-        if (order.getPaymentStatus() == PaymentStatus.PAID) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "Order must be refunded before cancellation");
-        }
-        order = applyStatusTransition(order, OrderStatus.CANCELLED, actor);
-        order.setInternalNote(order.getPaymentStatus() == PaymentStatus.REFUNDED
-                ? "Refund completed; cancellation finalized"
-                : "Cancellation finalized (nothing to refund)");
-        return assembleResponse(orderRepository.save(order));
-    }
-
-    /** Persists the admin decision before any external VNPay call is attempted. */
-    @Transactional
-    public AdminOrderResponse approveCancellationForRefund(UUID orderId, User actor) {
-        Order order = orderRepository.findByIdForUpdate(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        if (order.getOrderStatus() == OrderStatus.CANCELLATION_APPROVED
-                || order.getOrderStatus() == OrderStatus.CANCELLED) {
-            return assembleAdminResponse(order);
-        }
-        if (order.getOrderStatus() != OrderStatus.CANCELLATION_REQUESTED) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "Order has no cancellation request to approve");
-        }
-        order = applyStatusTransition(order, OrderStatus.CANCELLATION_APPROVED, actor);
-        order.setInternalNote("Cancellation approved by staff; refund processing started");
-        order = orderRepository.save(order);
-        notificationService.notifyCancellationApproved(order);
-        return assembleAdminResponse(order);
     }
 
     private record VariantCheck(

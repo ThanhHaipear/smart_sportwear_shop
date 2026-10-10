@@ -2,6 +2,7 @@ package com.dunghaiquyen.ecommerce.modules.order.entity;
 
 import com.dunghaiquyen.ecommerce.common.entity.AbstractAuditEntity;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
+import com.dunghaiquyen.ecommerce.modules.product.entity.ProductDataSource;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -45,17 +46,21 @@ public class Order extends AbstractAuditEntity {
     @Column(name = "address_snapshot_json", nullable = false, columnDefinition = "jsonb")
     private Map<String, Object> addressSnapshotJson;
 
-    @Column(name = "subtotal_amount", nullable = false, precision = 12, scale = 2)
+    @Column(name = "subtotal_amount", nullable = false, precision = 14, scale = 2)
     private BigDecimal subtotalAmount;
 
-    @Column(name = "shipping_fee", nullable = false, precision = 12, scale = 2)
+    @Column(name = "shipping_fee", nullable = false, precision = 14, scale = 2)
     private BigDecimal shippingFee = BigDecimal.ZERO;
 
-    @Column(name = "discount_amount", nullable = false, precision = 12, scale = 2)
+    @Column(name = "discount_amount", nullable = false, precision = 14, scale = 2)
     private BigDecimal discountAmount = BigDecimal.ZERO;
 
-    @Column(name = "total_amount", nullable = false, precision = 12, scale = 2)
+    @Column(name = "total_amount", nullable = false, precision = 14, scale = 2)
     private BigDecimal totalAmount;
+
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(name = "currency_code", nullable = false, length = 3)
+    private String currencyCode = "VND";
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false, length = 20)
@@ -85,9 +90,19 @@ public class Order extends AbstractAuditEntity {
     @Column(name = "cancellation_requested_at")
     private Instant cancellationRequestedAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "data_source", nullable = false, length = 20)
+    private ProductDataSource dataSource = ProductDataSource.REAL;
+
+    @Column(name = "placed_at", nullable = false, updatable = false)
+    private Instant placedAt = Instant.now();
+
     /** Set once, when orderStatus first reaches DELIVERED (see OrderService.applyStatusTransition) - backs the returns module's return-window eligibility check. Null for orders delivered before this column existed. */
     @Column(name = "delivered_at")
     private Instant deliveredAt;
+
+    @Column(name = "return_eligible_until")
+    private Instant returnEligibleUntil;
 
     /** Assigned once, lazily, the first time the order becomes invoice-eligible and someone actually asks for it - see OrderService.getOrderInvoice. Null until then. */
     @Column(name = "invoice_number", unique = true, length = 30)

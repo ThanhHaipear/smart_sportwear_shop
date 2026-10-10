@@ -209,7 +209,7 @@ public class ReturnService {
 
     @Transactional
     public ReturnResponse createReturn(UUID userId, CreateReturnRequest request) {
-        Order order = orderRepository.findById(request.orderId())
+        Order order = orderRepository.findByIdForUpdate(request.orderId())
                 .filter(o -> o.getUser().getId().equals(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
@@ -217,8 +217,10 @@ public class ReturnService {
             throw new BusinessRuleException(
                     HttpStatus.UNPROCESSABLE_ENTITY, "Order must be delivered before requesting a return");
         }
-        if (order.getDeliveredAt() != null
-                && Instant.now().isAfter(order.getDeliveredAt().plus(RETURN_WINDOW_DAYS, ChronoUnit.DAYS))) {
+        Instant eligibleUntil = order.getReturnEligibleUntil() != null
+                ? order.getReturnEligibleUntil()
+                : order.getDeliveredAt() == null ? null : order.getDeliveredAt().plus(RETURN_WINDOW_DAYS, ChronoUnit.DAYS);
+        if (eligibleUntil == null || Instant.now().isAfter(eligibleUntil)) {
             throw new BusinessRuleException(
                     HttpStatus.UNPROCESSABLE_ENTITY,
                     "Return window has expired (" + RETURN_WINDOW_DAYS + " days from delivery)");
@@ -240,21 +242,26 @@ public class ReturnService {
 
         returnRequest = saveWithCodeRetry(returnRequest);
 
-        for (ReturnItemRequest itemRequest : request.items()) {
-            OrderItem orderItem = orderItemRepository.findById(itemRequest.orderItemId())
+        for (ReturnItemRequest itemRequest : request.items().stream()
+                .sorted(java.util.Comparator.comparing(ReturnItemRequest::orderItemId)).toList()) {
+            OrderItem orderItem = orderItemRepository.findByIdForUpdate(itemRequest.orderItemId())
                     .filter(oi -> oi.getOrder().getId().equals(order.getId()))
                     .orElseThrow(() -> new ResourceNotFoundException("Order item not found in this order"));
-            if (itemRequest.quantity() > orderItem.getQuantity()) {
+            if (orderItem.getReturnPendingQuantity() + orderItem.getReturnedQuantity() + itemRequest.quantity()
+                    > orderItem.getQuantity()) {
                 throw new BusinessRuleException(
                         HttpStatus.UNPROCESSABLE_ENTITY,
                         "Return quantity exceeds ordered quantity for " + orderItem.getSkuSnapshot());
             }
             ReturnItem returnItem = new ReturnItem();
             returnItem.setReturnRequest(returnRequest);
+            returnItem.setOrder(order);
             returnItem.setOrderItem(orderItem);
             returnItem.setQuantity(itemRequest.quantity());
             returnItem.setReason(itemRequest.reason());
             returnItemRepository.save(returnItem);
+            orderItem.setReturnPendingQuantity(orderItem.getReturnPendingQuantity() + itemRequest.quantity());
+            orderItemRepository.save(orderItem);
         }
 
         return assembleResponse(returnRequest);
@@ -281,6 +288,7 @@ public class ReturnService {
                 .filter(r -> r.getUser().getId().equals(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("Return not found"));
         applyTransition(returnRequest, ReturnStatus.CANCELLED, returnRequest.getUser());
+        releasePendingQuantities(returnRequest);
         returnRequest.setResolvedAt(Instant.now());
         returnRequest = returnRepository.save(returnRequest);
         return assembleResponse(returnRequest);
@@ -334,6 +342,7 @@ public class ReturnService {
             resolveItems(returnRequest, request.items());
             returnRequest.setReceivedAt(Instant.now());
         } else if (request.status() == ReturnStatus.REJECTED || request.status() == ReturnStatus.CANCELLED) {
+            releasePendingQuantities(returnRequest);
             returnRequest.setResolvedAt(Instant.now());
         }
 
@@ -361,9 +370,13 @@ public class ReturnService {
             }
             item.setConditionStatus(resolution.conditionStatus());
             item.setResolution(resolution.resolution());
+            OrderItem orderItem = orderItemRepository.findByIdForUpdate(item.getOrderItem().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Order item not found"));
+            orderItem.setReturnPendingQuantity(orderItem.getReturnPendingQuantity() - item.getQuantity());
             if (resolution.resolution() == ReturnItemResolution.REFUND) {
-                BigDecimal maxRefund = item.getOrderItem().getUnitPriceSnapshot()
-                        .multiply(BigDecimal.valueOf(item.getQuantity()));
+                BigDecimal maxRefund = orderItem.getNetLineAmount()
+                        .multiply(BigDecimal.valueOf(item.getQuantity()))
+                        .divide(BigDecimal.valueOf(orderItem.getQuantity()), 2, java.math.RoundingMode.HALF_UP);
                 if (resolution.refundAmount() == null || resolution.refundAmount().compareTo(BigDecimal.ZERO) <= 0) {
                     throw new BusinessRuleException(
                             HttpStatus.UNPROCESSABLE_ENTITY, "refundAmount is required when resolution is REFUND");
@@ -374,6 +387,7 @@ public class ReturnService {
                             "refundAmount exceeds the line value for return item " + item.getId());
                 }
                 item.setRefundAmount(resolution.refundAmount());
+                orderItem.setReturnedQuantity(orderItem.getReturnedQuantity() + item.getQuantity());
             } else {
                 // Only a REFUND resolution may ever feed a Refund's amount - clearing this
                 // on every other resolution means createRefund's sum can never accidentally
@@ -384,11 +398,26 @@ public class ReturnService {
                     || resolution.conditionStatus() == ReturnItemConditionStatus.LIKE_NEW;
             boolean acceptedResolution = resolution.resolution() != ReturnItemResolution.REJECT;
             if (sellableCondition && acceptedResolution && !item.isRestocked()) {
-                inventoryService.restockReturn(item.getOrderItem().getVariant().getId(), item.getQuantity(),
-                        returnRequest.getOrder(), returnRequest.getHandledBy());
+                inventoryService.restockReturn(
+                        item.getOrderItem().getVariant().getId(),
+                        item.getQuantity(),
+                        returnRequest,
+                        item.getId(),
+                        returnRequest.getHandledBy());
                 item.setRestocked(true);
             }
             returnItemRepository.save(item);
+            orderItemRepository.save(orderItem);
+        }
+    }
+
+    private void releasePendingQuantities(Return returnRequest) {
+        for (ReturnItem item : returnItemRepository.findAllByReturnRequestIdOrderByIdAsc(returnRequest.getId())) {
+            OrderItem orderItem = orderItemRepository.findByIdForUpdate(item.getOrderItem().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Order item not found"));
+            orderItem.setReturnPendingQuantity(
+                    Math.max(0, orderItem.getReturnPendingQuantity() - item.getQuantity()));
+            orderItemRepository.save(orderItem);
         }
     }
 
@@ -397,8 +426,7 @@ public class ReturnService {
      * never admin-entered (see CreateRefundRequest's javadoc). Does NOT move
      * the Return to REFUNDED yet - that only happens when this Refund
      * actually completes (see updateRefundStatus). Provider is read off the
-     * order's most recent Payment row if one exists, else MANUAL (e.g. a
-     * COD order that never created a payment session).
+     * order's most recent paid Payment row if one exists, otherwise MANUAL.
      */
     @Transactional
     public RefundResponse createRefund(UUID returnId, CreateRefundRequest request, User actor) {
@@ -422,7 +450,9 @@ public class ReturnService {
 
         Order order = returnRequest.getOrder();
         Payment latestPayment = paymentRepository
-                .findFirstByOrderIdAndStatusOrderByCreatedAtDesc(order.getId(), PaymentStatus.PAID).orElse(null);
+                .findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
+                        order.getId(), Set.of(PaymentStatus.PAID, PaymentStatus.PARTIALLY_REFUNDED))
+                .orElse(null);
         if (latestPayment != null) {
             BigDecimal alreadyCommitted = refundRepository.sumAmountByOrderIdAndStatusIn(order.getId(),
                     Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING, RefundStatus.COMPLETED));
@@ -507,21 +537,18 @@ public class ReturnService {
     public RefundResponse refundCancellation(UUID orderId, String reason, User actor, String ipAddress) {
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        if (order.getOrderStatus() == OrderStatus.CANCELLED) {
-            return refundRepository.findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
-                            orderId, Set.of(RefundStatus.COMPLETED))
-                    .map(this::toRefundResponse)
-                    .orElseThrow(() -> new BusinessRuleException(HttpStatus.CONFLICT,
-                            "Order is cancelled but no completed refund was found"));
-        }
-        if (order.getOrderStatus() != OrderStatus.CANCELLATION_APPROVED) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "Cancellation must be approved before refund");
-        }
-        if (order.getPaymentStatus() != PaymentStatus.PAID) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "A paid order is required for cancellation refund");
+        if (order.getOrderStatus() != OrderStatus.CANCELLED) {
+            throw new BusinessRuleException(HttpStatus.CONFLICT, "Order must be cancelled before refund");
         }
         var activeRefund = refundRepository.findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(orderId,
                 Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING, RefundStatus.COMPLETED));
+        if (activeRefund.isPresent() && activeRefund.get().getStatus() == RefundStatus.COMPLETED) {
+            return toRefundResponse(activeRefund.get());
+        }
+        if (!Set.of(PaymentStatus.PAID, PaymentStatus.PARTIALLY_REFUNDED)
+                .contains(order.getPaymentStatus())) {
+            throw new BusinessRuleException(HttpStatus.CONFLICT, "A paid order is required for cancellation refund");
+        }
         if (activeRefund.isPresent()) {
             Refund existing = activeRefund.get();
             // Also close refunds created by the former gateway-based flow, so
@@ -539,9 +566,10 @@ public class ReturnService {
         }
 
         Payment payment = paymentRepository
-                .findFirstByOrderIdAndStatusOrderByCreatedAtDesc(orderId, PaymentStatus.PAID)
+                .findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
+                        orderId, Set.of(PaymentStatus.PAID, PaymentStatus.PARTIALLY_REFUNDED))
                 .orElseThrow(() -> new BusinessRuleException(HttpStatus.CONFLICT,
-                        "Paid VNPay transaction not found"));
+                        "Paid transaction not found"));
 
         Refund refund = new Refund();
         refund.setOrder(order);
@@ -656,22 +684,22 @@ public class ReturnService {
         }
 
         Order order = orderRepository.findByIdForUpdate(refund.getOrder().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-            BigDecimal completed = refundRepository.sumCompletedAmountByOrderId(order.getId());
-            BigDecimal refundableMerchandiseTotal = order.getSubtotalAmount().subtract(order.getDiscountAmount());
-            if (completed.compareTo(refundableMerchandiseTotal) >= 0) {
-                order.setPaymentStatus(PaymentStatus.REFUNDED);
-                paymentRepository.findFirstByOrderIdAndStatusOrderByCreatedAtDesc(order.getId(), PaymentStatus.PAID).ifPresent(payment -> {
-                    if (payment.getStatus() == PaymentStatus.PAID) {
-                        payment.setStatus(PaymentStatus.REFUNDED);
-                        paymentRepository.save(payment);
-                    }
-                });
-                orderRepository.save(order);
-                if (order.getOrderStatus() == OrderStatus.CANCELLATION_APPROVED) {
-                    orderService.completeCancellationAfterRefund(order.getId(), refund.getCreatedBy());
-                }
-            }
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        BigDecimal completed = refundRepository.sumCompletedAmountByOrderId(order.getId());
+        Payment payment = refund.getPayment() != null
+                ? paymentRepository.findById(refund.getPayment().getId()).orElse(null)
+                : paymentRepository.findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
+                        order.getId(), Set.of(PaymentStatus.PAID, PaymentStatus.PARTIALLY_REFUNDED)).orElse(null);
+        BigDecimal paidAmount = payment != null ? payment.getAmount() : order.getTotalAmount();
+        PaymentStatus nextStatus = completed.compareTo(paidAmount) >= 0
+                ? PaymentStatus.REFUNDED
+                : PaymentStatus.PARTIALLY_REFUNDED;
+        order.setPaymentStatus(nextStatus);
+        orderRepository.save(order);
+        if (payment != null && payment.getStatus() != PaymentStatus.REFUNDED) {
+            payment.setStatus(nextStatus);
+            paymentRepository.save(payment);
+        }
     }
 
     private void applyTransition(Return returnRequest, ReturnStatus target, User actor) {

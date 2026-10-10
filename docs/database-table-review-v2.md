@@ -93,6 +93,14 @@
 
 `shipping_methods` và `shipments` thuộc **đợt 2 — Để sau**; baseline cập nhật trạng thái trực tiếp trên `orders` và giữ `shipping_fee` snapshot.
 
+### 4.1. Kết quả triển khai và review migration 1B (10/10/2026)
+
+- DDL: `backend/src/main/resources/db/v2-migration/V3__create_1b_commerce_core.sql`, tạo đủ 15 bảng Commerce Core và các FK/UQ/CHECK/index/trigger đã chốt; fact log, payment event, history, inventory, audit, outbox và interaction được bảo vệ append-only theo phạm vi phù hợp.
+- Runtime: entity/service đã ánh xạ schema 1B; COD có payment `UNPAID` từ checkout và `PAID` khi giao; VNPay callback được ghi idempotent với payload redacted; hủy đi thẳng `CANCELLED` và tạo refund độc lập; partial/full refund đồng bộ `PARTIALLY_REFUNDED`/`REFUNDED`; return và inventory có row lock, counter và idempotency key.
+- Giao diện: admin/storefront không còn sử dụng `CANCELLATION_REQUESTED` hoặc `CANCELLATION_APPROVED`; đơn đã hủy và refund được theo dõi riêng.
+- Kiểm thử: Flyway `clean → migrate → validate → migrate lại`, Hibernate schema validation và negative test constraint/idempotency/append-only đạt **5/5 test 1B** trên PostgreSQL local 18.4. Bộ xác nhận gồm 1A, 1B và financial policy đạt **13/13 test**; backend compile và TypeScript typecheck của admin/storefront đều đạt.
+- Kết luận: **migration và entity/service 1B đã hoàn thành local**. Chưa bật Flyway V2 cho runtime và chưa chạy Supabase; integration/concurrency Commerce đầy đủ vẫn là cổng bắt buộc trước triển khai.
+
 ## 5. Review 1C — AI Retrieval (`ai_retrieval`, owner `ai_retrieval_app`)
 
 | Bảng | Kết luận review | Kiểm thử bắt buộc | Trạng thái |

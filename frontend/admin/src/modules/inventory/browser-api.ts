@@ -9,21 +9,21 @@ function toPage<T>(data: T[], meta: Record<string, unknown> | undefined): Invent
 export async function importStock(input: { variantId: string; quantity: number; note?: string }) {
   return browserApiRequest<InventoryItemResponse>(adminEndpoints.inventoryImport, {
     method: "POST",
-    body: JSON.stringify(input)
+    body: JSON.stringify({ ...input, requestId: crypto.randomUUID() })
   });
 }
 
 export async function exportStock(input: { variantId: string; quantity: number; note?: string }) {
   return browserApiRequest<InventoryItemResponse>(adminEndpoints.inventoryExport, {
     method: "POST",
-    body: JSON.stringify(input)
+    body: JSON.stringify({ ...input, requestId: crypto.randomUUID() })
   });
 }
 
 export async function adjustStock(input: { variantId: string; type: string; quantity: number; note?: string }) {
   return browserApiRequest<InventoryItemResponse>(adminEndpoints.inventoryAdjust, {
     method: "POST",
-    body: JSON.stringify(input)
+    body: JSON.stringify({ ...input, requestId: crypto.randomUUID() })
   });
 }
 
