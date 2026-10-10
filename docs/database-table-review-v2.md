@@ -69,7 +69,7 @@
 - Seed: `V2__seed_1a_taxonomy.sql`, gồm 5 loại sản phẩm, `FOOTBALL`/`RUNNING`, hệ size quần áo/giày/phụ kiện và không có `KIDS`.
 - Kiểm thử: `V2OneAMigrationTest` dùng Flyway `clean → migrate → validate → migrate lại` và Hibernate `validate` toàn bộ entity 1A, đạt **5/5 test** trên PostgreSQL local 18.4. `ProductImageServiceTest` đạt thêm **14/14 test** cho upload, URL khai báo, metadata và provenance ảnh.
 - Các ràng buộc DB đã kiểm tra: credential LOCAL/GOOGLE; email và địa chỉ mặc định duy nhất; category không chu trình; variant đúng hệ size; sản phẩm ACTIVE cần SKU và ảnh chính đủ metadata; ảnh phải khớp màu variant; `data_source` bất biến; dataset `FROZEN` bất biến.
-- Kết luận migration: **Đã kiểm thử local và đã chuyển entity/service của vertical slice 1A**. Chưa triển khai Supabase và chưa bật location V2 cho runtime; chỉ bật sau khi 1B được chuyển đổi để tránh ứng dụng 1A truy cập các bảng Commerce legacy.
+- Kết luận migration: **Đã kiểm thử local, đã chuyển entity/service và đã triển khai vertical slice 1A lên Supabase** bằng Flyway V2 ngày 10/10/2026. Runtime chưa chuyển sang location V2 để tránh chạy lẫn chuỗi migration legacy.
 
 ## 4. Review 1B — Commerce Core (`public`, owner `commerce_app`)
 
@@ -101,7 +101,7 @@
 - Giao diện: admin/storefront không còn sử dụng `CANCELLATION_REQUESTED` hoặc `CANCELLATION_APPROVED`; đơn đã hủy và refund được theo dõi riêng.
 - Kiểm thử: Flyway `clean → migrate → validate → migrate lại`, Hibernate schema validation và negative test constraint/idempotency/append-only đạt **5/5 test 1B** trên PostgreSQL local 18.4. Bộ xác nhận gồm 1A, 1B và financial policy đạt **13/13 test**; backend compile và TypeScript typecheck của admin/storefront đều đạt.
 - Kiểm thử integration: `OrderIntegrationTest` 26/26, `PaymentIntegrationTest` 23/23, `InventoryIntegrationTest` 16/16 và `ReturnRefundIntegrationTest` 15/15; tổng **80/80** trên PostgreSQL Testcontainers. Các ca bao phủ checkout cạnh tranh, callback lặp/muộn, hủy đồng thời, giữ/trừ/nhả/hoàn tồn, trả hàng và hoàn tiền.
-- Kết luận: **migration, entity/service và integration/concurrency Commerce 1B đã hoàn thành local**. Baseline V2 độc lập tiếp tục đạt **13/13** test 1A/1B/financial policy trên PostgreSQL 16.15. Chưa triển khai Supabase và chưa chuyển runtime chính thức sang location V2; `V56` chỉ là cầu nối an toàn cho runtime legacy hiện tại.
+- Kết luận: **migration, entity/service và integration/concurrency Commerce 1B đã hoàn thành local và baseline 1A–1B đã triển khai lên Supabase**. Ba migration V2 `V1 → V3` được áp dụng thành công trên PostgreSQL 17.11 và `flyway validate` đạt ngày 10/10/2026. Runtime chưa chuyển chính thức sang location V2; `V56` chỉ là cầu nối an toàn cho runtime legacy hiện tại.
 
 ## 5. Review 1C — AI Retrieval (`ai_retrieval`, owner `ai_retrieval_app`)
 
