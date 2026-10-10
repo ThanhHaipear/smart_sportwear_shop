@@ -44,7 +44,7 @@ const PRODUCT_IMAGE_MAX_BYTES = 5 * 1024 * 1024;
 const PRODUCT_IMAGE_MAX_BATCH = 10;
 const PRODUCT_IMAGE_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 const productStatusOptions = ["DRAFT", "ACTIVE", "INACTIVE"] as const;
-const genderOptions = ["MEN", "WOMEN", "UNISEX", "KIDS"] as const;
+const genderOptions = ["MEN", "WOMEN", "UNISEX"] as const;
 const variantStatusOptions = ["ACTIVE", "OUT_OF_STOCK", "INACTIVE"] as const;
 const quickSizeOptions = ["S", "M", "L", "XL", "XXL", "39", "40", "41", "42", "43"];
 

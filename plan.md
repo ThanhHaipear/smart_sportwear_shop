@@ -235,7 +235,7 @@ Không di chuyển toàn bộ thư mục ngay trong một commit. Thực hiện 
 
 Dùng **một Supabase project mới và một PostgreSQL database vật lý duy nhất** cho môi trường tích hợp/demo. Project mới được tạo trắng ở cấp ứng dụng; không chạy migration cũ lên đó cho đến khi ERD và baseline migration mới được duyệt. Không tạo Supabase riêng cho từng service hoặc từng thành viên. Mỗi thành viên dùng PostgreSQL + `pgvector` local hoặc Testcontainers khi phát triển và kiểm thử.
 
-Supabase cũ được giữ read-only làm nguồn đối chiếu và chuyển dữ liệu. Không xóa project cũ trước khi hệ thống mới được nghiệm thu và dữ liệu cần giữ đã được kiểm tra đầy đủ.
+Database ứng dụng cũ hiện đã trắng và không còn catalog/user/order/payment/inventory cần giữ hoặc chuyển. V2 là greenfield: không restore database cũ, không viết data migration cho dữ liệu không tồn tại và không chạy 52 migration legacy; chỉ seed taxonomy/config rồi nhập catalog mới có manifest/checksum.
 
 Để giảm tối đa thay đổi code cũ, không chuyển các bảng nghiệp vụ hiện tại từ `public` sang schema `commerce`:
 
@@ -273,9 +273,9 @@ Baseline V2 ưu tiên nhóm `MUST`; nhóm `SHOULD/COULD` chỉ được đưa v�
 
 Nhóm `MUST`:
 
-- Identity: `users`, `refresh_tokens`, `password_reset_tokens`, `addresses`.
+- Identity: `users`, `user_identities`, `refresh_tokens`, `password_reset_tokens`, `addresses`.
 - Catalog: `categories`, `brands`, `products`, `product_variants`, `product_images` và taxonomy thể thao.
-- Sales: `carts`, `cart_items`, `orders`, `order_items`, `payments`.
+- Sales và hậu mãi lõi: `carts`, `cart_items`, `orders`, `order_items`, `order_status_history`, `payments`, `payment_events`, `returns`, `return_items`, `refunds`.
 - Inventory: `inventory_transactions` và quantity trên variant hoặc bảng balance riêng.
 - System: `site_settings` hoặc bảng tham số hệ thống tương đương.
 - Operations: `audit_logs`, `integration_outbox`.
@@ -283,7 +283,7 @@ Nhóm `MUST`:
 
 Nhóm `SHOULD/COULD` cần review dependency trước khi giữ:
 
-- Fulfillment nâng cao: `shipping_methods`, `shipments`, `returns`, `return_items`, `refunds`.
+- Fulfillment nâng cao: `shipping_methods`, `shipments` (để sau vì baseline chưa tích hợp đơn vị vận chuyển).
 - Engagement: `wishlists`, `wishlist_items`, `product_reviews`, `notifications`.
 - Content: `collections`, `banners`, `banner_items`, `pages`.
 - Marketing: `promotions`, `promotion_products`, `combos`, `combo_products`.
@@ -625,17 +625,9 @@ Hành động thay đổi dữ liệu phải yêu cầu confirmation khi phù h�
 
 ## 10. Quy trình phát triển nhóm
 
-### 10.1. Phân công tham khảo cho nhóm 5 người
+### 10.1. Cách phân công của nhóm
 
-| Vai trò | Phạm vi chính |
-|---|---|
-| Thành viên 1 | Commerce Core, dữ liệu nghiệp vụ trong `public`, auth |
-| Thành viên 2 | Storefront và trải nghiệm tìm kiếm/chat/checkout |
-| Thành viên 3 | Admin, catalog, order, inventory, reports |
-| Thành viên 4 | AI Retrieval, text/image search, recommendation và indexing |
-| Thành viên 5 | Assistant/RAG, dataset/evaluation, tài liệu nghiên cứu và integration |
-
-Mỗi phần phải có người review ngoài người viết.
+Cả nhóm cùng phụ trách Commerce, AI Retrieval và Assistant; thành viên không bị khóa cố định vào module. Mỗi task/PR phải ghi một người thực hiện và một người review; mỗi lần chạy migration lên Supabase chỉ một người được giao thực hiện, không chạy đồng thời.
 
 ### 10.2. Branching
 
@@ -864,18 +856,18 @@ So sánh:
 
 Chưa hoàn thành hoặc chưa được xác minh:
 
-- [ ] Backup/export database cũ và Flyway history.
+- [x] Xác nhận database cũ đã trắng và không có dữ liệu ứng dụng cần backup/chuyển; migration legacy chỉ giữ trong Git làm tham khảo.
 - [ ] Tạo tag Git cho phiên bản code cũ.
 - [x] Commit phiên bản đầu của `plan.md` tại commit `e74ce68` (`docs: add v2 architecture and data rebuild plan`).
 - [ ] Xác định chủ sở hữu thay đổi chưa commit tại `VisualSearchDialog.tsx`.
 - [ ] Chạy toàn bộ test và lưu baseline report.
-- [ ] Thiết kế ERD/data dictionary cho database mới.
+- [x] Hoàn thành data dictionary và review thiết kế bảng tại `docs/database-design-v2.md`/`docs/database-table-review-v2.md`; ERD hình ảnh vẫn là artifact tài liệu riêng.
 - [ ] Bật extension `vector`; hiện tại `pgvector` chưa được bật trên Supabase mới.
 - [ ] Tạo baseline migration mới.
 - [ ] Kiểm tra upload/delete ảnh thật qua backend; hiện mới xác thực Cloudinary ở chế độ chỉ đọc.
 - [ ] Xây dựng và version hóa dataset v2.
 
-Việc tiếp theo ưu tiên: hoàn thành bảo toàn code/dữ liệu cũ, sau đó thiết kế data dictionary + ERD trước khi tạo bất kỳ bảng ứng dụng nào trên Supabase mới.
+Việc tiếp theo ưu tiên: nhóm xác nhận review, viết baseline migration V2 và kiểm thử trên PostgreSQL local sạch trước khi tạo bảng ứng dụng trên Supabase mới.
 
 ### Giai đoạn 0 - Bảo toàn hiện trạng và lập baseline
 
@@ -883,9 +875,9 @@ Mục tiêu: có điểm phục hồi trước khi tái cấu trúc.
 
 - [x] Tạo tag Git `legacy/pre-v2-prune-20261004` cho phiên bản trước khi tinh gọn.
 - [x] Ghi nhận `frontend/storefront/src/modules/visual-search/VisualSearchDialog.tsx` là thay đổi có sẵn của thành viên, không thuộc đợt tinh gọn.
-- [ ] Backup database hiện tại và giữ project cũ read-only.
+- [x] Không có dữ liệu database cũ cần backup/chuyển; giữ code/migration legacy trong Git để đối chiếu.
 - [x] Tạo một Supabase project mới trắng ở cấp ứng dụng.
-- [ ] Export schema và danh sách Flyway history.
+- [x] Không dùng Flyway history cũ cho V2; 52 migration legacy chỉ là tài liệu tham khảo trong repository.
 - [ ] Chạy toàn bộ test hiện có và lưu báo cáo.
 - [ ] Chạy smoke test các luồng chính.
 - [ ] Lưu benchmark text/image hiện tại làm baseline.
@@ -894,7 +886,7 @@ Mục tiêu: có điểm phục hồi trước khi tái cấu trúc.
 
 Tiêu chí hoàn thành:
 
-- Có tag, backup, test report và baseline benchmark.
+- Có tag, xác nhận không có dữ liệu cũ cần phục hồi, test report và baseline benchmark.
 - Có thể khôi phục code/database về trước tái cấu trúc.
 
 ### Giai đoạn 1 - Thu gọn phạm vi và chuẩn hóa môi trường
@@ -925,10 +917,10 @@ Tiêu chí hoàn thành:
 - [ ] Vẽ ERD schema `assistant`.
 - [ ] Chốt taxonomy môn thể thao, mục đích, chất liệu và công nghệ.
 - [ ] Chốt dữ liệu bắt buộc/tùy chọn của sản phẩm.
-- [ ] Viết data dictionary V2 và mapping dữ liệu cũ sang V2.
-- [ ] Chốt data retention cho chat và interaction.
+- [x] Viết data dictionary V2; không cần mapping database cũ vì dữ liệu ứng dụng cũ đã trắng.
+- [x] Chốt data retention cho chat và interaction tại O01 trong `docs/database-design-v2.md`.
 - [ ] Tạo database roles và permission matrix.
-- [ ] Backup và kiểm kê Supabase cũ để làm nguồn đối chiếu.
+- [x] Xác nhận không có dữ liệu ứng dụng cũ cần làm nguồn chuyển đổi; chỉ đối chiếu code/migration legacy khi cần.
 - [x] Chưa chạy migration cũ lên Supabase mới; đã xác nhận `public` có 0 bảng ứng dụng.
 - [ ] Chốt ERD và tạo baseline migration mới từ thiết kế đã duyệt.
 - [ ] Đóng băng/checksum raw catalog hiện có và tạo pilot normalized dataset 30-50 sản phẩm.
@@ -1152,15 +1144,15 @@ Tiêu chí hoàn thành:
 
 ## 18. Việc cần quyết định trước khi bắt đầu code
 
-- [ ] Số thành viên và người phụ trách từng module.
-- [x] Tạo một Supabase project mới trắng cho tích hợp/demo; giữ project cũ read-only; local/test dùng PostgreSQL cục bộ.
-- [ ] Có giữ Google login trong phạm vi cuối hay không.
-- [ ] Embedding provider cuối cho text và image.
-- [ ] LLM provider chính và fallback.
-- [ ] Baseline local/mã nguồn mở và ma trận mô hình/prompt cần so sánh.
-- [ ] Bộ taxonomy sản phẩm thể thao.
+- [x] Cả nhóm cùng phụ trách các module; mỗi task có một người làm và một người review, mỗi lần migration có một người chạy.
+- [x] Dùng một Supabase project mới trắng cho tích hợp/demo; database cũ không còn dữ liệu ứng dụng cần giữ/chuyển; local/test chỉ bật khi phát triển/kiểm thử.
+- [x] Giữ Google login; lưu Google `sub` trong `user_identities`, Spring Boot tự quản lý JWT và không dùng Supabase Auth.
+- [x] Text/knowledge dùng BGE-M3 1024 chiều; image dùng SigLIP2 768 chiều; chạy local và lưu vector bằng pgvector.
+- [x] Query parser/chatbot dùng Qwen2.5 3B Q4 local qua Ollama, có rule-based fallback cho query parser.
+- [x] Baseline dùng model pretrained mã nguồn mở/local; chưa fine-tune, nếu bắt buộc sẽ dùng GPU riêng và bổ sung TRAIN split.
+- [x] Chốt taxonomy catalog v1 tại B01 và `docs/database-design-v2.md`.
 - [ ] Quy mô dataset benchmark.
-- [ ] Chính sách lưu chat và interaction data.
+- [x] Chốt chính sách lưu chat, interaction, log và evaluation tại O01.
 - [x] Không tạo staging riêng trong phạm vi đồ án; Supabase chung là integration/demo.
 - [ ] Mức ngân sách API AI tối đa.
 - [ ] Ngưỡng nghiệm thu metric/latency sau khi có baseline, không đặt số tùy ý trước dữ liệu.
@@ -1187,23 +1179,22 @@ Không bắt đầu di chuyển schema hoặc xóa service trước khi hoàn th
 
 Thực hiện theo thứ tự:
 
-1. Backup hoặc `pg_dump` database cũ.
-2. Xuất `flyway_schema_history` và danh sách dữ liệu cần giữ để tham khảo.
-3. Giữ project cũ ở chế độ read-only về mặt quy trình nhóm.
-4. Tạo Supabase project mới tại Singapore.
-5. Lưu credential mới vào secret store/`.env` cục bộ, không commit Git.
-6. `backend/.env` hiện đã trỏ tới project mới nhưng phải giữ Flyway, seed và các feature AI ở trạng thái tắt; không khởi động luồng nghiệp vụ vào database trắng trước khi baseline schema tồn tại.
-7. Thiết kế ERD, ownership, constraint và index.
-8. Tạo baseline migration mới trên một PostgreSQL local sạch.
-9. Review migration bằng pull request.
-10. Chạy baseline migration lên Supabase mới đúng một lần.
-11. Seed dữ liệu chuẩn hoặc import dữ liệu đã chọn từ project cũ.
+1. Xác nhận database ứng dụng đích đang trắng và không có dữ liệu cũ cần chuyển.
+2. Giữ code, migration và Flyway history legacy trong Git chỉ để đối chiếu; không chạy lên V2.
+3. Tạo Supabase project mới tại Singapore.
+4. Lưu credential mới vào secret store/`.env` cục bộ, không commit Git.
+5. `backend/.env` hiện đã trỏ tới project mới nhưng phải giữ Flyway, seed và các feature AI ở trạng thái tắt; không khởi động luồng nghiệp vụ vào database trắng trước khi baseline schema tồn tại.
+6. Thiết kế ERD, ownership, constraint và index.
+7. Tạo baseline migration mới trên một PostgreSQL local sạch.
+8. Review migration bằng pull request.
+9. Chạy baseline migration lên Supabase mới đúng một lần.
+10. Seed taxonomy/config và nhập catalog mới từ manifest đã duyệt; không import từ database cũ.
 12. Chỉ sau khi smoke test thành công mới chuyển các service sang connection mới.
 
 Checklist:
 
-- [ ] Backup database cũ.
-- [ ] Kiểm kê schema/table/extension/role của database cũ.
+- [x] Không áp dụng: database cũ đã trắng, không có dữ liệu ứng dụng cần backup/chuyển.
+- [x] Không áp dụng cho migration dữ liệu; schema/migration legacy chỉ được đọc từ Git để đối chiếu.
 - [x] Tạo project Supabase mới tại Singapore và kiểm tra kết nối SSL thành công.
 - [ ] Đổi/rotate credential nếu secret cũ từng bị lộ.
 - [ ] Phân công một thành viên chịu trách nhiệm migration.
@@ -1409,7 +1400,7 @@ Database mới là greenfield ở cấp ứng dụng. Không restore nguyên dat
 
 Nguyên tắc:
 
-- Database cũ chỉ là nguồn tham khảo, không phải nguồn schema chuẩn.
+- Database cũ không còn dữ liệu ứng dụng và không phải nguồn chuyển đổi; code/migration/seed file trong Git chỉ là tài liệu hoặc raw input cần thẩm định lại.
 - Không nhập password hash, refresh token, password-reset token hoặc session cũ.
 - Không nhập dữ liệu test lẫn với dữ liệu benchmark.
 - Không sao chép embeddings cũ; luôn sinh lại từ dữ liệu catalog đã chuẩn hóa.
@@ -1437,8 +1428,8 @@ Kết luận: nguồn hiện tại có thể tái sử dụng làm **raw input**
 | Nhóm dữ liệu | Cách xây lại | Có chuyển từ hệ cũ? |
 |---|---|---|
 | Taxonomy | Thiết kế thủ công, seed có version | Không nhập thẳng |
-| Catalog sản phẩm | Làm sạch nguồn cũ + bổ sung dữ liệu mới | Chuyển có chọn lọc |
-| Variant/SKU | Sinh từ size, màu và SKU đã kiểm tra | Chuyển có biến đổi |
+| Catalog sản phẩm | Xây dựng catalog mới; file seed trong Git nếu dùng chỉ là raw input phải kiểm tra nguồn/quyền và chuẩn hóa lại | Không chuyển từ database cũ |
+| Variant/SKU | Sinh mới từ size, màu và SKU đã kiểm tra | Không chuyển từ database cũ |
 | Ảnh sản phẩm | Kiểm tra quyền sử dụng, upload vào Cloudinary mới | Không hotlink tùy tiện |
 | User | Tạo admin mới và tài khoản demo | Không chuyển credential cũ |
 | Tồn kho | Seed số lượng hợp lý theo variant | Tạo mới |

@@ -29,7 +29,7 @@ public class ProductSuggestionService {
                     from brands b where b.status='ACTIVE' and b.name ilike ?
                     union all
                     select 'PRODUCT', p.name, p.id::text, p.slug,
-                           (select pi.image_url from product_images pi where pi.product_id=p.id
+                           (select pi.secure_url from product_images pi where pi.product_id=p.id
                             order by pi.is_primary desc,pi.sort_order limit 1),
                            min(pv.price), concat(b.name,' · ',c.name), 3
                     from products p

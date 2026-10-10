@@ -39,7 +39,10 @@ public class CloudinaryImageStorageService implements ImageStorageService {
             String secureUrl = (String) result.get("secure_url");
             Integer width = toInteger(result.get("width"));
             Integer height = toInteger(result.get("height"));
-            return new UploadedImage(publicId, secureUrl, width, height);
+            String assetVersion = String.valueOf(result.getOrDefault("version", "unversioned"));
+            String format = String.valueOf(result.getOrDefault("format", "unknown"));
+            Long bytes = toLong(result.get("bytes"));
+            return new UploadedImage(publicId, secureUrl, assetVersion, format, bytes, width, height);
         } catch (IOException ex) {
             throw new ImageStorageException("Failed to upload image to Cloudinary", ex);
         }
@@ -65,5 +68,9 @@ public class CloudinaryImageStorageService implements ImageStorageService {
 
     private Integer toInteger(Object value) {
         return value instanceof Number number ? number.intValue() : null;
+    }
+
+    private Long toLong(Object value) {
+        return value instanceof Number number ? number.longValue() : null;
     }
 }

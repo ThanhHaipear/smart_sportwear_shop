@@ -40,7 +40,7 @@ public record ProductListQuery(
         String sortBy,
         String sortOrder,
         String sort,
-        /** Catalog V2: filter by product type (APPAREL, FOOTWEAR, ACCESSORY, EQUIPMENT). */
+        /** Schema 1A product type; legacy aliases remain accepted during client migration. */
         ProductType productType,
         /** Catalog V2: filter by collection slug (e.g. "bst-mua-he-2026"). */
         String collection,

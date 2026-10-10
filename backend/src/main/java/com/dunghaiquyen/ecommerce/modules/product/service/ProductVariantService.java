@@ -9,6 +9,7 @@ import com.dunghaiquyen.ecommerce.modules.product.dto.VariantUpdateRequest;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductVariant;
 import com.dunghaiquyen.ecommerce.modules.product.entity.VariantStatus;
+import com.dunghaiquyen.ecommerce.modules.catalog.service.CatalogReferenceService;
 import com.dunghaiquyen.ecommerce.modules.product.mapper.ProductMapper;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepository;
@@ -34,16 +35,19 @@ public class ProductVariantService {
     private final ProductVariantRepository variantRepository;
     private final ProductMapper productMapper;
     private final CatalogOutboxService catalogOutboxService;
+    private final CatalogReferenceService catalogReferenceService;
 
     public ProductVariantService(
             ProductRepository productRepository,
             ProductVariantRepository variantRepository,
             ProductMapper productMapper,
-            CatalogOutboxService catalogOutboxService) {
+            CatalogOutboxService catalogOutboxService,
+            CatalogReferenceService catalogReferenceService) {
         this.productRepository = productRepository;
         this.variantRepository = variantRepository;
         this.productMapper = productMapper;
         this.catalogOutboxService = catalogOutboxService;
+        this.catalogReferenceService = catalogReferenceService;
     }
 
     @Transactional
@@ -61,9 +65,10 @@ public class ProductVariantService {
 
         ProductVariant variant = new ProductVariant();
         variant.setProduct(product);
-        variant.setSku(request.sku());
-        variant.setSize(request.size());
-        variant.setColor(request.color());
+        variant.setSku(request.sku().trim().toUpperCase(java.util.Locale.ROOT));
+        variant.setSizeDefinition(catalogReferenceService.requireSize(
+                product.getProductTypeDefinition(), request.size()));
+        variant.setColorDefinition(catalogReferenceService.requireColor(request.color()));
         variant.setPrice(request.price());
         variant.setCompareAtPrice(request.compareAtPrice());
         variant.setStockQuantity(request.stockQuantity() != null ? request.stockQuantity() : 0);
@@ -88,10 +93,11 @@ public class ProductVariantService {
                 .orElseThrow(() -> new ResourceNotFoundException("Variant not found"));
 
         if (request.size() != null) {
-            variant.setSize(request.size());
+            variant.setSizeDefinition(catalogReferenceService.requireSize(
+                    variant.getProduct().getProductTypeDefinition(), request.size()));
         }
         if (request.color() != null) {
-            variant.setColor(request.color());
+            variant.setColorDefinition(catalogReferenceService.requireColor(request.color()));
         }
         if (request.price() != null) {
             variant.setPrice(request.price());

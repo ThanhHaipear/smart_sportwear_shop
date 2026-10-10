@@ -43,7 +43,7 @@ function productStatusClass(status: string) {
 const STATUS_OPTIONS = ["DRAFT", "ACTIVE", "INACTIVE", "ARCHIVED"] as const;
 const COLLECTION_TYPES = ["SEASONAL", "SPORT", "CAMPAIGN", "CAPSULE", "NEW_ARRIVAL"] as const;
 const PRODUCT_STATUS_OPTIONS = ["DRAFT", "ACTIVE", "INACTIVE"] as const;
-const PRODUCT_GENDER_OPTIONS = ["MEN", "WOMEN", "UNISEX", "KIDS"] as const;
+const PRODUCT_GENDER_OPTIONS = ["MEN", "WOMEN", "UNISEX"] as const;
 
 function createEmptyProductForm() {
   return {

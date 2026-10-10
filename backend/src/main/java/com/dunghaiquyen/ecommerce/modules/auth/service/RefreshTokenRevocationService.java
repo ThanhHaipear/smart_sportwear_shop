@@ -1,5 +1,6 @@
 package com.dunghaiquyen.ecommerce.modules.auth.service;
 
+import com.dunghaiquyen.ecommerce.modules.auth.entity.RefreshTokenRevocationReason;
 import com.dunghaiquyen.ecommerce.modules.auth.repository.RefreshTokenRepository;
 import java.time.Instant;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class RefreshTokenRevocationService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void revokeAllActiveForUser(UUID userId) {
-        refreshTokenRepository.revokeAllActiveForUser(userId, Instant.now());
+        refreshTokenRepository.revokeAllActiveForUser(
+                userId, Instant.now(), RefreshTokenRevocationReason.REUSE_DETECTED);
     }
 }

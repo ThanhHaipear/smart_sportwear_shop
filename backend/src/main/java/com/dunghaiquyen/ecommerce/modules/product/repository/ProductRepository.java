@@ -58,7 +58,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
                 p.category.id = :categoryId
                 or p.brand.id = :brandId
           )
-        order by p.featured desc, p.createdAt desc, p.id asc
+        order by p.createdAt desc, p.id asc
     """)
     List<Product> findSimilarActiveProducts(
             @Param("categoryId") UUID categoryId,
@@ -74,7 +74,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
         join fetch p.category
         where p.status = com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus.ACTIVE
           and p.id not in :excludedProductIds
-        order by p.featured desc, p.createdAt desc, p.id asc
+        order by p.createdAt desc, p.id asc
     """)
     List<Product> findActiveFallbackProductsExcluding(
             @Param("excludedProductIds") Collection<UUID> excludedProductIds,

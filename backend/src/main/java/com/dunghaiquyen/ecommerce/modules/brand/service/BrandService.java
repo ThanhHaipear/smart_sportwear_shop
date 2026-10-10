@@ -45,6 +45,7 @@ public class BrandService {
         }
 
         Brand brand = new Brand();
+        brand.setCode(toCode(request.slug()));
         brand.setName(request.name().trim());
         brand.setSlug(request.slug());
         brand.setDescription(request.description());
@@ -99,5 +100,9 @@ public class BrandService {
             throw new BusinessRuleException("Slug already exists: " + request.slug());
         }
         return brandMapper.toResponse(brand);
+    }
+
+    private String toCode(String slug) {
+        return slug.trim().toUpperCase(java.util.Locale.ROOT).replace('-', '_');
     }
 }

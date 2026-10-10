@@ -5,6 +5,8 @@ import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
 import com.dunghaiquyen.ecommerce.common.response.PageMeta;
 import com.dunghaiquyen.ecommerce.modules.brand.entity.Brand;
 import com.dunghaiquyen.ecommerce.modules.brand.repository.BrandRepository;
+import com.dunghaiquyen.ecommerce.modules.catalog.service.CatalogReferenceService;
+import com.dunghaiquyen.ecommerce.modules.catalog.entity.ProductTypeDefinition;
 import com.dunghaiquyen.ecommerce.modules.category.entity.Category;
 import com.dunghaiquyen.ecommerce.modules.category.repository.CategoryRepository;
 import com.dunghaiquyen.ecommerce.modules.product.dto.AdminProductListItemResponse;
@@ -82,6 +84,7 @@ public class ProductService {
     private final OrderItemRepository orderItemRepository;
     private final CatalogOutboxService catalogOutboxService;
     private final com.dunghaiquyen.ecommerce.modules.promotion.service.PromotionService promotionService;
+    private final CatalogReferenceService catalogReferenceService;
 
     public ProductService(
             ProductRepository productRepository,
@@ -96,7 +99,8 @@ public class ProductService {
             InventoryTransactionRepository inventoryTransactionRepository,
             OrderItemRepository orderItemRepository,
             CatalogOutboxService catalogOutboxService,
-            com.dunghaiquyen.ecommerce.modules.promotion.service.PromotionService promotionService) {
+            com.dunghaiquyen.ecommerce.modules.promotion.service.PromotionService promotionService,
+            CatalogReferenceService catalogReferenceService) {
         this.promotionService = promotionService;
         this.productRepository = productRepository;
         this.variantRepository = variantRepository;
@@ -110,6 +114,7 @@ public class ProductService {
         this.inventoryTransactionRepository = inventoryTransactionRepository;
         this.orderItemRepository = orderItemRepository;
         this.catalogOutboxService = catalogOutboxService;
+        this.catalogReferenceService = catalogReferenceService;
     }
 
     public record ListResult(List<ProductListItemResponse> items, PageMeta meta) {
@@ -253,6 +258,10 @@ public class ProductService {
 
     @Transactional
     public ProductDetailResponse create(ProductCreateRequest request) {
+        if (request.status() == ProductStatus.ACTIVE) {
+            throw new BusinessRuleException(
+                    "Create product as DRAFT first; add a sellable variant and a valid primary image before activation");
+        }
         if (productRepository.existsBySlug(request.slug())) {
             throw new BusinessRuleException("Slug already exists: " + request.slug());
         }
@@ -262,15 +271,19 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Brand not found"));
 
         Product product = new Product();
+        ProductTypeDefinition productType = catalogReferenceService.requireProductType(request.productType());
         product.setCategory(category);
         product.setBrand(brand);
+        product.setProductTypeDefinition(productType);
+        product.setSizeSystem(productType.getDefaultSizeSystem());
         product.setName(request.name().trim());
         product.setSlug(request.slug());
         product.setShortDescription(request.shortDescription());
         product.setDescription(request.description());
-        product.setGender(request.gender());
-        product.setSportType(request.sportType());
-        product.setProductType(request.productType());
+        product.setGender(request.gender() != null ? request.gender() : Gender.UNISEX);
+        if (request.sportType() != null && !request.sportType().isBlank()) {
+            product.getSports().add(catalogReferenceService.requireSport(request.sportType()));
+        }
         product.setStatus(request.status() != null ? request.status() : ProductStatus.DRAFT);
         product.setFeatured(request.isFeatured() != null && request.isFeatured());
         if (request.attributes() != null) {
@@ -324,10 +337,15 @@ public class ProductService {
             product.setGender(request.gender());
         }
         if (request.sportType() != null) {
-            product.setSportType(request.sportType());
+            product.getSports().clear();
+            if (!request.sportType().isBlank()) {
+                product.getSports().add(catalogReferenceService.requireSport(request.sportType()));
+            }
         }
         if (request.productType() != null) {
-            product.setProductType(request.productType());
+            ProductTypeDefinition type = catalogReferenceService.requireProductType(request.productType());
+            product.setProductTypeDefinition(type);
+            product.setSizeSystem(type.getDefaultSizeSystem());
         }
         if (request.status() != null) {
             product.setStatus(request.status());

@@ -27,19 +27,52 @@ public class Address extends AbstractAuditEntity {
     @Column(nullable = false, length = 20)
     private String phone;
 
-    @Column(nullable = false, length = 100)
-    private String province;
+    @Column(name = "province_code", length = 30)
+    private String provinceCode;
+
+    @Column(name = "province_name", nullable = false, length = 100)
+    private String provinceName;
 
     /** Vietnam dropped this administrative tier in the 2025 reform - kept nullable for legacy rows. */
-    @Column(length = 100)
-    private String district;
+    @Column(name = "district_code", length = 30)
+    private String districtCode;
 
-    @Column(nullable = false, length = 100)
-    private String ward;
+    @Column(name = "district_name", length = 100)
+    private String districtName;
+
+    @Column(name = "ward_code", length = 30)
+    private String wardCode;
+
+    @Column(name = "ward_name", nullable = false, length = 100)
+    private String wardName;
 
     @Column(name = "address_line", nullable = false, length = 255)
     private String addressLine;
 
     @Column(name = "is_default", nullable = false)
     private boolean isDefault = false;
+
+    public String getProvince() {
+        return provinceName;
+    }
+
+    public void setProvince(String province) {
+        this.provinceName = province;
+    }
+
+    public String getDistrict() {
+        return districtName;
+    }
+
+    public void setDistrict(String district) {
+        this.districtName = district;
+    }
+
+    public String getWard() {
+        return wardName;
+    }
+
+    public void setWard(String ward) {
+        this.wardName = ward;
+    }
 }

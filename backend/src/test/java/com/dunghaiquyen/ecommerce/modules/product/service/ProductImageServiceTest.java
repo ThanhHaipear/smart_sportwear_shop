@@ -11,6 +11,7 @@ import com.dunghaiquyen.ecommerce.common.exception.BusinessRuleException;
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
 import com.dunghaiquyen.ecommerce.common.storage.ImageStorageService;
 import com.dunghaiquyen.ecommerce.common.storage.UploadedImage;
+import com.dunghaiquyen.ecommerce.modules.catalog.service.CatalogReferenceService;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ImageCreateRequest;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ProductImageUploadResponse;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
@@ -59,6 +60,9 @@ class ProductImageServiceTest {
     @Mock
     private CatalogOutboxService catalogOutboxService;
 
+    @Mock
+    private CatalogReferenceService catalogReferenceService;
+
     private ProductImageService service;
     private UUID productId;
     private Product product;
@@ -71,7 +75,8 @@ class ProductImageServiceTest {
                 productMapper,
                 imageStorageService,
                 catalogOutboxService,
-                "res.cloudinary.com,cdn.shopify.com");
+                catalogReferenceService,
+                "res.cloudinary.com");
         productId = UUID.randomUUID();
         product = new Product();
         product.setId(productId);

@@ -67,6 +67,7 @@ public class CategoryService {
         CategoryNodeType nodeType = request.nodeType() != null ? request.nodeType() : CategoryNodeType.LEAF;
 
         Category category = new Category();
+        category.setCode(toCode(request.slug()));
         category.setName(request.name().trim());
         category.setSlug(request.slug());
         category.setDescription(request.description());
@@ -217,6 +218,10 @@ public class CategoryService {
         return roots.stream()
                 .map(root -> toTree(root, childrenByParent))
                 .toList();
+    }
+
+    private String toCode(String slug) {
+        return slug.trim().toUpperCase(java.util.Locale.ROOT).replace('-', '_');
     }
 
     private CategoryTreeResponse toTree(Category category, Map<UUID, List<Category>> childrenByParent) {

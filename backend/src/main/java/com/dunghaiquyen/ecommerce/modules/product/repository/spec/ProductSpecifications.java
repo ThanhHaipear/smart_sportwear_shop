@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Subquery;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -82,7 +81,7 @@ public final class ProductSpecifications {
 
     /** Admin product list filter. */
     public static Specification<Product> isFeatured(boolean featured) {
-        return (root, query, cb) -> cb.equal(root.get("featured"), featured);
+        return (root, query, cb) -> featured ? cb.disjunction() : cb.conjunction();
     }
 
     /** Phase N4 (related products): excludes the product itself from its own "related" list. */
@@ -105,12 +104,14 @@ public final class ProductSpecifications {
     }
 
     public static Specification<Product> hasSportType(String sportType) {
-        return (root, query, cb) -> cb.equal(cb.lower(root.get("sportType")), sportType.toLowerCase());
+        return (root, query, cb) -> cb.equal(
+                cb.lower(root.join("sports").get("code")), sportType.toLowerCase());
     }
 
-    /** Catalog V2 (V10): filter by top-level product type (APPAREL / FOOTWEAR / ACCESSORY / EQUIPMENT). */
+    /** Schema 1A: filter through the product_types lookup code. */
     public static Specification<Product> hasProductType(ProductType productType) {
-        return (root, query, cb) -> cb.equal(root.get("productType"), productType);
+        return (root, query, cb) -> cb.equal(
+                root.get("productTypeDefinition").get("code"), productType.catalogCode());
     }
 
     /**
@@ -141,32 +142,21 @@ public final class ProductSpecifications {
     }
 
     public static Specification<Product> hasVariantSize(String size) {
-        return variantExists((variantRoot, cb) -> cb.equal(variantRoot.get("size"), size));
+        return variantExists((variantRoot, cb) -> cb.or(
+                cb.equal(cb.lower(variantRoot.get("sizeDefinition").get("code")), size.toLowerCase()),
+                cb.equal(cb.lower(variantRoot.get("sizeDefinition").get("displayName")), size.toLowerCase())));
     }
 
     public static Specification<Product> hasVariantColor(String color) {
-        return variantExists((variantRoot, cb) -> cb.equal(variantRoot.get("color"), color));
+        return variantExists((variantRoot, cb) -> cb.or(
+                cb.equal(cb.lower(variantRoot.get("colorDefinition").get("code")), color.toLowerCase()),
+                cb.equal(cb.lower(variantRoot.get("colorDefinition").get("name")), color.toLowerCase())));
     }
 
     public static Specification<Product> hasVariantColorFamily(String colorFamily) {
-        List<String> tokens = switch (colorFamily.toUpperCase()) {
-            case "BLACK" -> List.of("black", "đen");
-            case "WHITE" -> List.of("white", "trắng");
-            case "BLUE" -> List.of("blue", "navy", "cobalt", "xanh dương", "xanh biển");
-            case "YELLOW" -> List.of("yellow", "vàng", "solar");
-            case "PINK" -> List.of("pink", "hồng");
-            case "RED" -> List.of("red", "đỏ");
-            case "GRAY" -> List.of("gray", "grey", "xám");
-            case "BEIGE" -> List.of("beige", "be");
-            case "BROWN" -> List.of("brown", "nâu");
-            case "GREEN" -> List.of("green", "xanh lá");
-            case "ORANGE" -> List.of("orange", "cam");
-            case "PURPLE" -> List.of("purple", "violet", "tím");
-            default -> List.of(colorFamily.toLowerCase());
-        };
-        return variantExists((variantRoot, cb) -> cb.or(tokens.stream()
-                .map(token -> cb.like(cb.lower(variantRoot.get("color")), "%" + token + "%"))
-                .toArray(jakarta.persistence.criteria.Predicate[]::new)));
+        return variantExists((variantRoot, cb) -> cb.equal(
+                cb.lower(variantRoot.get("colorDefinition").get("familyCode")),
+                colorFamily.toLowerCase()));
     }
 
     public static Specification<Product> hasVariantPriceGte(BigDecimal minPrice) {

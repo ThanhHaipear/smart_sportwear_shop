@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,11 +31,7 @@ public class User extends AbstractAuditEntity {
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "login_provider", nullable = false, length = 20)
-    private LoginProvider loginProvider = LoginProvider.LOCAL;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
+    @Column(name = "role_code", nullable = false, length = 30)
     private UserRole role;
 
     @Enumerated(EnumType.STRING)
@@ -43,4 +40,20 @@ public class User extends AbstractAuditEntity {
 
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
+
+    @Column(name = "anonymized_at")
+    private Instant anonymizedAt;
+
+    /** Compatibility helper; the persisted provider source of truth is user_identities. */
+    @Transient
+    public LoginProvider getLoginProvider() {
+        return passwordHash != null ? LoginProvider.LOCAL : LoginProvider.GOOGLE;
+    }
+
+    /** Kept for legacy callers; provider is no longer persisted on users. */
+    public void setLoginProvider(LoginProvider loginProvider) {
+        if (loginProvider == LoginProvider.GOOGLE) {
+            this.passwordHash = null;
+        }
+    }
 }

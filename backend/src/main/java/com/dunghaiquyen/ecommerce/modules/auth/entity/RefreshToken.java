@@ -22,7 +22,8 @@ public class RefreshToken extends AbstractCreatedAtEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "token_hash", nullable = false, unique = true, length = 255)
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.CHAR)
+    @Column(name = "token_hash", nullable = false, unique = true, length = 64, columnDefinition = "char(64)")
     private String tokenHash;
 
     @Column(name = "expires_at", nullable = false)
@@ -30,4 +31,8 @@ public class RefreshToken extends AbstractCreatedAtEntity {
 
     @Column(name = "revoked_at")
     private Instant revokedAt;
+
+    @jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
+    @Column(name = "revocation_reason", length = 30)
+    private RefreshTokenRevocationReason revocationReason;
 }

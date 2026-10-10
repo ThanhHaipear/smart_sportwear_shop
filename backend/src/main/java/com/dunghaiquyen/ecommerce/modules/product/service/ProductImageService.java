@@ -4,11 +4,13 @@ import com.dunghaiquyen.ecommerce.common.exception.BusinessRuleException;
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
 import com.dunghaiquyen.ecommerce.common.storage.ImageStorageService;
 import com.dunghaiquyen.ecommerce.common.storage.UploadedImage;
+import com.dunghaiquyen.ecommerce.modules.catalog.service.CatalogReferenceService;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ImageCreateRequest;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ProductImageResponse;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ProductImageUploadResponse;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductImage;
+import com.dunghaiquyen.ecommerce.modules.product.entity.ImageSourceKind;
 import com.dunghaiquyen.ecommerce.modules.product.mapper.ProductMapper;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
@@ -16,6 +18,9 @@ import com.dunghaiquyen.ecommerce.visualsearch.outbox.CatalogEventType;
 import com.dunghaiquyen.ecommerce.visualsearch.outbox.CatalogOutboxService;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -47,6 +52,7 @@ public class ProductImageService {
     private final ImageStorageService imageStorageService;
     private final CatalogOutboxService catalogOutboxService;
     private final Set<String> catalogImageAllowedHosts;
+    private final CatalogReferenceService catalogReferenceService;
 
     public ProductImageService(
             ProductRepository productRepository,
@@ -54,13 +60,15 @@ public class ProductImageService {
             ProductMapper productMapper,
             ImageStorageService imageStorageService,
             CatalogOutboxService catalogOutboxService,
-            @Value("${app.visual-search.catalog-image-allowed-hosts:res.cloudinary.com,cdn.shopify.com}")
+            CatalogReferenceService catalogReferenceService,
+            @Value("${app.visual-search.catalog-image-allowed-hosts:res.cloudinary.com}")
                     String catalogImageAllowedHosts) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
         this.productMapper = productMapper;
         this.imageStorageService = imageStorageService;
         this.catalogOutboxService = catalogOutboxService;
+        this.catalogReferenceService = catalogReferenceService;
         this.catalogImageAllowedHosts = Arrays.stream(catalogImageAllowedHosts.split(","))
                 .map(String::trim)
                 .filter(value -> !value.isEmpty())
@@ -77,7 +85,8 @@ public class ProductImageService {
 
         boolean makePrimary = request.isPrimary() != null && request.isPrimary();
         ProductImage image = insertImageRow(
-                product, request.imageUrl(), request.publicId(), request.altText(), request.color(), request.sortOrder(), makePrimary);
+                product, request.imageUrl(), request.publicId(), request.altText(), request.color(),
+                request.sortOrder(), makePrimary, null, null);
         return productMapper.toImageResponse(image);
     }
 
@@ -106,7 +115,8 @@ public class ProductImageService {
         boolean makePrimary = isPrimary != null && isPrimary;
         try {
             ProductImage image =
-                    insertImageRow(product, uploaded.secureUrl(), uploaded.publicId(), altText, color, sortOrder, makePrimary);
+                    insertImageRow(product, uploaded.secureUrl(), uploaded.publicId(), altText, color,
+                            sortOrder, makePrimary, uploaded, file);
             return new ProductImageUploadResponse(
                     image.getId(),
                     image.getImageUrl(),
@@ -200,7 +210,15 @@ public class ProductImageService {
      * method already returned, uncaught).
      */
     private ProductImage insertImageRow(
-            Product product, String imageUrl, String publicId, String altText, String color, Integer sortOrder, boolean makePrimary) {
+            Product product,
+            String imageUrl,
+            String publicId,
+            String altText,
+            String color,
+            Integer sortOrder,
+            boolean makePrimary,
+            UploadedImage uploaded,
+            MultipartFile sourceFile) {
         if (makePrimary) {
             product = productRepository.findByIdForUpdate(product.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
@@ -217,9 +235,24 @@ public class ProductImageService {
         ProductImage image = new ProductImage();
         image.setProduct(product);
         image.setImageUrl(imageUrl);
-        image.setPublicId(publicId);
+        image.setPublicId(publicId != null && !publicId.isBlank()
+                ? publicId.trim()
+                : "external/" + UUID.randomUUID());
+        image.setAssetVersion(uploaded != null ? uploaded.assetVersion() : "external");
+        image.setFormat(uploaded != null ? uploaded.format() : formatFromUrl(imageUrl));
+        image.setBytes(uploaded != null && uploaded.bytes() != null
+                ? uploaded.bytes()
+                : sourceFile != null ? sourceFile.getSize() : null);
+        image.setWidth(uploaded != null ? uploaded.width() : null);
+        image.setHeight(uploaded != null ? uploaded.height() : null);
+        image.setChecksum(sourceFile != null ? sha256(sourceFile) : null);
+        image.setSourceKind(uploaded != null ? ImageSourceKind.OWNED : ImageSourceKind.LICENSED);
+        image.setSourceUri(uploaded == null ? imageUrl : null);
+        image.setLicenseCode(uploaded != null ? "OWNED_BY_SHOP" : "EXTERNAL_DECLARED");
         image.setAltText(altText);
-        image.setColor(color != null && !color.isBlank() ? color.trim() : null);
+        image.setColorDefinition(color != null && !color.isBlank()
+                ? catalogReferenceService.requireColor(color)
+                : null);
         image.setSortOrder(sortOrder != null ? sortOrder : 0);
         image.setPrimary(makePrimary);
 
@@ -229,6 +262,21 @@ public class ProductImageService {
             return saved;
         } catch (DataIntegrityViolationException ex) {
             throw new BusinessRuleException("Another image was just set as primary for this product, please retry");
+        }
+    }
+
+    private String formatFromUrl(String imageUrl) {
+        String path = imageUrl.split("[?#]", 2)[0];
+        int dot = path.lastIndexOf('.');
+        return dot >= 0 ? path.substring(dot + 1).toLowerCase(Locale.ROOT) : "unknown";
+    }
+
+    private String sha256(MultipartFile file) {
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256").digest(file.getBytes());
+            return java.util.HexFormat.of().formatHex(digest);
+        } catch (IOException | NoSuchAlgorithmException ex) {
+            throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Could not fingerprint image file");
         }
     }
 

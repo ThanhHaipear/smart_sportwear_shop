@@ -3,6 +3,11 @@ package com.dunghaiquyen.ecommerce.modules.product.entity;
 import com.dunghaiquyen.ecommerce.common.entity.AbstractAuditEntity;
 import com.dunghaiquyen.ecommerce.modules.brand.entity.Brand;
 import com.dunghaiquyen.ecommerce.modules.category.entity.Category;
+import com.dunghaiquyen.ecommerce.modules.catalog.entity.ProductTypeDefinition;
+import com.dunghaiquyen.ecommerce.modules.catalog.entity.SizeSystem;
+import com.dunghaiquyen.ecommerce.modules.catalog.entity.Sport;
+import com.dunghaiquyen.ecommerce.modules.catalog.entity.UseCase;
+import com.dunghaiquyen.ecommerce.modules.catalog.entity.Technology;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,13 +16,18 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -41,6 +51,14 @@ public class Product extends AbstractAuditEntity {
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_type_id", nullable = false)
+    private ProductTypeDefinition productTypeDefinition;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "size_system_id", nullable = false)
+    private SizeSystem sizeSystem;
+
     @Column(nullable = false, length = 255)
     private String name;
 
@@ -54,27 +72,47 @@ public class Product extends AbstractAuditEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(name = "gender_code", nullable = false, length = 12)
     private Gender gender;
 
-    @Column(name = "sport_type", length = 50)
-    private String sportType;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "product_sports",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "sport_id"))
+    private Set<Sport> sports = new LinkedHashSet<>();
 
-    /** Catalog V2 (V10): nullable for existing products, populated by admin going forward. */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "product_type", length = 30)
-    private ProductType productType;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "product_use_cases",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "use_case_id"))
+    private Set<UseCase> useCases = new LinkedHashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "product_technologies",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "technology_id"))
+    private Set<Technology> technologies = new LinkedHashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ProductStatus status = ProductStatus.DRAFT;
 
-    @Column(name = "is_featured", nullable = false)
+    @Transient
     private boolean featured = false;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String, String> attributes = new LinkedHashMap<>();
+
+    @Column(name = "catalog_version", nullable = false)
+    private long catalogVersion = 1;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "data_source", nullable = false, length = 20, updatable = false)
+    private ProductDataSource dataSource = ProductDataSource.REAL;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("createdAt ASC")
@@ -83,4 +121,22 @@ public class Product extends AbstractAuditEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("sortOrder ASC")
     private List<ProductImage> images = new ArrayList<>();
+
+    @Transient
+    public String getSportType() {
+        return sports.stream().findFirst().map(Sport::getCode).orElse(null);
+    }
+
+    public void setSportType(String ignored) {
+        // Compatibility only. ProductService resolves and assigns the Sport entity.
+    }
+
+    @Transient
+    public ProductType getProductType() {
+        return productTypeDefinition == null ? null : ProductType.fromCatalogCode(productTypeDefinition.getCode());
+    }
+
+    public void setProductType(ProductType ignored) {
+        // Compatibility only. ProductService resolves and assigns the lookup entity.
+    }
 }

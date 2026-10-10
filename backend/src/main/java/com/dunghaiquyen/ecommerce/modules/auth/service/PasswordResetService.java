@@ -4,10 +4,12 @@ import com.dunghaiquyen.ecommerce.common.exception.InvalidTokenException;
 import com.dunghaiquyen.ecommerce.common.security.TokenHasher;
 import com.dunghaiquyen.ecommerce.config.AppPasswordResetProperties;
 import com.dunghaiquyen.ecommerce.modules.auth.entity.PasswordResetToken;
+import com.dunghaiquyen.ecommerce.modules.auth.entity.RefreshTokenRevocationReason;
 import com.dunghaiquyen.ecommerce.modules.auth.repository.PasswordResetTokenRepository;
 import com.dunghaiquyen.ecommerce.modules.auth.repository.RefreshTokenRepository;
 import com.dunghaiquyen.ecommerce.modules.notification.service.NotificationService;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
+import com.dunghaiquyen.ecommerce.modules.user.entity.UserStatus;
 import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -72,6 +74,9 @@ public class PasswordResetService {
             return;
         }
         User user = userOpt.get();
+        if (user.getPasswordHash() == null || user.getStatus() != UserStatus.ACTIVE) {
+            return;
+        }
 
         String rawToken = generateRawToken();
         PasswordResetToken token = new PasswordResetToken();
@@ -132,7 +137,8 @@ public class PasswordResetService {
         // (plain repository call, not the REQUIRES_NEW RefreshTokenRevocationService
         // wrapper used by AuthService.refresh) - nothing after this throws, so
         // there is no rollback-vs-revoke ordering problem to guard against here.
-        refreshTokenRepository.revokeAllActiveForUser(user.getId(), Instant.now());
+        refreshTokenRepository.revokeAllActiveForUser(
+                user.getId(), Instant.now(), RefreshTokenRevocationReason.PASSWORD_RESET);
     }
 
     private String generateRawToken() {

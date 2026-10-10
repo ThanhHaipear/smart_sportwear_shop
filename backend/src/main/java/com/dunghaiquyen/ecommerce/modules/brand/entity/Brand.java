@@ -15,6 +15,9 @@ import lombok.Setter;
 @Table(name = "brands")
 public class Brand extends AbstractAuditEntity {
 
+    @Column(nullable = false, unique = true, length = 50)
+    private String code;
+
     @Column(nullable = false, length = 150)
     private String name;
 

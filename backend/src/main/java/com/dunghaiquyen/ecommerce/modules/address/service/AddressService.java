@@ -17,14 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
  * userId (never trusts an addressId alone), same ownership-check pattern
  * already used for orders/carts.
  *
- * <p>"Default" invariant (at most one default address per user) is enforced
- * the same way ProductImageService enforces "at most one primary image": an
- * unset-old-defaults read-modify-write before writing the new one. Unlike
- * product images, there is deliberately NO partial-unique-index backstop
- * (no new migration) - a customer managing their own handful of addresses is
- * nowhere near the concurrency risk of admins racing to set a primary image,
- * so the weaker, sequential-only guarantee is an acceptable, documented
- * tradeoff rather than an oversight.
+ * <p>"Default" invariant is protected by the 1A partial unique index. The
+ * service clears and flushes the previous default before inserting/promoting
+ * the new row so Hibernate cannot violate the index through insert-first flush
+ * ordering.
  *
  * <p>Deleting the current default address does NOT auto-promote another
  * address to default (self-chosen rule, see class README/report) - silently
@@ -114,7 +110,7 @@ public class AddressService {
     private void unsetCurrentDefaults(UUID userId) {
         List<Address> currentDefaults = addressRepository.findAllByUserIdAndIsDefaultTrue(userId);
         currentDefaults.forEach(a -> a.setDefault(false));
-        addressRepository.saveAll(currentDefaults);
+        addressRepository.saveAllAndFlush(currentDefaults);
     }
 
     private Address findOwned(UUID userId, UUID addressId) {

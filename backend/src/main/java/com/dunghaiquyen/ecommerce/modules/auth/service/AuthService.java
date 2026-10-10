@@ -14,7 +14,11 @@ import com.dunghaiquyen.ecommerce.modules.auth.dto.AuthTokensResponse;
 import com.dunghaiquyen.ecommerce.modules.auth.dto.LoginRequest;
 import com.dunghaiquyen.ecommerce.modules.auth.dto.RegisterRequest;
 import com.dunghaiquyen.ecommerce.modules.auth.entity.RefreshToken;
+import com.dunghaiquyen.ecommerce.modules.auth.entity.RefreshTokenRevocationReason;
+import com.dunghaiquyen.ecommerce.modules.auth.entity.IdentityProvider;
+import com.dunghaiquyen.ecommerce.modules.auth.entity.UserIdentity;
 import com.dunghaiquyen.ecommerce.modules.auth.repository.RefreshTokenRepository;
+import com.dunghaiquyen.ecommerce.modules.auth.repository.UserIdentityRepository;
 import com.dunghaiquyen.ecommerce.modules.cart.service.CartMergeService;
 import com.dunghaiquyen.ecommerce.modules.user.entity.LoginProvider;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
@@ -53,6 +57,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserIdentityRepository userIdentityRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -67,6 +72,7 @@ public class AuthService {
     public AuthService(
             UserRepository userRepository,
             RefreshTokenRepository refreshTokenRepository,
+            UserIdentityRepository userIdentityRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtTokenProvider jwtTokenProvider,
@@ -78,6 +84,7 @@ public class AuthService {
             AppGoogleProperties googleProperties) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.userIdentityRepository = userIdentityRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.googleProperties = googleProperties;
@@ -134,7 +141,7 @@ public class AuthService {
         // Google login would reveal anyway, so this is not an account-enumeration
         // concern beyond what the happy path already exposes).
         userRepository.findByEmail(email)
-                .filter(u -> u.getLoginProvider() != com.dunghaiquyen.ecommerce.modules.user.entity.LoginProvider.LOCAL)
+                .filter(u -> u.getLoginProvider() != LoginProvider.LOCAL)
                 .ifPresent(u -> {
                     throw new com.dunghaiquyen.ecommerce.common.exception.BusinessRuleException(
                             org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY,
@@ -181,7 +188,8 @@ public class AuthService {
         // same token both reach this statement, but only one can match revoked_at IS
         // NULL - Postgres re-checks the predicate when it acquires the row lock, so
         // the loser sees 0 affected rows instead of both passing a stale in-memory check.
-        int claimed = refreshTokenRepository.revokeIfActive(stored.getId(), Instant.now());
+        int claimed = refreshTokenRepository.revokeIfActive(
+                stored.getId(), Instant.now(), RefreshTokenRevocationReason.ROTATED);
         if (claimed == 0) {
             // Not active anymore: either genuine reuse of an old, already-rotated
             // token, or this request lost the race to a concurrent rotation of the
@@ -207,6 +215,7 @@ public class AuthService {
                 boolean ownedByCaller = token.getUser().getId().equals(currentUserId);
                 if (ownedByCaller && token.getRevokedAt() == null) {
                     token.setRevokedAt(Instant.now());
+                    token.setRevocationReason(RefreshTokenRevocationReason.LOGOUT);
                     refreshTokenRepository.save(token);
                 }
             });
@@ -253,37 +262,51 @@ public class AuthService {
         GoogleTokenInfo tokenInfo = verifyGoogleToken(credential);
 
         String email = normalizeEmail(tokenInfo.email());
-        Optional<User> existing = userRepository.findByEmail(email);
+        Optional<UserIdentity> identityBySubject = userIdentityRepository.findByProviderAndProviderSubject(
+                IdentityProvider.GOOGLE, tokenInfo.sub());
+        Optional<User> existing = identityBySubject.map(UserIdentity::getUser);
 
         User user;
         if (existing.isPresent()) {
             user = existing.get();
-            if (user.getLoginProvider() != LoginProvider.GOOGLE) {
-                throw new BusinessRuleException(
-                        HttpStatus.UNPROCESSABLE_ENTITY,
-                        "An account with this email already uses email/password sign-in. Please log in with your password.");
-            }
             if (user.getStatus() == UserStatus.LOCKED) {
                 throw new AccountLockedException();
             }
+            if (user.getStatus() == UserStatus.DEACTIVATED) {
+                throw new BusinessRuleException(HttpStatus.FORBIDDEN, "Account is deactivated");
+            }
+            UserIdentity identity = identityBySubject.orElseThrow();
+            identity.setProviderEmail(email);
+            identity.setLastLoginAt(Instant.now());
+            userIdentityRepository.save(identity);
             user.setLastLoginAt(Instant.now());
             user = userRepository.save(user);
         } else {
+            Optional<User> emailOwner = userRepository.findByEmail(email);
+            if (emailOwner.isPresent()) {
+                throw new BusinessRuleException(
+                        HttpStatus.UNPROCESSABLE_ENTITY,
+                        "An account with this email already exists. Please use its original sign-in method.");
+            }
             user = new User();
             user.setEmail(email);
             user.setFullName(tokenInfo.name() != null && !tokenInfo.name().isBlank()
                     ? tokenInfo.name().trim()
                     : email.split("@")[0]);
-            user.setLoginProvider(LoginProvider.GOOGLE);
             user.setRole(UserRole.CUSTOMER);
             user.setStatus(UserStatus.ACTIVE);
             user.setLastLoginAt(Instant.now());
             try {
                 user = userRepository.save(user);
+                UserIdentity identity = new UserIdentity();
+                identity.setUser(user);
+                identity.setProvider(IdentityProvider.GOOGLE);
+                identity.setProviderSubject(tokenInfo.sub());
+                identity.setProviderEmail(email);
+                identity.setLastLoginAt(Instant.now());
+                userIdentityRepository.save(identity);
             } catch (DataIntegrityViolationException ex) {
-                // Race: concurrent Google logins with the same email both passed the existsByEmail check.
-                user = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new BusinessRuleException(HttpStatus.CONFLICT, "Account creation conflict, please retry"));
+                throw new BusinessRuleException(HttpStatus.CONFLICT, "Account creation conflict, please retry");
             }
         }
 

@@ -1,6 +1,7 @@
 package com.dunghaiquyen.ecommerce.modules.auth.repository;
 
 import com.dunghaiquyen.ecommerce.modules.auth.entity.RefreshToken;
+import com.dunghaiquyen.ecommerce.modules.auth.entity.RefreshTokenRevocationReason;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,8 +30,11 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID
      * /refresh call forcing re-login).
      */
     @Modifying
-    @Query("update RefreshToken r set r.revokedAt = :now where r.user.id = :userId and r.revokedAt is null")
-    void revokeAllActiveForUser(@Param("userId") UUID userId, @Param("now") Instant now);
+    @Query("update RefreshToken r set r.revokedAt = :now, r.revocationReason = :reason where r.user.id = :userId and r.revokedAt is null")
+    void revokeAllActiveForUser(
+            @Param("userId") UUID userId,
+            @Param("now") Instant now,
+            @Param("reason") RefreshTokenRevocationReason reason);
 
     /**
      * Atomic claim-and-revoke for one-time-use rotation: Postgres re-checks the
@@ -40,6 +44,9 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID
      * read-then-write gap for two concurrent requests to both pass through.
      */
     @Modifying
-    @Query("update RefreshToken r set r.revokedAt = :now where r.id = :id and r.revokedAt is null")
-    int revokeIfActive(@Param("id") UUID id, @Param("now") Instant now);
+    @Query("update RefreshToken r set r.revokedAt = :now, r.revocationReason = :reason where r.id = :id and r.revokedAt is null")
+    int revokeIfActive(
+            @Param("id") UUID id,
+            @Param("now") Instant now,
+            @Param("reason") RefreshTokenRevocationReason reason);
 }
