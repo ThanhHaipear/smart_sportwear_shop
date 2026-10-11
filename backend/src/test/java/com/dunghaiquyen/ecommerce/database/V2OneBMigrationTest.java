@@ -35,7 +35,7 @@ class V2OneBMigrationTest {
                 .cleanDisabled(false)
                 .load();
         flyway.clean();
-        assertEquals(3, flyway.migrate().migrationsExecuted);
+        assertEquals(4, flyway.migrate().migrationsExecuted);
         flyway.validate();
         assertEquals(0, flyway.migrate().migrationsExecuted);
         seedCommerceFixture();

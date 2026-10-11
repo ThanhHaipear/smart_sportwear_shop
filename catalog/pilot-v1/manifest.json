@@ -2,10 +2,10 @@
     "schemaVersion":  1,
     "dataset":  {
                     "name":  "smart-sportswear-pilot",
-                    "version":  "1.0.0",
+                    "version":  "1.1.0",
                     "dataSource":  "DEMO",
                     "licenseCode":  "AI_GENERATED_PROJECT_USE",
-                    "sourceDescription":  "30 fictional sportswear products and 60 synthetic product images generated for project demo, image retrieval and evaluation."
+                    "sourceDescription":  "30 fictional sportswear products split evenly between Nike and Adidas as simulated DEMO metadata, with 60 unbranded synthetic images for project demo, retrieval and evaluation; not official merchandise imagery."
                 },
     "imagePolicy":  {
                         "sourceKind":  "SYNTHETIC",
@@ -25,7 +25,7 @@
                          "name":  "Áo chạy bộ nam Aero Navy",
                          "slug":  "ao-chay-bo-nam-aero-navy",
                          "categorySlug":  "ao-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_TOP",
                          "gender":  "MEN",
                          "sportCode":  "RUNNING",
@@ -46,7 +46,8 @@
                                             "material":  "POLYESTER",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -72,7 +73,7 @@
                          "name":  "Áo tank chạy bộ nữ Coral Flow",
                          "slug":  "ao-tank-chay-bo-nu-coral-flow",
                          "categorySlug":  "ao-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_TOP",
                          "gender":  "WOMEN",
                          "sportCode":  "RUNNING",
@@ -93,7 +94,8 @@
                                             "material":  "POLYESTER_ELASTANE",
                                             "fit":  "SLIM",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -119,7 +121,7 @@
                          "name":  "Áo chạy bộ dài tay Uni Cloud",
                          "slug":  "ao-chay-bo-dai-tay-uni-cloud",
                          "categorySlug":  "ao-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_TOP",
                          "gender":  "UNISEX",
                          "sportCode":  "RUNNING",
@@ -141,7 +143,8 @@
                                             "material":  "POLYESTER",
                                             "fit":  "REGULAR",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -167,7 +170,7 @@
                          "name":  "Áo tập bóng đá nam Blaze Red",
                          "slug":  "ao-tap-bong-da-nam-blaze-red",
                          "categorySlug":  "ao-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_TOP",
                          "gender":  "MEN",
                          "sportCode":  "FOOTBALL",
@@ -188,7 +191,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -214,7 +218,7 @@
                          "name":  "Áo tập bóng đá nữ Royal Motion",
                          "slug":  "ao-tap-bong-da-nu-royal-motion",
                          "categorySlug":  "ao-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_TOP",
                          "gender":  "WOMEN",
                          "sportCode":  "FOOTBALL",
@@ -235,7 +239,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -261,7 +266,7 @@
                          "name":  "Áo giữ nhiệt bóng đá Uni Core",
                          "slug":  "ao-giu-nhiet-bong-da-uni-core",
                          "categorySlug":  "ao-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_TOP",
                          "gender":  "UNISEX",
                          "sportCode":  "FOOTBALL",
@@ -283,7 +288,8 @@
                                             "material":  "THERMAL_POLYESTER",
                                             "fit":  "SLIM",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -309,7 +315,7 @@
                          "name":  "Áo khoác chạy bộ nữ Violet Air",
                          "slug":  "ao-khoac-chay-bo-nu-violet-air",
                          "categorySlug":  "ao-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_TOP",
                          "gender":  "WOMEN",
                          "sportCode":  "RUNNING",
@@ -330,7 +336,8 @@
                                             "material":  "LIGHTWEIGHT_SHELL",
                                             "fit":  "SLIM",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -356,7 +363,7 @@
                          "name":  "Áo gió chạy bộ nam Orange Pace",
                          "slug":  "ao-gio-chay-bo-nam-orange-pace",
                          "categorySlug":  "ao-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_TOP",
                          "gender":  "MEN",
                          "sportCode":  "RUNNING",
@@ -377,7 +384,8 @@
                                             "material":  "WATER_RESISTANT_SHELL",
                                             "fit":  "REGULAR",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -403,7 +411,7 @@
                          "name":  "Quần short chạy bộ nam Swift Black",
                          "slug":  "quan-short-chay-bo-nam-swift-black",
                          "categorySlug":  "quan-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_BOTTOM",
                          "gender":  "MEN",
                          "sportCode":  "RUNNING",
@@ -424,7 +432,8 @@
                                             "material":  "WOVEN_POLYESTER",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -450,7 +459,7 @@
                          "name":  "Quần legging chạy bộ nữ Navy Flex",
                          "slug":  "quan-legging-chay-bo-nu-navy-flex",
                          "categorySlug":  "quan-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_BOTTOM",
                          "gender":  "WOMEN",
                          "sportCode":  "RUNNING",
@@ -471,7 +480,8 @@
                                             "material":  "POLYESTER_ELASTANE",
                                             "fit":  "COMPRESSION",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -497,7 +507,7 @@
                          "name":  "Quần jogger thể thao Uni Motion",
                          "slug":  "quan-jogger-the-thao-uni-motion",
                          "categorySlug":  "quan-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_BOTTOM",
                          "gender":  "UNISEX",
                          "sportCode":  "RUNNING",
@@ -519,7 +529,8 @@
                                             "material":  "TECHNICAL_KNIT",
                                             "fit":  "TAPERED",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -545,7 +556,7 @@
                          "name":  "Quần bóng đá nam Royal Kick",
                          "slug":  "quan-bong-da-nam-royal-kick",
                          "categorySlug":  "quan-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_BOTTOM",
                          "gender":  "MEN",
                          "sportCode":  "FOOTBALL",
@@ -566,7 +577,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -592,7 +604,7 @@
                          "name":  "Quần tập bóng đá nữ Black Drive",
                          "slug":  "quan-tap-bong-da-nu-black-drive",
                          "categorySlug":  "quan-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_BOTTOM",
                          "gender":  "WOMEN",
                          "sportCode":  "FOOTBALL",
@@ -613,7 +625,8 @@
                                             "material":  "STRETCH_WOVEN",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -639,7 +652,7 @@
                          "name":  "Quần track chạy bộ Uni Forest",
                          "slug":  "quan-track-chay-bo-uni-forest",
                          "categorySlug":  "quan-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_BOTTOM",
                          "gender":  "UNISEX",
                          "sportCode":  "RUNNING",
@@ -661,7 +674,8 @@
                                             "material":  "WATER_RESISTANT_WOVEN",
                                             "fit":  "TAPERED",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -687,7 +701,7 @@
                          "name":  "Giày chạy bộ nam Cobalt Ride",
                          "slug":  "giay-chay-bo-nam-cobalt-ride",
                          "categorySlug":  "giay-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_SHOES",
                          "gender":  "MEN",
                          "sportCode":  "RUNNING",
@@ -709,7 +723,8 @@
                                             "material":  "ENGINEERED_MESH",
                                             "fit":  "NEUTRAL",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -735,7 +750,7 @@
                          "name":  "Giày chạy bộ nữ Coral Cloud",
                          "slug":  "giay-chay-bo-nu-coral-cloud",
                          "categorySlug":  "giay-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_SHOES",
                          "gender":  "WOMEN",
                          "sportCode":  "RUNNING",
@@ -757,7 +772,8 @@
                                             "material":  "ENGINEERED_MESH",
                                             "fit":  "NEUTRAL",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -783,7 +799,7 @@
                          "name":  "Giày chạy bộ Uni Pure Step",
                          "slug":  "giay-chay-bo-uni-pure-step",
                          "categorySlug":  "giay-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_SHOES",
                          "gender":  "UNISEX",
                          "sportCode":  "RUNNING",
@@ -806,7 +822,8 @@
                                             "material":  "KNIT_MESH",
                                             "fit":  "STABLE",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -832,7 +849,7 @@
                          "name":  "Giày đá bóng nam Turf Shadow",
                          "slug":  "giay-da-bong-nam-turf-shadow",
                          "categorySlug":  "giay-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_SHOES",
                          "gender":  "MEN",
                          "sportCode":  "FOOTBALL",
@@ -854,7 +871,8 @@
                                             "material":  "SYNTHETIC_UPPER",
                                             "fit":  "TURF",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -880,7 +898,7 @@
                          "name":  "Giày đá bóng nữ Turf Spark",
                          "slug":  "giay-da-bong-nu-turf-spark",
                          "categorySlug":  "giay-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_SHOES",
                          "gender":  "WOMEN",
                          "sportCode":  "FOOTBALL",
@@ -902,7 +920,8 @@
                                             "material":  "SYNTHETIC_UPPER",
                                             "fit":  "TURF",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -928,7 +947,7 @@
                          "name":  "Giày futsal Uni Red Court",
                          "slug":  "giay-futsal-uni-red-court",
                          "categorySlug":  "giay-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_SHOES",
                          "gender":  "UNISEX",
                          "sportCode":  "FOOTBALL",
@@ -951,7 +970,8 @@
                                             "material":  "SYNTHETIC_UPPER",
                                             "fit":  "INDOOR",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -977,7 +997,7 @@
                          "name":  "Bộ bóng đá nam Crimson Unity",
                          "slug":  "bo-bong-da-nam-crimson-unity",
                          "categorySlug":  "dong-phuc-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_UNIFORM",
                          "gender":  "MEN",
                          "sportCode":  "FOOTBALL",
@@ -998,7 +1018,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1024,7 +1045,7 @@
                          "name":  "Bộ bóng đá nữ Royal Wave",
                          "slug":  "bo-bong-da-nu-royal-wave",
                          "categorySlug":  "dong-phuc-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_UNIFORM",
                          "gender":  "WOMEN",
                          "sportCode":  "FOOTBALL",
@@ -1045,7 +1066,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1071,7 +1093,7 @@
                          "name":  "Bộ bóng đá Uni Forest Line",
                          "slug":  "bo-bong-da-uni-forest-line",
                          "categorySlug":  "dong-phuc-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_UNIFORM",
                          "gender":  "UNISEX",
                          "sportCode":  "FOOTBALL",
@@ -1093,7 +1115,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "REGULAR",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1119,7 +1142,7 @@
                          "name":  "Bộ bóng đá nam Black Gold",
                          "slug":  "bo-bong-da-nam-black-gold",
                          "categorySlug":  "dong-phuc-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_UNIFORM",
                          "gender":  "MEN",
                          "sportCode":  "FOOTBALL",
@@ -1140,7 +1163,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1166,7 +1190,7 @@
                          "name":  "Bộ bóng đá nữ Violet Star",
                          "slug":  "bo-bong-da-nu-violet-star",
                          "categorySlug":  "dong-phuc-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_UNIFORM",
                          "gender":  "WOMEN",
                          "sportCode":  "FOOTBALL",
@@ -1187,7 +1211,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "ATHLETIC",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1213,7 +1238,7 @@
                          "name":  "Bộ bóng đá Uni Orange Pulse",
                          "slug":  "bo-bong-da-uni-orange-pulse",
                          "categorySlug":  "dong-phuc-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_UNIFORM",
                          "gender":  "UNISEX",
                          "sportCode":  "FOOTBALL",
@@ -1235,7 +1260,8 @@
                                             "material":  "POLYESTER_MESH",
                                             "fit":  "REGULAR",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1261,7 +1287,7 @@
                          "name":  "Bình nước thể thao Black Flow 750ml",
                          "slug":  "binh-nuoc-the-thao-black-flow-750ml",
                          "categorySlug":  "phu-kien-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_ACCESSORY",
                          "gender":  "UNISEX",
                          "sportCode":  "RUNNING",
@@ -1278,7 +1304,8 @@
                                             "material":  "BPA_FREE_PLASTIC",
                                             "fit":  "ONE_SIZE",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1304,7 +1331,7 @@
                          "name":  "Băng tay thể thao Royal Pair",
                          "slug":  "bang-tay-the-thao-royal-pair",
                          "categorySlug":  "phu-kien-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_ACCESSORY",
                          "gender":  "UNISEX",
                          "sportCode":  "RUNNING",
@@ -1321,7 +1348,8 @@
                                             "material":  "COTTON_ELASTANE",
                                             "fit":  "ONE_SIZE",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1347,7 +1375,7 @@
                          "name":  "Tất bóng đá White Match",
                          "slug":  "tat-bong-da-white-match",
                          "categorySlug":  "phu-kien-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "nike",
                          "productType":  "SPORTS_ACCESSORY",
                          "gender":  "UNISEX",
                          "sportCode":  "FOOTBALL",
@@ -1364,7 +1392,8 @@
                                             "material":  "POLYESTER_ELASTANE",
                                             "fit":  "ONE_SIZE",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {
@@ -1390,7 +1419,7 @@
                          "name":  "Ốp bảo vệ ống đồng Red Guard",
                          "slug":  "op-bao-ve-ong-dong-red-guard",
                          "categorySlug":  "phu-kien-the-thao",
-                         "brandSlug":  "khong-thuong-hieu",
+                         "brandSlug":  "adidas",
                          "productType":  "SPORTS_ACCESSORY",
                          "gender":  "UNISEX",
                          "sportCode":  "FOOTBALL",
@@ -1407,7 +1436,8 @@
                                             "material":  "POLYPROPYLENE_EVA",
                                             "fit":  "ONE_SIZE",
                                             "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
-                                            "dataset_version":  "1.0.0"
+                                            "dataset_version":  "1.1.0",
+                                            "brand_assignment":  "SIMULATED_DEMO_METADATA"
                                         },
                          "images":  [
                                         {

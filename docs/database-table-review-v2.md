@@ -39,7 +39,7 @@
 | Bảng | Kết luận review | Kiểm thử bắt buộc | Trạng thái |
 |---|---|---|---|
 | `categories` | Code/slug UQ, parent self-FK RESTRICT, status/ordering; chặn self-parent và chu trình sâu | Seed lặp; duplicate code/slug; chu trình 2+ cấp; query cây | Đạt thiết kế |
-| `brands` | Code/slug UQ, soft status; seed `NO_BRAND` để giữ `products.brand_id` NN | Seed lặp; duplicate; không xóa brand đang dùng | Đạt thiết kế |
+| `brands` | Code/slug UQ, soft status; seed `NO_BRAND`, `NIKE`, `ADIDAS` để giữ `products.brand_id` NN và có hai thương hiệu kinh doanh ban đầu | Seed lặp; duplicate; không xóa brand đang dùng | Đạt thiết kế |
 | `size_systems` | Code UQ; seed `APPAREL_INT`, `SHOES_EU`, `ONE_SIZE`; soft status | Seed lặp; code bất biến; FK RESTRICT | Đạt thiết kế |
 | `sizes` | FK size system; UQ system/code; `sort_order >= 0` | Sai hệ size; duplicate trong cùng hệ; thứ tự hiển thị | Đạt thiết kế |
 | `product_types` | Code UQ; default size system NN; seed 5 loại B01 | Type thiếu hệ size; code trùng; không xóa khi đã dùng | Đạt thiết kế |
@@ -101,7 +101,7 @@
 - Giao diện: admin/storefront không còn sử dụng `CANCELLATION_REQUESTED` hoặc `CANCELLATION_APPROVED`; đơn đã hủy và refund được theo dõi riêng.
 - Kiểm thử: Flyway `clean → migrate → validate → migrate lại`, Hibernate schema validation và negative test constraint/idempotency/append-only đạt **5/5 test 1B** trên PostgreSQL local 18.4. Bộ xác nhận gồm 1A, 1B và financial policy đạt **13/13 test**; backend compile và TypeScript typecheck của admin/storefront đều đạt.
 - Kiểm thử integration: `OrderIntegrationTest` 26/26, `PaymentIntegrationTest` 23/23, `InventoryIntegrationTest` 16/16 và `ReturnRefundIntegrationTest` 15/15; tổng **80/80** trên PostgreSQL Testcontainers. Các ca bao phủ checkout cạnh tranh, callback lặp/muộn, hủy đồng thời, giữ/trừ/nhả/hoàn tồn, trả hàng và hoàn tiền.
-- Kết luận: **migration, entity/service và integration/concurrency Commerce 1B đã hoàn thành local và baseline 1A–1B đã triển khai lên Supabase**. Ba migration V2 `V1 → V3` được áp dụng thành công trên PostgreSQL 17.11 và `flyway validate` đạt ngày 10/10/2026. Runtime mặc định đã chuyển sang location V2; các module ngoài baseline phải được migrate hoặc loại khỏi runtime trước khi nghiệm thu toàn bộ ứng dụng.
+- Kết luận: **migration, entity/service và integration/concurrency Commerce 1B đã hoàn thành local và baseline 1A–1B đã triển khai lên Supabase**. Bốn migration V2 `V1 → V4` được áp dụng thành công trên PostgreSQL 17.11 và `flyway validate` đạt ngày 11/10/2026; V4 seed Nike/Adidas. Runtime mặc định đã chuyển sang location V2; các module ngoài baseline phải được migrate hoặc loại khỏi runtime trước khi nghiệm thu toàn bộ ứng dụng.
 - Kiểm tra sau khi bỏ migration legacy: Flyway tạo thành công schema V2 đến `v3` trên PostgreSQL Testcontainers, sau đó Hibernate chủ động dừng ở entity ngoài baseline `association_rule_rebuild_logs`. Đây là chốt an toàn đúng thiết kế: không tự tái tạo bảng legacy; cần quyết định loại module recommendation cũ khỏi runtime hoặc ánh xạ nó vào 1C trước khi chạy toàn bộ Spring context.
 
 ## 5. Review 1C — AI Retrieval (`ai_retrieval`, owner `ai_retrieval_app`)
@@ -173,16 +173,16 @@ Review thiết kế từng bảng đã hoàn thành và được Chủ dự án 
 
 ### 9.1. Rà soát runtime sau khi bỏ migration legacy (10/10/2026)
 
-- Đã giới hạn JPA vào đúng entity/repository thuộc baseline 1A–1B; Spring context không còn yêu cầu các bảng legacy ngoài V1–V3.
+- Đã giới hạn JPA vào đúng entity/repository thuộc baseline 1A–1B; Spring context không còn yêu cầu các bảng legacy ngoài V1–V4.
 - Các module `banner`, `collection`, `combo`, `notification`, `page`, `promotion`, `recommendation`, `review`, `shipping`, `wishlist` và seed cũ được giữ trong mã nguồn nhưng loại khỏi runtime. Chỉ bật lại sau khi có migration, owner và test riêng.
 - Luồng lõi đã bỏ phụ thuộc vào combo/promotion/collection/review/notification: checkout dùng giá SKU hiện tại và discount bằng 0; password reset gửi qua `MailService`; sản phẩm chưa trả review/collection/promotion legacy.
 - Đã xóa repository aggregate review đặt nhầm trong module product và các endpoint gắn collection khỏi controller baseline.
-- Bằng chứng: backend compile và `OrderFinancialPolicyTest` thành công; PostgreSQL Testcontainers sạch chạy Flyway `V1 → V3`, validate 3 migration, Hibernate validate, `EcommerceBackendApplicationTests.contextLoads` và 8/8 ca `ForgotPasswordIntegrationTest` thành công.
+- Bằng chứng: backend compile và `OrderFinancialPolicyTest` thành công; PostgreSQL Testcontainers sạch chạy Flyway `V1 → V4`, validate 4 migration, Hibernate validate và `EcommerceBackendApplicationTests.contextLoads` thành công; 8/8 ca `ForgotPasswordIntegrationTest` đã đạt trên baseline trước đó.
 - Bộ integration test nghiệp vụ cũ cần chuyển fixture sang quy tắc 1A: sản phẩm chỉ được `ACTIVE` sau khi có variant bán được và ảnh chính upload đủ checksum/kích thước/định dạng/provenance. Các ca combo/promotion/notification và module đợt 2 không còn thuộc baseline test.
 
 ### 9.2. Catalog pilot và baseline ảnh (11/10/2026)
 
-- Đã nhập dataset `smart-sportswear-pilot:1.0.0` (`bfb1508a-804a-473a-b331-5b1e71a3a109`) lên Supabase/Cloudinary: 30 sản phẩm `ACTIVE`, 148 variant và 60 ảnh; đủ 8 áo, 6 quần, 6 giày, 6 bộ đồng phục và 4 phụ kiện; bao phủ nam, nữ, unisex, football và running.
+- Dataset gốc `smart-sportswear-pilot:1.0.0` (`bfb1508a-804a-473a-b331-5b1e71a3a109`) đã đóng băng. Bản hiện hành `1.1.0` (`a0f7dc7f-6a87-4800-98b9-c2111d15365a`) cũng đã đóng băng, phân bổ cùng 30 sản phẩm thành 15 Nike/15 Adidas, cân bằng trong từng loại; 148 variant và 60 ảnh không đổi pixel. Đây là metadata thương hiệu mô phỏng trên dữ liệu `DEMO`, không phải tuyên bố hàng chính hãng; ảnh không logo không dùng để đánh giá nhận diện brand bằng hình ảnh.
 - Toàn bộ sản phẩm pilot là `DEMO`; ảnh là `SYNTHETIC`, giấy phép `AI_GENERATED_PROJECT_USE`. Dataset đã `VALIDATED → FROZEN`; chạy importer lần hai trả kết quả hiện có và không tạo bản ghi/asset trùng.
 - Ảnh gốc PNG sRGB `1254×1254`, 2 ảnh/sản phẩm, có SHA-256, versioned Cloudinary URL, kích thước, định dạng, dung lượng và provenance. SigLIP2 phải dùng versioned original đã xác minh checksum; ảnh giao diện dùng khung vuông, `object-contain`, responsive và không upscale quá kích thước gốc.
 - Luồng publish đã được áp dụng đúng: `DRAFT → variant bán được → ảnh chính hợp lệ → ACTIVE`. Đồng phục được chụp đủ áo và quần trong cùng ảnh vì được bán dưới một SKU nguyên bộ.

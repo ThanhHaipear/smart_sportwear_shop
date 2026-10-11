@@ -1,15 +1,19 @@
 # Catalog pilot v1
 
-Catalog này là dữ liệu demo có phiên bản để kiểm thử giao diện, tìm kiếm văn bản và tìm kiếm hình ảnh. Bản `smart-sportswear-pilot:1.0.0` đã được nhập lên Supabase/Cloudinary ngày 11/10/2026 và đã đóng băng.
+Catalog này là dữ liệu demo có phiên bản để kiểm thử giao diện, tìm kiếm văn bản và tìm kiếm hình ảnh. Bản không thương hiệu `1.0.0` đã được đóng băng; bản hiện hành `smart-sportswear-pilot:1.1.0` phân bổ lại thương hiệu Nike/Adidas mà không thay đổi pixel ảnh gốc.
 
 ## Kết quả
 
-- Dataset ID: `bfb1508a-804a-473a-b331-5b1e71a3a109`.
+- Dataset hiện hành `1.1.0`: `a0f7dc7f-6a87-4800-98b9-c2111d15365a` (`FROZEN`).
+- Dataset lịch sử `1.0.0`: `bfb1508a-804a-473a-b331-5b1e71a3a109` (`FROZEN`).
 - 30 sản phẩm `ACTIVE`: 8 áo, 6 quần, 6 đôi giày, 6 bộ đồng phục bóng đá và 4 phụ kiện.
 - 148 variant có size, màu, giá và tồn kho.
 - 60 ảnh, đúng 2 ảnh mỗi sản phẩm; ảnh chính là góc ba phần tư, ảnh phụ là góc sau/đối diện.
 - Phân bổ giới tính: 9 nam, 9 nữ, 12 unisex. Phân bổ môn thể thao: 14 running, 16 football.
+- Phân bổ thương hiệu cân bằng: 15 Nike, 15 Adidas; trong từng nhóm sản phẩm lần lượt là áo 4/4, quần 3/3, giày 3/3, đồng phục 3/3 và phụ kiện 2/2.
 - Tất cả sản phẩm mang `data_source=DEMO`; ảnh mang `source_kind=SYNTHETIC` và `license_code=AI_GENERATED_PROJECT_USE`.
+
+Nike/Adidas trong pilot là **metadata mô phỏng phục vụ demo tìm kiếm**, không phải tuyên bố hàng chính hãng. Ảnh synthetic không có logo và không do hai thương hiệu cung cấp. Vì vậy, bản này có thể kiểm thử bộ lọc/tìm kiếm văn bản theo brand nhưng không được dùng để kết luận mô hình ảnh nhận diện được Nike hoặc Adidas. Khi nhập hàng thật phải dùng `data_source=REAL`, thông tin model/SKU thật và ảnh có quyền sử dụng.
 
 ## Rule dữ liệu và ảnh đã chốt
 
@@ -19,7 +23,7 @@ Catalog này là dữ liệu demo có phiên bản để kiểm thử giao diệ
 4. SigLIP2 chỉ tải **versioned original** từ Cloudinary và xác minh checksum trước khi tạo embedding. Không dùng URL thumbnail, ảnh nén hoặc transformation của giao diện làm nguồn embedding.
 5. Giao diện hiển thị ảnh trong khung vuông, `object-contain`, responsive và không phóng lớn quá `1254 x 1254`. Cloudinary/Next Image có thể sinh bản giao diện nhỏ hơn nhưng không thay đổi asset gốc.
 6. Sản phẩm được tạo ở `DRAFT`; chỉ chuyển `ACTIVE` sau khi có ít nhất một variant `ACTIVE`, tồn kho dương và một ảnh chính đủ checksum/kích thước/định dạng/provenance. Importer hiện yêu cầu 2–4 ảnh và đúng một ảnh chính cho mỗi sản phẩm.
-7. Dataset đi theo vòng đời `DRAFT → VALIDATED → FROZEN`. Không sửa bản `1.0.0` đã đóng băng; thay đổi nội dung hoặc asset phải tạo phiên bản dataset mới.
+7. Dataset đi theo vòng đời `DRAFT → VALIDATED → FROZEN`. Không sửa bản đã đóng băng; thay đổi phân bổ thương hiệu tạo bản `1.1.0`, còn thay đổi nội dung hoặc pixel ảnh tiếp tục phải tạo phiên bản mới.
 8. Đây là ảnh synthetic cho demo/nghiên cứu, không được mô tả là ảnh hàng thật. Catalog thực tế sau này phải dùng ảnh `OWNED` hoặc `LICENSED` với bằng chứng quyền sử dụng tương ứng.
 
 Các rule trên vừa bảo vệ chất lượng hiển thị, vừa giữ ảnh đủ ổn định và tái lập cho image embedding/evaluation.

@@ -1,12 +1,18 @@
 {
   "schemaVersion" : 1,
-  "datasetId" : "bfb1508a-804a-473a-b331-5b1e71a3a109",
-  "importedAt" : "2026-10-11T08:42:03.058978800Z",
+  "datasetId" : "a0f7dc7f-6a87-4800-98b9-c2111d15365a",
+  "importedAt" : "2026-10-11T09:05:29.895262400Z",
   "products" : [ {
     "id" : "57d9cced-fa73-46d7-b3f8-771b4818f78d",
     "slug" : "ao-chay-bo-nam-aero-navy",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "17aa8023-05af-4bf5-8822-fb2dbad256e8",
       "publicId" : "smart-sportswear/products/ua1yesn5exy8sqda5ybk",
@@ -43,6 +49,12 @@
     "slug" : "ao-tank-chay-bo-nu-coral-flow",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "bf58597c-294f-4542-87fd-6fdd13f43557",
       "publicId" : "smart-sportswear/products/agzv5clibsoaoocczypk",
@@ -79,6 +91,12 @@
     "slug" : "ao-chay-bo-dai-tay-uni-cloud",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "a504cc85-da27-47ad-8ccf-e8f14a218cdf",
       "publicId" : "smart-sportswear/products/v3qyywnct8id2akuikjm",
@@ -115,6 +133,12 @@
     "slug" : "ao-tap-bong-da-nam-blaze-red",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
       "publicId" : "smart-sportswear/products/hd4lzf06ikipmkzbgb2o",
@@ -151,6 +175,12 @@
     "slug" : "ao-tap-bong-da-nu-royal-motion",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
       "publicId" : "smart-sportswear/products/x1ucb4r7nrskgya2spij",
@@ -187,6 +217,12 @@
     "slug" : "ao-giu-nhiet-bong-da-uni-core",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "7a749aad-3d5b-4c49-8e06-3930370f1dd9",
       "publicId" : "smart-sportswear/products/k5kn1r9vjjen3fe6xt34",
@@ -223,6 +259,12 @@
     "slug" : "ao-khoac-chay-bo-nu-violet-air",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "bfdbd140-2bcd-47ad-addc-8efdb71a5b9d",
       "publicId" : "smart-sportswear/products/sutvezl5scukcordkw8c",
@@ -259,6 +301,12 @@
     "slug" : "ao-gio-chay-bo-nam-orange-pace",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "207cf7db-9c88-48eb-a763-089530c717b6",
       "publicId" : "smart-sportswear/products/rwyajzpiprdnyyqr2wia",
@@ -295,6 +343,12 @@
     "slug" : "quan-short-chay-bo-nam-swift-black",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "33480ceb-c507-4e76-8e73-77788e65eaa6",
       "publicId" : "smart-sportswear/products/ps8hjrtseiwun7a3w2sa",
@@ -331,6 +385,12 @@
     "slug" : "quan-legging-chay-bo-nu-navy-flex",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
       "publicId" : "smart-sportswear/products/ue9mug9cu2xhpofawo10",
@@ -367,6 +427,12 @@
     "slug" : "quan-jogger-the-thao-uni-motion",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "57bd0c25-8304-4690-9423-b426f3305799",
       "publicId" : "smart-sportswear/products/o2ahdxflf0ocejiipt87",
@@ -403,6 +469,12 @@
     "slug" : "quan-bong-da-nam-royal-kick",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
       "publicId" : "smart-sportswear/products/n70qbxes2aehjxxzdp2y",
@@ -439,6 +511,12 @@
     "slug" : "quan-tap-bong-da-nu-black-drive",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "f3d46837-6d57-4509-bff3-887d0abad933",
       "publicId" : "smart-sportswear/products/x7wybocccqjwr1smo3x0",
@@ -475,6 +553,12 @@
     "slug" : "quan-track-chay-bo-uni-forest",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "0c4a98ad-f765-447b-8eeb-7ad4183014cc",
       "publicId" : "smart-sportswear/products/r5rhw0sppyg1jsqi10cy",
@@ -511,6 +595,12 @@
     "slug" : "giay-chay-bo-nam-cobalt-ride",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "a2d2caef-1f88-4c4f-acb3-26459b123ccd",
       "publicId" : "smart-sportswear/products/gaevpecm6tox75lnx9lv",
@@ -547,6 +637,12 @@
     "slug" : "giay-chay-bo-nu-coral-cloud",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "c3521f7f-0322-4193-bc32-bcfa0ff39bc1",
       "publicId" : "smart-sportswear/products/gtl3oe5dshyqe5j2suak",
@@ -583,6 +679,12 @@
     "slug" : "giay-chay-bo-uni-pure-step",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "7a3ed951-1bfc-43b8-86a4-21139cb91869",
       "publicId" : "smart-sportswear/products/evddxnhjrvrarxglepwj",
@@ -619,6 +721,12 @@
     "slug" : "giay-da-bong-nam-turf-shadow",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "81c2749c-b9fc-428b-a581-9abdeb18c8a0",
       "publicId" : "smart-sportswear/products/ojr84oazad8o8s2ajhkj",
@@ -655,6 +763,12 @@
     "slug" : "giay-da-bong-nu-turf-spark",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "1050f8f2-2c5a-4285-a6eb-595c3777a369",
       "publicId" : "smart-sportswear/products/mvvazbpmdryngzamnzng",
@@ -691,6 +805,12 @@
     "slug" : "giay-futsal-uni-red-court",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "ef1deb5d-d57c-4f5c-a7fa-4729d3cad0a4",
       "publicId" : "smart-sportswear/products/vplyvioo1hct60oc1djm",
@@ -727,6 +847,12 @@
     "slug" : "bo-bong-da-nam-crimson-unity",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "b0435cbb-8f40-445e-9e42-c25fe1dd157e",
       "publicId" : "smart-sportswear/products/zeigb2351b8barub7tdk",
@@ -763,6 +889,12 @@
     "slug" : "bo-bong-da-nu-royal-wave",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
       "publicId" : "smart-sportswear/products/gh7gdixd4v2stckiid6k",
@@ -799,6 +931,12 @@
     "slug" : "bo-bong-da-uni-forest-line",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "6102b96a-0e2d-47d7-b087-be0cc7c27679",
       "publicId" : "smart-sportswear/products/nzzledybzvgabxy3ocxv",
@@ -835,6 +973,12 @@
     "slug" : "bo-bong-da-nam-black-gold",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
       "publicId" : "smart-sportswear/products/zgrvapskmoym3nvsfy27",
@@ -871,6 +1015,12 @@
     "slug" : "bo-bong-da-nu-violet-star",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "78cfe835-9516-4fef-aa55-b8a2386042d2",
       "publicId" : "smart-sportswear/products/bjmijgfqhv8rxbx63irj",
@@ -907,6 +1057,12 @@
     "slug" : "bo-bong-da-uni-orange-pulse",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "f331aefd-e6e2-467b-a42f-6f52b0c1e992",
       "publicId" : "smart-sportswear/products/nt914byg0jzqw0ts8dsd",
@@ -943,6 +1099,12 @@
     "slug" : "binh-nuoc-the-thao-black-flow-750ml",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "5ef669c5-26cd-4218-9d3b-4e983e9459a7",
       "publicId" : "smart-sportswear/products/i9l8ucu2g6fxftnfevr7",
@@ -979,6 +1141,12 @@
     "slug" : "bang-tay-the-thao-royal-pair",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "094139d3-877f-48a6-84e1-bdb96380c8ce",
       "publicId" : "smart-sportswear/products/vibhrhfxsxpgkxs5nnpw",
@@ -1015,6 +1183,12 @@
     "slug" : "tat-bong-da-white-match",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "nike",
+      "code" : "NIKE",
+      "name" : "Nike",
+      "id" : "45c2bdcd-d359-410c-8d4b-fdd3fe8f2efc"
+    },
     "images" : [ {
       "id" : "d42f6160-23f1-48ac-8cc6-bff11b5960eb",
       "publicId" : "smart-sportswear/products/d2r48apbypoin3v1untq",
@@ -1051,6 +1225,12 @@
     "slug" : "op-bao-ve-ong-dong-red-guard",
     "status" : "ACTIVE",
     "dataSource" : "DEMO",
+    "brand" : {
+      "slug" : "adidas",
+      "code" : "ADIDAS",
+      "name" : "Adidas",
+      "id" : "28142d0b-0373-4855-a036-4889292fda71"
+    },
     "images" : [ {
       "id" : "01bed2d1-0819-49ab-a605-8730d8a1cbae",
       "publicId" : "smart-sportswear/products/p5j9fehpulooch2yib61",

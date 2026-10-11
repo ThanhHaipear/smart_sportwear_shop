@@ -68,6 +68,9 @@ public class CatalogPilotImportService {
             "SPORTS_SHOES", 6,
             "SPORTS_UNIFORM", 6,
             "SPORTS_ACCESSORY", 4);
+    private static final Map<String, Integer> EXPECTED_BRANDS = Map.of(
+            "nike", 15,
+            "adidas", 15);
 
     private final ObjectMapper objectMapper;
     private final ProductService productService;
@@ -126,10 +129,11 @@ public class CatalogPilotImportService {
                 throw new BusinessRuleException("Frozen pilot dataset does not match the local manifest");
             }
             List<Map<String, Object>> reportProducts = manifest.products().stream()
-                    .map(spec -> products.findBySlug(spec.slug())
-                            .orElseThrow(() -> new BusinessRuleException(
-                                    "Frozen pilot product is missing: " + spec.slug())))
-                    .map(this::reportProduct)
+                    .map(spec -> reportProduct(
+                            products.findBySlug(spec.slug())
+                                    .orElseThrow(() -> new BusinessRuleException(
+                                            "Frozen pilot product is missing: " + spec.slug())),
+                            spec))
                     .toList();
             writeReport(manifestPath.getParent().resolve("import-result.json"), dataset.getId(), reportProducts);
             return new ImportSummary(dataset.getId(), EXPECTED_PRODUCTS, variantCount, EXPECTED_IMAGES, true);
@@ -148,7 +152,7 @@ public class CatalogPilotImportService {
                         "catalog://" + manifest.dataset().name() + "/" + manifest.dataset().version() + "/" + spec.code(),
                         sha256(writeBytes(spec)));
             }
-            reportProducts.add(reportProduct(product));
+            reportProducts.add(reportProduct(product, spec));
             completed++;
             log.info("Pilot catalog progress: {}/{} ({})", completed, EXPECTED_PRODUCTS, spec.code());
         }
@@ -163,15 +167,17 @@ public class CatalogPilotImportService {
     }
 
     private Product importProduct(PilotManifest manifest, PilotProduct spec, Path catalogRoot) {
+        Category category = categories.findBySlug(spec.categorySlug())
+                .orElseThrow(() -> new BusinessRuleException("Unknown category: " + spec.categorySlug()));
+        Brand brand = brands.findBySlug(spec.brandSlug())
+                .orElseThrow(() -> new BusinessRuleException("Unknown brand: " + spec.brandSlug()));
+        Map<String, String> attributes = new LinkedHashMap<>(spec.attributes());
+        attributes.put("pilot_code", spec.code());
+        attributes.put("catalog_dataset", manifest.dataset().name());
+        attributes.put("catalog_dataset_version", manifest.dataset().version());
+
         Product product = products.findBySlug(spec.slug()).orElse(null);
         if (product == null) {
-            Category category = categories.findBySlug(spec.categorySlug())
-                    .orElseThrow(() -> new BusinessRuleException("Unknown category: " + spec.categorySlug()));
-            Brand brand = brands.findBySlug(spec.brandSlug())
-                    .orElseThrow(() -> new BusinessRuleException("Unknown brand: " + spec.brandSlug()));
-            Map<String, String> attributes = new LinkedHashMap<>(spec.attributes());
-            attributes.put("pilot_code", spec.code());
-            attributes.put("catalog_dataset", manifest.dataset().name());
             ProductDetailResponse created = productService.create(new ProductCreateRequest(
                     spec.name(), spec.slug(), spec.shortDescription(), spec.description(),
                     category.getId(), brand.getId(), Gender.valueOf(spec.gender()), spec.sportCode(),
@@ -182,6 +188,14 @@ public class CatalogPilotImportService {
             if (product.getDataSource() != ProductDataSource.DEMO
                     || !spec.code().equals(product.getAttributes().get("pilot_code"))) {
                 throw new BusinessRuleException("Slug already belongs to non-pilot product: " + spec.slug());
+            }
+            boolean brandChanged = !brand.getId().equals(product.getBrand().getId());
+            boolean attributesChanged = !attributes.equals(product.getAttributes());
+            if (brandChanged || attributesChanged) {
+                productService.update(product.getId(), new ProductUpdateRequest(
+                        null, null, null, null, null, brandChanged ? brand.getId() : null,
+                        null, null, null, null, null, attributesChanged ? attributes : null));
+                product = products.findById(product.getId()).orElseThrow();
             }
         }
 
@@ -264,11 +278,13 @@ public class CatalogPilotImportService {
             throw new BusinessRuleException("Pilot products must use dataSource=DEMO");
         }
         Map<String, Integer> actualTypes = new HashMap<>();
+        Map<String, Integer> actualBrands = new HashMap<>();
         Set<String> codes = new HashSet<>();
         Set<String> slugs = new HashSet<>();
         int imageCount = 0;
         for (PilotProduct product : manifest.products()) {
             actualTypes.merge(product.productType(), 1, Integer::sum);
+            actualBrands.merge(product.brandSlug(), 1, Integer::sum);
             if (!codes.add(product.code()) || !slugs.add(product.slug())) {
                 throw new BusinessRuleException("Duplicate pilot product code or slug");
             }
@@ -285,8 +301,10 @@ public class CatalogPilotImportService {
                 validateImage(manifest.imagePolicy(), manifestPath.getParent().resolve(image.path()), image.sha256());
             }
         }
-        if (!EXPECTED_TYPES.equals(actualTypes) || imageCount != EXPECTED_IMAGES) {
-            throw new BusinessRuleException("Pilot category allocation or image count does not match the approved rule");
+        if (!EXPECTED_TYPES.equals(actualTypes) || !EXPECTED_BRANDS.equals(actualBrands)
+                || imageCount != EXPECTED_IMAGES) {
+            throw new BusinessRuleException(
+                    "Pilot category, brand allocation or image count does not match the approved rule");
         }
         Set<String> genders = manifest.products().stream().map(PilotProduct::gender).collect(java.util.stream.Collectors.toSet());
         Set<String> sports = manifest.products().stream().map(PilotProduct::sportCode).collect(java.util.stream.Collectors.toSet());
@@ -311,12 +329,22 @@ public class CatalogPilotImportService {
         }
     }
 
-    private Map<String, Object> reportProduct(Product product) {
+    private Map<String, Object> reportProduct(Product product, PilotProduct spec) {
         Map<String, Object> row = new LinkedHashMap<>();
         row.put("id", product.getId());
         row.put("slug", product.getSlug());
         row.put("status", product.getStatus());
         row.put("dataSource", product.getDataSource());
+        Brand brand = brands.findBySlug(spec.brandSlug())
+                .orElseThrow(() -> new BusinessRuleException("Unknown brand: " + spec.brandSlug()));
+        if (!brand.getId().equals(product.getBrand().getId())) {
+            throw new BusinessRuleException("Pilot product brand no longer matches manifest: " + product.getSlug());
+        }
+        row.put("brand", Map.of(
+                "id", brand.getId(),
+                "code", brand.getCode(),
+                "name", brand.getName(),
+                "slug", brand.getSlug()));
         row.put("images", images.findAllByProductIdOrderBySortOrderAsc(product.getId()).stream()
                 .map(this::reportImage)
                 .toList());

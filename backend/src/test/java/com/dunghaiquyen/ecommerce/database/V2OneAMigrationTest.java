@@ -47,7 +47,7 @@ class V2OneAMigrationTest {
                 .load();
 
         flyway.clean();
-        assertEquals(3, flyway.migrate().migrationsExecuted);
+        assertEquals(4, flyway.migrate().migrationsExecuted);
         flyway.validate();
         assertEquals(0, flyway.migrate().migrationsExecuted, "Migration phải idempotent qua Flyway");
     }
@@ -70,6 +70,9 @@ class V2OneAMigrationTest {
             assertEquals(5, scalarInt(connection, "select count(*) from product_types"));
             assertEquals(3, scalarInt(connection, "select count(*) from size_systems"));
             assertEquals(17, scalarInt(connection, "select count(*) from sizes"));
+            assertEquals(3, scalarInt(connection, "select count(*) from brands"));
+            assertEquals(2, scalarInt(connection,
+                    "select count(*) from brands where code in ('NIKE', 'ADIDAS') and status = 'ACTIVE'"));
             assertEquals(0, scalarInt(connection,
                     "select count(*) from products where gender_code = 'KIDS'"));
             assertEquals(0, scalarInt(connection,

@@ -42,7 +42,8 @@ function New-PilotProduct {
         name = $Name
         slug = $Slug
         categorySlug = $CategorySlug
-        brandSlug = 'khong-thuong-hieu'
+        # Được gán theo rule cân bằng sau khi tạo đủ danh sách sản phẩm.
+        brandSlug = $null
         productType = $ProductType
         gender = $Gender
         sportCode = $SportCode
@@ -57,7 +58,7 @@ function New-PilotProduct {
             material = $Material
             fit = $Fit
             image_source = 'OPENAI_IMAGEGEN_SYNTHETIC'
-            dataset_version = '1.0.0'
+            dataset_version = '1.1.0'
         }
         images = $images
     }
@@ -100,14 +101,22 @@ $products = @(
     New-PilotProduct 'PILOT-ACCESSORY-004' 'Ốp bảo vệ ống đồng Red Guard' 'op-bao-ve-ong-dong-red-guard' 'phu-kien-the-thao' 'SPORTS_ACCESSORY' 'UNISEX' 'FOOTBALL' 'RED' @('ONE_SIZE') 249000 319000 28 'POLYPROPYLENE_EVA' 'ONE_SIZE' 'Cặp bảo vệ ống đồng bóng đá màu đỏ với lớp đệm đen.'
 )
 
+# Xen kẽ theo từng nhóm có số lượng chẵn để toàn catalog và từng loại sản phẩm
+# đều cân bằng: 15 Nike / 15 Adidas; áo 4/4, các nhóm 6 món 3/3, phụ kiện 2/2.
+for ($index = 0; $index -lt $products.Count; $index++) {
+    $brandSlug = if ($index % 2 -eq 0) { 'nike' } else { 'adidas' }
+    $products[$index].brandSlug = $brandSlug
+    $products[$index].attributes.brand_assignment = 'SIMULATED_DEMO_METADATA'
+}
+
 $manifest = [ordered]@{
     schemaVersion = 1
     dataset = [ordered]@{
         name = 'smart-sportswear-pilot'
-        version = '1.0.0'
+        version = '1.1.0'
         dataSource = 'DEMO'
         licenseCode = 'AI_GENERATED_PROJECT_USE'
-        sourceDescription = '30 fictional sportswear products and 60 synthetic product images generated for project demo, image retrieval and evaluation.'
+        sourceDescription = '30 fictional sportswear products split evenly between Nike and Adidas as simulated DEMO metadata, with 60 unbranded synthetic images for project demo, retrieval and evaluation; not official merchandise imagery.'
     }
     imagePolicy = [ordered]@{
         sourceKind = 'SYNTHETIC'
