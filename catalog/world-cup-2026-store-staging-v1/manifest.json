@@ -1,0 +1,417 @@
+﻿{
+    "schemaVersion":  1,
+    "dataset":  {
+                    "name":  "world-cup-2026-official-store-reference",
+                    "version":  "1.0.0",
+                    "dataSource":  "REAL",
+                    "licenseCode":  "NONCOMMERCIAL_EDUCATIONAL_REFERENCE",
+                    "sourceDescription":  "Official Nike/Adidas store product references normalized for a private, non-commercial student project; source URLs retained and no commercial licence is asserted."
+                },
+    "imagePolicy":  {
+                        "sourceKind":  "REFERENCE",
+                        "generator":  "SOURCE_IMAGE_NORMALIZED_HIGH_QUALITY",
+                        "originalFormat":  "jpg",
+                        "requiredWidth":  1200,
+                        "requiredHeight":  1200,
+                        "minBytes":  30000,
+                        "maxBytes":  5242880,
+                        "colorSpace":  "sRGB",
+                        "embeddingSource":  "VERSIONED_CATALOG_ORIGINAL_ONLY",
+                        "uiDelivery":  "Cloudinary responsive delivery; square container; object-contain; never upscale above 1200px"
+                    },
+    "products":  [
+                     {
+                         "code":  "WC26-ADIDAS-ARG-JM8396",
+                         "name":  "Argentina 2026 Home Jersey",
+                         "slug":  "ao-dau-argentina-2026-home-jm8396",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "adidas",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "WHITE",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  2490000,
+                         "compareAtPrice":  2490000,
+                         "stockPerVariant":  8,
+                         "shortDescription":  "Argentina 2026 Home Jersey, 2026 national-team football shirt.",
+                         "description":  "Argentina 2026 Home Jersey, brand product code JM8396. Official-store reference data for a private non-commercial student project; this does not represent an authorized retailer relationship.",
+                         "attributes":  {
+                                            "team":  "ARGENTINA",
+                                            "kit_type":  "HOME",
+                                            "brand_product_code":  "JM8396",
+                                            "official_source_page":  "https://www.adidas.com/us/argentina-26-home-jersey/JM8396.html",
+                                            "image_usage":  "PERSONAL_EDUCATIONAL_REFERENCE",
+                                            "price_basis":  "PROJECT_DEMO_VND",
+                                            "inventory_basis":  "PROJECT_DEMO_STOCK"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "import-assets/argentina-jm8396-01.jpg",
+                                            "sha256":  "4d50cb8ab41ae938e44bfe002dbe882901ac31138edb613dedc2e7587bc167e9",
+                                            "altText":  "Argentina 2026 Home Jersey - product view 1",
+                                            "view":  "PRIMARY",
+                                            "sortOrder":  0,
+                                            "primary":  true,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/841749a208934f2ab4a0cfa1a8ae237d_9366/Argentina_26_Home_Jersey_White_JM8396_21_model.jpg"
+                                        },
+                                        {
+                                            "path":  "import-assets/argentina-jm8396-02.jpg",
+                                            "sha256":  "3113d2c673fecb65ce5e64837581c892dec229a019950f3ec40e17f93656459c",
+                                            "altText":  "Argentina 2026 Home Jersey - product view 2",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  1,
+                                            "primary":  false,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/3c16ce3f59834e0cbe052a59f63e27c5_9366/Argentina_26_Home_Jersey_White_JM8396_23_hover_model.jpg"
+                                        },
+                                        {
+                                            "path":  "import-assets/argentina-jm8396-03.jpg",
+                                            "sha256":  "e7e1de47c7999f74e592c97838885926d3a06b6ed1fc3da15fe1b7d026bfc00a",
+                                            "altText":  "Argentina 2026 Home Jersey - product view 3",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  2,
+                                            "primary":  false,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/6e10e88e911b47a6ad914e3626ea6b67_9366/Argentina_26_Home_Jersey_White_JM8396_25_model.jpg"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-ADIDAS-BEL-JM8381",
+                         "name":  "Belgium 2026 Home Jersey",
+                         "slug":  "ao-dau-bi-2026-home-jm8381",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "adidas",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "RED",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  2290000,
+                         "compareAtPrice":  2290000,
+                         "stockPerVariant":  8,
+                         "shortDescription":  "Belgium 2026 Home Jersey, 2026 national-team football shirt.",
+                         "description":  "Belgium 2026 Home Jersey, brand product code JM8381. Official-store reference data for a private non-commercial student project; this does not represent an authorized retailer relationship.",
+                         "attributes":  {
+                                            "team":  "BELGIUM",
+                                            "kit_type":  "HOME",
+                                            "brand_product_code":  "JM8381",
+                                            "official_source_page":  "https://www.adidas.com/us/belgium-26-home-jersey/JM8381.html",
+                                            "image_usage":  "PERSONAL_EDUCATIONAL_REFERENCE",
+                                            "price_basis":  "PROJECT_DEMO_VND",
+                                            "inventory_basis":  "PROJECT_DEMO_STOCK"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "import-assets/belgium-jm8381-01.jpg",
+                                            "sha256":  "92b925486644fd10885c29d8a419beb1bf695f2aad31905f0feeb5540433e9e9",
+                                            "altText":  "Belgium 2026 Home Jersey - product view 1",
+                                            "view":  "PRIMARY",
+                                            "sortOrder":  0,
+                                            "primary":  true,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/90d4b6018cb344808b4d17b65bc7e9f2_9366/Belgium_26_Home_Jersey_Red_JM8381_21_model.jpg"
+                                        },
+                                        {
+                                            "path":  "import-assets/belgium-jm8381-02.jpg",
+                                            "sha256":  "1507c7bb640ae27dfcff3e7b7dea73a72c9691c0aca71ba97affdd8d0ffb8480",
+                                            "altText":  "Belgium 2026 Home Jersey - product view 2",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  1,
+                                            "primary":  false,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/82025124160a458f8500bea6f2ad314f_9366/Belgium_26_Home_Jersey_Red_JM8381_23_hover_model.jpg"
+                                        },
+                                        {
+                                            "path":  "import-assets/belgium-jm8381-03.jpg",
+                                            "sha256":  "75a45fb9b859162087855c43013492e5acf9c0ad9f376d1e929f2622189442dd",
+                                            "altText":  "Belgium 2026 Home Jersey - product view 3",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  2,
+                                            "primary":  false,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/b9464bf0c0984b8f8103f5f078a61e80_9366/Belgium_26_Home_Jersey_Red_JM8381_25_model.jpg"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-ADIDAS-GER-JZ4559",
+                         "name":  "Germany Women 2026 Home Jersey",
+                         "slug":  "ao-dau-duc-nu-2026-home-jz4559",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "adidas",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "WOMEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "WHITE",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  2290000,
+                         "compareAtPrice":  2290000,
+                         "stockPerVariant":  8,
+                         "shortDescription":  "Germany Women 2026 Home Jersey, 2026 national-team football shirt.",
+                         "description":  "Germany Women 2026 Home Jersey, brand product code JZ4559. Official-store reference data for a private non-commercial student project; this does not represent an authorized retailer relationship.",
+                         "attributes":  {
+                                            "team":  "GERMANY",
+                                            "kit_type":  "HOME",
+                                            "brand_product_code":  "JZ4559",
+                                            "official_source_page":  "https://www.adidas.com/us/germany-26-home-jersey/JZ4559.html",
+                                            "image_usage":  "PERSONAL_EDUCATIONAL_REFERENCE",
+                                            "price_basis":  "PROJECT_DEMO_VND",
+                                            "inventory_basis":  "PROJECT_DEMO_STOCK"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "import-assets/germany-jz4559-01.jpg",
+                                            "sha256":  "6c5437e0fc627566b9709f6a363fa60f91faa7116c34e7846453e16469ac3cbc",
+                                            "altText":  "Germany Women 2026 Home Jersey - product view 1",
+                                            "view":  "PRIMARY",
+                                            "sortOrder":  0,
+                                            "primary":  true,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/55d6d19cfd744793a99f054c23c39de4_9366/Germany_26_Home_Jersey_White_JZ4559_21_model.jpg"
+                                        },
+                                        {
+                                            "path":  "import-assets/germany-jz4559-02.jpg",
+                                            "sha256":  "62ef8b731f89ed91e1b3bcf8e1289bfd7d4ea1c29089077ca0d4f2d9682866d9",
+                                            "altText":  "Germany Women 2026 Home Jersey - product view 2",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  1,
+                                            "primary":  false,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/842fb9a646c14237bee40840203ae307_9366/Germany_26_Home_Jersey_White_JZ4559_23_hover_model.jpg"
+                                        },
+                                        {
+                                            "path":  "import-assets/germany-jz4559-03.jpg",
+                                            "sha256":  "3a7d8a94ec3e5ee6495d2ef912c545d3af893b9eeb56fd33000d322e5d4a6780",
+                                            "altText":  "Germany Women 2026 Home Jersey - product view 3",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  2,
+                                            "primary":  false,
+                                            "sourceUri":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/bc75f31aa04b47ea9d1225e83aded391_9366/Germany_26_Home_Jersey_White_JZ4559_25_model.jpg"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-NIKE-BRA-IF7054-724",
+                         "name":  "Brazil 2026 Stadium Home Jersey",
+                         "slug":  "ao-dau-brazil-2026-home-if7054-724",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "nike",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "YELLOW",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  2490000,
+                         "compareAtPrice":  2490000,
+                         "stockPerVariant":  8,
+                         "shortDescription":  "Brazil 2026 Stadium Home Jersey, 2026 national-team football shirt.",
+                         "description":  "Brazil 2026 Stadium Home Jersey, brand product code IF7054-724. Official-store reference data for a private non-commercial student project; this does not represent an authorized retailer relationship.",
+                         "attributes":  {
+                                            "team":  "BRAZIL",
+                                            "kit_type":  "HOME",
+                                            "brand_product_code":  "IF7054-724",
+                                            "official_source_page":  "https://www.nike.com/t/brazil-national-team-2026-stadium-home-mens-nike-dri-fit-soccer-jersey-GLz3n7bY/IF7054-724",
+                                            "image_usage":  "PERSONAL_EDUCATIONAL_REFERENCE",
+                                            "price_basis":  "PROJECT_DEMO_VND",
+                                            "inventory_basis":  "PROJECT_DEMO_STOCK"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "import-assets/brazil-if7054-724-01.jpg",
+                                            "sha256":  "53245e2146d916afc5e1bfb3a6fe1492d128141fc90444403a386fe3ecbae6e9",
+                                            "altText":  "Brazil 2026 Stadium Home Jersey - product view 1",
+                                            "view":  "PRIMARY",
+                                            "sortOrder":  0,
+                                            "primary":  true,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/1f833d8e-610b-42e7-9747-9944a87c4f7c/CBF+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/brazil-if7054-724-02.jpg",
+                                            "sha256":  "2b9a42920420e1098ca55a965258b735cbbbc88ceea8657298a2de820ba95e75",
+                                            "altText":  "Brazil 2026 Stadium Home Jersey - product view 2",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  1,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ad5fbf0d-0039-4f9d-9894-02adc3e006ec/CBF+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/brazil-if7054-724-03.jpg",
+                                            "sha256":  "77163ba84daccc0ea0623bedc0eb69d858154a7f830b08a610870224d9cb2331",
+                                            "altText":  "Brazil 2026 Stadium Home Jersey - product view 3",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  2,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e5039b23-ecad-4e59-9826-1ea18af0535f/CBF+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/brazil-if7054-724-04.jpg",
+                                            "sha256":  "4a190da9e05f3c71c207f23d658789bf6d3f22979fef1ddbabf936f759fdee4e",
+                                            "altText":  "Brazil 2026 Stadium Home Jersey - product view 4",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  3,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/6ce0310c-0193-4d0b-ab7a-2766929571f7/CBF+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-NIKE-FRA-IB5300-480",
+                         "name":  "France 2026 Stadium Home Jersey",
+                         "slug":  "ao-dau-phap-2026-home-ib5300-480",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "nike",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "BLUE",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  2490000,
+                         "compareAtPrice":  2490000,
+                         "stockPerVariant":  8,
+                         "shortDescription":  "France 2026 Stadium Home Jersey, 2026 national-team football shirt.",
+                         "description":  "France 2026 Stadium Home Jersey, brand product code IB5300-480. Official-store reference data for a private non-commercial student project; this does not represent an authorized retailer relationship.",
+                         "attributes":  {
+                                            "team":  "FRANCE",
+                                            "kit_type":  "HOME",
+                                            "brand_product_code":  "IB5300-480",
+                                            "official_source_page":  "https://www.nike.com/t/france-national-team-2026-stadium-home-mens-nike-dri-fit-soccer-jersey-T0lfLEZh",
+                                            "image_usage":  "PERSONAL_EDUCATIONAL_REFERENCE",
+                                            "price_basis":  "PROJECT_DEMO_VND",
+                                            "inventory_basis":  "PROJECT_DEMO_STOCK"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "import-assets/france-ib5300-480-01.jpg",
+                                            "sha256":  "6aa89edb0037f8e833fabea0f0f35ebf1165f1f62943980e0db1c1b3372ef128",
+                                            "altText":  "France 2026 Stadium Home Jersey - product view 1",
+                                            "view":  "PRIMARY",
+                                            "sortOrder":  0,
+                                            "primary":  true,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/cd65203d-b6b3-4197-be62-9b3bcc4a5d9e/FFF+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/france-ib5300-480-02.jpg",
+                                            "sha256":  "18b9cedfba8d397eead70b54c84ca49008e57d32ef99153d0f7c421eb36e6a94",
+                                            "altText":  "France 2026 Stadium Home Jersey - product view 2",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  1,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d31c4e49-bf27-408a-af1b-f38e3a28352b/FFF+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/france-ib5300-480-03.jpg",
+                                            "sha256":  "b5f1464704342e0d351d90f0fb4bd2e4ce39c35075d38a8ff0a74aebbf9a8650",
+                                            "altText":  "France 2026 Stadium Home Jersey - product view 3",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  2,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c7450fa4-cbae-4d2a-8764-0b50703c781c/FFF+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/france-ib5300-480-04.jpg",
+                                            "sha256":  "f6f2222742b8c8c7fd6f76c16cf9124c6b304c549bb3565327962a4622303d1c",
+                                            "altText":  "France 2026 Stadium Home Jersey - product view 4",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  3,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/938ad314-2800-4515-be9e-0242efea4731/FFF+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-NIKE-ENG-IB5290-100",
+                         "name":  "England 2026 Stadium Home Jersey",
+                         "slug":  "ao-dau-anh-2026-home-ib5290-100",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "nike",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "WHITE",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  2490000,
+                         "compareAtPrice":  2490000,
+                         "stockPerVariant":  8,
+                         "shortDescription":  "England 2026 Stadium Home Jersey, 2026 national-team football shirt.",
+                         "description":  "England 2026 Stadium Home Jersey, brand product code IB5290-100. Official-store reference data for a private non-commercial student project; this does not represent an authorized retailer relationship.",
+                         "attributes":  {
+                                            "team":  "ENGLAND",
+                                            "kit_type":  "HOME",
+                                            "brand_product_code":  "IB5290-100",
+                                            "official_source_page":  "https://www.nike.com/gb/t/england-national-team-2026-stadium-home-mens-nike-dri-fit-football-shirt-UkzrxF5r/IB5290-100",
+                                            "image_usage":  "PERSONAL_EDUCATIONAL_REFERENCE",
+                                            "price_basis":  "PROJECT_DEMO_VND",
+                                            "inventory_basis":  "PROJECT_DEMO_STOCK"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "import-assets/england-ib5290-100-01.jpg",
+                                            "sha256":  "cfc2bf294cd3fedb568add771c071f20209461570ebefc9d61723d04cd688969",
+                                            "altText":  "England 2026 Stadium Home Jersey - product view 1",
+                                            "view":  "PRIMARY",
+                                            "sortOrder":  0,
+                                            "primary":  true,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/0bb0368e-cb48-4dfc-9b59-7325d7a9c181/ENT+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/england-ib5290-100-02.jpg",
+                                            "sha256":  "f2d9b417569aefaddf40650ee0859268041049c88bd8620aea67109caad2e2dc",
+                                            "altText":  "England 2026 Stadium Home Jersey - product view 2",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  1,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0515801e-56f3-41ea-9c8c-caf6063db37b/ENT+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/england-ib5290-100-03.jpg",
+                                            "sha256":  "e3a8a64b66506dbf7eae86d800bb54f91e68d70927ba430a47c6de8fc147c2b7",
+                                            "altText":  "England 2026 Stadium Home Jersey - product view 3",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  2,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c65b6f5c-64f0-4039-a394-aa6760349b9a/ENT+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        },
+                                        {
+                                            "path":  "import-assets/england-ib5290-100-04.jpg",
+                                            "sha256":  "94402c38d6bce6d1a1881eb02d6c19fd0184f7dce64b1315e1cea7b10d23f23d",
+                                            "altText":  "England 2026 Stadium Home Jersey - product view 4",
+                                            "view":  "ALTERNATE",
+                                            "sortOrder":  3,
+                                            "primary":  false,
+                                            "sourceUri":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1ee96970-8144-4934-910e-a2cfc3c25c69/ENT+M+NK+DF+JSY+SS+STAD+HM.png"
+                                        }
+                                    ]
+                     }
+                 ]
+}

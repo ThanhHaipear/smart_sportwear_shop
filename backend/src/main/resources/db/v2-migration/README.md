@@ -8,6 +8,7 @@ Thư mục này là chuỗi migration chính thức của database V2. Chuỗi m
 - `V2`: seed taxonomy tối thiểu, không có `KIDS`; gồm `FOOTBALL`, `RUNNING`, năm loại sản phẩm và ba hệ size.
 - `V3`: 1B cart, order, payment, return/refund, inventory, settings, audit, outbox và interaction.
 - `V4`: seed hai thương hiệu kinh doanh ban đầu `NIKE` và `ADIDAS`; tiếp tục giữ `NO_BRAND` cho sản phẩm không thương hiệu.
+- `V5`: bổ sung provenance ảnh `REFERENCE` cho dataset tham chiếu giáo dục phi thương mại; không đồng nhất với ảnh `OWNED` hoặc `LICENSED`.
 
 Entity/service của 1A–1B đã được chuyển đổi và kiểm tra bằng Hibernate schema validation cùng integration test. `spring.flyway.locations` mặc định trỏ vào thư mục này. Mỗi migration phải được kiểm thử trên PostgreSQL local sạch trước khi triển khai một lần lên Supabase dùng chung; không chỉnh sửa migration đã áp dụng.
 

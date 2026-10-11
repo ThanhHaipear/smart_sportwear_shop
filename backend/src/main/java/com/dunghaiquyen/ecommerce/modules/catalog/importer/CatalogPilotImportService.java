@@ -122,10 +122,12 @@ public class CatalogPilotImportService {
                         manifest.dataset().name(), manifest.dataset().version())
                 .orElseGet(() -> createDataset(manifest, manifestPath, manifestChecksum));
 
+        int expectedProducts = manifest.products().size();
+        int expectedImages = manifest.products().stream().mapToInt(p -> p.images().size()).sum();
         int variantCount = manifest.products().stream().mapToInt(p -> p.sizes().size()).sum();
         if (dataset.getStatus() == CatalogDatasetStatus.FROZEN) {
             long itemCount = datasetItems.countByDatasetId(dataset.getId());
-            if (itemCount != EXPECTED_PRODUCTS || !dataset.getManifestChecksum().equals(manifestChecksum)) {
+            if (itemCount != expectedProducts || !dataset.getManifestChecksum().equals(manifestChecksum)) {
                 throw new BusinessRuleException("Frozen pilot dataset does not match the local manifest");
             }
             List<Map<String, Object>> reportProducts = manifest.products().stream()
@@ -136,7 +138,7 @@ public class CatalogPilotImportService {
                             spec))
                     .toList();
             writeReport(manifestPath.getParent().resolve("import-result.json"), dataset.getId(), reportProducts);
-            return new ImportSummary(dataset.getId(), EXPECTED_PRODUCTS, variantCount, EXPECTED_IMAGES, true);
+            return new ImportSummary(dataset.getId(), expectedProducts, variantCount, expectedImages, true);
         }
 
         Path catalogRoot = manifestPath.getParent();
@@ -154,7 +156,7 @@ public class CatalogPilotImportService {
             }
             reportProducts.add(reportProduct(product, spec));
             completed++;
-            log.info("Pilot catalog progress: {}/{} ({})", completed, EXPECTED_PRODUCTS, spec.code());
+            log.info("Catalog import progress: {}/{} ({})", completed, expectedProducts, spec.code());
         }
 
         dataset = datasets.findById(dataset.getId()).orElseThrow();
@@ -163,7 +165,7 @@ public class CatalogPilotImportService {
         }
         datasetService.freeze(dataset.getId());
         writeReport(manifestPath.getParent().resolve("import-result.json"), dataset.getId(), reportProducts);
-        return new ImportSummary(dataset.getId(), EXPECTED_PRODUCTS, variantCount, EXPECTED_IMAGES, false);
+        return new ImportSummary(dataset.getId(), expectedProducts, variantCount, expectedImages, false);
     }
 
     private Product importProduct(PilotManifest manifest, PilotProduct spec, Path catalogRoot) {
@@ -172,7 +174,7 @@ public class CatalogPilotImportService {
         Brand brand = brands.findBySlug(spec.brandSlug())
                 .orElseThrow(() -> new BusinessRuleException("Unknown brand: " + spec.brandSlug()));
         Map<String, String> attributes = new LinkedHashMap<>(spec.attributes());
-        attributes.put("pilot_code", spec.code());
+        attributes.put("catalog_record_code", spec.code());
         attributes.put("catalog_dataset", manifest.dataset().name());
         attributes.put("catalog_dataset_version", manifest.dataset().version());
 
@@ -182,12 +184,12 @@ public class CatalogPilotImportService {
                     spec.name(), spec.slug(), spec.shortDescription(), spec.description(),
                     category.getId(), brand.getId(), Gender.valueOf(spec.gender()), spec.sportCode(),
                     ProductType.valueOf(spec.productType()), ProductStatus.DRAFT, false, attributes,
-                    ProductDataSource.DEMO));
+                    ProductDataSource.valueOf(manifest.dataset().dataSource())));
             product = products.findById(created.id()).orElseThrow();
         } else {
-            if (product.getDataSource() != ProductDataSource.DEMO
-                    || !spec.code().equals(product.getAttributes().get("pilot_code"))) {
-                throw new BusinessRuleException("Slug already belongs to non-pilot product: " + spec.slug());
+            if (product.getDataSource() != ProductDataSource.valueOf(manifest.dataset().dataSource())
+                    || !spec.code().equals(product.getAttributes().get("catalog_record_code"))) {
+                throw new BusinessRuleException("Slug already belongs to another catalog record: " + spec.slug());
             }
             boolean brandChanged = !brand.getId().equals(product.getBrand().getId());
             boolean attributesChanged = !attributes.equals(product.getAttributes());
@@ -212,13 +214,22 @@ public class CatalogPilotImportService {
         for (PilotImage imageSpec : spec.images()) {
             String sourceGroup = spec.code() + "-" + (imageSpec.sortOrder() + 1);
             ProductImage existing = existingImages.stream()
-                    .filter(image -> sourceGroup.equals(image.getSourceGroupCode()))
+                    .filter(image -> sourceGroup.equals(image.getSourceGroupCode())
+                            || imageSpec.sha256().equals(image.getChecksum()))
                     .findFirst()
                     .orElse(null);
             if (existing != null) {
                 if (!imageSpec.sha256().equals(existing.getChecksum())) {
                     throw new BusinessRuleException("Existing image checksum mismatch: " + sourceGroup);
                 }
+                existing.setSourceKind(ImageSourceKind.valueOf(manifest.imagePolicy().sourceKind()));
+                existing.setSourceUri(imageSpec.sourceUri() != null && !imageSpec.sourceUri().isBlank()
+                        ? imageSpec.sourceUri()
+                        : "catalog://" + manifest.dataset().name() + "/" + manifest.dataset().version()
+                                + "/" + imageSpec.path());
+                existing.setLicenseCode(manifest.dataset().licenseCode());
+                existing.setSourceGroupCode(sourceGroup);
+                images.saveAndFlush(existing);
                 continue;
             }
 
@@ -233,8 +244,10 @@ public class CatalogPilotImportService {
             }
             ProductImage image = images.findById(uploaded.id()).orElseThrow();
             image.setSourceKind(ImageSourceKind.valueOf(manifest.imagePolicy().sourceKind()));
-            image.setSourceUri("catalog://" + manifest.dataset().name() + "/" + manifest.dataset().version()
-                    + "/" + imageSpec.path());
+            image.setSourceUri(imageSpec.sourceUri() != null && !imageSpec.sourceUri().isBlank()
+                    ? imageSpec.sourceUri()
+                    : "catalog://" + manifest.dataset().name() + "/" + manifest.dataset().version()
+                            + "/" + imageSpec.path());
             image.setLicenseCode(manifest.dataset().licenseCode());
             image.setSourceGroupCode(sourceGroup);
             images.saveAndFlush(image);
@@ -271,11 +284,26 @@ public class CatalogPilotImportService {
     }
 
     private void validateManifest(PilotManifest manifest, Path manifestPath) {
-        if (manifest.schemaVersion() != 1 || manifest.products().size() != EXPECTED_PRODUCTS) {
-            throw new BusinessRuleException("Pilot manifest must use schema 1 and contain exactly 30 products");
+        if (manifest.schemaVersion() != 1 || manifest.products().isEmpty()) {
+            throw new BusinessRuleException("Catalog manifest must use schema 1 and contain products");
         }
-        if (!"DEMO".equals(manifest.dataset().dataSource())) {
-            throw new BusinessRuleException("Pilot products must use dataSource=DEMO");
+        ProductDataSource dataSource;
+        try {
+            dataSource = ProductDataSource.valueOf(manifest.dataset().dataSource());
+            ImageSourceKind.valueOf(manifest.imagePolicy().sourceKind());
+        } catch (IllegalArgumentException ex) {
+            throw new BusinessRuleException("Catalog manifest has an unsupported data or image source kind");
+        }
+        boolean fixedPilot = "smart-sportswear-pilot".equals(manifest.dataset().name());
+        boolean educationalReference = "world-cup-2026-official-store-reference"
+                .equals(manifest.dataset().name());
+        if (fixedPilot && (dataSource != ProductDataSource.DEMO
+                || manifest.products().size() != EXPECTED_PRODUCTS)) {
+            throw new BusinessRuleException("Pilot manifest must use DEMO and contain exactly 30 products");
+        }
+        if (educationalReference && (dataSource != ProductDataSource.REAL
+                || ImageSourceKind.valueOf(manifest.imagePolicy().sourceKind()) != ImageSourceKind.REFERENCE)) {
+            throw new BusinessRuleException("Educational REAL imports must identify images as REFERENCE");
         }
         Map<String, Integer> actualTypes = new HashMap<>();
         Map<String, Integer> actualBrands = new HashMap<>();
@@ -301,15 +329,15 @@ public class CatalogPilotImportService {
                 validateImage(manifest.imagePolicy(), manifestPath.getParent().resolve(image.path()), image.sha256());
             }
         }
-        if (!EXPECTED_TYPES.equals(actualTypes) || !EXPECTED_BRANDS.equals(actualBrands)
-                || imageCount != EXPECTED_IMAGES) {
+        if (fixedPilot && (!EXPECTED_TYPES.equals(actualTypes) || !EXPECTED_BRANDS.equals(actualBrands)
+                || imageCount != EXPECTED_IMAGES)) {
             throw new BusinessRuleException(
                     "Pilot category, brand allocation or image count does not match the approved rule");
         }
         Set<String> genders = manifest.products().stream().map(PilotProduct::gender).collect(java.util.stream.Collectors.toSet());
         Set<String> sports = manifest.products().stream().map(PilotProduct::sportCode).collect(java.util.stream.Collectors.toSet());
-        if (!genders.containsAll(Set.of("MEN", "WOMEN", "UNISEX"))
-                || !sports.containsAll(Set.of("FOOTBALL", "RUNNING"))) {
+        if (fixedPilot && (!genders.containsAll(Set.of("MEN", "WOMEN", "UNISEX"))
+                || !sports.containsAll(Set.of("FOOTBALL", "RUNNING")))) {
             throw new BusinessRuleException("Pilot must cover MEN/WOMEN/UNISEX and FOOTBALL/RUNNING");
         }
     }
@@ -410,5 +438,6 @@ public class CatalogPilotImportService {
             int stockPerVariant, String shortDescription, String description, Map<String, String> attributes,
             List<PilotImage> images) {}
     public record PilotImage(
-            String path, String sha256, String altText, String view, int sortOrder, boolean primary) {}
+            String path, String sha256, String altText, String view, int sortOrder, boolean primary,
+            String sourceUri) {}
 }

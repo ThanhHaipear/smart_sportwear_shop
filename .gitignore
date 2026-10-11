@@ -51,3 +51,8 @@ backups/
 # Generated pilot source images are uploaded to Cloudinary and intentionally kept
 # out of Git (about 120 MB). Manifest, prompts, checksums and import report stay tracked.
 catalog/pilot-v1/assets/
+
+# Official brand-store images are kept only in a local rights-review staging area.
+# Source URLs, checksums and review decisions remain tracked.
+catalog/world-cup-2026-store-staging-v1/assets/
+catalog/world-cup-2026-store-staging-v1/import-assets/

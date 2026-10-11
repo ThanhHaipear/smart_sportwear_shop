@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "dataset": {
+    "name": "world-cup-2026-official-store-staging",
+    "version": "1.0.0-draft",
+    "status": "IMPORTED",
+    "dataSource": "REAL",
+    "rightsStatus": "NONCOMMERCIAL_EDUCATIONAL_REFERENCE",
+    "privateDemoUseAllowed": true,
+    "commercialPublishAllowed": false,
+    "capturedAt": "2026-10-11"
+  },
+  "products": [
+    {
+      "code": "WC26-ADIDAS-ARG-JM8396",
+      "brand": "ADIDAS",
+      "team": "ARGENTINA",
+      "name": "Argentina 26 Home Jersey",
+      "brandProductCode": "JM8396",
+      "gender": "MEN",
+      "kitType": "HOME",
+      "color": "White / Icey Blue / Light Blue",
+      "sourcePage": "https://www.adidas.com/us/argentina-26-home-jersey/JM8396.html",
+      "sourcePrice": { "amount": 100.00, "currency": "USD", "kind": "ORIGINAL_LIST_PRICE", "catalogPrice": false },
+      "images": [
+        { "file": "argentina-jm8396-01.jpg", "role": "PRIMARY", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/841749a208934f2ab4a0cfa1a8ae237d_9366/Argentina_26_Home_Jersey_White_JM8396_21_model.jpg" },
+        { "file": "argentina-jm8396-02.jpg", "role": "ALTERNATE", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/3c16ce3f59834e0cbe052a59f63e27c5_9366/Argentina_26_Home_Jersey_White_JM8396_23_hover_model.jpg" },
+        { "file": "argentina-jm8396-03.jpg", "role": "ALTERNATE", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/6e10e88e911b47a6ad914e3626ea6b67_9366/Argentina_26_Home_Jersey_White_JM8396_25_model.jpg" }
+      ]
+    },
+    {
+      "code": "WC26-ADIDAS-BEL-JM8381",
+      "brand": "ADIDAS",
+      "team": "BELGIUM",
+      "name": "Belgium 26 Home Jersey",
+      "brandProductCode": "JM8381",
+      "gender": "MEN",
+      "kitType": "HOME",
+      "color": "Red / Bold Gold",
+      "sourcePage": "https://www.adidas.com/us/belgium-26-home-jersey/JM8381.html",
+      "sourcePrice": { "amount": 100.00, "currency": "USD", "kind": "ORIGINAL_LIST_PRICE", "catalogPrice": false },
+      "images": [
+        { "file": "belgium-jm8381-01.jpg", "role": "PRIMARY", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/90d4b6018cb344808b4d17b65bc7e9f2_9366/Belgium_26_Home_Jersey_Red_JM8381_21_model.jpg" },
+        { "file": "belgium-jm8381-02.jpg", "role": "ALTERNATE", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/82025124160a458f8500bea6f2ad314f_9366/Belgium_26_Home_Jersey_Red_JM8381_23_hover_model.jpg" },
+        { "file": "belgium-jm8381-03.jpg", "role": "ALTERNATE", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/b9464bf0c0984b8f8103f5f078a61e80_9366/Belgium_26_Home_Jersey_Red_JM8381_25_model.jpg" }
+      ]
+    },
+    {
+      "code": "WC26-ADIDAS-GER-JZ4559",
+      "brand": "ADIDAS",
+      "team": "GERMANY",
+      "name": "Germany 26 Home Jersey",
+      "brandProductCode": "JZ4559",
+      "gender": "WOMEN",
+      "kitType": "HOME",
+      "color": "White",
+      "sourcePage": "https://www.adidas.com/us/germany-26-home-jersey/JZ4559.html",
+      "sourcePrice": { "amount": 100.00, "currency": "USD", "kind": "ORIGINAL_LIST_PRICE", "catalogPrice": false },
+      "images": [
+        { "file": "germany-jz4559-01.jpg", "role": "PRIMARY", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/55d6d19cfd744793a99f054c23c39de4_9366/Germany_26_Home_Jersey_White_JZ4559_21_model.jpg" },
+        { "file": "germany-jz4559-02.jpg", "role": "ALTERNATE", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/842fb9a646c14237bee40840203ae307_9366/Germany_26_Home_Jersey_White_JZ4559_23_hover_model.jpg" },
+        { "file": "germany-jz4559-03.jpg", "role": "ALTERNATE", "sourceUrl": "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/bc75f31aa04b47ea9d1225e83aded391_9366/Germany_26_Home_Jersey_White_JZ4559_25_model.jpg" }
+      ]
+    },
+    {
+      "code": "WC26-NIKE-BRA-IF7054-724",
+      "brand": "NIKE",
+      "team": "BRAZIL",
+      "name": "Brazil National Team 2026 Stadium Home",
+      "brandProductCode": "IF7054-724",
+      "gender": "MEN",
+      "kitType": "HOME",
+      "color": "Yellow / Green / Blue",
+      "sourcePage": "https://www.nike.com/t/brazil-national-team-2026-stadium-home-mens-nike-dri-fit-soccer-jersey-GLz3n7bY/IF7054-724",
+      "sourcePrice": { "amount": 100.00, "currency": "USD", "kind": "ORIGINAL_LIST_PRICE", "catalogPrice": false },
+      "images": [
+        { "file": "brazil-if7054-724-01.png", "role": "PRIMARY", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/1f833d8e-610b-42e7-9747-9944a87c4f7c/CBF+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "brazil-if7054-724-02.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ad5fbf0d-0039-4f9d-9894-02adc3e006ec/CBF+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "brazil-if7054-724-03.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e5039b23-ecad-4e59-9826-1ea18af0535f/CBF+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "brazil-if7054-724-04.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/6ce0310c-0193-4d0b-ab7a-2766929571f7/CBF+M+NK+DF+JSY+SS+STAD+HM.png" }
+      ]
+    },
+    {
+      "code": "WC26-NIKE-FRA-IB5300-480",
+      "brand": "NIKE",
+      "team": "FRANCE",
+      "name": "France National Team 2026 Stadium Home",
+      "brandProductCode": "IB5300-480",
+      "gender": "MEN",
+      "kitType": "HOME",
+      "color": "Game Royal / Blackened Blue / White / Metallic Copper",
+      "sourcePage": "https://www.nike.com/t/france-national-team-2026-stadium-home-mens-nike-dri-fit-soccer-jersey-T0lfLEZh",
+      "sourcePrice": { "amount": 100.00, "currency": "USD", "kind": "ORIGINAL_LIST_PRICE", "catalogPrice": false },
+      "images": [
+        { "file": "france-ib5300-480-01.png", "role": "PRIMARY", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/cd65203d-b6b3-4197-be62-9b3bcc4a5d9e/FFF+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "france-ib5300-480-02.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d31c4e49-bf27-408a-af1b-f38e3a28352b/FFF+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "france-ib5300-480-03.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c7450fa4-cbae-4d2a-8764-0b50703c781c/FFF+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "france-ib5300-480-04.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/938ad314-2800-4515-be9e-0242efea4731/FFF+M+NK+DF+JSY+SS+STAD+HM.png" }
+      ]
+    },
+    {
+      "code": "WC26-NIKE-ENG-IB5290-100",
+      "brand": "NIKE",
+      "team": "ENGLAND",
+      "name": "England National Team 2026 Stadium Home",
+      "brandProductCode": "IB5290-100",
+      "gender": "MEN",
+      "kitType": "HOME",
+      "color": "White / Speed Red / Obsidian",
+      "sourcePage": "https://www.nike.com/gb/t/england-national-team-2026-stadium-home-mens-nike-dri-fit-football-shirt-UkzrxF5r/IB5290-100",
+      "sourcePrice": { "amount": 89.99, "currency": "GBP", "kind": "LIST_PRICE", "catalogPrice": false },
+      "images": [
+        { "file": "england-ib5290-100-01.png", "role": "PRIMARY", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/0bb0368e-cb48-4dfc-9b59-7325d7a9c181/ENT+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "england-ib5290-100-02.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0515801e-56f3-41ea-9c8c-caf6063db37b/ENT+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "england-ib5290-100-03.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c65b6f5c-64f0-4039-a394-aa6760349b9a/ENT+M+NK+DF+JSY+SS+STAD+HM.png" },
+        { "file": "england-ib5290-100-04.png", "role": "ALTERNATE", "sourceUrl": "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1ee96970-8144-4934-910e-a2cfc3c25c69/ENT+M+NK+DF+JSY+SS+STAD+HM.png" }
+      ]
+    }
+  ]
+}

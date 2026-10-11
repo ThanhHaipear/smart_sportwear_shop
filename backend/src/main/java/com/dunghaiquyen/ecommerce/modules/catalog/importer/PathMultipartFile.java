@@ -18,7 +18,12 @@ final class PathMultipartFile implements MultipartFile {
 
     @Override public String getName() { return "file"; }
     @Override public String getOriginalFilename() { return path.getFileName().toString(); }
-    @Override public String getContentType() { return "image/png"; }
+    @Override public String getContentType() {
+        String fileName = path.getFileName().toString().toLowerCase(java.util.Locale.ROOT);
+        if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) return "image/jpeg";
+        if (fileName.endsWith(".webp")) return "image/webp";
+        return "image/png";
+    }
     @Override public boolean isEmpty() { return bytes.length == 0; }
     @Override public long getSize() { return bytes.length; }
     @Override public byte[] getBytes() { return bytes.clone(); }

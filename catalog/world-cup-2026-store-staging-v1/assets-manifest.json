@@ -1,0 +1,284 @@
+﻿{
+    "schemaVersion":  1,
+    "dataset":  {
+                    "name":  "world-cup-2026-official-store-staging",
+                    "version":  "1.0.0-draft",
+                    "status":  "DRAFT",
+                    "dataSource":  "REAL",
+                    "rightsStatus":  "PERMISSION_REQUIRED",
+                    "publishAllowed":  false,
+                    "capturedAt":  "2026-10-11"
+                },
+    "generatedAt":  "2026-10-11T13:13:43.7444447+00:00",
+    "productCount":  6,
+    "imageCount":  21,
+    "products":  [
+                     {
+                         "code":  "WC26-ADIDAS-ARG-JM8396",
+                         "brandProductCode":  "JM8396",
+                         "images":  [
+                                        {
+                                            "file":  "argentina-jm8396-01.jpg",
+                                            "role":  "PRIMARY",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/841749a208934f2ab4a0cfa1a8ae237d_9366/Argentina_26_Home_Jersey_White_JM8396_21_model.jpg",
+                                            "sha256":  "6bf16a00114f3265f0882b7ce6ef74d33f66f6985431b5f7674e60edea280c54",
+                                            "bytes":  65288,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "argentina-jm8396-02.jpg",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/3c16ce3f59834e0cbe052a59f63e27c5_9366/Argentina_26_Home_Jersey_White_JM8396_23_hover_model.jpg",
+                                            "sha256":  "0947b741b2647296715a5649b9242c92bbf28279be2b37614607d2d4a5827751",
+                                            "bytes":  70986,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "argentina-jm8396-03.jpg",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/6e10e88e911b47a6ad914e3626ea6b67_9366/Argentina_26_Home_Jersey_White_JM8396_25_model.jpg",
+                                            "sha256":  "9a506e037035177465ce52f0a543ee74559f1866dcd589ec7f6fbeab822a14f4",
+                                            "bytes":  52695,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-ADIDAS-BEL-JM8381",
+                         "brandProductCode":  "JM8381",
+                         "images":  [
+                                        {
+                                            "file":  "belgium-jm8381-01.jpg",
+                                            "role":  "PRIMARY",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/90d4b6018cb344808b4d17b65bc7e9f2_9366/Belgium_26_Home_Jersey_Red_JM8381_21_model.jpg",
+                                            "sha256":  "74d01a71ecb7e5d2a49940ccdbe8ef9ab1f4b87e148c3fe131357a3b15a129d7",
+                                            "bytes":  61190,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "belgium-jm8381-02.jpg",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/82025124160a458f8500bea6f2ad314f_9366/Belgium_26_Home_Jersey_Red_JM8381_23_hover_model.jpg",
+                                            "sha256":  "9476fe75de8b3dbd436577dc51358e8c3ad584533918a12c4a80f6f5437941fc",
+                                            "bytes":  60971,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "belgium-jm8381-03.jpg",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/b9464bf0c0984b8f8103f5f078a61e80_9366/Belgium_26_Home_Jersey_Red_JM8381_25_model.jpg",
+                                            "sha256":  "cd26c2142b22e5e06bd9a692e49b938611afecd4400bc7fa7bb744059ba0a8f0",
+                                            "bytes":  42410,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-ADIDAS-GER-JZ4559",
+                         "brandProductCode":  "JZ4559",
+                         "images":  [
+                                        {
+                                            "file":  "germany-jz4559-01.jpg",
+                                            "role":  "PRIMARY",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/55d6d19cfd744793a99f054c23c39de4_9366/Germany_26_Home_Jersey_White_JZ4559_21_model.jpg",
+                                            "sha256":  "958ee281ab8bfc3e335a2c5ca98ec685af5de820966a61fdfece5ea700343fac",
+                                            "bytes":  57155,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "germany-jz4559-02.jpg",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/842fb9a646c14237bee40840203ae307_9366/Germany_26_Home_Jersey_White_JZ4559_23_hover_model.jpg",
+                                            "sha256":  "4fd9f74377bf5eaf87197df3cf5cc2e4611f18d9fb0a357f8aa52dc5ce4cc331",
+                                            "bytes":  50311,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "germany-jz4559-03.jpg",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://assets.adidas.com/images/w_1200%2Cf_jpg%2Cq_auto/bc75f31aa04b47ea9d1225e83aded391_9366/Germany_26_Home_Jersey_White_JZ4559_25_model.jpg",
+                                            "sha256":  "452fa8cca42ad487aa80c788c0e1393916a0b130e906ccafb699b97608e9ed93",
+                                            "bytes":  77210,
+                                            "width":  1200,
+                                            "height":  1200,
+                                            "mediaType":  "image/jpeg",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-NIKE-BRA-IF7054-724",
+                         "brandProductCode":  "IF7054-724",
+                         "images":  [
+                                        {
+                                            "file":  "brazil-if7054-724-01.png",
+                                            "role":  "PRIMARY",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/1f833d8e-610b-42e7-9747-9944a87c4f7c/CBF+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "76b18299179ef10d566ec67b52037c22d36249f78517066c5be3489c2a0ce203",
+                                            "bytes":  7246179,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "brazil-if7054-724-02.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ad5fbf0d-0039-4f9d-9894-02adc3e006ec/CBF+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "429e4a7a7d40c192f026c7a8b1abb9a9a5382bbb437f1f117c28192ef95455af",
+                                            "bytes":  8577664,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "brazil-if7054-724-03.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e5039b23-ecad-4e59-9826-1ea18af0535f/CBF+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "5a3bce009ff600fd616dce0cca904a740a36987679f69e2c28a9347f64c8f678",
+                                            "bytes":  3451588,
+                                            "width":  1728,
+                                            "height":  1728,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "brazil-if7054-724-04.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/6ce0310c-0193-4d0b-ab7a-2766929571f7/CBF+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "1d68cd2a4ce199aa33312aa3a82a7b510d33bd76800de8da4f2629f7e485cb01",
+                                            "bytes":  6612309,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-NIKE-FRA-IB5300-480",
+                         "brandProductCode":  "IB5300-480",
+                         "images":  [
+                                        {
+                                            "file":  "france-ib5300-480-01.png",
+                                            "role":  "PRIMARY",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/cd65203d-b6b3-4197-be62-9b3bcc4a5d9e/FFF+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "ed9dbff8e3ca5dc292b82a4c9cce6f01333b6c36d9abfba127a6fb68fac6001f",
+                                            "bytes":  9112223,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "france-ib5300-480-02.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d31c4e49-bf27-408a-af1b-f38e3a28352b/FFF+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "f092e192595636dbd48b736f7f04ba53120a444d186551be5fdf13c70ccf6256",
+                                            "bytes":  11915056,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "france-ib5300-480-03.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c7450fa4-cbae-4d2a-8764-0b50703c781c/FFF+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "5159a9465baa55632971b920dfd3aee72d0d65a721519d93f7d6b69227621b3d",
+                                            "bytes":  6247505,
+                                            "width":  1728,
+                                            "height":  1728,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "france-ib5300-480-04.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/938ad314-2800-4515-be9e-0242efea4731/FFF+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "e4b57ec2ef53905eb498be60e03f1e18952a5d6c6ff0c7ae8fff60e8f0f1d772",
+                                            "bytes":  7952478,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "WC26-NIKE-ENG-IB5290-100",
+                         "brandProductCode":  "IB5290-100",
+                         "images":  [
+                                        {
+                                            "file":  "england-ib5290-100-01.png",
+                                            "role":  "PRIMARY",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/0bb0368e-cb48-4dfc-9b59-7325d7a9c181/ENT+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "3d49903729acd33176b5d4e3ace3caedccd82280bcc8f49525399523c4d1180b",
+                                            "bytes":  6818192,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "england-ib5290-100-02.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0515801e-56f3-41ea-9c8c-caf6063db37b/ENT+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "94cdfb9120bf734daa2f2d0be0b7e2f45840fbac5ea8a5aff0be11524a5a3d16",
+                                            "bytes":  7805939,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "england-ib5290-100-03.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c65b6f5c-64f0-4039-a394-aa6760349b9a/ENT+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "9d5d942f8a72c61e2f7155f44758b7d3d06dedcbb7f82beae23061bbde5bd7eb",
+                                            "bytes":  5163648,
+                                            "width":  1728,
+                                            "height":  1728,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        },
+                                        {
+                                            "file":  "england-ib5290-100-04.png",
+                                            "role":  "ALTERNATE",
+                                            "sourceUrl":  "https://static.nike.com/a/images/t_PDP_1728_v1/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1ee96970-8144-4934-910e-a2cfc3c25c69/ENT+M+NK+DF+JSY+SS+STAD+HM.png",
+                                            "sha256":  "e40223034bffbc18aea6df0421ff23d23ca1fddc149604417779a30f995491b1",
+                                            "bytes":  9074553,
+                                            "width":  1728,
+                                            "height":  2160,
+                                            "mediaType":  "image/png",
+                                            "reviewStatus":  "PENDING_RIGHTS_APPROVAL"
+                                        }
+                                    ]
+                     }
+                 ]
+}
