@@ -45,14 +45,14 @@ export function ProductCard({ product }: { product: Product }) {
             -{product.discountPercent}%
           </span>
         ) : null}
-        <div className="thumb-product group relative mb-4 aspect-[332/498] overflow-hidden bg-[#f7f7f7]">
+        <div className="thumb-product group relative mb-4 aspect-square overflow-hidden bg-[#f7f7f7]">
           <Link href={product.href} className="relative block h-full">
             <Image
               src={product.image}
               alt={product.name}
               fill
               sizes="(max-width: 767px) 46vw, (max-width: 1279px) 30vw, 332px"
-              className="h-full w-full object-cover object-center"
+              className="h-full w-full object-contain object-center p-3"
               unoptimized={shouldBypassImageOptimization(product.image)}
             />
             <Image
@@ -60,7 +60,7 @@ export function ProductCard({ product }: { product: Product }) {
               alt={product.name}
               fill
               sizes="(max-width: 767px) 46vw, (max-width: 1279px) 30vw, 332px"
-              className="hover-img invisible absolute inset-0 h-full w-full object-cover object-center opacity-0 transition-all duration-300 ease-in-out group-hover:visible group-hover:opacity-100"
+              className="hover-img invisible absolute inset-0 h-full w-full object-contain object-center p-3 opacity-0 transition-all duration-300 ease-in-out group-hover:visible group-hover:opacity-100"
               unoptimized={shouldBypassImageOptimization(product.hoverImage)}
             />
           </Link>

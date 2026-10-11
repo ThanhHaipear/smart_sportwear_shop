@@ -1,0 +1,1432 @@
+﻿{
+    "schemaVersion":  1,
+    "dataset":  {
+                    "name":  "smart-sportswear-pilot",
+                    "version":  "1.0.0",
+                    "dataSource":  "DEMO",
+                    "licenseCode":  "AI_GENERATED_PROJECT_USE",
+                    "sourceDescription":  "30 fictional sportswear products and 60 synthetic product images generated for project demo, image retrieval and evaluation."
+                },
+    "imagePolicy":  {
+                        "sourceKind":  "SYNTHETIC",
+                        "generator":  "OpenAI built-in imagegen",
+                        "originalFormat":  "png",
+                        "requiredWidth":  1254,
+                        "requiredHeight":  1254,
+                        "minBytes":  100000,
+                        "maxBytes":  5242880,
+                        "colorSpace":  "sRGB",
+                        "embeddingSource":  "VERSIONED_ORIGINAL_ONLY",
+                        "uiDelivery":  "Cloudinary/Next Image responsive delivery; square container; object-contain; never upscale above original"
+                    },
+    "products":  [
+                     {
+                         "code":  "PILOT-TOP-001",
+                         "name":  "Áo chạy bộ nam Aero Navy",
+                         "slug":  "ao-chay-bo-nam-aero-navy",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "MEN",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "NAVY",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  429000,
+                         "compareAtPrice":  529000,
+                         "stockPerVariant":  16,
+                         "shortDescription":  "Áo chạy bộ nam màu navy, vải lưới thoáng khí và thấm hút mồ hôi.",
+                         "description":  "Áo chạy bộ nam màu navy, vải lưới thoáng khí và thấm hút mồ hôi. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-TOP-001-01.png",
+                                            "sha256":  "c290098639b4c585a18a33b4d14070ef3a8fd6d85e2e791e752e5092cc0bc6e2",
+                                            "altText":  "Áo chạy bộ nam Aero Navy - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-TOP-001-02.png",
+                                            "sha256":  "715351176c2dfd7674bff42874db61e928ce08e11ef5ab105c5b7f7347d43f90",
+                                            "altText":  "Áo chạy bộ nam Aero Navy - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-TOP-002",
+                         "name":  "Áo tank chạy bộ nữ Coral Flow",
+                         "slug":  "ao-tank-chay-bo-nu-coral-flow",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "WOMEN",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "PINK",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL"
+                                   ],
+                         "price":  389000,
+                         "compareAtPrice":  479000,
+                         "stockPerVariant":  14,
+                         "shortDescription":  "Áo tank chạy bộ nữ màu coral, nhẹ và thoáng khí.",
+                         "description":  "Áo tank chạy bộ nữ màu coral, nhẹ và thoáng khí. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_ELASTANE",
+                                            "fit":  "SLIM",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-TOP-002-01.png",
+                                            "sha256":  "ebc99f2a54f3ef942ca2890439a712599398f38e92b23bd2d29bd09ae4c39880",
+                                            "altText":  "Áo tank chạy bộ nữ Coral Flow - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-TOP-002-02.png",
+                                            "sha256":  "91c2aa33b46d6388ad6279ebafa307d21559f63c63b7e78f47bdec4b533c7fec",
+                                            "altText":  "Áo tank chạy bộ nữ Coral Flow - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-TOP-003",
+                         "name":  "Áo chạy bộ dài tay Uni Cloud",
+                         "slug":  "ao-chay-bo-dai-tay-uni-cloud",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "UNISEX",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "WHITE",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  499000,
+                         "compareAtPrice":  599000,
+                         "stockPerVariant":  14,
+                         "shortDescription":  "Áo chạy bộ dài tay unisex màu trắng, phù hợp thời tiết mát.",
+                         "description":  "Áo chạy bộ dài tay unisex màu trắng, phù hợp thời tiết mát. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER",
+                                            "fit":  "REGULAR",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-TOP-003-01.png",
+                                            "sha256":  "7595ca4249fb7c02c9613e3598884cba8de2dc368783c72ac333f4ad1c8328ca",
+                                            "altText":  "Áo chạy bộ dài tay Uni Cloud - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-TOP-003-02.png",
+                                            "sha256":  "c3033b22807727c631e0232d67ff589f7a2be8fde71793516fc8bc1e23c865e3",
+                                            "altText":  "Áo chạy bộ dài tay Uni Cloud - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-TOP-004",
+                         "name":  "Áo tập bóng đá nam Blaze Red",
+                         "slug":  "ao-tap-bong-da-nam-blaze-red",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "RED",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  459000,
+                         "compareAtPrice":  559000,
+                         "stockPerVariant":  18,
+                         "shortDescription":  "Áo tập bóng đá nam màu đỏ với các mảng lưới thoáng khí.",
+                         "description":  "Áo tập bóng đá nam màu đỏ với các mảng lưới thoáng khí. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-TOP-004-01.png",
+                                            "sha256":  "fe0edb29f4316411184e063325d5399778f429564bc520dbf6ed5aedc18f8f7b",
+                                            "altText":  "Áo tập bóng đá nam Blaze Red - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-TOP-004-02.png",
+                                            "sha256":  "2d1223772a75452e36be78cca8353e5d4aaf81301692135c3ff064e677302e10",
+                                            "altText":  "Áo tập bóng đá nam Blaze Red - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-TOP-005",
+                         "name":  "Áo tập bóng đá nữ Royal Motion",
+                         "slug":  "ao-tap-bong-da-nu-royal-motion",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "WOMEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "BLUE",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL"
+                                   ],
+                         "price":  459000,
+                         "compareAtPrice":  559000,
+                         "stockPerVariant":  16,
+                         "shortDescription":  "Áo tập bóng đá nữ màu xanh dương, phom thể thao gọn.",
+                         "description":  "Áo tập bóng đá nữ màu xanh dương, phom thể thao gọn. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-TOP-005-01.png",
+                                            "sha256":  "c62cc0920d37084e8c68ec5be9accd1e2ae479e8e74a4693606c9958f7125fea",
+                                            "altText":  "Áo tập bóng đá nữ Royal Motion - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-TOP-005-02.png",
+                                            "sha256":  "06a047e3c6a49b21573d42e2ba94c4c6db111c041b43bbaca2594637fb901e05",
+                                            "altText":  "Áo tập bóng đá nữ Royal Motion - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-TOP-006",
+                         "name":  "Áo giữ nhiệt bóng đá Uni Core",
+                         "slug":  "ao-giu-nhiet-bong-da-uni-core",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "UNISEX",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "BLACK",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  579000,
+                         "compareAtPrice":  699000,
+                         "stockPerVariant":  12,
+                         "shortDescription":  "Áo giữ nhiệt bóng đá unisex màu đen, thiết kế dài tay.",
+                         "description":  "Áo giữ nhiệt bóng đá unisex màu đen, thiết kế dài tay. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "THERMAL_POLYESTER",
+                                            "fit":  "SLIM",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-TOP-006-01.png",
+                                            "sha256":  "8b6fa413c708f39e06ae9012e35ca5411ac680a1c602164b214e73fcac588155",
+                                            "altText":  "Áo giữ nhiệt bóng đá Uni Core - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-TOP-006-02.png",
+                                            "sha256":  "42714e53b2d9dae4896e732c4941709c7899f03bc52f98925e3b7ed153d66ca5",
+                                            "altText":  "Áo giữ nhiệt bóng đá Uni Core - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-TOP-007",
+                         "name":  "Áo khoác chạy bộ nữ Violet Air",
+                         "slug":  "ao-khoac-chay-bo-nu-violet-air",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "WOMEN",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "PURPLE",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL"
+                                   ],
+                         "price":  749000,
+                         "compareAtPrice":  899000,
+                         "stockPerVariant":  10,
+                         "shortDescription":  "Áo khoác chạy bộ nữ màu tím, nhẹ và cản gió.",
+                         "description":  "Áo khoác chạy bộ nữ màu tím, nhẹ và cản gió. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "LIGHTWEIGHT_SHELL",
+                                            "fit":  "SLIM",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-TOP-007-01.png",
+                                            "sha256":  "8238db5b0b6f7576fb8a9e49517dd0b40a3f0aac52f6d926858395fc57450695",
+                                            "altText":  "Áo khoác chạy bộ nữ Violet Air - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-TOP-007-02.png",
+                                            "sha256":  "6c5374d9c9013c6260dbf706c61d124d63acf24b0c479eb000231b6d12e2664e",
+                                            "altText":  "Áo khoác chạy bộ nữ Violet Air - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-TOP-008",
+                         "name":  "Áo gió chạy bộ nam Orange Pace",
+                         "slug":  "ao-gio-chay-bo-nam-orange-pace",
+                         "categorySlug":  "ao-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_TOP",
+                         "gender":  "MEN",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "ORANGE",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  789000,
+                         "compareAtPrice":  949000,
+                         "stockPerVariant":  10,
+                         "shortDescription":  "Áo gió chạy bộ nam màu cam, có lưng thông khí.",
+                         "description":  "Áo gió chạy bộ nam màu cam, có lưng thông khí. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "WATER_RESISTANT_SHELL",
+                                            "fit":  "REGULAR",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-TOP-008-01.png",
+                                            "sha256":  "4908989ff900cab5d43c2d296f6527a54f725f75547cacd31015e5c53b33939f",
+                                            "altText":  "Áo gió chạy bộ nam Orange Pace - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-TOP-008-02.png",
+                                            "sha256":  "7dbe55997eb35efdabbcbf74f9ae54d28f43ee3e4e2431099845058a5d17e536",
+                                            "altText":  "Áo gió chạy bộ nam Orange Pace - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-BOTTOM-001",
+                         "name":  "Quần short chạy bộ nam Swift Black",
+                         "slug":  "quan-short-chay-bo-nam-swift-black",
+                         "categorySlug":  "quan-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_BOTTOM",
+                         "gender":  "MEN",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "BLACK",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  359000,
+                         "compareAtPrice":  449000,
+                         "stockPerVariant":  18,
+                         "shortDescription":  "Quần short chạy bộ nam màu đen, nhẹ và linh hoạt.",
+                         "description":  "Quần short chạy bộ nam màu đen, nhẹ và linh hoạt. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "WOVEN_POLYESTER",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-001-01.png",
+                                            "sha256":  "768933775ec6b6b09be0ddf8e5c302658f5c7fca7e9ecbf2dc391a05d663fc4f",
+                                            "altText":  "Quần short chạy bộ nam Swift Black - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-001-02.png",
+                                            "sha256":  "8020a4b3cb512f937427e09b4d370113a03c619734974f1f899f4813662720d5",
+                                            "altText":  "Quần short chạy bộ nam Swift Black - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-BOTTOM-002",
+                         "name":  "Quần legging chạy bộ nữ Navy Flex",
+                         "slug":  "quan-legging-chay-bo-nu-navy-flex",
+                         "categorySlug":  "quan-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_BOTTOM",
+                         "gender":  "WOMEN",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "NAVY",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL"
+                                   ],
+                         "price":  529000,
+                         "compareAtPrice":  649000,
+                         "stockPerVariant":  14,
+                         "shortDescription":  "Quần legging chạy bộ nữ màu navy, cạp cao và co giãn.",
+                         "description":  "Quần legging chạy bộ nữ màu navy, cạp cao và co giãn. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_ELASTANE",
+                                            "fit":  "COMPRESSION",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-002-01.png",
+                                            "sha256":  "32bf7f9dabafcc4a7059abb3d6f98807db84dedfab4c0dec6c3fbd208249a76e",
+                                            "altText":  "Quần legging chạy bộ nữ Navy Flex - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-002-02.png",
+                                            "sha256":  "feaaf4cc2ae25445acc6e4e18fa41eb19b4c600e63accb6f86cd04f23887a231",
+                                            "altText":  "Quần legging chạy bộ nữ Navy Flex - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-BOTTOM-003",
+                         "name":  "Quần jogger thể thao Uni Motion",
+                         "slug":  "quan-jogger-the-thao-uni-motion",
+                         "categorySlug":  "quan-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_BOTTOM",
+                         "gender":  "UNISEX",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "GRAY",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  549000,
+                         "compareAtPrice":  679000,
+                         "stockPerVariant":  14,
+                         "shortDescription":  "Quần jogger thể thao unisex màu xám, phom thuôn gọn.",
+                         "description":  "Quần jogger thể thao unisex màu xám, phom thuôn gọn. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "TECHNICAL_KNIT",
+                                            "fit":  "TAPERED",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-003-01.png",
+                                            "sha256":  "73a9c55789e4eea3c3778e3fa56026293e83c488adc1cca01f232e02e4988c5f",
+                                            "altText":  "Quần jogger thể thao Uni Motion - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-003-02.png",
+                                            "sha256":  "202d0b83e8d0019090f83e1aba46c77ea510f5176114027aabe4b3d4b62d6b5c",
+                                            "altText":  "Quần jogger thể thao Uni Motion - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-BOTTOM-004",
+                         "name":  "Quần bóng đá nam Royal Kick",
+                         "slug":  "quan-bong-da-nam-royal-kick",
+                         "categorySlug":  "quan-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_BOTTOM",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "BLUE",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  329000,
+                         "compareAtPrice":  419000,
+                         "stockPerVariant":  18,
+                         "shortDescription":  "Quần bóng đá nam màu xanh dương, vải lưới nhanh khô.",
+                         "description":  "Quần bóng đá nam màu xanh dương, vải lưới nhanh khô. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-004-01.png",
+                                            "sha256":  "15511d2602592d7ff8672086157c2ebc747d87baa4f49271f1647835534fadd3",
+                                            "altText":  "Quần bóng đá nam Royal Kick - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-004-02.png",
+                                            "sha256":  "3d6faa9a01001e284e8f633d0199e17d6872d3fdeb4d1136ca8ac0303494eb00",
+                                            "altText":  "Quần bóng đá nam Royal Kick - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-BOTTOM-005",
+                         "name":  "Quần tập bóng đá nữ Black Drive",
+                         "slug":  "quan-tap-bong-da-nu-black-drive",
+                         "categorySlug":  "quan-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_BOTTOM",
+                         "gender":  "WOMEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "BLACK",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL"
+                                   ],
+                         "price":  349000,
+                         "compareAtPrice":  439000,
+                         "stockPerVariant":  16,
+                         "shortDescription":  "Quần tập bóng đá nữ màu đen, co giãn và thoáng khí.",
+                         "description":  "Quần tập bóng đá nữ màu đen, co giãn và thoáng khí. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "STRETCH_WOVEN",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-005-01.png",
+                                            "sha256":  "c6752e2aede7042d1c31dc376c5c384e93c38d92dd006e3fdb03b65f56acd1b4",
+                                            "altText":  "Quần tập bóng đá nữ Black Drive - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-005-02.png",
+                                            "sha256":  "04120d4cc7a967ec812b99f1eced0d8575e65c182455a98cc08af126c62f316c",
+                                            "altText":  "Quần tập bóng đá nữ Black Drive - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-BOTTOM-006",
+                         "name":  "Quần track chạy bộ Uni Forest",
+                         "slug":  "quan-track-chay-bo-uni-forest",
+                         "categorySlug":  "quan-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_BOTTOM",
+                         "gender":  "UNISEX",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "GREEN",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  599000,
+                         "compareAtPrice":  729000,
+                         "stockPerVariant":  12,
+                         "shortDescription":  "Quần track chạy bộ unisex màu xanh lá, có khóa cổ chân.",
+                         "description":  "Quần track chạy bộ unisex màu xanh lá, có khóa cổ chân. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "WATER_RESISTANT_WOVEN",
+                                            "fit":  "TAPERED",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-006-01.png",
+                                            "sha256":  "0c7af9fb1923262069d60c6e895d3ceb5bdcbeaad0724a485ffb734f364d7d62",
+                                            "altText":  "Quần track chạy bộ Uni Forest - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-BOTTOM-006-02.png",
+                                            "sha256":  "3d07aef7de96d28b93ccddf82bfcbd1dd5a7bbbbccefa8b6ced4379ac3e915db",
+                                            "altText":  "Quần track chạy bộ Uni Forest - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-SHOE-001",
+                         "name":  "Giày chạy bộ nam Cobalt Ride",
+                         "slug":  "giay-chay-bo-nam-cobalt-ride",
+                         "categorySlug":  "giay-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_SHOES",
+                         "gender":  "MEN",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "BLUE",
+                         "sizes":  [
+                                       "40",
+                                       "41",
+                                       "42",
+                                       "43",
+                                       "44",
+                                       "45"
+                                   ],
+                         "price":  1399000,
+                         "compareAtPrice":  1699000,
+                         "stockPerVariant":  10,
+                         "shortDescription":  "Giày chạy bộ nam màu cobalt, đệm êm cho luyện tập hằng ngày.",
+                         "description":  "Giày chạy bộ nam màu cobalt, đệm êm cho luyện tập hằng ngày. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "ENGINEERED_MESH",
+                                            "fit":  "NEUTRAL",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-SHOE-001-01.png",
+                                            "sha256":  "195fc701909931e0eb18491a75234cc70b9bc369ca6914726745b1e919935dc9",
+                                            "altText":  "Giày chạy bộ nam Cobalt Ride - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-SHOE-001-02.png",
+                                            "sha256":  "498b814f50a6ef938f4d0aa38a203c2d40e7d159305d1ab6683c027ad07237b3",
+                                            "altText":  "Giày chạy bộ nam Cobalt Ride - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-SHOE-002",
+                         "name":  "Giày chạy bộ nữ Coral Cloud",
+                         "slug":  "giay-chay-bo-nu-coral-cloud",
+                         "categorySlug":  "giay-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_SHOES",
+                         "gender":  "WOMEN",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "PINK",
+                         "sizes":  [
+                                       "36",
+                                       "37",
+                                       "38",
+                                       "39",
+                                       "40",
+                                       "41"
+                                   ],
+                         "price":  1399000,
+                         "compareAtPrice":  1699000,
+                         "stockPerVariant":  10,
+                         "shortDescription":  "Giày chạy bộ nữ màu coral với thân lưới nhẹ.",
+                         "description":  "Giày chạy bộ nữ màu coral với thân lưới nhẹ. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "ENGINEERED_MESH",
+                                            "fit":  "NEUTRAL",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-SHOE-002-01.png",
+                                            "sha256":  "369c6eb474fb8ea0cdebfa498389786bedcb29e4b0dcdfbc4f637bda045e420f",
+                                            "altText":  "Giày chạy bộ nữ Coral Cloud - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-SHOE-002-02.png",
+                                            "sha256":  "2630d0261f3770e7d769ab628b71563e3bfeae389d60a87fc8ce4473160dcdd8",
+                                            "altText":  "Giày chạy bộ nữ Coral Cloud - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-SHOE-003",
+                         "name":  "Giày chạy bộ Uni Pure Step",
+                         "slug":  "giay-chay-bo-uni-pure-step",
+                         "categorySlug":  "giay-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_SHOES",
+                         "gender":  "UNISEX",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "WHITE",
+                         "sizes":  [
+                                       "38",
+                                       "39",
+                                       "40",
+                                       "41",
+                                       "42",
+                                       "43",
+                                       "44"
+                                   ],
+                         "price":  1499000,
+                         "compareAtPrice":  1799000,
+                         "stockPerVariant":  9,
+                         "shortDescription":  "Giày chạy bộ unisex màu trắng, đế ổn định và êm.",
+                         "description":  "Giày chạy bộ unisex màu trắng, đế ổn định và êm. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "KNIT_MESH",
+                                            "fit":  "STABLE",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-SHOE-003-01.png",
+                                            "sha256":  "f7211cdfd6be301fbc2dc53ac9878e609ef504a7b91dceb07ae23451e342a23b",
+                                            "altText":  "Giày chạy bộ Uni Pure Step - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-SHOE-003-02.png",
+                                            "sha256":  "3931c2b550e451c4a1f4890cb75a52c15501228cf5c8053aeb90c6a1a31f370a",
+                                            "altText":  "Giày chạy bộ Uni Pure Step - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-SHOE-004",
+                         "name":  "Giày đá bóng nam Turf Shadow",
+                         "slug":  "giay-da-bong-nam-turf-shadow",
+                         "categorySlug":  "giay-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_SHOES",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "BLACK",
+                         "sizes":  [
+                                       "40",
+                                       "41",
+                                       "42",
+                                       "43",
+                                       "44",
+                                       "45"
+                                   ],
+                         "price":  1199000,
+                         "compareAtPrice":  1499000,
+                         "stockPerVariant":  10,
+                         "shortDescription":  "Giày đá bóng sân cỏ nhân tạo nam màu đen, đế đinh thấp.",
+                         "description":  "Giày đá bóng sân cỏ nhân tạo nam màu đen, đế đinh thấp. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "SYNTHETIC_UPPER",
+                                            "fit":  "TURF",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-SHOE-004-01.png",
+                                            "sha256":  "a4ee8346b473dde54e90f8638b17225ba19b018ed0b05c55a8d08b872f5fcc9b",
+                                            "altText":  "Giày đá bóng nam Turf Shadow - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-SHOE-004-02.png",
+                                            "sha256":  "82231d0aab4e1244d5f222b270270b9b8f532f03da85e5b1e7fed683fb360be7",
+                                            "altText":  "Giày đá bóng nam Turf Shadow - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-SHOE-005",
+                         "name":  "Giày đá bóng nữ Turf Spark",
+                         "slug":  "giay-da-bong-nu-turf-spark",
+                         "categorySlug":  "giay-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_SHOES",
+                         "gender":  "WOMEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "YELLOW",
+                         "sizes":  [
+                                       "36",
+                                       "37",
+                                       "38",
+                                       "39",
+                                       "40",
+                                       "41"
+                                   ],
+                         "price":  1199000,
+                         "compareAtPrice":  1499000,
+                         "stockPerVariant":  10,
+                         "shortDescription":  "Giày đá bóng sân cỏ nhân tạo nữ màu vàng nổi bật.",
+                         "description":  "Giày đá bóng sân cỏ nhân tạo nữ màu vàng nổi bật. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "SYNTHETIC_UPPER",
+                                            "fit":  "TURF",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-SHOE-005-01.png",
+                                            "sha256":  "a5d280d4437fdda846709e09da1098212db117f89f5e424b8c227bf8d11906b1",
+                                            "altText":  "Giày đá bóng nữ Turf Spark - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-SHOE-005-02.png",
+                                            "sha256":  "3e6f50d4413515fce786d58edb663e7c94dc94361760be83e132cfffc2906403",
+                                            "altText":  "Giày đá bóng nữ Turf Spark - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-SHOE-006",
+                         "name":  "Giày futsal Uni Red Court",
+                         "slug":  "giay-futsal-uni-red-court",
+                         "categorySlug":  "giay-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_SHOES",
+                         "gender":  "UNISEX",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "RED",
+                         "sizes":  [
+                                       "38",
+                                       "39",
+                                       "40",
+                                       "41",
+                                       "42",
+                                       "43",
+                                       "44"
+                                   ],
+                         "price":  1099000,
+                         "compareAtPrice":  1399000,
+                         "stockPerVariant":  10,
+                         "shortDescription":  "Giày futsal unisex màu đỏ với đế cao su bám sân.",
+                         "description":  "Giày futsal unisex màu đỏ với đế cao su bám sân. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "SYNTHETIC_UPPER",
+                                            "fit":  "INDOOR",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-SHOE-006-01.png",
+                                            "sha256":  "a4c2f891b18b1d26101724f26fdeb922d140ac5387643d4ba4f78350679203c4",
+                                            "altText":  "Giày futsal Uni Red Court - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-SHOE-006-02.png",
+                                            "sha256":  "39364d13906486be636d91407a0ddd8aa688cab3f9b24bee20ac2b4c1c9812dd",
+                                            "altText":  "Giày futsal Uni Red Court - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-UNIFORM-001",
+                         "name":  "Bộ bóng đá nam Crimson Unity",
+                         "slug":  "bo-bong-da-nam-crimson-unity",
+                         "categorySlug":  "dong-phuc-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_UNIFORM",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "RED",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  699000,
+                         "compareAtPrice":  849000,
+                         "stockPerVariant":  14,
+                         "shortDescription":  "Bộ bóng đá nam màu đỏ gồm áo và quần đồng bộ.",
+                         "description":  "Bộ bóng đá nam màu đỏ gồm áo và quần đồng bộ. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-001-01.png",
+                                            "sha256":  "9d69937856fcbd10ae0ec929ac9ddac20d1d1f1a08e00f390956deefe8e0a9bf",
+                                            "altText":  "Bộ bóng đá nam Crimson Unity - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-001-02.png",
+                                            "sha256":  "8b84ac6d7391c74154faf737cb7e30686a464b0b3b5fe1221b83ec47e24be039",
+                                            "altText":  "Bộ bóng đá nam Crimson Unity - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-UNIFORM-002",
+                         "name":  "Bộ bóng đá nữ Royal Wave",
+                         "slug":  "bo-bong-da-nu-royal-wave",
+                         "categorySlug":  "dong-phuc-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_UNIFORM",
+                         "gender":  "WOMEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "BLUE",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL"
+                                   ],
+                         "price":  699000,
+                         "compareAtPrice":  849000,
+                         "stockPerVariant":  14,
+                         "shortDescription":  "Bộ bóng đá nữ xanh dương và navy gồm áo và quần.",
+                         "description":  "Bộ bóng đá nữ xanh dương và navy gồm áo và quần. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-002-01.png",
+                                            "sha256":  "1b9289f81acc561317f562be9658b2104039fdba55935c84679e1aadfdbaeeb4",
+                                            "altText":  "Bộ bóng đá nữ Royal Wave - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-002-02.png",
+                                            "sha256":  "cfb29192e2892926bde7ba6e9408046ce71a9558c76c46554afb27133e728e18",
+                                            "altText":  "Bộ bóng đá nữ Royal Wave - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-UNIFORM-003",
+                         "name":  "Bộ bóng đá Uni Forest Line",
+                         "slug":  "bo-bong-da-uni-forest-line",
+                         "categorySlug":  "dong-phuc-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_UNIFORM",
+                         "gender":  "UNISEX",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "GREEN",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  729000,
+                         "compareAtPrice":  879000,
+                         "stockPerVariant":  12,
+                         "shortDescription":  "Bộ bóng đá unisex xanh lá gồm áo và quần đồng bộ.",
+                         "description":  "Bộ bóng đá unisex xanh lá gồm áo và quần đồng bộ. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "REGULAR",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-003-01.png",
+                                            "sha256":  "bf656fbb12f85f54a7ca8dd0e31fe2954c237c3171fb38ab6c8020283bb635fb",
+                                            "altText":  "Bộ bóng đá Uni Forest Line - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-003-02.png",
+                                            "sha256":  "4fc45ddd1638f4125bc25d39f6726cf91e590e80bdf20f18a970670fd2a1b473",
+                                            "altText":  "Bộ bóng đá Uni Forest Line - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-UNIFORM-004",
+                         "name":  "Bộ bóng đá nam Black Gold",
+                         "slug":  "bo-bong-da-nam-black-gold",
+                         "categorySlug":  "dong-phuc-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_UNIFORM",
+                         "gender":  "MEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "BLACK",
+                         "sizes":  [
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  759000,
+                         "compareAtPrice":  929000,
+                         "stockPerVariant":  12,
+                         "shortDescription":  "Bộ bóng đá nam màu đen viền vàng gồm áo và quần.",
+                         "description":  "Bộ bóng đá nam màu đen viền vàng gồm áo và quần. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-004-01.png",
+                                            "sha256":  "ca14af6896df79f3720dcf740c798778e1ddd1d96928a7612d7e68bbcf89a6be",
+                                            "altText":  "Bộ bóng đá nam Black Gold - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-004-02.png",
+                                            "sha256":  "ab26c8463001f9763e85bbb1fe0e1a1a0ea90455aa3c1fe87010bb14c929ac93",
+                                            "altText":  "Bộ bóng đá nam Black Gold - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-UNIFORM-005",
+                         "name":  "Bộ bóng đá nữ Violet Star",
+                         "slug":  "bo-bong-da-nu-violet-star",
+                         "categorySlug":  "dong-phuc-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_UNIFORM",
+                         "gender":  "WOMEN",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "PURPLE",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL"
+                                   ],
+                         "price":  729000,
+                         "compareAtPrice":  879000,
+                         "stockPerVariant":  12,
+                         "shortDescription":  "Bộ bóng đá nữ màu tím viền trắng gồm áo và quần.",
+                         "description":  "Bộ bóng đá nữ màu tím viền trắng gồm áo và quần. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "ATHLETIC",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-005-01.png",
+                                            "sha256":  "b93683b00967d82d3f0af2b5482b7f4f7c1bc748c0ac2421ac9b8e5c5dc4dd3f",
+                                            "altText":  "Bộ bóng đá nữ Violet Star - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-005-02.png",
+                                            "sha256":  "9158771e9583d438c627d7357e45b2ecc7f571f1002e496f5e5aa30ac7711ba1",
+                                            "altText":  "Bộ bóng đá nữ Violet Star - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-UNIFORM-006",
+                         "name":  "Bộ bóng đá Uni Orange Pulse",
+                         "slug":  "bo-bong-da-uni-orange-pulse",
+                         "categorySlug":  "dong-phuc-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_UNIFORM",
+                         "gender":  "UNISEX",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "ORANGE",
+                         "sizes":  [
+                                       "XS",
+                                       "S",
+                                       "M",
+                                       "L",
+                                       "XL",
+                                       "XXL"
+                                   ],
+                         "price":  729000,
+                         "compareAtPrice":  879000,
+                         "stockPerVariant":  12,
+                         "shortDescription":  "Bộ bóng đá unisex cam và đen gồm áo và quần đồng bộ.",
+                         "description":  "Bộ bóng đá unisex cam và đen gồm áo và quần đồng bộ. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_MESH",
+                                            "fit":  "REGULAR",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-006-01.png",
+                                            "sha256":  "c2be1ca9000b185dea7e5d9fa51b68d68dd3c7a9768f2a3f1032cbdb485e7420",
+                                            "altText":  "Bộ bóng đá Uni Orange Pulse - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-UNIFORM-006-02.png",
+                                            "sha256":  "30ec86365e1031c9a2057dbf9070ffc65cf7d9c68794169b9484fcca6fba733b",
+                                            "altText":  "Bộ bóng đá Uni Orange Pulse - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-ACCESSORY-001",
+                         "name":  "Bình nước thể thao Black Flow 750ml",
+                         "slug":  "binh-nuoc-the-thao-black-flow-750ml",
+                         "categorySlug":  "phu-kien-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_ACCESSORY",
+                         "gender":  "UNISEX",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "BLACK",
+                         "sizes":  [
+                                       "ONE_SIZE"
+                                   ],
+                         "price":  219000,
+                         "compareAtPrice":  279000,
+                         "stockPerVariant":  30,
+                         "shortDescription":  "Bình nước thể thao màu đen dung tích 750 ml, nắp bật.",
+                         "description":  "Bình nước thể thao màu đen dung tích 750 ml, nắp bật. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "BPA_FREE_PLASTIC",
+                                            "fit":  "ONE_SIZE",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-ACCESSORY-001-01.png",
+                                            "sha256":  "fa12c4905a8af2ceffceb6119186b3ee973d7f2b99ce7397037d08bc16198de0",
+                                            "altText":  "Bình nước thể thao Black Flow 750ml - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-ACCESSORY-001-02.png",
+                                            "sha256":  "f9ad8b090c1230b90b3d95d302b4d36529024ba18993508454b8f3833549aa69",
+                                            "altText":  "Bình nước thể thao Black Flow 750ml - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-ACCESSORY-002",
+                         "name":  "Băng tay thể thao Royal Pair",
+                         "slug":  "bang-tay-the-thao-royal-pair",
+                         "categorySlug":  "phu-kien-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_ACCESSORY",
+                         "gender":  "UNISEX",
+                         "sportCode":  "RUNNING",
+                         "colorCode":  "BLUE",
+                         "sizes":  [
+                                       "ONE_SIZE"
+                                   ],
+                         "price":  129000,
+                         "compareAtPrice":  169000,
+                         "stockPerVariant":  35,
+                         "shortDescription":  "Cặp băng cổ tay thể thao màu xanh dương, thấm hút tốt.",
+                         "description":  "Cặp băng cổ tay thể thao màu xanh dương, thấm hút tốt. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "COTTON_ELASTANE",
+                                            "fit":  "ONE_SIZE",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-ACCESSORY-002-01.png",
+                                            "sha256":  "ed25a38980ff4013a6ede7d94bf68284cd0866214420ebdde3684a01df1e300a",
+                                            "altText":  "Băng tay thể thao Royal Pair - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-ACCESSORY-002-02.png",
+                                            "sha256":  "7e14022e4dce397a0564ced7da5dda7ed2ce3db94eba0f22f3498ee2c0f72c89",
+                                            "altText":  "Băng tay thể thao Royal Pair - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-ACCESSORY-003",
+                         "name":  "Tất bóng đá White Match",
+                         "slug":  "tat-bong-da-white-match",
+                         "categorySlug":  "phu-kien-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_ACCESSORY",
+                         "gender":  "UNISEX",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "WHITE",
+                         "sizes":  [
+                                       "ONE_SIZE"
+                                   ],
+                         "price":  159000,
+                         "compareAtPrice":  199000,
+                         "stockPerVariant":  32,
+                         "shortDescription":  "Cặp tất bóng đá cao cổ màu trắng, dệt gân và có đệm chân.",
+                         "description":  "Cặp tất bóng đá cao cổ màu trắng, dệt gân và có đệm chân. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYESTER_ELASTANE",
+                                            "fit":  "ONE_SIZE",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-ACCESSORY-003-01.png",
+                                            "sha256":  "8e685d62a2af1674e7cf4849ed91a6a7f8416fde376427ab0c4a7760e21c4938",
+                                            "altText":  "Tất bóng đá White Match - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-ACCESSORY-003-02.png",
+                                            "sha256":  "7393cbfdae38fb52888c7bcf0ed910d27094897575b70d1d9d21c9194641c85e",
+                                            "altText":  "Tất bóng đá White Match - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     },
+                     {
+                         "code":  "PILOT-ACCESSORY-004",
+                         "name":  "Ốp bảo vệ ống đồng Red Guard",
+                         "slug":  "op-bao-ve-ong-dong-red-guard",
+                         "categorySlug":  "phu-kien-the-thao",
+                         "brandSlug":  "khong-thuong-hieu",
+                         "productType":  "SPORTS_ACCESSORY",
+                         "gender":  "UNISEX",
+                         "sportCode":  "FOOTBALL",
+                         "colorCode":  "RED",
+                         "sizes":  [
+                                       "ONE_SIZE"
+                                   ],
+                         "price":  249000,
+                         "compareAtPrice":  319000,
+                         "stockPerVariant":  28,
+                         "shortDescription":  "Cặp bảo vệ ống đồng bóng đá màu đỏ với lớp đệm đen.",
+                         "description":  "Cặp bảo vệ ống đồng bóng đá màu đỏ với lớp đệm đen. Sản phẩm pilot hư cấu, ảnh synthetic không chứa logo, dùng cho demo và đánh giá tìm kiếm hình ảnh.",
+                         "attributes":  {
+                                            "material":  "POLYPROPYLENE_EVA",
+                                            "fit":  "ONE_SIZE",
+                                            "image_source":  "OPENAI_IMAGEGEN_SYNTHETIC",
+                                            "dataset_version":  "1.0.0"
+                                        },
+                         "images":  [
+                                        {
+                                            "path":  "assets/PILOT-ACCESSORY-004-01.png",
+                                            "sha256":  "80bc3cfd06804c64122a47d3c3a6182f4b629535866008339cbc2c9c9e333938",
+                                            "altText":  "Ốp bảo vệ ống đồng Red Guard - góc chính",
+                                            "view":  "PRIMARY_THREE_QUARTER",
+                                            "sortOrder":  0,
+                                            "primary":  true
+                                        },
+                                        {
+                                            "path":  "assets/PILOT-ACCESSORY-004-02.png",
+                                            "sha256":  "6237e87d020a0f9c45667d631e6f1ca621b01dceae5a1385619b3e7b8458ac79",
+                                            "altText":  "Ốp bảo vệ ống đồng Red Guard - góc sau",
+                                            "view":  "REAR_THREE_QUARTER",
+                                            "sortOrder":  1,
+                                            "primary":  false
+                                        }
+                                    ]
+                     }
+                 ]
+}

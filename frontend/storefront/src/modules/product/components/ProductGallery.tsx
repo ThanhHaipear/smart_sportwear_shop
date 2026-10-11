@@ -30,7 +30,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
             aria-label={`${alt} thumbnail ${index + 1}`}
             aria-current={index === activeIndex}
             className={cn(
-              "relative aspect-[1/1.18] overflow-hidden border border-transparent bg-white",
+              "relative aspect-square overflow-hidden border border-transparent bg-[#f7f7f7]",
               index === activeIndex && "border-ivy-dark",
             )}
           >
@@ -39,7 +39,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
               alt={`${alt} thumbnail ${index + 1}`}
               fill
               sizes="90px"
-              className="object-cover"
+              className="object-contain p-1"
               unoptimized={shouldBypassImageOptimization(image)}
             />
           </button>
@@ -58,14 +58,14 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
           </button>
         ) : null}
 
-        <div className="relative aspect-[0.78] w-full overflow-hidden">
+        <div className="relative aspect-square w-full overflow-hidden bg-[#f7f7f7]">
           <Image
             key={activeIndex}
             src={images[activeIndex]}
             alt={alt}
             fill
             sizes="(min-width: 1024px) 620px, 100vw"
-            className="object-cover"
+            className="object-contain p-3 md:p-6"
             priority
             unoptimized={shouldBypassImageOptimization(images[activeIndex])}
           />

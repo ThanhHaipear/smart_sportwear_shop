@@ -206,6 +206,9 @@ app:
     cloud-name: ${CLOUDINARY_CLOUD_NAME:}
     api-key: ${CLOUDINARY_API_KEY:}
     api-secret: ${CLOUDINARY_API_SECRET:}
+    # Store originals once. UI transformations are derived at delivery time;
+    # image embeddings use the versioned original secure_url stored in PostgreSQL.
+    product-image-folder: ${CLOUDINARY_PRODUCT_IMAGE_FOLDER:products}
 
 info:
   app:

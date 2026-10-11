@@ -21,6 +21,7 @@ import com.dunghaiquyen.ecommerce.modules.product.dto.ProductUpdateRequest;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ProductVariantResponse;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ReviewSummaryResponse;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
+import com.dunghaiquyen.ecommerce.modules.product.entity.ProductDataSource;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Gender;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductImage;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
@@ -272,6 +273,7 @@ public class ProductService {
             product.getSports().add(catalogReferenceService.requireSport(request.sportType()));
         }
         product.setStatus(request.status() != null ? request.status() : ProductStatus.DRAFT);
+        product.setDataSource(request.dataSource() != null ? request.dataSource() : ProductDataSource.REAL);
         product.setFeatured(request.isFeatured() != null && request.isFeatured());
         if (request.attributes() != null) {
             product.setAttributes(request.attributes());

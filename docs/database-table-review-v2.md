@@ -179,3 +179,11 @@ Review thiết kế từng bảng đã hoàn thành và được Chủ dự án 
 - Đã xóa repository aggregate review đặt nhầm trong module product và các endpoint gắn collection khỏi controller baseline.
 - Bằng chứng: backend compile và `OrderFinancialPolicyTest` thành công; PostgreSQL Testcontainers sạch chạy Flyway `V1 → V3`, validate 3 migration, Hibernate validate, `EcommerceBackendApplicationTests.contextLoads` và 8/8 ca `ForgotPasswordIntegrationTest` thành công.
 - Bộ integration test nghiệp vụ cũ cần chuyển fixture sang quy tắc 1A: sản phẩm chỉ được `ACTIVE` sau khi có variant bán được và ảnh chính upload đủ checksum/kích thước/định dạng/provenance. Các ca combo/promotion/notification và module đợt 2 không còn thuộc baseline test.
+
+### 9.2. Catalog pilot và baseline ảnh (11/10/2026)
+
+- Đã nhập dataset `smart-sportswear-pilot:1.0.0` (`bfb1508a-804a-473a-b331-5b1e71a3a109`) lên Supabase/Cloudinary: 30 sản phẩm `ACTIVE`, 148 variant và 60 ảnh; đủ 8 áo, 6 quần, 6 giày, 6 bộ đồng phục và 4 phụ kiện; bao phủ nam, nữ, unisex, football và running.
+- Toàn bộ sản phẩm pilot là `DEMO`; ảnh là `SYNTHETIC`, giấy phép `AI_GENERATED_PROJECT_USE`. Dataset đã `VALIDATED → FROZEN`; chạy importer lần hai trả kết quả hiện có và không tạo bản ghi/asset trùng.
+- Ảnh gốc PNG sRGB `1254×1254`, 2 ảnh/sản phẩm, có SHA-256, versioned Cloudinary URL, kích thước, định dạng, dung lượng và provenance. SigLIP2 phải dùng versioned original đã xác minh checksum; ảnh giao diện dùng khung vuông, `object-contain`, responsive và không upscale quá kích thước gốc.
+- Luồng publish đã được áp dụng đúng: `DRAFT → variant bán được → ảnh chính hợp lệ → ACTIVE`. Đồng phục được chụp đủ áo và quần trong cùng ảnh vì được bán dưới một SKU nguyên bộ.
+- Bằng chứng và rule tái sử dụng: [catalog pilot README](../catalog/pilot-v1/README.md), [manifest](../catalog/pilot-v1/manifest.json), [checksum](../catalog/pilot-v1/assets.sha256), [kết quả import](../catalog/pilot-v1/import-result.json), [prompt/provenance](../catalog/pilot-v1/image-prompts.md).

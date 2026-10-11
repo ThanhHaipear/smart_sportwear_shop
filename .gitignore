@@ -47,3 +47,7 @@ chatbot-admin-service/data/
 backups/
 *.dump
 *.backup
+
+# Generated pilot source images are uploaded to Cloudinary and intentionally kept
+# out of Git (about 120 MB). Manifest, prompts, checksums and import report stay tracked.
+catalog/pilot-v1/assets/

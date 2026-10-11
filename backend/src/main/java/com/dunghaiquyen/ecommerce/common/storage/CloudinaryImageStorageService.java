@@ -6,27 +6,29 @@ import java.io.IOException;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * Real provider, active only when app.storage.provider=cloudinary. All
- * product images are uploaded into a single fixed "products" folder - no
- * per-tenant/per-category folder structure is needed at this project's scale,
- * and adding one would be speculative for a requirement nobody has asked for.
+ * Real provider, active only when app.storage.provider=cloudinary. Original
+ * product assets use one configurable catalog folder; derived delivery sizes
+ * are Cloudinary transformations and never replace the stored original.
  */
 @Service
 @ConditionalOnProperty(prefix = "app.storage", name = "provider", havingValue = "cloudinary")
 public class CloudinaryImageStorageService implements ImageStorageService {
 
     private static final Logger log = LoggerFactory.getLogger(CloudinaryImageStorageService.class);
-    private static final String FOLDER = "products";
-
     private final Cloudinary cloudinary;
+    private final String folder;
 
-    public CloudinaryImageStorageService(Cloudinary cloudinary) {
+    public CloudinaryImageStorageService(
+            Cloudinary cloudinary,
+            @Value("${app.cloudinary.product-image-folder:products}") String folder) {
         this.cloudinary = cloudinary;
+        this.folder = normalizeFolder(folder);
     }
 
     @Override
@@ -34,7 +36,10 @@ public class CloudinaryImageStorageService implements ImageStorageService {
         try {
             @SuppressWarnings("unchecked")
             Map<String, Object> result = cloudinary.uploader()
-                    .upload(file.getBytes(), ObjectUtils.asMap("folder", FOLDER));
+                    .upload(file.getBytes(), ObjectUtils.asMap(
+                            "folder", folder,
+                            "resource_type", "image",
+                            "overwrite", false));
             String publicId = (String) result.get("public_id");
             String secureUrl = (String) result.get("secure_url");
             Integer width = toInteger(result.get("width"));
@@ -72,5 +77,12 @@ public class CloudinaryImageStorageService implements ImageStorageService {
 
     private Long toLong(Object value) {
         return value instanceof Number number ? number.longValue() : null;
+    }
+
+    private String normalizeFolder(String value) {
+        if (value == null || value.isBlank()) {
+            return "products";
+        }
+        return value.trim().replaceAll("^/+|/+$", "");
     }
 }

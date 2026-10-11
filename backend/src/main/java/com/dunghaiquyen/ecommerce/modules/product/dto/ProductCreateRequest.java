@@ -2,6 +2,7 @@ package com.dunghaiquyen.ecommerce.modules.product.dto;
 
 import com.dunghaiquyen.ecommerce.common.validation.Patterns;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Gender;
+import com.dunghaiquyen.ecommerce.modules.product.entity.ProductDataSource;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,5 +45,7 @@ public record ProductCreateRequest(
 
         Boolean isFeatured,
 
-        Map<String, String> attributes) {
+        Map<String, String> attributes,
+
+        ProductDataSource dataSource) {
 }
