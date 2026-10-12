@@ -24,6 +24,8 @@ type CategoryListingQuery = {
   surface?: string;
   discount?: string;
   gender?: string;
+  sportType?: string;
+  brandSlug?: string;
 };
 
 export async function fetchCategoryListing(query: CategoryListingQuery) {

@@ -11,8 +11,8 @@ interface ColorSwatch {
   hex: string;
 }
 
-const CLOTH_SIZES = ["S", "M", "L", "XL", "XXL"] as const;
-const SHOE_SIZES = ["38", "39", "40", "41", "42", "43", "44", "45"] as const;
+const CLOTH_SIZES = ["XS", "S", "M", "L", "XL", "XXL"] as const;
+const SHOE_SIZES = ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"] as const;
 
 const COLOR_SWATCHES: ColorSwatch[] = [
   { label: "Đen", value: "BLACK", hex: "#1A1A1A" },
@@ -22,7 +22,6 @@ const COLOR_SWATCHES: ColorSwatch[] = [
   { label: "Hồng", value: "PINK", hex: "#E91E8C" },
   { label: "Đỏ", value: "RED", hex: "#8B0000" },
   { label: "Xám", value: "GRAY", hex: "#757575" },
-  { label: "Be", value: "BEIGE", hex: "#C8A97E" },
   { label: "Nâu", value: "BROWN", hex: "#5D4037" },
   { label: "Xanh lá", value: "GREEN", hex: "#2E7D32" },
   { label: "Cam", value: "ORANGE", hex: "#E8813A" },
@@ -44,9 +43,20 @@ const SURFACE_OPTIONS = [
 const GENDER_OPTIONS = [
   { label: "Nam", value: "MEN" },
   { label: "Nữ", value: "WOMEN" },
+  { label: "Unisex", value: "UNISEX" },
 ] as const;
 
-type SizeType = "cloth" | "shoe" | "both";
+const SPORT_OPTIONS = [
+  { label: "Bóng đá", value: "FOOTBALL" },
+  { label: "Chạy bộ", value: "RUNNING" },
+] as const;
+
+const BRAND_OPTIONS = [
+  { label: "Nike", value: "nike" },
+  { label: "Adidas", value: "adidas" },
+] as const;
+
+type SizeType = "cloth" | "shoe" | "both" | "none";
 
 const MIN_PRICE = 0;
 const MAX_PRICE = 10_000_000;
@@ -115,6 +125,8 @@ export function CategorySidebarFilter({
   initialSurface,
   initialDiscount,
   initialGender,
+  initialSportType,
+  initialBrandSlug,
   showSurface = false,
   sizeType = "both",
 }: {
@@ -125,6 +137,8 @@ export function CategorySidebarFilter({
   initialSurface?: string;
   initialDiscount?: string;
   initialGender?: string;
+  initialSportType?: string;
+  initialBrandSlug?: string;
   showSurface?: boolean;
   sizeType?: SizeType;
 }) {
@@ -134,6 +148,8 @@ export function CategorySidebarFilter({
   const [openPrice, setOpenPrice] = useState(false);
   const [openDiscount, setOpenDiscount] = useState(false);
   const [openGender, setOpenGender] = useState(Boolean(initialGender));
+  const [openSport, setOpenSport] = useState(Boolean(initialSportType));
+  const [openBrand, setOpenBrand] = useState(Boolean(initialBrandSlug));
   const [selectedSurface, setSelectedSurface] = useState<string | null>(initialSurface ?? null);
 
   const pathname = usePathname();
@@ -145,6 +161,8 @@ export function CategorySidebarFilter({
   const [selectedColor, setSelectedColor] = useState<string | null>(initialColor ?? null);
   const [selectedDiscount, setSelectedDiscount] = useState<string | null>(initialDiscount ?? null);
   const [selectedGender, setSelectedGender] = useState<string | null>(initialGender ?? null);
+  const [selectedSportType, setSelectedSportType] = useState<string | null>(initialSportType ?? null);
+  const [selectedBrandSlug, setSelectedBrandSlug] = useState<string | null>(initialBrandSlug ?? null);
   const [priceRange, setPriceRange] = useState<[number, number]>([
     initialMinPrice ?? MIN_PRICE,
     initialMaxPrice ?? MAX_PRICE,
@@ -187,6 +205,12 @@ export function CategorySidebarFilter({
     if (selectedGender) params.set("gender", selectedGender);
     else params.delete("gender");
 
+    if (selectedSportType) params.set("sportType", selectedSportType);
+    else params.delete("sportType");
+
+    if (selectedBrandSlug) params.set("brandSlug", selectedBrandSlug);
+    else params.delete("brandSlug");
+
     const query = params.toString();
     const nextUrl = query ? `${pathname}?${query}` : pathname;
     if (nextUrl === currentUrl) return;
@@ -198,13 +222,15 @@ export function CategorySidebarFilter({
 
   function clearFilters() {
     const params = new URLSearchParams(searchParams.toString());
-    ["page", "size", "color", "minPrice", "maxPrice", "surface", "discount", "gender"].forEach((k) => params.delete(k));
+    ["page", "size", "color", "minPrice", "maxPrice", "surface", "discount", "gender", "sportType", "brandSlug"].forEach((k) => params.delete(k));
     setSelectedSize(null);
     setSelectedColor(null);
     setSelectedSurface(null);
     setPriceRange([MIN_PRICE, MAX_PRICE]);
     setSelectedDiscount(null);
     setSelectedGender(null);
+    setSelectedSportType(null);
+    setSelectedBrandSlug(null);
     const query = params.toString();
     const nextUrl = query ? `${pathname}?${query}` : pathname;
     if (nextUrl === currentUrl) return;
@@ -238,6 +264,44 @@ export function CategorySidebarFilter({
         </ul>
       </FilterSection>
 
+      <FilterSection label="Môn thể thao" open={openSport} onToggle={() => setOpenSport((p) => !p)}>
+        <ul className="space-y-3">
+          {SPORT_OPTIONS.map((opt) => (
+            <li key={opt.value}>
+              <label className="flex cursor-pointer items-center gap-2 text-[13px] text-gray-700">
+                <input
+                  type="radio"
+                  name="sportType"
+                  checked={selectedSportType === opt.value}
+                  onChange={() => setSelectedSportType(opt.value)}
+                  className="size-4 accent-ivy-dark"
+                />
+                {opt.label}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </FilterSection>
+
+      <FilterSection label="Thương hiệu" open={openBrand} onToggle={() => setOpenBrand((p) => !p)}>
+        <ul className="space-y-3">
+          {BRAND_OPTIONS.map((opt) => (
+            <li key={opt.value}>
+              <label className="flex cursor-pointer items-center gap-2 text-[13px] text-gray-700">
+                <input
+                  type="radio"
+                  name="brandSlug"
+                  checked={selectedBrandSlug === opt.value}
+                  onChange={() => setSelectedBrandSlug(opt.value)}
+                  className="size-4 accent-ivy-dark"
+                />
+                {opt.label}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </FilterSection>
+
       {showSurface ? (
         <FilterSection label="Mặt sân" open={openSurface} onToggle={() => setOpenSurface((p) => !p)}>
           <ul className="space-y-3">
@@ -259,34 +323,36 @@ export function CategorySidebarFilter({
         </FilterSection>
       ) : null}
 
-      <FilterSection label="Size" open={openSize} onToggle={() => setOpenSize((p) => !p)}>
-        <div className="space-y-3">
-          {showCloth && (
-            <div>
-              {sizeType === "both" && (
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-400">Quần áo</p>
-              )}
-              <div className="flex flex-wrap gap-2">
-                {CLOTH_SIZES.map((s) => (
-                  <SizeChip key={s} size={s} selected={selectedSize === s} onToggle={() => setSelectedSize((p) => (p === s ? null : s))} />
-                ))}
+      {sizeType !== "none" ? (
+        <FilterSection label="Size" open={openSize} onToggle={() => setOpenSize((p) => !p)}>
+          <div className="space-y-3">
+            {showCloth && (
+              <div>
+                {sizeType === "both" && (
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-400">Quần áo</p>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {CLOTH_SIZES.map((s) => (
+                    <SizeChip key={s} size={s} selected={selectedSize === s} onToggle={() => setSelectedSize((p) => (p === s ? null : s))} />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          {showShoe && (
-            <div>
-              {sizeType === "both" && (
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-400">Giày</p>
-              )}
-              <div className="flex flex-wrap gap-2">
-                {SHOE_SIZES.map((s) => (
-                  <SizeChip key={s} size={s} selected={selectedSize === s} onToggle={() => setSelectedSize((p) => (p === s ? null : s))} />
-                ))}
+            )}
+            {showShoe && (
+              <div>
+                {sizeType === "both" && (
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-400">Giày</p>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {SHOE_SIZES.map((s) => (
+                    <SizeChip key={s} size={s} selected={selectedSize === s} onToggle={() => setSelectedSize((p) => (p === s ? null : s))} />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </FilterSection>
+            )}
+          </div>
+        </FilterSection>
+      ) : null}
 
       <FilterSection label="Màu sắc" open={openColor} onToggle={() => setOpenColor((p) => !p)}>
         <div className="flex flex-wrap gap-3">

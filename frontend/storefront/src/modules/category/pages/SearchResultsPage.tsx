@@ -16,11 +16,11 @@ export async function SearchResultsPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const params = await searchParams;
-  const { q, page: pageParam, discount, sort, size, color, minPrice, maxPrice, surface, gender, brandSlug, categorySlug } = params;
+  const { q, page: pageParam, discount, sort, size, color, minPrice, maxPrice, gender, brandSlug, categorySlug, sportType } = params;
   const query = q?.trim() ?? "";
   const currentPage = Math.max(1, Number(pageParam ?? 1));
   const isSaleListing = discount === "any";
-  const filters = { discount, sort, size, color, minPrice, maxPrice, surface, gender, brandSlug, categorySlug };
+  const filters = { discount, sort, size, color, minPrice, maxPrice, gender, brandSlug, categorySlug, sportType };
   const { products, meta, error }: { products: ProductListItem[]; meta: PageMeta; error: boolean } = await fetchSearchResults(
     query,
     currentPage,
@@ -43,10 +43,10 @@ export async function SearchResultsPage({
           initialColor={color}
           initialMinPrice={minPrice ? Number(minPrice) : undefined}
           initialMaxPrice={maxPrice ? Number(maxPrice) : undefined}
-          initialSurface={surface}
           initialDiscount={discount}
           initialGender={gender}
-          showSurface
+          initialSportType={sportType}
+          initialBrandSlug={brandSlug}
         />
         <div className="flex-1">
           <CategoryToolbar title={title} resultCount={meta.total} currentSort={sort} />

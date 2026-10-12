@@ -69,6 +69,7 @@
 - Seed: `V2__seed_1a_taxonomy.sql`, gồm 5 loại sản phẩm, `FOOTBALL`/`RUNNING`, hệ size quần áo/giày/phụ kiện và không có `KIDS`.
 - Kiểm thử: `V2OneAMigrationTest` dùng Flyway `clean → migrate → validate → migrate lại` và Hibernate `validate` toàn bộ entity 1A, đạt **5/5 test** trên PostgreSQL local 18.4. `ProductImageServiceTest` đạt thêm **14/14 test** cho upload, URL khai báo, metadata và provenance ảnh.
 - Các ràng buộc DB đã kiểm tra: credential LOCAL/GOOGLE; email và địa chỉ mặc định duy nhất; category không chu trình; variant đúng hệ size; sản phẩm ACTIVE cần SKU và ảnh chính đủ metadata; ảnh phải khớp màu variant; `data_source` bất biến; dataset `FROZEN` bất biến.
+- Quy ước storefront ngày 12/10/2026: menu chỉ dùng 5 leaf category chuẩn `ao-the-thao`, `quan-the-thao`, `dong-phuc-the-thao`, `giay-the-thao`, `phu-kien-the-thao`; giới tính, `FOOTBALL`/`RUNNING` và `NIKE`/`ADIDAS` là facet, không nhân bản thành category. URL taxonomy cũ được redirect sang category chuẩn kèm facet.
 - Kết luận migration: **Đã kiểm thử local, đã chuyển entity/service và đã triển khai vertical slice 1A lên Supabase** bằng Flyway V2 ngày 10/10/2026. Runtime mặc định đã chuyển sang location V2; migration legacy chỉ còn trong lịch sử Git.
 
 ## 4. Review 1B — Commerce Core (`public`, owner `commerce_app`)

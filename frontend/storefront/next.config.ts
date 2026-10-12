@@ -1,6 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: "/danh-muc/ao", destination: "/danh-muc/ao-the-thao", permanent: true },
+      { source: "/danh-muc/quan", destination: "/danh-muc/quan-the-thao", permanent: true },
+      { source: "/danh-muc/ao-da-bong", destination: "/danh-muc/ao-the-thao?sportType=FOOTBALL", permanent: true },
+      { source: "/danh-muc/quan-da-bong", destination: "/danh-muc/quan-the-thao?sportType=FOOTBALL", permanent: true },
+      { source: "/danh-muc/ao-chay-bo", destination: "/danh-muc/ao-the-thao?sportType=RUNNING", permanent: true },
+      { source: "/danh-muc/quan-chay-bo", destination: "/danh-muc/quan-the-thao?sportType=RUNNING", permanent: true },
+      { source: "/danh-muc/giay-da-bong-fg", destination: "/danh-muc/giay-the-thao?sportType=FOOTBALL", permanent: true },
+      { source: "/danh-muc/giay-da-bong-tf", destination: "/danh-muc/giay-the-thao?sportType=FOOTBALL", permanent: true },
+      { source: "/danh-muc/giay-futsal", destination: "/danh-muc/giay-the-thao?sportType=FOOTBALL", permanent: true },
+      { source: "/danh-muc/giay-chay-bo", destination: "/danh-muc/giay-the-thao?sportType=RUNNING", permanent: true },
+      { source: "/danh-muc/phu-kien-da-bong", destination: "/danh-muc/phu-kien-the-thao?sportType=FOOTBALL", permanent: true },
+    ];
+  },
   // Allow devices on the local network to load Next.js development assets and HMR.
   allowedDevOrigins: [
     "172.20.10.4",

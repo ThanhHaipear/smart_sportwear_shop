@@ -19,9 +19,10 @@ type CategorySearchParams = {
   color?: string;
   minPrice?: string;
   maxPrice?: string;
-  surface?: string;
   discount?: string;
   gender?: string;
+  sportType?: string;
+  brandSlug?: string;
 };
 
 export async function CategoryListingPage({
@@ -33,10 +34,21 @@ export async function CategoryListingPage({
 }) {
   const { slug } = await params;
   const resolvedSearchParams = await searchParams;
-  const { page: pageParam, sort, sortBy, sortOrder, size, color, minPrice, maxPrice, surface, discount, gender } = resolvedSearchParams;
+  const {
+    page: pageParam,
+    sort,
+    sortBy,
+    sortOrder,
+    size,
+    color,
+    minPrice,
+    maxPrice,
+    discount,
+    gender,
+    sportType,
+    brandSlug,
+  } = resolvedSearchParams;
   const currentPage = Math.max(1, Number(pageParam ?? 1));
-  // Surface facet only makes sense for football footwear (group "giay" + boot leaves).
-  const showSurface = slug === "giay" || slug.includes("da-bong") || slug.includes("futsal");
 
   const [{ products, meta }, category]: [
     { products: ProductListItem[]; meta: PageMeta },
@@ -53,9 +65,10 @@ export async function CategoryListingPage({
       color: color || undefined,
       minPrice: minPrice || undefined,
       maxPrice: maxPrice || undefined,
-      surface: surface || undefined,
       discount: discount || undefined,
       gender: gender || undefined,
+      sportType: sportType || undefined,
+      brandSlug: brandSlug || undefined,
     }),
     fetchCategoryDetail(slug),
   ]);
@@ -65,7 +78,10 @@ export async function CategoryListingPage({
   const breadcrumbItems = [
     { label: "Trang chủ", href: "/" },
     ...(category?.parentSlug
-      ? [{ label: category.parentName ?? category.parentSlug.replace(/-/g, " "), href: `/danh-muc/${category.parentSlug}` }]
+      ? [{
+          label: category.parentName ?? category.parentSlug.replace(/-/g, " "),
+          href: `/danh-muc/${category.parentSlug}`,
+        }]
       : []),
     { label: categoryName },
   ];
@@ -75,16 +91,22 @@ export async function CategoryListingPage({
       <Breadcrumb items={breadcrumbItems} />
       <div className="mx-auto flex max-w-[1368px] flex-col gap-8 px-4 pb-16 md:px-0 lg:flex-row">
         <CategorySidebarFilter
-          key={[size, color, minPrice, maxPrice, surface, discount, gender].join("|")}
+          key={[size, color, minPrice, maxPrice, discount, gender, sportType, brandSlug].join("|")}
           initialSize={size}
           initialColor={color}
           initialMinPrice={minPrice ? Number(minPrice) : undefined}
           initialMaxPrice={maxPrice ? Number(maxPrice) : undefined}
-          initialSurface={surface}
           initialDiscount={discount}
           initialGender={gender}
-          showSurface={showSurface}
-          sizeType={slug.includes("giay") ? "shoe" : "cloth"}
+          initialSportType={sportType}
+          initialBrandSlug={brandSlug}
+          sizeType={
+            slug === "phu-kien" || slug === "phu-kien-the-thao"
+              ? "none"
+              : slug.includes("giay")
+                ? "shoe"
+                : "cloth"
+          }
         />
         <div className="flex-1">
           <CategoryToolbar title={categoryName} resultCount={meta.total} currentSort={sort} />
@@ -106,7 +128,7 @@ export async function CategoryListingPage({
             </>
           ) : (
             <p className="border border-ivy-hairline py-10 text-center text-ivy-text-muted">
-              Không có sản phẩm nào trong danh mục này.
+              Không có sản phẩm nào phù hợp với danh mục và bộ lọc đã chọn.
             </p>
           )}
         </div>

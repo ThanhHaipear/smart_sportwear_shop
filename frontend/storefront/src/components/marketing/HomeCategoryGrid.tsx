@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { Shirt, Footprints, Wind, PersonStanding, Sparkles, Trophy } from "lucide-react";
+import { Footprints, Package, PersonStanding, Shirt, Sparkles, Trophy } from "lucide-react";
 
 const CATEGORIES = [
-  { label: "Áo Đá Bóng", href: "/danh-muc/ao-da-bong", icon: Trophy },
-  { label: "Giày Đá Bóng", href: "/danh-muc/giay-da-bong-fg", icon: Footprints },
-  { label: "Áo Chạy Bộ", href: "/danh-muc/ao-chay-bo", icon: Shirt },
-  { label: "Quần Chạy Bộ", href: "/danh-muc/quan-chay-bo", icon: PersonStanding },
-  { label: "Giày Sân Cỏ Nhân Tạo", href: "/danh-muc/giay-da-bong-tf", icon: Wind },
-  { label: "Bộ Sưu Tập", href: "/bo-suu-tap", icon: Sparkles },
+  { label: "Áo thể thao", href: "/danh-muc/ao-the-thao", icon: Shirt },
+  { label: "Quần thể thao", href: "/danh-muc/quan-the-thao", icon: PersonStanding },
+  { label: "Đồng phục bóng đá", href: "/danh-muc/dong-phuc-the-thao", icon: Trophy },
+  { label: "Giày thể thao", href: "/danh-muc/giay-the-thao", icon: Footprints },
+  { label: "Phụ kiện", href: "/danh-muc/phu-kien-the-thao", icon: Package },
+  { label: "Bộ sưu tập", href: "/bo-suu-tap", icon: Sparkles },
 ];
 
 export function HomeCategoryGrid() {
