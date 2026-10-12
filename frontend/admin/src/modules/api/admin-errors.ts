@@ -19,11 +19,9 @@ const defaultFieldLabels: Record<string, string> = {
   categoryId: "Danh mục",
   brandId: "Thương hiệu",
   status: "Trạng thái",
-  collectionType: "Loại bộ sưu tập",
   season: "Mùa",
   year: "Năm",
   coverImageUrl: "Ảnh bìa",
-  bannerImageUrl: "Ảnh banner",
   sortOrder: "Thứ tự hiển thị"
 };
 

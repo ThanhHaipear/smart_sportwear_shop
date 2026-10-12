@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
+import type { Viewport } from "next";
 import { AdminShell } from "@/components/ui/AdminShell";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
 import { InventoryRealtimeRefresh } from "@/components/ui/InventoryRealtimeRefresh";
@@ -21,6 +22,11 @@ const body = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "DHQ Admin",
   description: "Bảng quản trị vận hành DHQ",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

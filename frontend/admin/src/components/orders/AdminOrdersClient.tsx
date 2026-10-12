@@ -7,9 +7,6 @@ import { ApiRequestError } from "@/modules/api/common";
 import { cancelOrderByStaff, confirmManualRefund, fetchOrderDetail, fetchOrderRefunds, refreshVnpayRefund, submitVnpayRefund, updateOrderStatus } from "@/modules/orders/browser-api";
 import type { OrderRefundResponse } from "@/modules/orders/browser-api";
 import type { AdminOrderResponse, PageMeta } from "@/modules/orders/types";
-import { fetchOrderShipment, updateOrderShipment } from "@/modules/shipping/browser-api";
-import type { ShipmentResponse, ShippingMethodResponse } from "@/modules/shipping/types";
-import { ADMIN_ORDER_CHANGED_EVENT } from "@/modules/notifications/inbox-api";
 import { PackingSlipQueueModal } from "@/components/orders/PackingSlipQueueModal";
 
 const orderStatuses = [
@@ -32,16 +29,6 @@ const orderStatusLabels: Record<string, string> = {
   CANCELLED: "Đã hủy"
 };
 
-const shipmentStatuses = [
-  "PENDING",
-  "READY_TO_SHIP",
-  "SHIPPING",
-  "DELIVERED",
-  "FAILED",
-  "RETURNED",
-  "CANCELLED"
-] as const;
-
 function extractError(error: unknown, fallback: string) {
   if (error instanceof ApiRequestError) {
     const payload = error.payload as { message?: string } | null;
@@ -51,56 +38,34 @@ function extractError(error: unknown, fallback: string) {
   return fallback;
 }
 
-function createShipmentDraft(shipment?: ShipmentResponse | null) {
-  return {
-    shippingMethodId: shipment?.shippingMethodId ?? "",
-    trackingNumber: shipment?.trackingNumber ?? "",
-    carrierName: shipment?.carrierName ?? "",
-    status: shipment?.status ?? "PENDING",
-    note: shipment?.note ?? ""
-  };
-}
-
 const OrderRow = memo(function OrderRow({
   order,
-  shipment,
-  shipmentDraft,
   detail,
   refunds,
-  shippingMethods,
   statusDraft,
   noteDraft,
   savingId,
   onStatusChange,
   onNoteChange,
   onLoadDetail,
-  onLoadShipment,
   onSaveStatus,
   onStaffCancel,
   onRefreshRefund,
   onManualConfirmRefund,
-  onShipmentDraftChange,
-  onSaveShipment
 }: {
   order: AdminOrderResponse;
-  shipment: ShipmentResponse | null | undefined;
-  shipmentDraft: ReturnType<typeof createShipmentDraft> | undefined;
   detail: AdminOrderResponse | undefined;
   refunds: OrderRefundResponse[] | undefined;
-  shippingMethods: ShippingMethodResponse[];
   statusDraft: string;
   noteDraft: string;
   savingId: string | null;
   onStatusChange: (value: string) => void;
   onNoteChange: (value: string) => void;
   onLoadDetail: () => void;
-  onLoadShipment: () => void;
   onSaveStatus: () => void;
   onStaffCancel: () => void;
   onRefreshRefund: (refundId: string) => void;
   onManualConfirmRefund: (refund: OrderRefundResponse) => void;
-  onShipmentDraftChange: (patch: Partial<ReturnType<typeof createShipmentDraft>>) => void;
-  onSaveShipment: () => void;
 }) {
   const isTerminal = ["DELIVERED", "CANCELLED"].includes(order.orderStatus);
   return (
@@ -141,41 +106,9 @@ const OrderRow = memo(function OrderRow({
           <button className="admin-btn secondary" type="button" onClick={onLoadDetail} disabled={savingId === `detail:${order.id}`}>
             {savingId === `detail:${order.id}` ? "Đang tải..." : detail ? "Ẩn chi tiết" : "Chi tiết"}
           </button>
-          {!isTerminal ? <button className="admin-btn secondary" type="button" onClick={onLoadShipment} disabled={savingId === `load-shipment:${order.id}`}>
-            {savingId === `load-shipment:${order.id}` ? "Đang tải..." : "Giao vận"}
-          </button> : null}
           {isTerminal ? <span className="table-subtle">{order.orderStatus === "DELIVERED" ? "Đơn đã giao" : "Đơn đã hủy"} — vòng đời đã kết thúc, không thể cập nhật hoặc hủy.</span> : null}
           </div>
         </div>
-
-        {shipmentDraft ? (
-          <div className="admin-subcard admin-subcard-tight">
-            <div className="table-subtle">
-              {shipment?.shipmentCode ? `Mã vận đơn: ${shipment.shipmentCode}` : "Chưa có shipment, sẽ tạo khi lưu lần đầu."}
-            </div>
-            <div className="admin-form-grid">
-              <select className="select" value={shipmentDraft.shippingMethodId} onChange={(event) => onShipmentDraftChange({ shippingMethodId: event.target.value })}>
-                <option value="">Chọn phương thức giao hàng</option>
-                {shippingMethods.map((item) => (
-                  <option value={item.id} key={item.id}>{item.name}</option>
-                ))}
-              </select>
-              <select className="select" value={shipmentDraft.status} onChange={(event) => onShipmentDraftChange({ status: event.target.value })}>
-                {shipmentStatuses.map((status) => (
-                  <option value={status} key={status}>{status}</option>
-                ))}
-              </select>
-              <input className="admin-input" placeholder="Đơn vị vận chuyển" value={shipmentDraft.carrierName} onChange={(event) => onShipmentDraftChange({ carrierName: event.target.value })} />
-              <input className="admin-input" placeholder="Mã tracking" value={shipmentDraft.trackingNumber} onChange={(event) => onShipmentDraftChange({ trackingNumber: event.target.value })} />
-              <div className="admin-form-full">
-                <input className="admin-input" placeholder="Ghi chú giao vận" value={shipmentDraft.note} onChange={(event) => onShipmentDraftChange({ note: event.target.value })} />
-              </div>
-            </div>
-            <button className="admin-btn secondary" type="button" onClick={onSaveShipment} disabled={savingId === `save-shipment:${order.id}`}>
-              {savingId === `save-shipment:${order.id}` ? "Đang lưu..." : "Lưu giao vận"}
-            </button>
-          </div>
-        ) : null}
 
         {refunds ? (
           <div className="admin-subcard admin-subcard-tight">
@@ -251,14 +184,12 @@ function visiblePages(currentPage: number, totalPages: number) {
 
 export function AdminOrdersClient({
   initialOrders,
-  shippingMethods,
   pageMeta,
   initialKeyword,
   initialStatus,
   loadError
 }: {
   initialOrders: AdminOrderResponse[];
-  shippingMethods: ShippingMethodResponse[];
   pageMeta: PageMeta;
   initialKeyword: string;
   initialStatus: string;
@@ -270,15 +201,12 @@ export function AdminOrdersClient({
   const [statusFilter, setStatusFilter] = useState<"all" | (typeof orderStatuses)[number]>(initialStatus as "all" | (typeof orderStatuses)[number]);
   const [statusDrafts, setStatusDrafts] = useState<Record<string, string>>(Object.fromEntries(initialOrders.map((item) => [item.id, item.orderStatus])));
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
-  const [shipmentDrafts, setShipmentDrafts] = useState<Record<string, ReturnType<typeof createShipmentDraft>>>({});
-  const [shipments, setShipments] = useState<Record<string, ShipmentResponse | null>>({});
   const [orderDetails, setOrderDetails] = useState<Record<string, AdminOrderResponse>>({});
   const [refundsByOrder, setRefundsByOrder] = useState<Record<string, OrderRefundResponse[]>>({});
   const [message, setMessage] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [showPackingModal, setShowPackingModal] = useState(false);
   const orderDetailCacheRef = useRef<Record<string, AdminOrderResponse>>({});
-  const shipmentCacheRef = useRef<Record<string, ShipmentResponse | null>>({});
   const pendingCancellationCount = orders.filter((order) =>
     order.orderStatus === "CANCELLED"
     && ["PAID", "PARTIALLY_REFUNDED"].includes(order.paymentStatus)).length;
@@ -314,12 +242,6 @@ export function AdminOrdersClient({
     })).catch(() => undefined);
   }, [initialOrders]);
 
-  useEffect(() => {
-    const refreshOrders = () => router.refresh();
-    window.addEventListener(ADMIN_ORDER_CHANGED_EVENT, refreshOrders);
-    return () => window.removeEventListener(ADMIN_ORDER_CHANGED_EVENT, refreshOrders);
-  }, [router]);
-
   async function handleUpdate(id: string) {
     const currentOrder = orders.find((item) => item.id === id);
     if (!currentOrder || (statusDrafts[id] ?? currentOrder.orderStatus) === currentOrder.orderStatus) {
@@ -337,31 +259,6 @@ export function AdminOrdersClient({
       setMessage(`Đã cập nhật trạng thái đơn ${updated.orderCode}.`);
     } catch (error) {
       setMessage(extractError(error, "Không cập nhật được trạng thái đơn hàng"));
-    } finally {
-      setSavingId(null);
-    }
-  }
-
-  async function handleLoadShipment(id: string) {
-    if (Object.prototype.hasOwnProperty.call(shipmentCacheRef.current, id)) {
-      const cached = shipmentCacheRef.current[id];
-      setShipments((current) => ({ ...current, [id]: cached }));
-      setShipmentDrafts((current) => ({ ...current, [id]: createShipmentDraft(cached) }));
-      return;
-    }
-
-    try {
-      setSavingId(`load-shipment:${id}`);
-      setMessage(null);
-      const shipment = await fetchOrderShipment(id);
-      shipmentCacheRef.current[id] = shipment;
-      setShipments((current) => ({ ...current, [id]: shipment }));
-      setShipmentDrafts((current) => ({ ...current, [id]: createShipmentDraft(shipment) }));
-    } catch (error) {
-      shipmentCacheRef.current[id] = null;
-      setMessage(extractError(error, "Chưa lấy được thông tin giao vận"));
-      setShipments((current) => ({ ...current, [id]: null }));
-      setShipmentDrafts((current) => ({ ...current, [id]: createShipmentDraft(null) }));
     } finally {
       setSavingId(null);
     }
@@ -474,31 +371,6 @@ export function AdminOrdersClient({
     }
   }
 
-  async function handleSaveShipment(id: string) {
-    const draft = shipmentDrafts[id];
-    if (!draft) return;
-
-    try {
-      setSavingId(`save-shipment:${id}`);
-      setMessage(null);
-      const shipment = await updateOrderShipment(id, {
-        shippingMethodId: draft.shippingMethodId || null,
-        trackingNumber: draft.trackingNumber || null,
-        carrierName: draft.carrierName || null,
-        status: draft.status || null,
-        note: draft.note || null
-      });
-      shipmentCacheRef.current[id] = shipment;
-      setShipments((current) => ({ ...current, [id]: shipment }));
-      setShipmentDrafts((current) => ({ ...current, [id]: createShipmentDraft(shipment) }));
-      setMessage(`Đã cập nhật giao vận cho đơn ${orders.find((item) => item.id === id)?.orderCode ?? ""}.`);
-    } catch (error) {
-      setMessage(extractError(error, "Không cập nhật được giao vận"));
-    } finally {
-      setSavingId(null);
-    }
-  }
-
   return (
     <section className="card panel">
       <div className="panel-header">
@@ -546,24 +418,18 @@ export function AdminOrdersClient({
               <OrderRow
                 key={order.id}
                 order={order}
-                shipment={shipments[order.id]}
-                shipmentDraft={shipmentDrafts[order.id]}
                 detail={orderDetails[order.id]}
                 refunds={refundsByOrder[order.id]}
-                shippingMethods={shippingMethods}
                 statusDraft={statusDrafts[order.id] ?? order.orderStatus}
                 noteDraft={noteDrafts[order.id] ?? ""}
                 savingId={savingId}
                 onStatusChange={(value) => setStatusDrafts((current) => ({ ...current, [order.id]: value }))}
                 onNoteChange={(value) => setNoteDrafts((current) => ({ ...current, [order.id]: value }))}
                 onLoadDetail={() => void handleLoadDetail(order.id)}
-                onLoadShipment={() => void handleLoadShipment(order.id)}
                 onSaveStatus={() => void handleUpdate(order.id)}
                 onStaffCancel={() => void handleStaffCancel(order.id)}
                 onRefreshRefund={(refundId) => void handleRefreshRefund(order.id, refundId)}
                 onManualConfirmRefund={(refund) => void handleManualConfirmRefund(order.id, refund)}
-                onShipmentDraftChange={(patch) => setShipmentDrafts((current) => ({ ...current, [order.id]: { ...current[order.id], ...patch } }))}
-                onSaveShipment={() => void handleSaveShipment(order.id)}
               />
             ))}
           </tbody>

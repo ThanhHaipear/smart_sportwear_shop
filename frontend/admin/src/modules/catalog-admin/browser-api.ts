@@ -3,36 +3,11 @@ import { adminEndpoints } from "@/modules/api/endpoints";
 import type {
   BrandResponse,
   CategoryResponse,
-  CollectionResponse,
-  ComboInput,
-  ComboResponse,
   ProductDetailResponse,
   ProductImageResponse,
   ProductImageUploadResponse,
   ProductVariantResponse
 } from "@/modules/catalog-admin/types";
-
-export async function listCombos() {
-  return browserApiRequest<ComboResponse[]>(adminEndpoints.combos, { method: "GET" });
-}
-
-export async function createCombo(input: ComboInput) {
-  return browserApiRequest<ComboResponse>(adminEndpoints.combos, {
-    method: "POST",
-    body: JSON.stringify(input)
-  });
-}
-
-export async function updateCombo(id: string, input: ComboInput) {
-  return browserApiRequest<ComboResponse>(adminEndpoints.combo(id), {
-    method: "PUT",
-    body: JSON.stringify(input)
-  });
-}
-
-export async function deleteCombo(id: string) {
-  return browserApiRequest<void>(adminEndpoints.combo(id), { method: "DELETE" });
-}
 
 export async function createAdminProduct(input: Record<string, unknown>) {
   return browserApiRequest<ProductDetailResponse>(adminEndpoints.products, {
@@ -169,47 +144,4 @@ export async function listCategoriesForPicker() {
 
 export async function listBrandsForPicker() {
   return browserApiRequest<BrandResponse[]>(adminEndpoints.brands, { method: "GET" });
-}
-
-export async function listCollectionProducts(collectionId: string) {
-  return browserApiRequest<ProductPickItem[]>(adminEndpoints.collectionProducts(collectionId), { method: "GET" });
-}
-
-export async function listProductCollections(productId: string) {
-  return browserApiRequest<CollectionResponse[]>(adminEndpoints.productCollections(productId), { method: "GET" });
-}
-
-export async function listCollectionsForPicker() {
-  return browserApiRequest<CollectionResponse[]>(`${adminEndpoints.collections}?limit=100`, { method: "GET" });
-}
-
-export async function createCollection(input: Record<string, unknown>) {
-  return browserApiRequest<CollectionResponse>(adminEndpoints.collections, {
-    method: "POST",
-    body: JSON.stringify(input)
-  });
-}
-
-export async function updateCollection(id: string, input: Record<string, unknown>) {
-  return browserApiRequest<CollectionResponse>(adminEndpoints.collection(id), {
-    method: "PATCH",
-    body: JSON.stringify(input)
-  });
-}
-
-export async function deleteCollection(id: string) {
-  return browserApiRequest<void>(adminEndpoints.collection(id), { method: "DELETE" });
-}
-
-export async function addProductToCollection(productId: string, collectionId: string) {
-  return browserApiRequest<void>(adminEndpoints.productCollections(productId), {
-    method: "POST",
-    body: JSON.stringify({ collectionId })
-  });
-}
-
-export async function removeProductFromCollection(productId: string, collectionId: string) {
-  return browserApiRequest<void>(adminEndpoints.productCollection(productId, collectionId), {
-    method: "DELETE"
-  });
 }

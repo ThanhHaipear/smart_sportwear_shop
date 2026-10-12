@@ -10,16 +10,12 @@ import { normalizeImageUrl } from "@/modules/ui/image-url";
 import { toSlug } from "@/modules/utils/slug";
 import {
   addProductImage,
-  addProductToCollection,
   createAdminProduct,
   createVariant,
   deleteProduct,
   deleteProductImage,
   setPrimaryProductImage,
   fetchAdminProductDetail,
-  listCollectionsForPicker,
-  listProductCollections,
-  removeProductFromCollection,
   updateAdminProduct,
   updateVariant,
   uploadProductImage
@@ -27,7 +23,6 @@ import {
 import type {
   BrandResponse,
   CategoryResponse,
-  CollectionResponse,
   ProductDetailResponse,
   ProductImageResponse,
   ProductVariantResponse
@@ -45,6 +40,9 @@ const PRODUCT_IMAGE_MAX_BATCH = 10;
 const PRODUCT_IMAGE_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 const productStatusOptions = ["DRAFT", "ACTIVE", "INACTIVE"] as const;
 const genderOptions = ["MEN", "WOMEN", "UNISEX"] as const;
+const productTypeOptions = ["SPORTS_TOP", "SPORTS_BOTTOM", "SPORTS_SHOES", "SPORTS_UNIFORM", "SPORTS_ACCESSORY"] as const;
+const dataSourceOptions = ["REAL", "DEMO", "SYNTHETIC"] as const;
+const sportOptions = ["FOOTBALL", "RUNNING"] as const;
 const variantStatusOptions = ["ACTIVE", "OUT_OF_STOCK", "INACTIVE"] as const;
 const quickSizeOptions = ["S", "M", "L", "XL", "XXL", "39", "40", "41", "42", "43"];
 
@@ -131,6 +129,8 @@ const fieldLabelMap: Record<string, string> = {
   description: "Mô tả chi tiết",
   gender: "Giới tính",
   sportType: "Môn thể thao",
+  productType: "Loại sản phẩm",
+  dataSource: "Nguồn dữ liệu",
   status: "Trạng thái",
   sku: "SKU",
   size: "Kích cỡ",
@@ -201,18 +201,6 @@ function mapAdminStatus(status: ProductDetailResponse["status"], stock: number):
   return "active";
 }
 
-function collectionStatusTone(status: string) {
-  if (status === "ACTIVE") return "success";
-  if (status === "ARCHIVED") return "muted";
-  return "warning";
-}
-
-function collectionStatusLabel(status: string) {
-  if (status === "ACTIVE") return "Hoạt động";
-  if (status === "ARCHIVED") return "Lưu trữ";
-  return "Nháp";
-}
-
 function getPublishChecklist(detail: ProductDetailResponse | null, form: ReturnType<typeof createEmptyProductForm>) {
   const activeVariants = detail?.variants.filter((variant) => variant.status === "ACTIVE") ?? [];
   const pricedVariants = activeVariants.filter((variant) => Number(variant.price) > 0);
@@ -261,6 +249,8 @@ function createEmptyProductForm(categoryId = "", brandId = "") {
     brandId,
     gender: "",
     sportType: "",
+    productType: "SPORTS_TOP",
+    dataSource: "REAL",
     status: "DRAFT",
     isFeatured: false
   };
@@ -356,6 +346,8 @@ function buildProductForm(detail: ProductDetailResponse, categories: CategoryRes
     brandId: detail.brand?.id ?? brands[0]?.id ?? "",
     gender: detail.gender ?? "",
     sportType: detail.sportType ?? "",
+    productType: detail.productType ?? "SPORTS_TOP",
+    dataSource: "REAL",
     status: detail.status,
     isFeatured: detail.isFeatured
   };
@@ -493,22 +485,13 @@ export function AdminProductsCatalogClient({
   const [saving, setSaving] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [statusFilter, setStatusFilter] = useState<"all" | AdminProduct["status"] | "featured">("all");
-  const [activeTab, setActiveTab] = useState<"info" | "variants" | "images" | "collections">("info");
+  const [activeTab, setActiveTab] = useState<"info" | "variants" | "images">("info");
   const [page, setPage] = useState(1);
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
   useEffect(() => {
     setSearchTerm(initialSearchTerm);
   }, [initialSearchTerm]);
-
-  const [productCollections, setProductCollections] = useState<CollectionResponse[]>([]);
-  const [allCollections, setAllCollections] = useState<CollectionResponse[]>([]);
-  const [collectionSearch, setCollectionSearch] = useState("");
-  const [collectionsLoading, setCollectionsLoading] = useState(false);
-  const [collectionsPickerLoading, setCollectionsPickerLoading] = useState(false);
-  const [collectionMessage, setCollectionMessage] = useState<string | null>(null);
-  const allCollectionsFetchedRef = useRef(false);
-  const productCollectionsCacheRef = useRef<Record<string, CollectionResponse[]>>({});
 
   const selectedProduct = useMemo(() => products.find((item) => item.id === selectedProductId) ?? null, [products, selectedProductId]);
   const selectedProductImage = useMemo(() => {
@@ -571,56 +554,6 @@ export function AdminProductsCatalogClient({
   }, [message]);
 
   useEffect(() => {
-    if (!collectionMessage) return;
-    const timer = setTimeout(() => setCollectionMessage(null), 4000);
-    return () => clearTimeout(timer);
-  }, [collectionMessage]);
-
-  useEffect(() => {
-    if (!selectedProductId) {
-      setProductCollections([]);
-      return;
-    }
-
-    const cached = productCollectionsCacheRef.current[selectedProductId];
-    if (cached) {
-      setProductCollections(cached);
-      return;
-    }
-
-    let active = true;
-    setCollectionsLoading(true);
-
-    listProductCollections(selectedProductId)
-      .then((data) => {
-        if (!active) return;
-        productCollectionsCacheRef.current[selectedProductId] = data;
-        setProductCollections(data);
-      })
-      .catch(() => {
-        if (!active) return;
-        setProductCollections([]);
-      })
-      .finally(() => {
-        if (active) setCollectionsLoading(false);
-      });
-
-    return () => { active = false; };
-  }, [selectedProductId]);
-
-  // Load all collections once on mount — not tied to selectedProductId so the active
-  // cleanup from switching products doesn't cancel it.
-  useEffect(() => {
-    if (allCollectionsFetchedRef.current) return;
-    allCollectionsFetchedRef.current = true;
-    setCollectionsPickerLoading(true);
-    listCollectionsForPicker()
-      .then((data) => setAllCollections(data))
-      .catch(() => { allCollectionsFetchedRef.current = false; })
-      .finally(() => setCollectionsPickerLoading(false));
-  }, []);
-
-  useEffect(() => {
     if (!selectedProductId) {
       setDetail(null);
       return;
@@ -673,58 +606,6 @@ export function AdminProductsCatalogClient({
     setVariantSkuDirty(false);
   }, [selectedProductId]);
 
-  const filteredAvailableCollections = useMemo(() => {
-    const assignedIds = new Set(productCollections.map((c) => c.id));
-    const keyword = collectionSearch.trim().toLowerCase();
-    return allCollections
-      .filter((c) => !assignedIds.has(c.id))
-      .filter((c) => !keyword || [c.name, c.slug, c.collectionType].join(" ").toLowerCase().includes(keyword))
-      .slice(0, 20);
-  }, [allCollections, productCollections, collectionSearch]);
-
-  async function ensureAllCollectionsLoaded() {
-    if (allCollectionsFetchedRef.current && allCollections.length > 0) return;
-    if (collectionsPickerLoading) return;
-    allCollectionsFetchedRef.current = true;
-    try {
-      setCollectionsPickerLoading(true);
-      const data = await listCollectionsForPicker();
-      setAllCollections(data);
-    } catch {
-      allCollectionsFetchedRef.current = false;
-    } finally {
-      setCollectionsPickerLoading(false);
-    }
-  }
-
-  async function handleAddToCollection(collection: CollectionResponse) {
-    if (!selectedProductId) return;
-    try {
-      setCollectionMessage(null);
-      await addProductToCollection(selectedProductId, collection.id);
-      const next = [...productCollections, collection];
-      setProductCollections(next);
-      productCollectionsCacheRef.current[selectedProductId] = next;
-      setCollectionMessage(`Đã thêm vào bộ sưu tập ${collection.name}.`);
-    } catch (error) {
-      setCollectionMessage(extractError(error, "Không thêm được vào bộ sưu tập"));
-    }
-  }
-
-  async function handleRemoveFromCollection(collectionId: string) {
-    if (!selectedProductId) return;
-    try {
-      setCollectionMessage(null);
-      await removeProductFromCollection(selectedProductId, collectionId);
-      const next = productCollections.filter((c) => c.id !== collectionId);
-      setProductCollections(next);
-      productCollectionsCacheRef.current[selectedProductId] = next;
-      setCollectionMessage("Đã gỡ khỏi bộ sưu tập.");
-    } catch (error) {
-      setCollectionMessage(extractError(error, "Không gỡ được khỏi bộ sưu tập"));
-    }
-  }
-
   function upsertProductCard(nextDetail: ProductDetailResponse) {
     const nextProduct = toAdminProduct(nextDetail, categories, brands);
     setProducts((current) => {
@@ -771,6 +652,7 @@ export function AdminProductsCatalogClient({
         brandId: productForm.brandId,
         gender: productForm.gender || null,
         sportType: productForm.sportType || null,
+        productType: productForm.productType,
         status: productForm.status,
         isFeatured: productForm.isFeatured
       };
@@ -790,7 +672,7 @@ export function AdminProductsCatalogClient({
         return;
       }
 
-      const created = await createAdminProduct(payload);
+      const created = await createAdminProduct({ ...payload, dataSource: productForm.dataSource });
       detailCacheRef.current[created.id] = created;
       setSelectedProductId(created.id);
       setDetail(created);
@@ -1336,7 +1218,7 @@ export function AdminProductsCatalogClient({
             <div className="table-subtle">
               {selectedProduct
                 ? [selectedProduct.category, selectedProduct.brand, selectedProduct.sku].filter(Boolean).join(" · ")
-                : "Điền thông tin và lưu để mở khoá biến thể, hình ảnh, bộ sưu tập."}
+                : "Điền thông tin và lưu để mở khoá biến thể và hình ảnh."}
             </div>
           </div>
           {selectedProduct ? <span className={`status ${selectedProduct.status}`}>{selectedProduct.status}</span> : null}
@@ -1353,10 +1235,6 @@ export function AdminProductsCatalogClient({
           <button type="button" className={`editor-tab${activeTab === "images" ? " active" : ""}`} onClick={() => setActiveTab("images")}>
             Hình ảnh
             {detail?.images.length ? <span className="tab-count">{detail.images.length}</span> : null}
-          </button>
-          <button type="button" className={`editor-tab${activeTab === "collections" ? " active" : ""}`} onClick={() => setActiveTab("collections")}>
-            Bộ sưu tập
-            {selectedProductId && productCollections.length ? <span className="tab-count">{productCollections.length}</span> : null}
           </button>
         </div>
 
@@ -1443,7 +1321,18 @@ export function AdminProductsCatalogClient({
                   </option>
                 ))}
               </select>
-              <input className="admin-input" placeholder="Môn thể thao" value={productForm.sportType} onChange={(event) => setProductForm((current) => ({ ...current, sportType: event.target.value }))} />
+              <select className="select" value={productForm.productType} onChange={(event) => setProductForm((current) => ({ ...current, productType: event.target.value }))}>
+                {productTypeOptions.map((item) => <option value={item} key={item}>{item}</option>)}
+              </select>
+              <select className="select" value={productForm.sportType} onChange={(event) => setProductForm((current) => ({ ...current, sportType: event.target.value }))}>
+                <option value="">Không chọn môn thể thao</option>
+                {sportOptions.map((item) => <option value={item} key={item}>{item}</option>)}
+              </select>
+              {!selectedProductId ? (
+                <select className="select" value={productForm.dataSource} onChange={(event) => setProductForm((current) => ({ ...current, dataSource: event.target.value }))}>
+                  {dataSourceOptions.map((item) => <option value={item} key={item}>{item} - {item === "REAL" ? "Dữ liệu thật" : item === "DEMO" ? "Dữ liệu demo" : "Dữ liệu tổng hợp"}</option>)}
+                </select>
+              ) : null}
               <label className="admin-check">
                 <input type="checkbox" checked={productForm.isFeatured} onChange={(event) => setProductForm((current) => ({ ...current, isFeatured: event.target.checked }))} />
                 Sản phẩm nổi bật
@@ -1773,141 +1662,6 @@ export function AdminProductsCatalogClient({
           </div>
         ) : null}
 
-        {activeTab === "collections" ? (
-          <div className="editor-panel">
-            <div className="editor-section-head">
-              <h3>Bộ sưu tập</h3>
-              <p className="table-subtle">Gắn sản phẩm vào các bộ sưu tập để hiển thị trên storefront.</p>
-            </div>
-            {!selectedProductId ? (
-              <div className="empty-state">Hãy lưu sản phẩm ở tab Thông tin trước khi gắn bộ sưu tập.</div>
-            ) : (
-              <>
-                {collectionMessage ? <p className="action-message">{collectionMessage}</p> : null}
-
-                <div>
-                  <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>
-                    Đang thuộc bộ sưu tập ({productCollections.length})
-                  </h3>
-                  {collectionsLoading && productCollections.length === 0 ? (
-                    <div className="loading-state">
-                      <div className="skeleton" style={{ width: "60%", marginBottom: 8 }} />
-                      <div className="skeleton" style={{ width: "80%" }} />
-                    </div>
-                  ) : productCollections.length === 0 ? (
-                    <div className="empty-state">Sản phẩm này chưa thuộc bộ sưu tập nào.</div>
-                  ) : (
-                    <div className="admin-gallery">
-                      {productCollections.map((c) => (
-                        <article key={c.id} className="admin-image-card">
-                          {c.coverImageUrl ? (
-                            <Image
-                              src={c.coverImageUrl}
-                              alt={c.name}
-                              width={96}
-                              height={96}
-                              style={{ width: 96, height: 96, borderRadius: 12, objectFit: "cover" }}
-                              unoptimized
-                            />
-                          ) : (
-                            <div style={{ width: 96, height: 96, borderRadius: 12, background: "var(--admin-line)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, flexShrink: 0 }}>
-                              🗂
-                            </div>
-                          )}
-                          <div>
-                            <strong style={{ display: "block", marginBottom: 2 }}>{c.name}</strong>
-                            <div className="table-subtle">
-                              {[c.collectionType, c.season, c.year].filter(Boolean).join(" · ")}
-                            </div>
-                            <div className="table-subtle">{c.slug}</div>
-                            <span className={`status-pill status-pill-${collectionStatusTone(c.status)}`} style={{ marginTop: 4, display: "inline-block" }}>
-                              {collectionStatusLabel(c.status)}
-                            </span>
-                          </div>
-                          <button
-                            className="admin-btn secondary"
-                            type="button"
-                            onClick={() => void handleRemoveFromCollection(c.id)}
-                          >
-                            Gỡ khỏi bộ sưu tập
-                          </button>
-                        </article>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <hr className="editor-divider" />
-
-                <div>
-                  <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>Thêm vào bộ sưu tập</h3>
-                  <input
-                    className="admin-input"
-                    placeholder="Tìm bộ sưu tập để thêm..."
-                    value={collectionSearch}
-                    style={{ width: "100%", marginBottom: 12 }}
-                    onFocus={() => void ensureAllCollectionsLoaded()}
-                    onChange={(event) => {
-                      void ensureAllCollectionsLoaded();
-                      setCollectionSearch(event.target.value);
-                    }}
-                  />
-                  {collectionsPickerLoading ? (
-                    <div className="loading-state">
-                      <div className="skeleton" style={{ width: "70%", marginBottom: 8 }} />
-                      <div className="skeleton" style={{ width: "85%", marginBottom: 8 }} />
-                      <div className="skeleton" style={{ width: "60%" }} />
-                    </div>
-                  ) : filteredAvailableCollections.length === 0 ? (
-                    <div className="empty-state">
-                      {allCollections.length === 0
-                        ? "Bấm vào ô tìm kiếm để tải danh sách bộ sưu tập."
-                        : "Không có bộ sưu tập nào khả dụng để thêm."}
-                    </div>
-                  ) : (
-                    <div className="admin-gallery">
-                      {filteredAvailableCollections.map((c) => (
-                        <article key={c.id} className="admin-image-card">
-                          {c.coverImageUrl ? (
-                            <Image
-                              src={c.coverImageUrl}
-                              alt={c.name}
-                              width={96}
-                              height={96}
-                              style={{ width: 96, height: 96, borderRadius: 12, objectFit: "cover" }}
-                              unoptimized
-                            />
-                          ) : (
-                            <div style={{ width: 96, height: 96, borderRadius: 12, background: "var(--admin-line)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, flexShrink: 0 }}>
-                              🗂
-                            </div>
-                          )}
-                          <div>
-                            <strong style={{ display: "block", marginBottom: 2 }}>{c.name}</strong>
-                            <div className="table-subtle">
-                              {[c.collectionType, c.season, c.year].filter(Boolean).join(" · ")}
-                            </div>
-                            <div className="table-subtle">{c.slug}</div>
-                            <span className={`status-pill status-pill-${collectionStatusTone(c.status)}`} style={{ marginTop: 4, display: "inline-block" }}>
-                              {collectionStatusLabel(c.status)}
-                            </span>
-                          </div>
-                          <button
-                            className="admin-btn"
-                            type="button"
-                            onClick={() => void handleAddToCollection(c)}
-                          >
-                            Thêm vào
-                          </button>
-                        </article>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        ) : null}
       </section>
     </div>
   );

@@ -2,25 +2,22 @@
 
 import {
   ArrowCounterClockwise,
-  Books,
   ChartLineUp,
-  FileText,
   Flag,
   GearSix,
   House,
   ImageSquare,
+  List,
   MagnifyingGlass,
   Package,
   Receipt,
   Scroll,
   ShieldCheck,
   SignOut,
-  Star,
-  Ticket,
   TreeStructure,
   TShirt,
-  Truck,
   Users,
+  X,
 } from "@phosphor-icons/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,7 +25,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { adminLogout } from "@/modules/auth/api";
 import { clearAuthSession, getBrowserRefreshToken, getBrowserUserRole } from "@/modules/auth/session";
-import { AdminNotificationBell } from "@/components/ui/AdminNotificationBell";
 
 type NavItem = {
   label: string;
@@ -52,7 +48,6 @@ const navGroups: NavGroup[] = [
       { label: "Khách hàng", href: "/customers", icon: Users },
       { label: "Báo cáo", href: "/reports", icon: ChartLineUp },
       { label: "Đổi trả", href: "/returns", icon: ArrowCounterClockwise },
-      { label: "Đánh giá", href: "/reviews", icon: Star },
     ],
   },
   {
@@ -61,16 +56,11 @@ const navGroups: NavGroup[] = [
       { label: "Sản phẩm", href: "/products", icon: TShirt },
       { label: "Danh mục", href: "/categories", icon: TreeStructure },
       { label: "Thương hiệu", href: "/brands", icon: Flag },
-      { label: "Bộ sưu tập", href: "/collections", icon: Books },
-      { label: "Banner", href: "/banners", icon: ImageSquare },
-      { label: "Combo", href: "/combos", icon: Ticket },
-      { label: "Khuyến mãi", href: "/promotions", icon: Ticket },
     ],
   },
   {
     title: "Hệ thống",
     items: [
-      { label: "Nội dung", href: "/pages", icon: FileText },
       { label: "Nhật ký", href: "/audit-logs", icon: Scroll },
       { label: "Phân quyền", href: "/users-roles", icon: ShieldCheck },
       { label: "Cấu hình", href: "/system-config", icon: GearSix },
@@ -80,24 +70,18 @@ const navGroups: NavGroup[] = [
 
 function getPageMeta(pathname: string) {
   const metaByPrefix = [
-    { prefix: "/orders", title: "Đơn hàng", subtitle: "Theo dõi xử lý đơn, giao vận và tiến độ chăm sóc khách hàng." },
+    { prefix: "/orders", title: "Đơn hàng", subtitle: "Theo dõi vòng đời đơn, thanh toán và tiến độ xử lý." },
     { prefix: "/visual-search", title: "Visual Search", subtitle: "Theo dõi coverage embedding, usage AI và hàng đợi đồng bộ ảnh." },
     { prefix: "/inventory", title: "Tồn kho", subtitle: "Kiểm soát nhập xuất, điều chỉnh và cảnh báo SKU tồn thấp." },
-    { prefix: "/products", title: "Sản phẩm", subtitle: "Quản lý thông tin sản phẩm, biến thể, ảnh và bộ sưu tập." },
+    { prefix: "/products", title: "Sản phẩm", subtitle: "Quản lý thông tin sản phẩm, SKU, ảnh và dữ liệu nguồn." },
     { prefix: "/categories", title: "Danh mục", subtitle: "Sắp xếp hệ thống danh mục để storefront và tìm kiếm rõ ràng hơn." },
     { prefix: "/brands", title: "Thương hiệu", subtitle: "Tập trung quản trị thương hiệu, nhận diện và trạng thái hiển thị." },
-    { prefix: "/collections", title: "Bộ sưu tập", subtitle: "Tạo các cụm trưng bày theo mùa, chiến dịch và dòng sản phẩm." },
-    { prefix: "/banners", title: "Banner", subtitle: "Điều phối hero banner, vị trí hiển thị và nội dung chiến dịch." },
-    { prefix: "/combos", title: "Combo", subtitle: "Tạo bộ sản phẩm mua kèm và mức giảm cố định khi mua đủ bộ." },
-    { prefix: "/promotions", title: "Khuyến mãi", subtitle: "Tạo chương trình giảm giá theo sản phẩm, phần trăm và khung thời gian hiệu lực." },
     { prefix: "/customers", title: "Khách hàng", subtitle: "Theo dõi tình trạng tài khoản và phân loại người dùng." },
-    { prefix: "/pages", title: "Nội dung", subtitle: "Biên tập các trang tĩnh và nội dung truyền thông của hệ thống." },
     { prefix: "/reports", title: "Báo cáo", subtitle: "Xem snapshot kinh doanh theo thời gian thực từ backend." },
     { prefix: "/audit-logs", title: "Nhật ký", subtitle: "Theo dõi mọi thao tác nhạy cảm để kiểm soát vận hành." },
-    { prefix: "/reviews", title: "Đánh giá", subtitle: "Duyệt, ẩn hoặc xử lý nội dung review từ khách hàng." },
     { prefix: "/returns", title: "Đổi trả", subtitle: "Xử lý hoàn hàng, hoàn tiền và các case hậu mãi." },
     { prefix: "/users-roles", title: "Phân quyền", subtitle: "Điều chỉnh vai trò nội bộ và quyền vận hành hệ thống." },
-    { prefix: "/system-config", title: "Cấu hình", subtitle: "Quản lý mẫu thông báo, cấu hình và các công cụ hệ thống." },
+    { prefix: "/system-config", title: "Cấu hình", subtitle: "Quản lý các tham số vận hành thuộc schema V2." },
   ];
 
   return metaByPrefix.find((item) => pathname.startsWith(item.prefix)) ?? {
@@ -106,7 +90,7 @@ function getPageMeta(pathname: string) {
   };
 }
 
-export function Sidebar() {
+export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const [role, setRole] = useState<string | null>(null);
 
@@ -115,7 +99,10 @@ export function Sidebar() {
   }, []);
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${open ? " is-open" : ""}`}>
+      <button className="sidebar-close" type="button" aria-label="Đóng menu" onClick={onClose}>
+        <X size={22} />
+      </button>
       <div className="admin-brand">
         <div className="admin-brand-logo">
           <Image src="/logo.png" alt="Điểm Đến Thể Thao" width={64} height={64} priority />
@@ -157,7 +144,7 @@ export function Sidebar() {
   );
 }
 
-export function AdminTopbar() {
+export function AdminTopbar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
   const router = useRouter();
   const pathname = usePathname();
   const pageMeta = getPageMeta(pathname);
@@ -206,6 +193,9 @@ export function AdminTopbar() {
 
   return (
     <header className="admin-topbar">
+      <button className="sidebar-open" type="button" aria-label="Mở menu" onClick={onOpenSidebar}>
+        <List size={22} />
+      </button>
       <div className="admin-topbar-main">
         <div className="admin-page-intro">
           <span className="admin-page-kicker">Admin Console</span>
@@ -225,11 +215,6 @@ export function AdminTopbar() {
 
       <div className="admin-actions">
         <span className="admin-badge">Đồng bộ thời gian thực</span>
-        <AdminNotificationBell />
-        <button className="admin-btn">
-          <Truck size={18} weight="duotone" />
-          Xuất báo cáo
-        </button>
         <button className="admin-btn secondary" onClick={handleLogout} aria-label="Đăng xuất">
           <SignOut size={18} weight="duotone" />
           Đăng xuất

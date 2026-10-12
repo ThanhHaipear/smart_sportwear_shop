@@ -32,6 +32,7 @@ export type ProductDetailResponse = {
   description: string | null;
   gender: string | null;
   sportType: string | null;
+  productType: "SPORTS_TOP" | "SPORTS_BOTTOM" | "SPORTS_SHOES" | "SPORTS_UNIFORM" | "SPORTS_ACCESSORY" | null;
   brand: CatalogRef | null;
   category: CatalogRef | null;
   images: ProductImageResponse[];
@@ -61,27 +62,6 @@ export type BrandResponse = {
   status: string;
 };
 
-export type CollectionResponse = {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  shortDescription: string | null;
-  collectionType: string;
-  brand: { id: string; name: string } | null;
-  season: string | null;
-  year: number | null;
-  bannerImageUrl: string | null;
-  coverImageUrl: string | null;
-  status: string;
-  startsAt: string | null;
-  endsAt: string | null;
-  sortOrder: number;
-  isFeatured: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type ProductImageUploadResponse = {
   id: string;
   imageUrl: string;
@@ -91,29 +71,4 @@ export type ProductImageUploadResponse = {
   sortOrder: number;
   width: number | null;
   height: number | null;
-};
-
-export type ComboProductResponse = {
-  productId: string;
-  productName: string;
-  quantity: number;
-};
-
-export type ComboResponse = {
-  id: string;
-  name: string;
-  description: string | null;
-  discountAmount: number;
-  status: "ACTIVE" | "INACTIVE";
-  products: ComboProductResponse[];
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type ComboInput = {
-  name: string;
-  description?: string | null;
-  discountAmount: number;
-  status?: "ACTIVE" | "INACTIVE";
-  productIds: string[];
 };

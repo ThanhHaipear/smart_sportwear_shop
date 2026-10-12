@@ -1,7 +1,6 @@
 ﻿import { Suspense } from "react";
 import { AdminOrdersClient } from "@/components/orders/AdminOrdersClient";
 import { listAdminOrders } from "@/modules/orders/api";
-import { listShippingMethods } from "@/modules/shipping/api";
 
 type OrdersSearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -17,7 +16,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Order
       <section className="page-title">
         <div>
           <h1>Đơn hàng</h1>
-          <p>Theo dõi trạng thái xử lý đơn hàng và cập nhật giao vận ngay trong cùng một màn hình.</p>
+          <p>Theo dõi trạng thái xử lý, thanh toán, hoàn tiền và lịch sử đơn hàng.</p>
         </div>
       </section>
 
@@ -29,12 +28,9 @@ export default async function OrdersPage({ searchParams }: { searchParams: Order
 }
 
 async function OrdersContent({ page, keyword, status }: { page: number; keyword: string; status: string }) {
-  const [orderResult, shippingMethods] = await Promise.all([
-    listAdminOrders({ page, limit: 20, keyword: keyword || undefined, status: status === "all" ? undefined : status })
-      .then((data) => ({ data, error: null }))
-      .catch(() => ({ data: { items: [], meta: { page, limit: 20, total: 0, totalPages: 0 } }, error: "Không thể tải đơn hàng. Vui lòng kiểm tra backend hoặc đăng nhập lại." })),
-    listShippingMethods().catch(() => []),
-  ]);
+  const orderResult = await listAdminOrders({ page, limit: 20, keyword: keyword || undefined, status: status === "all" ? undefined : status })
+    .then((data) => ({ data, error: null }))
+    .catch(() => ({ data: { items: [], meta: { page, limit: 20, total: 0, totalPages: 0 } }, error: "Không thể tải đơn hàng. Vui lòng kiểm tra backend hoặc đăng nhập lại." }));
   const orderPage = orderResult.data;
 
   return (
@@ -44,7 +40,6 @@ async function OrdersContent({ page, keyword, status }: { page: number; keyword:
       pageMeta={orderPage.meta}
       initialKeyword={keyword}
       initialStatus={status}
-      shippingMethods={shippingMethods}
       loadError={orderResult.error}
     />
   );

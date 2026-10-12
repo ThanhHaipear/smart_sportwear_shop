@@ -1,24 +1,19 @@
 ﻿import { AdminSystemCenterClient } from "@/components/system/AdminSystemCenterClient";
-import { listNotificationTemplates, listAdminNotifications } from "@/modules/notifications/api";
 import { listAdminSettings } from "@/modules/settings/api";
 
 export default async function SystemConfigPage() {
-  const [templates, notifications, settings] = await Promise.all([
-    listNotificationTemplates().catch(() => []),
-    listAdminNotifications().catch(() => []),
-    listAdminSettings().catch(() => [])
-  ]);
+  const settings = await listAdminSettings().catch(() => []);
 
   return (
     <main className="workspace">
       <section className="page-title">
         <div>
           <h1>Hệ thống</h1>
-          <p>Quản lý cấu hình hệ thống, mẫu thông báo giao dịch và lịch sử gửi thực tế.</p>
+          <p>Quản lý các tham số vận hành trong bảng site_settings của schema V2.</p>
         </div>
       </section>
 
-      <AdminSystemCenterClient initialTemplates={templates} initialNotifications={notifications} initialSettings={settings} />
+      <AdminSystemCenterClient initialSettings={settings} />
     </main>
   );
 }

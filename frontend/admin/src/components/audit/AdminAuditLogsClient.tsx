@@ -12,10 +12,6 @@ const ENTITY_TYPES = [
   "VARIANT",
   "INVENTORY",
   "COUPON",
-  "PROMOTION",
-  "COLLECTION",
-  "BANNER",
-  "REVIEW",
   "RETURN",
 ] as const;
 

@@ -43,10 +43,9 @@ function isRelevantToAdmin(scope: string, pathname: string) {
   if (pathname === "/") return true;
   const routes: Record<string, string[]> = {
     products: ["/products"], variants: ["/products"], categories: ["/categories", "/products"],
-    brands: ["/brands", "/products"], collections: ["/collections", "/products"], combos: ["/combos"],
-    banners: ["/banners"], promotions: ["/promotions"], pages: ["/pages"], orders: ["/orders"],
-    returns: ["/returns", "/orders"], reviews: ["/reviews"], users: ["/users-roles", "/customers"],
-    settings: ["/system-config"], "notification-templates": ["/system-config"], notifications: ["/system-config"],
+    brands: ["/brands", "/products"], orders: ["/orders"],
+    returns: ["/returns", "/orders"], users: ["/users-roles", "/customers"],
+    settings: ["/system-config"],
   };
   return (routes[scope] ?? []).some((route) => pathname.startsWith(route));
 }

@@ -3,7 +3,6 @@ import { adminEndpoints } from "@/modules/api/endpoints";
 import type {
   BrandResponse,
   CategoryResponse,
-  CollectionResponse,
   ProductDetailResponse
 } from "@/modules/catalog-admin/types";
 
@@ -17,8 +16,4 @@ export async function listAdminBrands() {
 
 export async function getAdminProductDetail(id: string) {
   return apiRequest<ProductDetailResponse>(adminEndpoints.productDetail(id), { next: { revalidate: 30 } });
-}
-
-export async function listCollections() {
-  return apiRequest<CollectionResponse[]>(adminEndpoints.collections, { next: { revalidate: 30 } });
 }
