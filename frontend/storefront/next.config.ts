@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR ?? ".next",
   output: "standalone",
   images: {
+    // During local development, let the browser fetch CDN assets directly.
+    // This avoids /_next/image 500 responses when the local Next.js process
+    // cannot reach Cloudinary, while production keeps Next image optimization.
+    unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [
       {
         protocol: "https",
