@@ -764,8 +764,9 @@ public class ProductService {
 
     /**
      * Same category OR same brand, ACTIVE only, never the product itself.
-     * Deterministic order (featured first, then newest, then id as a final
-     * tiebreaker) - no personalization/recommendation engine, per Phase N4 scope.
+     * Deterministic order (newest, then id as a final tiebreaker) - no
+     * personalization/recommendation engine, per Phase N4 scope. Product.featured
+     * is transient, so it must not be passed to a database Sort.
      */
     private List<ProductListItemResponse> findRelatedProducts(Product product) {
         Specification<Product> spec = ProductSpecifications.hasStatus(ProductStatus.ACTIVE)
@@ -776,8 +777,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(
                 0,
                 RELATED_PRODUCTS_LIMIT,
-                Sort.by(Sort.Direction.DESC, "featured")
-                        .and(Sort.by(Sort.Direction.DESC, "createdAt"))
+                Sort.by(Sort.Direction.DESC, "createdAt")
                         .and(Sort.by(Sort.Direction.ASC, "id")));
         List<Product> related = productRepository.findAll(spec, pageable).getContent();
         return assembleListItems(related);
