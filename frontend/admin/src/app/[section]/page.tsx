@@ -22,7 +22,7 @@ export default async function AdminSectionPage({ params }: AdminSectionPageProps
       <section className="page-title">
         <div>
           <h1>{title}</h1>
-          <p>Module giữ chỗ theo cùng layout THF Admin để điều hướng không bị lỗi 404.</p>
+          <p>Module giữ chỗ theo cùng layout DHQ Admin để điều hướng không bị lỗi 404.</p>
         </div>
       </section>
 

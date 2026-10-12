@@ -19,8 +19,8 @@ const body = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "THF Admin",
-  description: "Bảng quản trị vận hành Thanh Hùng Futsal",
+  title: "DHQ Admin",
+  description: "Bảng quản trị vận hành DHQ",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

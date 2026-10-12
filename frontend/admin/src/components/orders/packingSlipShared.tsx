@@ -70,7 +70,7 @@ export function PackingSlipContent({ order, pageBreakBefore }: { order: AdminOrd
   return (
     <div className={`packing-slip${pageBreakBefore ? " ps-page-break" : ""}`}>
       <div className="ps-header">
-        <div className="ps-shop">Thanh Hùng Futsal</div>
+        <div className="ps-shop">DHQ</div>
         <div className="ps-title">
           <h1>PHIẾU ĐÓNG GÓI / GIAO HÀNG</h1>
           <div>Mã đơn: <strong>{order.orderCode}</strong></div>

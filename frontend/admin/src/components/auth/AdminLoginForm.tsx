@@ -56,10 +56,10 @@ export function AdminLoginForm() {
           <span className="login-logo">
             <SoccerBall size={24} weight="fill" />
           </span>
-          <strong>THF Admin</strong>
+          <strong>DHQ Admin</strong>
         </div>
         <h1 className="login-heading">Đăng nhập</h1>
-        <p className="login-sub">Dành cho nhân viên Thanh Hùng Futsal</p>
+        <p className="login-sub">Dành cho nhân viên DHQ</p>
 
         <form className="login-form" onSubmit={handleSubmit} noValidate>
           <div className="login-field">
@@ -70,7 +70,7 @@ export function AdminLoginForm() {
               id="email"
               type="email"
               className="admin-input"
-              placeholder="name@thf.vn"
+              placeholder="name@dhq.vn"
               autoComplete="email"
               required
               value={email}

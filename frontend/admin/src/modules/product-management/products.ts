@@ -71,10 +71,10 @@ export const adminProducts: AdminProduct[] = [
     image: NO_IMAGE
   },
   {
-    sku: "THF-BALO-TRAINING",
-    name: "Balo Thanh Hùng Futsal Training",
+    sku: "DHQ-BALO-TRAINING",
+    name: "Balo DHQ Training",
     category: "Phụ kiện",
-    brand: "Thanh Hùng Futsal",
+    brand: "DHQ",
     price: "390.000 ₫",
     stock: 120,
     sold: 146,
