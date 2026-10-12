@@ -32,10 +32,12 @@ class V2OneBMigrationTest {
         Flyway flyway = Flyway.configure()
                 .dataSource(URL, USERNAME, PASSWORD)
                 .locations("classpath:db/v2-migration")
+                .schemas("public", "ai_retrieval")
+                .defaultSchema("public")
                 .cleanDisabled(false)
                 .load();
         flyway.clean();
-        assertEquals(4, flyway.migrate().migrationsExecuted);
+        assertEquals(6, flyway.migrate().migrationsExecuted);
         flyway.validate();
         assertEquals(0, flyway.migrate().migrationsExecuted);
         seedCommerceFixture();

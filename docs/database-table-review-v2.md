@@ -2,6 +2,7 @@
 
 **Ngày review:** 09/10/2026
 **Xác nhận:** Chủ dự án đã duyệt kết quả review ngày 09/10/2026.
+**Cập nhật triển khai:** 1C.1–1C.2 và bảng điều phối indexing đã được kiểm thử local, triển khai Supabase bằng Flyway `V6` và đối chiếu schema ngày 12/10/2026.
 **Phạm vi:** toàn bộ bảng baseline 1A–1D và ranh giới đợt 2.
 **Nguồn:** `database-design-v2.md`, `database-implementation-plan.md`, `plan.md`, entity/service/test và migration legacy trong lịch sử Git (chỉ đối chiếu, không tái sử dụng làm baseline).
 
@@ -109,19 +110,19 @@
 
 | Bảng | Kết luận review | Kiểm thử bắt buộc | Trạng thái |
 |---|---|---|---|
-| `product_search_documents` | Read model theo product; source version chống event cũ; GIN search vector; không là nguồn giá/tồn | Event lặp/đảo thứ tự; inactive product; rebuild cùng kết quả | Đạt thiết kế |
-| `search_variant_facets` | Read model theo variant để filter size/màu/giá cùng SKU; hydrate lại Commerce | Facet stale; filter chéo SKU bị chặn; source version | Đạt thiết kế |
-| `embedding_models` | Registry modality/model revision/dimension/metric/preprocess; một active/modality; immutable khi đã dùng | Sai dimension/modality; activate hai model; đổi preprocess tạo version | Đạt thiết kế |
-| `product_text_embeddings` | PK product/model; vector(1024), document hash/status; BGE-M3 normalized | Hash stale; dimension sai; retry lỗi; exact cosine | Đạt thiết kế |
-| `product_image_embeddings` | PK image/model; vector(768), Cloudinary asset version/hash; SigLIP2 normalized | URL/checksum/content type sai; ảnh thay/xóa; dimension sai | Đạt thiết kế |
+| `product_search_documents` | Read model theo product; source version chống event cũ; GIN search vector; không là nguồn giá/tồn | Event lặp/đảo thứ tự; inactive product; rebuild cùng kết quả | Đã kiểm thử V6 |
+| `search_variant_facets` | Read model theo variant để filter size/màu/giá cùng SKU; hydrate lại Commerce | Facet stale; filter chéo SKU bị chặn; source version | Đã kiểm thử V6 |
+| `embedding_models` | Registry modality/model revision/dimension/metric/preprocess; một active/modality; immutable khi đã dùng | Sai dimension/modality; activate hai model; đổi preprocess tạo version | Đã kiểm thử V6 |
+| `product_text_embeddings` | PK product/model; vector(1024), document hash/status; BGE-M3 normalized | Hash stale; dimension sai; retry lỗi; exact cosine | Đã kiểm thử V6 |
+| `product_image_embeddings` | PK image/model; vector(768), Cloudinary asset version/hash; SigLIP2 normalized | URL/checksum/content type sai; ảnh thay/xóa; dimension sai | Đã kiểm thử V6 |
 | `knowledge_documents` | Code/version UQ; source/checksum/effective/status; version bất biến | Hai version active; source đổi; deactivate không phá evidence cũ | Đạt thiết kế |
 | `knowledge_chunks` | UQ document/chunk index; content hash; FK cascade/restrict theo lifecycle version | Chunk order/hash; re-chunk tạo document version mới | Đạt thiết kế |
 | `knowledge_embeddings` | PK chunk/model; vector(1024), content hash; chỉ READY khi khớp | Hash stale; model sai; exact retrieval | Đạt thiết kế |
 | `query_prompt_versions` | Task/version/hash UQ; prompt/schema/few-shot immutable | Prompt sửa tại chỗ bị chặn; JSON Schema invalid; active version | Đạt thiết kế |
 | `query_analysis_logs` | Request UQ; chỉ hash query vận hành; parser/model/schema/validity/latency/cost; TTL 30 ngày | Fallback rule; timeout/schema/taxonomy invalid; cleanup | Đạt thiết kế |
-| `indexing_jobs` | Trạng thái/count/time/error; model/job type; theo dõi batch | Count nhất quán; resume/retry; job terminal bất biến | Đạt thiết kế |
-| `indexing_job_items` | UQ job/entity; status/attempt/error; FK job | Retry một item; hai worker; tổng job khớp item | Đạt thiết kế |
-| `processed_events` | PK consumer/event; ghi cùng transaction read model | Consumer crash/retry; event duplicate/đảo thứ tự | Đạt thiết kế |
+| `indexing_jobs` | Trạng thái/count/time/error; model/job type; theo dõi batch | Count nhất quán; resume/retry; job terminal bất biến | Đã kiểm thử V6 |
+| `indexing_job_items` | UQ job/entity; status/attempt/error; FK job | Retry một item; hai worker; tổng job khớp item | Đã kiểm thử V6 |
+| `processed_events` | PK consumer/event; ghi cùng transaction read model | Consumer crash/retry; event duplicate/đảo thứ tự | Đã kiểm thử V6 |
 | `recommendation_models` | Algorithm/version UQ; config/training cutoff/checksum; version bất biến | Không dùng future event; activate đúng model; popularity baseline | Đạt thiết kế |
 | `recommendation_requests` | Logical pseudonymous user/context/model; TTL 30 ngày | Không PII; cleanup; model/context hợp lệ | Đạt thiết kế |
 | `recommendation_items` | PK request/rank; UQ request/product; score/reason | Rank trùng; product trùng; thứ tự ổn định | Đạt thiết kế |
