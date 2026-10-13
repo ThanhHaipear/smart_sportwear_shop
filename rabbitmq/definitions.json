@@ -162,6 +162,14 @@
       "vhost": "/",
       "destination": "product-search.indexing",
       "destination_type": "queue",
+      "routing_key": "product.deleted",
+      "arguments": {}
+    },
+    {
+      "source": "catalog.events",
+      "vhost": "/",
+      "destination": "product-search.indexing",
+      "destination_type": "queue",
       "routing_key": "product.reindex.requested",
       "arguments": {}
     },
@@ -187,6 +195,14 @@
       "destination": "visual-search.indexing",
       "destination_type": "queue",
       "routing_key": "product.deactivated",
+      "arguments": {}
+    },
+    {
+      "source": "catalog.events",
+      "vhost": "/",
+      "destination": "visual-search.indexing",
+      "destination_type": "queue",
+      "routing_key": "product.deleted",
       "arguments": {}
     },
     {

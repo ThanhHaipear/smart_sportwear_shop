@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
-@ConditionalOnProperty(prefix = "app.visual-search", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "app.catalog-events", name = "enabled", havingValue = "true")
 public class CatalogOutboxPublisher {
 
     private static final Logger log = LoggerFactory.getLogger(CatalogOutboxPublisher.class);
@@ -37,9 +37,9 @@ public class CatalogOutboxPublisher {
             JdbcTemplate jdbcTemplate,
             TransactionTemplate transactionTemplate,
             RabbitTemplate rabbitTemplate,
-            @Value("${app.visual-search.outbox.batch-size:25}") int batchSize,
-            @Value("${app.visual-search.outbox.confirm-timeout-seconds:5}") int confirmTimeoutSeconds,
-            @Value("${app.visual-search.outbox.max-attempts:10}") int maxAttempts) {
+            @Value("${app.catalog-events.outbox.batch-size:25}") int batchSize,
+            @Value("${app.catalog-events.outbox.confirm-timeout-seconds:5}") int confirmTimeoutSeconds,
+            @Value("${app.catalog-events.outbox.max-attempts:10}") int maxAttempts) {
         this.jdbcTemplate = jdbcTemplate;
         this.transactionTemplate = transactionTemplate;
         this.rabbitTemplate = rabbitTemplate;
@@ -49,7 +49,7 @@ public class CatalogOutboxPublisher {
         this.rabbitTemplate.setMandatory(true);
     }
 
-    @Scheduled(fixedDelayString = "${app.visual-search.outbox.poll-delay-ms:1000}")
+    @Scheduled(fixedDelayString = "${app.catalog-events.outbox.poll-delay-ms:1000}")
     public void publishAvailable() {
         for (OutboxRecord record : claimBatch()) {
             publish(record);
@@ -62,6 +62,12 @@ public class CatalogOutboxPublisher {
                     select id, event_type, payload::text, attempts
                     from integration_outbox
                     where status in ('PENDING', 'FAILED', 'PUBLISHING')
+                      and aggregate_type = 'PRODUCT'
+                      and event_type in (
+                          'PRODUCT_IMAGE_CREATED', 'PRODUCT_IMAGE_DELETED',
+                          'PRODUCT_ACTIVATED', 'PRODUCT_DEACTIVATED',
+                          'PRODUCT_DELETED', 'PRODUCT_REINDEX_REQUESTED'
+                      )
                       and available_at <= now()
                       and attempts < ?
                     order by created_at

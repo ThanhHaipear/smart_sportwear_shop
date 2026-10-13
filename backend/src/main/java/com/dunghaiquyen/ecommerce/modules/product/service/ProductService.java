@@ -382,6 +382,9 @@ public class ProductService {
             inventoryTransactionRepository.deleteAllByVariantIdIn(variantIds);
         }
 
+        // Append the tombstone before deleting the aggregate. The outbox row has
+        // no FK to products and therefore survives the catalog delete.
+        catalogOutboxService.append(CatalogEventType.PRODUCT_DELETED, product.getId(), null);
         productRepository.delete(product);
     }
 

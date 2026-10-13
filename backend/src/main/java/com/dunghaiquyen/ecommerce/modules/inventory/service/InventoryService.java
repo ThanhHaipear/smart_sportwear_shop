@@ -29,6 +29,8 @@ import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageReposit
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepository;
 import com.dunghaiquyen.ecommerce.modules.product.util.ThumbnailResolver;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
+import com.dunghaiquyen.ecommerce.visualsearch.outbox.CatalogEventType;
+import com.dunghaiquyen.ecommerce.visualsearch.outbox.CatalogOutboxService;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -76,16 +78,19 @@ public class InventoryService {
     private final InventoryTransactionRepository transactionRepository;
     private final ProductImageRepository imageRepository;
     private final InventoryRealtimeService realtimeService;
+    private final CatalogOutboxService catalogOutboxService;
 
     public InventoryService(
             ProductVariantRepository variantRepository,
             InventoryTransactionRepository transactionRepository,
             ProductImageRepository imageRepository,
-            InventoryRealtimeService realtimeService) {
+            InventoryRealtimeService realtimeService,
+            CatalogOutboxService catalogOutboxService) {
         this.variantRepository = variantRepository;
         this.transactionRepository = transactionRepository;
         this.imageRepository = imageRepository;
         this.realtimeService = realtimeService;
+        this.catalogOutboxService = catalogOutboxService;
     }
 
     public record ListResult<T>(List<T> items, PageMeta meta) {
@@ -507,6 +512,12 @@ public class InventoryService {
         tx.setCreatedBy(actor);
         tx.setIdempotencyKey(idempotencyKey);
         transactionRepository.save(tx);
+        // Available quantity is a search facet, so every real inventory
+        // movement emits one aggregate reindex event in the same transaction.
+        catalogOutboxService.append(
+                CatalogEventType.PRODUCT_REINDEX_REQUESTED,
+                variant.getProduct().getId(),
+                null);
         realtimeService.publishAfterCommit(variant);
     }
 

@@ -23,7 +23,11 @@ class CatalogIndexer:
     async def handle(self, event: CatalogEvent) -> None:
         if await self.repository.is_processed(event.event_id):
             return
-        if event.event_type in {CatalogEventType.PRODUCT_IMAGE_DELETED, CatalogEventType.PRODUCT_DEACTIVATED}:
+        if event.event_type in {
+            CatalogEventType.PRODUCT_IMAGE_DELETED,
+            CatalogEventType.PRODUCT_DEACTIVATED,
+            CatalogEventType.PRODUCT_DELETED,
+        }:
             await self._complete(event)
             return
 

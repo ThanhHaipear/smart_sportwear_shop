@@ -47,6 +47,8 @@ class Settings(BaseSettings):
     PRODUCT_SEARCH_INDEXING_PREFETCH: int = 5
     PRODUCT_SEARCH_RECONCILIATION_INTERVAL_SECONDS: int = 3600
     PRODUCT_SEARCH_RECONCILIATION_BATCH_SIZE: int = 100
+    CATALOG_INDEX_BACKFILL_ON_STARTUP: bool = True
+    CATALOG_INDEXING_MAX_ITEM_ATTEMPTS: int = 3
 
     model_config = SettingsConfigDict(
         env_file=".env",

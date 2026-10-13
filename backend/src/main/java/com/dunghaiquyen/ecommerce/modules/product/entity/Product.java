@@ -107,7 +107,10 @@ public class Product extends AbstractAuditEntity {
     @Column(columnDefinition = "jsonb")
     private Map<String, String> attributes = new LinkedHashMap<>();
 
-    @Column(name = "catalog_version", nullable = false)
+    // Advanced only by CatalogOutboxService. Keeping it out of Hibernate UPDATE
+    // statements prevents a managed Product with an older value from undoing the
+    // atomic JDBC increment performed when an event is appended.
+    @Column(name = "catalog_version", nullable = false, updatable = false)
     private long catalogVersion = 1;
 
     @Enumerated(EnumType.STRING)

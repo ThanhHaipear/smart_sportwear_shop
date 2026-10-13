@@ -35,6 +35,7 @@ def test_main_queue_has_exact_catalog_bindings() -> None:
         "product.image.deleted",
         "product.activated",
         "product.deactivated",
+        "product.deleted",
         "product.reindex.requested",
     }
 

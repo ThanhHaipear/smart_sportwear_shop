@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import jakarta.persistence.EntityManager;
 import org.slf4j.MDC;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,15 @@ public class CatalogOutboxService {
     private static final int EVENT_VERSION = 1;
     private final JdbcTemplate jdbcTemplate;
     private final ObjectMapper objectMapper;
+    private final EntityManager entityManager;
 
-    public CatalogOutboxService(JdbcTemplate jdbcTemplate, ObjectMapper objectMapper) {
+    public CatalogOutboxService(
+            JdbcTemplate jdbcTemplate,
+            ObjectMapper objectMapper,
+            EntityManager entityManager) {
         this.jdbcTemplate = jdbcTemplate;
         this.objectMapper = objectMapper;
+        this.entityManager = entityManager;
     }
 
     /**
@@ -27,12 +33,26 @@ public class CatalogOutboxService {
      * that transaction, so the catalog row and its event commit or roll back together.
      */
     public UUID append(CatalogEventType type, UUID productId, UUID imageId) {
+        // In particular, a newly-created ACTIVE product may not have been
+        // INSERTed yet. Flush first so the following atomic version bump always
+        // sees the aggregate and all event-visible catalog mutations.
+        entityManager.flush();
         UUID eventId = UUID.randomUUID();
+        Long sourceVersion = jdbcTemplate.queryForObject("""
+                update products
+                   set catalog_version = catalog_version + 1
+                 where id = ?
+             returning catalog_version
+                """, Long.class, productId);
+        if (sourceVersion == null) {
+            throw new IllegalStateException("Cannot append catalog event for missing product " + productId);
+        }
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("eventId", eventId);
         payload.put("eventType", type.name());
         payload.put("eventVersion", EVENT_VERSION);
         payload.put("productId", productId);
+        payload.put("sourceVersion", sourceVersion);
         if (imageId != null) {
             payload.put("imageId", imageId);
         }
@@ -43,10 +63,10 @@ public class CatalogOutboxService {
                 insert into integration_outbox
                     (id, idempotency_key, event_type, event_version, aggregate_type,
                      aggregate_id, aggregate_version, payload)
-                values (?, ?, ?, ?, 'PRODUCT', ?, 0, cast(? as jsonb))
+                values (?, ?, ?, ?, 'PRODUCT', ?, ?, cast(? as jsonb))
                 """,
                 eventId, type.name() + ":" + productId + ":" + eventId,
-                type.name(), EVENT_VERSION, productId, toJson(payload));
+                type.name(), EVENT_VERSION, productId, sourceVersion, toJson(payload));
         return eventId;
     }
 

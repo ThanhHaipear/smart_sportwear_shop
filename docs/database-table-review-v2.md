@@ -2,7 +2,7 @@
 
 **Ngày review:** 09/10/2026
 **Xác nhận:** Chủ dự án đã duyệt kết quả review ngày 09/10/2026.
-**Cập nhật triển khai:** 1C.1–1C.2 và bảng điều phối indexing đã được kiểm thử local, triển khai Supabase bằng Flyway `V6` và đối chiếu schema ngày 12/10/2026.
+**Cập nhật triển khai:** 1C.1–1C.2 và bảng điều phối indexing đã được kiểm thử local, triển khai Supabase bằng Flyway `V6` và đối chiếu schema ngày 12/10/2026. Catalog indexer dùng chung hoàn tất ngày 13/10/2026; backfill thật đạt 36 document/178 SKU facet, lần chạy lặp bỏ qua đủ 36 item.
 **Phạm vi:** toàn bộ bảng baseline 1A–1D và ranh giới đợt 2.
 **Nguồn:** `database-design-v2.md`, `database-implementation-plan.md`, `plan.md`, entity/service/test và migration legacy trong lịch sử Git (chỉ đối chiếu, không tái sử dụng làm baseline).
 
