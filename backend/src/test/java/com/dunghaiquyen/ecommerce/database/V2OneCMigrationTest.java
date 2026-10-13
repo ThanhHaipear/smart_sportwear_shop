@@ -34,7 +34,7 @@ class V2OneCMigrationTest {
                 .cleanDisabled(false)
                 .load();
         flyway.clean();
-        assertEquals(6, flyway.migrate().migrationsExecuted);
+        assertEquals(7, flyway.migrate().migrationsExecuted);
         flyway.validate();
         assertEquals(0, flyway.migrate().migrationsExecuted);
         seedFixture();
@@ -88,7 +88,7 @@ class V2OneCMigrationTest {
                 insert into ai_retrieval.product_text_embeddings
                     (product_id, model_id, document_hash, status, last_error)
                 values ('62000000-0000-0000-0000-000000000001',
-                        '61000000-0000-0000-0000-000000000002', repeat('a', 64),
+                        '71000000-0000-0000-0000-000000000002', repeat('a', 64),
                         'FAILED', 'wrong modality')
                 """);
         assertSqlState("23514", """
@@ -98,7 +98,7 @@ class V2OneCMigrationTest {
                 """);
         assertSqlState("55000", """
                 update ai_retrieval.embedding_models set model_version='mutated'
-                 where id='61000000-0000-0000-0000-000000000001'
+                 where id='71000000-0000-0000-0000-000000000001'
                 """);
         assertSqlState("23505", """
                 insert into ai_retrieval.processed_events
@@ -109,14 +109,40 @@ class V2OneCMigrationTest {
 
     private static void seedFixture() throws SQLException {
         execute("""
-                insert into ai_retrieval.embedding_models
-                    (id, modality, provider, model_name, model_version, dimensions,
-                     preprocessing_version, status, activated_at)
-                values
-                    ('61000000-0000-0000-0000-000000000001', 'PRODUCT_TEXT', 'HUGGING_FACE',
-                     'BAAI/bge-m3', 'fixture-commit', 1024, 'text-v1', 'ACTIVE', now()),
-                    ('61000000-0000-0000-0000-000000000002', 'PRODUCT_IMAGE', 'HUGGING_FACE',
-                     'google/siglip2-base-patch16-224', 'fixture-commit', 768, 'image-v1', 'ACTIVE', now());
+                insert into products(
+                    id,category_id,brand_id,product_type_id,size_system_id,name,slug,
+                    gender_code,status,data_source
+                )
+                select '62000000-0000-0000-0000-000000000001', category.id, brand.id,
+                       product_type.id, size_system.id, 'Running shirt', 'running-shirt-fixture',
+                       'UNISEX', 'ACTIVE', 'DEMO'
+                  from categories category
+                  join brands brand on brand.code='NIKE'
+                  join product_types product_type on product_type.code='SPORTS_TOP'
+                  join size_systems size_system on size_system.code='APPAREL_INT'
+                 where category.code='SPORTS_TOPS';
+
+                insert into product_variants(
+                    id,product_id,sku,size_id,color_id,price,stock_quantity,status
+                )
+                select '62500000-0000-0000-0000-000000000001',
+                       '62000000-0000-0000-0000-000000000001', 'FIXTURE-RUN-M-BLUE',
+                       size.id, color.id, 100000, 1, 'ACTIVE'
+                  from sizes size
+                  join size_systems size_system on size_system.id=size.size_system_id
+                  join colors color on color.code='BLUE'
+                 where size_system.code='APPAREL_INT' and size.code='M';
+
+                insert into product_images(
+                    id,product_id,storage_provider,public_id,asset_version,secure_url,
+                    format,bytes,width,height,checksum,is_primary,source_kind,license_code
+                ) values (
+                    '63000000-0000-0000-0000-000000000001',
+                    '62000000-0000-0000-0000-000000000001', 'CLOUDINARY',
+                    'catalog/running-shirt', '1',
+                    'https://res.cloudinary.com/demo/image/upload/v1/catalog/running-shirt.jpg',
+                    'jpg', 100, 224, 224, repeat('b',64), true, 'OWNED', 'TEST_FIXTURE'
+                );
 
                 insert into ai_retrieval.product_search_documents
                     (product_id, name, document_text, document_hash, source_version)
@@ -126,7 +152,7 @@ class V2OneCMigrationTest {
                 insert into ai_retrieval.product_text_embeddings
                     (product_id, model_id, document_hash, embedding, status, embedded_at)
                 values ('62000000-0000-0000-0000-000000000001',
-                        '61000000-0000-0000-0000-000000000001', repeat('a', 64),
+                        '71000000-0000-0000-0000-000000000001', repeat('a', 64),
                         array_fill((1.0 / sqrt(1024))::real, array[1024])::extensions.vector,
                         'READY', now());
 
@@ -135,7 +161,7 @@ class V2OneCMigrationTest {
                      image_hash, embedding, status, embedded_at)
                 values ('63000000-0000-0000-0000-000000000001',
                         '62000000-0000-0000-0000-000000000001',
-                        '61000000-0000-0000-0000-000000000002', 'catalog/running-shirt', '1',
+                        '71000000-0000-0000-0000-000000000002', 'catalog/running-shirt', '1',
                         repeat('b', 64),
                         array_fill((1.0 / sqrt(768))::real, array[768])::extensions.vector,
                         'READY', now());
@@ -157,7 +183,7 @@ class V2OneCMigrationTest {
             try (ResultSet rs = statement.executeQuery("""
                     select product_id, distance
                       from ai_retrieval.search_product_text_exact(
-                          '61000000-0000-0000-0000-000000000001',
+                          '71000000-0000-0000-0000-000000000001',
                           array_fill((1.0 / sqrt(1024))::real, array[1024])::extensions.vector,
                           5)
                     """)) {
@@ -169,7 +195,7 @@ class V2OneCMigrationTest {
             try (ResultSet rs = statement.executeQuery("""
                     select image_id, product_id, distance
                       from ai_retrieval.search_product_images_exact(
-                          '61000000-0000-0000-0000-000000000002',
+                          '71000000-0000-0000-0000-000000000002',
                           array_fill((1.0 / sqrt(768))::real, array[768])::extensions.vector,
                           5)
                     """)) {

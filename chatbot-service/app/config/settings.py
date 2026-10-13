@@ -50,6 +50,15 @@ class Settings(BaseSettings):
     CATALOG_INDEX_BACKFILL_ON_STARTUP: bool = True
     CATALOG_INDEXING_MAX_ITEM_ATTEMPTS: int = 3
 
+    # 1C.2 local embedding workers. Model revisions are also registered by V7.
+    EMBEDDING_DEVICE: str = "auto"  # auto | cpu | cuda
+    EMBEDDING_MAX_TEXT_LENGTH: int = 512
+    EMBEDDING_MAX_IMAGE_BYTES: int = 15 * 1024 * 1024
+    EMBEDDING_MAX_IMAGE_PIXELS: int = 40_000_000
+    EMBEDDING_MAX_ITEM_ATTEMPTS: int = 3
+    EMBEDDING_HTTP_TIMEOUT_SECONDS: float = 30.0
+    EMBEDDING_CACHE_DIR: str = ""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

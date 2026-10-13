@@ -38,6 +38,14 @@ async def index_product(
         if updated is not None:
             await conn.execute(
                 """
+                update ai_retrieval.product_text_embeddings
+                   set status = 'STALE', last_error = null
+                 where product_id = $1 and status = 'READY'
+                """,
+                product_id,
+            )
+            await conn.execute(
+                """
                 update ai_retrieval.search_variant_facets
                    set status = 'DELETED', source_version = $2, indexed_at = now()
                  where product_id = $1 and source_version < $2
@@ -84,6 +92,21 @@ async def index_product(
     )
     if accepted is None:
         return IndexResult("SKIPPED_STALE_OR_CURRENT", source_version)
+
+    # A READY vector represents one immutable document hash. Invalidate it in
+    # the same transaction as the read-model update so exact search can never
+    # serve an embedding for older product content.
+    await conn.execute(
+        """
+        update ai_retrieval.product_text_embeddings
+           set status = 'STALE', last_error = null
+         where product_id = $1
+           and status = 'READY'
+           and document_hash is distinct from $2
+        """,
+        product_id,
+        content_hash(document),
+    )
 
     variants = await conn.fetch(PRODUCT_VARIANTS_SQL, product_id)
     variant_ids: list[UUID] = []

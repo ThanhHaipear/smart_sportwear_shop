@@ -1,5 +1,23 @@
 # chatbot-service
 
+## V2 1C.2 local product embeddings
+
+Canonical V2 embeddings use schema `ai_retrieval`, not the legacy OpenAI/Voyage tables described later in this file.
+
+```powershell
+cd chatbot-service
+.venv\Scripts\python.exe -m pip install -r requirements-embeddings.txt
+cd ..
+.\backfill-product-embeddings.ps1 -Modality text
+.\backfill-product-embeddings.ps1 -Modality image
+.\backfill-product-embeddings.ps1 -Verify
+```
+
+- BGE-M3 `5617a9f61b028005a4858fdac845db406aefb181`: `vector(1024)` for product documents.
+- SigLIP2 `75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2`: `vector(768)` from versioned Cloudinary originals.
+- Run modalities sequentially on low-memory machines. Jobs are resumable; repeated runs mark current rows `SKIPPED` without loading the model.
+- Pilot search remains exact cosine; no HNSW/IVFFlat index is created.
+
 AI chatbot service cho sport shop — độc lập với Spring Boot backend.
 
 **Phase hiện tại: Phase 10 — Test Suite + Reliability Hardening**

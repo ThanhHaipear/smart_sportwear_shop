@@ -1,0 +1,7 @@
+# Install after requirements.txt only on the machine that runs local embedding jobs.
+# Versions are pinned because preprocessing/model APIs are part of the index identity.
+numpy==2.2.6
+Pillow==11.3.0
+sentence-transformers==5.1.1
+transformers==4.57.1
+torch==2.7.1
