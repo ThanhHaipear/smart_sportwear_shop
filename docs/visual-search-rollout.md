@@ -5,9 +5,9 @@
 Keep the public feature disabled until all of these are true:
 
 1. Flyway migrations are applied and the configured model is the only `ACTIVE` model.
-2. `/health/ready` reports database, active model and RabbitMQ ready.
+2. `/health/ready` reports the query database and active model ready; RabbitMQ is not a query-path dependency.
 3. Admin coverage reports no `PENDING`, `PROCESSING`, `FAILED` or `MISSING` ACTIVE images and at least 98% READY coverage.
-4. Main, retry and DLQ queues and the outbox have no unexplained backlog.
+4. Before enabling the indexing worker, the admin operations endpoint reports that main, retry and DLQ queues and the outbox have no unexplained backlog.
 5. The external-image benchmark passes with at least 100 images across the three searchable catalog strata (`tops`, `bottoms`, `shoes`), Recall@5 >= 80%, category accuracy >= 90%, and end-to-end p95 <= 3 seconds. `accessories` is explicitly N/A while the audited ACTIVE catalog contains zero accessory products with images; it becomes mandatory as soon as such a product is added.
 
 Benchmark images must be independently sourced alternate views, not catalog files, duplicates, or direct crops. Keep the images outside Git; commit only an anonymized manifest/report when licensing permits. Run:

@@ -27,6 +27,7 @@ class VisualSearchServiceTest {
         VisualSearchClient client = mock(VisualSearchClient.class);
         MultipartFile image = mock(MultipartFile.class);
         when(image.isEmpty()).thenReturn(false);
+        when(image.getContentType()).thenReturn("image/jpeg");
         when(client.search(image, VisualSearchService.CANDIDATE_LIMIT)).thenReturn(List.of());
         VisualSearchService service = new VisualSearchService(
                 new VisualSearchProperties(true, "http://localhost", "token", 5, 10),
@@ -45,6 +46,7 @@ class VisualSearchServiceTest {
         ProductRepository productRepository = mock(ProductRepository.class);
         MultipartFile image = mock(MultipartFile.class);
         when(image.isEmpty()).thenReturn(false);
+        when(image.getContentType()).thenReturn("image/png");
         UUID categoryId = UUID.randomUUID();
         UUID matchingId = UUID.randomUUID();
         UUID wrongCategoryId = UUID.randomUUID();
@@ -87,6 +89,7 @@ class VisualSearchServiceTest {
         ProductRepository productRepository = mock(ProductRepository.class);
         MultipartFile image = mock(MultipartFile.class);
         when(image.isEmpty()).thenReturn(false);
+        when(image.getContentType()).thenReturn("image/webp");
         UUID soldOutId = UUID.randomUUID();
         UUID inStockId = UUID.randomUUID();
         when(client.search(image, 50)).thenReturn(List.of(

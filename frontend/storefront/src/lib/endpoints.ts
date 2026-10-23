@@ -5,6 +5,7 @@ export const endpoints = {
   frequentlyBoughtTogether: (productId: string) => `/api/v1/products/${productId}/frequently-bought-together`,
   productSuggestions: "/api/v1/products/search-suggestions",
   visualSearch: "/api/v1/products/search-by-image",
+  visualSearchStatus: "/api/v1/visual-search/status",
   categories: "/api/v1/categories",
   categoryTree: "/api/v1/categories/tree",
   category: (slugOrId: string) => `/api/v1/categories/${slugOrId}`,

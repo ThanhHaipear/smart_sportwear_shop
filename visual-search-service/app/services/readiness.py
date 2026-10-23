@@ -1,8 +1,6 @@
 import asyncio
 from dataclasses import dataclass
 
-import aio_pika
-
 from app.config import Settings
 from app.persistence import VisualSearchRepository
 
@@ -22,12 +20,14 @@ class ReadinessChecker:
 
     async def check(self) -> ReadinessResult:
         database, model = await self._check_database_and_model()
-        rabbitmq = await self._check_rabbitmq()
         return ReadinessResult(
-            ready=database == "up" and model == "active" and rabbitmq == "up",
+            # The synchronous query API does not use RabbitMQ. Queue health is
+            # exposed by the admin operations endpoint and must not take image
+            # search out of service when database/model retrieval still works.
+            ready=database == "up" and model == "active",
             database=database,
             active_model=model,
-            rabbitmq=rabbitmq,
+            rabbitmq="not_required",
         )
 
     async def _check_database_and_model(self) -> tuple[str, str]:
@@ -51,19 +51,3 @@ class ReadinessChecker:
                 and model.preprocessing_version == self.settings.visual_embedding_preprocessing
             )
         return "up", "active" if matches else "mismatch"
-
-    async def _check_rabbitmq(self) -> str:
-        connection = None
-        try:
-            connection = await aio_pika.connect(
-                self.settings.rabbitmq_url,
-                timeout=self.settings.readiness_timeout_seconds,
-            )
-            channel = await connection.channel()
-            await channel.declare_queue(self.settings.rabbitmq_consumer_queue, passive=True)
-            return "up"
-        except Exception:
-            return "down"
-        finally:
-            if connection is not None:
-                await connection.close()

@@ -332,6 +332,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 | 23/10/2026 | Khôi phục và đối chiếu phạm vi của Hải | Tạo bảng tiến độ đầy đủ | File này | Chưa chạy lại coverage | Bắt đầu HAI-01.1 |
 | 23/10/2026 | Hoàn tất catalog và embedding verification | HAI-01/02 đạt; 81/81 READY, idempotency skip 81 | `evidence/image-search/*.json` | Không có mismatch/stale/failed | Chuyển HAI-03 sang VERIFY |
 | 23/10/2026 | Chuyển query path và storefront sang SigLIP2 V2 | Public API HTTP 200; storefront render 4 kết quả, top-1 đúng; 5/5 candidate duy nhất | `siglip2-v2-smoke-2026-10-23.json`; `npm run smoke:visual-search` | Không còn vướng mắc trong HAI-03 | Bắt đầu HAI-04 test pipeline V2 |
+| 23/10/2026 | Harden storefront, public API và query readiness | FE giữ thứ tự backend, có availability/cancel/retry/states; BE giữ 422/429/503, chặn MIME/size và xử lý timeout; RabbitMQ không chặn query | Storefront build; 17 Spring tests; 101 Python tests | Chưa hoàn tất QA camera/mobile và toàn bộ ma trận HAI-04 | Tiếp tục các ca HAI-04 còn lại |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |

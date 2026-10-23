@@ -1,9 +1,11 @@
+import asyncio
+
 from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock, patch
 
 from app.config import Settings, get_settings
 from app.main import app
-from app.services.readiness import ReadinessResult
+from app.services.readiness import ReadinessChecker, ReadinessResult
 
 
 def test_liveness() -> None:
@@ -45,7 +47,7 @@ def test_readiness_checks_dependencies_when_enabled() -> None:
     assert response.json()["status"] == "ready"
 
 
-def test_readiness_returns_503_when_a_dependency_is_down() -> None:
+def test_readiness_returns_503_when_database_or_model_is_down() -> None:
     app.dependency_overrides[get_settings] = lambda: Settings(
         _env_file=None,
         visual_search_enabled=True,
@@ -57,11 +59,32 @@ def test_readiness_returns_503_when_a_dependency_is_down() -> None:
     try:
         with patch(
             "app.api.health.ReadinessChecker.check",
-            new=AsyncMock(return_value=ReadinessResult(False, "up", "active", "down")),
+            new=AsyncMock(return_value=ReadinessResult(False, "down", "unknown", "not_required")),
         ):
             response = TestClient(app).get("/health/ready")
     finally:
         app.dependency_overrides.clear()
     assert response.status_code == 503
     assert response.json()["status"] == "not_ready"
-    assert response.json()["checks"]["rabbitmq"] == "down"
+    assert response.json()["checks"]["database"] == "down"
+
+
+def test_query_readiness_does_not_require_rabbitmq() -> None:
+    settings = Settings(
+        _env_file=None,
+        visual_search_enabled=True,
+        database_url="postgresql://configured",
+        rabbitmq_url="amqp://unavailable",
+        internal_service_token="configured",
+        cloudinary_cloud_name="demo",
+    )
+    checker = ReadinessChecker(settings)
+    with patch.object(
+        checker,
+        "_check_database_and_model",
+        new=AsyncMock(return_value=("up", "active")),
+    ):
+        result = asyncio.run(checker.check())
+
+    assert result.ready is True
+    assert result.rabbitmq == "not_required"

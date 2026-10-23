@@ -7,7 +7,7 @@ import { ApiError } from "@/lib/api";
 import { mapProductListItem } from "@/modules/product/mappers";
 import { ProductCard } from "@/modules/product/components/ProductCard";
 import type { VisualSearchResult } from "@/modules/product/types";
-import { searchProductsByImage } from "@/modules/visual-search/api";
+import { getVisualSearchStatus, searchProductsByImage } from "@/modules/visual-search/api";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 const MAX_RESULTS = 4;
@@ -60,7 +60,8 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
   const dialogRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const busyRef = useRef(false);
+  const requestRef = useRef<AbortController | null>(null);
+  const [availability, setAvailability] = useState<"checking" | "available" | "unavailable">("checking");
   const [open, setOpen] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
   const [cameraStream, setCameraStream] = useState<MediaStream>();
@@ -73,12 +74,21 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
   const [hasSearched, setHasSearched] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
-  busyRef.current = busy;
 
   useEffect(() => () => {
     if (source) URL.revokeObjectURL(source);
     streamRef.current?.getTracks().forEach((track) => track.stop());
+    requestRef.current?.abort();
   }, [source]);
+  useEffect(() => {
+    const controller = new AbortController();
+    void getVisualSearchStatus(controller.signal)
+      .then((status) => setAvailability(status.enabled && status.available ? "available" : "unavailable"))
+      .catch(() => {
+        if (!controller.signal.aborted) setAvailability("unavailable");
+      });
+    return () => controller.abort();
+  }, []);
   useEffect(() => {
     if (videoRef.current && cameraStream) videoRef.current.srcObject = cameraStream;
   }, [cameraOpen, cameraStream]);
@@ -91,7 +101,10 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
     ) ?? []);
     requestAnimationFrame(() => focusable()[0]?.focus());
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !busyRef.current) {
+      if (event.key === "Escape") {
+        requestRef.current?.abort();
+        requestRef.current = null;
+        setBusy(false);
         streamRef.current?.getTracks().forEach((track) => track.stop());
         streamRef.current = null;
         setCameraStream(undefined);
@@ -132,8 +145,18 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
   }
 
   function closeDialog() {
+    requestRef.current?.abort();
+    requestRef.current = null;
+    setBusy(false);
     stopCamera();
     setOpen(false);
+  }
+
+  function cancelSearch() {
+    requestRef.current?.abort();
+    requestRef.current = null;
+    setBusy(false);
+    setError(undefined);
   }
 
   async function startCamera(mode: "user" | "environment" = facingMode) {
@@ -183,31 +206,40 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
 
   async function submit() {
     if (!source) return;
+    requestRef.current?.abort();
+    const controller = new AbortController();
+    requestRef.current = controller;
     setBusy(true);
+    setHasSearched(false);
     setError(undefined);
     try {
       const image = await cropImage(source, zoom, positionX, positionY);
-      const searchResults = await searchProductsByImage(image, MAX_RESULTS);
-      setResults(
-        [...searchResults]
-          .sort((first, second) => second.similarity - first.similarity)
-          .slice(0, MAX_RESULTS),
-      );
+      if (controller.signal.aborted) return;
+      const searchResults = await searchProductsByImage(image, MAX_RESULTS, controller.signal);
+      if (controller.signal.aborted) return;
+      // Spring owns the final ranking (including the in-stock-first rule).
+      setResults(searchResults.slice(0, MAX_RESULTS));
       setHasSearched(true);
     } catch (cause) {
-      setError(errorMessage(cause));
+      if (!controller.signal.aborted) setError(errorMessage(cause));
     } finally {
-      setBusy(false);
+      if (requestRef.current === controller) {
+        requestRef.current = null;
+        setBusy(false);
+      }
     }
   }
 
   function reset() {
+    cancelSearch();
     if (source) URL.revokeObjectURL(source);
     setSource(undefined);
     setResults([]);
     setHasSearched(false);
     setError(undefined);
   }
+
+  if (availability !== "available") return null;
 
   return (
     <>
@@ -219,14 +251,14 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
         </button>
       )}
       {open ? (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/45 px-3 py-6 md:py-12" role="dialog" aria-modal="true" aria-labelledby="visual-search-title" onMouseDown={(event) => { if (event.target === event.currentTarget && !busy) closeDialog(); }}>
-          <section ref={dialogRef} className="w-full max-w-6xl rounded-2xl bg-white p-5 shadow-2xl md:p-8">
+        <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/45 px-3 py-6 md:py-12" role="dialog" aria-modal="true" aria-labelledby="visual-search-title" onMouseDown={(event) => { if (event.target === event.currentTarget) closeDialog(); }}>
+          <section ref={dialogRef} aria-busy={busy} className="w-full max-w-6xl rounded-2xl bg-white p-5 shadow-2xl md:p-8">
             <header className="mb-6 flex items-start justify-between gap-4">
               <div>
                 <h2 id="visual-search-title" className="text-xl font-semibold text-ivy-dark">Tìm kiếm bằng hình ảnh</h2>
                 <p className="mt-1 text-sm text-ivy-text-muted">Chọn hoặc chụp ảnh, căn sản phẩm vào khung rồi bắt đầu tìm kiếm.</p>
               </div>
-              <button type="button" onClick={closeDialog} disabled={busy} className="rounded-full p-2 hover:bg-[#f3f3f3] disabled:opacity-50" aria-label="Đóng"><X className="size-5" /></button>
+              <button type="button" onClick={closeDialog} className="rounded-full p-2 hover:bg-[#f3f3f3]" aria-label="Đóng"><X className="size-5" /></button>
             </header>
 
             {cameraOpen ? (
@@ -263,7 +295,8 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
                   <label className="text-sm text-ivy-text">Phóng to <input type="range" min="1" max="3" step="0.05" value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="mt-2 w-full accent-[#221f20]" /></label>
                   <label className="text-sm text-ivy-text">Di chuyển ngang <input type="range" min="0" max="100" value={positionX} onChange={(e) => setPositionX(Number(e.target.value))} className="mt-2 w-full accent-[#221f20]" /></label>
                   <label className="text-sm text-ivy-text">Di chuyển dọc <input type="range" min="0" max="100" value={positionY} onChange={(e) => setPositionY(Number(e.target.value))} className="mt-2 w-full accent-[#221f20]" /></label>
-                  <button type="button" onClick={submit} disabled={busy} className="flex h-11 items-center justify-center gap-2 rounded-tl-xl rounded-br-xl bg-ivy-dark px-5 text-sm font-semibold text-white disabled:opacity-60">{busy ? <LoaderCircle className="size-4 animate-spin" /> : <Search className="size-4" />}{busy ? "Đang tìm kiếm..." : "Tìm sản phẩm tương tự"}</button>
+                  <button type="button" onClick={submit} disabled={busy} className="flex h-11 items-center justify-center gap-2 rounded-tl-xl rounded-br-xl bg-ivy-dark px-5 text-sm font-semibold text-white disabled:opacity-60">{busy ? <LoaderCircle className="size-4 animate-spin" /> : <Search className="size-4" />}{busy ? "Đang tìm kiếm..." : error ? "Thử lại" : "Tìm sản phẩm tương tự"}</button>
+                  {busy ? <button type="button" onClick={cancelSearch} className="h-10 border border-ivy-hairline px-5 text-sm text-ivy-text hover:bg-[#fafafa]">Hủy tìm kiếm</button> : null}
                   <button type="button" onClick={() => startCamera()} disabled={busy} className="flex h-10 items-center justify-center gap-2 border border-ivy-hairline text-sm text-ivy-text hover:bg-[#fafafa] disabled:opacity-60"><Camera className="size-4" />Chụp lại bằng camera</button>
                   <button type="button" onClick={() => inputRef.current?.click()} disabled={busy} className="h-10 border border-ivy-hairline text-sm text-ivy-text hover:bg-[#fafafa]">Chọn ảnh khác</button>
                 </div>
@@ -272,7 +305,10 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
               <div>
                 <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
                   <p className="text-sm text-ivy-text">Tìm thấy <strong>{results.length}</strong> sản phẩm tương tự</p>
-                  <button type="button" onClick={reset} className="border border-ivy-hairline px-4 py-2 text-sm hover:bg-[#fafafa]">Tìm bằng ảnh khác</button>
+                  <div className="flex flex-wrap gap-2">
+                    <button type="button" onClick={submit} disabled={busy} className="border border-ivy-hairline px-4 py-2 text-sm hover:bg-[#fafafa] disabled:opacity-60">Thử lại ảnh này</button>
+                    <button type="button" onClick={reset} disabled={busy} className="border border-ivy-hairline px-4 py-2 text-sm hover:bg-[#fafafa] disabled:opacity-60">Tìm bằng ảnh khác</button>
+                  </div>
                 </div>
                 {results.length > 0 ? (
                   <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
@@ -296,7 +332,7 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
                 )}
               </div>
             )}
-            {error ? <p role="alert" className="mt-5 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
+            {error ? <div role="alert" className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700"><span>{error}</span>{source && !busy ? <button type="button" onClick={submit} className="border border-red-200 bg-white px-3 py-1.5 font-medium hover:bg-red-100">Thử lại</button> : null}</div> : null}
             <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={(event) => { chooseFile(event.target.files?.[0]); event.target.value = ""; }} />
             <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="sr-only" onChange={(event) => { chooseFile(event.target.files?.[0]); event.target.value = ""; }} />
           </section>

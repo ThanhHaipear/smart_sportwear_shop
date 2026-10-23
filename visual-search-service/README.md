@@ -54,11 +54,13 @@ permanent image errors and exhausted retries are sent to
 `visual-search.indexing.dlq`. Duplicate event IDs and unchanged READY image
 hashes are skipped without another provider call.
 
-`GET /health/ready` verifies the database connection, an ACTIVE model matching
-the configured provider/model/dimensions, and the main RabbitMQ queue. It returns
-HTTP 503 with component states when any dependency is unavailable. When running
-the Python process directly on the host, `RABBITMQ_URL` must use `localhost`;
-the `rabbitmq` hostname is only valid from another Docker Compose container.
+`GET /health/ready` verifies the database connection and an ACTIVE model matching
+the configured provider/model/dimensions. RabbitMQ is not on the synchronous
+query path, so queue availability is reported as `not_required` and does not make
+the HTTP API unavailable. Worker/queue health remains available from the admin
+operations endpoint. When running the worker directly on the host, `RABBITMQ_URL`
+must use `localhost`; the `rabbitmq` hostname is only valid from another Docker
+Compose container.
 
 Run the broker integration test after starting RabbitMQ:
 

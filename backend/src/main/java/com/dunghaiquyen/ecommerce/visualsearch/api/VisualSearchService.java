@@ -7,11 +7,12 @@ import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
 import com.dunghaiquyen.ecommerce.modules.product.service.ProductService;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class VisualSearchService {
 
     static final int CANDIDATE_LIMIT = 50;
+    static final long MAX_IMAGE_BYTES = 5L * 1024 * 1024;
+    private static final Set<String> ALLOWED_IMAGE_TYPES = Set.of("image/jpeg", "image/png", "image/webp");
 
     private final VisualSearchProperties properties;
     private final VisualSearchClient client;
@@ -47,6 +50,14 @@ public class VisualSearchService {
         }
         if (image == null || image.isEmpty()) {
             throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Image is required");
+        }
+        if (image.getSize() > MAX_IMAGE_BYTES) {
+            throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Image must not exceed 5 MB");
+        }
+        String contentType = normalizeContentType(image.getContentType());
+        if (!ALLOWED_IMAGE_TYPES.contains(contentType)) {
+            throw new BusinessRuleException(
+                    HttpStatus.UNPROCESSABLE_ENTITY, "Image must be JPEG, PNG or WebP");
         }
         if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
             throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "minPrice must not exceed maxPrice");
@@ -90,5 +101,13 @@ public class VisualSearchService {
             return false;
         }
         return maxPrice == null || (product.minPrice() != null && product.minPrice().compareTo(maxPrice) <= 0);
+    }
+
+    private static String normalizeContentType(String value) {
+        if (value == null || value.isBlank()) {
+            return "";
+        }
+        int parameters = value.indexOf(';');
+        return (parameters >= 0 ? value.substring(0, parameters) : value).trim().toLowerCase(java.util.Locale.ROOT);
     }
 }

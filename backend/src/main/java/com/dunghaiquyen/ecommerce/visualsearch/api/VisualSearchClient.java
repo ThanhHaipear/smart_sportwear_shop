@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import java.time.Duration;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -15,9 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.multipart.MultipartFile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
 public class VisualSearchClient {
@@ -64,9 +66,17 @@ public class VisualSearchClient {
             return response == null || response.candidates() == null ? List.of() : response.candidates();
         } catch (RestClientResponseException ex) {
             log.warn("Visual search service returned HTTP {}: {}", ex.getStatusCode(), ex.getResponseBodyAsString());
-            HttpStatus status = ex.getStatusCode().is4xxClientError()
-                    ? HttpStatus.UNPROCESSABLE_ENTITY : HttpStatus.SERVICE_UNAVAILABLE;
+            HttpStatus status = switch (ex.getStatusCode().value()) {
+                case 400, 413, 415, 422 -> HttpStatus.UNPROCESSABLE_ENTITY;
+                case 429 -> HttpStatus.TOO_MANY_REQUESTS;
+                default -> HttpStatus.SERVICE_UNAVAILABLE;
+            };
             throw new BusinessRuleException(status, "Visual search request failed");
+        } catch (InvalidMediaTypeException ex) {
+            throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid image MIME type");
+        } catch (ResourceAccessException ex) {
+            log.warn("Visual search service could not be reached before the configured timeout");
+            throw new BusinessRuleException(HttpStatus.SERVICE_UNAVAILABLE, "Visual search request timed out");
         } catch (RestClientException | java.io.IOException ex) {
             throw new BusinessRuleException(HttpStatus.SERVICE_UNAVAILABLE, "Visual search is temporarily unavailable");
         }
