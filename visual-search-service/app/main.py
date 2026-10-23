@@ -6,13 +6,22 @@ from app.api.admin import router as admin_router
 from app.api.health import router as health_router
 from app.api.search import router as search_router
 from app.config import get_settings
-from app.providers.factory import close_provider_clients
+from app.providers.factory import build_provider, close_provider_clients
+from app.providers.siglip2 import Siglip2EmbeddingProvider
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    yield
-    await close_provider_clients()
+    settings = get_settings()
+    if settings.visual_search_enabled and settings.visual_embedding_provider == "hugging_face_local":
+        provider = build_provider(settings)
+        if not isinstance(provider, Siglip2EmbeddingProvider):
+            raise RuntimeError("Local embedding provider was not initialized correctly")
+        await provider.prepare()
+    try:
+        yield
+    finally:
+        await close_provider_clients()
 
 
 def create_app() -> FastAPI:

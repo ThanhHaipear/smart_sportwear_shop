@@ -42,6 +42,10 @@ class Siglip2EmbeddingProvider:
         self._processor: Any | None = None
         self._model: Any | None = None
 
+    async def prepare(self) -> None:
+        """Load the pinned model before the application accepts traffic."""
+        await asyncio.to_thread(self._load)
+
     async def embed_document(self, image: bytes, text: str | None = None) -> EmbeddingResult:
         return await self.embed_query(image)
 

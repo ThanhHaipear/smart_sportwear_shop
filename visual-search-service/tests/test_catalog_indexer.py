@@ -91,6 +91,21 @@ def test_ready_hash_skips_provider_and_completes_event():
     asyncio.run(scenario())
 
 
+def test_changed_asset_hash_recomputes_embedding():
+    async def scenario():
+        event = make_event()
+        repo = FakeRepository(
+            event,
+            existing=ExistingEmbedding("READY", "b" * 64, (1.0,) + (0.0,) * 13),
+        )
+        await CatalogIndexer(repo, FakePipeline(), FakeEmbeddingProvider(4)).handle(event)
+        assert repo.processing_calls == 1
+        assert repo.ready_calls == 1
+        assert repo.completed == [event.event_id]
+
+    asyncio.run(scenario())
+
+
 def test_active_image_becomes_ready_and_event_is_processed():
     async def scenario():
         event = make_event()

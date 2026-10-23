@@ -113,6 +113,72 @@ class VisualSearchServiceTest {
                 .containsExactly(inStockId, soldOutId);
     }
 
+    @Test
+    void appliesCategoryGenderAndPriceFiltersIndependently() {
+        VisualSearchClient client = mock(VisualSearchClient.class);
+        ProductService productService = mock(ProductService.class);
+        ProductRepository productRepository = mock(ProductRepository.class);
+        MultipartFile image = validImage("image/jpeg");
+        UUID categoryId = UUID.randomUUID();
+        UUID matchingId = UUID.randomUUID();
+        UUID wrongCategoryId = UUID.randomUUID();
+        UUID wrongGenderId = UUID.randomUUID();
+        UUID belowPriceId = UUID.randomUUID();
+        UUID abovePriceId = UUID.randomUUID();
+        List<UUID> ids = List.of(matchingId, wrongCategoryId, wrongGenderId, belowPriceId, abovePriceId);
+        when(client.search(image, 50)).thenReturn(ids.stream()
+                .map(id -> new VisualSearchCandidate(id, UUID.randomUUID(), "https://example/" + id, 0.8))
+                .toList());
+        when(productService.assembleListItemsByIds(ids, ProductStatus.ACTIVE)).thenReturn(List.of(
+                listItem(matchingId, "Matching", 400_000, 500_000),
+                listItem(wrongCategoryId, "Wrong category", 400_000, 500_000),
+                listItem(wrongGenderId, "Wrong gender", 400_000, 500_000),
+                listItem(belowPriceId, "Below range", 100_000, 200_000),
+                listItem(abovePriceId, "Above range", 600_000, 700_000)));
+        List<Product> entities = List.of(
+                withId(product(categoryId, Gender.MEN, true), matchingId),
+                withId(product(UUID.randomUUID(), Gender.MEN, true), wrongCategoryId),
+                withId(product(categoryId, Gender.WOMEN, true), wrongGenderId),
+                withId(product(categoryId, Gender.MEN, true), belowPriceId),
+                withId(product(categoryId, Gender.MEN, true), abovePriceId));
+        when(productRepository.findAllById(ids)).thenReturn(entities);
+
+        List<VisualSearchResult> results = service(client, productService, productRepository).search(
+                image,
+                20,
+                categoryId,
+                Gender.MEN,
+                BigDecimal.valueOf(350_000),
+                BigDecimal.valueOf(550_000));
+
+        assertThat(results).extracting(result -> result.product().id()).containsExactly(matchingId);
+    }
+
+    @Test
+    void preservesBackendCandidateOrderWhenStockAndSimilarityAreTied() {
+        VisualSearchClient client = mock(VisualSearchClient.class);
+        ProductService productService = mock(ProductService.class);
+        ProductRepository productRepository = mock(ProductRepository.class);
+        MultipartFile image = validImage("image/webp");
+        UUID firstId = UUID.randomUUID();
+        UUID secondId = UUID.randomUUID();
+        List<UUID> ids = List.of(firstId, secondId);
+        when(client.search(image, 50)).thenReturn(List.of(
+                new VisualSearchCandidate(firstId, UUID.randomUUID(), "first", 0.8),
+                new VisualSearchCandidate(secondId, UUID.randomUUID(), "second", 0.8)));
+        when(productService.assembleListItemsByIds(ids, ProductStatus.ACTIVE)).thenReturn(List.of(
+                listItem(firstId, "First", 100_000, 100_000),
+                listItem(secondId, "Second", 100_000, 100_000)));
+        Product first = withId(product(UUID.randomUUID(), Gender.UNISEX, true), firstId);
+        Product second = withId(product(UUID.randomUUID(), Gender.UNISEX, true), secondId);
+        when(productRepository.findAllById(ids)).thenReturn(List.of(first, second));
+
+        List<VisualSearchResult> results = service(client, productService, productRepository)
+                .search(image, 20, null, null, null, null);
+
+        assertThat(results).extracting(result -> result.product().id()).containsExactly(firstId, secondId);
+    }
+
     private static VisualSearchService service(
             VisualSearchClient client, ProductService productService, ProductRepository productRepository) {
         return new VisualSearchService(
@@ -144,5 +210,12 @@ class VisualSearchServiceTest {
     private static Product withId(Product product, UUID id) {
         when(product.getId()).thenReturn(id);
         return product;
+    }
+
+    private static MultipartFile validImage(String contentType) {
+        MultipartFile image = mock(MultipartFile.class);
+        when(image.isEmpty()).thenReturn(false);
+        when(image.getContentType()).thenReturn(contentType);
+        return image;
     }
 }

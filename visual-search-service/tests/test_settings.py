@@ -48,9 +48,20 @@ def test_voyage_requires_api_key_when_feature_is_enabled() -> None:
         enabled_settings(visual_embedding_provider="voyage", voyage_api_key="")
 
 
-def test_siglip2_configuration_must_match_v2_index() -> None:
-    with pytest.raises(ValidationError, match="VISUAL_EMBEDDING_DIMS"):
-        enabled_settings(visual_embedding_provider="hugging_face_local", visual_embedding_dims=1024)
+@pytest.mark.parametrize(
+    ("override", "expected_field"),
+    [
+        ({"visual_embedding_model": "wrong/model"}, "VISUAL_EMBEDDING_MODEL"),
+        ({"visual_embedding_revision": "wrong-revision"}, "VISUAL_EMBEDDING_REVISION"),
+        ({"visual_embedding_preprocessing": "wrong-v1"}, "VISUAL_EMBEDDING_PREPROCESSING"),
+        ({"visual_embedding_dims": 1024}, "VISUAL_EMBEDDING_DIMS"),
+    ],
+)
+def test_siglip2_configuration_must_match_v2_index(
+    override: dict[str, object], expected_field: str
+) -> None:
+    with pytest.raises(ValidationError, match=expected_field):
+        enabled_settings(visual_embedding_provider="hugging_face_local", **override)
 
 
 def test_catalog_allowlist_requires_both_supported_sources() -> None:

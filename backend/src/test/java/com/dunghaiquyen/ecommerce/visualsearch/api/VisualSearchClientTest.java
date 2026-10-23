@@ -57,6 +57,19 @@ class VisualSearchClientTest {
         assertThat(error.getStatus()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @Test
+    void upstreamAuthenticationDetailsAreMappedToGeneric503() {
+        visualSearchStub.stubFor(post(urlPathEqualTo("/internal/v1/search"))
+                .willReturn(aResponse().withStatus(401).withBody("internal-token=must-not-leak")));
+
+        BusinessRuleException error = catchThrowableOfType(
+                () -> client(2).search(validImage(), 20), BusinessRuleException.class);
+
+        assertThat(error.getStatus()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
+        assertThat(error.getMessage()).isEqualTo("Visual search request failed");
+        assertThat(error.getMessage()).doesNotContain("must-not-leak");
+    }
+
     private static VisualSearchClient client(int timeoutSeconds) {
         return new VisualSearchClient(new VisualSearchProperties(
                 true, visualSearchStub.baseUrl(), "test-token", timeoutSeconds, 10));

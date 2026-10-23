@@ -33,6 +33,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "smoke:visual-search": "node scripts/smoke-visual-search.mjs",
+    "qa:visual-search": "node scripts/qa-visual-search.mjs",
     "check": "npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {

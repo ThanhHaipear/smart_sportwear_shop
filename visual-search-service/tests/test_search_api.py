@@ -2,6 +2,7 @@ import io
 from unittest.mock import AsyncMock, patch
 from uuid import uuid4
 
+import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
@@ -31,15 +32,23 @@ def enabled_settings() -> Settings:
     )
 
 
-def test_search_requires_internal_token() -> None:
+@pytest.mark.parametrize(
+    "headers",
+    [{}, {"X-Internal-Service-Token": "wrong-token"}],
+)
+def test_search_requires_correct_internal_token_without_leaking_secret(headers: dict[str, str]) -> None:
     app.dependency_overrides[get_settings] = enabled_settings
     try:
         response = TestClient(app).post(
-            "/internal/v1/search", files={"image": ("query.png", png_bytes(), "image/png")}
+            "/internal/v1/search",
+            headers=headers,
+            files={"image": ("query.png", png_bytes(), "image/png")},
         )
     finally:
         app.dependency_overrides.clear()
     assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid internal service token"
+    assert "secret" not in response.text
 
 
 def test_search_normalizes_embeds_and_returns_candidates() -> None:
@@ -113,6 +122,48 @@ def test_search_returns_controlled_error_when_provider_is_unavailable() -> None:
     assert response.status_code == 503
     assert response.json()["detail"] == "Visual embedding provider is unavailable"
     assert "upstream detail" not in response.text
+
+
+def test_search_rejects_active_model_revision_mismatch_before_embedding() -> None:
+    settings = enabled_settings()
+    settings = settings.model_copy(
+        update={
+            "visual_embedding_provider": "hugging_face_local",
+            "visual_embedding_model": "google/siglip2-base-patch16-224",
+            "visual_embedding_revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+            "visual_embedding_preprocessing": "siglip2-autoprocessor-original-v1",
+            "visual_embedding_dims": 768,
+        }
+    )
+    model = ModelVersion(
+        uuid4(),
+        "HUGGING_FACE_LOCAL",
+        settings.visual_embedding_model,
+        768,
+        "stale-revision",
+        settings.visual_embedding_preprocessing,
+    )
+    connection = AsyncMock()
+    connection.__aenter__.return_value = connection
+
+    app.dependency_overrides[get_settings] = lambda: settings
+    try:
+        with (
+            patch("app.api.search.build_provider") as build_provider,
+            patch("app.api.search.VisualSearchRepository._connect", new=AsyncMock(return_value=connection)),
+            patch("app.api.search.VisualSearchRepository.active_model_on", new=AsyncMock(return_value=model)),
+        ):
+            response = TestClient(app).post(
+                "/internal/v1/search",
+                headers={"X-Internal-Service-Token": "secret"},
+                files={"image": ("query.png", png_bytes(), "image/png")},
+            )
+    finally:
+        app.dependency_overrides.clear()
+
+    assert response.status_code == 503
+    assert response.json()["detail"] == "Active visual model does not match the configured SigLIP2 index"
+    build_provider.assert_not_called()
 
 
 def test_search_stops_when_monthly_budget_is_exhausted() -> None:

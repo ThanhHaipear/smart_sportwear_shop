@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock, patch
 
 from app.config import Settings, get_settings
-from app.main import app
+from app.main import app, lifespan
 from app.services.readiness import ReadinessChecker, ReadinessResult
 
 
@@ -88,3 +88,28 @@ def test_query_readiness_does_not_require_rabbitmq() -> None:
 
     assert result.ready is True
     assert result.rabbitmq == "not_required"
+
+
+def test_lifespan_preloads_local_model_before_serving() -> None:
+    settings = Settings(
+        _env_file=None,
+        visual_search_enabled=True,
+        visual_embedding_provider="hugging_face_local",
+        database_url="postgresql://configured",
+        internal_service_token="configured",
+        cloudinary_cloud_name="demo",
+    )
+    provider = AsyncMock()
+
+    async def run_lifespan() -> None:
+        with (
+            patch("app.main.get_settings", return_value=settings),
+            patch("app.main.build_provider", return_value=provider),
+            patch("app.main.Siglip2EmbeddingProvider", object),
+            patch("app.main.close_provider_clients", new=AsyncMock()) as close_clients,
+        ):
+            async with lifespan(app):
+                provider.prepare.assert_awaited_once()
+            close_clients.assert_awaited_once()
+
+    asyncio.run(run_lifespan())

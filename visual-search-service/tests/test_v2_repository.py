@@ -55,3 +55,30 @@ def test_exact_search_groups_products_and_uses_stable_order() -> None:
     assert rows[0].product_id == product_id
     assert rows[0].image_id == image_id
     assert rows[0].similarity == 0.91
+
+
+def test_exact_search_bounds_image_candidates_and_preserves_tie_order() -> None:
+    first_product = uuid4()
+    second_product = uuid4()
+    first_image = uuid4()
+    second_image = uuid4()
+    model_id = uuid4()
+    cursor = AsyncMock()
+    cursor.fetchall.return_value = [
+        (first_product, first_image, "https://example/first.jpg", 0.8),
+        (second_product, second_image, "https://example/second.jpg", 0.8),
+    ]
+    connection = MagicMock()
+    connection.cursor.return_value = async_context(cursor)
+
+    rows = asyncio.run(
+        VisualSearchRepository.search_on(connection, model_id, (0.5, 0.5), 20)
+    )
+
+    sql = cursor.execute.await_args.args[0]
+    params = cursor.execute.await_args.args[1]
+    assert "partition by result.product_id" in sql
+    assert "where product_rank = 1" in sql
+    assert "order by similarity desc, product_id, image_id" in sql
+    assert params[2:] == (100, 20)
+    assert [row.product_id for row in rows] == [first_product, second_product]

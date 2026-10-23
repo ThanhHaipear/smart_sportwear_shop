@@ -61,6 +61,24 @@ def test_rejects_decoded_pixel_limit():
         pipeline.normalize(image_bytes(size=(20, 20)))
 
 
+def test_rejects_encoded_byte_limit():
+    payload = image_bytes()
+    pipeline = ImagePipeline(
+        Settings(cloudinary_cloud_name="demo", max_upload_bytes=len(payload) - 1)
+    )
+    with pytest.raises(ImagePipelineError, match="byte"):
+        pipeline.normalize(payload, "image/png")
+
+
+def test_rejects_pillow_decompression_bomb(monkeypatch):
+    # Pillow raises DecompressionBombError above twice MAX_IMAGE_PIXELS. Keep
+    # the fixture tiny while exercising the same defensive path as a huge file.
+    monkeypatch.setattr(Image, "MAX_IMAGE_PIXELS", 100)
+    pipeline = ImagePipeline(Settings(cloudinary_cloud_name="demo", max_image_pixels=10_000))
+    with pytest.raises(ImagePipelineError, match="decoded safely"):
+        pipeline.normalize(image_bytes(size=(20, 20)), "image/png")
+
+
 def test_download_stream_enforces_redirect_allowlist_and_normalizes():
     asyncio.run(_test_download_stream_enforces_redirect_allowlist_and_normalizes())
 

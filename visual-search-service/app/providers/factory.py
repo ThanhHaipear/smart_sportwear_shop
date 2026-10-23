@@ -23,10 +23,11 @@ def _shared_http_client(settings: Settings) -> httpx.AsyncClient:
 
 
 async def close_provider_clients() -> None:
-    global _http_client
+    global _http_client, _local_provider
     if _http_client is not None:
         await _http_client.aclose()
         _http_client = None
+    _local_provider = None
 
 
 def build_provider(settings: Settings) -> MultimodalEmbeddingProvider:
