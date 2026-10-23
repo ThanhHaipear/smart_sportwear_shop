@@ -22,6 +22,8 @@ class ModelVersion:
     provider: str
     model: str
     dimensions: int
+    model_version: str = ""
+    preprocessing_version: str = ""
 
 
 @dataclass(frozen=True, slots=True)
@@ -250,7 +252,11 @@ class VisualSearchRepository:
     async def active_model_on(connection: psycopg.AsyncConnection[Any]) -> ModelVersion | None:
         async with connection.cursor() as cursor:
             await cursor.execute(
-                "select id, provider, model, dimensions from visual_search.model_versions where status = 'ACTIVE'"
+                """
+                select id, provider, model_name, dimensions, model_version, preprocessing_version
+                from ai_retrieval.embedding_models
+                where modality = 'PRODUCT_IMAGE' and status = 'ACTIVE'
+                """
             )
             row = await cursor.fetchone()
             return ModelVersion(*row) if row else None
@@ -710,45 +716,29 @@ class VisualSearchRepository:
         image_limit = min(max(limit * 10, 50), 100)
         async with connection.cursor() as cursor:
             await cursor.execute(
-                    """
-                    with ranked_images as (
-                        select e.product_id, e.image_id, pi.image_url,
-                               1 - (e.embedding <=> %s::vector) as similarity
-                        from visual_search.image_embeddings e
-                        join product_images pi on pi.id = e.image_id
-                        join products p on p.id = e.product_id
-                        where e.model_version_id = %s
-                          and e.status = 'READY'
-                          and p.status = 'ACTIVE'
-                        order by e.embedding <=> %s::vector
-                        limit %s
-                    ), ranked_products as (
-                        select distinct on (product_id)
-                               product_id, image_id, image_url, similarity
-                        from ranked_images
-                        order by product_id, similarity desc
-                    )
-                    select rp.product_id, rp.image_id, rp.image_url, rp.similarity, e.color_signature
-                    from ranked_products rp
-                    join visual_search.image_embeddings e
-                      on e.image_id=rp.image_id and e.model_version_id=%s
-                    order by similarity desc
-                    """,
-                    (encoded, model_id, encoded, image_limit, model_id),
+                """
+                with ranked_images as (
+                    select result.product_id, result.image_id, image.secure_url,
+                           result.similarity,
+                           row_number() over (
+                               partition by result.product_id
+                               order by result.similarity desc, result.image_id
+                           ) as product_rank
+                    from ai_retrieval.search_product_images_exact(
+                        %s, %s::extensions.vector, %s
+                    ) result
+                    join public.product_images image on image.id = result.image_id
+                )
+                select product_id, image_id, secure_url, similarity
+                from ranked_images
+                where product_rank = 1
+                order by similarity desc, product_id, image_id
+                limit %s
+                """,
+                (model_id, encoded, image_limit, limit),
             )
             rows = await cursor.fetchall()
-            ranked: list[SearchCandidate] = []
-            for row in rows:
-                visual_score = float(row[3])
-                stored_color = tuple(float(value) for value in row[4]) if row[4] else ()
-                if query_color and stored_color and len(query_color) == len(stored_color):
-                    color_score = sum(min(left, right) for left, right in zip(query_color, stored_color))
-                    final_score = blend_visual_and_color_similarity(visual_score, color_score)
-                else:
-                    final_score = visual_score
-                ranked.append(SearchCandidate(row[0], row[1], row[2], final_score))
-            ranked.sort(key=lambda candidate: candidate.similarity, reverse=True)
-            return ranked[:limit]
+            return [SearchCandidate(row[0], row[1], row[2], float(row[3])) for row in rows]
 
     async def record_query_usage(
         self,

@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-10-23T12:44:58+07:00",
+  "queryImage": "catalog/pilot-v1/assets/PILOT-TOP-001-01.png",
+  "model": "google/siglip2-base-patch16-224",
+  "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+  "dimensions": 768,
+  "queryVectorL2Norm": 1.0,
+  "expectedProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+  "topProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+  "topImageId": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+  "topSimilarity": 0.998296,
+  "requestedResults": 5,
+  "returnedResults": 5,
+  "uniqueProducts": 5,
+  "internalApiStatus": 200,
+  "internalApiContract": "POST /internal/v1/search?limit=5",
+  "publicApiStatus": 200,
+  "publicApiContract": "POST /api/v1/products/search-by-image?limit=5",
+  "publicApiTopProductName": "Áo chạy bộ nam Aero Navy",
+  "storefrontSmoke": {
+    "command": "npm run smoke:visual-search",
+    "httpStatus": 200,
+    "renderedResultCards": 4,
+    "expectedTopSlug": "ao-chay-bo-nam-aero-navy",
+    "expectedTopVisible": true
+  },
+  "pipeline": "storefront upload/crop -> Spring public API -> pinned local SigLIP2 -> ai_retrieval.search_product_images_exact -> stable product grouping -> Commerce hydration",
+  "passed": true
+}

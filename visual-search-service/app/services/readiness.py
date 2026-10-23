@@ -40,10 +40,16 @@ class ReadinessChecker:
         if model is None:
             return "up", "missing"
         matches = (
-            model.provider == self.settings.visual_embedding_provider
+            model.provider.lower() == self.settings.visual_embedding_provider
             and model.model == self.settings.visual_embedding_model
             and model.dimensions == self.settings.visual_embedding_dims
         )
+        if self.settings.visual_embedding_provider == "hugging_face_local":
+            matches = (
+                matches
+                and model.model_version == self.settings.visual_embedding_revision
+                and model.preprocessing_version == self.settings.visual_embedding_preprocessing
+            )
         return "up", "active" if matches else "mismatch"
 
     async def _check_rabbitmq(self) -> str:

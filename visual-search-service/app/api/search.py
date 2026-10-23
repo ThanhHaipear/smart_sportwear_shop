@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from app.config import Settings, get_settings
 from app.persistence.repository import RepositoryUnavailableError, VisualSearchRepository
 from app.providers.factory import build_provider
+from app.providers.siglip2 import Siglip2ProviderError
 from app.providers.voyage import VoyageProviderError
 from app.services.errors import ImagePipelineError
 from app.services.image_pipeline import ImagePipeline
@@ -55,27 +56,40 @@ async def search_by_image(
 
     repository = VisualSearchRepository(settings)
     try:
-        monthly_cost = await repository.current_month_cost()
-        if settings.monthly_budget_usd == 0 or monthly_cost >= settings.monthly_budget_usd:
-            raise HTTPException(
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail="Visual search monthly AI budget is exhausted",
-            )
+        if settings.visual_embedding_provider != "hugging_face_local":
+            monthly_cost = await repository.current_month_cost()
+            if settings.monthly_budget_usd == 0 or monthly_cost >= settings.monthly_budget_usd:
+                raise HTTPException(
+                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                    detail="Visual search monthly AI budget is exhausted",
+                )
         async with await repository._connect() as connection:
             model = await repository.active_model_on(connection)
             if model is None:
                 raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="No active visual model")
+            if settings.visual_embedding_provider == "hugging_face_local" and not (
+                model.provider == "HUGGING_FACE_LOCAL"
+                and model.model == settings.visual_embedding_model
+                and model.model_version == settings.visual_embedding_revision
+                and model.preprocessing_version == settings.visual_embedding_preprocessing
+                and model.dimensions == settings.visual_embedding_dims
+            ):
+                raise HTTPException(
+                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                    detail="Active visual model does not match the configured SigLIP2 index",
+                )
             started = time.perf_counter()
             result = (await build_provider(settings).embed_query(normalized.content)).validate_dimensions(model.dimensions)
             latency_ms = round((time.perf_counter() - started) * 1000)
             candidates = await repository.search_on(
                 connection, model.id, result.vector, limit, normalized.color_signature
             )
-            await repository.record_query_usage_on(connection, model, result, latency_ms)
+            if settings.visual_embedding_provider != "hugging_face_local":
+                await repository.record_query_usage_on(connection, model, result, latency_ms)
             await connection.commit()
     except RepositoryUnavailableError as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Visual search is unavailable") from exc
-    except (VoyageProviderError, ValueError) as exc:
+    except (VoyageProviderError, Siglip2ProviderError, ValueError, RuntimeError) as exc:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Visual embedding provider is unavailable",

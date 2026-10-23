@@ -10,9 +10,13 @@ class Settings(BaseSettings):
 
     service_name: str = "visual-search-service"
     visual_search_enabled: bool = False
-    visual_embedding_provider: Literal["fake", "voyage"] = "fake"
-    visual_embedding_model: str = "voyage-multimodal-3.5"
-    visual_embedding_dims: int = Field(default=1024, gt=0)
+    visual_embedding_provider: Literal["fake", "voyage", "hugging_face_local"] = "hugging_face_local"
+    visual_embedding_model: str = "google/siglip2-base-patch16-224"
+    visual_embedding_revision: str = "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2"
+    visual_embedding_preprocessing: str = "siglip2-autoprocessor-original-v1"
+    visual_embedding_dims: int = Field(default=768, gt=0)
+    visual_embedding_device: Literal["auto", "cpu", "cuda"] = "auto"
+    visual_embedding_cache_dir: str = ""
     voyage_api_key: str = ""
     voyage_api_url: str = "https://api.voyageai.com/v1/multimodalembeddings"
     voyage_timeout_seconds: float = Field(default=30, gt=0)
@@ -69,6 +73,28 @@ class Settings(BaseSettings):
                 "Visual search is enabled but required configuration is missing: "
                 + ", ".join(missing)
             )
+
+        if self.visual_embedding_provider == "hugging_face_local":
+            expected = {
+                "VISUAL_EMBEDDING_MODEL": (
+                    self.visual_embedding_model,
+                    "google/siglip2-base-patch16-224",
+                ),
+                "VISUAL_EMBEDDING_REVISION": (
+                    self.visual_embedding_revision,
+                    "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+                ),
+                "VISUAL_EMBEDDING_PREPROCESSING": (
+                    self.visual_embedding_preprocessing,
+                    "siglip2-autoprocessor-original-v1",
+                ),
+                "VISUAL_EMBEDDING_DIMS": (self.visual_embedding_dims, 768),
+            }
+            mismatches = [name for name, (actual, required) in expected.items() if actual != required]
+            if mismatches:
+                raise ValueError(
+                    "SigLIP2 configuration must match the active V2 index: " + ", ".join(mismatches)
+                )
 
         required_hosts = {"res.cloudinary.com", "cdn.shopify.com"}
         if not required_hosts.issubset(self.allowed_hosts):

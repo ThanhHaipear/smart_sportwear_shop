@@ -48,6 +48,11 @@ def test_voyage_requires_api_key_when_feature_is_enabled() -> None:
         enabled_settings(visual_embedding_provider="voyage", voyage_api_key="")
 
 
+def test_siglip2_configuration_must_match_v2_index() -> None:
+    with pytest.raises(ValidationError, match="VISUAL_EMBEDDING_DIMS"):
+        enabled_settings(visual_embedding_provider="hugging_face_local", visual_embedding_dims=1024)
+
+
 def test_catalog_allowlist_requires_both_supported_sources() -> None:
     with pytest.raises(ValidationError, match="CATALOG_IMAGE_ALLOWED_HOSTS"):
         enabled_settings(catalog_image_allowed_hosts="res.cloudinary.com")

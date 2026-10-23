@@ -1,6 +1,7 @@
 # Visual Search Service
 
-Independent FastAPI service for catalog image embeddings and visual product search. The feature flag is off by default and the fake deterministic provider is the safe local/test default.
+Independent FastAPI service for visual product search. The V2 query path uses the
+pinned local SigLIP2 model and the versioned image index in `ai_retrieval`.
 
 ## Local development
 
@@ -20,12 +21,11 @@ Shopify `/s/files/` path. Redirect targets and resolved/connected IP addresses a
 checked to prevent SSRF, and response bytes, MIME type, decoded pixels and image
 format are bounded before a deterministic JPEG is produced and hashed.
 
-Set `VISUAL_EMBEDDING_PROVIDER=voyage` and provide `VOYAGE_API_KEY` to use the
-real `voyage-multimodal-3.5` provider. Catalog images are sent as normalized
-base64 bytes with `input_type=document`; search images use `input_type=query`.
-The API call has bounded timeout/retries and validates the configured vector
-dimension. Unit tests use an in-memory HTTP transport and never call Voyage or
-download from the Internet.
+Install `requirements-embeddings.txt` on the host serving image queries. Set
+`VISUAL_EMBEDDING_PROVIDER=hugging_face_local`; the model name, immutable revision,
+preprocessing version and 768 dimensions must match the ACTIVE `PRODUCT_IMAGE`
+row in `ai_retrieval.embedding_models`. The legacy Voyage provider remains only
+for historical comparison and rollback evidence.
 
 ## Phase 6 search API
 
@@ -33,10 +33,11 @@ download from the Internet.
 allows up to 50 internal candidates so Spring can apply commerce filters before
 returning at most 20 public results. It requires `X-Internal-Service-Token`,
 validates and normalizes the upload,
-creates a query embedding, runs exact cosine search against READY embeddings
-for the ACTIVE model, groups matches by product, and excludes non-ACTIVE
-products. Query images are not stored; only provider usage and latency are
-recorded.
+creates a normalized SigLIP2 query embedding, calls
+`ai_retrieval.search_product_images_exact`, groups matches by product with a
+stable tie-break, and excludes stale/non-READY embeddings through the database
+function. Spring applies current Commerce status, inventory, category, gender
+and price filters. Query images are not stored.
 
 ## Phase 4 indexing worker
 

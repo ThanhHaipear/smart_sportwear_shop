@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-10-23T12:25:00+07:00",
+  "gitCommit": "158589f953cc8abeca3634c91e8fb7b9ce761829",
+  "coverage": { "textTotal": 36, "textReady": 36, "imageTotal": 81, "imageReady": 81 },
+  "imageModel": {
+    "provider": "HUGGING_FACE_LOCAL",
+    "name": "google/siglip2-base-patch16-224",
+    "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+    "dimensions": 768,
+    "normalization": "L2",
+    "preprocessingVersion": "siglip2-autoprocessor-original-v1"
+  },
+  "verification": {
+    "badImageL2": 0,
+    "staleImageReady": 0,
+    "failedImage": 0,
+    "openJobsBeforeIdempotencyRun": 0,
+    "annIndexes": 0,
+    "exactCosineSelfSimilarity": 1.0
+  },
+  "idempotencyRun": {
+    "jobId": "2472dc24-92cd-4a77-a95c-439267f38b2b",
+    "status": "COMPLETED",
+    "total": 81,
+    "success": 81,
+    "skipped": 81,
+    "failed": 0
+  },
+  "negativeTests": {
+    "checksumMismatch": "covered by image source validation",
+    "invalidMime": "covered by image pipeline tests",
+    "oversizedBytesOrPixels": "covered by image pipeline tests",
+    "invalidVectorDimensionZeroOrNonFinite": "covered by embedding provider tests"
+  }
+}

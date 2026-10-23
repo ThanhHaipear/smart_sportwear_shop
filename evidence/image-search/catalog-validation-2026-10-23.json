@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-10-23T12:25:00+07:00",
+  "gitCommit": "158589f953cc8abeca3634c91e8fb7b9ce761829",
+  "catalog": {
+    "activeProducts": 36,
+    "databaseImages": 81,
+    "primaryImages": 36,
+    "productsWithoutImages": 0,
+    "productsWithInvalidPrimaryCount": 0,
+    "missingAssetIdentity": 0,
+    "missingChecksum": 0,
+    "missingTechnicalMetadata": 0,
+    "missingProvenance": 0
+  },
+  "localAssets": {
+    "pilot": { "expected": 60, "checked": 60, "checksumErrors": 0 },
+    "worldCup": { "expected": 21, "checked": 21, "checksumErrors": 0 }
+  },
+  "databaseManifestComparison": {
+    "expectedImages": 81,
+    "databaseImages": 81,
+    "missing": 0,
+    "extra": 0,
+    "metadataMismatches": 0
+  },
+  "snapshot": {
+    "version": "image-catalog-v2-2026-10-23",
+    "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0",
+    "files": [
+      { "path": "catalog/pilot-v1/manifest.json", "sha256": "b09df18dea5d1ac020bf6710b62fdeecfaef66467994d99982ad44900356b198" },
+      { "path": "catalog/pilot-v1/assets.sha256", "sha256": "1199d4be890b34d53916b7df0d585bbb2f2857f78287cf79031d9793ab7fd99f" },
+      { "path": "catalog/pilot-v1/import-result.json", "sha256": "b6bccc0d19b5ebc333963bc24dc45f12e7682b43993f8f7d3928f1f339e7e561" },
+      { "path": "catalog/world-cup-2026-store-staging-v1/manifest.json", "sha256": "0b796c3583460481dc3006486a1ddaa984017f6d4d8983cb3f5cb71db6b01f28" },
+      { "path": "catalog/world-cup-2026-store-staging-v1/assets-manifest.json", "sha256": "a6842f5db519c665aad3edadd7a6b5c15fda19ed2182691ab0cff3379bd82e1f" },
+      { "path": "catalog/world-cup-2026-store-staging-v1/import-result.json", "sha256": "4cacfce3497b51252adc2c0e242956a01807b4628397bfbbde9345f85ff7092f" }
+    ]
+  },
+  "manualMappingReview": {
+    "status": "PASSED",
+    "method": "Reviewed stable product-code/file prefixes, declared colorCode, image alt text and exact DB/import metadata mapping for all 36 products and 81 images.",
+    "issues": 0
+  }
+}

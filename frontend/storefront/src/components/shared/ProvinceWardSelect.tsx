@@ -35,9 +35,12 @@ export function ProvinceWardSelect({
   labels?: { wrapperClassName: string; captionClassName: string };
 }) {
   const [provinces, setProvinces] = useState<Province[]>([]);
-  const [wards, setWards] = useState<Ward[]>([]);
-  const [loadingWards, setLoadingWards] = useState(false);
+  const [wardData, setWardData] = useState<{ provinceCode: number; wards: Ward[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const selectedProvince = provinces.find((province) => province.name === provinceValue);
+  const selectedProvinceCode = selectedProvince?.code;
+  const loadingWards = Boolean(selectedProvinceCode && wardData?.provinceCode !== selectedProvinceCode);
+  const wards = wardData && wardData.provinceCode === selectedProvinceCode ? wardData.wards : [];
 
   useEffect(() => {
     let cancelled = false;
@@ -56,33 +59,24 @@ export function ProvinceWardSelect({
   }, []);
 
   useEffect(() => {
-    if (!provinceValue || provinces.length === 0) {
-      setWards([]);
-      return;
-    }
-    const province = provinces.find((p) => p.name === provinceValue);
-    if (!province) {
-      setWards([]);
-      return;
-    }
+    if (!selectedProvinceCode) return;
     let cancelled = false;
-    setLoadingWards(true);
-    fetch(PROVINCE_DETAIL_URL(province.code))
+    fetch(PROVINCE_DETAIL_URL(selectedProvinceCode))
       .then((res) => res.json())
       .then((data: ProvinceDetail) => {
         if (cancelled) return;
-        setWards([...(data.wards ?? [])].sort((a, b) => a.name.localeCompare(b.name, "vi")));
+        setWardData({
+          provinceCode: selectedProvinceCode,
+          wards: [...(data.wards ?? [])].sort((a, b) => a.name.localeCompare(b.name, "vi")),
+        });
       })
       .catch(() => {
         if (!cancelled) setError("Không tải được danh sách phường/xã.");
-      })
-      .finally(() => {
-        if (!cancelled) setLoadingWards(false);
       });
     return () => {
       cancelled = true;
     };
-  }, [provinceValue, provinces]);
+  }, [selectedProvinceCode]);
 
   // A saved address's ward/province may not match the freshly-fetched list
   // (renamed since, or legacy pre-reform data) - keep it selectable/visible

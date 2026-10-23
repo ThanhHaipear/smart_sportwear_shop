@@ -1,0 +1,23 @@
+import math
+
+import pytest
+
+from app.providers.siglip2 import l2_normalize
+
+
+def test_siglip2_vector_is_l2_normalized() -> None:
+    vector = l2_normalize([3.0, 4.0], 2)
+
+    assert vector == pytest.approx((0.6, 0.8))
+    assert math.sqrt(sum(value * value for value in vector)) == pytest.approx(1.0)
+
+
+def test_siglip2_rejects_wrong_dimension() -> None:
+    with pytest.raises(ValueError, match="Expected 3 dimensions"):
+        l2_normalize([1.0, 2.0], 3)
+
+
+@pytest.mark.parametrize("values", [[0.0, 0.0], [float("nan"), 1.0]])
+def test_siglip2_rejects_invalid_vector(values: list[float]) -> None:
+    with pytest.raises(ValueError):
+        l2_normalize(values, 2)

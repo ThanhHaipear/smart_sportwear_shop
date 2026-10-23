@@ -58,21 +58,24 @@ Mở một cửa sổ PowerShell riêng:
 
 ### 5. Visual search (khi cần)
 
-Sao chép `visual-search-service/.env.example` thành `visual-search-service/.env`, điền cấu hình local và chỉ đặt `VISUAL_SEARCH_ENABLED=true` sau khi các giá trị bắt buộc đã có. Sau đó:
+Sao chép `visual-search-service/.env.example` thành `visual-search-service/.env`, điền cấu hình local và chỉ đặt `VISUAL_SEARCH_ENABLED=true` sau khi các giá trị bắt buộc đã có. Cài runtime và model dependencies một lần:
 
 ```powershell
 cd visual-search-service
 python -m venv .venv
 .\.venv\Scripts\pip install -r requirements-test.txt
-.\.venv\Scripts\python scripts\run_api.py
+.\.venv\Scripts\pip install -r requirements-embeddings.txt
 ```
 
-Mở thêm một cửa sổ PowerShell cho worker (bắt buộc với index/backfill):
+Sau đó chạy API từ thư mục gốc:
 
 ```powershell
-cd visual-search-service
-python -m app.worker
+.\start-visual-search.cmd
 ```
+
+Launcher lấy connection Supabase từ `backend/.env` để backend, backfill và visual
+search không trỏ nhầm tenant. Query V2 đọc model/vector trong `ai_retrieval`;
+không chạy `python -m app.worker` của pipeline Voyage legacy cho đường V2.
 
 Sau khi backend publisher và worker đều healthy, kiểm tra backfill ở chế độ dry-run
 trước khi enqueue. Không chạy lại backfill production nếu coverage đã đầy đủ:

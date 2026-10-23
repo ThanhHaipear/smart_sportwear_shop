@@ -69,7 +69,7 @@ export function OrderHistoryPageClient() {
     setError(null);
     setSuccess(null);
     try {
-      const updated = await cancelOrder(id, paid ? "Khách hàng yêu cầu hủy và hoàn tiền" : "Khách hàng yêu cầu hủy");
+      await cancelOrder(id, paid ? "Khách hàng yêu cầu hủy và hoàn tiền" : "Khách hàng yêu cầu hủy");
       await loadOrders();
       setSuccess(paid
         ? "Đơn hàng đã được hủy. Giao dịch hoàn tiền VNPay đang chờ cửa hàng xử lý."
