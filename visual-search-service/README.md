@@ -141,27 +141,35 @@ Usage cost is estimated using `IMAGE_COST_PER_MEGAPIXEL_USD` (default
 `0.0006`). Operations exposes monthly cost/budget, and query embedding stops
 with HTTP 429 when `MONTHLY_BUDGET_USD` reaches 100%.
 
-## Phase 10 benchmark and rollout
+## Frozen-dataset benchmark and rollout
 
-The acceptance benchmark uses at least 100 independently sourced images across
-`tops`, `bottoms` and `shoes`. `accessories` is N/A because the audited ACTIVE
-catalog currently has no accessory product with an image, and becomes required
-when one is added. The benchmark rejects a rollout unless
-Recall@5 is at least 80%, top-result category accuracy is at least 90%, and
-end-to-end p95 latency is at most 3 seconds. See
-`evidence/visual-search/benchmark-manifest.example.json` for the manifest shape:
+The runner reads the versioned `manifest.json` and `labels.json` pair used by
+`datasets/image-search/dev-v1` and the independent TEST dataset. It verifies the
+frozen status and every query checksum, stores ranked output, and calculates
+Precision/Recall@1/5/10, top-k and category/color accuracy, unknown/failure
+rates, latency and per-group slices. Threshold tuning is permitted on DEV only:
 
 ```powershell
-python scripts/benchmark_search.py ..\evidence\visual-search\benchmark-manifest.json `
-  --output ..\evidence\visual-search\phase10-benchmark-report.json
+python scripts/benchmark_search.py ..\datasets\image-search\dev-v1 `
+  --output-dir ..\evidence\image-search-v2\dev-v1-benchmark `
+  --candidate-limit 20 --tune-threshold
 ```
 
-Benchmark images must remain outside Git and must not be catalog originals,
-copies or direct crops. The full staged rollout, monitoring and non-destructive
-rollback procedure is in `docs/visual-search-rollout.md`.
+The output directory contains `ranked-results.json`, `metrics.json` and
+`benchmark-config.json`. A TEST run rejects `--tune-threshold`; pass the DEV
+threshold explicitly with `--similarity-threshold`. TEST v1 requires 100
+positive photos balanced across tops, bottoms, uniforms, shoes and accessories,
+plus 20 unknown queries. See `datasets/image-search/test-v1/README.md` for the
+locked independence, rights, leakage and review protocol.
 
-When independent photos are unavailable, an explicitly approved synthetic
-robustness set can be reproduced with `python scripts/build_synthetic_benchmark.py
-../evidence/visual-search/synthetic-benchmark`. Generated images are ignored by
-Git; the manifest records source IDs, seeds and transformations. This mode does
-not claim real-world generalization.
+Benchmark images remain outside Git and must not be catalog originals, copies,
+direct crops or synthetic catalog transformations. The benchmark rejects a
+TEST rollout unless Recall@5 is at least 80%, top-result category accuracy is
+at least 90%, leakage is zero and p95 latency is at most 3 seconds. The staged
+rollout, monitoring and non-destructive rollback procedure is in
+`docs/visual-search-rollout.md`.
+
+The tuning-only synthetic set can be rebuilt with
+`python ../datasets/image-search/dev-v1/build_dataset.py`. Generated images are
+ignored by Git; its committed manifest records source IDs, seeds, checksums and
+transformations. DEV results never replace the independent TEST acceptance run.

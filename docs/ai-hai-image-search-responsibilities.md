@@ -39,8 +39,8 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-03 | Chuyển API tìm ảnh sang SigLIP2 V2 | `DONE` | 100% | P0 | HAI-02 |
 | HAI-04 | Kiểm thử API và repository V2 | `DONE` | 100% | P0 | HAI-03 |
 | HAI-05 | Xây dựng tập ảnh DEV | `DONE` | 100% | P0 | HAI-01 |
-| HAI-06 | Xây dựng tập ảnh TEST độc lập | `TODO` | 0% | P0 | HAI-01, HAI-05 |
-| HAI-07 | Viết runner và chạy đánh giá | `TODO` | 10% | P0 | HAI-03, HAI-05, HAI-06 |
+| HAI-06 | Xây dựng tập ảnh TEST độc lập | `IN PROGRESS` | 10% | P0 | HAI-01, HAI-05 |
+| HAI-07 | Viết runner và chạy đánh giá | `IN PROGRESS` | 90% | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và so sánh baseline | `TODO` | 10% | P1 | HAI-07 |
 | HAI-09 | Hardening, rollout và rollback | `TODO` | 40% | P1 | HAI-03, HAI-04 |
 | HAI-10 | Hoàn thiện nội dung báo cáo | `TODO` | 20% | P1 | HAI-07, HAI-08 |
@@ -191,11 +191,11 @@ DEV dùng để chọn preprocessing, threshold, candidate limit và grouping; k
 
 ### HAI-06 Xây dựng tập ảnh TEST độc lập
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `IN PROGRESS`
 
 | Xong | ID | Việc cần làm | Yêu cầu | Đầu ra |
 |---:|---|---|---|---|
-| [ ] | HAI-06.1 | Chốt protocol trước khi thu ảnh | Không đổi metric sau khi xem kết quả | `README.md` |
+| [x] | HAI-06.1 | Chốt protocol trước khi thu ảnh | Không đổi metric sau khi xem kết quả | `datasets/image-search/test-v1/README.md` |
 | [ ] | HAI-06.2 | Thu ảnh độc lập | Mục tiêu tối thiểu 100 ảnh | Asset có quyền dùng |
 | [ ] | HAI-06.3 | Cân bằng năm nhóm | Mục tiêu 20 ảnh/nhóm | Distribution report |
 | [ ] | HAI-06.4 | Tạo manifest/checksum/license | Đủ metadata/case | Manifest và SHA-256 |
@@ -207,9 +207,11 @@ DEV dùng để chọn preprocessing, threshold, candidate limit và grouping; k
 
 TEST không được là ảnh catalog, crop trực tiếp, ảnh synthetic từ catalog hoặc ảnh cùng `source_group_code` với catalog/DEV.
 
+**Protocol đã khóa (24/10/2026):** TEST v1 gồm 100 positive query cân bằng 20 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện và 20 unknown query. Protocol đã khóa quyền sử dụng, provenance, exact/near-duplicate gate, relevance grade, reviewer/adjudication và cấm tune trên TEST. Việc thu asset thật chưa hoàn thành nên TEST chưa được freeze.
+
 ### HAI-07 Viết runner và chạy đánh giá
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `IN PROGRESS`
 
 ```text
 Precision@K = |top-K ∩ relevant| / K
@@ -218,18 +220,20 @@ Recall@K    = |top-K ∩ relevant| / |relevant|
 
 | Xong | ID | Việc cần làm | Đầu ra | Điều kiện đạt |
 |---:|---|---|---|---|
-| [ ] | HAI-07.1 | Runner đọc dataset đã freeze | CLI/script | Không đọc label ngoài version |
-| [ ] | HAI-07.2 | Lưu ranked output từng case | `ranked-results.json` | Có ID, rank, score, matched image |
-| [ ] | HAI-07.3 | Tính Precision@1/5/10 | Metrics JSON | Tính lại được từ ranked output |
-| [ ] | HAI-07.4 | Tính Recall@1/5/10 | Metrics JSON | Chỉ dùng case `COMPLETE` |
-| [ ] | HAI-07.5 | Tính top-1/top-5 accuracy | Metrics JSON | Có sample count |
-| [ ] | HAI-07.6 | Tính category/color accuracy | Metrics JSON | Báo N/A nếu thiếu label |
-| [ ] | HAI-07.7 | Tính failure/unknown rate | Metrics JSON | Ghi rõ mẫu số |
-| [ ] | HAI-07.8 | Tính latency P50/P95 | Metrics JSON | Đo end-to-end, ghi phần cứng |
-| [ ] | HAI-07.9 | Báo cáo theo nhóm sản phẩm | Metric slices | Không chỉ báo trung bình |
-| [ ] | HAI-07.10 | Lưu config/model/dataset/commit | `benchmark-config.json` | Run tái lập được |
-| [ ] | HAI-07.11 | Chạy DEV, khóa cấu hình | DEV report | Hoàn tất trước TEST |
+| [x] | HAI-07.1 | Runner đọc dataset đã freeze | CLI/script | Không đọc label ngoài version |
+| [x] | HAI-07.2 | Lưu ranked output từng case | `ranked-results.json` | Có ID, rank, score, matched image |
+| [x] | HAI-07.3 | Tính Precision@1/5/10 | Metrics JSON | Tính lại được từ ranked output |
+| [x] | HAI-07.4 | Tính Recall@1/5/10 | Metrics JSON | Chỉ dùng case `COMPLETE` |
+| [x] | HAI-07.5 | Tính top-1/top-5 accuracy | Metrics JSON | Có sample count |
+| [x] | HAI-07.6 | Tính category/color accuracy | Metrics JSON | Báo N/A nếu thiếu label |
+| [x] | HAI-07.7 | Tính failure/unknown rate | Metrics JSON | Ghi rõ mẫu số |
+| [x] | HAI-07.8 | Tính latency P50/P95 | Metrics JSON | Đo end-to-end, ghi phần cứng |
+| [x] | HAI-07.9 | Báo cáo theo nhóm sản phẩm | Metric slices | Không chỉ báo trung bình |
+| [x] | HAI-07.10 | Lưu config/model/dataset/commit | `benchmark-config.json` | Run tái lập được |
+| [x] | HAI-07.11 | Chạy DEV, khóa cấu hình | DEV report | Hoàn tất trước TEST |
 | [ ] | HAI-07.12 | Chạy TEST cuối | Final report | Không tune lại bằng TEST |
+
+**DEV report (24/10/2026):** `evidence/image-search-v2/dev-v1-benchmark-2026-10-24/`. Runner kiểm tra dataset frozen/checksum và hoàn tất 55/55 request, khóa candidate limit `20` và similarity threshold `0.71233916`. Trên tập synthetic DEV: Recall@1/5/10 và category accuracy đều `1.0`, unknown rejection `1.0`, request failure `0`, latency P50 `607.88 ms`, P95 `707.04 ms`; Precision@1/5/10 lần lượt `1.0/0.2/0.1` vì mỗi query chỉ có một relevant product. Color accuracy là N/A do DEV chưa có expected color label. Các số DEV chỉ dùng để tune, không phải acceptance hoặc bằng chứng tổng quát hóa thực tế.
 
 ### Acceptance target
 

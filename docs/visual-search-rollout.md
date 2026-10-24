@@ -6,21 +6,22 @@ Keep the public feature disabled until all of these are true:
 
 1. Flyway migrations are applied and the configured model is the only `ACTIVE` model.
 2. `/health/ready` reports the query database and active model ready; RabbitMQ is not a query-path dependency.
-3. Admin coverage reports no `PENDING`, `PROCESSING`, `FAILED` or `MISSING` ACTIVE images and at least 98% READY coverage.
+3. Admin coverage reports no `PENDING`, `PROCESSING`, `FAILED` or `MISSING` ACTIVE images and 100% READY coverage for the frozen catalog snapshot.
 4. Before enabling the indexing worker, the admin operations endpoint reports that main, retry and DLQ queues and the outbox have no unexplained backlog.
-5. The external-image benchmark passes with at least 100 images across the three searchable catalog strata (`tops`, `bottoms`, `shoes`), Recall@5 >= 80%, category accuracy >= 90%, and end-to-end p95 <= 3 seconds. `accessories` is explicitly N/A while the audited ACTIVE catalog contains zero accessory products with images; it becomes mandatory as soon as such a product is added.
+5. The frozen TEST benchmark passes with 100 positive images balanced across `tops`, `bottoms`, `uniforms`, `shoes` and `accessories`, plus 20 unknown queries. Recall@5 must be >= 80%, category accuracy >= 90%, leakage zero and p95 <= 3 seconds on recorded hardware.
 
-Benchmark images must be independently sourced alternate views, not catalog files, duplicates, or direct crops. Keep the images outside Git; commit only an anonymized manifest/report when licensing permits. Run:
+Benchmark images must follow `datasets/image-search/test-v1/README.md`: independently sourced and licensed, not catalog/DEV files, exact or near duplicates, direct crops or synthetic catalog transformations. Keep image binaries outside Git and commit the frozen manifest, labels, checksums, review reports and evaluation artifacts. Use the similarity threshold locked by DEV; never tune it on TEST. Run:
 
 ```powershell
 cd visual-search-service
-python scripts/benchmark_search.py ..\evidence\visual-search\benchmark-manifest.json `
-  --output ..\evidence\visual-search\phase10-benchmark-report.json
+python scripts/benchmark_search.py ..\datasets\image-search\test-v1 `
+  --output-dir ..\evidence\image-search-v2\test-v1-final `
+  --candidate-limit 20 --similarity-threshold 0.71233916
 ```
 
-The command calls the real internal HTTP endpoint, measures end-to-end latency, resolves the top result's catalog category from Supabase, and exits with code 2 when an acceptance gate fails. The report never contains image bytes or secrets.
+The command verifies the frozen dataset and checksums, calls the real internal HTTP endpoint, measures preprocessing/embedding/vector-search latency, resolves result metadata from Supabase, and exits with code 2 when an acceptance gate fails. It writes `ranked-results.json`, `metrics.json` and `benchmark-config.json`; none contains image bytes or secrets.
 
-For the current catalog, the user approved a deterministic synthetic robustness benchmark because no independent photos were available. `scripts/build_synthetic_benchmark.py` produces 100 camera-like transformations with source image IDs, fixed seeds and operation provenance; generated binaries remain outside Git. This validates transformation robustness only and must not be presented as evidence of real-world generalization. The 2026-08-01 run passed with Recall@1 98%, Recall@5 100%, category accuracy 100% and p95 2978.23 ms.
+The frozen DEV v1 set is synthetic and may be used only for tuning and transformation-robustness checks. Its results must not be presented as final acceptance or evidence of real-world generalization.
 
 ## Staged rollout
 
