@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-10-24T09:52:00+07:00",
+  "gitCommit": "ea9a2afadc5f50cee1975e812568d3ee082e54ce",
+  "dataset": "image-search-dev-v1:1.0.0",
+  "status": "FROZEN",
+  "catalogSnapshot": {
+    "version": "image-catalog-v2-2026-10-23",
+    "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+  },
+  "summary": {
+    "samples": 55,
+    "positive": 50,
+    "unknown": 5,
+    "completeJudgments": 55,
+    "uniqueAssetHashes": 55,
+    "exactDuplicates": 0,
+    "uniqueSourceGroups": 53
+  },
+  "distribution": {
+    "tops": 10,
+    "bottoms": 10,
+    "uniforms": 10,
+    "shoes": 10,
+    "accessories": 10,
+    "unknown": 5
+  },
+  "coverage": {
+    "crop": 50,
+    "rotation": 50,
+    "background": 50,
+    "brightness": 50,
+    "contrast": 50,
+    "color": 50,
+    "noise": 50,
+    "blur": 50,
+    "jpeg": 50
+  },
+  "artifacts": {
+    "manifest": {
+      "path": "datasets/image-search/dev-v1/manifest.json",
+      "sha256": "2c8554da2c3aad90178b1abc68036aa21da4c86c3ed794010fe10db2e200ad83"
+    },
+    "labels": {
+      "path": "datasets/image-search/dev-v1/labels.json",
+      "sha256": "3de8645488216d62b97c5bc33d3939a1a2bfa6c8c14dd3af44332c830a851fbf"
+    },
+    "assetChecksums": {
+      "path": "datasets/image-search/dev-v1/assets.sha256",
+      "sha256": "3ea2c94065ddf28de55c010f746985404c8934f2df76f84d4995f7b6d984ad5d"
+    }
+  },
+  "validation": {
+    "allAssetsPresent": true,
+    "allAssetChecksumsMatch": true,
+    "allSourcesHaveLicenseCode": true,
+    "allCasesHaveSourceGroupCode": true,
+    "allCasesHaveCompleteJudgment": true,
+    "builderRerunDeterministic": true,
+    "reviewer": "Codex automated provenance, label and checksum review"
+  },
+  "limitations": [
+    "Positive queries are catalog-derived simulations and are valid only for DEV tuning.",
+    "This dataset must not be used as the final TEST split or as evidence of real-world generalization.",
+    "Legacy UI negatives require rights review before redistribution."
+  ],
+  "result": "PASSED"
+}

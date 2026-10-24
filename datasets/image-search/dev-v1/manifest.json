@@ -1,0 +1,1617 @@
+{
+  "schemaVersion": 1,
+  "dataset": {
+    "name": "image-search-dev-v1",
+    "version": "1.0.0",
+    "split": "DEV",
+    "status": "FROZEN",
+    "generatedAt": "2026-10-24T09:50:00+07:00",
+    "seed": 20261024,
+    "catalogSnapshot": {
+      "version": "image-catalog-v2-2026-10-23",
+      "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+    }
+  },
+  "policy": {
+    "purpose": "Preprocessing, threshold, candidate-limit and grouping selection only.",
+    "mayTuneOnThisSplit": true,
+    "mayReportAsFinalTest": false,
+    "limitations": [
+      "Positive cases are deterministic catalog-derived simulations.",
+      "This split measures transformation robustness, not real-world generalization.",
+      "Negative legacy UI assets require rights review before redistribution."
+    ]
+  },
+  "samples": [
+    {
+      "id": "dev-001",
+      "image": "assets/dev-001.jpg",
+      "sha256": "36eab0e642d0f0aa2c56fd6c46791ed7c36eee26b5044a689b253428fd389d77",
+      "bytes": 47568,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-001-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-001-01.png",
+        "imageId": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "productSlug": "ao-chay-bo-nam-aero-navy",
+        "sourceSha256": "c290098639b4c585a18a33b4d14070ef3a8fd6d85e2e791e752e5092cc0bc6e2",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261025,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-002",
+      "image": "assets/dev-002.jpg",
+      "sha256": "d650043dd1cbd85e4a3e6428a3be640ffd454270159b1cfdc6db4d900ffd8efa",
+      "bytes": 37866,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-001-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-001-02.png",
+        "imageId": "9bc17fc4-0f23-444a-92d8-1b80d8ad40b1",
+        "productSlug": "ao-chay-bo-nam-aero-navy",
+        "sourceSha256": "715351176c2dfd7674bff42874db61e928ce08e11ef5ab105c5b7f7347d43f90",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261026,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-003",
+      "image": "assets/dev-003.jpg",
+      "sha256": "174c0f53803f1f196daa66765413bb84695696c39bfeab4bd51104841b44d691",
+      "bytes": 38596,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-002-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-002-01.png",
+        "imageId": "bf58597c-294f-4542-87fd-6fdd13f43557",
+        "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+        "sourceSha256": "ebc99f2a54f3ef942ca2890439a712599398f38e92b23bd2d29bd09ae4c39880",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261027,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-004",
+      "image": "assets/dev-004.jpg",
+      "sha256": "30ad369aae84ed70a8dd6a4ba61fc09bfd2a6be62e50ae9f5e6029522d4cb2ba",
+      "bytes": 28460,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-002-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-002-02.png",
+        "imageId": "064a80b8-1fb6-4d7a-bf06-7345a86f4396",
+        "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+        "sourceSha256": "91c2aa33b46d6388ad6279ebafa307d21559f63c63b7e78f47bdec4b533c7fec",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261028,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-005",
+      "image": "assets/dev-005.jpg",
+      "sha256": "317a8de924cbe6ae77386f812ab7f11d2c7d7872a010e24a2b93745db20f4a0a",
+      "bytes": 19267,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-003-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-003-01.png",
+        "imageId": "a504cc85-da27-47ad-8ccf-e8f14a218cdf",
+        "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+        "sourceSha256": "7595ca4249fb7c02c9613e3598884cba8de2dc368783c72ac333f4ad1c8328ca",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261029,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-006",
+      "image": "assets/dev-006.jpg",
+      "sha256": "bb7467a42f974ac59f1e956866f5e203e6381ce2e9c25c96d3ad14f25ab7caad",
+      "bytes": 20082,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-003-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-003-02.png",
+        "imageId": "7e2299c8-d55b-45ea-9f3a-ba0bcce3079c",
+        "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+        "sourceSha256": "c3033b22807727c631e0232d67ff589f7a2be8fde71793516fc8bc1e23c865e3",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261030,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-007",
+      "image": "assets/dev-007.jpg",
+      "sha256": "8542744e596c3718da27609f53259ccb23a3509ffc1cee17df64d74abfcbfbe3",
+      "bytes": 39188,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-004-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-004-01.png",
+        "imageId": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "productSlug": "ao-tap-bong-da-nam-blaze-red",
+        "sourceSha256": "fe0edb29f4316411184e063325d5399778f429564bc520dbf6ed5aedc18f8f7b",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261031,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-008",
+      "image": "assets/dev-008.jpg",
+      "sha256": "7de1b7408bca7ca10d5678ab2987e844d610a7852f40daa99e061574ede0a1f2",
+      "bytes": 55171,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-004-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-004-02.png",
+        "imageId": "265315de-1f65-483c-9dfb-1158af5186f8",
+        "productSlug": "ao-tap-bong-da-nam-blaze-red",
+        "sourceSha256": "2d1223772a75452e36be78cca8353e5d4aaf81301692135c3ff064e677302e10",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261032,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-009",
+      "image": "assets/dev-009.jpg",
+      "sha256": "e0b31293e8f5ce2266047b683ce04fbdcee6384a936132364d753cfd8a1d2307",
+      "bytes": 37712,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-005-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-005-01.png",
+        "imageId": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "productSlug": "ao-tap-bong-da-nu-royal-motion",
+        "sourceSha256": "c62cc0920d37084e8c68ec5be9accd1e2ae479e8e74a4693606c9958f7125fea",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261033,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-010",
+      "image": "assets/dev-010.jpg",
+      "sha256": "5e8aaba7594541a9a73477526004efd0e9321d1ac70642593054218fa1d6d7e6",
+      "bytes": 32461,
+      "group": "tops",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-TOP-005-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-TOP-005-02.png",
+        "imageId": "ce50a9d4-2743-43ae-9f30-3149778b7e8e",
+        "productSlug": "ao-tap-bong-da-nu-royal-motion",
+        "sourceSha256": "06a047e3c6a49b21573d42e2ba94c4c6db111c041b43bbaca2594637fb901e05",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261034,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-011",
+      "image": "assets/dev-011.jpg",
+      "sha256": "4956cb5cf3a91873504aaaed06e20aa2e00cbe921bd2546008882370a97a9660",
+      "bytes": 34976,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-001-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-001-01.png",
+        "imageId": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "productSlug": "quan-short-chay-bo-nam-swift-black",
+        "sourceSha256": "768933775ec6b6b09be0ddf8e5c302658f5c7fca7e9ecbf2dc391a05d663fc4f",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261035,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-012",
+      "image": "assets/dev-012.jpg",
+      "sha256": "a6b9d14b57f855b3d1c5020b957129f6b9ae7e56056fed34ec397190080f1843",
+      "bytes": 35444,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-001-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-001-02.png",
+        "imageId": "2ccea016-0358-4ba8-b03a-07fbd6ec165b",
+        "productSlug": "quan-short-chay-bo-nam-swift-black",
+        "sourceSha256": "8020a4b3cb512f937427e09b4d370113a03c619734974f1f899f4813662720d5",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261036,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-013",
+      "image": "assets/dev-013.jpg",
+      "sha256": "6789d056a306a473766c8220a690dcc1bd18c39f1acc9b22a93ec7beb28cde36",
+      "bytes": 41638,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-002-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-002-01.png",
+        "imageId": "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+        "sourceSha256": "32bf7f9dabafcc4a7059abb3d6f98807db84dedfab4c0dec6c3fbd208249a76e",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261037,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-014",
+      "image": "assets/dev-014.jpg",
+      "sha256": "b0927e351db5218086797c45f94389ae2afef2cafae9c053c16bbae715bf09fd",
+      "bytes": 25524,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-002-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-002-02.png",
+        "imageId": "bcc92668-b60a-4506-9158-5c3d49d011a7",
+        "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+        "sourceSha256": "feaaf4cc2ae25445acc6e4e18fa41eb19b4c600e63accb6f86cd04f23887a231",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261038,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-015",
+      "image": "assets/dev-015.jpg",
+      "sha256": "be8e1a2748d6bdacf75fc158414a176db342362fb74bec8f4f495d872998bb1c",
+      "bytes": 39003,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-003-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-003-01.png",
+        "imageId": "57bd0c25-8304-4690-9423-b426f3305799",
+        "productSlug": "quan-jogger-the-thao-uni-motion",
+        "sourceSha256": "73a9c55789e4eea3c3778e3fa56026293e83c488adc1cca01f232e02e4988c5f",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261039,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-016",
+      "image": "assets/dev-016.jpg",
+      "sha256": "2c11d4c1ade80e3da5db62eae424ba4b14d55d0d5b8ff1d42cea49a4089c61ed",
+      "bytes": 25620,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-003-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-003-02.png",
+        "imageId": "54198e2e-f4c5-4232-8b90-46a58023ef5a",
+        "productSlug": "quan-jogger-the-thao-uni-motion",
+        "sourceSha256": "202d0b83e8d0019090f83e1aba46c77ea510f5176114027aabe4b3d4b62d6b5c",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261040,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-017",
+      "image": "assets/dev-017.jpg",
+      "sha256": "b6628328542d4853da4c5d1ff3a02cbb71ccfabe00c977bf3549ca093afc88a6",
+      "bytes": 60396,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-004-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-004-01.png",
+        "imageId": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "productSlug": "quan-bong-da-nam-royal-kick",
+        "sourceSha256": "15511d2602592d7ff8672086157c2ebc747d87baa4f49271f1647835534fadd3",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261041,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-018",
+      "image": "assets/dev-018.jpg",
+      "sha256": "db5b7c84f05a42ae6822328ec0f104336fe5c2df44d5a60c0d823b2fb107774a",
+      "bytes": 57416,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-004-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-004-02.png",
+        "imageId": "58165b7c-72f9-4357-8fc1-ddb77cfc1f0e",
+        "productSlug": "quan-bong-da-nam-royal-kick",
+        "sourceSha256": "3d6faa9a01001e284e8f633d0199e17d6872d3fdeb4d1136ca8ac0303494eb00",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261042,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-019",
+      "image": "assets/dev-019.jpg",
+      "sha256": "cdce4276bcb4cf83587b06c0a0ddbb836c1fd7b7dd818acd71882705ae908231",
+      "bytes": 53864,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-005-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-005-01.png",
+        "imageId": "f3d46837-6d57-4509-bff3-887d0abad933",
+        "productSlug": "quan-tap-bong-da-nu-black-drive",
+        "sourceSha256": "c6752e2aede7042d1c31dc376c5c384e93c38d92dd006e3fdb03b65f56acd1b4",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261043,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-020",
+      "image": "assets/dev-020.jpg",
+      "sha256": "5f872220b829ec17f256b170f99a8f9a6361d8a139cd764b46f50441aa2ab433",
+      "bytes": 42475,
+      "group": "bottoms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-BOTTOM-005-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-BOTTOM-005-02.png",
+        "imageId": "ca06858f-3471-4c07-93f7-e54434ba0003",
+        "productSlug": "quan-tap-bong-da-nu-black-drive",
+        "sourceSha256": "04120d4cc7a967ec812b99f1eced0d8575e65c182455a98cc08af126c62f316c",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261044,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-021",
+      "image": "assets/dev-021.jpg",
+      "sha256": "d87d3aa0197ffbad0ba216a8e86f8d787dd93ef70ea04a6eba0152450aadcdac",
+      "bytes": 36548,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-001-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-001-01.png",
+        "imageId": "b0435cbb-8f40-445e-9e42-c25fe1dd157e",
+        "productSlug": "bo-bong-da-nam-crimson-unity",
+        "sourceSha256": "9d69937856fcbd10ae0ec929ac9ddac20d1d1f1a08e00f390956deefe8e0a9bf",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261045,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-022",
+      "image": "assets/dev-022.jpg",
+      "sha256": "a59cc2d35bf8c04c29cda30e16f42340821307945b4e320e88aae0f0e70feffe",
+      "bytes": 24700,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-001-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-001-02.png",
+        "imageId": "eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "productSlug": "bo-bong-da-nam-crimson-unity",
+        "sourceSha256": "8b84ac6d7391c74154faf737cb7e30686a464b0b3b5fe1221b83ec47e24be039",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261046,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-023",
+      "image": "assets/dev-023.jpg",
+      "sha256": "654fb623c2a0a1e4a6c6b2c0d9fb026f91bfcc600ca530039df7e376d0c0b111",
+      "bytes": 31255,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-002-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-002-01.png",
+        "imageId": "8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "productSlug": "bo-bong-da-nu-royal-wave",
+        "sourceSha256": "1b9289f81acc561317f562be9658b2104039fdba55935c84679e1aadfdbaeeb4",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261047,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-024",
+      "image": "assets/dev-024.jpg",
+      "sha256": "f13944b609110a58bc63a85e1f7c81373cad20b6b36b4f666bf1bbbc7e4585a6",
+      "bytes": 52458,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-002-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-002-02.png",
+        "imageId": "20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "productSlug": "bo-bong-da-nu-royal-wave",
+        "sourceSha256": "cfb29192e2892926bde7ba6e9408046ce71a9558c76c46554afb27133e728e18",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261048,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-025",
+      "image": "assets/dev-025.jpg",
+      "sha256": "3ddaa2e2f1909dd4de309f18f6f1de0c41e716370159b772fc9fc4a66df81b8f",
+      "bytes": 27707,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-003-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-003-01.png",
+        "imageId": "6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "productSlug": "bo-bong-da-uni-forest-line",
+        "sourceSha256": "bf656fbb12f85f54a7ca8dd0e31fe2954c237c3171fb38ab6c8020283bb635fb",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261049,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-026",
+      "image": "assets/dev-026.jpg",
+      "sha256": "a6f37a7dc155c88e7ffa8c812a529697b5b335de6e51c7564786e2551750661b",
+      "bytes": 35754,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-003-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-003-02.png",
+        "imageId": "b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "productSlug": "bo-bong-da-uni-forest-line",
+        "sourceSha256": "4fc45ddd1638f4125bc25d39f6726cf91e590e80bdf20f18a970670fd2a1b473",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261050,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-027",
+      "image": "assets/dev-027.jpg",
+      "sha256": "87781ea1bab44c64780da8aa2979173566cc213866dfbedfa240fe314ac8905d",
+      "bytes": 26267,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-004-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-004-01.png",
+        "imageId": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "productSlug": "bo-bong-da-nam-black-gold",
+        "sourceSha256": "ca14af6896df79f3720dcf740c798778e1ddd1d96928a7612d7e68bbcf89a6be",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261051,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-028",
+      "image": "assets/dev-028.jpg",
+      "sha256": "8153af03921ea5e92b78ab4edb80fa367b3442951c4f8eed93e0a6967c0fc39f",
+      "bytes": 42967,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-004-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-004-02.png",
+        "imageId": "d60b0ac3-e430-4ad4-ab4c-44bae6195d5b",
+        "productSlug": "bo-bong-da-nam-black-gold",
+        "sourceSha256": "ab26c8463001f9763e85bbb1fe0e1a1a0ea90455aa3c1fe87010bb14c929ac93",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261052,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-029",
+      "image": "assets/dev-029.jpg",
+      "sha256": "8258f1337c6d0e7b1cb8f5b1918775b049aac9c52c2b6066484aa090e6db16ce",
+      "bytes": 52088,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-005-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-005-01.png",
+        "imageId": "78cfe835-9516-4fef-aa55-b8a2386042d2",
+        "productSlug": "bo-bong-da-nu-violet-star",
+        "sourceSha256": "b93683b00967d82d3f0af2b5482b7f4f7c1bc748c0ac2421ac9b8e5c5dc4dd3f",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261053,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-030",
+      "image": "assets/dev-030.jpg",
+      "sha256": "41a574fe50b0e13e3816730d58f4a50486efab950c97c8899b7ba30273c311e3",
+      "bytes": 26846,
+      "group": "uniforms",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-UNIFORM-005-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-UNIFORM-005-02.png",
+        "imageId": "a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "productSlug": "bo-bong-da-nu-violet-star",
+        "sourceSha256": "9158771e9583d438c627d7357e45b2ecc7f571f1002e496f5e5aa30ac7711ba1",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261054,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-031",
+      "image": "assets/dev-031.jpg",
+      "sha256": "63503eb9024cac1c92861402709d0360c6ca85881f888420a124a0ee962a9028",
+      "bytes": 48333,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-001-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-001-01.png",
+        "imageId": "a2d2caef-1f88-4c4f-acb3-26459b123ccd",
+        "productSlug": "giay-chay-bo-nam-cobalt-ride",
+        "sourceSha256": "195fc701909931e0eb18491a75234cc70b9bc369ca6914726745b1e919935dc9",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261055,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-032",
+      "image": "assets/dev-032.jpg",
+      "sha256": "7b92f7192d335828220c3a26262df9063f075299d4b2c0572919a4794f8a0f6d",
+      "bytes": 75490,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-001-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-001-02.png",
+        "imageId": "4f324302-84dd-4b41-a76a-53fbc57cd35e",
+        "productSlug": "giay-chay-bo-nam-cobalt-ride",
+        "sourceSha256": "498b814f50a6ef938f4d0aa38a203c2d40e7d159305d1ab6683c027ad07237b3",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261056,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-033",
+      "image": "assets/dev-033.jpg",
+      "sha256": "f3738e317090249e6b3cb36ec19eb87cfa05a6b76dab42e20d4b441e798928ef",
+      "bytes": 43201,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-002-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-002-01.png",
+        "imageId": "c3521f7f-0322-4193-bc32-bcfa0ff39bc1",
+        "productSlug": "giay-chay-bo-nu-coral-cloud",
+        "sourceSha256": "369c6eb474fb8ea0cdebfa498389786bedcb29e4b0dcdfbc4f637bda045e420f",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261057,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-034",
+      "image": "assets/dev-034.jpg",
+      "sha256": "a2e952bd9d9799176579ee541cd8464bd593c1e2fe2bed8c54fd5d0b63ca9a24",
+      "bytes": 53035,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-002-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-002-02.png",
+        "imageId": "fbf1859a-7954-4ce8-b1b7-30dff7a6592f",
+        "productSlug": "giay-chay-bo-nu-coral-cloud",
+        "sourceSha256": "2630d0261f3770e7d769ab628b71563e3bfeae389d60a87fc8ce4473160dcdd8",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261058,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-035",
+      "image": "assets/dev-035.jpg",
+      "sha256": "a05637d435a0b12a030d588a1e8148c797e1e6aba91096f2cd1c68bd8aae8cc1",
+      "bytes": 41472,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-003-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-003-01.png",
+        "imageId": "7a3ed951-1bfc-43b8-86a4-21139cb91869",
+        "productSlug": "giay-chay-bo-uni-pure-step",
+        "sourceSha256": "f7211cdfd6be301fbc2dc53ac9878e609ef504a7b91dceb07ae23451e342a23b",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261059,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-036",
+      "image": "assets/dev-036.jpg",
+      "sha256": "43c70005e9fd6634ea86d4e5a3716bc8deb25472440783692422da7b30a8a234",
+      "bytes": 86813,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-003-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-003-02.png",
+        "imageId": "a71f004b-17c9-4cf9-9e23-981b8b8c2f17",
+        "productSlug": "giay-chay-bo-uni-pure-step",
+        "sourceSha256": "3931c2b550e451c4a1f4890cb75a52c15501228cf5c8053aeb90c6a1a31f370a",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261060,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-037",
+      "image": "assets/dev-037.jpg",
+      "sha256": "6f98f53c37601c3da2a05e04a768cc733e991af820ea74191f7510f3a3588b67",
+      "bytes": 44368,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-004-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-004-01.png",
+        "imageId": "81c2749c-b9fc-428b-a581-9abdeb18c8a0",
+        "productSlug": "giay-da-bong-nam-turf-shadow",
+        "sourceSha256": "a4ee8346b473dde54e90f8638b17225ba19b018ed0b05c55a8d08b872f5fcc9b",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261061,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-038",
+      "image": "assets/dev-038.jpg",
+      "sha256": "5906b60f2386e5d4e377f6a4886bcf142dfd1dbe53ec12bc919d2a9b55c0913d",
+      "bytes": 55115,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-004-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-004-02.png",
+        "imageId": "d679cd80-f64f-4766-bc5f-e131321a196d",
+        "productSlug": "giay-da-bong-nam-turf-shadow",
+        "sourceSha256": "82231d0aab4e1244d5f222b270270b9b8f532f03da85e5b1e7fed683fb360be7",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261062,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-039",
+      "image": "assets/dev-039.jpg",
+      "sha256": "a0e2eca1f91a3a44b74ce9630f9514c7d94da54def2ef3fff107e8881aa41b5c",
+      "bytes": 37483,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-005-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-005-01.png",
+        "imageId": "1050f8f2-2c5a-4285-a6eb-595c3777a369",
+        "productSlug": "giay-da-bong-nu-turf-spark",
+        "sourceSha256": "a5d280d4437fdda846709e09da1098212db117f89f5e424b8c227bf8d11906b1",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261063,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-040",
+      "image": "assets/dev-040.jpg",
+      "sha256": "fb6af24f3b09c16d2a9b03fd6cc3630ba1f0dcfa0ead55dfc011f1803499bab3",
+      "bytes": 49976,
+      "group": "shoes",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-SHOE-005-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-SHOE-005-02.png",
+        "imageId": "427c873f-774c-4e02-9cb8-c190521c98bf",
+        "productSlug": "giay-da-bong-nu-turf-spark",
+        "sourceSha256": "3e6f50d4413515fce786d58edb663e7c94dc94361760be83e132cfffc2906403",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261064,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-041",
+      "image": "assets/dev-041.jpg",
+      "sha256": "628387f87232bd005c41b675383855025936804c512396c73efb5b5b04bfabea",
+      "bytes": 27871,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-001-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-001-01.png",
+        "imageId": "5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+        "sourceSha256": "fa12c4905a8af2ceffceb6119186b3ee973d7f2b99ce7397037d08bc16198de0",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261065,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-042",
+      "image": "assets/dev-042.jpg",
+      "sha256": "d202460e7c0d88cb66ba1a995c087255a29ce01d7c0e3e00c91aa901c9e83d0f",
+      "bytes": 22751,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-001-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-001-02.png",
+        "imageId": "10aed1aa-6ca7-4efd-958c-4145db7966d0",
+        "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+        "sourceSha256": "f9ad8b090c1230b90b3d95d302b4d36529024ba18993508454b8f3833549aa69",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261066,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-043",
+      "image": "assets/dev-043.jpg",
+      "sha256": "89ca12cedeff6dce9025f9ded770bd158e6b6fe5d95157d21aa79238df59a03d",
+      "bytes": 103649,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-002-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-002-01.png",
+        "imageId": "094139d3-877f-48a6-84e1-bdb96380c8ce",
+        "productSlug": "bang-tay-the-thao-royal-pair",
+        "sourceSha256": "ed25a38980ff4013a6ede7d94bf68284cd0866214420ebdde3684a01df1e300a",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261067,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-044",
+      "image": "assets/dev-044.jpg",
+      "sha256": "b6883eacb5376e950ce43a2ed5af0f885977a0245d87130cd862cdc5d54109a2",
+      "bytes": 97058,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-002-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-002-02.png",
+        "imageId": "789b35bc-0b40-4143-8731-8120a0c25be6",
+        "productSlug": "bang-tay-the-thao-royal-pair",
+        "sourceSha256": "7e14022e4dce397a0564ced7da5dda7ed2ce3db94eba0f22f3498ee2c0f72c89",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261068,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-045",
+      "image": "assets/dev-045.jpg",
+      "sha256": "1b526449b69874df2842bc4a513ed67af8388648d2ffb20b95468e1415638e74",
+      "bytes": 32444,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-003-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-003-01.png",
+        "imageId": "d42f6160-23f1-48ac-8cc6-bff11b5960eb",
+        "productSlug": "tat-bong-da-white-match",
+        "sourceSha256": "8e685d62a2af1674e7cf4849ed91a6a7f8416fde376427ab0c4a7760e21c4938",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261069,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-046",
+      "image": "assets/dev-046.jpg",
+      "sha256": "9a651be9a4aa681f13b64b04fe34d685dd4e6081bbe5015b81e69e543aa0681b",
+      "bytes": 29617,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-003-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-003-02.png",
+        "imageId": "97b4ce89-2688-485d-a55e-27dedba8d322",
+        "productSlug": "tat-bong-da-white-match",
+        "sourceSha256": "7393cbfdae38fb52888c7bcf0ed910d27094897575b70d1d9d21c9194641c85e",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261070,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-047",
+      "image": "assets/dev-047.jpg",
+      "sha256": "4ffb28b81a517f118d5b91efb4038096ed28607990da6882b1684daf0179f245",
+      "bytes": 55584,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-004-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-004-01.png",
+        "imageId": "01bed2d1-0819-49ab-a605-8730d8a1cbae",
+        "productSlug": "op-bao-ve-ong-dong-red-guard",
+        "sourceSha256": "80bc3cfd06804c64122a47d3c3a6182f4b629535866008339cbc2c9c9e333938",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261071,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-048",
+      "image": "assets/dev-048.jpg",
+      "sha256": "77606f1fbab56c7cc77f5332f0e3bb2aa228bc0235fd8b70cb1747975705d784",
+      "bytes": 36241,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-004-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-004-02.png",
+        "imageId": "d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "productSlug": "op-bao-ve-ong-dong-red-guard",
+        "sourceSha256": "6237e87d020a0f9c45667d631e6f1ca621b01dceae5a1385619b3e7b8458ac79",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261072,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-049",
+      "image": "assets/dev-049.jpg",
+      "sha256": "4be4eee53f7c346f281701096a4e697b7a69cdd23fc1f115147983e9cda3def9",
+      "bytes": 23487,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-001-1",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-001-01.png",
+        "imageId": "5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+        "sourceSha256": "fa12c4905a8af2ceffceb6119186b3ee973d7f2b99ce7397037d08bc16198de0",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261073,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-050",
+      "image": "assets/dev-050.jpg",
+      "sha256": "af8656501d679a2b556477b921dc0018366818c85dc15a9741c7d2742625b2a4",
+      "bytes": 28196,
+      "group": "accessories",
+      "caseKind": "catalog-derived-camera-simulation",
+      "sourceGroupCode": "PILOT-ACCESSORY-001-2",
+      "source": {
+        "uri": "repo://catalog/pilot-v1/assets/PILOT-ACCESSORY-001-02.png",
+        "imageId": "10aed1aa-6ca7-4efd-958c-4145db7966d0",
+        "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+        "sourceSha256": "f9ad8b090c1230b90b3d95d302b4d36529024ba18993508454b8f3833549aa69",
+        "licenseCode": "AI_GENERATED_PROJECT_USE"
+      },
+      "transform": {
+        "seed": 20261074,
+        "operations": [
+          "crop",
+          "rotation",
+          "background",
+          "brightness",
+          "contrast",
+          "color",
+          "noise",
+          "blur",
+          "jpeg"
+        ]
+      }
+    },
+    {
+      "id": "dev-051",
+      "image": "assets/dev-051.webp",
+      "sha256": "ad71618410b16face7809cc502a3dd131a78c399c34d35ce61972612077160ee",
+      "bytes": 646065,
+      "group": "unknown",
+      "caseKind": "negative-repository-asset",
+      "sourceGroupCode": "legacy-ui:slideshow_2",
+      "source": {
+        "uri": "repo://frontend/storefront/public/images/slideshow_2.webp",
+        "sourceSha256": "ad71618410b16face7809cc502a3dd131a78c399c34d35ce61972612077160ee",
+        "licenseCode": "PROJECT_LEGACY_ASSET_REVIEW_REQUIRED"
+      },
+      "transform": {
+        "seed": null,
+        "operations": []
+      }
+    },
+    {
+      "id": "dev-052",
+      "image": "assets/dev-052.webp",
+      "sha256": "d1a269e1607f8717900c747186e2c3ddb4e5fd1d6f5d03b455b21f44034a7dfb",
+      "bytes": 528073,
+      "group": "unknown",
+      "caseKind": "negative-repository-asset",
+      "sourceGroupCode": "legacy-ui:slideshow_5",
+      "source": {
+        "uri": "repo://frontend/storefront/public/images/slideshow_5.webp",
+        "sourceSha256": "d1a269e1607f8717900c747186e2c3ddb4e5fd1d6f5d03b455b21f44034a7dfb",
+        "licenseCode": "PROJECT_LEGACY_ASSET_REVIEW_REQUIRED"
+      },
+      "transform": {
+        "seed": null,
+        "operations": []
+      }
+    },
+    {
+      "id": "dev-053",
+      "image": "assets/dev-053.webp",
+      "sha256": "a43840d321e2eaf6c1fc0f58e35fe4cc82914cca1ec4339c5570fc5eb1ca6f35",
+      "bytes": 525696,
+      "group": "unknown",
+      "caseKind": "negative-repository-asset",
+      "sourceGroupCode": "legacy-ui:slideshow_9",
+      "source": {
+        "uri": "repo://frontend/storefront/public/images/slideshow_9.webp",
+        "sourceSha256": "a43840d321e2eaf6c1fc0f58e35fe4cc82914cca1ec4339c5570fc5eb1ca6f35",
+        "licenseCode": "PROJECT_LEGACY_ASSET_REVIEW_REQUIRED"
+      },
+      "transform": {
+        "seed": null,
+        "operations": []
+      }
+    },
+    {
+      "id": "dev-054",
+      "image": "assets/dev-054.webp",
+      "sha256": "80c2db9ec690941256719abc5476178df94e58ee8c53cca3bd6b0997f89854b3",
+      "bytes": 361954,
+      "group": "unknown",
+      "caseKind": "negative-repository-asset",
+      "sourceGroupCode": "legacy-ui:slideshow_10",
+      "source": {
+        "uri": "repo://frontend/storefront/public/images/slideshow_10.webp",
+        "sourceSha256": "80c2db9ec690941256719abc5476178df94e58ee8c53cca3bd6b0997f89854b3",
+        "licenseCode": "PROJECT_LEGACY_ASSET_REVIEW_REQUIRED"
+      },
+      "transform": {
+        "seed": null,
+        "operations": []
+      }
+    },
+    {
+      "id": "dev-055",
+      "image": "assets/dev-055.png",
+      "sha256": "4c1a311e05897c73ee0fd2afffa3801dbc3091ff1c2e9c5e7061a27909e99fe4",
+      "bytes": 2895065,
+      "group": "unknown",
+      "caseKind": "negative-repository-asset",
+      "sourceGroupCode": "legacy-ui:banner-hero-1",
+      "source": {
+        "uri": "repo://frontend/storefront/public/images/banner-hero-1.png",
+        "sourceSha256": "4c1a311e05897c73ee0fd2afffa3801dbc3091ff1c2e9c5e7061a27909e99fe4",
+        "licenseCode": "PROJECT_LEGACY_ASSET_REVIEW_REQUIRED"
+      },
+      "transform": {
+        "seed": null,
+        "operations": []
+      }
+    }
+  ]
+}

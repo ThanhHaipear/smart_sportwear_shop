@@ -1,73 +1,47 @@
 ## Danh mục sản phẩm của cửa hàng Điểm Đến Thể Thao
 ### Danh mục:
-- Áo Chạy Bộ (32 sản phẩm)
-- Áo Đá Bóng (30 sản phẩm)
-- Găng Tay Thủ Môn (1 sản phẩm)
-- Giày Đá Bóng Cỏ Nhân Tạo (TF) (5 sản phẩm)
-- Giày Đá Bóng Cỏ Thật (FG) (15 sản phẩm)
-- Phụ Kiện Đá Bóng (6 sản phẩm)
-- Quần Chạy Bộ (20 sản phẩm)
+- Áo thể thao (14 sản phẩm)
+- Đồng phục thể thao (6 sản phẩm)
+- Giày thể thao (6 sản phẩm)
+- Phụ kiện thể thao (4 sản phẩm)
+- Quần thể thao (6 sản phẩm)
 
-### Thương hiệu: Adidas, Mizuno, Nike, Puma, Ronhill, SAYSKY
+### Thương hiệu: Adidas, Nike
 
 ### Ví dụ sản phẩm thực tế:
-- Adidas Arsenal Home Jersey 26/27
-- Adidas Italy Away Jersey 2026
-- Adidas Juventus 3rd Jersey 25/26
-- Adidas Juventus Icon Jersey 2025
-- Adidas Liverpool FC Away Jersey 25/26
-- Adidas Liverpool FC Home Jersey 25/26
-- Adidas Manchester United FC Icon Jersey 25/26
-- Adidas Men's Argentina 26 Home Authentic Jersey
-- Adidas Men's Argentina 26 Home Jersey
-- Adidas Men's Colombia 26 Home Authentic Jersey
-- Adidas Men's Colombia 26 Home Jersey
-- Adidas Men's Germany 26 Home Long Sleeve Jersey
-- Adidas Men's Germany Away Jersey 1994
-- Adidas Men's Germany Away Jersey 2014
-- Adidas Men's Japan 26 Away Jersey
-- Adidas Men's Mexico 26 Home Authentic Jersey
-- Adidas Men's Mexico 26 Home Jersey
-- Adidas Men's Spain 26 Home Authentic Jersey
-- Adidas Men's Spain 26 Home Jersey
-- Adidas Predator Elite FG
-- Adidas Predator Elite Laceless FG
-- Adidas Real Madrid Away Jersey 25/26
-- Adidas Real Madrid Icon Jersey
-- Balo Thể Thao Nike Brasilia
-- Băng Tay Thể Thao Adidas
-- Bình Nước Thể Thao Puma 750ml
-- Flower Combat Singlet
-- Flower Combat T-Shirt
-- Flower Flow Air Singlet
-- France 2026 Stadium Away Men's Nike Dri-FIT Soccer Replica Jersey
-- Găng Tay Thủ Môn Adidas Predator
-- High Five Pace T-Shirt
-- Lót Ống Đồng Adidas Predator
-- Men's Core 5" Short
-- Men's Core 5" Twin Short
-- Men's Core L/S Tee
-- Men's Core Racer Short
-- Men's Core S/S Tee
-- Men's Core Stretch Short
-- Men's Core Vest
-- Men's Tech 5" Short
-- Men's Tech 5" Twin Short
-- Men's Tech 7" Twin Short
-- Men's Tech All-Terrain 5" Short
-- Men's Tech All-Terrain S/S Tee
-- Men's Tech Golden Hour Tank
-- Men's Tech Golden Hour Tee
-- Men's Tech Race 5" Short
-- Men's Tech Race S/S Tee
-- Men's Tech Race Short
-- Men's Tech Race Twin Short
-- Men's Tech Race Vest
-- Men's Tech Reflect L/S Tee
-- Men's Tech Reflect S/S Tee
-- Men's Tech S/S Tee
-- Mizuno Morelia Neo IV Beta Elite
-- Mizuno Morelia Neo IV Pro FG
-- Mizuno Morelia Neo V Beta Japan FG
-- Mizuno Morelia Neo V Japan FG
-- Morelia Neo IV (MIJ)
+- Áo chạy bộ dài tay Uni Cloud
+- Áo chạy bộ nam Aero Navy
+- Áo gió chạy bộ nam Orange Pace
+- Áo giữ nhiệt bóng đá Uni Core
+- Áo khoác chạy bộ nữ Violet Air
+- Áo tank chạy bộ nữ Coral Flow
+- Áo tập bóng đá nam Blaze Red
+- Áo tập bóng đá nữ Royal Motion
+- Argentina 2026 Home Jersey
+- Băng tay thể thao Royal Pair
+- Belgium 2026 Home Jersey
+- Bình nước thể thao Black Flow 750ml
+- Bộ bóng đá nam Black Gold
+- Bộ bóng đá nam Crimson Unity
+- Bộ bóng đá nữ Royal Wave
+- Bộ bóng đá nữ Violet Star
+- Bộ bóng đá Uni Forest Line
+- Bộ bóng đá Uni Orange Pulse
+- Brazil 2026 Stadium Home Jersey
+- England 2026 Stadium Home Jersey
+- France 2026 Stadium Home Jersey
+- Germany Women 2026 Home Jersey
+- Giày chạy bộ nam Cobalt Ride
+- Giày chạy bộ nữ Coral Cloud
+- Giày chạy bộ Uni Pure Step
+- Giày đá bóng nam Turf Shadow
+- Giày đá bóng nữ Turf Spark
+- Giày futsal Uni Red Court
+- Ốp bảo vệ ống đồng Red Guard
+- Quần bóng đá nam Royal Kick
+- Quần jogger thể thao Uni Motion
+- Quần legging chạy bộ nữ Navy Flex
+- Quần short chạy bộ nam Swift Black
+- Quần tập bóng đá nữ Black Drive
+- Quần track chạy bộ Uni Forest
+- Tất bóng đá White Match

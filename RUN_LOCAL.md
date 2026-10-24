@@ -13,6 +13,8 @@ Mở Docker Desktop, sau đó chạy:
 Cấu hình local được đọc từ:
 
 - `backend/.env`
+- `chatbot-service/.env`
+- `visual-search-service/.env`
 - `frontend/admin/.env.local`
 - `frontend/storefront/.env.local`
 
@@ -119,6 +121,10 @@ docker compose up -d redis rabbitmq
 ```
 
 Use the corresponding `.cmd` launchers when starting from Command Prompt.
+The chatbot and product-indexer launchers derive `DB_READ_URL`/`DB_WRITE_URL`
+from `backend/.env`, so local services cannot silently connect to different
+Supabase projects. Service-specific `.env` files still provide model, token,
+queue and feature settings.
 `PRODUCT_SEARCH_INTERNAL_TOKEN` must be present and identical in
 `backend/.env` and `chatbot-service/.env`. Keep
 `PRODUCT_HYBRID_SEARCH_ENABLED=false` until migrations, embedding coverage,

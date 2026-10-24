@@ -1,0 +1,79 @@
+{
+  "generatedAt": "2026-10-24T09:43:00+07:00",
+  "gitCommit": "ea9a2afadc5f50cee1975e812568d3ee082e54ce",
+  "scope": "HAI-04 visual-search V2 pipeline verification",
+  "environment": {
+    "database": "Supabase PostgreSQL 17.11",
+    "vectorExtension": "0.8.2",
+    "dockerServer": "29.6.1",
+    "model": "google/siglip2-base-patch16-224",
+    "modelRevision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+    "dimensions": 768
+  },
+  "databaseCoverage": {
+    "activeProducts": 36,
+    "activeVariants": 178,
+    "catalogImages": 81,
+    "readyImageEmbeddings": 81,
+    "searchDocuments": 36,
+    "readyTextEmbeddings": 36,
+    "openIndexingJobs": 0,
+    "unpublishedOutboxEvents": 0
+  },
+  "checks": {
+    "python": {
+      "command": "$env:RUN_RABBITMQ_INTEGRATION='1'; python -m pytest -q",
+      "passed": 114,
+      "failed": 0,
+      "skipped": 0,
+      "rabbitmqIntegration": "PASSED"
+    },
+    "spring": {
+      "command": ".\\mvnw.cmd -q -Dtest=VisualSearchServiceTest,VisualSearchRateLimiterTest,VisualSearchClientTest,VisualSearchPublicApiIntegrationTest test",
+      "passed": 20,
+      "failed": 0,
+      "errors": 0,
+      "testcontainersMigrations": "V1-V7 PASSED"
+    },
+    "storefront": {
+      "lint": "PASSED",
+      "typecheck": "PASSED",
+      "productionBuild": "PASSED",
+      "playwrightQa": {
+        "status": "PASSED",
+        "desktopCases": 16,
+        "mobileCases": 3,
+        "abortedRequestsObserved": 2,
+        "completedRequests": 9
+      }
+    },
+    "runtime": {
+      "visualReadiness": {
+        "status": "ready",
+        "database": "up",
+        "activeModel": "active",
+        "rabbitmq": "not_required"
+      },
+      "backendStatus": {
+        "enabled": true,
+        "available": true
+      },
+      "endToEndSmoke": {
+        "httpStatus": 200,
+        "resultCards": 4,
+        "expectedTopVisible": true,
+        "expectedSlug": "ao-chay-bo-nam-aero-navy"
+      }
+    }
+  },
+  "configuration": {
+    "databaseEndpointsAligned": true,
+    "chatbotLauncherHealth": "PASSED",
+    "chatbotReadPool": "ready",
+    "chatbotWritePool": "ready",
+    "credentialsRecorded": false,
+    "publicFeatureFlagPersisted": false,
+    "note": "Feature was enabled only in the smoke-test backend process; backend/.env remains disabled by default."
+  },
+  "result": "PASSED"
+}

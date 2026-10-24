@@ -37,8 +37,8 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-01 | Kiểm kê và khóa catalog ảnh V2 | `DONE` | 100% | P0 | Không |
 | HAI-02 | Xác nhận image embedding V2 | `DONE` | 100% | P0 | HAI-01 |
 | HAI-03 | Chuyển API tìm ảnh sang SigLIP2 V2 | `DONE` | 100% | P0 | HAI-02 |
-| HAI-04 | Kiểm thử API và repository V2 | `TODO` | 25% | P0 | HAI-03 |
-| HAI-05 | Xây dựng tập ảnh DEV | `TODO` | 10% | P0 | HAI-01 |
+| HAI-04 | Kiểm thử API và repository V2 | `DONE` | 100% | P0 | HAI-03 |
+| HAI-05 | Xây dựng tập ảnh DEV | `DONE` | 100% | P0 | HAI-01 |
 | HAI-06 | Xây dựng tập ảnh TEST độc lập | `TODO` | 0% | P0 | HAI-01, HAI-05 |
 | HAI-07 | Viết runner và chạy đánh giá | `TODO` | 10% | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và so sánh baseline | `TODO` | 10% | P1 | HAI-07 |
@@ -154,34 +154,38 @@ Lần chạy cuối chứng minh idempotency và phải skip các vector còn h�
 
 ### HAI-04 Kiểm thử pipeline V2
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `DONE`
 
 | Xong | ID | Nhóm test | Ca bắt buộc | Điều kiện đạt |
 |---:|---|---|---|---|
-| [ ] | HAI-04.1 | Image validation | File hỏng, MIME sai, quá byte/pixel, decompression bomb | Từ chối đúng status |
-| [ ] | HAI-04.2 | Model | Revision sai, thiếu dependency, sai dimension, zero/non-finite vector | Fail-fast rõ ràng |
-| [ ] | HAI-04.3 | Repository | Active model, exact cosine, stale/failed vector, asset đổi | Đọc đúng schema V2 |
-| [ ] | HAI-04.4 | Grouping | Nhiều ảnh/product, tie score, candidate limit | Không trùng product |
-| [ ] | HAI-04.5 | Spring | Inactive, out-of-stock, filter, enrichment | Response đúng hiện thời |
-| [ ] | HAI-04.6 | Security | Token sai, rate limit, timeout | Không lộ secret/stack trace |
-| [ ] | HAI-04.7 | Frontend QA | Upload, camera, crop, loading, empty, error, retry, mobile | Không có lỗi chặn demo |
-| [ ] | HAI-04.8 | Regression | Python, Spring và storefront gates | Các suite liên quan xanh |
+| [x] | HAI-04.1 | Image validation | File hỏng, MIME sai, quá byte/pixel, decompression bomb | Từ chối đúng status |
+| [x] | HAI-04.2 | Model | Revision sai, thiếu dependency, sai dimension, zero/non-finite vector | Fail-fast rõ ràng |
+| [x] | HAI-04.3 | Repository | Active model, exact cosine, stale/failed vector, asset đổi | Đọc đúng schema V2 |
+| [x] | HAI-04.4 | Grouping | Nhiều ảnh/product, tie score, candidate limit | Không trùng product |
+| [x] | HAI-04.5 | Spring | Inactive, out-of-stock, filter, enrichment | Response đúng hiện thời |
+| [x] | HAI-04.6 | Security | Token sai, rate limit, timeout | Không lộ secret/stack trace |
+| [x] | HAI-04.7 | Frontend QA | Upload, camera, crop, loading, empty, error, retry, mobile | Không có lỗi chặn demo |
+| [x] | HAI-04.8 | Regression | Python, Spring và storefront gates | Các suite liên quan xanh |
+
+**Bằng chứng đóng task (24/10/2026):** `evidence/image-search-v2/hai-04-verification-2026-10-24.json`. Kết quả gồm 114 Python tests với RabbitMQ thật, 20 Spring tests với PostgreSQL/pgvector Testcontainers, storefront lint/typecheck/build, Playwright QA desktop/mobile/camera và smoke end-to-end trên Supabase thật. Feature flag chỉ được bật trong process smoke test; cấu hình mặc định vẫn tắt.
 
 ### HAI-05 Xây dựng tập ảnh DEV
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `DONE`
 
 | Xong | ID | Việc cần làm | Yêu cầu | Đầu ra |
 |---:|---|---|---|---|
-| [ ] | HAI-05.1 | Tạo DEV v1 | Không sửa catalog frozen | `datasets/image-search/dev-v1/` |
-| [ ] | HAI-05.2 | Thu thập/tạo ảnh DEV | 40–60 ảnh | Assets có nguồn |
-| [ ] | HAI-05.3 | Phủ năm nhóm | Áo, quần, đồng phục, giày, phụ kiện | Distribution report |
-| [ ] | HAI-05.4 | Phủ biến đổi ảnh | Góc, nền, sáng, crop, blur, noise, JPEG | Case metadata |
-| [ ] | HAI-05.5 | Thêm unknown query | Có ảnh ngoài catalog | Negative labels |
-| [ ] | HAI-05.6 | Tạo manifest/checksum | ID, SHA-256, nguồn, license | `manifest.json`, `assets.sha256` |
-| [ ] | HAI-05.7 | Gán `source_group_code` | Không rò rỉ qua split | Manifest review |
-| [ ] | HAI-05.8 | Gán relevance 0–3 | `grade >= 2` là relevant | `labels.json` |
-| [ ] | HAI-05.9 | Freeze DEV v1 | Có reviewer/checksum cuối | README `FROZEN` |
+| [x] | HAI-05.1 | Tạo DEV v1 | Không sửa catalog frozen | `datasets/image-search/dev-v1/` |
+| [x] | HAI-05.2 | Thu thập/tạo ảnh DEV | 40–60 ảnh | Assets có nguồn |
+| [x] | HAI-05.3 | Phủ năm nhóm | Áo, quần, đồng phục, giày, phụ kiện | Distribution report |
+| [x] | HAI-05.4 | Phủ biến đổi ảnh | Góc, nền, sáng, crop, blur, noise, JPEG | Case metadata |
+| [x] | HAI-05.5 | Thêm unknown query | Có ảnh ngoài catalog | Negative labels |
+| [x] | HAI-05.6 | Tạo manifest/checksum | ID, SHA-256, nguồn, license | `manifest.json`, `assets.sha256` |
+| [x] | HAI-05.7 | Gán `source_group_code` | Không rò rỉ qua split | Manifest review |
+| [x] | HAI-05.8 | Gán relevance 0–3 | `grade >= 2` là relevant | `labels.json` |
+| [x] | HAI-05.9 | Freeze DEV v1 | Có reviewer/checksum cuối | README `FROZEN` |
+
+**Bằng chứng đóng task (24/10/2026):** `evidence/image-search-v2/dev-v1-validation-2026-10-24.json`. DEV v1 có 55 ảnh, gồm 10 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện và 5 unknown; 55/55 judgment `COMPLETE`, 55 checksum duy nhất và không có exact duplicate. Positive case là biến đổi deterministic từ catalog nên chỉ dùng để tune DEV, tuyệt đối không dùng làm TEST hoặc bằng chứng tổng quát hóa thực tế.
 
 DEV dùng để chọn preprocessing, threshold, candidate limit và grouping; không dùng làm kết quả cuối.
 
@@ -333,6 +337,8 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 | 23/10/2026 | Hoàn tất catalog và embedding verification | HAI-01/02 đạt; 81/81 READY, idempotency skip 81 | `evidence/image-search/*.json` | Không có mismatch/stale/failed | Chuyển HAI-03 sang VERIFY |
 | 23/10/2026 | Chuyển query path và storefront sang SigLIP2 V2 | Public API HTTP 200; storefront render 4 kết quả, top-1 đúng; 5/5 candidate duy nhất | `siglip2-v2-smoke-2026-10-23.json`; `npm run smoke:visual-search` | Không còn vướng mắc trong HAI-03 | Bắt đầu HAI-04 test pipeline V2 |
 | 23/10/2026 | Harden storefront, public API và query readiness | FE giữ thứ tự backend, có availability/cancel/retry/states; BE giữ 422/429/503, chặn MIME/size và xử lý timeout; RabbitMQ không chặn query | Storefront build; 17 Spring tests; 101 Python tests | Chưa hoàn tất QA camera/mobile và toàn bộ ma trận HAI-04 | Tiếp tục các ca HAI-04 còn lại |
+| 24/10/2026 | Đóng HAI-04 và đồng bộ runtime database | 114 Python tests, 20 Spring tests, build storefront, Playwright desktop/mobile/camera và smoke Supabase thật đều đạt; ba service dùng cùng Supabase | `evidence/image-search-v2/hai-04-verification-2026-10-24.json` | Chưa có DEV v1 | Bắt đầu HAI-05 |
+| 24/10/2026 | Tạo và khóa DEV v1 | 55 query, đủ năm nhóm + unknown; manifest/labels/checksum tái tạo được, không exact duplicate | `datasets/image-search/dev-v1/`; `evidence/image-search-v2/dev-v1-validation-2026-10-24.json` | Positive case là catalog-derived, chỉ dùng tune DEV | Tune trên DEV rồi mới thu TEST độc lập |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
@@ -342,8 +348,8 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 - [x] HAI-01 hoàn thành và catalog snapshot đã khóa.
 - [x] HAI-02 hoàn thành với coverage 100% và idempotency report.
 - [x] HAI-03 hoàn thành; API dùng SigLIP2 + `ai_retrieval` end-to-end.
-- [ ] HAI-04 hoàn thành; test và QA liên quan đều đạt.
-- [ ] HAI-05 DEV v1 đã `FROZEN`.
+- [x] HAI-04 hoàn thành; test và QA liên quan đều đạt.
+- [x] HAI-05 DEV v1 đã `FROZEN`.
 - [ ] HAI-06 TEST v1 độc lập đã `FROZEN` và không leakage.
 - [ ] HAI-07 benchmark cuối có ranked output và metric tái lập được.
 - [ ] HAI-08 có failure-case analysis và baseline comparison.

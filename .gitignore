@@ -30,6 +30,7 @@ db.sql
 *.backup
 image/
 evidence/visual-search/synthetic-benchmark/benchmark-images/
+datasets/image-search/**/assets/
 # Old cloner template directory (content moved to frontend/storefront)
 ai-website-cloner-template/
 
