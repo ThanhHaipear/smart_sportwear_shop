@@ -39,7 +39,7 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-03 | Chuyển API tìm ảnh sang SigLIP2 V2 | `DONE` | 100% | P0 | HAI-02 |
 | HAI-04 | Kiểm thử API và repository V2 | `DONE` | 100% | P0 | HAI-03 |
 | HAI-05 | Xây dựng tập ảnh DEV | `DONE` | 100% | P0 | HAI-01 |
-| HAI-06 | Xây dựng tập ảnh TEST độc lập | `IN PROGRESS` | 10% | P0 | HAI-01, HAI-05 |
+| HAI-06 | Xây dựng tập ảnh TEST độc lập | `DONE` | 100% | P0 | HAI-01, HAI-05 |
 | HAI-07 | Viết runner và chạy đánh giá | `IN PROGRESS` | 90% | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và so sánh baseline | `TODO` | 10% | P1 | HAI-07 |
 | HAI-09 | Hardening, rollout và rollback | `TODO` | 40% | P1 | HAI-03, HAI-04 |
@@ -191,23 +191,23 @@ DEV dùng để chọn preprocessing, threshold, candidate limit và grouping; k
 
 ### HAI-06 Xây dựng tập ảnh TEST độc lập
 
-**Trạng thái:** `IN PROGRESS`
+**Trạng thái:** `DONE`
 
 | Xong | ID | Việc cần làm | Yêu cầu | Đầu ra |
 |---:|---|---|---|---|
 | [x] | HAI-06.1 | Chốt protocol trước khi thu ảnh | Không đổi metric sau khi xem kết quả | `datasets/image-search/test-v1/README.md` |
-| [ ] | HAI-06.2 | Thu ảnh độc lập | Mục tiêu tối thiểu 100 ảnh | Asset có quyền dùng |
-| [ ] | HAI-06.3 | Cân bằng năm nhóm | Mục tiêu 20 ảnh/nhóm | Distribution report |
-| [ ] | HAI-06.4 | Tạo manifest/checksum/license | Đủ metadata/case | Manifest và SHA-256 |
-| [ ] | HAI-06.5 | Loại exact duplicate | So với catalog/DEV | 0 duplicate |
-| [ ] | HAI-06.6 | Loại near duplicate | Perceptual hash/embedding + review | Near-duplicate report |
-| [ ] | HAI-06.7 | Gán product/category/color | Có reviewer | `labels.json` |
-| [ ] | HAI-06.8 | Hoàn tất candidate judgment | Chỉ `COMPLETE` tính Recall | Judgment report |
-| [ ] | HAI-06.9 | Freeze TEST v1 | Không tune bằng TEST | Checksum cuối |
+| [x] | HAI-06.2 | Thu ảnh độc lập | Mục tiêu tối thiểu 100 ảnh | Asset có quyền dùng |
+| [x] | HAI-06.3 | Cân bằng năm nhóm | Mục tiêu 20 ảnh/nhóm | Distribution report |
+| [x] | HAI-06.4 | Tạo manifest/checksum/license | Đủ metadata/case | Manifest và SHA-256 |
+| [x] | HAI-06.5 | Loại exact duplicate | So với catalog/DEV | 0 duplicate |
+| [x] | HAI-06.6 | Loại near duplicate | Perceptual hash/embedding + review | Near-duplicate report |
+| [x] | HAI-06.7 | Gán product/category/color | Có reviewer | `labels.json` |
+| [x] | HAI-06.8 | Hoàn tất candidate judgment | Chỉ `COMPLETE` tính Recall | Judgment report |
+| [x] | HAI-06.9 | Freeze TEST v1 | Không tune bằng TEST | Checksum cuối |
 
 TEST không được là ảnh catalog, crop trực tiếp, ảnh synthetic từ catalog hoặc ảnh cùng `source_group_code` với catalog/DEV.
 
-**Protocol đã khóa (24/10/2026):** TEST v1 gồm 100 positive query cân bằng 20 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện và 20 unknown query. Protocol đã khóa quyền sử dụng, provenance, exact/near-duplicate gate, relevance grade, reviewer/adjudication và cấm tune trên TEST. Việc thu asset thật chưa hoàn thành nên TEST chưa được freeze.
+**Bằng chứng đóng task (24/10/2026):** `evidence/image-search-v2/test-v1-validation-2026-10-24.json`. TEST v1 đã `FROZEN` với 120 query độc lập từ Wikimedia Commons: 100 positive cân bằng 20 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện và 20 unknown. Có 120/120 judgment `COMPLETE`, 120 checksum duy nhất, 107 source group (tối đa 2 query/source group), đầy đủ attribution/license; không có exact duplicate và khoảng cách dHash gần nhất được nhận là 10 sau khi đối chiếu 136 ảnh catalog/DEV. Color được báo N/A thay vì đoán. Việc ký duyệt của một thành viên dự án khác vẫn là điều kiện riêng trước khi nộp báo cáo cuối.
 
 ### HAI-07 Viết runner và chạy đánh giá
 
@@ -343,7 +343,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 | 23/10/2026 | Harden storefront, public API và query readiness | FE giữ thứ tự backend, có availability/cancel/retry/states; BE giữ 422/429/503, chặn MIME/size và xử lý timeout; RabbitMQ không chặn query | Storefront build; 17 Spring tests; 101 Python tests | Chưa hoàn tất QA camera/mobile và toàn bộ ma trận HAI-04 | Tiếp tục các ca HAI-04 còn lại |
 | 24/10/2026 | Đóng HAI-04 và đồng bộ runtime database | 114 Python tests, 20 Spring tests, build storefront, Playwright desktop/mobile/camera và smoke Supabase thật đều đạt; ba service dùng cùng Supabase | `evidence/image-search-v2/hai-04-verification-2026-10-24.json` | Chưa có DEV v1 | Bắt đầu HAI-05 |
 | 24/10/2026 | Tạo và khóa DEV v1 | 55 query, đủ năm nhóm + unknown; manifest/labels/checksum tái tạo được, không exact duplicate | `datasets/image-search/dev-v1/`; `evidence/image-search-v2/dev-v1-validation-2026-10-24.json` | Positive case là catalog-derived, chỉ dùng tune DEV | Tune trên DEV rồi mới thu TEST độc lập |
-|  |  |  |  |  |  |
+| 24/10/2026 | Thu thập, QA và khóa TEST v1 độc lập | 120 query; 20/nhóm; 120 judgment COMPLETE; 0 exact/near duplicate chưa xử lý; validator PASS | `datasets/image-search/test-v1/`; `evidence/image-search-v2/test-v1-validation-2026-10-24.json` | Còn ký duyệt của thành viên dự án khác trước benchmark/nộp cuối | Ký duyệt rồi chạy HAI-07.12 đúng một lần |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 
@@ -354,7 +354,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 - [x] HAI-03 hoàn thành; API dùng SigLIP2 + `ai_retrieval` end-to-end.
 - [x] HAI-04 hoàn thành; test và QA liên quan đều đạt.
 - [x] HAI-05 DEV v1 đã `FROZEN`.
-- [ ] HAI-06 TEST v1 độc lập đã `FROZEN` và không leakage.
+- [x] HAI-06 TEST v1 độc lập đã `FROZEN` và không leakage.
 - [ ] HAI-07 benchmark cuối có ranked output và metric tái lập được.
 - [ ] HAI-08 có failure-case analysis và baseline comparison.
 - [ ] HAI-09 có rollout/rollback đã thử nghiệm.

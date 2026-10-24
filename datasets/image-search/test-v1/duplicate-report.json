@@ -1,0 +1,973 @@
+{
+  "schemaVersion": 1,
+  "method": "SHA-256 exact-match and 64-bit dHash; reject Hamming distance <= 6 against catalog, DEV and accepted TEST assets.",
+  "referenceAssetCount": 136,
+  "accepted": [
+    {
+      "queryId": "test-001",
+      "sha256Unique": true,
+      "dHash64": "03e0c4dcdcd4dcfc",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-004-02.png",
+      "nearestHammingDistance": 15,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-002",
+      "sha256Unique": true,
+      "dHash64": "6d6d7925647c7c6c",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-003-01.png",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-003",
+      "sha256Unique": true,
+      "dHash64": "00ddc52b579797cb",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-003-01.png",
+      "nearestHammingDistance": 25,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-004",
+      "sha256Unique": true,
+      "dHash64": "11ccccaaacaeace8",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-001-02.png",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-005",
+      "sha256Unique": true,
+      "dHash64": "331d3517575f1f33",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-006",
+      "sha256Unique": true,
+      "dHash64": "729dc9ccccc8e039",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-001-02.png",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-007",
+      "sha256Unique": true,
+      "dHash64": "f8f0c8ece8d8d87c",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-003.jpg",
+      "nearestHammingDistance": 12,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-008",
+      "sha256Unique": true,
+      "dHash64": "20b09a8ea2e2cae8",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/argentina-jm8396-03.jpg",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-009",
+      "sha256Unique": true,
+      "dHash64": "4e4f38333332c6c4",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-042.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-010",
+      "sha256Unique": true,
+      "dHash64": "b68e93a6cedad6ac",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/belgium-jm8381-03.jpg",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-011",
+      "sha256Unique": true,
+      "dHash64": "eade17673676b2b6",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-001-01.png",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-012",
+      "sha256Unique": true,
+      "dHash64": "470120b08ea4c0c0",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-SHOE-006-01.png",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-013",
+      "sha256Unique": true,
+      "dHash64": "e8cc8ee4fcecece4",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-001-01.png",
+      "nearestHammingDistance": 12,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-014",
+      "sha256Unique": true,
+      "dHash64": "c4adba526c6bb327",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-018.jpg",
+      "nearestHammingDistance": 25,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-015",
+      "sha256Unique": true,
+      "dHash64": "ecae3a9ed69595f4",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-053.webp",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-016",
+      "sha256Unique": true,
+      "dHash64": "39cd68dccabad8cc",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-004-01.png",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-017",
+      "sha256Unique": true,
+      "dHash64": "0723939b0b2b3f01",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-018",
+      "sha256Unique": true,
+      "dHash64": "3331b333333b2b2f",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 10,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-019",
+      "sha256Unique": true,
+      "dHash64": "8b0f07159d1d9d1a",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-051.webp",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-020",
+      "sha256Unique": true,
+      "dHash64": "92b8ec47ba3d2e5a",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-006-01.png",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-021",
+      "sha256Unique": true,
+      "dHash64": "351989b1b96dcc38",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-003-02.png",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-022",
+      "sha256Unique": true,
+      "dHash64": "778c8db998b8d0d8",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-050.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-023",
+      "sha256Unique": true,
+      "dHash64": "44564d49ccd96969",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-006-01.png",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-024",
+      "sha256Unique": true,
+      "dHash64": "4072243686977408",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-042.jpg",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-025",
+      "sha256Unique": true,
+      "dHash64": "44666291dd989989",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/france-ib5300-480-02.png",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-026",
+      "sha256Unique": true,
+      "dHash64": "200b0b4e8d151507",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-035.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-027",
+      "sha256Unique": true,
+      "dHash64": "1ea561413292d622",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-027.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-028",
+      "sha256Unique": true,
+      "dHash64": "9adc670f0f4c12aa",
+      "nearestAsset": "test-011",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-029",
+      "sha256Unique": true,
+      "dHash64": "3dcc8c8de6ceec61",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-001-01.png",
+      "nearestHammingDistance": 14,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-030",
+      "sha256Unique": true,
+      "dHash64": "ca53b166869403e2",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-SHOE-002-02.png",
+      "nearestHammingDistance": 24,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-031",
+      "sha256Unique": true,
+      "dHash64": "19198c9ccccd85d3",
+      "nearestAsset": "test-029",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-032",
+      "sha256Unique": true,
+      "dHash64": "cad2d3ac2c20213c",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/england-ib5290-100-03.png",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-033",
+      "sha256Unique": true,
+      "dHash64": "8f97978f8f8f83b3",
+      "nearestAsset": "test-017",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-034",
+      "sha256Unique": true,
+      "dHash64": "9d9cb92959d1e1e3",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-03.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-035",
+      "sha256Unique": true,
+      "dHash64": "420acb9bbb53191f",
+      "nearestAsset": "test-026",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-036",
+      "sha256Unique": true,
+      "dHash64": "480b0f818b8b4400",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-051.webp",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-037",
+      "sha256Unique": true,
+      "dHash64": "97998ba72c27db9b",
+      "nearestAsset": "test-033",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-038",
+      "sha256Unique": true,
+      "dHash64": "13a2c81434bb9f9f",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-006-01.png",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-039",
+      "sha256Unique": true,
+      "dHash64": "3c3c3620ad99ad2e",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-006-02.png",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-040",
+      "sha256Unique": true,
+      "dHash64": "1f7c4c8414b8ad2d",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-019.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-041",
+      "sha256Unique": true,
+      "dHash64": "1e0f1acd4967260b",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-SHOE-001-02.png",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-042",
+      "sha256Unique": true,
+      "dHash64": "0f8b89890b99152f",
+      "nearestAsset": "test-017",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-043",
+      "sha256Unique": true,
+      "dHash64": "03999fd39a4e4ded",
+      "nearestAsset": "test-021",
+      "nearestHammingDistance": 24,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-044",
+      "sha256Unique": true,
+      "dHash64": "8787914972a4e2f1",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/france-ib5300-480-01.png",
+      "nearestHammingDistance": 24,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-045",
+      "sha256Unique": true,
+      "dHash64": "959829cc4407d7d3",
+      "nearestAsset": "test-037",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-046",
+      "sha256Unique": true,
+      "dHash64": "35317a5c3039b3fe",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-006-02.png",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-047",
+      "sha256Unique": true,
+      "dHash64": "7a3e3c656d64f96f",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-01.jpg",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-048",
+      "sha256Unique": true,
+      "dHash64": "94b0b2e808480b32",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/brazil-if7054-724-02.png",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-049",
+      "sha256Unique": true,
+      "dHash64": "9333d1f0e4606868",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/france-ib5300-480-01.png",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-050",
+      "sha256Unique": true,
+      "dHash64": "22e1a5e575e065c4",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-003-01.png",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-051",
+      "sha256Unique": true,
+      "dHash64": "304d9d29188eabd2",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-045.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-052",
+      "sha256Unique": true,
+      "dHash64": "8ef1c94bcac6c69e",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-01.png",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-053",
+      "sha256Unique": true,
+      "dHash64": "4c0c63a592c62425",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-SHOE-003-01.png",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-054",
+      "sha256Unique": true,
+      "dHash64": "776f6b4b7fdc6839",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-003-01.png",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-055",
+      "sha256Unique": true,
+      "dHash64": "54d49194c8e2e6e2",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/france-ib5300-480-01.png",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-056",
+      "sha256Unique": true,
+      "dHash64": "646261696c69792c",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-006-01.png",
+      "nearestHammingDistance": 12,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-057",
+      "sha256Unique": true,
+      "dHash64": "86a58aa24d09cc00",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-01.png",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-058",
+      "sha256Unique": true,
+      "dHash64": "c6959646c7cbadc7",
+      "nearestAsset": "test-033",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-059",
+      "sha256Unique": true,
+      "dHash64": "25273b73274d0949",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-035.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-060",
+      "sha256Unique": true,
+      "dHash64": "51b1a16166606914",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-006-01.png",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-061",
+      "sha256Unique": true,
+      "dHash64": "e4ec675d17bb3d4d",
+      "nearestAsset": "test-025",
+      "nearestHammingDistance": 24,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-062",
+      "sha256Unique": true,
+      "dHash64": "fc3cd3dbb7d3cc34",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-053.webp",
+      "nearestHammingDistance": 24,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-063",
+      "sha256Unique": true,
+      "dHash64": "05170e060f2b0f87",
+      "nearestAsset": "test-017",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-064",
+      "sha256Unique": true,
+      "dHash64": "9864e4d398a4f001",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-006.jpg",
+      "nearestHammingDistance": 14,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-065",
+      "sha256Unique": true,
+      "dHash64": "0c0ccef61339de8d",
+      "nearestAsset": "test-063",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-066",
+      "sha256Unique": true,
+      "dHash64": "23131f2f33303232",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 14,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-067",
+      "sha256Unique": true,
+      "dHash64": "1939757476747536",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-049.jpg",
+      "nearestHammingDistance": 14,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-068",
+      "sha256Unique": true,
+      "dHash64": "18848ccaa1c0f801",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-006.jpg",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-069",
+      "sha256Unique": true,
+      "dHash64": "3432a08096f6e081",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/belgium-jm8381-03.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-070",
+      "sha256Unique": true,
+      "dHash64": "92d3c96afb7d7f37",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-02.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-071",
+      "sha256Unique": true,
+      "dHash64": "6d7398cc765c5c39",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-018.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-072",
+      "sha256Unique": true,
+      "dHash64": "c0250e1f1da18911",
+      "nearestAsset": "test-019",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-073",
+      "sha256Unique": true,
+      "dHash64": "0852292e475d7e20",
+      "nearestAsset": "test-024",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-074",
+      "sha256Unique": true,
+      "dHash64": "9dd89fe6e7cf6e1c",
+      "nearestAsset": "test-029",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-075",
+      "sha256Unique": true,
+      "dHash64": "3124468b9839ba14",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-008-01.png",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-076",
+      "sha256Unique": true,
+      "dHash64": "19363c3931d287c4",
+      "nearestAsset": "test-009",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-077",
+      "sha256Unique": true,
+      "dHash64": "0f7888c667291315",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-020.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-078",
+      "sha256Unique": true,
+      "dHash64": "3272f0c4bc98fe2e",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/brazil-if7054-724-02.png",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-079",
+      "sha256Unique": true,
+      "dHash64": "0f05071f3d3bbe1f",
+      "nearestAsset": "test-019",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-080",
+      "sha256Unique": true,
+      "dHash64": "70f2f0d8e8def839",
+      "nearestAsset": "test-007",
+      "nearestHammingDistance": 15,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-081",
+      "sha256Unique": true,
+      "dHash64": "390d78fcf4c06969",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-UNIFORM-002-02.png",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-082",
+      "sha256Unique": true,
+      "dHash64": "d4d4c9ccf0c8e871",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-001-01.png",
+      "nearestHammingDistance": 11,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-083",
+      "sha256Unique": true,
+      "dHash64": "0ebfb579c94b4b3b",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-03.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-084",
+      "sha256Unique": true,
+      "dHash64": "143c5a0861e3a5bc",
+      "nearestAsset": "test-039",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-085",
+      "sha256Unique": true,
+      "dHash64": "6c6e4ece8ba393d0",
+      "nearestAsset": "test-015",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-086",
+      "sha256Unique": true,
+      "dHash64": "33396e586b63e3e1",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-003-01.png",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-087",
+      "sha256Unique": true,
+      "dHash64": "242767d9c9492595",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-039.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-088",
+      "sha256Unique": true,
+      "dHash64": "964c5bf3b6e6e60f",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-SHOE-001-02.png",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-089",
+      "sha256Unique": true,
+      "dHash64": "bc4cccc267153101",
+      "nearestAsset": "test-077",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-090",
+      "sha256Unique": true,
+      "dHash64": "e69b9d8d9697934c",
+      "nearestAsset": "test-015",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-091",
+      "sha256Unique": true,
+      "dHash64": "15137717193a2925",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-092",
+      "sha256Unique": true,
+      "dHash64": "fd8f032f9b8f4d33",
+      "nearestAsset": "test-033",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-093",
+      "sha256Unique": true,
+      "dHash64": "94c8e8eceeece4a8",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-02.png",
+      "nearestHammingDistance": 14,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-094",
+      "sha256Unique": true,
+      "dHash64": "441991835e6fbfbb",
+      "nearestAsset": "test-005",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-095",
+      "sha256Unique": true,
+      "dHash64": "012553d0e4f23803",
+      "nearestAsset": "test-049",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-096",
+      "sha256Unique": true,
+      "dHash64": "c8a0c8c8c8c8c8c8",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-02.png",
+      "nearestHammingDistance": 12,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-097",
+      "sha256Unique": true,
+      "dHash64": "0bb13192d99dba13",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-054.webp",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-098",
+      "sha256Unique": true,
+      "dHash64": "f65295d385850c9e",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/england-ib5290-100-01.png",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-099",
+      "sha256Unique": true,
+      "dHash64": "58a0e0fee6be0028",
+      "nearestAsset": "test-093",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-100",
+      "sha256Unique": true,
+      "dHash64": "ca88c9d9d9c9d1d0",
+      "nearestAsset": "test-096",
+      "nearestHammingDistance": 14,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-101",
+      "sha256Unique": true,
+      "dHash64": "7b79e8e0e1e46571",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-003-01.png",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-102",
+      "sha256Unique": true,
+      "dHash64": "7f3f272b2f2c2323",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-103",
+      "sha256Unique": true,
+      "dHash64": "0f0f1869e3e0309f",
+      "nearestAsset": "test-041",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-104",
+      "sha256Unique": true,
+      "dHash64": "47012cc06a1822c8",
+      "nearestAsset": "test-012",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-105",
+      "sha256Unique": true,
+      "dHash64": "8638746270743808",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-009.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-106",
+      "sha256Unique": true,
+      "dHash64": "19939797d5b6ed6d",
+      "nearestAsset": "test-091",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-107",
+      "sha256Unique": true,
+      "dHash64": "c4e39b90118bcb06",
+      "nearestAsset": "test-057",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-108",
+      "sha256Unique": true,
+      "dHash64": "f8fccc1fe7180880",
+      "nearestAsset": "test-089",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-109",
+      "sha256Unique": true,
+      "dHash64": "d8c6c5c1eae0c4cc",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-004-01.png",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-110",
+      "sha256Unique": true,
+      "dHash64": "060b0f0f07078313",
+      "nearestAsset": "test-026",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-111",
+      "sha256Unique": true,
+      "dHash64": "311909a919452535",
+      "nearestAsset": "test-021",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-112",
+      "sha256Unique": true,
+      "dHash64": "7616071321009963",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-036.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-113",
+      "sha256Unique": true,
+      "dHash64": "eee3cbc1d3c36070",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-003-02.png",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-114",
+      "sha256Unique": true,
+      "dHash64": "0fd2d3f1e1f37b63",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/france-ib5300-480-04.png",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-115",
+      "sha256Unique": true,
+      "dHash64": "1b99b8ac6c8ca6e2",
+      "nearestAsset": "test-031",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-116",
+      "sha256Unique": true,
+      "dHash64": "3c10813f0fda246c",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-003-01.png",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-117",
+      "sha256Unique": true,
+      "dHash64": "184cd852e086c664",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-004-01.png",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-118",
+      "sha256Unique": true,
+      "dHash64": "7c7c75797a7bf3f1",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/belgium-jm8381-02.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-119",
+      "sha256Unique": true,
+      "dHash64": "599999195a3bdbc9",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-03.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "test-120",
+      "sha256Unique": true,
+      "dHash64": "4747c78f87474707",
+      "nearestAsset": "test-110",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    }
+  ],
+  "rejections": {
+    "DOWNLOAD_OR_DECODE:ValueError": 1,
+    "DUPLICATE_SOURCE_SERIES": 9,
+    "NEAR_DUPLICATE_DHASH_LE_6": 1
+  },
+  "unresolved": []
+}

@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-10-24T21:28:53+07:00",
+  "gitCommit": "d75e89bcb65289b460768ce7255c401f80d8294e",
+  "dataset": "image-search-test-v1:1.0.0",
+  "status": "FROZEN",
+  "catalogSnapshot": {
+    "version": "image-catalog-v2-2026-10-23",
+    "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+  },
+  "summary": {
+    "samples": 120,
+    "positive": 100,
+    "unknown": 20,
+    "completeJudgments": 120,
+    "uniqueAssetHashes": 120,
+    "exactDuplicates": 0,
+    "uniqueSourceGroups": 107,
+    "maximumQueriesPerSourceGroup": 2
+  },
+  "distribution": {
+    "tops": 20,
+    "bottoms": 20,
+    "uniforms": 20,
+    "shoes": 20,
+    "accessories": 20,
+    "unknown": 20
+  },
+  "licenses": {
+    "CC BY": 33,
+    "CC BY-SA": 70,
+    "CC0": 9,
+    "Public domain": 8
+  },
+  "leakageReview": {
+    "referenceAssetsChecked": 136,
+    "exactMethod": "SHA-256",
+    "nearDuplicateMethod": "64-bit dHash",
+    "rejectedAtOrBelowHammingDistance": 6,
+    "minimumAcceptedNearestHammingDistance": 10,
+    "unresolved": 0
+  },
+  "artifacts": {
+    "manifest": {
+      "path": "datasets/image-search/test-v1/manifest.json",
+      "sha256": "e7af468108eefb1883cb7f6ee0e7d89d889164d6db628794137cbf0562f2df7c"
+    },
+    "labels": {
+      "path": "datasets/image-search/test-v1/labels.json",
+      "sha256": "0047970aca6d3f0f8d82b74f3a6800af9b62097e0e6de3f49cef5299c288886d"
+    },
+    "assetChecksums": {
+      "path": "datasets/image-search/test-v1/assets.sha256",
+      "sha256": "0a9f1328a37f7842a8b34419d9d44b6a42abae369c2da821bebedf497a070abd"
+    },
+    "sourceInventory": {
+      "path": "datasets/image-search/test-v1/source-inventory.json",
+      "sha256": "bd33a4b2e2f317ecfb04760ffa896c1ed98ebdc10f56111642bc6dc0c598c2b4"
+    },
+    "duplicateReport": {
+      "path": "datasets/image-search/test-v1/duplicate-report.json",
+      "sha256": "93cabe8e4e75b9ffb04c4b6c8b280ce8658351d2ce5fac30f3118327551c46f1"
+    },
+    "reviewReport": {
+      "path": "datasets/image-search/test-v1/review-report.json",
+      "sha256": "bfd5614c36c6f90ed1aa91d9d35d71a3dc94053b930bb707243fc5b3e5e4542e"
+    }
+  },
+  "validation": {
+    "allAssetsPresent": true,
+    "allAssetChecksumsMatch": true,
+    "allSourcesHaveAttributionAndAllowedLicense": true,
+    "allCasesHaveSourceGroupCode": true,
+    "allPositiveCasesHaveRelevantProducts": true,
+    "allUnknownCasesHaveNoRelevantProducts": true,
+    "allCasesHaveCompleteJudgment": true,
+    "contactSheetReviewComplete": true,
+    "reviewer": "Codex-assisted visual, provenance, label and checksum review"
+  },
+  "limitations": [
+    "Product relevance is source-subcategory-level for tops, bottoms, shoes and accessories, and sports-uniform-category-level for uniforms; it does not claim exact-product identity.",
+    "Expected color is intentionally N/A because color was not unambiguous for every independent query.",
+    "A second project team member must sign off before final academic submission."
+  ],
+  "result": "PASSED"
+}

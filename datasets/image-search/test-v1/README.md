@@ -1,8 +1,10 @@
 # Image Search TEST v1 Protocol
 
-**Status:** `COLLECTION_PENDING`
+**Status:** `FROZEN`
 
-**Planned version:** `image-search-test-v1:1.0.0`
+**Version:** `image-search-test-v1:1.0.0`
+
+**Frozen at:** `2026-10-24T14:28:53.558879+00:00`
 
 This protocol is locked before any TEST result is inspected. TEST v1 is the final, independent generalization evaluation for the SigLIP2 V2 image-search pipeline. It must never be used to choose preprocessing, similarity threshold, candidate limit, grouping, model revision or relevance rules.
 
@@ -56,3 +58,32 @@ Before freeze:
 - Run TEST only after `manifest.json`, `labels.json`, `assets.sha256`, exact/near-duplicate report and reviewer sign-off are frozen. Do not retune after seeing TEST results.
 
 Changing this protocol requires a new dataset version and must happen before collecting or evaluating that version.
+
+## Frozen artifact
+
+TEST v1 now contains 120 independently sourced Wikimedia Commons queries: 20 each for tops, bottoms, uniforms, shoes, accessories and unknown/negative cases. The images are licensed CC0, CC BY, CC BY-SA or Public Domain and their complete attribution is recorded in `source-inventory.json`.
+
+The freeze includes:
+
+- `manifest.json`: immutable sample metadata and catalog-snapshot binding.
+- `labels.json`: 120 complete relevance judgments.
+- `assets.sha256`: checksums for all query binaries.
+- `source-inventory.json`: source URI, author, license and acquisition metadata.
+- `duplicate-report.json`: exact SHA-256 and 64-bit dHash leakage checks against 136 catalog/DEV assets.
+- `review-report.json`: category, subtype and provenance review outcome.
+
+Reproduce validation without changing the frozen data:
+
+```powershell
+python datasets/image-search/test-v1/build_dataset.py
+```
+
+Regenerate ignored contact sheets for visual review:
+
+```powershell
+python datasets/image-search/test-v1/build_dataset.py --contact-sheets
+```
+
+`--collect` rebuilds the dataset from Commons and therefore creates a new freeze timestamp and artifact hashes. It must not be run after final TEST metrics are inspected; any intentional dataset change requires a new dataset version. Query binaries and download/review caches remain ignored under `assets/`.
+
+Automated validation and a full contact-sheet review are complete. The project-level requirement for a second team member to sign off the dataset, code, metrics and report remains separate and must be completed before academic submission.

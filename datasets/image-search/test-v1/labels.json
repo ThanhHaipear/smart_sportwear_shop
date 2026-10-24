@@ -1,0 +1,3481 @@
+{
+  "schemaVersion": 1,
+  "dataset": "image-search-test-v1",
+  "relevanceScale": {
+    "minimum": 0,
+    "maximum": 3,
+    "relevantAtOrAbove": 2
+  },
+  "review": {
+    "status": "COMPLETE",
+    "method": "Independent Commons category mapped to frozen catalog category or accessory subtype; unlisted products are grade 0."
+  },
+  "cases": [
+    {
+      "queryId": "test-001",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-002",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-003",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+          "productSlug": "ao-dau-argentina-2026-home-jm8396",
+          "productName": "Argentina 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+          "productSlug": "ao-dau-bi-2026-home-jm8381",
+          "productName": "Belgium 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+          "productSlug": "ao-dau-duc-nu-2026-home-jz4559",
+          "productName": "Germany Women 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+          "productSlug": "ao-dau-brazil-2026-home-if7054-724",
+          "productName": "Brazil 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "773289df-121a-4124-beba-bee575eb3b24",
+          "productSlug": "ao-dau-phap-2026-home-ib5300-480",
+          "productName": "France 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+          "productSlug": "ao-dau-anh-2026-home-ib5290-100",
+          "productName": "England 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-004",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+          "productSlug": "ao-khoac-chay-bo-nu-violet-air",
+          "productName": "Áo khoác chạy bộ nữ Violet Air",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+          "productSlug": "ao-gio-chay-bo-nam-orange-pace",
+          "productName": "Áo gió chạy bộ nam Orange Pace",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-005",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-006",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-007",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+          "productSlug": "ao-dau-argentina-2026-home-jm8396",
+          "productName": "Argentina 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+          "productSlug": "ao-dau-bi-2026-home-jm8381",
+          "productName": "Belgium 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+          "productSlug": "ao-dau-duc-nu-2026-home-jz4559",
+          "productName": "Germany Women 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+          "productSlug": "ao-dau-brazil-2026-home-if7054-724",
+          "productName": "Brazil 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "773289df-121a-4124-beba-bee575eb3b24",
+          "productSlug": "ao-dau-phap-2026-home-ib5300-480",
+          "productName": "France 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+          "productSlug": "ao-dau-anh-2026-home-ib5290-100",
+          "productName": "England 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-008",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+          "productSlug": "ao-khoac-chay-bo-nu-violet-air",
+          "productName": "Áo khoác chạy bộ nữ Violet Air",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+          "productSlug": "ao-gio-chay-bo-nam-orange-pace",
+          "productName": "Áo gió chạy bộ nam Orange Pace",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-009",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-010",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-011",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+          "productSlug": "ao-dau-argentina-2026-home-jm8396",
+          "productName": "Argentina 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+          "productSlug": "ao-dau-bi-2026-home-jm8381",
+          "productName": "Belgium 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+          "productSlug": "ao-dau-duc-nu-2026-home-jz4559",
+          "productName": "Germany Women 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+          "productSlug": "ao-dau-brazil-2026-home-if7054-724",
+          "productName": "Brazil 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "773289df-121a-4124-beba-bee575eb3b24",
+          "productSlug": "ao-dau-phap-2026-home-ib5300-480",
+          "productName": "France 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+          "productSlug": "ao-dau-anh-2026-home-ib5290-100",
+          "productName": "England 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-012",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+          "productSlug": "ao-khoac-chay-bo-nu-violet-air",
+          "productName": "Áo khoác chạy bộ nữ Violet Air",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+          "productSlug": "ao-gio-chay-bo-nam-orange-pace",
+          "productName": "Áo gió chạy bộ nam Orange Pace",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-013",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-014",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-015",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+          "productSlug": "ao-dau-argentina-2026-home-jm8396",
+          "productName": "Argentina 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+          "productSlug": "ao-dau-bi-2026-home-jm8381",
+          "productName": "Belgium 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+          "productSlug": "ao-dau-duc-nu-2026-home-jz4559",
+          "productName": "Germany Women 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+          "productSlug": "ao-dau-brazil-2026-home-if7054-724",
+          "productName": "Brazil 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "773289df-121a-4124-beba-bee575eb3b24",
+          "productSlug": "ao-dau-phap-2026-home-ib5300-480",
+          "productName": "France 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+          "productSlug": "ao-dau-anh-2026-home-ib5290-100",
+          "productName": "England 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-016",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+          "productSlug": "ao-khoac-chay-bo-nu-violet-air",
+          "productName": "Áo khoác chạy bộ nữ Violet Air",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+          "productSlug": "ao-gio-chay-bo-nam-orange-pace",
+          "productName": "Áo gió chạy bộ nam Orange Pace",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-017",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-018",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+          "productSlug": "ao-chay-bo-nam-aero-navy",
+          "productName": "Áo chạy bộ nam Aero Navy",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+          "productSlug": "ao-tank-chay-bo-nu-coral-flow",
+          "productName": "Áo tank chạy bộ nữ Coral Flow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-019",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+          "productSlug": "ao-tap-bong-da-nam-blaze-red",
+          "productName": "Áo tập bóng đá nam Blaze Red",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+          "productSlug": "ao-tap-bong-da-nu-royal-motion",
+          "productName": "Áo tập bóng đá nữ Royal Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+          "productSlug": "ao-dau-argentina-2026-home-jm8396",
+          "productName": "Argentina 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+          "productSlug": "ao-dau-bi-2026-home-jm8381",
+          "productName": "Belgium 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+          "productSlug": "ao-dau-duc-nu-2026-home-jz4559",
+          "productName": "Germany Women 2026 Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+          "productSlug": "ao-dau-brazil-2026-home-if7054-724",
+          "productName": "Brazil 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "773289df-121a-4124-beba-bee575eb3b24",
+          "productSlug": "ao-dau-phap-2026-home-ib5300-480",
+          "productName": "France 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+          "productSlug": "ao-dau-anh-2026-home-ib5290-100",
+          "productName": "England 2026 Stadium Home Jersey",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-020",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "tops",
+      "relevantProducts": [
+        {
+          "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+          "productSlug": "ao-chay-bo-dai-tay-uni-cloud",
+          "productName": "Áo chạy bộ dài tay Uni Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+          "productSlug": "ao-giu-nhiet-bong-da-uni-core",
+          "productName": "Áo giữ nhiệt bóng đá Uni Core",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+          "productSlug": "ao-khoac-chay-bo-nu-violet-air",
+          "productName": "Áo khoác chạy bộ nữ Violet Air",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+          "productSlug": "ao-gio-chay-bo-nam-orange-pace",
+          "productName": "Áo gió chạy bộ nam Orange Pace",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-021",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-022",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+          "productSlug": "quan-jogger-the-thao-uni-motion",
+          "productName": "Quần jogger thể thao Uni Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+          "productSlug": "quan-track-chay-bo-uni-forest",
+          "productName": "Quần track chạy bộ Uni Forest",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-023",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+          "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+          "productName": "Quần legging chạy bộ nữ Navy Flex",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-024",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-025",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+          "productSlug": "quan-jogger-the-thao-uni-motion",
+          "productName": "Quần jogger thể thao Uni Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+          "productSlug": "quan-track-chay-bo-uni-forest",
+          "productName": "Quần track chạy bộ Uni Forest",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-026",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+          "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+          "productName": "Quần legging chạy bộ nữ Navy Flex",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-027",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-028",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+          "productSlug": "quan-jogger-the-thao-uni-motion",
+          "productName": "Quần jogger thể thao Uni Motion",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+          "productSlug": "quan-track-chay-bo-uni-forest",
+          "productName": "Quần track chạy bộ Uni Forest",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-029",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+          "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+          "productName": "Quần legging chạy bộ nữ Navy Flex",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-030",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+          "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+          "productName": "Quần legging chạy bộ nữ Navy Flex",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-031",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+          "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+          "productName": "Quần legging chạy bộ nữ Navy Flex",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-032",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+          "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+          "productName": "Quần legging chạy bộ nữ Navy Flex",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-033",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+          "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+          "productName": "Quần legging chạy bộ nữ Navy Flex",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-034",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+          "productSlug": "quan-legging-chay-bo-nu-navy-flex",
+          "productName": "Quần legging chạy bộ nữ Navy Flex",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-035",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-036",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-037",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-038",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-039",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-040",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "bottoms",
+      "relevantProducts": [
+        {
+          "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+          "productSlug": "quan-short-chay-bo-nam-swift-black",
+          "productName": "Quần short chạy bộ nam Swift Black",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+          "productSlug": "quan-bong-da-nam-royal-kick",
+          "productName": "Quần bóng đá nam Royal Kick",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+          "productSlug": "quan-tap-bong-da-nu-black-drive",
+          "productName": "Quần tập bóng đá nữ Black Drive",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-041",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-042",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-043",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-044",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-045",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-046",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-047",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-048",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-049",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-050",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-051",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-052",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-053",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-054",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-055",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-056",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-057",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-058",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-059",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-060",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-061",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-062",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-063",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-064",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-065",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-066",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-067",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-068",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-069",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-070",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-071",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-072",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-073",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-074",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-075",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-076",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-077",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-078",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-079",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+          "productSlug": "giay-chay-bo-nam-cobalt-ride",
+          "productName": "Giày chạy bộ nam Cobalt Ride",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+          "productSlug": "giay-chay-bo-nu-coral-cloud",
+          "productName": "Giày chạy bộ nữ Coral Cloud",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "90df2223-3c14-49cf-822f-207603429950",
+          "productSlug": "giay-chay-bo-uni-pure-step",
+          "productName": "Giày chạy bộ Uni Pure Step",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-080",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "shoes",
+      "relevantProducts": [
+        {
+          "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+          "productSlug": "giay-da-bong-nam-turf-shadow",
+          "productName": "Giày đá bóng nam Turf Shadow",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+          "productSlug": "giay-da-bong-nu-turf-spark",
+          "productName": "Giày đá bóng nữ Turf Spark",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        },
+        {
+          "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+          "productSlug": "giay-futsal-uni-red-court",
+          "productName": "Giày futsal Uni Red Court",
+          "grade": 2,
+          "judgment": "visually relevant same-category substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-081",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+          "productSlug": "op-bao-ve-ong-dong-red-guard",
+          "productName": "Ốp bảo vệ ống đồng Red Guard",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-082",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+          "productSlug": "tat-bong-da-white-match",
+          "productName": "Tất bóng đá White Match",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-083",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+          "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+          "productName": "Bình nước thể thao Black Flow 750ml",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-084",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+          "productSlug": "bang-tay-the-thao-royal-pair",
+          "productName": "Băng tay thể thao Royal Pair",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-085",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+          "productSlug": "bang-tay-the-thao-royal-pair",
+          "productName": "Băng tay thể thao Royal Pair",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-086",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+          "productSlug": "op-bao-ve-ong-dong-red-guard",
+          "productName": "Ốp bảo vệ ống đồng Red Guard",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-087",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+          "productSlug": "tat-bong-da-white-match",
+          "productName": "Tất bóng đá White Match",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-088",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+          "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+          "productName": "Bình nước thể thao Black Flow 750ml",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-089",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+          "productSlug": "bang-tay-the-thao-royal-pair",
+          "productName": "Băng tay thể thao Royal Pair",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-090",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+          "productSlug": "tat-bong-da-white-match",
+          "productName": "Tất bóng đá White Match",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-091",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+          "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+          "productName": "Bình nước thể thao Black Flow 750ml",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-092",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+          "productSlug": "bang-tay-the-thao-royal-pair",
+          "productName": "Băng tay thể thao Royal Pair",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-093",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+          "productSlug": "tat-bong-da-white-match",
+          "productName": "Tất bóng đá White Match",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-094",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+          "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+          "productName": "Bình nước thể thao Black Flow 750ml",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-095",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+          "productSlug": "bang-tay-the-thao-royal-pair",
+          "productName": "Băng tay thể thao Royal Pair",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-096",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+          "productSlug": "op-bao-ve-ong-dong-red-guard",
+          "productName": "Ốp bảo vệ ống đồng Red Guard",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-097",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+          "productSlug": "tat-bong-da-white-match",
+          "productName": "Tất bóng đá White Match",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-098",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+          "productSlug": "binh-nuoc-the-thao-black-flow-750ml",
+          "productName": "Bình nước thể thao Black Flow 750ml",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-099",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+          "productSlug": "bang-tay-the-thao-royal-pair",
+          "productName": "Băng tay thể thao Royal Pair",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-100",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "accessories",
+      "relevantProducts": [
+        {
+          "productId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+          "productSlug": "op-bao-ve-ong-dong-red-guard",
+          "productName": "Ốp bảo vệ ống đồng Red Guard",
+          "grade": 2,
+          "judgment": "visually relevant same-subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "test-101",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-102",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-103",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-104",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-105",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-106",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-107",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-108",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-109",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-110",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-111",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-112",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-113",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-114",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-115",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-116",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-117",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-118",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-119",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "test-120",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    }
+  ]
+}
