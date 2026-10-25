@@ -33,6 +33,7 @@ class CatalogImage:
     image_url: str
     public_id: str | None
     product_status: str
+    asset_version: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -155,7 +156,10 @@ class VisualSearchRepository:
         async with await self._connect() as connection:
             async with connection.cursor() as cursor:
                 await cursor.execute(
-                    "select exists(select 1 from visual_search.processed_events where event_id = %s)",
+                    """select exists(
+                           select 1 from ai_retrieval.processed_events
+                           where consumer_name = 'visual-search-indexer' and event_id = %s
+                       )""",
                     (event_id,),
                 )
                 return bool((await cursor.fetchone())[0])
@@ -169,7 +173,7 @@ class VisualSearchRepository:
             async with connection.cursor() as cursor:
                 await cursor.execute(
                     """select coalesce(sum(estimated_cost_usd), 0)
-                       from visual_search.usage_events
+                       from ai_retrieval.usage_events
                        where occurred_at >= date_trunc('month', now())"""
                 )
                 return float((await cursor.fetchone())[0])
@@ -179,22 +183,32 @@ class VisualSearchRepository:
             async with connection.cursor() as cursor:
                 await cursor.execute(
                     """
-                    select m.id, m.provider, m.model, m.dimensions, m.status,
+                    select m.id, m.provider, m.model_name, m.dimensions, m.status,
                            (select count(*) from product_images pi join products p on p.id=pi.product_id
                             where p.status='ACTIVE')::int,
-                           (select count(*) from visual_search.image_embeddings e
+                           (select count(*) from ai_retrieval.product_image_embeddings e
+                            join product_images pi on pi.id=e.image_id and pi.product_id=e.product_id
+                              and pi.public_id=e.source_public_id and pi.asset_version=e.source_asset_version
                             join products p on p.id=e.product_id
-                            where e.model_version_id=m.id and e.status='READY' and p.status='ACTIVE')::int,
-                           (select count(*) from visual_search.image_embeddings e
+                            where e.model_id=m.id and e.status='READY' and p.status='ACTIVE')::int,
+                           (select count(*) from ai_retrieval.product_image_embeddings e
+                            join product_images pi on pi.id=e.image_id and pi.product_id=e.product_id
+                              and pi.public_id=e.source_public_id and pi.asset_version=e.source_asset_version
                             join products p on p.id=e.product_id
-                            where e.model_version_id=m.id and e.status='FAILED' and p.status='ACTIVE')::int,
-                           m.activated_at, m.revision
-                    from visual_search.model_versions m order by m.created_at desc
+                            where e.model_id=m.id and e.status='FAILED' and p.status='ACTIVE')::int,
+                           m.activated_at,
+                           dense_rank() over (partition by m.provider, m.model_name order by m.created_at)::int
+                    from ai_retrieval.embedding_models m
+                    where m.modality = 'PRODUCT_IMAGE'
+                    order by m.created_at desc
                     """
                 )
                 return [ModelVersionStats(*row) for row in await cursor.fetchall()]
 
-    async def create_model_version(self, provider: str, model: str, dimensions: int) -> ModelVersionStats:
+    async def create_model_version(
+        self, provider: str, model: str, model_version: str,
+        preprocessing_version: str, dimensions: int,
+    ) -> ModelVersionStats:
         if dimensions <= 0:
             raise ValueError("Model dimensions must be positive")
         model_id = uuid4()
@@ -203,13 +217,13 @@ class VisualSearchRepository:
                 async with connection.cursor() as cursor:
                     await cursor.execute(
                         """
-                        insert into visual_search.model_versions
-                            (id, provider, model, dimensions, revision, status)
-                        select %s, %s, %s, %s, coalesce(max(revision), 0) + 1, 'BUILDING'
-                        from visual_search.model_versions
-                        where provider = %s and model = %s
+                        insert into ai_retrieval.embedding_models
+                            (id, modality, provider, model_name, model_version, dimensions,
+                             distance_metric, normalization, preprocessing_version, status)
+                        values (%s, 'PRODUCT_IMAGE', %s, %s, %s, %s,
+                                'COSINE', 'L2', %s, 'DRAFT')
                         """,
-                        (model_id, provider, model, dimensions, provider, model),
+                        (model_id, provider, model, model_version, dimensions, preprocessing_version),
                     )
         versions = await self.model_versions()
         return next(version for version in versions if version.id == model_id)
@@ -219,7 +233,8 @@ class VisualSearchRepository:
             async with connection.transaction():
                 async with connection.cursor() as cursor:
                     await cursor.execute(
-                        "select status from visual_search.model_versions where id=%s for update", (model_id,)
+                        """select status from ai_retrieval.embedding_models
+                           where id=%s and modality='PRODUCT_IMAGE' for update""", (model_id,)
                     )
                     row = await cursor.fetchone()
                     if row is None:
@@ -228,22 +243,27 @@ class VisualSearchRepository:
                         """select count(*)::int,
                                   count(*) filter(where e.status='READY')::int
                            from product_images pi join products p on p.id=pi.product_id
-                           left join visual_search.image_embeddings e
-                             on e.image_id=pi.id and e.model_version_id=%s
+                           left join ai_retrieval.product_image_embeddings e
+                             on e.image_id=pi.id and e.model_id=%s
+                            and e.product_id=pi.product_id
+                            and e.source_public_id=pi.public_id
+                            and e.source_asset_version=pi.asset_version
                            where p.status='ACTIVE'""", (model_id,)
                     )
                     total, ready = await cursor.fetchone()
                     if total == 0 or ready / total < 0.98:
                         raise ValueError(f"Model coverage {ready}/{total} is below the 98% activation gate")
                     await cursor.execute(
-                        "update visual_search.model_versions set status='INACTIVE', updated_at=now() where status='ACTIVE' and id<>%s",
+                        """update ai_retrieval.embedding_models
+                           set status='RETIRED', updated_at=now()
+                           where modality='PRODUCT_IMAGE' and status='ACTIVE' and id<>%s""",
                         (model_id,),
                     )
                     await cursor.execute(
-                        """update visual_search.model_versions
-                           set status='ACTIVE', target_image_count=%s, ready_image_count=%s,
-                               activated_at=now(), updated_at=now() where id=%s""",
-                        (total, ready, model_id),
+                        """update ai_retrieval.embedding_models
+                           set status='ACTIVE', activated_at=coalesce(activated_at, now()), updated_at=now()
+                           where id=%s""",
+                        (model_id,),
                     )
         versions = await self.model_versions()
         return next(version for version in versions if version.id == model_id)
@@ -266,7 +286,7 @@ class VisualSearchRepository:
             async with connection.cursor() as cursor:
                 await cursor.execute(
                     """
-                    select pi.id, pi.product_id, pi.image_url, pi.public_id, p.status
+                    select pi.id, pi.product_id, pi.secure_url, pi.public_id, p.status, pi.asset_version
                     from product_images pi join products p on p.id = pi.product_id
                     where pi.id = %s
                     """,
@@ -285,7 +305,9 @@ class VisualSearchRepository:
         async with await self._connect() as connection:
             async with connection.cursor() as cursor:
                 await cursor.execute(
-                    "select status, image_hash, color_signature from visual_search.image_embeddings where image_id = %s and model_version_id = %s",
+                    """select status, image_hash, color_signature
+                       from ai_retrieval.product_image_embeddings
+                       where image_id = %s and model_id = %s""",
                     (image_id, model_id),
                 )
                 row = await cursor.fetchone()
@@ -299,7 +321,9 @@ class VisualSearchRepository:
             async with connection.transaction():
                 async with connection.cursor() as cursor:
                     await cursor.execute(
-                        "update visual_search.image_embeddings set color_signature=%s, updated_at=now() where image_id=%s and model_version_id=%s",
+                        """update ai_retrieval.product_image_embeddings
+                           set color_signature=%s, updated_at=now()
+                           where image_id=%s and model_id=%s""",
                         (list(signature), image_id, model_id),
                     )
                     if event_id is not None and event_type is not None and event_version is not None:
@@ -312,17 +336,22 @@ class VisualSearchRepository:
                 async with connection.cursor() as cursor:
                     await cursor.execute(
                         """
-                        insert into visual_search.image_embeddings
-                            (image_id, product_id, model_version_id, status, attempts, last_attempt_at)
-                        values (%s, %s, %s, 'PROCESSING', 1, now())
-                        on conflict (image_id, model_version_id) do update
-                        set status = 'PROCESSING', attempts = visual_search.image_embeddings.attempts + 1,
+                        insert into ai_retrieval.product_image_embeddings
+                            (image_id, product_id, model_id, source_public_id, source_asset_version,
+                             status, attempts, last_attempt_at)
+                        values (%s, %s, %s, %s, %s, 'PROCESSING', 1, now())
+                        on conflict (image_id, model_id) do update
+                        set product_id = excluded.product_id,
+                            source_public_id = excluded.source_public_id,
+                            source_asset_version = excluded.source_asset_version,
+                            status = 'PROCESSING',
+                            attempts = ai_retrieval.product_image_embeddings.attempts + 1,
                             last_attempt_at = now(), last_error = null, failure_code = null, updated_at = now()
-                        where visual_search.image_embeddings.status <> 'PROCESSING'
-                           or visual_search.image_embeddings.last_attempt_at < now() - interval '15 minutes'
+                        where ai_retrieval.product_image_embeddings.status <> 'PROCESSING'
+                           or ai_retrieval.product_image_embeddings.last_attempt_at < now() - interval '15 minutes'
                         returning image_id
                         """,
-                        (image.id, image.product_id, model_id),
+                        (image.id, image.product_id, model_id, image.public_id, image.asset_version),
                     )
                     changed = await cursor.fetchone() is not None
                     if changed:
@@ -347,22 +376,22 @@ class VisualSearchRepository:
                 async with connection.cursor() as cursor:
                     await cursor.execute(
                         """
-                        update visual_search.image_embeddings
-                        set embedding = %s::vector, image_hash = %s, status = 'READY', last_error = null,
+                        update ai_retrieval.product_image_embeddings
+                        set embedding = %s::extensions.vector, image_hash = %s, status = 'READY', last_error = null,
                             failure_code = null, color_signature = %s,
-                            ready_at = now(), updated_at = now()
-                        where image_id = %s and model_version_id = %s
+                            embedded_at = now(), updated_at = now()
+                        where image_id = %s and model_id = %s
                         """,
                         (vector, image_hash, list(color_signature), image.id, model.id),
                     )
                     await cursor.execute(
                         """
-                        insert into visual_search.usage_events
-                            (id, provider, model, operation, image_pixels, text_tokens,
+                        insert into ai_retrieval.usage_events
+                            (id, model_id, provider, model_name, operation, image_pixels, text_tokens,
                              estimated_cost_usd, latency_ms, success)
-                        values (%s, %s, %s, 'DOCUMENT_EMBEDDING', %s, %s, %s, %s, true)
+                        values (%s, %s, %s, %s, 'DOCUMENT_EMBEDDING', %s, %s, %s, %s, true)
                         """,
-                        (uuid4(), model.provider, model.model, result.usage.image_pixels,
+                        (uuid4(), model.id, model.provider, model.model, result.usage.image_pixels,
                          result.usage.text_tokens, self._estimated_cost(result.usage.image_pixels), latency_ms),
                     )
                     if event_id is not None and event_type is not None and event_version is not None:
@@ -383,19 +412,20 @@ class VisualSearchRepository:
     async def _insert_processed(cursor: Any, event_id: UUID, event_type: str, event_version: int) -> None:
         await cursor.execute(
             """
-            insert into visual_search.processed_events(event_id, event_type, event_version)
-            values (%s, %s, %s) on conflict (event_id) do nothing
+            insert into ai_retrieval.processed_events(consumer_name, event_id, aggregate_version)
+            values ('visual-search-indexer', %s, %s)
+            on conflict (consumer_name, event_id) do nothing
             """,
-            (event_id, event_type, event_version),
+            (event_id, event_version),
         )
 
     @staticmethod
     async def _complete_job_item(cursor: Any, event_id: UUID) -> None:
         await cursor.execute(
             """
-            update visual_search.indexing_job_items
-            set status = 'COMPLETED', completed_at = now(), updated_at = now()
-            where event_id = %s and status <> 'COMPLETED'
+            update ai_retrieval.indexing_job_items
+            set status = 'SUCCEEDED', updated_at = now()
+            where event_id = %s and status <> 'SUCCEEDED'
             returning job_id
             """,
             (event_id,),
@@ -412,22 +442,21 @@ class VisualSearchRepository:
             with counts as (
                 select count(*) filter (where status = 'PENDING') as pending,
                        count(*) filter (where status = 'PROCESSING') as processing,
-                       count(*) filter (where status = 'COMPLETED') as completed,
+                       count(*) filter (where status = 'SUCCEEDED') as completed,
                        count(*) filter (where status = 'FAILED') as failed
-                from visual_search.indexing_job_items where job_id = %s
+                from ai_retrieval.indexing_job_items where job_id = %s
             )
-            update visual_search.indexing_jobs j
-            set pending_count = counts.pending,
-                processing_count = counts.processing,
-                completed_count = counts.completed,
+            update ai_retrieval.indexing_jobs j
+            set success_count = counts.completed,
                 failed_count = counts.failed,
                 status = case
                     when counts.pending = 0 and counts.processing = 0 and counts.failed = 0 then 'COMPLETED'
-                    when counts.pending = 0 and counts.processing = 0 then 'PARTIAL'
+                    when counts.pending = 0 and counts.processing = 0 and counts.completed > 0 then 'PARTIALLY_COMPLETED'
+                    when counts.pending = 0 and counts.processing = 0 then 'FAILED'
                     else 'RUNNING'
                 end,
                 started_at = coalesce(started_at, now()),
-                completed_at = case
+                finished_at = case
                     when counts.pending = 0 and counts.processing = 0 then now()
                     else null
                 end,
@@ -438,17 +467,17 @@ class VisualSearchRepository:
         )
         await cursor.execute(
             """
-            update visual_search.indexing_jobs j
+            update ai_retrieval.indexing_jobs j
             set source_counts = coalesce((
                     select jsonb_object_agg(source_provider, amount)
                     from (select coalesce(source_provider, 'unknown') source_provider, count(*) amount
-                          from visual_search.indexing_job_items where job_id = %s
+                          from ai_retrieval.indexing_job_items where job_id = %s
                           group by coalesce(source_provider, 'unknown')) sources
                 ), '{}'::jsonb),
                 error_summary = coalesce((
                     select jsonb_object_agg(failure_code, amount)
                     from (select coalesce(failure_code, 'UNKNOWN') failure_code, count(*) amount
-                          from visual_search.indexing_job_items
+                          from ai_retrieval.indexing_job_items
                           where job_id = %s and status = 'FAILED'
                           group by coalesce(failure_code, 'UNKNOWN')) failures
                 ), '{}'::jsonb)
@@ -459,29 +488,13 @@ class VisualSearchRepository:
 
     @staticmethod
     async def _refresh_model_counts(cursor: Any, model_id: UUID) -> None:
-        await cursor.execute(
-            """
-            update visual_search.model_versions m
-            set target_image_count = stats.target_count,
-                ready_image_count = stats.ready_count,
-                failed_image_count = stats.failed_count,
-                updated_at = now()
-            from (
-                select count(pi.id)::int target_count,
-                       count(e.image_id) filter(where e.status='READY')::int ready_count,
-                       count(e.image_id) filter(where e.status='FAILED')::int failed_count
-                from products p join product_images pi on pi.product_id=p.id
-                left join visual_search.image_embeddings e
-                  on e.image_id=pi.id and e.model_version_id=%s
-                where p.status='ACTIVE'
-            ) stats where m.id=%s
-            """,
-            (model_id, model_id),
-        )
+        # V2 computes model coverage from immutable vectors instead of caching
+        # counters on the model registry row.
+        await cursor.execute("select 1 from ai_retrieval.embedding_models where id=%s", (model_id,))
 
     @staticmethod
     async def _refresh_all_model_counts(cursor: Any) -> None:
-        await cursor.execute("select id from visual_search.model_versions")
+        await cursor.execute("select id from ai_retrieval.embedding_models where modality='PRODUCT_IMAGE'")
         for row in await cursor.fetchall():
             await VisualSearchRepository._refresh_model_counts(cursor, row[0])
 
@@ -496,12 +509,13 @@ class VisualSearchRepository:
                 async with connection.cursor() as cursor:
                     await cursor.execute(
                         """
-                        insert into visual_search.image_embeddings
-                            (image_id, product_id, model_version_id, status, attempts, last_error,
-                             failure_code, last_attempt_at)
-                        select pi.id, pi.product_id, %s, 'FAILED', 1, %s, %s, now()
+                        insert into ai_retrieval.product_image_embeddings
+                            (image_id, product_id, model_id, source_public_id, source_asset_version,
+                             status, attempts, last_error, failure_code, last_attempt_at)
+                        select pi.id, pi.product_id, %s, pi.public_id, pi.asset_version,
+                               'FAILED', 1, %s, %s, now()
                         from product_images pi where pi.id = %s
-                        on conflict (image_id, model_version_id) do update
+                        on conflict (image_id, model_id) do update
                         set status = 'FAILED', last_error = excluded.last_error,
                             failure_code = excluded.failure_code, updated_at = now()
                         """,
@@ -515,9 +529,9 @@ class VisualSearchRepository:
                 async with connection.cursor() as cursor:
                     await cursor.execute(
                         """
-                        update visual_search.image_embeddings
+                        update ai_retrieval.product_image_embeddings
                         set status = 'PENDING', last_error = %s, updated_at = now()
-                        where image_id = %s and model_version_id = %s
+                        where image_id = %s and model_id = %s
                           and status = 'PROCESSING'
                         """,
                         (error[:2000], image_id, model_id),
@@ -530,7 +544,7 @@ class VisualSearchRepository:
                 async with connection.cursor() as cursor:
                     await cursor.execute(
                         """
-                        update visual_search.indexing_job_items
+                        update ai_retrieval.indexing_job_items
                         set status = 'FAILED', last_error = %s, failure_code = %s, updated_at = now()
                         where event_id = %s returning job_id
                         """,
@@ -550,6 +564,8 @@ class VisualSearchRepository:
                     select pi.id, pi.product_id,
                            case
                                when e.image_id is null then 'MISSING'
+                               when e.source_public_id is distinct from pi.public_id
+                                 or e.source_asset_version is distinct from pi.asset_version then 'SOURCE_CHANGED'
                                when e.status = 'PROCESSING' then 'PROCESSING_TIMEOUT'
                                when e.status = 'READY' and e.color_signature is null then 'COLOR_MISSING'
                                when e.status = 'FAILED' and e.failure_code = 'RetryableEventError'
@@ -559,11 +575,13 @@ class VisualSearchRepository:
                            end as reason
                     from product_images pi
                     join products p on p.id = pi.product_id
-                    left join visual_search.image_embeddings e
-                      on e.image_id = pi.id and e.model_version_id = %s
+                    left join ai_retrieval.product_image_embeddings e
+                      on e.image_id = pi.id and e.model_id = %s
                     where p.status = 'ACTIVE'
                       and (
                         e.image_id is null
+                        or e.source_public_id is distinct from pi.public_id
+                        or e.source_asset_version is distinct from pi.asset_version
                         or (e.status = 'READY' and e.color_signature is null)
                         or e.status = 'PENDING'
                         or e.status = 'STALE'
@@ -624,7 +642,7 @@ class VisualSearchRepository:
                 await cursor.execute(
                     """
                     select exists(
-                        select 1 from visual_search.indexing_jobs
+                        select 1 from ai_retrieval.indexing_jobs
                         where job_type = 'RECONCILIATION'
                           and created_at >= now() - %s::interval
                     )
@@ -645,12 +663,15 @@ class VisualSearchRepository:
                 async with connection.cursor() as cursor:
                     await cursor.execute(
                         """
-                        insert into visual_search.indexing_jobs
-                            (id, job_type, status, model_version_id, requested_by,
-                             total_count, pending_count, source_counts, completed_at)
-                        select %s, %s, %s, id, %s, %s, %s, %s::jsonb,
+                        insert into ai_retrieval.indexing_jobs
+                            (id, job_type, status, model_id, requested_by,
+                             total_count, success_count, failed_count, source_counts,
+                             started_at, finished_at)
+                        select %s, %s, %s, id, %s, %s, 0, 0, %s::jsonb,
+                               case when %s = 0 then now() else null end,
                                case when %s = 0 then now() else null end
-                        from visual_search.model_versions where status = 'ACTIVE'
+                        from ai_retrieval.embedding_models
+                        where modality='PRODUCT_IMAGE' and status = 'ACTIVE'
                         """,
                         (
                             job_id,
@@ -658,8 +679,8 @@ class VisualSearchRepository:
                             "COMPLETED" if not candidates else "PENDING",
                             requested_by,
                             len(candidates),
-                            len(candidates),
                             "{}",
+                            len(candidates),
                             len(candidates),
                         ),
                     )
@@ -680,19 +701,23 @@ class VisualSearchRepository:
                         await cursor.execute(
                             """
                             insert into integration_outbox
-                                (id, event_type, event_version, aggregate_type, aggregate_id, payload)
-                            values (%s, %s, 1, 'PRODUCT', %s, %s::jsonb)
+                                (id, idempotency_key, event_type, event_version,
+                                 aggregate_type, aggregate_id, aggregate_version, payload)
+                            values (%s, %s, %s, 1, 'PRODUCT', %s, 1, %s::jsonb)
                             """,
-                            (event_id, event_type, candidate.product_id, json.dumps(payload)),
+                            (
+                                event_id, f"VISUAL_REINDEX:{event_id}", event_type,
+                                candidate.product_id, json.dumps(payload),
+                            ),
                         )
                         await cursor.execute(
                             """
-                            insert into visual_search.indexing_job_items
-                                (job_id, image_id, event_id, source_provider)
-                            select %s, %s, %s, case
-                                when image_url like 'https://res.cloudinary.com/%%' then 'cloudinary'
-                                when image_url like 'https://cdn.shopify.com/%%' then 'shopify'
-                                when image_url like 'https://%%' then 'unsupported_host'
+                            insert into ai_retrieval.indexing_job_items
+                                (job_id, entity_type, entity_id, event_id, source_provider)
+                            select %s, 'PRODUCT_IMAGE', %s, %s, case
+                                when secure_url like 'https://res.cloudinary.com/%%' then 'cloudinary'
+                                when secure_url like 'https://cdn.shopify.com/%%' then 'shopify'
+                                when secure_url like 'https://%%' then 'unsupported_host'
                                 else 'relative_or_non_https' end
                             from product_images where id = %s
                             """,
@@ -759,13 +784,13 @@ class VisualSearchRepository:
         async with connection.cursor() as cursor:
             await cursor.execute(
                         """
-                        insert into visual_search.usage_events
-                            (id, provider, model, operation, image_pixels, text_tokens,
+                        insert into ai_retrieval.usage_events
+                            (id, model_id, provider, model_name, operation, image_pixels, text_tokens,
                              estimated_cost_usd, latency_ms, success, error_code)
-                        values (%s, %s, %s, 'QUERY_EMBEDDING', %s, %s, %s, %s, %s, %s)
+                        values (%s, %s, %s, %s, 'QUERY_EMBEDDING', %s, %s, %s, %s, %s, %s)
                         """,
                         (
-                            uuid4(), model.provider, model.model, result.usage.image_pixels,
+                            uuid4(), model.id, model.provider, model.model, result.usage.image_pixels,
                             result.usage.text_tokens, self._estimated_cost(result.usage.image_pixels),
                             latency_ms, success, error_code,
                         ),
@@ -785,11 +810,15 @@ class VisualSearchRepository:
                         count(pi.id) filter (where e.image_id is null) as missing
                     from product_images pi
                     join products p on p.id = pi.product_id
-                    left join visual_search.image_embeddings e
+                    left join ai_retrieval.product_image_embeddings e
                       on e.image_id = pi.id
-                     and e.model_version_id = (
-                           select id from visual_search.model_versions where status = 'ACTIVE' limit 1
+                     and e.model_id = (
+                           select id from ai_retrieval.embedding_models
+                           where modality='PRODUCT_IMAGE' and status = 'ACTIVE' limit 1
                        )
+                     and e.product_id = pi.product_id
+                     and e.source_public_id = pi.public_id
+                     and e.source_asset_version = pi.asset_version
                     where p.status = 'ACTIVE'
                     """
                 )
@@ -816,7 +845,7 @@ class VisualSearchRepository:
                         coalesce(sum(estimated_cost_usd), 0) as estimated_cost_usd,
                         count(*) filter (where success) as success_count,
                         count(*) filter (where not success) as failure_count
-                    from visual_search.usage_events
+                    from ai_retrieval.usage_events
                     where occurred_at >= now() - (%s || ' days')::interval
                     group by day, operation
                     order by day desc, operation
@@ -842,10 +871,10 @@ class VisualSearchRepository:
             async with connection.cursor() as cursor:
                 await cursor.execute(
                     """
-                    select id, job_type, status, total_count, completed_count,
-                           failed_count, pending_count, created_at, completed_at,
-                           source_counts, error_summary
-                    from visual_search.indexing_jobs
+                    select id, job_type, status, total_count, success_count,
+                           failed_count, greatest(total_count-success_count-failed_count, 0),
+                           created_at, finished_at, source_counts, error_summary
+                    from ai_retrieval.indexing_jobs
                     order by created_at desc
                     limit %s
                     """,
@@ -873,15 +902,18 @@ class VisualSearchRepository:
             async with connection.cursor() as cursor:
                 await cursor.execute(
                     """
-                    select id, provider, model, dimensions
-                    from visual_search.model_versions
-                    where status = 'ACTIVE'
+                    select id, provider, model_name, dimensions, model_version, preprocessing_version
+                    from ai_retrieval.embedding_models
+                    where modality='PRODUCT_IMAGE' and status = 'ACTIVE'
                     limit 1
                     """
                 )
                 model_row = await cursor.fetchone()
                 model = (
-                    ModelVersion(model_row[0], model_row[1], model_row[2], int(model_row[3]))
+                    ModelVersion(
+                        model_row[0], model_row[1], model_row[2], int(model_row[3]),
+                        model_row[4], model_row[5],
+                    )
                     if model_row else None
                 )
                 await cursor.execute(

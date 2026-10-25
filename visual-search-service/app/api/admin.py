@@ -9,6 +9,7 @@ from datetime import date
 from uuid import UUID
 
 import aio_pika
+from psycopg import Error as PsycopgError
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
@@ -164,6 +165,8 @@ class ModelVersionResponse(BaseModel):
 class CreateModelVersionRequest(BaseModel):
     provider: str
     model: str
+    model_version: str
+    preprocessing_version: str
     dimensions: int
 
 
@@ -202,7 +205,7 @@ async def get_operations(
     try:
         stats: OperationsStats = await repo.operations_stats()
         monthly_cost = await repo.current_month_cost()
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable") from exc
     return OperationsResponse(
         provider=stats.model.provider if stats.model else None,
@@ -236,7 +239,7 @@ def _model_response(item: ModelVersionStats) -> ModelVersionResponse:
 async def get_models(repo: VisualSearchRepository = Depends(get_repository)) -> ModelVersionsResponse:
     try:
         return ModelVersionsResponse(models=[_model_response(item) for item in await repo.model_versions()])
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=503, detail="Database unavailable") from exc
 
 
@@ -245,13 +248,20 @@ async def create_model(
     request: CreateModelVersionRequest,
     repo: VisualSearchRepository = Depends(get_repository),
 ) -> ModelVersionResponse:
-    provider = request.provider.strip().lower()
+    provider = request.provider.strip().upper()
     model = request.model.strip()
-    if not provider or not model or request.dimensions <= 0:
-        raise HTTPException(status_code=422, detail="provider, model and positive dimensions are required")
+    model_version = request.model_version.strip()
+    preprocessing_version = request.preprocessing_version.strip()
+    if not provider or not model or not model_version or not preprocessing_version or request.dimensions <= 0:
+        raise HTTPException(
+            status_code=422,
+            detail="provider, model, model_version, preprocessing_version and positive dimensions are required",
+        )
     try:
-        return _model_response(await repo.create_model_version(provider, model, request.dimensions))
-    except RepositoryUnavailableError as exc:
+        return _model_response(await repo.create_model_version(
+            provider, model, model_version, preprocessing_version, request.dimensions
+        ))
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=503, detail="Database unavailable") from exc
 
 
@@ -262,7 +272,7 @@ async def activate_model(model_id: UUID, repo: VisualSearchRepository = Depends(
         return _model_response(await repo.activate_model_version(model_id))
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=503, detail="Database unavailable") from exc
 
 
@@ -285,7 +295,7 @@ async def backfill_missing(
         filtered = ReconciliationReport(total=len(candidates), reasons={"MISSING": len(candidates)}, candidates=candidates)
         job = await service.enqueue("BACKFILL", filtered)
         return EnqueueResponse(job_id=str(job.id), enqueued_count=job.total_count)
-    except (RepositoryUnavailableError, RuntimeError) as exc:
+    except (RepositoryUnavailableError, PsycopgError, RuntimeError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
 
 
@@ -312,7 +322,7 @@ async def reindex(
         report = ReconciliationReport(total=len(candidates), reasons={"REQUESTED": len(candidates)}, candidates=tuple(candidates))
         job = await service.enqueue("IMAGE" if request.image_id else "PRODUCT", report)
         return EnqueueResponse(job_id=str(job.id), enqueued_count=job.total_count)
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable") from exc
 
 
@@ -330,7 +340,7 @@ async def get_coverage(
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Visual search is disabled")
     try:
         stats: CoverageStats = await repo.coverage_stats()
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable") from exc
     return CoverageResponse(
         total_active_images=stats.total_active_images,
@@ -358,7 +368,7 @@ async def get_usage(
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Visual search is disabled")
     try:
         rows: list[UsageDayStat] = await repo.usage_stats(days)
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable") from exc
     return UsageResponse(
         days=days,
@@ -393,7 +403,7 @@ async def get_jobs(
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Visual search is disabled")
     try:
         jobs: list[RecentJob] = await repo.recent_jobs(limit)
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable") from exc
     return JobsResponse(
         jobs=[
@@ -439,7 +449,7 @@ async def retry_failed(
         if failed_only_report.total == 0:
             return RetryFailedResponse(job_id="", enqueued_count=0)
         job = await service.enqueue("RECONCILIATION", failed_only_report)
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable") from exc
     except RuntimeError as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc

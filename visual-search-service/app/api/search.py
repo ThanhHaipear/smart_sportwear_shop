@@ -3,6 +3,7 @@ import time
 
 from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, UploadFile, status
 from pydantic import BaseModel
+from psycopg import Error as PsycopgError
 
 from app.config import Settings, get_settings
 from app.persistence.repository import RepositoryUnavailableError, VisualSearchRepository
@@ -87,7 +88,7 @@ async def search_by_image(
             if settings.visual_embedding_provider != "hugging_face_local":
                 await repository.record_query_usage_on(connection, model, result, latency_ms)
             await connection.commit()
-    except RepositoryUnavailableError as exc:
+    except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Visual search is unavailable") from exc
     except (VoyageProviderError, Siglip2ProviderError, ValueError, RuntimeError) as exc:
         raise HTTPException(

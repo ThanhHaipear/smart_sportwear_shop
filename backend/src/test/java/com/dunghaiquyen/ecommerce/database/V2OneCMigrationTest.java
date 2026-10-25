@@ -34,7 +34,7 @@ class V2OneCMigrationTest {
                 .cleanDisabled(false)
                 .load();
         flyway.clean();
-        assertEquals(7, flyway.migrate().migrationsExecuted);
+        assertEquals(8, flyway.migrate().migrationsExecuted);
         flyway.validate();
         assertEquals(0, flyway.migrate().migrationsExecuted);
         seedFixture();
@@ -45,7 +45,7 @@ class V2OneCMigrationTest {
         Set<String> expected = Set.of(
                 "embedding_models", "product_search_documents", "search_variant_facets",
                 "processed_events", "product_text_embeddings", "product_image_embeddings",
-                "indexing_jobs", "indexing_job_items");
+                "indexing_jobs", "indexing_job_items", "usage_events");
         try (Connection connection = open()) {
             assertTrue(queryBoolean(connection,
                     "select exists (select 1 from pg_extension where extname='vector')"));
@@ -221,6 +221,28 @@ class V2OneCMigrationTest {
                 values ('65000000-0000-0000-0000-000000000001', 'PRODUCT',
                         '62000000-0000-0000-0000-000000000001', 'FAILED', null)
                 """);
+    }
+
+    @Test
+    void visualSearchOperationalTelemetryStoresNoQueryPayloadOrIdentity() throws Exception {
+        try (Connection connection = open()) {
+            assertTrue(queryBoolean(connection, """
+                    select exists (
+                        select 1 from information_schema.columns
+                         where table_schema='ai_retrieval'
+                           and table_name='product_image_embeddings'
+                           and column_name='color_signature'
+                    )
+                    """));
+            assertFalse(queryBoolean(connection, """
+                    select exists (
+                        select 1 from information_schema.columns
+                         where table_schema='ai_retrieval'
+                           and table_name='usage_events'
+                           and column_name in ('query_image', 'image_bytes', 'user_id', 'token')
+                    )
+                    """));
+        }
     }
 
     private static Connection open() throws SQLException {

@@ -38,13 +38,14 @@ def test_readiness_checks_dependencies_when_enabled() -> None:
     try:
         with patch(
             "app.api.health.ReadinessChecker.check",
-            new=AsyncMock(return_value=ReadinessResult(True, "up", "active", "up")),
+            new=AsyncMock(return_value=ReadinessResult(True, "up", "active", "complete", "not_required")),
         ):
             response = TestClient(app).get("/health/ready")
     finally:
         app.dependency_overrides.clear()
     assert response.status_code == 200
     assert response.json()["status"] == "ready"
+    assert response.json()["checks"]["coverage"] == "complete"
 
 
 def test_readiness_returns_503_when_database_or_model_is_down() -> None:
@@ -59,7 +60,7 @@ def test_readiness_returns_503_when_database_or_model_is_down() -> None:
     try:
         with patch(
             "app.api.health.ReadinessChecker.check",
-            new=AsyncMock(return_value=ReadinessResult(False, "down", "unknown", "not_required")),
+            new=AsyncMock(return_value=ReadinessResult(False, "down", "unknown", "unknown", "not_required")),
         ):
             response = TestClient(app).get("/health/ready")
     finally:
@@ -81,13 +82,33 @@ def test_query_readiness_does_not_require_rabbitmq() -> None:
     checker = ReadinessChecker(settings)
     with patch.object(
         checker,
-        "_check_database_and_model",
-        new=AsyncMock(return_value=("up", "active")),
+        "_check_database_model_and_coverage",
+        new=AsyncMock(return_value=("up", "active", "complete")),
     ):
         result = asyncio.run(checker.check())
 
     assert result.ready is True
     assert result.rabbitmq == "not_required"
+
+
+def test_query_readiness_fails_closed_when_coverage_is_incomplete() -> None:
+    settings = Settings(
+        _env_file=None,
+        visual_search_enabled=True,
+        database_url="postgresql://configured",
+        internal_service_token="configured",
+        cloudinary_cloud_name="demo",
+    )
+    checker = ReadinessChecker(settings)
+    with patch.object(
+        checker,
+        "_check_database_model_and_coverage",
+        new=AsyncMock(return_value=("up", "active", "incomplete")),
+    ):
+        result = asyncio.run(checker.check())
+
+    assert result.ready is False
+    assert result.coverage == "incomplete"
 
 
 def test_lifespan_preloads_local_model_before_serving() -> None:

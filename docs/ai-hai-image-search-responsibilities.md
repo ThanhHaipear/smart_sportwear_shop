@@ -42,7 +42,7 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-06 | Xây dựng tập ảnh TEST độc lập | `DONE` | 100% | P0 | HAI-01, HAI-05 |
 | HAI-07 | Viết runner và chạy đánh giá | `DONE` | 100% | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và so sánh baseline | `DONE` | 100% | P1 | HAI-07 |
-| HAI-09 | Hardening, rollout và rollback | `TODO` | 40% | P1 | HAI-03, HAI-04 |
+| HAI-09 | Hardening, rollout và rollback | `IN PROGRESS` | 80% | P1 | HAI-03, HAI-04 |
 | HAI-10 | Hoàn thiện nội dung báo cáo | `TODO` | 20% | P1 | HAI-07, HAI-08 |
 
 ## 4. Những phần đã có, không làm lại
@@ -270,20 +270,22 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 ### HAI-09 Hardening, rollout và rollback
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `IN PROGRESS`
 
 | Xong | ID | Việc cần làm | Điều kiện đạt |
 |---:|---|---|---|
-| [ ] | HAI-09.1 | Feature flag mặc định tắt trước acceptance | Không bật ngoài ý muốn |
-| [ ] | HAI-09.2 | Internal token chỉ ở server | Frontend không thấy token |
-| [ ] | HAI-09.3 | Rate limit tại Spring | Test đạt |
-| [ ] | HAI-09.4 | Byte/MIME/pixel/timeout guard | Test đạt |
-| [ ] | HAI-09.5 | Xóa query image sau xử lý | Không vượt retention |
+| [x] | HAI-09.1 | Feature flag mặc định tắt trước acceptance | Không bật ngoài ý muốn |
+| [x] | HAI-09.2 | Internal token chỉ ở server | Frontend không thấy token |
+| [x] | HAI-09.3 | Rate limit tại Spring | Test đạt |
+| [x] | HAI-09.4 | Byte/MIME/pixel/timeout guard | Test đạt |
+| [x] | HAI-09.5 | Xóa query image sau xử lý | Không vượt retention |
 | [ ] | HAI-09.6 | Audit log | Không có ảnh/token/secret/PII |
-| [ ] | HAI-09.7 | Readiness model/DB/coverage | Phản ánh đúng trạng thái |
-| [ ] | HAI-09.8 | Viết rollout checklist | Có precondition và smoke test |
+| [x] | HAI-09.7 | Readiness model/DB/coverage | Phản ánh đúng trạng thái |
+| [x] | HAI-09.8 | Viết rollout checklist | Có precondition và smoke test |
 | [ ] | HAI-09.9 | Thử rollback feature/model | Rollback thành công |
-| [ ] | HAI-09.10 | Bảo vệ model/vector được evaluation tham chiếu | Không xóa artifact cần tái lập |
+| [x] | HAI-09.10 | Bảo vệ model/vector được evaluation tham chiếu | Không xóa artifact cần tái lập |
+
+**Bằng chứng hardening (25/10/2026):** repository visual search đã được đồng bộ hoàn toàn sang schema V2 `ai_retrieval`; migration V8 bổ sung retry/job correlation và usage telemetry không lưu query image, token, secret hoặc user ID. Readiness fail-closed khi model sai revision, coverage không đủ hoặc truy vấn coverage lỗi. Migration V1–V8 và repository read/write đã được kiểm thử trên PostgreSQL 17.11 + pgvector tạm thời; `V2OneCMigrationTest` 5/5, repository integration 1/1 và visual service 118 passed/2 skipped. Smoke read-only Supabase hiện tại xác nhận readiness `ready`, coverage 81/81 và model ACTIVE; jobs/usage fail-closed 503 cho tới khi V8 được deploy. Còn HAI-09.6 audit log cho thao tác admin và HAI-09.9 rollback drill; rollout tiếp tục tắt do TEST v1 không đạt acceptance.
 
 ### HAI-10 Hoàn thiện nội dung báo cáo
 
@@ -350,6 +352,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 | 24/10/2026 | Thu thập, QA và khóa TEST v1 độc lập | 120 query; 20/nhóm; 120 judgment COMPLETE; 0 exact/near duplicate chưa xử lý; validator PASS | `datasets/image-search/test-v1/`; `evidence/image-search-v2/test-v1-validation-2026-10-24.json` | Còn ký duyệt của thành viên dự án khác trước benchmark/nộp cuối | Ký duyệt rồi chạy HAI-07.12 đúng một lần |
 | 24/10/2026 | Chạy benchmark TEST v1 cuối sau ký duyệt của Dũng | 120/120 request; acceptance FAILED: Recall@5 1.67%, category accuracy 4%; unknown rejection 100%, P95 670.52 ms | `evidence/image-search-v2/test-v1-final/` | Chất lượng ảnh độc lập không đạt; không được retune/chạy lại TEST v1 | Thực hiện HAI-08 và xây DEV/TEST version mới nếu thay đổi pipeline |
 | 25/10/2026 | Hoàn tất HAI-08 failure analysis và baseline comparison | Có confusion matrix, taxonomy, 9 case đại diện; raw hit@5 79%, raw category 67%; xác định domain shift và giới hạn ground truth/telemetry | `failure-analysis.json`; `failure-cases.md`; `analyze_test_failures.py` | Raw image candidates và expected color không được lưu nên hai phân tích tương ứng là N/A | Giữ rollout tắt; tiếp tục HAI-09 hardening và lập DEV/TEST v2 |
+| 25/10/2026 | Sửa blocker schema và readiness HAI-09 | Loại SQL `visual_search` cũ; V8 telemetry/job metadata; readiness kiểm tra model + coverage; migration và repository integration đạt | `V8__harden_visual_search_operations.sql`; `test_v2_repository_integration.py` | Chưa deploy V8 lên Supabase dùng chung; còn audit log và rollback drill | Review migration, deploy có kiểm soát, smoke admin endpoints, sau đó hoàn tất HAI-09.6/09.9 |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 

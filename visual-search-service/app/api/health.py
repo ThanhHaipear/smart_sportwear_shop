@@ -29,6 +29,7 @@ async def ready(
         "checks": {
             "database": result.database,
             "activeModel": result.active_model,
+            "coverage": result.coverage,
             "rabbitmq": result.rabbitmq,
         },
     }

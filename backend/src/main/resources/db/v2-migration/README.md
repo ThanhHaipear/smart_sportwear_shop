@@ -11,6 +11,7 @@ Thư mục này là chuỗi migration chính thức của database V2. Chuỗi m
 - `V5`: bổ sung provenance ảnh `REFERENCE` cho dataset tham chiếu giáo dục phi thương mại; không đồng nhất với ảnh `OWNED` hoặc `LICENSED`.
 - `V6`: nền tảng 1C.1–1C.2 trong schema `ai_retrieval`: model registry, catalog read model, text/image embedding và indexing jobs; bật pgvector và chỉ dùng exact cosine search cho pilot.
 - `V7`: seed hai model local bằng Hugging Face commit bất biến: BGE-M3 1024 chiều cho product text và SigLIP2 768 chiều cho ảnh gốc Cloudinary.
+- `V8`: hardening visual search trên schema `ai_retrieval`: retry metadata, correlation cho indexing job và usage telemetry không lưu query image/token/PII.
 
 Entity/service của 1A–1B đã được chuyển đổi và kiểm tra bằng Hibernate schema validation cùng integration test. 1C được kiểm tra bằng contract test trực tiếp trên PostgreSQL có extension pgvector. `spring.flyway.locations` mặc định trỏ vào thư mục này. Mỗi migration phải được kiểm thử trên PostgreSQL local sạch trước khi triển khai một lần lên Supabase dùng chung; không chỉnh sửa migration đã áp dụng.
 
