@@ -40,6 +40,15 @@ Never expose RabbitMQ management port `15672`, the Voyage key, database credenti
 
 Disable visual search at the storefront/ingress first, then set `VISUAL_SEARCH_ENABLED=false` for the public path and restart affected services. Do not remove migrations, purge queues, or delete the active/previous model vectors during an incident. Commerce and text search remain independent. Preserve benchmark reports, usage events, outbox rows and DLQ messages for diagnosis; re-enable only after readiness and the acceptance gate pass again.
 
+The feature and model rollback procedure was drilled on 25 October 2026 using
+isolated Spring contexts and a disposable PostgreSQL/pgvector database. The
+feature rollback returned image search HTTP 503 without calling the internal
+service while catalog search remained available. A fully covered candidate
+model was activated and then rolled back to SigLIP2; exactly one model remained
+ACTIVE, both vector versions were preserved, activation audits were present and
+Flyway remained at version 8. Evidence is stored in
+`evidence/image-search-v2/hai-09-rollback-drill-2026-10-25.json`.
+
 ## Incident checks
 
 - Provider timeout/429/5xx: leave commerce running, stop cohort expansion, inspect budget and delayed retries.

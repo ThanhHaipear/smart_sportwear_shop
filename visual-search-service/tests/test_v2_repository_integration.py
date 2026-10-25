@@ -34,8 +34,35 @@ def test_repository_operational_queries_match_migrated_v2_schema() -> None:
             768,
         )
         assert draft_model.status == "DRAFT"
-        reactivated_model = await repository.activate_model_version(model.id)
-        assert reactivated_model.status == "ACTIVE"
+        async with await repository._connect() as connection:
+            async with connection.transaction():
+                async with connection.cursor() as cursor:
+                    await cursor.execute(
+                        """
+                        insert into ai_retrieval.product_image_embeddings
+                            (image_id, product_id, model_id, source_public_id,
+                             source_asset_version, image_hash, embedding, status,
+                             attempts, last_attempt_at, embedded_at, color_signature)
+                        select image_id, product_id, %s, source_public_id,
+                               source_asset_version, image_hash, embedding, status,
+                               attempts, last_attempt_at, embedded_at, color_signature
+                        from ai_retrieval.product_image_embeddings
+                        where model_id=%s
+                        """,
+                        (draft_model.id, model.id),
+                    )
+
+        activated_candidate = await repository.activate_model_version(draft_model.id)
+        assert activated_candidate.status == "ACTIVE"
+        candidate_active = await repository.active_model()
+        assert candidate_active is not None
+        assert candidate_active.id == draft_model.id
+
+        rolled_back_model = await repository.activate_model_version(model.id)
+        assert rolled_back_model.status == "ACTIVE"
+        active_after_rollback = await repository.active_model()
+        assert active_after_rollback is not None
+        assert active_after_rollback.id == model.id
 
         coverage = await repository.coverage_stats()
         assert coverage.total_active_images == 1
@@ -44,6 +71,13 @@ def test_repository_operational_queries_match_migrated_v2_schema() -> None:
 
         models = await repository.model_versions()
         assert any(item.id == model.id and item.ready_image_count == 1 for item in models)
+        assert any(
+            item.id == draft_model.id
+            and item.status == "RETIRED"
+            and item.ready_image_count == 1
+            for item in models
+        )
+        assert sum(item.status == "ACTIVE" for item in models) == 1
 
         operations = await repository.operations_stats()
         assert operations.model is not None
@@ -81,7 +115,7 @@ def test_repository_operational_queries_match_migrated_v2_schema() -> None:
                        order by created_at"""
                 )
                 model_audits = await cursor.fetchall()
-                assert len(model_audits) == 2
+                assert len(model_audits) == 3
                 assert model_audits[0][0:3] == (
                     "VISUAL_MODEL_CREATE",
                     "VISUAL_EMBEDDING_MODEL",
@@ -99,13 +133,50 @@ def test_repository_operational_queries_match_migrated_v2_schema() -> None:
                 assert model_audits[1][0:3] == (
                     "VISUAL_MODEL_ACTIVATE",
                     "VISUAL_EMBEDDING_MODEL",
+                    str(draft_model.id),
+                )
+                assert model_audits[1][3] == {
+                    "active_model_id": str(model.id),
+                    "target_status": "DRAFT",
+                }
+                assert model_audits[1][4] == {
+                    "active_model_id": str(draft_model.id),
+                    "target_status": "ACTIVE",
+                }
+                assert model_audits[2][0:3] == (
+                    "VISUAL_MODEL_ACTIVATE",
+                    "VISUAL_EMBEDDING_MODEL",
                     str(model.id),
                 )
+                assert model_audits[2][3] == {
+                    "active_model_id": str(draft_model.id),
+                    "target_status": "RETIRED",
+                }
+                assert model_audits[2][4] == {
+                    "active_model_id": str(model.id),
+                    "target_status": "ACTIVE",
+                }
                 for audit_row in model_audits:
                     assert audit_row[5] == {
                         "source": "visual-search-service", "result": "SUCCESS"
                     }
                     assert audit_row[6:] == (None, None, None)
+                await cursor.execute(
+                    """select count(*) from ai_retrieval.product_image_embeddings
+                       where model_id in (%s, %s)""",
+                    (model.id, draft_model.id),
+                )
+                assert (await cursor.fetchone())[0] == 2
+                await cursor.execute(
+                    """select count(*) from ai_retrieval.embedding_models
+                       where modality='PRODUCT_IMAGE' and status='ACTIVE'"""
+                )
+                assert (await cursor.fetchone())[0] == 1
+                await cursor.execute(
+                    """select version from public.flyway_schema_history
+                       where success order by installed_rank desc limit 1"""
+                )
+                assert (await cursor.fetchone())[0] == "8"
                 await cursor.execute(
                     "select id from integration_outbox where payload->>'traceId'=%s",
                     (str(job.id),),

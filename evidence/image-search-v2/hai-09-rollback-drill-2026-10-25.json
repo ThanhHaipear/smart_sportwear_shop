@@ -1,0 +1,54 @@
+{
+  "evidence_type": "hai-09-feature-and-model-rollback-drill",
+  "executed_at": "2026-10-25T19:10:38+07:00",
+  "scope": "HAI-09.9",
+  "environment": {
+    "database": "disposable PostgreSQL 17.11 with pgvector",
+    "spring": "isolated Testcontainers application contexts",
+    "shared_supabase_mutated": false,
+    "temporary_resources_removed": true
+  },
+  "feature_flag_drill": {
+    "enabled_context": {
+      "public_image_search_http_status": 200,
+      "tests": 4
+    },
+    "rollback_context": {
+      "visual_search_enabled": false,
+      "public_image_search_http_status": 503,
+      "status_endpoint_enabled": false,
+      "status_endpoint_available": false,
+      "internal_visual_service_called": false,
+      "public_catalog_search_http_status": 200,
+      "tests": 2
+    },
+    "combined_result": "6 passed"
+  },
+  "model_drill": {
+    "original_model": "google/siglip2-base-patch16-224",
+    "candidate_model": "audit-fixture-model",
+    "active_catalog_images": 1,
+    "candidate_ready_embeddings": 1,
+    "activation_gate_pct": 98,
+    "steps": [
+      "created candidate model",
+      "copied one disposable fixture embedding to provide 100 percent coverage",
+      "activated candidate model",
+      "verified candidate was the only ACTIVE PRODUCT_IMAGE model",
+      "activated the original SigLIP2 model",
+      "verified SigLIP2 was restored as the only ACTIVE PRODUCT_IMAGE model"
+    ],
+    "active_model_count_after_rollback": 1,
+    "original_model_status_after_rollback": "ACTIVE",
+    "candidate_model_status_after_rollback": "RETIRED",
+    "embedding_rows_preserved": 2,
+    "model_activation_audit_events": 2,
+    "model_creation_audit_events": 1,
+    "flyway_version_after_rollback": "8",
+    "repository_integration_result": "1 passed"
+  },
+  "migration_contract_result": "5 passed",
+  "public_default_remains_disabled": true,
+  "data_deleted_or_queues_purged": false,
+  "result": "PASS"
+}
