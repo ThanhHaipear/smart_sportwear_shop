@@ -1,0 +1,2361 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": "2026-10-24T15:38:58.038261+00:00",
+  "policy": {
+    "offlineOnly": true,
+    "testRerun": false,
+    "testTuning": false,
+    "lockedThreshold": 0.71233916
+  },
+  "acceptance": {
+    "passed": false,
+    "recallAt5": 0.0167,
+    "categoryAccuracy": 0.04,
+    "unknownRejectionRate": 1.0,
+    "requestFailureRate": 0.0,
+    "latencyP95Ms": 670.52
+  },
+  "raw": {
+    "top1Relevant": 59,
+    "top1RelevantRate": 0.59,
+    "hitAt5": 79,
+    "hitAt5Rate": 0.79,
+    "hitAt10": 84,
+    "hitAt10Rate": 0.84,
+    "top1Category": 67,
+    "top1CategoryRate": 0.67
+  },
+  "threshold": {
+    "positiveAcceptedTop1": 4,
+    "positiveTopScore": {
+      "minimum": 0.45339,
+      "p50": 0.59598,
+      "p95": 0.70537,
+      "maximum": 0.795
+    },
+    "unknownTopScore": {
+      "minimum": 0.3556,
+      "p50": 0.51916,
+      "p95": 0.58984,
+      "maximum": 0.60379
+    }
+  },
+  "groups": {
+    "tops": {
+      "sampleCount": 20,
+      "rawTop1Relevant": 8,
+      "rawHitAt5": 18,
+      "rawHitAt10": 18,
+      "rawTop1Category": 14,
+      "acceptedTop1": 2,
+      "topScoreP50": 0.59627,
+      "topScoreP95": 0.71612
+    },
+    "bottoms": {
+      "sampleCount": 20,
+      "rawTop1Relevant": 12,
+      "rawHitAt5": 14,
+      "rawHitAt10": 17,
+      "rawTop1Category": 14,
+      "acceptedTop1": 0,
+      "topScoreP50": 0.62395,
+      "topScoreP95": 0.68488
+    },
+    "uniforms": {
+      "sampleCount": 20,
+      "rawTop1Relevant": 16,
+      "rawHitAt5": 20,
+      "rawHitAt10": 20,
+      "rawTop1Category": 16,
+      "acceptedTop1": 0,
+      "topScoreP50": 0.57931,
+      "topScoreP95": 0.65542
+    },
+    "shoes": {
+      "sampleCount": 20,
+      "rawTop1Relevant": 10,
+      "rawHitAt5": 13,
+      "rawHitAt10": 13,
+      "rawTop1Category": 10,
+      "acceptedTop1": 1,
+      "topScoreP50": 0.57924,
+      "topScoreP95": 0.69941
+    },
+    "accessories": {
+      "sampleCount": 20,
+      "rawTop1Relevant": 13,
+      "rawHitAt5": 14,
+      "rawHitAt10": 16,
+      "rawTop1Category": 13,
+      "acceptedTop1": 1,
+      "topScoreP50": 0.58298,
+      "topScoreP95": 0.71124
+    }
+  },
+  "confusionMatrix": {
+    "tops": {
+      "tops": 14,
+      "bottoms": 3,
+      "uniforms": 3,
+      "shoes": 0,
+      "accessories": 0
+    },
+    "bottoms": {
+      "tops": 2,
+      "bottoms": 14,
+      "uniforms": 4,
+      "shoes": 0,
+      "accessories": 0
+    },
+    "uniforms": {
+      "tops": 3,
+      "bottoms": 0,
+      "uniforms": 16,
+      "shoes": 0,
+      "accessories": 1
+    },
+    "shoes": {
+      "tops": 4,
+      "bottoms": 5,
+      "uniforms": 1,
+      "shoes": 10,
+      "accessories": 0
+    },
+    "accessories": {
+      "tops": 4,
+      "bottoms": 0,
+      "uniforms": 3,
+      "shoes": 0,
+      "accessories": 13
+    }
+  },
+  "failureTaxonomy": {
+    "LOCKED_THRESHOLD_REJECTED_TOP1": 96,
+    "NO_RELEVANT_PRODUCT_IN_RAW_TOP5": 21,
+    "RELEVANT_RESULT_BELOW_THRESHOLD": 77,
+    "TOP1_CATEGORY_CONFUSION": 33
+  },
+  "representativeCases": [
+    {
+      "queryId": "test-004",
+      "group": "tops",
+      "sourceCategory": "Sweatshirts",
+      "sourceTitle": "File:BUZO.jpg",
+      "top1ProductId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.5255,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 13,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ],
+      "expectedProductNames": [
+        "Áo chạy bộ dài tay Uni Cloud",
+        "Áo giữ nhiệt bóng đá Uni Core",
+        "Áo khoác chạy bộ nữ Violet Air",
+        "Áo gió chạy bộ nam Orange Pace"
+      ]
+    },
+    {
+      "queryId": "test-013",
+      "group": "tops",
+      "sourceCategory": "Sports T-shirts",
+      "sourceTitle": "File:Maglia corta atletica CARIRI circa 2005 - fronte 01.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.68811,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Áo chạy bộ nam Aero Navy",
+        "Áo tank chạy bộ nữ Coral Flow",
+        "Áo chạy bộ dài tay Uni Cloud",
+        "Áo tập bóng đá nam Blaze Red",
+        "Áo tập bóng đá nữ Royal Motion"
+      ]
+    },
+    {
+      "queryId": "test-039",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:Bouldering at Riverrock.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.58482,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 8,
+      "rawHitAt5": false,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ],
+      "expectedProductNames": [
+        "Quần short chạy bộ nam Swift Black",
+        "Quần bóng đá nam Royal Kick",
+        "Quần tập bóng đá nữ Black Drive"
+      ]
+    },
+    {
+      "queryId": "test-022",
+      "group": "bottoms",
+      "sourceCategory": "Sweatpants",
+      "sourceTitle": "File:HK TKO Spot mall 將軍澳 Tseung Kwan O 尚德廣場 Sheung Tak Estate Shopping Centre shop 巴雷諾 Baleno Clothing June 2022 Px3 02.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.6998,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Quần jogger thể thao Uni Motion",
+        "Quần track chạy bộ Uni Forest"
+      ]
+    },
+    {
+      "queryId": "test-046",
+      "group": "uniforms",
+      "sourceCategory": "Association football players",
+      "sourceTitle": "File:1693160293131 ldekuh 2 0.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.67579,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Bộ bóng đá nam Crimson Unity",
+        "Bộ bóng đá nữ Royal Wave",
+        "Bộ bóng đá Uni Forest Line",
+        "Bộ bóng đá nam Black Gold",
+        "Bộ bóng đá nữ Violet Star",
+        "Bộ bóng đá Uni Orange Pulse"
+      ]
+    },
+    {
+      "queryId": "test-067",
+      "group": "shoes",
+      "sourceCategory": "Association football boots",
+      "sourceTitle": "File:(Saison 1958-1959). Foot. TFC - 53Fi6493.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.50264,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": null,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ],
+      "expectedProductNames": [
+        "Giày đá bóng nam Turf Shadow",
+        "Giày đá bóng nữ Turf Spark",
+        "Giày futsal Uni Red Court"
+      ]
+    },
+    {
+      "queryId": "test-065",
+      "group": "shoes",
+      "sourceCategory": "Running shoes",
+      "sourceTitle": "File:137th SOW services Airmen support 35th FSS mission while training (9268283).jpg",
+      "top1ProductId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+      "top1Category": "shoes",
+      "top1Similarity": 0.69941,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Giày chạy bộ nam Cobalt Ride",
+        "Giày chạy bộ nữ Coral Cloud",
+        "Giày chạy bộ Uni Pure Step"
+      ]
+    },
+    {
+      "queryId": "test-086",
+      "group": "accessories",
+      "sourceCategory": "Shin guards",
+      "sourceTitle": "File:250629 FC 서울 vs 포항 (박수일) 2.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.58193,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 8,
+      "rawHitAt5": false,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ],
+      "expectedProductNames": [
+        "Ốp bảo vệ ống đồng Red Guard"
+      ]
+    },
+    {
+      "queryId": "test-088",
+      "group": "accessories",
+      "sourceCategory": "Water bottles",
+      "sourceTitle": "File:02014 Wasserflaschen.JPG",
+      "top1ProductId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "top1Category": "accessories",
+      "top1Similarity": 0.71124,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Bình nước thể thao Black Flow 750ml"
+      ]
+    }
+  ],
+  "allPositiveDiagnostics": [
+    {
+      "queryId": "test-001",
+      "group": "tops",
+      "sourceCategory": "Sports T-shirts",
+      "sourceTitle": "File:Bieg Konstytucji 2018 Warszawa T-shirt.jpg",
+      "top1ProductId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+      "top1Category": "tops",
+      "top1Similarity": 0.67928,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-002",
+      "group": "tops",
+      "sourceCategory": "T-shirts",
+      "sourceTitle": "File:02123jfClothes shirts pants in Philippinesfvf 05.jpg",
+      "top1ProductId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+      "top1Category": "tops",
+      "top1Similarity": 0.71612,
+      "top1Accepted": true,
+      "top1Relevant": false,
+      "firstRelevantRank": 2,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-003",
+      "group": "tops",
+      "sourceCategory": "Sports jerseys",
+      "sourceTitle": "File:AMISOM KDF Donation-2 (24115829666).jpg",
+      "top1ProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.53359,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 5,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-004",
+      "group": "tops",
+      "sourceCategory": "Sweatshirts",
+      "sourceTitle": "File:BUZO.jpg",
+      "top1ProductId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.5255,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 13,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ],
+      "expectedProductNames": [
+        "Áo chạy bộ dài tay Uni Cloud",
+        "Áo giữ nhiệt bóng đá Uni Core",
+        "Áo khoác chạy bộ nữ Violet Air",
+        "Áo gió chạy bộ nam Orange Pace"
+      ]
+    },
+    {
+      "queryId": "test-005",
+      "group": "tops",
+      "sourceCategory": "Sports T-shirts",
+      "sourceTitle": "File:Corrida e Caminhada Esperanto (1. - 2018 - Curitiba (Brasil)) 6.jpg",
+      "top1ProductId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+      "top1Category": "tops",
+      "top1Similarity": 0.6684,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-006",
+      "group": "tops",
+      "sourceCategory": "T-shirts",
+      "sourceTitle": "File:02123jfClothes shirts pants in Philippinesfvf 06.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.62766,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-007",
+      "group": "tops",
+      "sourceCategory": "Sports jerseys",
+      "sourceTitle": "File:Aaron Soccer Jersey.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.70537,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 4,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-008",
+      "group": "tops",
+      "sourceCategory": "Sweatshirts",
+      "sourceTitle": "File:Generra Hypercolor sweatshirt (cropped).jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.56745,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 2,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-009",
+      "group": "tops",
+      "sourceCategory": "Sports T-shirts",
+      "sourceTitle": "File:HK SKD TKO 寶琳 Po Lam 新都城中心商場 Metro City Plaza MCP Two Central mall void Football FIESTA Goal June 2026 N13P 16.jpg",
+      "top1ProductId": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+      "top1Category": "tops",
+      "top1Similarity": 0.795,
+      "top1Accepted": true,
+      "top1Relevant": false,
+      "firstRelevantRank": 11,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-010",
+      "group": "tops",
+      "sourceCategory": "T-shirts",
+      "sourceTitle": "File:12a.DCCenter.WDC.26June2015 (19187985982).jpg",
+      "top1ProductId": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+      "top1Category": "tops",
+      "top1Similarity": 0.51354,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 3,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-011",
+      "group": "tops",
+      "sourceCategory": "Sports jerseys",
+      "sourceTitle": "File:P20230320CS-0768 (52834640446).jpg",
+      "top1ProductId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+      "top1Category": "tops",
+      "top1Similarity": 0.51777,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-012",
+      "group": "tops",
+      "sourceCategory": "Sweatshirts",
+      "sourceTitle": "File:Generra Hypercolor sweatshirt.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.50187,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 4,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-013",
+      "group": "tops",
+      "sourceCategory": "Sports T-shirts",
+      "sourceTitle": "File:Maglia corta atletica CARIRI circa 2005 - fronte 01.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.68811,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Áo chạy bộ nam Aero Navy",
+        "Áo tank chạy bộ nữ Coral Flow",
+        "Áo chạy bộ dài tay Uni Cloud",
+        "Áo tập bóng đá nam Blaze Red",
+        "Áo tập bóng đá nữ Royal Motion"
+      ]
+    },
+    {
+      "queryId": "test-014",
+      "group": "tops",
+      "sourceCategory": "T-shirts",
+      "sourceTitle": "File:2011 Wytheville Vendor Show (5518023741).jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.57581,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-015",
+      "group": "tops",
+      "sourceCategory": "Sports jerseys",
+      "sourceTitle": "File:President Joe Biden and First Lady Jill Biden with cast of “Ted Lasso” Jason Sudeikis and Hannah Waddingham presenting them with AFC Richmond jerseys on March 20, 2023 in the Oval Office of the White House - P20230320AS-2571.jpg",
+      "top1ProductId": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+      "top1Category": "tops",
+      "top1Similarity": 0.50477,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-016",
+      "group": "tops",
+      "sourceCategory": "Sweatshirts",
+      "sourceTitle": "File:HK KTD 九龍灣 Kln Bay 德福廣場 Telford Plaza mall shop ZARA clothing store January 2022 Px3 07.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.61519,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 4,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-017",
+      "group": "tops",
+      "sourceCategory": "Sports T-shirts",
+      "sourceTitle": "File:Camiseta Oficial del club.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.67592,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 4,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-018",
+      "group": "tops",
+      "sourceCategory": "T-shirts",
+      "sourceTitle": "File:2018-08-20 EMMA Mainz-1930.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.61111,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-019",
+      "group": "tops",
+      "sourceCategory": "Sports jerseys",
+      "sourceTitle": "File:160521 송도 KSF 동우 1.jpg",
+      "top1ProductId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+      "top1Category": "tops",
+      "top1Similarity": 0.59627,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 2,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-020",
+      "group": "tops",
+      "sourceCategory": "Sweatshirts",
+      "sourceTitle": "File:HK KTD 九龍灣 Kln Bay 德福廣場 Telford Plaza mall shop ZARA clothing store January 2022 Px3 08.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.55121,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 3,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-021",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:1024chika.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.59598,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 7,
+      "rawHitAt5": false,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-022",
+      "group": "bottoms",
+      "sourceCategory": "Sweatpants",
+      "sourceTitle": "File:HK TKO Spot mall 將軍澳 Tseung Kwan O 尚德廣場 Sheung Tak Estate Shopping Centre shop 巴雷諾 Baleno Clothing June 2022 Px3 02.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.6998,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Quần jogger thể thao Uni Motion",
+        "Quần track chạy bộ Uni Forest"
+      ]
+    },
+    {
+      "queryId": "test-023",
+      "group": "bottoms",
+      "sourceCategory": "Yoga pants",
+      "sourceTitle": "File:Belly wrap.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.65555,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-024",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:20140913 1845 W AUT HUN 1260.jpg",
+      "top1ProductId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.609,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 17,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-025",
+      "group": "bottoms",
+      "sourceCategory": "Sweatpants",
+      "sourceTitle": "File:HK TKO 將軍澳 Tseung Kwan O PopCorn mall shop Uniqlo Clothing Store 冬季 winter December 2022 Px3 01.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.63547,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-026",
+      "group": "bottoms",
+      "sourceCategory": "Yoga pants",
+      "sourceTitle": "File:Fitman.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.62358,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-027",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:20140913 1845 W AUT HUN 1261.jpg",
+      "top1ProductId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.62395,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 13,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-028",
+      "group": "bottoms",
+      "sourceCategory": "Sweatpants",
+      "sourceTitle": "File:Corteiz Alcatraz Joggers.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.68488,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-029",
+      "group": "bottoms",
+      "sourceCategory": "Yoga pants",
+      "sourceTitle": "File:Graphic hoodie wearing by yoga girl (52774579343).jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.5897,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-030",
+      "group": "bottoms",
+      "sourceCategory": "Yoga pants",
+      "sourceTitle": "File:Project Yoga Richmond 1.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.62544,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-031",
+      "group": "bottoms",
+      "sourceCategory": "Yoga pants",
+      "sourceTitle": "File:Project Yoga Richmond 2.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.67697,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-032",
+      "group": "bottoms",
+      "sourceCategory": "Yoga pants",
+      "sourceTitle": "File:Woman sitting on couch holding a cup while looking out window in a modern living room.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.66114,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-033",
+      "group": "bottoms",
+      "sourceCategory": "Yoga pants",
+      "sourceTitle": "File:Female Torso with Tiger Stripes (Stretch Marks) from Pregnancy.JPG",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.67786,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-034",
+      "group": "bottoms",
+      "sourceCategory": "Yoga pants",
+      "sourceTitle": "File:Project Yoga Richmond 1 Ubhaya Padangusthasana.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.64406,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-035",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:20170706 OEFB AUT-DEN DSC 8437.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.60633,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 13,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-036",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:663Poblacion, Baliuag, Bulacan 31.jpg",
+      "top1ProductId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.6525,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-037",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:Agnieszka Radwanska (14436384551).jpg",
+      "top1ProductId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+      "top1Category": "tops",
+      "top1Similarity": 0.60427,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 5,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-038",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:Agnieszka Radwanska (14438612724).jpg",
+      "top1ProductId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.58594,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 5,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-039",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:Bouldering at Riverrock.jpg",
+      "top1ProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.58482,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 8,
+      "rawHitAt5": false,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ],
+      "expectedProductNames": [
+        "Quần short chạy bộ nam Swift Black",
+        "Quần bóng đá nam Royal Kick",
+        "Quần tập bóng đá nữ Black Drive"
+      ]
+    },
+    {
+      "queryId": "test-040",
+      "group": "bottoms",
+      "sourceCategory": "Shorts (sports clothing)",
+      "sourceTitle": "File:CSD 2006 Cologne 15.jpg",
+      "top1ProductId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+      "top1Category": "tops",
+      "top1Similarity": 0.59171,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 6,
+      "rawHitAt5": false,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-041",
+      "group": "uniforms",
+      "sourceCategory": "People wearing sports clothing",
+      "sourceTitle": "File:160101 여자농구 신한은행 vs 우리은행 직찍 1 (7).jpg",
+      "top1ProductId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.59881,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-042",
+      "group": "uniforms",
+      "sourceCategory": "Association football players",
+      "sourceTitle": "File:08 julho 2014 treino nas Laranjeiras.jpg",
+      "top1ProductId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.61928,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-043",
+      "group": "uniforms",
+      "sourceCategory": "Basketball players",
+      "sourceTitle": "File:1, Chris Crews, DSC 3920.jpg",
+      "top1ProductId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.57931,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-044",
+      "group": "uniforms",
+      "sourceCategory": "Baseball players",
+      "sourceTitle": "File:1948 Wilton Loggers baseball team.png",
+      "top1ProductId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.53311,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-045",
+      "group": "uniforms",
+      "sourceCategory": "People wearing sports clothing",
+      "sourceTitle": "File:(16.04.22) 넥센 vs LG 고척돔 치어리더 14p by (5).jpg",
+      "top1ProductId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.53907,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-046",
+      "group": "uniforms",
+      "sourceCategory": "Association football players",
+      "sourceTitle": "File:1693160293131 ldekuh 2 0.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.67579,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Bộ bóng đá nam Crimson Unity",
+        "Bộ bóng đá nữ Royal Wave",
+        "Bộ bóng đá Uni Forest Line",
+        "Bộ bóng đá nam Black Gold",
+        "Bộ bóng đá nữ Violet Star",
+        "Bộ bóng đá Uni Orange Pulse"
+      ]
+    },
+    {
+      "queryId": "test-047",
+      "group": "uniforms",
+      "sourceCategory": "Basketball players",
+      "sourceTitle": "File:20130307 Cliff Alexander against Jahlil Okafor cropped.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.56381,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-048",
+      "group": "uniforms",
+      "sourceCategory": "Baseball players",
+      "sourceTitle": "File:1951 Gene Conley Hartford Chiefs.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.50972,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 2,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-049",
+      "group": "uniforms",
+      "sourceCategory": "People wearing sports clothing",
+      "sourceTitle": "File:(기업은행) 챔피언결정전 5차전 13-14 시즌 마지막 경기 박수쳐주고 싶은 선수들.jpg",
+      "top1ProductId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.59789,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-050",
+      "group": "uniforms",
+      "sourceCategory": "Association football players",
+      "sourceTitle": "File:1912 Edmonton Caledonians.jpg",
+      "top1ProductId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.56089,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-051",
+      "group": "uniforms",
+      "sourceCategory": "Basketball players",
+      "sourceTitle": "File:20130307 Paul White shoots against Cliff Alexander cropped.jpg",
+      "top1ProductId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.58775,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-052",
+      "group": "uniforms",
+      "sourceCategory": "Baseball players",
+      "sourceTitle": "File:1986 Amateur World Series All-Stars (cropped).jpg",
+      "top1ProductId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+      "top1Category": "accessories",
+      "top1Similarity": 0.45339,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 5,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-053",
+      "group": "uniforms",
+      "sourceCategory": "People wearing sports clothing",
+      "sourceTitle": "File:(기업은행)멘붕?.jpg",
+      "top1ProductId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.57276,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-054",
+      "group": "uniforms",
+      "sourceCategory": "Basketball players",
+      "sourceTitle": "File:20130307 Paul White shoots against Cliff Alexander.JPG",
+      "top1ProductId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.59357,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-055",
+      "group": "uniforms",
+      "sourceCategory": "Baseball players",
+      "sourceTitle": "File:ABC basket Equipe 1972.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.57533,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-056",
+      "group": "uniforms",
+      "sourceCategory": "People wearing sports clothing",
+      "sourceTitle": "File:(직캠) 140721 수비요정 밍키 0m0s.jpg",
+      "top1ProductId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.59728,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-057",
+      "group": "uniforms",
+      "sourceCategory": "Association football players",
+      "sourceTitle": "File:20230827 190223 polarr.jpg",
+      "top1ProductId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.65542,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-058",
+      "group": "uniforms",
+      "sourceCategory": "Basketball players",
+      "sourceTitle": "File:20130316 DJ Williams (1).JPG",
+      "top1ProductId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+      "top1Category": "tops",
+      "top1Similarity": 0.60493,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 2,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-059",
+      "group": "uniforms",
+      "sourceCategory": "Baseball players",
+      "sourceTitle": "File:Atleta con bate en mano posicion lateral.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.59873,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 3,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-060",
+      "group": "uniforms",
+      "sourceCategory": "People wearing sports clothing",
+      "sourceTitle": "File:151221 여자농구 신한은행 vs 하나외환 직찍 퓨처스 (1).jpg",
+      "top1ProductId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.57143,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-061",
+      "group": "shoes",
+      "sourceCategory": "Running shoes",
+      "sourceTitle": "File:\"Neptej se mě proč běhám, zeptej se sám sebe proč to nedělám\".jpg",
+      "top1ProductId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+      "top1Category": "tops",
+      "top1Similarity": 0.6411,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 20,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-062",
+      "group": "shoes",
+      "sourceCategory": "Athletic shoes",
+      "sourceTitle": "File:1910s football cleats - Skagit County Historical Museum.jpg",
+      "top1ProductId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+      "top1Category": "shoes",
+      "top1Similarity": 0.53867,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-063",
+      "group": "shoes",
+      "sourceCategory": "Association football boots",
+      "sourceTitle": "File:(Saison 1958-1959). Foot. TFC - 53Fi6484.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.50865,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": null,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-064",
+      "group": "shoes",
+      "sourceCategory": "Basketball shoes",
+      "sourceTitle": "File:187's-shoes-double quarter.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.66201,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 20,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-065",
+      "group": "shoes",
+      "sourceCategory": "Running shoes",
+      "sourceTitle": "File:137th SOW services Airmen support 35th FSS mission while training (9268283).jpg",
+      "top1ProductId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+      "top1Category": "shoes",
+      "top1Similarity": 0.69941,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Giày chạy bộ nam Cobalt Ride",
+        "Giày chạy bộ nữ Coral Cloud",
+        "Giày chạy bộ Uni Pure Step"
+      ]
+    },
+    {
+      "queryId": "test-066",
+      "group": "shoes",
+      "sourceCategory": "Athletic shoes",
+      "sourceTitle": "File:5-Fingers-Glasboden 29-07-2013.jpg",
+      "top1ProductId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+      "top1Category": "shoes",
+      "top1Similarity": 0.58413,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-067",
+      "group": "shoes",
+      "sourceCategory": "Association football boots",
+      "sourceTitle": "File:(Saison 1958-1959). Foot. TFC - 53Fi6493.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.50264,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": null,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ],
+      "expectedProductNames": [
+        "Giày đá bóng nam Turf Shadow",
+        "Giày đá bóng nữ Turf Spark",
+        "Giày futsal Uni Red Court"
+      ]
+    },
+    {
+      "queryId": "test-068",
+      "group": "shoes",
+      "sourceCategory": "Basketball shoes",
+      "sourceTitle": "File:1977's-shoes-with box.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.60206,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 14,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-069",
+      "group": "shoes",
+      "sourceCategory": "Running shoes",
+      "sourceTitle": "File:20160110 150800 copy.jpg",
+      "top1ProductId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+      "top1Category": "tops",
+      "top1Similarity": 0.61011,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 2,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-070",
+      "group": "shoes",
+      "sourceCategory": "Athletic shoes",
+      "sourceTitle": "File:Athletic Shoe Fit Specialist.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.49682,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 5,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-071",
+      "group": "shoes",
+      "sourceCategory": "Basketball shoes",
+      "sourceTitle": "File:A Pair of White Adidas Basketball Shoe Size 46.jpg",
+      "top1ProductId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+      "top1Category": "shoes",
+      "top1Similarity": 0.58869,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-072",
+      "group": "shoes",
+      "sourceCategory": "Running shoes",
+      "sourceTitle": "File:Adidas Adizero Boston 12 Taipei Marathon Collaboration Edition.jpeg",
+      "top1ProductId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+      "top1Category": "shoes",
+      "top1Similarity": 0.7193,
+      "top1Accepted": true,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": true,
+      "reasons": []
+    },
+    {
+      "queryId": "test-073",
+      "group": "shoes",
+      "sourceCategory": "Athletic shoes",
+      "sourceTitle": "File:British Knights Control Hi in White and Black.jpg",
+      "top1ProductId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+      "top1Category": "shoes",
+      "top1Similarity": 0.57558,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-074",
+      "group": "shoes",
+      "sourceCategory": "Association football boots",
+      "sourceTitle": "File:2010-06-03 Arena AufSchalke 07.jpg",
+      "top1ProductId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+      "top1Category": "shoes",
+      "top1Similarity": 0.54218,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-075",
+      "group": "shoes",
+      "sourceCategory": "Basketball shoes",
+      "sourceTitle": "File:AND1 Smooth Mid.JPG",
+      "top1ProductId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+      "top1Category": "shoes",
+      "top1Similarity": 0.54903,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-076",
+      "group": "shoes",
+      "sourceCategory": "Running shoes",
+      "sourceTitle": "File:Altra Running Shoes Demo 2019.jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.54242,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 11,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-077",
+      "group": "shoes",
+      "sourceCategory": "Association football boots",
+      "sourceTitle": "File:23.05.66 Just Fontaine dans son magasin (1966) - 53Fi634.jpg",
+      "top1ProductId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "top1Category": "bottoms",
+      "top1Similarity": 0.50904,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 15,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-078",
+      "group": "shoes",
+      "sourceCategory": "Basketball shoes",
+      "sourceTitle": "File:And1 basketball shoes.jpg",
+      "top1ProductId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+      "top1Category": "shoes",
+      "top1Similarity": 0.57924,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-079",
+      "group": "shoes",
+      "sourceCategory": "Running shoes",
+      "sourceTitle": "File:Altra trail running shoe, Lone Peak, side view.jpg",
+      "top1ProductId": "90df2223-3c14-49cf-822f-207603429950",
+      "top1Category": "shoes",
+      "top1Similarity": 0.58345,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-080",
+      "group": "shoes",
+      "sourceCategory": "Association football boots",
+      "sourceTitle": "File:Antiguos botines de futbol.jpg",
+      "top1ProductId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.61636,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 2,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-081",
+      "group": "accessories",
+      "sourceCategory": "Shin guards",
+      "sourceTitle": "File:250629 FC 서울 vs 포항 (박수일) 1.jpg",
+      "top1ProductId": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+      "top1Category": "tops",
+      "top1Similarity": 0.60624,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 13,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-082",
+      "group": "accessories",
+      "sourceCategory": "Sports socks",
+      "sourceTitle": "File:1971 ca. der junge, 1958 in Bremen geborene Dieter Zimmermann in SV Werder Bremen-„Uniform“ (langärmeliges Hemd und zu große Turnhose), Foto-Bildseite mit Kniestrümpfen und Fußball.jpg",
+      "top1ProductId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.51008,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 2,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-083",
+      "group": "accessories",
+      "sourceCategory": "Water bottles",
+      "sourceTitle": "File:-i---i- (51980856064).jpg",
+      "top1ProductId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "top1Category": "accessories",
+      "top1Similarity": 0.57449,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-084",
+      "group": "accessories",
+      "sourceCategory": "Headbands in sport",
+      "sourceTitle": "File:LeBron James 1109.jpg",
+      "top1ProductId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+      "top1Category": "tops",
+      "top1Similarity": 0.58298,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 12,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-085",
+      "group": "accessories",
+      "sourceCategory": "Wristbands",
+      "sourceTitle": "File:03.JoséGutierrez.CPF.WDC.11jun06 (243107104).jpg",
+      "top1ProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "top1Category": "tops",
+      "top1Similarity": 0.61146,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 12,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-086",
+      "group": "accessories",
+      "sourceCategory": "Shin guards",
+      "sourceTitle": "File:250629 FC 서울 vs 포항 (박수일) 2.jpg",
+      "top1ProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.58193,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 8,
+      "rawHitAt5": false,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ],
+      "expectedProductNames": [
+        "Ốp bảo vệ ống đồng Red Guard"
+      ]
+    },
+    {
+      "queryId": "test-087",
+      "group": "accessories",
+      "sourceCategory": "Sports socks",
+      "sourceTitle": "File:Girls' Volleyball socks (6945447033).jpg",
+      "top1ProductId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "top1Category": "uniforms",
+      "top1Similarity": 0.63708,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": 7,
+      "rawHitAt5": false,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-088",
+      "group": "accessories",
+      "sourceCategory": "Water bottles",
+      "sourceTitle": "File:02014 Wasserflaschen.JPG",
+      "top1ProductId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "top1Category": "accessories",
+      "top1Similarity": 0.71124,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ],
+      "expectedProductNames": [
+        "Bình nước thể thao Black Flow 750ml"
+      ]
+    },
+    {
+      "queryId": "test-089",
+      "group": "accessories",
+      "sourceCategory": "Headbands in sport",
+      "sourceTitle": "File:Roger Federer (26 June 2009, Wimbledon) 2 (crop).jpg",
+      "top1ProductId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+      "top1Category": "tops",
+      "top1Similarity": 0.59755,
+      "top1Accepted": false,
+      "top1Relevant": false,
+      "firstRelevantRank": null,
+      "rawHitAt5": false,
+      "rawHitAt10": false,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "TOP1_CATEGORY_CONFUSION",
+        "NO_RELEVANT_PRODUCT_IN_RAW_TOP5"
+      ]
+    },
+    {
+      "queryId": "test-090",
+      "group": "accessories",
+      "sourceCategory": "Sports socks",
+      "sourceTitle": "File:Gray football sock, ca. mid-20th Century - Skagit County Historical Museum.jpg",
+      "top1ProductId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+      "top1Category": "accessories",
+      "top1Similarity": 0.57049,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-091",
+      "group": "accessories",
+      "sourceCategory": "Water bottles",
+      "sourceTitle": "File:100116-F-2082O-0106 (4279954020).jpg",
+      "top1ProductId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "top1Category": "accessories",
+      "top1Similarity": 0.58496,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-092",
+      "group": "accessories",
+      "sourceCategory": "Wristbands",
+      "sourceTitle": "File:Caesar Polsbandje.JPG",
+      "top1ProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+      "top1Category": "accessories",
+      "top1Similarity": 0.54722,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-093",
+      "group": "accessories",
+      "sourceCategory": "Sports socks",
+      "sourceTitle": "File:OutDoor 2018, Friedrichshafen (1X7A0143).jpg",
+      "top1ProductId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+      "top1Category": "accessories",
+      "top1Similarity": 0.51995,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-094",
+      "group": "accessories",
+      "sourceCategory": "Water bottles",
+      "sourceTitle": "File:106158 square of the abductees - the abductees' dinin PikiWiki Israel.jpg",
+      "top1ProductId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "top1Category": "accessories",
+      "top1Similarity": 0.46317,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-095",
+      "group": "accessories",
+      "sourceCategory": "Wristbands",
+      "sourceTitle": "File:Custom Wristbands.jpg",
+      "top1ProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+      "top1Category": "accessories",
+      "top1Similarity": 0.6071,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-096",
+      "group": "accessories",
+      "sourceCategory": "Shin guards",
+      "sourceTitle": "File:Boxing guards - shin, instep BSI3020 (1).jpg",
+      "top1ProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+      "top1Category": "accessories",
+      "top1Similarity": 0.68778,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-097",
+      "group": "accessories",
+      "sourceCategory": "Sports socks",
+      "sourceTitle": "File:Sensoria fitness socks DSCF2246.jpg",
+      "top1ProductId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+      "top1Category": "accessories",
+      "top1Similarity": 0.6421,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-098",
+      "group": "accessories",
+      "sourceCategory": "Water bottles",
+      "sourceTitle": "File:106159 square of the abductees - the abductees' dinin PikiWiki Israel.jpg",
+      "top1ProductId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "top1Category": "accessories",
+      "top1Similarity": 0.54585,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-099",
+      "group": "accessories",
+      "sourceCategory": "Wristbands",
+      "sourceTitle": "File:Eintrittsberechtigung (Handgelenkbändchen) für das Oktoberfestzelt „Hacker=Bräurösl“ (29.9.2018 Mittag).jpg",
+      "top1ProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+      "top1Category": "accessories",
+      "top1Similarity": 0.46379,
+      "top1Accepted": false,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": false,
+      "reasons": [
+        "LOCKED_THRESHOLD_REJECTED_TOP1",
+        "RELEVANT_RESULT_BELOW_THRESHOLD"
+      ]
+    },
+    {
+      "queryId": "test-100",
+      "group": "accessories",
+      "sourceCategory": "Shin guards",
+      "sourceTitle": "File:Boxing guards - shin, instep BSI3020 (2).jpg",
+      "top1ProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+      "top1Category": "accessories",
+      "top1Similarity": 0.72149,
+      "top1Accepted": true,
+      "top1Relevant": true,
+      "firstRelevantRank": 1,
+      "rawHitAt5": true,
+      "rawHitAt10": true,
+      "acceptedHitAt5": true,
+      "reasons": []
+    }
+  ],
+  "ablation": {
+    "groupedResultsUniqueByProduct": true,
+    "rawImageCandidatesRecorded": false,
+    "rawVsGroupedQualityDelta": "N/A_NOT_RECORDED"
+  },
+  "colorAnalysis": "N/A_MISSING_EXPECTED_COLOR_LABELS",
+  "baseline": {
+    "voyagePhase0": {
+      "model": "voyage-multimodal-3.5",
+      "sampleCount": 4,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "warning": "Alternate catalog views; feasibility-only and not comparable to independent TEST v1."
+    },
+    "legacyPhase10": {
+      "model": "NOT_RECORDED_IN_REPORT",
+      "sampleCount": 100,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "warning": "Synthetic tops/bottoms/shoes only; no uniforms, accessories or unknowns."
+    },
+    "siglip2DevV1": {
+      "sampleCount": 55,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "warning": "Catalog-derived synthetic tuning split; not final acceptance."
+    }
+  }
+}

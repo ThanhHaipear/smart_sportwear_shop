@@ -41,7 +41,7 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-05 | Xây dựng tập ảnh DEV | `DONE` | 100% | P0 | HAI-01 |
 | HAI-06 | Xây dựng tập ảnh TEST độc lập | `DONE` | 100% | P0 | HAI-01, HAI-05 |
 | HAI-07 | Viết runner và chạy đánh giá | `DONE` | 100% | P0 | HAI-03, HAI-05, HAI-06 |
-| HAI-08 | Phân tích lỗi và so sánh baseline | `TODO` | 10% | P1 | HAI-07 |
+| HAI-08 | Phân tích lỗi và so sánh baseline | `DONE` | 100% | P1 | HAI-07 |
 | HAI-09 | Hardening, rollout và rollback | `TODO` | 40% | P1 | HAI-03, HAI-04 |
 | HAI-10 | Hoàn thiện nội dung báo cáo | `TODO` | 20% | P1 | HAI-07, HAI-08 |
 
@@ -251,20 +251,22 @@ Precision@K phải báo baseline trước khi chốt ngưỡng cuối, không đ
 
 ### HAI-08 Phân tích lỗi và baseline
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `DONE`
 
 | Xong | ID | Việc cần làm | Đầu ra |
 |---:|---|---|---|
-| [ ] | HAI-08.1 | So sánh legacy Voyage và SigLIP2 V2 | Comparison table có cảnh báo khác dataset/model |
-| [ ] | HAI-08.2 | So sánh raw candidates với grouped Commerce results | Ablation result |
-| [ ] | HAI-08.3 | Phân tích nhầm áo/đồng phục | Failure cases |
-| [ ] | HAI-08.4 | Phân tích nhầm màu | Failure cases |
-| [ ] | HAI-08.5 | Phân tích crop/che khuất/nền phức tạp | Failure cases |
-| [ ] | HAI-08.6 | Phân tích phụ kiện nhỏ | Failure cases |
-| [ ] | HAI-08.7 | So sánh synthetic catalog với ảnh chụp | Limitations section |
-| [ ] | HAI-08.8 | Đề xuất cải tiến nhưng không sửa TEST | `failure-cases.md` |
+| [x] | HAI-08.1 | So sánh legacy Voyage và SigLIP2 V2 | Comparison table có cảnh báo khác dataset/model |
+| [x] | HAI-08.2 | So sánh raw candidates với grouped Commerce results | `N/A_NOT_RECORDED`; xác nhận grouped result không trùng product và bổ sung yêu cầu telemetry cho runner v2 |
+| [x] | HAI-08.3 | Phân tích nhầm áo/đồng phục | Failure cases |
+| [x] | HAI-08.4 | Phân tích nhầm màu | `N/A_MISSING_EXPECTED_COLOR_LABELS`; không đoán nhãn hậu nghiệm |
+| [x] | HAI-08.5 | Phân tích crop/che khuất/nền phức tạp | Failure cases |
+| [x] | HAI-08.6 | Phân tích phụ kiện nhỏ | Failure cases |
+| [x] | HAI-08.7 | So sánh synthetic catalog với ảnh chụp | Limitations section |
+| [x] | HAI-08.8 | Đề xuất cải tiến nhưng không sửa TEST | `failure-cases.md` |
 
 Mỗi failure case phải có query ID, expected products, top results, similarity, category/color và nhận xét nguyên nhân.
+
+**Bằng chứng đóng task (25/10/2026):** `evidence/image-search-v2/test-v1-final/failure-analysis.json` và `failure-cases.md`, sinh offline bằng `visual-search-service/scripts/analyze_test_failures.py` từ ranked output đã khóa, không gọi lại TEST. Raw top-1 relevant `59%`, raw hit@5 `79%`, raw hit@10 `84%`, raw top-1 category `67%`; 96/100 positive top-1 không vượt threshold DEV, 33/100 nhầm category và 21/100 không có relevant product trong raw top 5. Báo cáo có confusion matrix, phân tích theo nhóm, case đại diện, review ảnh/nền/crop/phụ kiện, so sánh Voyage lịch sử và DEV synthetic, cùng kế hoạch DEV/TEST v2. Hai phép đo không có dữ liệu được ghi N/A rõ ràng; TEST v1 không bị retune hoặc chạy lại.
 
 ### HAI-09 Hardening, rollout và rollback
 
@@ -347,6 +349,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 | 24/10/2026 | Tạo và khóa DEV v1 | 55 query, đủ năm nhóm + unknown; manifest/labels/checksum tái tạo được, không exact duplicate | `datasets/image-search/dev-v1/`; `evidence/image-search-v2/dev-v1-validation-2026-10-24.json` | Positive case là catalog-derived, chỉ dùng tune DEV | Tune trên DEV rồi mới thu TEST độc lập |
 | 24/10/2026 | Thu thập, QA và khóa TEST v1 độc lập | 120 query; 20/nhóm; 120 judgment COMPLETE; 0 exact/near duplicate chưa xử lý; validator PASS | `datasets/image-search/test-v1/`; `evidence/image-search-v2/test-v1-validation-2026-10-24.json` | Còn ký duyệt của thành viên dự án khác trước benchmark/nộp cuối | Ký duyệt rồi chạy HAI-07.12 đúng một lần |
 | 24/10/2026 | Chạy benchmark TEST v1 cuối sau ký duyệt của Dũng | 120/120 request; acceptance FAILED: Recall@5 1.67%, category accuracy 4%; unknown rejection 100%, P95 670.52 ms | `evidence/image-search-v2/test-v1-final/` | Chất lượng ảnh độc lập không đạt; không được retune/chạy lại TEST v1 | Thực hiện HAI-08 và xây DEV/TEST version mới nếu thay đổi pipeline |
+| 25/10/2026 | Hoàn tất HAI-08 failure analysis và baseline comparison | Có confusion matrix, taxonomy, 9 case đại diện; raw hit@5 79%, raw category 67%; xác định domain shift và giới hạn ground truth/telemetry | `failure-analysis.json`; `failure-cases.md`; `analyze_test_failures.py` | Raw image candidates và expected color không được lưu nên hai phân tích tương ứng là N/A | Giữ rollout tắt; tiếp tục HAI-09 hardening và lập DEV/TEST v2 |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 
@@ -359,7 +362,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 - [x] HAI-05 DEV v1 đã `FROZEN`.
 - [x] HAI-06 TEST v1 độc lập đã `FROZEN` và không leakage.
 - [x] HAI-07 benchmark cuối có ranked output và metric tái lập được; acceptance hiện `FAILED`.
-- [ ] HAI-08 có failure-case analysis và baseline comparison.
+- [x] HAI-08 có failure-case analysis và baseline comparison.
 - [ ] HAI-09 có rollout/rollback đã thử nghiệm.
 - [ ] HAI-10 có nội dung báo cáo hoàn chỉnh.
 - [ ] Một thành viên khác đã review dataset, code, metric và báo cáo.
