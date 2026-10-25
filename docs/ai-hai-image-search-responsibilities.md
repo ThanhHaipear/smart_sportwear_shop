@@ -43,7 +43,7 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-07 | Viết runner và chạy đánh giá | `DONE` | 100% | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và so sánh baseline | `DONE` | 100% | P1 | HAI-07 |
 | HAI-09 | Hardening, rollout và rollback | `DONE` | 100% | P1 | HAI-03, HAI-04 |
-| HAI-10 | Hoàn thiện nội dung báo cáo | `TODO` | 20% | P1 | HAI-07, HAI-08 |
+| HAI-10 | Hoàn thiện nội dung báo cáo | `IN REVIEW` | 95% | P1 | HAI-07, HAI-08 |
 
 ## 4. Những phần đã có, không làm lại
 
@@ -293,19 +293,21 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 | Xong | ID | Nội dung | Bằng chứng cần dùng |
 |---:|---|---|---|
-| [ ] | HAI-10.1 | Mục tiêu và phạm vi image search | Bảng phân công, kiến trúc V2 |
-| [ ] | HAI-10.2 | Nguồn ảnh, license và provenance | Catalog manifests |
-| [ ] | HAI-10.3 | Chuẩn hóa ảnh | Kích thước, checksum, Cloudinary |
-| [ ] | HAI-10.4 | Kiến trúc pipeline | Cloudinary → SigLIP2 → pgvector → Spring → UI |
-| [ ] | HAI-10.5 | Lý do chọn SigLIP2 768 chiều | Model registry/config |
-| [ ] | HAI-10.6 | Lý do dùng exact cosine | Quy mô catalog/benchmark |
-| [ ] | HAI-10.7 | Versioning và idempotency | Model/image hash/job report |
-| [ ] | HAI-10.8 | DEV/TEST và chống leakage | Manifest/checksum/source group |
-| [ ] | HAI-10.9 | Công thức và protocol metric | Evaluation runner |
-| [ ] | HAI-10.10 | Kết quả tổng thể/theo nhóm | Final metrics |
-| [ ] | HAI-10.11 | Failure-case analysis | `failure-cases.md` |
-| [ ] | HAI-10.12 | Hạn chế và hướng mở rộng | Synthetic/reference/real photo |
-| [ ] | HAI-10.13 | Vận hành và rollback | Runbook đã thử |
+| [x] | HAI-10.1 | Mục tiêu và phạm vi image search | Bảng phân công, kiến trúc V2 |
+| [x] | HAI-10.2 | Nguồn ảnh, license và provenance | Catalog manifests |
+| [x] | HAI-10.3 | Chuẩn hóa ảnh | Kích thước, checksum, Cloudinary |
+| [x] | HAI-10.4 | Kiến trúc pipeline | Cloudinary → SigLIP2 → pgvector → Spring → UI |
+| [x] | HAI-10.5 | Lý do chọn SigLIP2 768 chiều | Model registry/config |
+| [x] | HAI-10.6 | Lý do dùng exact cosine | Quy mô catalog/benchmark |
+| [x] | HAI-10.7 | Versioning và idempotency | Model/image hash/job report |
+| [x] | HAI-10.8 | DEV/TEST và chống leakage | Manifest/checksum/source group |
+| [x] | HAI-10.9 | Công thức và protocol metric | Evaluation runner |
+| [x] | HAI-10.10 | Kết quả tổng thể/theo nhóm | Final metrics |
+| [x] | HAI-10.11 | Failure-case analysis | `failure-cases.md` |
+| [x] | HAI-10.12 | Hạn chế và hướng mở rộng | Synthetic/reference/real photo |
+| [x] | HAI-10.13 | Vận hành và rollback | Runbook đã thử |
+
+**Bằng chứng báo cáo (25/10/2026):** `docs/ai-hai-image-search-final-report.md` đã tổng hợp đầy đủ mục tiêu/phạm vi, provenance/license, chuẩn hóa, kiến trúc, model, exact cosine, versioning/idempotency, protocol chống leakage, công thức metric, kết quả tổng thể/theo nhóm, failure analysis, hạn chế, hướng mở rộng và rollback. Báo cáo giữ nguyên kết luận TEST v1 FAILED (Recall@5 `1,67%`, category accuracy `4%`), yêu cầu public flag tiếp tục tắt và liên kết toàn bộ evidence có thể tái lập. HAI-10 chờ một thành viên khác review bản báo cáo cuối để chuyển từ `IN REVIEW` sang `DONE`.
 
 ## 7. Artifact phải bàn giao
 
@@ -339,6 +341,8 @@ evidence/
 
 Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest, checksum, nguồn, license và hướng dẫn tái tạo hoặc tải lại hợp lệ.
 
+Báo cáo tổng kết HAI-10 được bàn giao tại `docs/ai-hai-image-search-final-report.md`; báo cáo TEST v1 cấp benchmark vẫn được giữ riêng tại `evidence/image-search-v2/test-v1-final/final-report.md`.
+
 ## 8. Nhật ký thực hiện
 
 | Ngày | Công việc | Kết quả | Commit/Artifact | Vướng mắc | Bước tiếp theo |
@@ -356,6 +360,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 | 25/10/2026 | Backup, deploy V8 và smoke Supabase HAI-09 | Restore backup thành công; Flyway ở v8; readiness complete; coverage 81/81; model ACTIVE; jobs/usage/operations HTTP 200 | `evidence/image-search-v2/hai-09-v8-deployment-2026-10-25.json` | RabbitMQ local unavailable; public rollout vẫn bị chặn do TEST v1 failed acceptance | Hoàn tất audit log HAI-09.6 và rollback drill HAI-09.9 |
 | 25/10/2026 | Hoàn tất audit log HAI-09.6 | Sáu admin mutation ghi audit append-only; transaction-safe; payload allowlist; không ảnh/token/secret/PII; 120 Python tests + migration/integration đạt | `evidence/image-search-v2/hai-09-admin-audit-2026-10-25.json` | Internal token xác thực service, không định danh cá nhân vận hành và không được ghi log | Thực hiện rollback drill HAI-09.9 |
 | 25/10/2026 | Hoàn tất rollback drill HAI-09.9 | Feature on/off 6/6; rollback tắt trả image search 503 nhưng catalog 200; model candidate → SigLIP2 thành công; vector/audit giữ nguyên; Flyway v8 | `evidence/image-search-v2/hai-09-rollback-drill-2026-10-25.json` | Drill dùng môi trường tạm; public production vẫn phải tắt vì TEST v1 failed acceptance | Chuyển sang HAI-10 hoàn thiện báo cáo |
+| 25/10/2026 | Hoàn thiện nội dung báo cáo HAI-10 | Đủ HAI-10.1–10.13; kết luận TEST v1 FAILED được giữ nguyên; evidence và điều kiện rollout/rollback được liên kết | `docs/ai-hai-image-search-final-report.md` | Chưa có review độc lập cho bản báo cáo tổng kết | Thành viên khác review dataset, code, metric và báo cáo; sau đó đóng HAI-10 |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 
@@ -370,7 +375,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 - [x] HAI-07 benchmark cuối có ranked output và metric tái lập được; acceptance hiện `FAILED`.
 - [x] HAI-08 có failure-case analysis và baseline comparison.
 - [x] HAI-09 có rollout/rollback đã thử nghiệm.
-- [ ] HAI-10 có nội dung báo cáo hoàn chỉnh.
+- [x] HAI-10 có nội dung báo cáo hoàn chỉnh.
 - [ ] Một thành viên khác đã review dataset, code, metric và báo cáo.
 
 Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN ANALYZE` và benchmark chứng minh exact cosine không đáp ứng latency ở quy mô dữ liệu thực tế.
