@@ -1,0 +1,224 @@
+{
+  "split": "TEST",
+  "sampleCount": 120,
+  "completeJudgmentCount": 120,
+  "positive": {
+    "sampleCount": 100,
+    "precision": {
+      "at1": 0.02,
+      "at5": 0.006,
+      "at10": 0.003
+    },
+    "recall": {
+      "at1": 0.0133,
+      "at5": 0.0167,
+      "at10": 0.0167
+    },
+    "accuracy": {
+      "top1": 0.02,
+      "top5": 0.02
+    },
+    "categoryAccuracy": {
+      "value": 0.04,
+      "sampleCount": 100
+    },
+    "colorAccuracy": {
+      "value": null,
+      "sampleCount": 0,
+      "status": "N/A_MISSING_EXPECTED_COLOR_LABELS"
+    },
+    "retrievalFailureRateAt5": {
+      "value": 0.98,
+      "failureCount": 98,
+      "sampleCount": 100
+    }
+  },
+  "unknown": {
+    "sampleCount": 20,
+    "rejectedCount": 20,
+    "rejectionRate": 1.0
+  },
+  "requestFailureRate": {
+    "value": 0.0,
+    "failureCount": 0,
+    "sampleCount": 120
+  },
+  "latencyMs": {
+    "p50": 623.03,
+    "p95": 670.52,
+    "sampleCount": 120
+  },
+  "groups": [
+    "accessories",
+    "bottoms",
+    "shoes",
+    "tops",
+    "uniforms"
+  ],
+  "slices": {
+    "accessories": {
+      "sampleCount": 20,
+      "precision": {
+        "at1": 0.05,
+        "at5": 0.01,
+        "at10": 0.005
+      },
+      "recall": {
+        "at1": 0.05,
+        "at5": 0.05,
+        "at10": 0.05
+      },
+      "accuracy": {
+        "top1": 0.05,
+        "top5": 0.05
+      },
+      "categoryAccuracy": {
+        "value": 0.05,
+        "sampleCount": 20
+      },
+      "colorAccuracy": {
+        "value": null,
+        "sampleCount": 0,
+        "status": "N/A_MISSING_EXPECTED_COLOR_LABELS"
+      },
+      "retrievalFailureRateAt5": {
+        "value": 0.95,
+        "failureCount": 19,
+        "sampleCount": 20
+      }
+    },
+    "bottoms": {
+      "sampleCount": 20,
+      "precision": {
+        "at1": 0.0,
+        "at5": 0.0,
+        "at10": 0.0
+      },
+      "recall": {
+        "at1": 0.0,
+        "at5": 0.0,
+        "at10": 0.0
+      },
+      "accuracy": {
+        "top1": 0.0,
+        "top5": 0.0
+      },
+      "categoryAccuracy": {
+        "value": 0.0,
+        "sampleCount": 20
+      },
+      "colorAccuracy": {
+        "value": null,
+        "sampleCount": 0,
+        "status": "N/A_MISSING_EXPECTED_COLOR_LABELS"
+      },
+      "retrievalFailureRateAt5": {
+        "value": 1.0,
+        "failureCount": 20,
+        "sampleCount": 20
+      }
+    },
+    "shoes": {
+      "sampleCount": 20,
+      "precision": {
+        "at1": 0.05,
+        "at5": 0.02,
+        "at10": 0.01
+      },
+      "recall": {
+        "at1": 0.0167,
+        "at5": 0.0333,
+        "at10": 0.0333
+      },
+      "accuracy": {
+        "top1": 0.05,
+        "top5": 0.05
+      },
+      "categoryAccuracy": {
+        "value": 0.05,
+        "sampleCount": 20
+      },
+      "colorAccuracy": {
+        "value": null,
+        "sampleCount": 0,
+        "status": "N/A_MISSING_EXPECTED_COLOR_LABELS"
+      },
+      "retrievalFailureRateAt5": {
+        "value": 0.95,
+        "failureCount": 19,
+        "sampleCount": 20
+      }
+    },
+    "tops": {
+      "sampleCount": 20,
+      "precision": {
+        "at1": 0.0,
+        "at5": 0.0,
+        "at10": 0.0
+      },
+      "recall": {
+        "at1": 0.0,
+        "at5": 0.0,
+        "at10": 0.0
+      },
+      "accuracy": {
+        "top1": 0.0,
+        "top5": 0.0
+      },
+      "categoryAccuracy": {
+        "value": 0.1,
+        "sampleCount": 20
+      },
+      "colorAccuracy": {
+        "value": null,
+        "sampleCount": 0,
+        "status": "N/A_MISSING_EXPECTED_COLOR_LABELS"
+      },
+      "retrievalFailureRateAt5": {
+        "value": 1.0,
+        "failureCount": 20,
+        "sampleCount": 20
+      }
+    },
+    "uniforms": {
+      "sampleCount": 20,
+      "precision": {
+        "at1": 0.0,
+        "at5": 0.0,
+        "at10": 0.0
+      },
+      "recall": {
+        "at1": 0.0,
+        "at5": 0.0,
+        "at10": 0.0
+      },
+      "accuracy": {
+        "top1": 0.0,
+        "top5": 0.0
+      },
+      "categoryAccuracy": {
+        "value": 0.0,
+        "sampleCount": 20
+      },
+      "colorAccuracy": {
+        "value": null,
+        "sampleCount": 0,
+        "status": "N/A_MISSING_EXPECTED_COLOR_LABELS"
+      },
+      "retrievalFailureRateAt5": {
+        "value": 1.0,
+        "failureCount": 20,
+        "sampleCount": 20
+      }
+    }
+  },
+  "acceptance": {
+    "eligible": true,
+    "passed": false,
+    "failures": [
+      "recall@5 is below 80%",
+      "category accuracy is below 90%"
+    ],
+    "note": null
+  }
+}

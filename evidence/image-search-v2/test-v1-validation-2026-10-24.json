@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-24T21:28:53+07:00",
+  "generatedAt": "2026-10-24T22:33:05+07:00",
   "gitCommit": "d75e89bcb65289b460768ce7255c401f80d8294e",
   "dataset": "image-search-test-v1:1.0.0",
   "status": "FROZEN",
@@ -62,7 +62,7 @@
     },
     "reviewReport": {
       "path": "datasets/image-search/test-v1/review-report.json",
-      "sha256": "bfd5614c36c6f90ed1aa91d9d35d71a3dc94053b930bb707243fc5b3e5e4542e"
+      "sha256": "adc73d5b6373a199a4fb78f9f17db70f81579ec9945578734392b1ea5fe104f8"
     }
   },
   "validation": {
@@ -74,7 +74,12 @@
     "allUnknownCasesHaveNoRelevantProducts": true,
     "allCasesHaveCompleteJudgment": true,
     "contactSheetReviewComplete": true,
-    "reviewer": "Codex-assisted visual, provenance, label and checksum review"
+    "reviewer": "Codex-assisted visual, provenance, label and checksum review",
+    "independentSignOff": {
+      "reviewer": "Dũng",
+      "reviewedAt": "2026-10-24T22:33:05+07:00",
+      "decision": "APPROVED_FOR_FINAL_BENCHMARK"
+    }
   },
   "limitations": [
     "Product relevance is source-subcategory-level for tops, bottoms, shoes and accessories, and sports-uniform-category-level for uniforms; it does not claim exact-product identity.",

@@ -40,7 +40,7 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-04 | Kiểm thử API và repository V2 | `DONE` | 100% | P0 | HAI-03 |
 | HAI-05 | Xây dựng tập ảnh DEV | `DONE` | 100% | P0 | HAI-01 |
 | HAI-06 | Xây dựng tập ảnh TEST độc lập | `DONE` | 100% | P0 | HAI-01, HAI-05 |
-| HAI-07 | Viết runner và chạy đánh giá | `IN PROGRESS` | 90% | P0 | HAI-03, HAI-05, HAI-06 |
+| HAI-07 | Viết runner và chạy đánh giá | `DONE` | 100% | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và so sánh baseline | `TODO` | 10% | P1 | HAI-07 |
 | HAI-09 | Hardening, rollout và rollback | `TODO` | 40% | P1 | HAI-03, HAI-04 |
 | HAI-10 | Hoàn thiện nội dung báo cáo | `TODO` | 20% | P1 | HAI-07, HAI-08 |
@@ -211,7 +211,7 @@ TEST không được là ảnh catalog, crop trực tiếp, ảnh synthetic từ
 
 ### HAI-07 Viết runner và chạy đánh giá
 
-**Trạng thái:** `IN PROGRESS`
+**Trạng thái:** `DONE`
 
 ```text
 Precision@K = |top-K ∩ relevant| / K
@@ -231,9 +231,11 @@ Recall@K    = |top-K ∩ relevant| / |relevant|
 | [x] | HAI-07.9 | Báo cáo theo nhóm sản phẩm | Metric slices | Không chỉ báo trung bình |
 | [x] | HAI-07.10 | Lưu config/model/dataset/commit | `benchmark-config.json` | Run tái lập được |
 | [x] | HAI-07.11 | Chạy DEV, khóa cấu hình | DEV report | Hoàn tất trước TEST |
-| [ ] | HAI-07.12 | Chạy TEST cuối | Final report | Không tune lại bằng TEST |
+| [x] | HAI-07.12 | Chạy TEST cuối | Final report | Không tune lại bằng TEST |
 
 **DEV report (24/10/2026):** `evidence/image-search-v2/dev-v1-benchmark-2026-10-24/`. Runner kiểm tra dataset frozen/checksum và hoàn tất 55/55 request, khóa candidate limit `20` và similarity threshold `0.71233916`. Trên tập synthetic DEV: Recall@1/5/10 và category accuracy đều `1.0`, unknown rejection `1.0`, request failure `0`, latency P50 `607.88 ms`, P95 `707.04 ms`; Precision@1/5/10 lần lượt `1.0/0.2/0.1` vì mỗi query chỉ có một relevant product. Color accuracy là N/A do DEV chưa có expected color label. Các số DEV chỉ dùng để tune, không phải acceptance hoặc bằng chứng tổng quát hóa thực tế.
+
+**TEST report (24/10/2026):** `evidence/image-search-v2/test-v1-final/`. Lượt TEST cuối chạy đúng một lần sau khi Dũng ký duyệt độc lập, dùng candidate limit `20` và threshold DEV đã khóa `0.71233916`; 120/120 request hoàn tất, không có request failure. Acceptance `FAILED`: Recall@5 `1.67%` và category accuracy `4%`, thấp hơn mục tiêu `80%` và `90%`; unknown rejection `100%`, latency P50 `623.03 ms`, P95 `670.52 ms`, leakage `0`. Chẩn đoán trên ranked output đã lưu cho thấy raw top-5 hit trước threshold là `79%` và raw top-1 category match `67%`; domain shift từ DEV synthetic sang ảnh độc lập là nguyên nhân chính, nhưng ranking thô cũng chưa đạt target. Không retune và không chạy lại TEST v1.
 
 ### Acceptance target
 
@@ -344,6 +346,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 | 24/10/2026 | Đóng HAI-04 và đồng bộ runtime database | 114 Python tests, 20 Spring tests, build storefront, Playwright desktop/mobile/camera và smoke Supabase thật đều đạt; ba service dùng cùng Supabase | `evidence/image-search-v2/hai-04-verification-2026-10-24.json` | Chưa có DEV v1 | Bắt đầu HAI-05 |
 | 24/10/2026 | Tạo và khóa DEV v1 | 55 query, đủ năm nhóm + unknown; manifest/labels/checksum tái tạo được, không exact duplicate | `datasets/image-search/dev-v1/`; `evidence/image-search-v2/dev-v1-validation-2026-10-24.json` | Positive case là catalog-derived, chỉ dùng tune DEV | Tune trên DEV rồi mới thu TEST độc lập |
 | 24/10/2026 | Thu thập, QA và khóa TEST v1 độc lập | 120 query; 20/nhóm; 120 judgment COMPLETE; 0 exact/near duplicate chưa xử lý; validator PASS | `datasets/image-search/test-v1/`; `evidence/image-search-v2/test-v1-validation-2026-10-24.json` | Còn ký duyệt của thành viên dự án khác trước benchmark/nộp cuối | Ký duyệt rồi chạy HAI-07.12 đúng một lần |
+| 24/10/2026 | Chạy benchmark TEST v1 cuối sau ký duyệt của Dũng | 120/120 request; acceptance FAILED: Recall@5 1.67%, category accuracy 4%; unknown rejection 100%, P95 670.52 ms | `evidence/image-search-v2/test-v1-final/` | Chất lượng ảnh độc lập không đạt; không được retune/chạy lại TEST v1 | Thực hiện HAI-08 và xây DEV/TEST version mới nếu thay đổi pipeline |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 
@@ -355,7 +358,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 - [x] HAI-04 hoàn thành; test và QA liên quan đều đạt.
 - [x] HAI-05 DEV v1 đã `FROZEN`.
 - [x] HAI-06 TEST v1 độc lập đã `FROZEN` và không leakage.
-- [ ] HAI-07 benchmark cuối có ranked output và metric tái lập được.
+- [x] HAI-07 benchmark cuối có ranked output và metric tái lập được; acceptance hiện `FAILED`.
 - [ ] HAI-08 có failure-case analysis và baseline comparison.
 - [ ] HAI-09 có rollout/rollback đã thử nghiệm.
 - [ ] HAI-10 có nội dung báo cáo hoàn chỉnh.
