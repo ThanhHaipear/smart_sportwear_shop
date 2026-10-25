@@ -1,0 +1,106 @@
+{
+  "evidence_type": "hai-09-v8-deployment-and-read-only-smoke",
+  "executed_at": "2026-10-25T11:59:25+07:00",
+  "environment": "shared Supabase plus local visual-search service",
+  "source_commit": "403a38c",
+  "backup": {
+    "path": "tmp/supabase-backups/pre-v8-20261025-115409.dump",
+    "format": "PostgreSQL custom archive",
+    "schemas": [
+      "public",
+      "ai_retrieval",
+      "extensions"
+    ],
+    "bytes": 818468,
+    "sha256": "b12b301247454c9ce670c886bea7d7e87fdd6ce24823e2ab52f7eaf855080d10",
+    "toc_entries": 433,
+    "restore_verified": true,
+    "restore_target": "temporary PostgreSQL 17 with pgvector 0.8.7",
+    "restore_checks": {
+      "flyway_version": "7",
+      "flyway_successful_migrations": 7,
+      "model_versions": 2,
+      "ready_image_embeddings": 81,
+      "active_products": 36
+    },
+    "restore_note": "The target must have the vector extension installed before restoring this schema-filtered archive. The temporary restore database and container were removed after verification."
+  },
+  "pre_deploy": {
+    "flyway_version": "7",
+    "usage_events_table_present": false,
+    "indexing_jobs_source_counts_present": false
+  },
+  "deployment": {
+    "migration": "backend/src/main/resources/db/v2-migration/V8__harden_visual_search_operations.sql",
+    "executor": "Spring Boot Flyway",
+    "validated_migration_count": 8,
+    "previous_version": "7",
+    "current_version": "8",
+    "success": true,
+    "confirmation": "Flyway reported that V8 was applied successfully and schema public is now at version v8."
+  },
+  "smoke": {
+    "base_url": "http://127.0.0.1:8090",
+    "read_only": true,
+    "endpoints": [
+      {
+        "path": "/health/ready",
+        "http_status": 200,
+        "status": "ready",
+        "database": "up",
+        "active_model": "active",
+        "coverage": "complete",
+        "rabbitmq": "not_required"
+      },
+      {
+        "path": "/internal/v1/admin/coverage",
+        "http_status": 200,
+        "total_active_images": 81,
+        "ready": 81,
+        "missing": 0,
+        "coverage_pct": 100.0
+      },
+      {
+        "path": "/internal/v1/admin/models",
+        "http_status": 200,
+        "provider": "HUGGING_FACE_LOCAL",
+        "model": "google/siglip2-base-patch16-224",
+        "dimensions": 768,
+        "status": "ACTIVE",
+        "target_image_count": 81,
+        "ready_image_count": 81
+      },
+      {
+        "path": "/internal/v1/admin/jobs",
+        "http_status": 200,
+        "most_recent_job_status": "COMPLETED",
+        "most_recent_job_total": 81,
+        "most_recent_job_completed": 81,
+        "most_recent_job_failed": 0
+      },
+      {
+        "path": "/internal/v1/admin/usage",
+        "http_status": 200,
+        "days": 30,
+        "rows": 0
+      },
+      {
+        "path": "/internal/v1/admin/operations",
+        "http_status": 200,
+        "outbox_pending": 0,
+        "outbox_publishing": 0,
+        "outbox_failed": 0,
+        "rabbitmq_available": false,
+        "monthly_cost_usd": 0.0,
+        "budget_exhausted": false
+      }
+    ]
+  },
+  "rollout_guard": {
+    "backend_env_visual_search_enabled": false,
+    "backend_example_visual_search_enabled": false,
+    "reason": "TEST v1 failed acceptance; public rollout remains disabled."
+  },
+  "secrets_recorded": false,
+  "result": "PASS"
+}
