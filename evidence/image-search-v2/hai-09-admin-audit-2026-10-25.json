@@ -1,0 +1,46 @@
+{
+  "evidence_type": "hai-09-admin-audit",
+  "executed_at": "2026-10-25T15:15:00+07:00",
+  "scope": "HAI-09.6",
+  "storage": {
+    "table": "public.audit_logs",
+    "append_only": true,
+    "schema_migration_required": false,
+    "source": "visual-search-service",
+    "result": "SUCCESS"
+  },
+  "audited_actions": [
+    "VISUAL_MODEL_CREATE",
+    "VISUAL_MODEL_ACTIVATE",
+    "VISUAL_BACKFILL_MISSING",
+    "VISUAL_REINDEX_PRODUCT_IMAGE",
+    "VISUAL_REINDEX_PRODUCT",
+    "VISUAL_RETRY_FAILED"
+  ],
+  "transaction_guarantees": {
+    "model_create": "same transaction as model insert",
+    "model_activate_or_rollback": "same transaction as model status changes",
+    "indexing_job_actions": "same transaction as job, outbox and job-item inserts",
+    "retry_noop": "standalone audit transaction because no business row is changed"
+  },
+  "privacy": {
+    "payload_fields_are_allowlisted": true,
+    "raw_request_body_recorded": false,
+    "image_or_image_url_recorded": false,
+    "internal_token_recorded": false,
+    "secret_or_credential_recorded": false,
+    "actor_user_id_recorded": false,
+    "ip_address_recorded": false,
+    "user_agent_recorded": false
+  },
+  "verification": {
+    "admin_and_indexing_unit_tests": "27 passed",
+    "visual_search_full_suite": "120 passed, 2 skipped",
+    "v2_migration_contract": "5 passed",
+    "postgresql_repository_integration": "1 passed",
+    "postgresql_version": "17.11",
+    "flyway_version": "8"
+  },
+  "shared_supabase_mutated": false,
+  "result": "PASS"
+}

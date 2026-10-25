@@ -293,7 +293,13 @@ async def backfill_missing(
         report = await service.inspect(include_failed=False)
         candidates = tuple(item for item in report.candidates if item.reason == "MISSING")
         filtered = ReconciliationReport(total=len(candidates), reasons={"MISSING": len(candidates)}, candidates=candidates)
-        job = await service.enqueue("BACKFILL", filtered)
+        job = await service.enqueue(
+            "BACKFILL",
+            filtered,
+            audit_action="VISUAL_BACKFILL_MISSING",
+            audit_target_type="ACTIVE_CATALOG",
+            audit_target_id="all",
+        )
         return EnqueueResponse(job_id=str(job.id), enqueued_count=job.total_count)
     except (RepositoryUnavailableError, PsycopgError, RuntimeError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
@@ -320,7 +326,15 @@ async def reindex(
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No ACTIVE catalog image matched")
         service = IndexingJobService(repo)
         report = ReconciliationReport(total=len(candidates), reasons={"REQUESTED": len(candidates)}, candidates=tuple(candidates))
-        job = await service.enqueue("IMAGE" if request.image_id else "PRODUCT", report)
+        target_type = "PRODUCT_IMAGE" if request.image_id else "PRODUCT"
+        target_id = str(request.image_id or request.product_id)
+        job = await service.enqueue(
+            "IMAGE" if request.image_id else "PRODUCT",
+            report,
+            audit_action=f"VISUAL_REINDEX_{target_type}",
+            audit_target_type=target_type,
+            audit_target_id=target_id,
+        )
         return EnqueueResponse(job_id=str(job.id), enqueued_count=job.total_count)
     except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable") from exc
@@ -447,8 +461,20 @@ async def retry_failed(
             candidates=retryable,
         )
         if failed_only_report.total == 0:
+            await repo.record_admin_audit(
+                action="VISUAL_RETRY_FAILED",
+                entity_type="VISUAL_INDEXING_JOB",
+                entity_id="NO_JOB",
+                after={"job_type": "RECONCILIATION", "enqueued_count": 0},
+            )
             return RetryFailedResponse(job_id="", enqueued_count=0)
-        job = await service.enqueue("RECONCILIATION", failed_only_report)
+        job = await service.enqueue(
+            "RECONCILIATION",
+            failed_only_report,
+            audit_action="VISUAL_RETRY_FAILED",
+            audit_target_type="FAILED_RETRYABLE",
+            audit_target_id="all",
+        )
     except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable") from exc
     except RuntimeError as exc:

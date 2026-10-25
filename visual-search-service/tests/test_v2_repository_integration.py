@@ -26,6 +26,17 @@ def test_repository_operational_queries_match_migrated_v2_schema() -> None:
         assert model is not None
         assert model.dimensions == 768
 
+        draft_model = await repository.create_model_version(
+            "HUGGING_FACE_LOCAL",
+            "audit-fixture-model",
+            "audit-fixture-revision",
+            "audit-fixture-preprocessing",
+            768,
+        )
+        assert draft_model.status == "DRAFT"
+        reactivated_model = await repository.activate_model_version(model.id)
+        assert reactivated_model.status == "ACTIVE"
+
         coverage = await repository.coverage_stats()
         assert coverage.total_active_images == 1
         assert coverage.ready == 1
@@ -45,7 +56,13 @@ def test_repository_operational_queries_match_migrated_v2_schema() -> None:
         assert jobs[0].pending_count == 1
 
         candidates = await repository.targeted_candidates(product_id=coverage_product_id)
-        job = await repository.create_indexing_job("PRODUCT", candidates)
+        job = await repository.create_indexing_job(
+            "PRODUCT",
+            candidates,
+            audit_action="VISUAL_REINDEX_PRODUCT",
+            audit_target_type="PRODUCT",
+            audit_target_id=str(coverage_product_id),
+        )
         assert job.total_count == 1
         assert (await repository.recent_jobs())[0].id == job.id
 
@@ -57,10 +74,64 @@ def test_repository_operational_queries_match_migrated_v2_schema() -> None:
         async with await repository._connect() as connection:
             async with connection.cursor() as cursor:
                 await cursor.execute(
+                    """select action, entity_type, entity_id, before_json, after_json,
+                              details_redacted, actor_user_id, ip_address, user_agent
+                       from public.audit_logs
+                       where action in ('VISUAL_MODEL_CREATE', 'VISUAL_MODEL_ACTIVATE')
+                       order by created_at"""
+                )
+                model_audits = await cursor.fetchall()
+                assert len(model_audits) == 2
+                assert model_audits[0][0:3] == (
+                    "VISUAL_MODEL_CREATE",
+                    "VISUAL_EMBEDDING_MODEL",
+                    str(draft_model.id),
+                )
+                assert model_audits[0][3] is None
+                assert model_audits[0][4] == {
+                    "provider": "HUGGING_FACE_LOCAL",
+                    "model": "audit-fixture-model",
+                    "model_version": "audit-fixture-revision",
+                    "preprocessing_version": "audit-fixture-preprocessing",
+                    "dimensions": 768,
+                    "status": "DRAFT",
+                }
+                assert model_audits[1][0:3] == (
+                    "VISUAL_MODEL_ACTIVATE",
+                    "VISUAL_EMBEDDING_MODEL",
+                    str(model.id),
+                )
+                for audit_row in model_audits:
+                    assert audit_row[5] == {
+                        "source": "visual-search-service", "result": "SUCCESS"
+                    }
+                    assert audit_row[6:] == (None, None, None)
+                await cursor.execute(
                     "select id from integration_outbox where payload->>'traceId'=%s",
                     (str(job.id),),
                 )
                 event_id = (await cursor.fetchone())[0]
+                await cursor.execute(
+                    """select action, entity_type, entity_id, before_json, after_json,
+                              details_redacted, actor_user_id, ip_address, user_agent
+                       from public.audit_logs where entity_id=%s""",
+                    (str(job.id),),
+                )
+                audit = await cursor.fetchone()
+                assert audit[0:3] == (
+                    "VISUAL_REINDEX_PRODUCT", "VISUAL_INDEXING_JOB", str(job.id)
+                )
+                assert audit[3] is None
+                assert audit[4] == {
+                    "job_type": "PRODUCT",
+                    "enqueued_count": 1,
+                    "target_type": "PRODUCT",
+                    "target_id": str(coverage_product_id),
+                }
+                assert audit[5] == {
+                    "source": "visual-search-service", "result": "SUCCESS"
+                }
+                assert audit[6:] == (None, None, None)
 
         value = 1.0 / (768 ** 0.5)
         await repository.mark_ready_and_processed(

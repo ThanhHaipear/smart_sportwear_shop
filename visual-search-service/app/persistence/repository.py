@@ -138,6 +138,25 @@ class ModelVersionStats:
 
 class VisualSearchRepository:
     RECONCILIATION_ADVISORY_LOCK_ID = 7_410_057_007
+    ADMIN_AUDIT_ENTITY_TYPES = frozenset(
+        {"VISUAL_EMBEDDING_MODEL", "VISUAL_INDEXING_JOB"}
+    )
+    ADMIN_AUDIT_FIELDS = frozenset(
+        {
+            "active_model_id",
+            "dimensions",
+            "enqueued_count",
+            "job_type",
+            "model",
+            "model_version",
+            "preprocessing_version",
+            "provider",
+            "status",
+            "target_id",
+            "target_status",
+            "target_type",
+        }
+    )
 
     def __init__(self, settings: Settings):
         self.database_url = settings.database_url
@@ -145,6 +164,74 @@ class VisualSearchRepository:
 
     def _estimated_cost(self, image_pixels: int) -> float:
         return max(0, image_pixels) / 1_000_000 * self.image_cost_per_megapixel_usd
+
+    @staticmethod
+    def _validate_admin_audit_payload(
+        action: str,
+        entity_type: str,
+        before: dict[str, Any] | None,
+        after: dict[str, Any] | None,
+    ) -> None:
+        if not action.startswith("VISUAL_"):
+            raise ValueError("Visual-search audit actions must use the VISUAL_ prefix")
+        if entity_type not in VisualSearchRepository.ADMIN_AUDIT_ENTITY_TYPES:
+            raise ValueError("Unsupported visual-search audit entity type")
+        fields = set((before or {}).keys()) | set((after or {}).keys())
+        unsupported = fields - VisualSearchRepository.ADMIN_AUDIT_FIELDS
+        if unsupported:
+            raise ValueError(
+                "Unsupported visual-search audit fields: " + ", ".join(sorted(unsupported))
+            )
+
+    @staticmethod
+    async def _insert_admin_audit(
+        cursor: Any,
+        *,
+        action: str,
+        entity_type: str,
+        entity_id: str,
+        before: dict[str, Any] | None = None,
+        after: dict[str, Any] | None = None,
+    ) -> None:
+        """Write an allowlisted, non-PII admin event to the append-only audit log."""
+        VisualSearchRepository._validate_admin_audit_payload(
+            action, entity_type, before, after
+        )
+        await cursor.execute(
+            """
+            insert into public.audit_logs
+                (action, entity_type, entity_id, before_json, after_json, details_redacted)
+            values (%s, %s, %s, %s::jsonb, %s::jsonb,
+                    '{"source":"visual-search-service","result":"SUCCESS"}'::jsonb)
+            """,
+            (
+                action,
+                entity_type,
+                entity_id,
+                json.dumps(before) if before is not None else None,
+                json.dumps(after) if after is not None else None,
+            ),
+        )
+
+    async def record_admin_audit(
+        self,
+        *,
+        action: str,
+        entity_type: str,
+        entity_id: str,
+        after: dict[str, Any],
+    ) -> None:
+        """Record a successful admin no-op when there is no business write transaction."""
+        async with await self._connect() as connection:
+            async with connection.transaction():
+                async with connection.cursor() as cursor:
+                    await self._insert_admin_audit(
+                        cursor,
+                        action=action,
+                        entity_type=entity_type,
+                        entity_id=entity_id,
+                        after=after,
+                    )
 
     async def _connect(self) -> psycopg.AsyncConnection[Any]:
         try:
@@ -225,6 +312,20 @@ class VisualSearchRepository:
                         """,
                         (model_id, provider, model, model_version, dimensions, preprocessing_version),
                     )
+                    await self._insert_admin_audit(
+                        cursor,
+                        action="VISUAL_MODEL_CREATE",
+                        entity_type="VISUAL_EMBEDDING_MODEL",
+                        entity_id=str(model_id),
+                        after={
+                            "provider": provider,
+                            "model": model,
+                            "model_version": model_version,
+                            "preprocessing_version": preprocessing_version,
+                            "dimensions": dimensions,
+                            "status": "DRAFT",
+                        },
+                    )
         versions = await self.model_versions()
         return next(version for version in versions if version.id == model_id)
 
@@ -239,6 +340,13 @@ class VisualSearchRepository:
                     row = await cursor.fetchone()
                     if row is None:
                         raise ValueError("Model version not found")
+                    previous_status = row[0]
+                    await cursor.execute(
+                        """select id from ai_retrieval.embedding_models
+                           where modality='PRODUCT_IMAGE' and status='ACTIVE' for update"""
+                    )
+                    active_row = await cursor.fetchone()
+                    previous_active_model_id = str(active_row[0]) if active_row else None
                     await cursor.execute(
                         """select count(*)::int,
                                   count(*) filter(where e.status='READY')::int
@@ -258,6 +366,17 @@ class VisualSearchRepository:
                            set status='RETIRED', updated_at=now()
                            where modality='PRODUCT_IMAGE' and status='ACTIVE' and id<>%s""",
                         (model_id,),
+                    )
+                    await self._insert_admin_audit(
+                        cursor,
+                        action="VISUAL_MODEL_ACTIVATE",
+                        entity_type="VISUAL_EMBEDDING_MODEL",
+                        entity_id=str(model_id),
+                        before={
+                            "active_model_id": previous_active_model_id,
+                            "target_status": previous_status,
+                        },
+                        after={"active_model_id": str(model_id), "target_status": "ACTIVE"},
                     )
                     await cursor.execute(
                         """update ai_retrieval.embedding_models
@@ -656,6 +775,10 @@ class VisualSearchRepository:
         job_type: str,
         candidates: list[ReconciliationCandidate],
         requested_by: UUID | None = None,
+        *,
+        audit_action: str | None = None,
+        audit_target_type: str | None = None,
+        audit_target_id: str | None = None,
     ) -> IndexingJob:
         job_id = uuid4()
         async with await self._connect() as connection:
@@ -722,6 +845,19 @@ class VisualSearchRepository:
                             from product_images where id = %s
                             """,
                             (job_id, candidate.image_id, event_id, candidate.image_id),
+                        )
+                    if audit_action is not None:
+                        await self._insert_admin_audit(
+                            cursor,
+                            action=audit_action,
+                            entity_type="VISUAL_INDEXING_JOB",
+                            entity_id=str(job_id),
+                            after={
+                                "job_type": job_type,
+                                "enqueued_count": len(candidates),
+                                "target_type": audit_target_type,
+                                "target_id": audit_target_id,
+                            },
                         )
         return IndexingJob(job_id, job_type, len(candidates))
 

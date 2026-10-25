@@ -32,7 +32,7 @@ class FakeRepository:
             if include_failed or not item.reason.startswith("FAILED")
         ]
 
-    async def create_indexing_job(self, job_type, candidates, requested_by=None):
+    async def create_indexing_job(self, job_type, candidates, requested_by=None, **audit):
         self.created = (job_type, candidates, requested_by)
         return IndexingJob(uuid4(), job_type, len(candidates))
 

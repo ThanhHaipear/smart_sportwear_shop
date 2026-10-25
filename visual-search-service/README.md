@@ -136,6 +136,10 @@ Available internal endpoints:
 
 All maintenance actions create indexing jobs and transactional outbox events;
 they never call the embedding provider from the HTTP request.
+Successful model creation/activation and indexing maintenance actions also write
+an allowlisted event to the append-only `public.audit_logs` table. The audit
+payload contains operational IDs/counts only and never stores request images,
+tokens, credentials, IP addresses, user agents or user identity.
 
 Usage cost is estimated using `IMAGE_COST_PER_MEGAPIXEL_USD` (default
 `0.0006`). Operations exposes monthly cost/budget, and query embedding stops

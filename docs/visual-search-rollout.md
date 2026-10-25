@@ -27,10 +27,12 @@ The frozen DEV v1 set is synthetic and may be used only for tuning and transform
 
 1. Deploy migrations, RabbitMQ topology, backend and visual service with the public/storefront feature disabled.
 2. Verify readiness, active model, coverage, outbox and queue depth.
-3. Run the benchmark and archive its manifest version and report.
-4. Enable ADMIN/internal access and observe errors, latency, usage, cost and DLQ for one business day.
-5. Enable the storefront for a small traffic cohort at the ingress/feature-management layer.
-6. Expand only while p95, error rate, DLQ, monthly budget and search quality remain within the agreed limits.
+3. Verify each successful admin mutation creates an append-only, redacted audit
+   event without image data, tokens, secrets, IP addresses, user agents or PII.
+4. Run the benchmark and archive its manifest version and report.
+5. Enable ADMIN/internal access and observe errors, latency, usage, cost and DLQ for one business day.
+6. Enable the storefront for a small traffic cohort at the ingress/feature-management layer.
+7. Expand only while p95, error rate, DLQ, monthly budget and search quality remain within the agreed limits.
 
 Never expose RabbitMQ management port `15672`, the Voyage key, database credentials, or the internal service token publicly.
 

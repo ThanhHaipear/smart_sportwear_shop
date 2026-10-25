@@ -42,7 +42,7 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-06 | Xây dựng tập ảnh TEST độc lập | `DONE` | 100% | P0 | HAI-01, HAI-05 |
 | HAI-07 | Viết runner và chạy đánh giá | `DONE` | 100% | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và so sánh baseline | `DONE` | 100% | P1 | HAI-07 |
-| HAI-09 | Hardening, rollout và rollback | `IN PROGRESS` | 80% | P1 | HAI-03, HAI-04 |
+| HAI-09 | Hardening, rollout và rollback | `IN PROGRESS` | 90% | P1 | HAI-03, HAI-04 |
 | HAI-10 | Hoàn thiện nội dung báo cáo | `TODO` | 20% | P1 | HAI-07, HAI-08 |
 
 ## 4. Những phần đã có, không làm lại
@@ -279,13 +279,13 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 | [x] | HAI-09.3 | Rate limit tại Spring | Test đạt |
 | [x] | HAI-09.4 | Byte/MIME/pixel/timeout guard | Test đạt |
 | [x] | HAI-09.5 | Xóa query image sau xử lý | Không vượt retention |
-| [ ] | HAI-09.6 | Audit log | Không có ảnh/token/secret/PII |
+| [x] | HAI-09.6 | Audit log | Không có ảnh/token/secret/PII |
 | [x] | HAI-09.7 | Readiness model/DB/coverage | Phản ánh đúng trạng thái |
 | [x] | HAI-09.8 | Viết rollout checklist | Có precondition và smoke test |
 | [ ] | HAI-09.9 | Thử rollback feature/model | Rollback thành công |
 | [x] | HAI-09.10 | Bảo vệ model/vector được evaluation tham chiếu | Không xóa artifact cần tái lập |
 
-**Bằng chứng hardening (25/10/2026):** repository visual search đã được đồng bộ hoàn toàn sang schema V2 `ai_retrieval`; migration V8 bổ sung retry/job correlation và usage telemetry không lưu query image, token, secret hoặc user ID. Readiness fail-closed khi model sai revision, coverage không đủ hoặc truy vấn coverage lỗi. Migration V1–V8 và repository read/write đã được kiểm thử trên PostgreSQL 17.11 + pgvector tạm thời; `V2OneCMigrationTest` 5/5, repository integration 1/1 và visual service 118 passed/2 skipped. Trước deploy đã tạo backup custom-format, kiểm tra checksum/TOC và restore thành công trên PostgreSQL 17 + pgvector; Flyway sau đó áp dụng V8 thành công, schema `public` ở version `8`. Smoke read-only sau deploy đạt: readiness `200/complete`, coverage `81/81 READY`, SigLIP2 ACTIVE và các endpoint jobs/usage/operations đều HTTP 200; RabbitMQ local unavailable nhưng không ảnh hưởng readiness. Evidence: `evidence/image-search-v2/hai-09-v8-deployment-2026-10-25.json`. Còn HAI-09.6 audit log cho thao tác admin và HAI-09.9 rollback drill; rollout public tiếp tục tắt do TEST v1 không đạt acceptance.
+**Bằng chứng hardening (25/10/2026):** repository visual search đã được đồng bộ hoàn toàn sang schema V2 `ai_retrieval`; migration V8 bổ sung retry/job correlation và usage telemetry không lưu query image, token, secret hoặc user ID. Readiness fail-closed khi model sai revision, coverage không đủ hoặc truy vấn coverage lỗi. Migration V1–V8 và repository read/write đã được kiểm thử trên PostgreSQL 17.11 + pgvector tạm thời; `V2OneCMigrationTest` 5/5 và repository integration 1/1. Trước deploy đã tạo backup custom-format, kiểm tra checksum/TOC và restore thành công trên PostgreSQL 17 + pgvector; Flyway sau đó áp dụng V8 thành công, schema `public` ở version `8`. Smoke read-only sau deploy đạt: readiness `200/complete`, coverage `81/81 READY`, SigLIP2 ACTIVE và các endpoint jobs/usage/operations đều HTTP 200; RabbitMQ local unavailable nhưng không ảnh hưởng readiness. Evidence deploy: `evidence/image-search-v2/hai-09-v8-deployment-2026-10-25.json`. HAI-09.6 đã bổ sung audit append-only cho toàn bộ admin mutation, ghi cùng transaction với model/job/outbox, dùng payload allowlist và không lưu ảnh, URL ảnh, token, secret, IP, user-agent hoặc user identity; visual service đạt 120 passed/2 skipped, migration contract 5/5 và repository integration 1/1. Evidence audit: `evidence/image-search-v2/hai-09-admin-audit-2026-10-25.json`. Còn HAI-09.9 rollback drill; rollout public tiếp tục tắt do TEST v1 không đạt acceptance.
 
 ### HAI-10 Hoàn thiện nội dung báo cáo
 
@@ -354,6 +354,7 @@ Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest,
 | 25/10/2026 | Hoàn tất HAI-08 failure analysis và baseline comparison | Có confusion matrix, taxonomy, 9 case đại diện; raw hit@5 79%, raw category 67%; xác định domain shift và giới hạn ground truth/telemetry | `failure-analysis.json`; `failure-cases.md`; `analyze_test_failures.py` | Raw image candidates và expected color không được lưu nên hai phân tích tương ứng là N/A | Giữ rollout tắt; tiếp tục HAI-09 hardening và lập DEV/TEST v2 |
 | 25/10/2026 | Sửa blocker schema và readiness HAI-09 | Loại SQL `visual_search` cũ; V8 telemetry/job metadata; readiness kiểm tra model + coverage; migration và repository integration đạt | `V8__harden_visual_search_operations.sql`; `test_v2_repository_integration.py` | Cần backup/restore verification và deploy có kiểm soát lên Supabase dùng chung | Backup, deploy V8 và smoke admin endpoints |
 | 25/10/2026 | Backup, deploy V8 và smoke Supabase HAI-09 | Restore backup thành công; Flyway ở v8; readiness complete; coverage 81/81; model ACTIVE; jobs/usage/operations HTTP 200 | `evidence/image-search-v2/hai-09-v8-deployment-2026-10-25.json` | RabbitMQ local unavailable; public rollout vẫn bị chặn do TEST v1 failed acceptance | Hoàn tất audit log HAI-09.6 và rollback drill HAI-09.9 |
+| 25/10/2026 | Hoàn tất audit log HAI-09.6 | Sáu admin mutation ghi audit append-only; transaction-safe; payload allowlist; không ảnh/token/secret/PII; 120 Python tests + migration/integration đạt | `evidence/image-search-v2/hai-09-admin-audit-2026-10-25.json` | Internal token xác thực service, không định danh cá nhân vận hành và không được ghi log | Thực hiện rollback drill HAI-09.9 |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 

@@ -59,6 +59,7 @@ class FakeRepository:
         self._candidates = candidates or []
         self._raise_unavailable = raise_unavailable
         self.created_job: tuple | None = None
+        self.audit_events: list[dict] = []
 
     async def operations_stats(self) -> OperationsStats:
         if self._raise_unavailable:
@@ -95,10 +96,15 @@ class FakeRepository:
         return self._candidates
 
     async def create_indexing_job(
-        self, job_type: str, candidates: list, requested_by=None
+        self, job_type: str, candidates: list, requested_by=None, **audit
     ) -> IndexingJob:
         self.created_job = (job_type, candidates)
+        if audit.get("audit_action"):
+            self.audit_events.append(audit)
         return IndexingJob(uuid4(), job_type, len(candidates))
+
+    async def record_admin_audit(self, **event) -> None:
+        self.audit_events.append(event)
 
 
 # ---------------------------------------------------------------------------
@@ -179,6 +185,11 @@ def test_backfill_missing_only_enqueues_missing_candidates():
     assert resp.status_code == 200
     assert resp.json()["enqueued_count"] == 1
     assert repo.created_job[0] == "BACKFILL"
+    assert repo.audit_events == [{
+        "audit_action": "VISUAL_BACKFILL_MISSING",
+        "audit_target_type": "ACTIVE_CATALOG",
+        "audit_target_id": "all",
+    }]
 
 
 def test_reindex_image_enqueues_image_job():
@@ -190,6 +201,8 @@ def test_reindex_image_enqueues_image_job():
     assert resp.status_code == 200
     assert resp.json()["enqueued_count"] == 1
     assert repo.created_job[0] == "IMAGE"
+    assert repo.audit_events[0]["audit_action"] == "VISUAL_REINDEX_PRODUCT_IMAGE"
+    assert repo.audit_events[0]["audit_target_id"] == str(image_id)
 
 
 def test_reindex_rejects_ambiguous_target():
@@ -316,6 +329,36 @@ def test_retry_failed_response_schema_no_failures():
     assert data["job_id"] == ""
 
 
+def test_retry_failed_noop_is_audited_without_token_or_pii():
+    repo = FakeRepository(candidates=[])
+
+    resp = _make_client(repo).post("/internal/v1/admin/retry-failed", headers=headers())
+
+    assert resp.status_code == 200
+    assert resp.json() == {"job_id": "", "enqueued_count": 0}
+    assert repo.audit_events == [{
+        "action": "VISUAL_RETRY_FAILED",
+        "entity_type": "VISUAL_INDEXING_JOB",
+        "entity_id": "NO_JOB",
+        "after": {"job_type": "RECONCILIATION", "enqueued_count": 0},
+    }]
+    serialized = str(repo.audit_events).lower()
+    assert VALID_TOKEN.lower() not in serialized
+    assert "image_url" not in serialized
+    assert "ip_address" not in serialized
+    assert "user_agent" not in serialized
+
+
+def test_admin_audit_payload_rejects_non_allowlisted_sensitive_fields():
+    with pytest.raises(ValueError, match="Unsupported visual-search audit fields"):
+        VisualSearchRepository._validate_admin_audit_payload(
+            "VISUAL_REINDEX_PRODUCT",
+            "VISUAL_INDEXING_JOB",
+            None,
+            {"job_type": "PRODUCT", "internal_token": "must-not-be-recorded"},
+        )
+
+
 def test_retry_failed_response_schema_with_failures():
     """RetryFailedResponse with enqueued jobs."""
     from app.api.admin import RetryFailedResponse
@@ -338,6 +381,7 @@ def test_retry_failed_enqueues_only_retryable_failures():
     assert resp.status_code == 200
     assert resp.json()["enqueued_count"] == 1
     assert repo.created_job[1][0].reason == "FAILED_RETRYABLE"
+    assert repo.audit_events[0]["audit_action"] == "VISUAL_RETRY_FAILED"
 
 
 def test_recent_job_response_schema():

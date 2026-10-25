@@ -47,9 +47,20 @@ class IndexingJobService:
         report: ReconciliationReport,
         requested_by: UUID | None = None,
         limit: int | None = None,
+        *,
+        audit_action: str | None = None,
+        audit_target_type: str | None = None,
+        audit_target_id: str | None = None,
     ) -> IndexingJob:
         candidates = list(report.candidates[:limit] if limit is not None else report.candidates)
-        return await self.repository.create_indexing_job(job_type, candidates, requested_by)
+        return await self.repository.create_indexing_job(
+            job_type,
+            candidates,
+            requested_by,
+            audit_action=audit_action,
+            audit_target_type=audit_target_type,
+            audit_target_id=audit_target_id,
+        )
 
 
 class ReconciliationScheduler:
