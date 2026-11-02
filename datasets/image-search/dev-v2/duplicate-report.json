@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "method": "SHA-256 and 64-bit dHash against catalog, DEV v1, TEST v1 and accepted DEV v2; TEST-v1 sourceGroupCode overlap is forbidden.",
+  "referenceAssetCount": 256,
+  "accepted": [
+    {
+      "queryId": "dev2-001",
+      "sha256Unique": true,
+      "dHash64": "e0630f0d2bc2c666",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-036.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-002",
+      "sha256Unique": true,
+      "dHash64": "8d4dd1c3e1c9c9f1",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-082.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-003",
+      "sha256Unique": true,
+      "dHash64": "8f4f4ac98f173333",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-110.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-004",
+      "sha256Unique": true,
+      "dHash64": "982f4dc44c008930",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-049.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-005",
+      "sha256Unique": true,
+      "dHash64": "12191919d3d3cec4",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-119.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-006",
+      "sha256Unique": true,
+      "dHash64": "ccd496331373573b",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-007",
+      "sha256Unique": true,
+      "dHash64": "6b6b2b6b67474f4e",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-022.jpg",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-008",
+      "sha256Unique": true,
+      "dHash64": "3803a4cf83cc42c1",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-068.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-009",
+      "sha256Unique": true,
+      "dHash64": "b17171712e6666ec",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/argentina-jm8396-02.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-010",
+      "sha256Unique": true,
+      "dHash64": "4c491890b0e4666c",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-117.jpg",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-011",
+      "sha256Unique": true,
+      "dHash64": "3272b0b2b2b02420",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-001-01.png",
+      "nearestHammingDistance": 13,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-012",
+      "sha256Unique": true,
+      "dHash64": "d55e51dcfab6262c",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-055.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-013",
+      "sha256Unique": true,
+      "dHash64": "ed1b9e3571706062",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-066.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-014",
+      "sha256Unique": true,
+      "dHash64": "73595971717333eb",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-UNIFORM-006-02.png",
+      "nearestHammingDistance": 12,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-015",
+      "sha256Unique": true,
+      "dHash64": "7361737171713b6b",
+      "nearestAsset": "test-014",
+      "nearestHammingDistance": 9,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-016",
+      "sha256Unique": true,
+      "dHash64": "26313210b1b171d3",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-024.jpg",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-017",
+      "sha256Unique": true,
+      "dHash64": "1a4a5029285b9d1d",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-051.webp",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-018",
+      "sha256Unique": true,
+      "dHash64": "d256666e7b714bc6",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-048.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-019",
+      "sha256Unique": true,
+      "dHash64": "5b5f7bf9d8d9d9d8",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-050.jpg",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-020",
+      "sha256Unique": true,
+      "dHash64": "f3d1e9cc9cccccc8",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-02.png",
+      "nearestHammingDistance": 15,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-021",
+      "sha256Unique": true,
+      "dHash64": "370f171f1f313163",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-022",
+      "sha256Unique": true,
+      "dHash64": "eed90f27e34ba527",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-058.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-023",
+      "sha256Unique": true,
+      "dHash64": "92911ba9a3a43673",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-066.jpg",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-024",
+      "sha256Unique": true,
+      "dHash64": "a4ba7a76ca8ea686",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/brazil-if7054-724-02.png",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-025",
+      "sha256Unique": true,
+      "dHash64": "1f94676565fe8e49",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-SHOE-003-01.png",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-026",
+      "sha256Unique": true,
+      "dHash64": "b2d7cb6271c79c59",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-040.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-027",
+      "sha256Unique": true,
+      "dHash64": "46263656d4ab0b07",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-058.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-028",
+      "sha256Unique": true,
+      "dHash64": "474d0b2b7360e0c8",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-002-02.png",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-029",
+      "sha256Unique": true,
+      "dHash64": "3bacc6436c5c5dcd",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-01.png",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-030",
+      "sha256Unique": true,
+      "dHash64": "b94bcb9c3cc69692",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-031.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-031",
+      "sha256Unique": true,
+      "dHash64": "e9d4b22632174d49",
+      "nearestAsset": "test-006",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-032",
+      "sha256Unique": true,
+      "dHash64": "958c4ece4e8c9d58",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-01.png",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-033",
+      "sha256Unique": true,
+      "dHash64": "c8f8321099910923",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-054.webp",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-034",
+      "sha256Unique": true,
+      "dHash64": "7a361e15b3b38f97",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-076.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-035",
+      "sha256Unique": true,
+      "dHash64": "c4381d27261246f8",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-009.jpg",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-036",
+      "sha256Unique": true,
+      "dHash64": "93f86cf698f8fcd9",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-008.jpg",
+      "nearestHammingDistance": 15,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-037",
+      "sha256Unique": true,
+      "dHash64": "adec96f08e07c3e2",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-033.jpg",
+      "nearestHammingDistance": 23,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-038",
+      "sha256Unique": true,
+      "dHash64": "e4746c2862335d85",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-007.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-039",
+      "sha256Unique": true,
+      "dHash64": "0c1c34fcf8746c6a",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-081.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-040",
+      "sha256Unique": true,
+      "dHash64": "d9791b0e6c3bcf5f",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-119.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-041",
+      "sha256Unique": true,
+      "dHash64": "58cbc60505264f69",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-106.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-042",
+      "sha256Unique": true,
+      "dHash64": "0f47771b4d070f01",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-017.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-043",
+      "sha256Unique": true,
+      "dHash64": "98bcc6eaf0e08084",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-006.jpg",
+      "nearestHammingDistance": 15,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-044",
+      "sha256Unique": true,
+      "dHash64": "238f1d144e1b3012",
+      "nearestAsset": "test-021",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-045",
+      "sha256Unique": true,
+      "dHash64": "47cf6e673330f07a",
+      "nearestAsset": "test-028",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-046",
+      "sha256Unique": true,
+      "dHash64": "f31e9e192227e35d",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-086.jpg",
+      "nearestHammingDistance": 22,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-047",
+      "sha256Unique": true,
+      "dHash64": "337161a639792103",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-001.jpg",
+      "nearestHammingDistance": 14,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-048",
+      "sha256Unique": true,
+      "dHash64": "1f671f8625150f3e",
+      "nearestAsset": "test-042",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-049",
+      "sha256Unique": true,
+      "dHash64": "72b2b03058583870",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-02.jpg",
+      "nearestHammingDistance": 18,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-050",
+      "sha256Unique": true,
+      "dHash64": "46c3332329995e76",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-036.jpg",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-051",
+      "sha256Unique": true,
+      "dHash64": "3f3e9fddd595657c",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-106.jpg",
+      "nearestHammingDistance": 19,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-052",
+      "sha256Unique": true,
+      "dHash64": "2b761c88921868ec",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-040.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-053",
+      "sha256Unique": true,
+      "dHash64": "c3d493ca33134949",
+      "nearestAsset": "test-031",
+      "nearestHammingDistance": 13,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-054",
+      "sha256Unique": true,
+      "dHash64": "e7a66b4bc89adb9b",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-055.png",
+      "nearestHammingDistance": 16,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-055",
+      "sha256Unique": true,
+      "dHash64": "470309410f8f8779",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-110.jpg",
+      "nearestHammingDistance": 17,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-056",
+      "sha256Unique": true,
+      "dHash64": "0f333333232d331f",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-013.jpg",
+      "nearestHammingDistance": 10,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-057",
+      "sha256Unique": true,
+      "dHash64": "d7cf8e96b793b39f",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-038.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-058",
+      "sha256Unique": true,
+      "dHash64": "2787dbd8c7312436",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-003-02.png",
+      "nearestHammingDistance": 20,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-059",
+      "sha256Unique": true,
+      "dHash64": "c69309410f0f97ed",
+      "nearestAsset": "test-055",
+      "nearestHammingDistance": 9,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-060",
+      "sha256Unique": true,
+      "dHash64": "098ac04108096c52",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/england-ib5290-100-04.png",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    }
+  ],
+  "rejections": {
+    "DOWNLOAD_OR_DECODE:ValueError": 1,
+    "DUPLICATE_SOURCE_SERIES": 1
+  },
+  "unresolved": []
+}

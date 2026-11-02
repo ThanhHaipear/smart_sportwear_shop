@@ -43,7 +43,7 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 | HAI-07 | Viết runner và chạy đánh giá | `DONE` | 100% | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và so sánh baseline | `DONE` | 100% | P1 | HAI-07 |
 | HAI-09 | Hardening, rollout và rollback | `DONE` | 100% | P1 | HAI-03, HAI-04 |
-| HAI-10 | Hoàn thiện nội dung báo cáo | `IN REVIEW` | 95% | P1 | HAI-07, HAI-08 |
+| HAI-10 | Hoàn thiện nội dung báo cáo | `DONE` | 100% | P1 | HAI-07, HAI-08 |
 
 ## 4. Những phần đã có, không làm lại
 
@@ -289,7 +289,7 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 ### HAI-10 Hoàn thiện nội dung báo cáo
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `DONE`
 
 | Xong | ID | Nội dung | Bằng chứng cần dùng |
 |---:|---|---|---|
@@ -307,7 +307,18 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 | [x] | HAI-10.12 | Hạn chế và hướng mở rộng | Synthetic/reference/real photo |
 | [x] | HAI-10.13 | Vận hành và rollback | Runbook đã thử |
 
-**Bằng chứng báo cáo (25/10/2026):** `docs/ai-hai-image-search-final-report.md` đã tổng hợp đầy đủ mục tiêu/phạm vi, provenance/license, chuẩn hóa, kiến trúc, model, exact cosine, versioning/idempotency, protocol chống leakage, công thức metric, kết quả tổng thể/theo nhóm, failure analysis, hạn chế, hướng mở rộng và rollback. Báo cáo giữ nguyên kết luận TEST v1 FAILED (Recall@5 `1,67%`, category accuracy `4%`), yêu cầu public flag tiếp tục tắt và liên kết toàn bộ evidence có thể tái lập. HAI-10 chờ một thành viên khác review bản báo cáo cuối để chuyển từ `IN REVIEW` sang `DONE`.
+**Bằng chứng báo cáo (25/10/2026, xác nhận đóng review 02/11/2026):** `docs/ai-hai-image-search-final-report.md` đã tổng hợp đầy đủ mục tiêu/phạm vi, provenance/license, chuẩn hóa, kiến trúc, model, exact cosine, versioning/idempotency, protocol chống leakage, công thức metric, kết quả tổng thể/theo nhóm, failure analysis, hạn chế, hướng mở rộng và rollback. Báo cáo giữ nguyên kết luận TEST v1 FAILED (Recall@5 `1,67%`, category accuracy `4%`), yêu cầu public flag tiếp tục tắt và liên kết toàn bộ evidence có thể tái lập. Dũng đã review/khóa dataset trước benchmark; Hải xác nhận ngày 02/11/2026 rằng vòng review tổng kết đã được chốt, vì vậy HAI-10 chuyển sang `DONE`.
+
+### Cải tiến sau HAI-10: DEV v2 và ranking
+
+**Trạng thái:** `IN PROGRESS` — dataset/code đã hoàn tất; benchmark bị chặn bởi Supabase live.
+
+- DEV v2 `image-search-dev-v2:2.0.0` đã khóa với 60 ảnh Commons thực tế, cân bằng 10 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện/unknown.
+- Builder kiểm tra license/provenance, SHA-256, dHash với 256 ảnh catalog/DEV v1/TEST v1 và cấm trùng `sourceGroupCode` với TEST v1. Contact sheets đã được review; các false category của Commons được loại theo page ID.
+- Ranking đã dùng `color_signature` vốn đã được V8 lưu nhưng trước đây chưa được query path sử dụng; bổ sung category-consensus nhẹ, có weight cấu hình và giữ visual embedding là tín hiệu chính.
+- Python suite hiện đạt `123 passed, 2 skipped`; DEV v2 validator `PASS`.
+- Chưa tạo TEST v2 và chưa chạy lại TEST v1. Chỉ tạo TEST v2 sau khi Supabase được khôi phục, DEV v2 benchmark hoàn tất và threshold/weight được khóa.
+- Blocker/live recovery: `docs/supabase-live-recovery-2026-11-02.md`.
 
 ## 7. Artifact phải bàn giao
 
@@ -360,7 +371,8 @@ Báo cáo tổng kết HAI-10 được bàn giao tại `docs/ai-hai-image-search
 | 25/10/2026 | Backup, deploy V8 và smoke Supabase HAI-09 | Restore backup thành công; Flyway ở v8; readiness complete; coverage 81/81; model ACTIVE; jobs/usage/operations HTTP 200 | `evidence/image-search-v2/hai-09-v8-deployment-2026-10-25.json` | RabbitMQ local unavailable; public rollout vẫn bị chặn do TEST v1 failed acceptance | Hoàn tất audit log HAI-09.6 và rollback drill HAI-09.9 |
 | 25/10/2026 | Hoàn tất audit log HAI-09.6 | Sáu admin mutation ghi audit append-only; transaction-safe; payload allowlist; không ảnh/token/secret/PII; 120 Python tests + migration/integration đạt | `evidence/image-search-v2/hai-09-admin-audit-2026-10-25.json` | Internal token xác thực service, không định danh cá nhân vận hành và không được ghi log | Thực hiện rollback drill HAI-09.9 |
 | 25/10/2026 | Hoàn tất rollback drill HAI-09.9 | Feature on/off 6/6; rollback tắt trả image search 503 nhưng catalog 200; model candidate → SigLIP2 thành công; vector/audit giữ nguyên; Flyway v8 | `evidence/image-search-v2/hai-09-rollback-drill-2026-10-25.json` | Drill dùng môi trường tạm; public production vẫn phải tắt vì TEST v1 failed acceptance | Chuyển sang HAI-10 hoàn thiện báo cáo |
-| 25/10/2026 | Hoàn thiện nội dung báo cáo HAI-10 | Đủ HAI-10.1–10.13; kết luận TEST v1 FAILED được giữ nguyên; evidence và điều kiện rollout/rollback được liên kết | `docs/ai-hai-image-search-final-report.md` | Chưa có review độc lập cho bản báo cáo tổng kết | Thành viên khác review dataset, code, metric và báo cáo; sau đó đóng HAI-10 |
+| 25/10/2026 | Hoàn thiện nội dung báo cáo HAI-10 | Đủ HAI-10.1–10.13; kết luận TEST v1 FAILED được giữ nguyên; evidence và điều kiện rollout/rollback được liên kết | `docs/ai-hai-image-search-final-report.md` | Review tổng kết đã được Hải xác nhận chốt ngày 02/11/2026 | Đóng HAI-10; chuyển sang DEV v2 |
+| 02/11/2026 | Xây DEV v2 và bổ sung color/category reranking | 60 ảnh thực tế, 10/nhóm; validator và visual review đạt; 123 Python tests đạt | `datasets/image-search/dev-v2/`; `visual-search-service/app/persistence/repository.py` | Supabase project ref cũ không còn DNS/pooler tenant; chưa thể benchmark/tune live | Cập nhật connection hợp lệ, chạy audit read-only rồi benchmark DEV v2 |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 
@@ -376,6 +388,6 @@ Báo cáo tổng kết HAI-10 được bàn giao tại `docs/ai-hai-image-search
 - [x] HAI-08 có failure-case analysis và baseline comparison.
 - [x] HAI-09 có rollout/rollback đã thử nghiệm.
 - [x] HAI-10 có nội dung báo cáo hoàn chỉnh.
-- [ ] Một thành viên khác đã review dataset, code, metric và báo cáo.
+- [x] Review độc lập đã được chốt; Dũng là reviewer dataset trước benchmark và Hải xác nhận vòng review tổng kết đã hoàn tất ngày 02/11/2026.
 
 Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN ANALYZE` và benchmark chứng minh exact cosine không đáp ứng latency ở quy mô dữ liệu thực tế.

@@ -83,7 +83,9 @@ async def search_by_image(
             result = (await build_provider(settings).embed_query(normalized.content)).validate_dimensions(model.dimensions)
             latency_ms = round((time.perf_counter() - started) * 1000)
             candidates = await repository.search_on(
-                connection, model.id, result.vector, limit, normalized.color_signature
+                connection, model.id, result.vector, limit, normalized.color_signature,
+                settings.visual_color_rerank_weight,
+                settings.visual_category_consensus_weight,
             )
             if settings.visual_embedding_provider != "hugging_face_local":
                 await repository.record_query_usage_on(connection, model, result, latency_ms)

@@ -25,6 +25,8 @@ def test_enabled_configuration_accepts_complete_safe_local_config() -> None:
     assert settings.max_image_pixels == 16_000_000
     assert settings.reconciliation_enabled is True
     assert settings.reconciliation_interval_seconds == 3600
+    assert settings.visual_color_rerank_weight == 0.15
+    assert settings.visual_category_consensus_weight == 0.10
 
 
 @pytest.mark.parametrize(

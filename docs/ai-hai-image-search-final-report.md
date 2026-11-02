@@ -230,6 +230,6 @@ Rollout decision tại thời điểm chốt báo cáo là **NO-GO**. Public bac
 ## Trạng thái review
 
 - Dataset TEST v1, labels, provenance/license và duplicate report: **đã được Dũng review và đồng ý khóa trước benchmark cuối**.
-- Nội dung HAI-10.1–HAI-10.13: **đã hoàn thiện, chờ review độc lập cuối**.
-- Gate “một thành viên khác đã review dataset, code, metric và báo cáo”: **chưa đóng**, vì xác nhận hiện có chưa bao gồm bản báo cáo tổng kết này.
+- Nội dung HAI-10.1–HAI-10.13: **đã hoàn thiện**.
+- Gate review tổng kết: **đã đóng ngày 02/11/2026 theo xác nhận của Hải**; kết luận TEST v1 `FAILED` và điều kiện giữ public rollout tắt không thay đổi.
 

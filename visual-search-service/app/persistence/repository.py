@@ -49,6 +49,7 @@ class SearchCandidate:
     image_id: UUID
     matched_image_url: str
     similarity: float
+    category_group: str | None = None
 
 
 # Shape/content embeddings are the primary retrieval signal. Colour is useful
@@ -60,6 +61,58 @@ COLOR_SIMILARITY_WEIGHT = 0.15
 
 def blend_visual_and_color_similarity(visual_score: float, color_score: float) -> float:
     return VISUAL_SIMILARITY_WEIGHT * visual_score + COLOR_SIMILARITY_WEIGHT * color_score
+
+
+def histogram_intersection(left: tuple[float, ...], right: tuple[float, ...]) -> float:
+    if not left or len(left) != len(right):
+        return 0.0
+    return max(0.0, min(1.0, sum(min(a, b) for a, b in zip(left, right, strict=True))))
+
+
+def _category_group(product_type_code: str | None) -> str | None:
+    return {
+        "SPORTS_TOP": "tops",
+        "SPORTS_BOTTOM": "bottoms",
+        "SPORTS_UNIFORM": "uniforms",
+        "SPORTS_SHOES": "shoes",
+        "SPORTS_ACCESSORY": "accessories",
+    }.get(product_type_code or "")
+
+
+def rerank_visual_candidates(
+    rows: list[tuple[UUID, UUID, str, float, tuple[float, ...] | list[float] | None, str | None]],
+    query_color: tuple[float, ...],
+    *,
+    color_weight: float = COLOR_SIMILARITY_WEIGHT,
+    category_weight: float = 0.0,
+) -> list[SearchCandidate]:
+    """Blend color and retrieval-consensus signals without requiring a query classifier."""
+    scored: list[tuple[UUID, UUID, str, float, str | None]] = []
+    for product_id, image_id, url, visual_score, catalog_color, product_type_code in rows:
+        base_score = float(visual_score)
+        if query_color and catalog_color and len(query_color) == len(catalog_color):
+            color_score = histogram_intersection(query_color, tuple(float(value) for value in catalog_color))
+            base_score = (1.0 - color_weight) * base_score + color_weight * color_score
+        scored.append((product_id, image_id, url, base_score, _category_group(product_type_code)))
+
+    group_scores: dict[str, list[float]] = {}
+    for *_, score, group in scored:
+        if group:
+            group_scores.setdefault(group, []).append(score)
+    # Use the mean of at most three strongest products so catalog size cannot
+    # make a category win merely because it contains more products.
+    consensus = {
+        group: sum(sorted(scores, reverse=True)[:3]) / min(3, len(scores))
+        for group, scores in group_scores.items()
+    }
+    strongest = max(consensus.values(), default=0.0)
+
+    candidates = []
+    for product_id, image_id, url, base_score, group in scored:
+        support = consensus.get(group, 0.0) / strongest if strongest > 0 else 0.0
+        final_score = (1.0 - category_weight) * base_score + category_weight * support
+        candidates.append(SearchCandidate(product_id, image_id, url, final_score, group))
+    return sorted(candidates, key=lambda item: (-item.similarity, str(item.product_id), str(item.image_id)))
 
 
 @dataclass(frozen=True, slots=True)
@@ -866,12 +919,18 @@ class VisualSearchRepository:
         query_color: tuple[float, ...] = (),
     ) -> list[SearchCandidate]:
         async with await self._connect() as connection:
-            return await self.search_on(connection, model_id, vector, limit, query_color)
+            return await self.search_on(
+                connection, model_id, vector, limit, query_color,
+                self.settings.visual_color_rerank_weight,
+                self.settings.visual_category_consensus_weight,
+            )
 
     @staticmethod
     async def search_on(
         connection: psycopg.AsyncConnection[Any], model_id: UUID, vector: tuple[float, ...], limit: int,
         query_color: tuple[float, ...] = (),
+        color_weight: float = COLOR_SIMILARITY_WEIGHT,
+        category_weight: float = 0.0,
     ) -> list[SearchCandidate]:
         encoded = "[" + ",".join(str(value) for value in vector) + "]"
         image_limit = min(max(limit * 10, 50), 100)
@@ -890,16 +949,22 @@ class VisualSearchRepository:
                     ) result
                     join public.product_images image on image.id = result.image_id
                 )
-                select product_id, image_id, secure_url, similarity
-                from ranked_images
-                where product_rank = 1
-                order by similarity desc, product_id, image_id
-                limit %s
+                select ranked.product_id, ranked.image_id, ranked.secure_url, ranked.similarity,
+                       embedding.color_signature, product_type.code
+                from ranked_images ranked
+                join ai_retrieval.product_image_embeddings embedding
+                  on embedding.image_id = ranked.image_id and embedding.model_id = %s
+                join public.products product on product.id = ranked.product_id
+                join public.product_types product_type on product_type.id = product.product_type_id
+                where ranked.product_rank = 1
+                order by ranked.similarity desc, ranked.product_id, ranked.image_id
                 """,
-                (model_id, encoded, image_limit, limit),
+                (model_id, encoded, image_limit, model_id),
             )
             rows = await cursor.fetchall()
-            return [SearchCandidate(row[0], row[1], row[2], float(row[3])) for row in rows]
+            return rerank_visual_candidates(
+                rows, query_color, color_weight=color_weight, category_weight=category_weight
+            )[:limit]
 
     async def record_query_usage(
         self,

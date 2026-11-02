@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "status": "COMPLETE",
+  "reviewer": "Hải/Codex DEV-v2 engineering review",
+  "method": "Real-domain tuning split review; never final acceptance evidence.",
+  "limitations": [
+    "Subcategory/category judgments do not claim an exact-product match.",
+    "Expected color is intentionally omitted unless a human reviewer adds an unambiguous normalized color label.",
+    "A second team member must visually review all queries before final academic submission."
+  ],
+  "caseCount": 60,
+  "distribution": {
+    "accessories": 10,
+    "bottoms": 10,
+    "shoes": 10,
+    "tops": 10,
+    "uniforms": 10,
+    "unknown": 10
+  },
+  "unresolved": []
+}
