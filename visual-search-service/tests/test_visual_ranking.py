@@ -57,3 +57,19 @@ def test_category_consensus_uses_average_not_catalog_group_size() -> None:
     # stabilizer, not a hard category filter.
     assert ranked[0].product_id == top_product
     assert {item.category_group for item in ranked} == {"tops", "shoes"}
+
+
+def test_zero_shot_category_scores_override_retrieval_consensus() -> None:
+    rows = [
+        (uuid4(), uuid4(), "top.jpg", 0.70, None, "SPORTS_TOP"),
+        (uuid4(), uuid4(), "shoe.jpg", 0.68, None, "SPORTS_SHOES"),
+    ]
+
+    ranked = rerank_visual_candidates(
+        rows,
+        (),
+        category_weight=0.25,
+        query_category_scores={"tops": 0.05, "shoes": 0.95},
+    )
+
+    assert ranked[0].category_group == "shoes"

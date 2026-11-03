@@ -1,4 +1,5 @@
 import hmac
+import logging
 import time
 
 from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, UploadFile, status
@@ -8,12 +9,13 @@ from psycopg import Error as PsycopgError
 from app.config import Settings, get_settings
 from app.persistence.repository import RepositoryUnavailableError, VisualSearchRepository
 from app.providers.factory import build_provider
-from app.providers.siglip2 import Siglip2ProviderError
+from app.providers.siglip2 import Siglip2EmbeddingProvider, Siglip2ProviderError
 from app.providers.voyage import VoyageProviderError
 from app.services.errors import ImagePipelineError
 from app.services.image_pipeline import ImagePipeline
 
 router = APIRouter(prefix="/internal/v1", tags=["visual-search"])
+logger = logging.getLogger(__name__)
 
 
 class SearchCandidateResponse(BaseModel):
@@ -80,12 +82,19 @@ async def search_by_image(
                     detail="Active visual model does not match the configured SigLIP2 index",
                 )
             started = time.perf_counter()
-            result = (await build_provider(settings).embed_query(normalized.content)).validate_dimensions(model.dimensions)
+            provider = build_provider(settings)
+            result = (await provider.embed_query(normalized.content)).validate_dimensions(model.dimensions)
+            category_scores = (
+                await provider.category_scores(result.vector)
+                if isinstance(provider, Siglip2EmbeddingProvider)
+                else None
+            )
             latency_ms = round((time.perf_counter() - started) * 1000)
             candidates = await repository.search_on(
                 connection, model.id, result.vector, limit, normalized.color_signature,
                 settings.visual_color_rerank_weight,
                 settings.visual_category_consensus_weight,
+                category_scores,
             )
             if settings.visual_embedding_provider != "hugging_face_local":
                 await repository.record_query_usage_on(connection, model, result, latency_ms)
@@ -93,6 +102,7 @@ async def search_by_image(
     except (RepositoryUnavailableError, PsycopgError) as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Visual search is unavailable") from exc
     except (VoyageProviderError, Siglip2ProviderError, ValueError, RuntimeError) as exc:
+        logger.exception("Visual embedding or category inference failed")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Visual embedding provider is unavailable",

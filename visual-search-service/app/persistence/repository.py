@@ -85,8 +85,9 @@ def rerank_visual_candidates(
     *,
     color_weight: float = COLOR_SIMILARITY_WEIGHT,
     category_weight: float = 0.0,
+    query_category_scores: dict[str, float] | None = None,
 ) -> list[SearchCandidate]:
-    """Blend color and retrieval-consensus signals without requiring a query classifier."""
+    """Blend visual, color and zero-shot/fallback category signals."""
     scored: list[tuple[UUID, UUID, str, float, str | None]] = []
     for product_id, image_id, url, visual_score, catalog_color, product_type_code in rows:
         base_score = float(visual_score)
@@ -105,11 +106,12 @@ def rerank_visual_candidates(
         group: sum(sorted(scores, reverse=True)[:3]) / min(3, len(scores))
         for group, scores in group_scores.items()
     }
-    strongest = max(consensus.values(), default=0.0)
+    category_support = query_category_scores or consensus
+    strongest = max(category_support.values(), default=0.0)
 
     candidates = []
     for product_id, image_id, url, base_score, group in scored:
-        support = consensus.get(group, 0.0) / strongest if strongest > 0 else 0.0
+        support = category_support.get(group, 0.0) / strongest if strongest > 0 else 0.0
         final_score = (1.0 - category_weight) * base_score + category_weight * support
         candidates.append(SearchCandidate(product_id, image_id, url, final_score, group))
     return sorted(candidates, key=lambda item: (-item.similarity, str(item.product_id), str(item.image_id)))
@@ -931,6 +933,7 @@ class VisualSearchRepository:
         query_color: tuple[float, ...] = (),
         color_weight: float = COLOR_SIMILARITY_WEIGHT,
         category_weight: float = 0.0,
+        query_category_scores: dict[str, float] | None = None,
     ) -> list[SearchCandidate]:
         encoded = "[" + ",".join(str(value) for value in vector) + "]"
         image_limit = min(max(limit * 10, 50), 100)
@@ -963,7 +966,8 @@ class VisualSearchRepository:
             )
             rows = await cursor.fetchall()
             return rerank_visual_candidates(
-                rows, query_color, color_weight=color_weight, category_weight=category_weight
+                rows, query_color, color_weight=color_weight, category_weight=category_weight,
+                query_category_scores=query_category_scores,
             )[:limit]
 
     async def record_query_usage(

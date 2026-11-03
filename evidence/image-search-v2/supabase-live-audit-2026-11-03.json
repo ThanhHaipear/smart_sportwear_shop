@@ -1,0 +1,99 @@
+{
+  "readOnly": true,
+  "database": [
+    {
+      "database": "postgres",
+      "checked_at": "2026-11-03 04:32:57.947393+00:00"
+    }
+  ],
+  "flyway": [
+    {
+      "version": "1",
+      "description": "create 1a identity taxonomy catalog",
+      "success": true,
+      "installed_on": "2026-10-10 13:31:16.484987"
+    },
+    {
+      "version": "2",
+      "description": "seed 1a taxonomy",
+      "success": true,
+      "installed_on": "2026-10-10 13:31:24.012470"
+    },
+    {
+      "version": "3",
+      "description": "create 1b commerce core",
+      "success": true,
+      "installed_on": "2026-10-10 13:31:26.008994"
+    },
+    {
+      "version": "4",
+      "description": "seed initial sportswear brands",
+      "success": true,
+      "installed_on": "2026-10-11 09:02:05.562215"
+    },
+    {
+      "version": "5",
+      "description": "add reference product image source",
+      "success": true,
+      "installed_on": "2026-10-11 13:41:20.148057"
+    },
+    {
+      "version": "6",
+      "description": "create 1c ai retrieval foundation",
+      "success": true,
+      "installed_on": "2026-10-12 13:33:35.282563"
+    },
+    {
+      "version": "7",
+      "description": "seed 1c embedding models",
+      "success": true,
+      "installed_on": "2026-10-13 03:25:45.261706"
+    },
+    {
+      "version": "8",
+      "description": "harden visual search operations",
+      "success": true,
+      "installed_on": "2026-10-25 04:59:24.289744"
+    }
+  ],
+  "catalog": [
+    {
+      "products": 36,
+      "active_products": 36
+    }
+  ],
+  "images": [
+    {
+      "images": 81,
+      "active_images": 81,
+      "missing_public_id": 0
+    }
+  ],
+  "models": [
+    {
+      "id": "71000000-0000-0000-0000-000000000002",
+      "provider": "HUGGING_FACE_LOCAL",
+      "model_name": "google/siglip2-base-patch16-224",
+      "model_version": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+      "dimensions": 768,
+      "preprocessing_version": "siglip2-autoprocessor-original-v1",
+      "status": "ACTIVE",
+      "activated_at": "2026-10-13 03:25:45.474327+00:00"
+    }
+  ],
+  "coverage": [
+    {
+      "active_images": 81,
+      "ready": 81,
+      "missing": 0,
+      "not_ready": 0,
+      "color_ready": 81
+    }
+  ],
+  "outbox": [
+    {
+      "status": "PUBLISHED",
+      "count": 487
+    }
+  ]
+}

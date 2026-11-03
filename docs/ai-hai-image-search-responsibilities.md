@@ -311,14 +311,18 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 ### Cải tiến sau HAI-10: DEV v2 và ranking
 
-**Trạng thái:** `IN PROGRESS` — dataset/code đã hoàn tất; benchmark bị chặn bởi Supabase live.
+**Trạng thái:** `IN PROGRESS` — Supabase và backfill màu đã hoàn tất; DEV v2 cải thiện mạnh nhưng chưa đạt gate để tạo TEST v2.
 
 - DEV v2 `image-search-dev-v2:2.0.0` đã khóa với 60 ảnh Commons thực tế, cân bằng 10 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện/unknown.
 - Builder kiểm tra license/provenance, SHA-256, dHash với 256 ảnh catalog/DEV v1/TEST v1 và cấm trùng `sourceGroupCode` với TEST v1. Contact sheets đã được review; các false category của Commons được loại theo page ID.
-- Ranking đã dùng `color_signature` vốn đã được V8 lưu nhưng trước đây chưa được query path sử dụng; bổ sung category-consensus nhẹ, có weight cấu hình và giữ visual embedding là tín hiệu chính.
-- Python suite hiện đạt `123 passed, 2 skipped`; DEV v2 validator `PASS`.
-- Chưa tạo TEST v2 và chưa chạy lại TEST v1. Chỉ tạo TEST v2 sau khi Supabase được khôi phục, DEV v2 benchmark hoàn tất và threshold/weight được khóa.
-- Blocker/live recovery: `docs/supabase-live-recovery-2026-11-02.md`.
+- Supabase live đã khôi phục ngày 03/11/2026. Flyway V8, 36/36 sản phẩm và 81/81 ảnh ACTIVE; embedding đạt 81/81 READY.
+- Job `493cdb82-6eed-40a0-b8d7-88c146206d3c` đã backfill `color_signature`; coverage cuối đạt 81/81, outbox và toàn bộ visual-search queue/retry/DLQ đều sạch.
+- Ranking dùng histogram màu và zero-shot category prototypes của chính SigLIP2, có thêm prototype `unknown` để ảnh ngoài miền không bị ép vào category catalog. Không dùng nhãn TEST hoặc thêm model ngoài.
+- Baseline DEV v2: Recall@5 `11,43%`, category accuracy `22%`, unknown rejection `100%`, p95 `985,58 ms`.
+- Iteration tốt nhất sau zero-shot + unknown: Recall@5 `45,52%`, category accuracy `66%`, top-5 accuracy `72%`, unknown rejection `90%`, request failure `0%`, p95 `1.157,78 ms`.
+- Python suite hiện đạt `125 passed, 2 skipped`; DEV v2 validator `PASS`.
+- Chưa tạo TEST v2 và chưa chạy lại TEST v1. DEV v2 chưa đạt mục tiêu Recall@5 `>=80%` và category accuracy `>=90%`, vì vậy threshold/weight chưa được khóa và public flag tiếp tục tắt.
+- Evidence: `evidence/image-search-v2/supabase-live-audit-2026-11-03.json` và `evidence/image-search-v2/dev-v2-benchmark-zero-shot-unknown-2026-11-03/`.
 
 ## 7. Artifact phải bàn giao
 
@@ -373,6 +377,7 @@ Báo cáo tổng kết HAI-10 được bàn giao tại `docs/ai-hai-image-search
 | 25/10/2026 | Hoàn tất rollback drill HAI-09.9 | Feature on/off 6/6; rollback tắt trả image search 503 nhưng catalog 200; model candidate → SigLIP2 thành công; vector/audit giữ nguyên; Flyway v8 | `evidence/image-search-v2/hai-09-rollback-drill-2026-10-25.json` | Drill dùng môi trường tạm; public production vẫn phải tắt vì TEST v1 failed acceptance | Chuyển sang HAI-10 hoàn thiện báo cáo |
 | 25/10/2026 | Hoàn thiện nội dung báo cáo HAI-10 | Đủ HAI-10.1–10.13; kết luận TEST v1 FAILED được giữ nguyên; evidence và điều kiện rollout/rollback được liên kết | `docs/ai-hai-image-search-final-report.md` | Review tổng kết đã được Hải xác nhận chốt ngày 02/11/2026 | Đóng HAI-10; chuyển sang DEV v2 |
 | 02/11/2026 | Xây DEV v2 và bổ sung color/category reranking | 60 ảnh thực tế, 10/nhóm; validator và visual review đạt; 123 Python tests đạt | `datasets/image-search/dev-v2/`; `visual-search-service/app/persistence/repository.py` | Supabase project ref cũ không còn DNS/pooler tenant; chưa thể benchmark/tune live | Cập nhật connection hợp lệ, chạy audit read-only rồi benchmark DEV v2 |
+| 03/11/2026 | Khôi phục live, backfill màu và benchmark DEV v2 | Supabase V8; 81/81 READY + color; zero-shot/unknown tăng Recall@5 11,43% → 45,52%, category 22% → 66%; 125 tests đạt | `supabase-live-audit-2026-11-03.json`; `dev-v2-benchmark-zero-shot-unknown-2026-11-03/` | DEV vẫn dưới gate 80%/90%; chưa được khóa threshold và chưa tạo TEST v2 | Tiếp tục cải thiện bottoms/accessories/category và relevance judgment hoàn toàn trên DEV v2 |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 
