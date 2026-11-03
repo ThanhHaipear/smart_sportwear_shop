@@ -311,7 +311,7 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 ### Cải tiến sau HAI-10: DEV v2 và ranking
 
-**Trạng thái:** `AWAITING REVIEW` — DEV v2.2 đã đạt gate và khóa cấu hình; TEST v2 candidate đã tạo nhưng final benchmark đang chờ sign-off độc lập.
+**Trạng thái:** `TEST V2 FAILED — NO-GO` — DEV v2.2 đã đạt gate, nhưng final TEST v2 độc lập không đạt hai ngưỡng chất lượng bắt buộc; public rollout tiếp tục tắt.
 
 - DEV v2.2 `image-search-dev-v2:2.2.0` đã khóa với 60 ảnh Commons thực tế, cân bằng 10 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện/unknown. Ba case còn mơ hồ về query-focus đã được thay và toàn bộ contact sheet được review lại.
 - Builder kiểm tra license/provenance, SHA-256, dHash với 256 ảnh catalog/DEV v1/TEST v1 và cấm trùng `sourceGroupCode` với TEST v1. Contact sheets đã được review; các false category của Commons được loại theo page ID.
@@ -321,9 +321,10 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 - Baseline DEV v2: Recall@5 `11,43%`, category accuracy `22%`, unknown rejection `100%`, p95 `985,58 ms`.
 - DEV v2.2 locked đạt Recall@5 `84,83%`, category accuracy `94%`, top-5 accuracy `94%`, unknown rejection `100%`, request failure `0%`, p95 `802,07 ms`; đã vượt gate DEV `80%/90%`.
 - Python suite hiện đạt `127 passed, 2 skipped`; DEV v2.2 validator `PASS`.
-- TEST v2 `2.0.0-rc1` đã tạo đủ 120 ảnh (20 mỗi nhóm), provenance/license đầy đủ, duplicate/leakage validator `PASS` với 316 ảnh tham chiếu và đã qua nhiều vòng engineering contact-sheet review. Trạng thái vẫn là `REVIEW_REQUIRED`; sign-off của thành viên dự án khác là `PENDING`.
-- Chưa chạy final TEST v2 và chưa chạy lại TEST v1. Final benchmark chỉ được chạy đúng một lần sau sign-off và freeze; public flag tiếp tục tắt.
-- Evidence: `evidence/image-search-v2/supabase-live-audit-2026-11-03.json`, `evidence/image-search-v2/dev-v2.2-locked-2026-11-03/` và `datasets/image-search/test-v2/`.
+- TEST v2 `2.0.0` đã freeze đủ 120 ảnh (20 mỗi nhóm), provenance/license đầy đủ, duplicate/leakage validator `PASS` với 316 ảnh tham chiếu. Dũng đã review độc lập và Hải chuyển xác nhận sign-off trước benchmark; commit freeze là `fc07163`.
+- Final TEST v2 đã chạy đúng một lần trên 120/120 query với cấu hình DEV v2.2 đã khóa. Acceptance `FAILED`: Recall@5 `73,75%` < `80%`, category accuracy `79%` < `90%`; unknown rejection `75%`, request failure `0%`, p95 `1.381,07 ms`.
+- Phân tích offline cho thấy raw hit@5 `86%`, raw hit@10 `89%`, raw top-1 category `83%`; accessories và tops là hai nhóm category yếu nhất. Không retune threshold/ranking và không chạy lại TEST v2. Public flag tiếp tục tắt.
+- Evidence: `evidence/image-search-v2/supabase-live-audit-2026-11-03.json`, `evidence/image-search-v2/dev-v2.2-locked-2026-11-03/`, `datasets/image-search/test-v2/` và `evidence/image-search-v2/test-v2-final/`.
 
 ## 7. Artifact phải bàn giao
 
@@ -381,6 +382,7 @@ Báo cáo tổng kết HAI-10 được bàn giao tại `docs/ai-hai-image-search
 | 03/11/2026 | Khôi phục live, backfill màu và benchmark DEV v2 | Supabase V8; 81/81 READY + color; zero-shot/unknown tăng Recall@5 11,43% → 45,52%, category 22% → 66%; 125 tests đạt | `supabase-live-audit-2026-11-03.json`; `dev-v2-benchmark-zero-shot-unknown-2026-11-03/` | DEV vẫn dưới gate 80%/90%; chưa được khóa threshold và chưa tạo TEST v2 | Tiếp tục cải thiện bottoms/accessories/category và relevance judgment hoàn toàn trên DEV v2 |
 | 03/11/2026 | Review query-focus và nâng DEV lên v2.1 | Loại ảnh sai/incidental/near-duplicate; relevance theo subtype; subtype prompts đạt Recall@5 63,50%, category 76%, top-5 78%, unknown 90%, p95 926,27 ms | `datasets/image-search/dev-v2/`; `dev-v2.1-subtype-prompts-2026-11-03/` | Vẫn dưới gate tổng 80%/90%; bottoms Recall@5 55%, category 60% | Giữ TEST v2 bị khóa; nghiên cứu region-aware classification hoặc catalog/category coverage trên DEV |
 | 03/11/2026 | Khóa DEV v2.2 và tạo TEST v2 candidate | DEV đạt Recall@5 84,83%, category 94%, unknown 100%, p95 802,07 ms; 127 tests đạt. TEST v2 đủ 120 case, validator PASS, đối chiếu 316 ảnh tham chiếu | `dev-v2.2-locked-2026-11-03/`; `datasets/image-search/test-v2/` | TEST v2 đang `REVIEW_REQUIRED`, sign-off độc lập `PENDING`; chưa chạy final benchmark | Thành viên khác review/sign-off, freeze checksum rồi chạy TEST v2 đúng một lần |
+| 03/11/2026 | Freeze và chạy final TEST v2 đúng một lần | Dũng sign-off; 120/120 request; Recall@5 73,75%, category 79%, unknown 75%, request failure 0%, p95 1.381,07 ms; acceptance FAILED | `datasets/image-search/test-v2/`; `evidence/image-search-v2/test-v2-final/` | Recall và category dưới gate; TEST v2 không được retune hoặc chạy lại | Giữ public tắt; phân tích offline và chỉ cải tiến trên DEV v3 trước khi tạo TEST v3 độc lập |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 
