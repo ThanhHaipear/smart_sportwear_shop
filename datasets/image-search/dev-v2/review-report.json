@@ -18,7 +18,7 @@
     "unknown": 10
   },
   "unresolved": [],
-  "datasetVersion": "2.1.0",
+  "datasetVersion": "2.2.0",
   "manualVisualReview": {
     "status": "PASS",
     "scope": "All 60 contact-sheet cases; reject incidental, absent and near-duplicate subjects.",

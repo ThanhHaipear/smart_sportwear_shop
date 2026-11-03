@@ -1,6 +1,6 @@
 # Image Search DEV v2
 
-**Version:** `image-search-dev-v2:2.1.0`
+**Version:** `image-search-dev-v2:2.2.0`
 
 DEV v2 is the real-domain tuning split created after TEST v1 exposed the
 synthetic-to-real domain shift. It contains 60 independently sourced Wikimedia
@@ -16,6 +16,10 @@ v1, and rejects any `sourceGroupCode` shared with TEST v1. Version 2.1 also
 requires manual query-focus review and maps relevance by source subtype to
 compatible frozen-catalog products instead of labeling an entire category as
 relevant.
+
+Version 2.2 removes three visually ambiguous cases where a mixed fashion
+display, a phone portrait, or boxing shoes displaced the labeled garment or
+accessory as the actual query focus.
 
 ```powershell
 visual-search-service\.venv\Scripts\python.exe datasets\image-search\dev-v2\build_dataset.py --collect --contact-sheets

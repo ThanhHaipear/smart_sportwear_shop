@@ -25,8 +25,15 @@ def test_enabled_configuration_accepts_complete_safe_local_config() -> None:
     assert settings.max_image_pixels == 16_000_000
     assert settings.reconciliation_enabled is True
     assert settings.reconciliation_interval_seconds == 3600
-    assert settings.visual_color_rerank_weight == 0.15
-    assert settings.visual_category_consensus_weight == 0.25
+    assert settings.visual_color_rerank_weight == 0.0
+    assert settings.visual_category_consensus_weight == 0.60
+
+
+def test_category_rerank_weight_is_bounded() -> None:
+    settings = enabled_settings(visual_category_consensus_weight=0.60)
+    assert settings.visual_category_consensus_weight == 0.60
+    with pytest.raises(ValidationError):
+        enabled_settings(visual_category_consensus_weight=0.61)
 
 
 @pytest.mark.parametrize(

@@ -81,8 +81,8 @@ def test_search_normalizes_embeds_and_returns_candidates() -> None:
     assert response.status_code == 200
     assert search_on.await_args.args[3] == 50
     assert len(search_on.await_args.args[4]) == 14
-    assert search_on.await_args.args[5] == 0.15
-    assert search_on.await_args.args[6] == 0.25
+    assert search_on.await_args.args[5] == 0.0
+    assert search_on.await_args.args[6] == 0.60
     assert search_on.await_args.args[7] is None
     assert response.json()["candidates"][0]["product_id"] == str(candidate.product_id)
     assert response.json()["candidates"][0]["similarity"] == 0.91

@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "dataset": {
     "name": "image-search-dev-v2",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "split": "DEV",
     "status": "FROZEN",
-    "frozenAt": "2026-11-03T05:31:37.477778+00:00",
+    "frozenAt": "2026-11-03T09:50:18.300474+00:00",
     "catalogSnapshot": {
       "version": "image-catalog-v2-2026-10-23",
       "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
@@ -39,7 +39,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -61,7 +61,7 @@
         "licenseCode": "CC0",
         "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -83,7 +83,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "doyles",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -105,29 +105,29 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
       "id": "dev2-005",
       "image": "assets/dev2-005.jpg",
-      "sha256": "cb7f013e08eb74a0e341f9aaa6f4799c35bd246b31e7d71d7714b47e3cdee007",
-      "bytes": 122645,
-      "width": 576,
+      "sha256": "2889d68b7958ead5e0811cc370f501ea80864c3debc0b4599ed3c96f759ba0ae",
+      "bytes": 358570,
+      "width": 768,
       "height": 1024,
       "group": "tops",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:walter-van-beirendonck-looks-from-the-gender-collection",
+      "sourceGroupCode": "commons-series:a-woman-causal-style-in-spring",
       "sourceCategory": "Hoodies",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:2000_Walter_van_Beirendonck_looks_from_the_%27Gender%3F%27_collection.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/ec/2000_Walter_van_Beirendonck_looks_from_the_%27Gender%3F%27_collection.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:2000 Walter van Beirendonck looks from the 'Gender?' collection.jpg",
-        "author": "Rosa Menkman",
-        "licenseCode": "CC BY 2.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-        "attribution": "https://www.flickr.com/photos/68716054@N00/6904889839/",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "uri": "https://commons.wikimedia.org/wiki/File:A_woman_causal_style_in_spring_2021.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/ae/A_woman_causal_style_in_spring_2021.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:A woman causal style in spring 2021.jpg",
+        "author": "Peachyeung316",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -149,7 +149,7 @@
         "licenseCode": "CC0",
         "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -171,29 +171,29 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
       "id": "dev2-008",
       "image": "assets/dev2-008.jpg",
-      "sha256": "1ae412a498c4463b93fd9a787344be1ebe3e88c15959352c8f8c6db94ba917e6",
-      "bytes": 144807,
-      "width": 768,
+      "sha256": "890f681c564101ebe92cfb0477505dba4d1592923932208f13aca4efd4972aa7",
+      "bytes": 100129,
+      "width": 682,
       "height": 1024,
       "group": "tops",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:a-man-reading-a-magazine",
+      "sourceGroupCode": "commons-series:boots-official-portrait",
       "sourceCategory": "Hoodies",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:A_man_reading_a_magazine.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/79/A_man_reading_a_magazine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:A man reading a magazine.jpg",
-        "author": "Peachyeung316",
-        "licenseCode": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "uri": "https://commons.wikimedia.org/wiki/File:BOOTS-Official-Portrait.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/6e/BOOTS-Official-Portrait.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:BOOTS-Official-Portrait.jpg",
+        "author": "Moraljonathan",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Cara Stricker",
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -215,7 +215,7 @@
         "licenseCode": "CC BY 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -237,7 +237,7 @@
         "licenseCode": "CC0",
         "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -259,7 +259,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "Day 102",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -281,7 +281,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "https://www.flickr.com/photos/victor_paul/10266407734/",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -303,7 +303,7 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "Cycling Ascent",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -325,7 +325,7 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "https://www.flickr.com/photos/23155134@N06/15264044347/",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -347,7 +347,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -369,7 +369,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -391,7 +391,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -413,7 +413,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -435,7 +435,7 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "Cycling Ascent",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -457,7 +457,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -479,7 +479,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -501,7 +501,7 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "AUSTRALIAN FIJIANS V NSW MAORI",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -523,7 +523,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -545,7 +545,7 @@
         "licenseCode": "Public domain",
         "licenseUrl": "",
         "attribution": "Library of Congress Catalog: https://lccn.loc.gov/2016841518 Image download: https://cdn.loc.gov/service/pnp/npcc/15200/15254v.jpg Original url: https://www.loc.gov/pictures/item/2016841518/",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -567,7 +567,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -589,7 +589,7 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "AUSTRALIAN FIJIANS V NSW MAORI",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -611,7 +611,7 @@
         "licenseCode": "CC BY 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -633,7 +633,7 @@
         "licenseCode": "CC BY-SA 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
         "attribution": "Imported from 500px ( archived version ) by the Archive Team . ( detail page )",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -655,7 +655,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -677,7 +677,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -699,7 +699,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -721,7 +721,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "Cleveland Museum of Art",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -743,7 +743,7 @@
         "licenseCode": "CC BY-SA 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
         "attribution": "IonutDragu",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -765,7 +765,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "260927_Lynx_Liberty_JohnMc91",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -787,7 +787,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -809,7 +809,7 @@
         "licenseCode": "Public domain",
         "licenseUrl": "",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -831,7 +831,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -853,7 +853,7 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "BYU Sports Nation",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -875,7 +875,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -897,7 +897,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -919,7 +919,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "Originally posted to Flickr as \" Rangers vs. Yankees: 5/24/2015 \" Cropped by UCinternational",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -941,7 +941,7 @@
         "licenseCode": "CC BY 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -963,7 +963,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -985,29 +985,29 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
       "id": "dev2-045",
       "image": "assets/dev2-045.jpg",
-      "sha256": "47d05323b40ea3da24e45b841c0c9340df91661f1b88d65863e96797266df02c",
-      "bytes": 189916,
-      "width": 681,
-      "height": 1024,
+      "sha256": "5da00aff29a254c17f7399fb6b0bfd0aa581c1d4549d54915f13abdb51328218",
+      "bytes": 13015,
+      "width": 414,
+      "height": 320,
       "group": "accessories",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:usa-boxing",
+      "sourceGroupCode": "commons-series:bulk-tube-socks",
       "sourceCategory": "Sports socks",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:USA_Boxing_(5840720470).jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/5/53/USA_Boxing_%285840720470%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:USA Boxing (5840720470).jpg",
-        "author": "U.S. Army",
-        "licenseCode": "CC BY 2.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-        "attribution": "USA Boxing",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "uri": "https://commons.wikimedia.org/wiki/File:Bulk_tube_socks.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Bulk_tube_socks.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Bulk tube socks.png",
+        "author": "Hammad Darvesh",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1029,7 +1029,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1051,7 +1051,7 @@
         "licenseCode": "CC BY-SA 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1073,34 +1073,12 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
       "id": "dev2-049",
       "image": "assets/dev2-049.jpg",
-      "sha256": "5da00aff29a254c17f7399fb6b0bfd0aa581c1d4549d54915f13abdb51328218",
-      "bytes": 13015,
-      "width": 414,
-      "height": 320,
-      "group": "accessories",
-      "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:bulk-tube-socks",
-      "sourceCategory": "Sports socks",
-      "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Bulk_tube_socks.png",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Bulk_tube_socks.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Bulk tube socks.png",
-        "author": "Hammad Darvesh",
-        "licenseCode": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
-      }
-    },
-    {
-      "id": "dev2-050",
-      "image": "assets/dev2-050.jpg",
       "sha256": "dcfe61b6f8676826286c3c56c9def1fe0953a6a60c51405b3a6944682f9f8a16",
       "bytes": 46936,
       "width": 1024,
@@ -1117,7 +1095,29 @@
         "licenseCode": "Public domain",
         "licenseUrl": "",
         "attribution": "Self-scanned",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
+      }
+    },
+    {
+      "id": "dev2-050",
+      "image": "assets/dev2-050.jpg",
+      "sha256": "f7ba43d0ee36161e6cc89ffd5e1eabb5af31d9cd4932ba04d0930ebefbd3ddbb",
+      "bytes": 68287,
+      "width": 1024,
+      "height": 681,
+      "group": "accessories",
+      "caseKind": "independent-dev-domain-photo",
+      "sourceGroupCode": "commons-series:invisiblechildrenbracelet",
+      "sourceCategory": "Wristbands",
+      "source": {
+        "uri": "https://commons.wikimedia.org/wiki/File:InvisibleChildrenbracelet.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/3c/InvisibleChildrenbracelet.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:InvisibleChildrenbracelet.jpg",
+        "author": "swimfreak000 from United States",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Invisible Children. Uploaded by xnatedawgx",
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1139,7 +1139,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1161,7 +1161,7 @@
         "licenseCode": "Public domain",
         "licenseUrl": "",
         "attribution": "Nathan Mayo Collection",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1183,7 +1183,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "16.8.20 1 Borovany Poklady z diecéze 154",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1205,7 +1205,7 @@
         "licenseCode": "CC0",
         "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1227,7 +1227,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1249,7 +1249,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1271,7 +1271,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1293,7 +1293,7 @@
         "licenseCode": "CC BY 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
         "attribution": "ines lukic",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1315,7 +1315,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     },
     {
@@ -1337,7 +1337,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Self-photographed",
-        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+        "acquiredAt": "2026-11-03T09:50:05.921737+00:00"
       }
     }
   ]

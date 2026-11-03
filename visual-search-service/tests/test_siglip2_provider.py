@@ -5,7 +5,12 @@ from unittest.mock import patch
 import pytest
 
 from app.config import Settings
-from app.providers.siglip2 import Siglip2EmbeddingProvider, category_probabilities, l2_normalize
+from app.providers.siglip2 import (
+    CATEGORY_PROMPTS,
+    Siglip2EmbeddingProvider,
+    category_probabilities,
+    l2_normalize,
+)
 
 
 def test_siglip2_vector_is_l2_normalized() -> None:
@@ -37,6 +42,15 @@ def test_category_probabilities_favor_closest_prototype() -> None:
 
     assert scores["tops"] > 0.99
     assert sum(scores.values()) == pytest.approx(1.0)
+
+
+def test_category_prompt_bank_covers_each_catalog_group_with_subtypes() -> None:
+    assert set(CATEGORY_PROMPTS) == {
+        "tops", "bottoms", "uniforms", "shoes", "accessories", "unknown"
+    }
+    assert all(len(prompts) >= 5 for prompts in CATEGORY_PROMPTS.values())
+    assert any("cycling" in prompt for prompt in CATEGORY_PROMPTS["bottoms"])
+    assert any("shin guards" in prompt for prompt in CATEGORY_PROMPTS["accessories"])
 
 
 def test_siglip2_fails_fast_when_embedding_dependencies_are_missing() -> None:

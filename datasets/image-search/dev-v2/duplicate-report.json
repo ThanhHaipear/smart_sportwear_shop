@@ -38,9 +38,9 @@
     {
       "queryId": "dev2-005",
       "sha256Unique": true,
-      "dHash64": "12191919d3d3cec4",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-119.jpg",
-      "nearestHammingDistance": 19,
+      "dHash64": "41499b8e2f3b334f",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-017.jpg",
+      "nearestHammingDistance": 20,
       "decision": "ACCEPT"
     },
     {
@@ -62,8 +62,8 @@
     {
       "queryId": "dev2-008",
       "sha256Unique": true,
-      "dHash64": "3803a4cf83cc42c1",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-068.jpg",
+      "dHash64": "00200a39b5adbcb0",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-072.jpg",
       "nearestHammingDistance": 20,
       "decision": "ACCEPT"
     },
@@ -319,8 +319,8 @@
       "queryId": "dev2-040",
       "sha256Unique": true,
       "dHash64": "d9791b0e6c3bcf5f",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-119.jpg",
-      "nearestHammingDistance": 20,
+      "nearestAsset": "test-005",
+      "nearestHammingDistance": 17,
       "decision": "ACCEPT"
     },
     {
@@ -358,9 +358,9 @@
     {
       "queryId": "dev2-045",
       "sha256Unique": true,
-      "dHash64": "47cf6e673330f07a",
-      "nearestAsset": "test-028",
-      "nearestHammingDistance": 17,
+      "dHash64": "72b2b03058583870",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-02.jpg",
+      "nearestHammingDistance": 18,
       "decision": "ACCEPT"
     },
     {
@@ -390,17 +390,17 @@
     {
       "queryId": "dev2-049",
       "sha256Unique": true,
-      "dHash64": "72b2b03058583870",
-      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-02.jpg",
-      "nearestHammingDistance": 18,
+      "dHash64": "9002a0b8b8bc0180",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-033.jpg",
+      "nearestHammingDistance": 16,
       "decision": "ACCEPT"
     },
     {
       "queryId": "dev2-050",
       "sha256Unique": true,
-      "dHash64": "9002a0b8b8bc0180",
-      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-033.jpg",
-      "nearestHammingDistance": 16,
+      "dHash64": "58b2e36b4a466cb1",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/argentina-jm8396-02.jpg",
+      "nearestHammingDistance": 17,
       "decision": "ACCEPT"
     },
     {

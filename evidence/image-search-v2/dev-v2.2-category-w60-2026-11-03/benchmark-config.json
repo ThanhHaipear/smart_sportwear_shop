@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-03T09:59:54.958525+00:00",
+  "gitCommit": "eeaf5adb672a0711106984303e78ada29e5b6561",
+  "dataset": {
+    "name": "image-search-dev-v2",
+    "version": "2.2.0",
+    "split": "DEV",
+    "status": "FROZEN",
+    "manifestSha256": "17c59219250cb5c612382aa2f78300dca7a664999eb9438723ea3c48dddd62d0",
+    "labelsSha256": "29c51e4403815bc51573edbd48633fa5fea84329f2b5adfca78bbdeb1055eb7a",
+    "catalogSnapshot": {
+      "version": "image-catalog-v2-2026-10-23",
+      "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+    }
+  },
+  "service": {
+    "url": "http://127.0.0.1:8090",
+    "latencyScope": "visual-service HTTP + preprocessing + embedding + exact vector search",
+    "candidateLimit": 20,
+    "requestTimeoutSeconds": 60.0,
+    "intervalSeconds": 0.0
+  },
+  "model": {
+    "provider": "hugging_face_local",
+    "name": "google/siglip2-base-patch16-224",
+    "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+    "preprocessing": "siglip2-autoprocessor-original-v1",
+    "dimensions": 768
+  },
+  "relevance": {
+    "relevantAtOrAbove": 2,
+    "kValues": [
+      1,
+      5,
+      10
+    ]
+  },
+  "threshold": {
+    "mode": "DEV_GRID_SEARCH",
+    "objective": "maximize mean(Recall@5, unknown rejection rate), require Recall@5>=0.80, deterministic ties",
+    "selectedSimilarityThreshold": 0.77966662
+  },
+  "hardware": {
+    "system": "Windows",
+    "release": "10",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel",
+    "python": "3.11.3"
+  }
+}

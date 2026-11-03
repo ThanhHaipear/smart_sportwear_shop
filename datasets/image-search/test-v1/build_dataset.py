@@ -24,6 +24,9 @@ DATASET_VERSION = "1.0.0"
 CATALOG_SNAPSHOT_VERSION = "image-catalog-v2-2026-10-23"
 CATALOG_SNAPSHOT_SHA256 = "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
 TARGET_PER_GROUP = 20
+EXPECTED_REFERENCE_ASSET_COUNT = 136
+CANDIDATE_PREFETCH_TARGET = 20
+ACCESSORY_PREFETCH_TARGET = 40
 THUMBNAIL_WIDTH = 1024
 USER_AGENT = "SmartSportswearShopResearch/1.0 (academic image-search benchmark)"
 COMMONS_API = "https://commons.wikimedia.org/w/api.php"
@@ -442,7 +445,11 @@ def collect(workspace: Path, dataset_dir: Path) -> None:
         # The accessory taxonomy is noisier than the apparel categories, so keep
         # a larger replacement pool for manual visual QA without redownloading
         # already-stable groups on every reproducibility run.
-        cache_target = 40 if group == "accessories" else 20
+        cache_target = (
+            ACCESSORY_PREFETCH_TARGET
+            if group == "accessories"
+            else CANDIDATE_PREFETCH_TARGET
+        )
         cached_page_ids = {item["pageId"] for item in cached_candidates}
         fresh_candidates = [
             candidate for candidate in candidates
@@ -668,7 +675,7 @@ def validate(dataset_dir: Path) -> None:
     duplicate_ids = {item["queryId"] for item in duplicate_items}
     if len(duplicate_ids) != 120 or duplicate_ids != sample_ids:
         raise ValueError("manifest/duplicate-report IDs do not match")
-    if duplicate_report.get("referenceAssetCount") != 136:
+    if duplicate_report.get("referenceAssetCount") != EXPECTED_REFERENCE_ASSET_COUNT:
         raise ValueError("leakage reference count changed; rebuild and review TEST v1")
     for item in duplicate_items:
         if not item.get("sha256Unique") or item.get("decision") != "ACCEPT":

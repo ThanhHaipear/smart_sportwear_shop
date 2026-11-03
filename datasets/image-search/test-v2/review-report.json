@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "status": "REVIEW_REQUIRED",
+  "reviewer": "Codex-assisted category/provenance review; independent team-member sign-off still required by final project checklist",
+  "method": "Every query is sourced from a group-specific Commons category. Tops, bottoms, shoes and accessories use source-category/subtype grade-2 substitutes; uniforms use sports-uniform category substitutes; unknown queries have no relevant product.",
+  "limitations": [
+    "Subcategory/category judgments do not claim an exact-product match.",
+    "Expected color is intentionally omitted unless a human reviewer adds an unambiguous normalized color label.",
+    "A second team member must visually review all queries before final academic submission."
+  ],
+  "caseCount": 120,
+  "distribution": {
+    "accessories": 20,
+    "bottoms": 20,
+    "shoes": 20,
+    "tops": 20,
+    "uniforms": 20,
+    "unknown": 20
+  },
+  "unresolved": [],
+  "reviewerSignoff": {
+    "status": "PENDING",
+    "requiredRole": "independent project team member"
+  },
+  "blockedAction": "Do not run the final TEST v2 benchmark before sign-off and freeze."
+}

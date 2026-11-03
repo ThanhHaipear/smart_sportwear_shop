@@ -47,8 +47,11 @@ class Settings(BaseSettings):
     catalog_download_timeout_seconds: float = Field(default=10, gt=0)
     catalog_download_max_redirects: int = Field(default=3, ge=0, le=5)
     search_rate_limit_per_minute: int = Field(default=10, gt=0)
-    visual_color_rerank_weight: float = Field(default=0.15, ge=0, le=0.30)
-    visual_category_consensus_weight: float = Field(default=0.25, ge=0, le=0.25)
+    visual_color_rerank_weight: float = Field(default=0.0, ge=0, le=0.30)
+    # Real-domain photos often contain people and background context. Allow
+    # the zero-shot category signal to outweigh that context, while keeping a
+    # strict ceiling so category support remains a reranker.
+    visual_category_consensus_weight: float = Field(default=0.60, ge=0, le=0.60)
     monthly_budget_usd: float = Field(default=20, ge=0)
     image_cost_per_megapixel_usd: float = Field(default=0.0006, ge=0)
     store_query_images: bool = False

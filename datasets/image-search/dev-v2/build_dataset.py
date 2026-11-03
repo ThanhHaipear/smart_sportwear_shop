@@ -26,7 +26,7 @@ def load_base_builder():
 
 def configure(module: Any) -> None:
     module.DATASET_NAME = "image-search-dev-v2"
-    module.DATASET_VERSION = "2.1.0"
+    module.DATASET_VERSION = "2.2.0"
     module.TARGET_PER_GROUP = 10
 
     def compatible_dhash(path: Path) -> int:
@@ -75,6 +75,10 @@ def configure(module: Any) -> None:
         3694279,                          # bottoms: full cyclist scene, shorts too small
         108129443,                        # bottoms: shopping-mall scene miscategorized as shorts
         132357857, 132357859,             # bottoms: distant team scenes, shorts not query focus
+        118114994,                        # tops: mixed fashion display, hoodie not query focus
+        98021280,                         # tops: phone/person portrait, hoodie is incidental
+        39735212,                         # accessories: boxing shoes dominate the sports socks
+        63706279,                         # accessories: baseball scene, shin guard is incidental
     })
     test_manifest_path = WORKSPACE / "datasets" / "image-search" / "test-v1" / "manifest.json"
     test_manifest = json.loads(test_manifest_path.read_text(encoding="utf-8"))
@@ -251,7 +255,7 @@ def postprocess(module: Any) -> None:
 
     manifest["dataset"].update({
         "name": "image-search-dev-v2",
-        "version": "2.1.0",
+        "version": "2.2.0",
         "split": "DEV",
         "status": "FROZEN",
     })
@@ -274,7 +278,7 @@ def postprocess(module: Any) -> None:
     review.update({
         "status": "COMPLETE",
         "reviewer": "Hải/Codex DEV-v2 engineering review",
-        "datasetVersion": "2.1.0",
+        "datasetVersion": "2.2.0",
         "method": "Real-domain query-focus and subtype review; never final acceptance evidence.",
         "caseCount": len(manifest["samples"]),
         "distribution": dict(sorted(Counter(sample["group"] for sample in manifest["samples"]).items())),

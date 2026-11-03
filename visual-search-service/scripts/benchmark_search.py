@@ -387,6 +387,10 @@ async def run(args: argparse.Namespace) -> int:
             "revision": settings.visual_embedding_revision, "preprocessing": settings.visual_embedding_preprocessing,
             "dimensions": settings.visual_embedding_dims,
         },
+        "ranking": {
+            "colorRerankWeight": settings.visual_color_rerank_weight,
+            "categoryConsensusWeight": settings.visual_category_consensus_weight,
+        },
         "relevance": {"relevantAtOrAbove": relevant_at_or_above, "kValues": [1, 5, 10]},
         "threshold": tuning,
         "hardware": {
