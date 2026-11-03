@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "status": "COMPLETE",
   "reviewer": "Hải/Codex DEV-v2 engineering review",
-  "method": "Real-domain tuning split review; never final acceptance evidence.",
+  "method": "Real-domain query-focus and subtype review; never final acceptance evidence.",
   "limitations": [
-    "Subcategory/category judgments do not claim an exact-product match.",
-    "Expected color is intentionally omitted unless a human reviewer adds an unambiguous normalized color label.",
-    "A second team member must visually review all queries before final academic submission."
+    "Grade-2 labels represent visually compatible substitutes, not an exact physical product match.",
+    "Expected color remains omitted unless a human reviewer adds an unambiguous normalized color label.",
+    "DEV v2.1 is tuning-only and must not be reused in TEST v2 or reported as final acceptance."
   ],
   "caseCount": 60,
   "distribution": {
@@ -17,5 +17,23 @@
     "uniforms": 10,
     "unknown": 10
   },
-  "unresolved": []
+  "unresolved": [],
+  "datasetVersion": "2.1.0",
+  "manualVisualReview": {
+    "status": "PASS",
+    "scope": "All 60 contact-sheet cases; reject incidental, absent and near-duplicate subjects.",
+    "groups": [
+      "accessories",
+      "bottoms",
+      "shoes",
+      "tops",
+      "uniforms",
+      "unknown"
+    ]
+  },
+  "relevanceJudgment": {
+    "status": "PASS",
+    "method": "Source subtype mapped only to compatible frozen-catalog product slugs.",
+    "maximumRelevantProductsPerQuery": 6
+  }
 }

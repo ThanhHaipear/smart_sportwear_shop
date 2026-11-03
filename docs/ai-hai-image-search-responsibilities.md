@@ -313,16 +313,16 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 **Trạng thái:** `IN PROGRESS` — Supabase và backfill màu đã hoàn tất; DEV v2 cải thiện mạnh nhưng chưa đạt gate để tạo TEST v2.
 
-- DEV v2 `image-search-dev-v2:2.0.0` đã khóa với 60 ảnh Commons thực tế, cân bằng 10 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện/unknown.
+- DEV v2.1 `image-search-dev-v2:2.1.0` đã khóa với 60 ảnh Commons thực tế, cân bằng 10 ảnh cho mỗi nhóm áo/quần/đồng phục/giày/phụ kiện/unknown. Toàn bộ contact sheet đã được review lại theo query-focus; false metadata, incidental object và near-duplicate thủ công đã bị loại.
 - Builder kiểm tra license/provenance, SHA-256, dHash với 256 ảnh catalog/DEV v1/TEST v1 và cấm trùng `sourceGroupCode` với TEST v1. Contact sheets đã được review; các false category của Commons được loại theo page ID.
 - Supabase live đã khôi phục ngày 03/11/2026. Flyway V8, 36/36 sản phẩm và 81/81 ảnh ACTIVE; embedding đạt 81/81 READY.
 - Job `493cdb82-6eed-40a0-b8d7-88c146206d3c` đã backfill `color_signature`; coverage cuối đạt 81/81, outbox và toàn bộ visual-search queue/retry/DLQ đều sạch.
 - Ranking dùng histogram màu và zero-shot category prototypes của chính SigLIP2, có thêm prototype `unknown` để ảnh ngoài miền không bị ép vào category catalog. Không dùng nhãn TEST hoặc thêm model ngoài.
 - Baseline DEV v2: Recall@5 `11,43%`, category accuracy `22%`, unknown rejection `100%`, p95 `985,58 ms`.
-- Iteration tốt nhất sau zero-shot + unknown: Recall@5 `45,52%`, category accuracy `66%`, top-5 accuracy `72%`, unknown rejection `90%`, request failure `0%`, p95 `1.157,78 ms`.
+- DEV v2.1 thu hẹp relevance từ toàn category xuống source subtype tương thích, tối đa 6 sản phẩm relevant/query. Iteration tốt nhất với subtype prompts đạt Recall@5 `63,50%`, category accuracy `76%`, top-5 accuracy `78%`, unknown rejection `90%`, request failure `0%`, p95 `926,27 ms`.
 - Python suite hiện đạt `125 passed, 2 skipped`; DEV v2 validator `PASS`.
 - Chưa tạo TEST v2 và chưa chạy lại TEST v1. DEV v2 chưa đạt mục tiêu Recall@5 `>=80%` và category accuracy `>=90%`, vì vậy threshold/weight chưa được khóa và public flag tiếp tục tắt.
-- Evidence: `evidence/image-search-v2/supabase-live-audit-2026-11-03.json` và `evidence/image-search-v2/dev-v2-benchmark-zero-shot-unknown-2026-11-03/`.
+- Evidence: `evidence/image-search-v2/supabase-live-audit-2026-11-03.json`, `evidence/image-search-v2/dev-v2.1-benchmark-2026-11-03/` và `evidence/image-search-v2/dev-v2.1-subtype-prompts-2026-11-03/`.
 
 ## 7. Artifact phải bàn giao
 
@@ -378,6 +378,7 @@ Báo cáo tổng kết HAI-10 được bàn giao tại `docs/ai-hai-image-search
 | 25/10/2026 | Hoàn thiện nội dung báo cáo HAI-10 | Đủ HAI-10.1–10.13; kết luận TEST v1 FAILED được giữ nguyên; evidence và điều kiện rollout/rollback được liên kết | `docs/ai-hai-image-search-final-report.md` | Review tổng kết đã được Hải xác nhận chốt ngày 02/11/2026 | Đóng HAI-10; chuyển sang DEV v2 |
 | 02/11/2026 | Xây DEV v2 và bổ sung color/category reranking | 60 ảnh thực tế, 10/nhóm; validator và visual review đạt; 123 Python tests đạt | `datasets/image-search/dev-v2/`; `visual-search-service/app/persistence/repository.py` | Supabase project ref cũ không còn DNS/pooler tenant; chưa thể benchmark/tune live | Cập nhật connection hợp lệ, chạy audit read-only rồi benchmark DEV v2 |
 | 03/11/2026 | Khôi phục live, backfill màu và benchmark DEV v2 | Supabase V8; 81/81 READY + color; zero-shot/unknown tăng Recall@5 11,43% → 45,52%, category 22% → 66%; 125 tests đạt | `supabase-live-audit-2026-11-03.json`; `dev-v2-benchmark-zero-shot-unknown-2026-11-03/` | DEV vẫn dưới gate 80%/90%; chưa được khóa threshold và chưa tạo TEST v2 | Tiếp tục cải thiện bottoms/accessories/category và relevance judgment hoàn toàn trên DEV v2 |
+| 03/11/2026 | Review query-focus và nâng DEV lên v2.1 | Loại ảnh sai/incidental/near-duplicate; relevance theo subtype; subtype prompts đạt Recall@5 63,50%, category 76%, top-5 78%, unknown 90%, p95 926,27 ms | `datasets/image-search/dev-v2/`; `dev-v2.1-subtype-prompts-2026-11-03/` | Vẫn dưới gate tổng 80%/90%; bottoms Recall@5 55%, category 60% | Giữ TEST v2 bị khóa; nghiên cứu region-aware classification hoặc catalog/category coverage trên DEV |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
 

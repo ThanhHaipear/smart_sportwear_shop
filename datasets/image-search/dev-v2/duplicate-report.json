@@ -94,9 +94,9 @@
     {
       "queryId": "dev2-012",
       "sha256Unique": true,
-      "dHash64": "d55e51dcfab6262c",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-055.jpg",
-      "nearestHammingDistance": 22,
+      "dHash64": "32cccdbb3331e9ac",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-UNIFORM-003-01.png",
+      "nearestHammingDistance": 18,
       "decision": "ACCEPT"
     },
     {
@@ -110,41 +110,41 @@
     {
       "queryId": "dev2-014",
       "sha256Unique": true,
+      "dHash64": "b51d25640c792934",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-039.jpg",
+      "nearestHammingDistance": 21,
+      "decision": "ACCEPT"
+    },
+    {
+      "queryId": "dev2-015",
+      "sha256Unique": true,
       "dHash64": "73595971717333eb",
       "nearestAsset": "catalog/pilot-v1/assets/PILOT-UNIFORM-006-02.png",
       "nearestHammingDistance": 12,
       "decision": "ACCEPT"
     },
     {
-      "queryId": "dev2-015",
-      "sha256Unique": true,
-      "dHash64": "7361737171713b6b",
-      "nearestAsset": "test-014",
-      "nearestHammingDistance": 9,
-      "decision": "ACCEPT"
-    },
-    {
       "queryId": "dev2-016",
       "sha256Unique": true,
-      "dHash64": "26313210b1b171d3",
-      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-024.jpg",
-      "nearestHammingDistance": 16,
+      "dHash64": "66671f6f87331f37",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-110.jpg",
+      "nearestHammingDistance": 19,
       "decision": "ACCEPT"
     },
     {
       "queryId": "dev2-017",
       "sha256Unique": true,
-      "dHash64": "1a4a5029285b9d1d",
-      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-051.webp",
-      "nearestHammingDistance": 21,
+      "dHash64": "7361737171713b6b",
+      "nearestAsset": "test-015",
+      "nearestHammingDistance": 9,
       "decision": "ACCEPT"
     },
     {
       "queryId": "dev2-018",
       "sha256Unique": true,
-      "dHash64": "d256666e7b714bc6",
-      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-048.jpg",
-      "nearestHammingDistance": 19,
+      "dHash64": "3a3b332363cbab82",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-035.jpg",
+      "nearestHammingDistance": 17,
       "decision": "ACCEPT"
     },
     {
@@ -158,9 +158,9 @@
     {
       "queryId": "dev2-020",
       "sha256Unique": true,
-      "dHash64": "f3d1e9cc9cccccc8",
-      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-02.png",
-      "nearestHammingDistance": 15,
+      "dHash64": "30253515dcb939a6",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-008-01.png",
+      "nearestHammingDistance": 18,
       "decision": "ACCEPT"
     },
     {
@@ -182,9 +182,9 @@
     {
       "queryId": "dev2-023",
       "sha256Unique": true,
-      "dHash64": "92911ba9a3a43673",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-066.jpg",
-      "nearestHammingDistance": 18,
+      "dHash64": "46263656d4ab0b07",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-058.jpg",
+      "nearestHammingDistance": 20,
       "decision": "ACCEPT"
     },
     {
@@ -214,9 +214,9 @@
     {
       "queryId": "dev2-027",
       "sha256Unique": true,
-      "dHash64": "46263656d4ab0b07",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-058.jpg",
-      "nearestHammingDistance": 20,
+      "dHash64": "b94bcb9c3cc69692",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-031.jpg",
+      "nearestHammingDistance": 21,
       "decision": "ACCEPT"
     },
     {
@@ -238,8 +238,8 @@
     {
       "queryId": "dev2-030",
       "sha256Unique": true,
-      "dHash64": "b94bcb9c3cc69692",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-031.jpg",
+      "dHash64": "b558186872d294b2",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-043.jpg",
       "nearestHammingDistance": 21,
       "decision": "ACCEPT"
     },
@@ -326,9 +326,9 @@
     {
       "queryId": "dev2-041",
       "sha256Unique": true,
-      "dHash64": "58cbc60505264f69",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-106.jpg",
-      "nearestHammingDistance": 20,
+      "dHash64": "c3cd86cc9c269299",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-SHOE-002-01.png",
+      "nearestHammingDistance": 21,
       "decision": "ACCEPT"
     },
     {
@@ -342,17 +342,17 @@
     {
       "queryId": "dev2-043",
       "sha256Unique": true,
-      "dHash64": "98bcc6eaf0e08084",
-      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-006.jpg",
-      "nearestHammingDistance": 15,
+      "dHash64": "793970988461984c",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-019.jpg",
+      "nearestHammingDistance": 18,
       "decision": "ACCEPT"
     },
     {
       "queryId": "dev2-044",
       "sha256Unique": true,
-      "dHash64": "238f1d144e1b3012",
-      "nearestAsset": "test-021",
-      "nearestHammingDistance": 19,
+      "dHash64": "68e6c2b39634d8a6",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-014.jpg",
+      "nearestHammingDistance": 21,
       "decision": "ACCEPT"
     },
     {
@@ -366,9 +366,9 @@
     {
       "queryId": "dev2-046",
       "sha256Unique": true,
-      "dHash64": "f31e9e192227e35d",
-      "nearestAsset": "datasets/image-search/test-v1/assets/test-086.jpg",
-      "nearestHammingDistance": 22,
+      "dHash64": "8030b1b1b030301c",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-028.jpg",
+      "nearestHammingDistance": 15,
       "decision": "ACCEPT"
     },
     {
@@ -382,9 +382,9 @@
     {
       "queryId": "dev2-048",
       "sha256Unique": true,
-      "dHash64": "1f671f8625150f3e",
-      "nearestAsset": "test-042",
-      "nearestHammingDistance": 21,
+      "dHash64": "c0068e4cc6c6c6c6",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-ACCESSORY-004-02.png",
+      "nearestHammingDistance": 18,
       "decision": "ACCEPT"
     },
     {
@@ -398,9 +398,9 @@
     {
       "queryId": "dev2-050",
       "sha256Unique": true,
-      "dHash64": "46c3332329995e76",
-      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-036.jpg",
-      "nearestHammingDistance": 20,
+      "dHash64": "9002a0b8b8bc0180",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-033.jpg",
+      "nearestHammingDistance": 16,
       "decision": "ACCEPT"
     },
     {
@@ -470,9 +470,9 @@
     {
       "queryId": "dev2-059",
       "sha256Unique": true,
-      "dHash64": "c69309410f0f97ed",
-      "nearestAsset": "test-055",
-      "nearestHammingDistance": 9,
+      "dHash64": "70e88ec2f030b8b0",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-007-01.png",
+      "nearestHammingDistance": 18,
       "decision": "ACCEPT"
     },
     {

@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "dataset": {
     "name": "image-search-dev-v2",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "split": "DEV",
     "status": "FROZEN",
-    "frozenAt": "2026-11-02T15:16:20.314354+00:00",
+    "frozenAt": "2026-11-03T05:31:37.477778+00:00",
     "catalogSnapshot": {
       "version": "image-catalog-v2-2026-10-23",
       "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
@@ -39,7 +39,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -61,7 +61,7 @@
         "licenseCode": "CC0",
         "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -83,7 +83,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "doyles",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -105,7 +105,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -127,7 +127,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "https://www.flickr.com/photos/68716054@N00/6904889839/",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -149,7 +149,7 @@
         "licenseCode": "CC0",
         "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -171,7 +171,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -193,7 +193,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -215,7 +215,7 @@
         "licenseCode": "CC BY 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -237,7 +237,7 @@
         "licenseCode": "CC0",
         "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -259,29 +259,29 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "Day 102",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-012",
       "image": "assets/dev2-012.jpg",
-      "sha256": "73a3117df9a8cafbcc04cc8ef82e44711cfb7f1e6f22ef8da27ebba706d293dd",
-      "bytes": 132629,
-      "width": 1024,
-      "height": 682,
+      "sha256": "29bd5cb643b47f3f2bf4d72829323634c53c410f476df88561840caed24e1964",
+      "bytes": 141020,
+      "width": 768,
+      "height": 1024,
       "group": "bottoms",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:lymphedema-compression-sleeve-november-second-skin",
-      "sourceCategory": "Compression garments",
+      "sourceGroupCode": "commons-series:charntay-poko-clears-the-ball",
+      "sourceCategory": "Shorts (sports clothing)",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Lymphedema_Compression_sleeve_November_2106_Second_Skin_016.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Lymphedema_Compression_sleeve_November_2106_Second_Skin_016.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Lymphedema Compression sleeve November 2106 Second Skin 016.jpg",
-        "author": "Staff photographer",
-        "licenseCode": "CC BY-SA 3.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-        "attribution": "Science History Institute",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "uri": "https://commons.wikimedia.org/wiki/File:Charntay_Poko_clears_the_ball.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Charntay_Poko_clears_the_ball.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Charntay Poko clears the ball.jpg",
+        "author": "vjpaul",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "https://www.flickr.com/photos/victor_paul/10266407734/",
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -303,12 +303,34 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "Cycling Ascent",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-014",
       "image": "assets/dev2-014.jpg",
+      "sha256": "00e739db9a784b58aef271d2b4b25d2c42191af34edc97d421d67bc76b19335e",
+      "bytes": 305902,
+      "width": 589,
+      "height": 1024,
+      "group": "bottoms",
+      "caseKind": "independent-dev-domain-photo",
+      "sourceGroupCode": "commons-series:fitness-coach-in-park",
+      "sourceCategory": "Shorts (sports clothing)",
+      "source": {
+        "uri": "https://commons.wikimedia.org/wiki/File:Fitness_Coach_In_Park_9-14_(15264044347).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/70/Fitness_Coach_In_Park_9-14_%2815264044347%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Fitness Coach In Park 9-14 (15264044347).jpg",
+        "author": "inkknife_2000 (7.5 million views +)",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "https://www.flickr.com/photos/23155134@N06/15264044347/",
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+      }
+    },
+    {
+      "id": "dev2-015",
+      "image": "assets/dev2-015.jpg",
       "sha256": "12eacd87840c232a6bf298d8c40d7946692afa09e728c15fc0dc986cefc1128c",
       "bytes": 101406,
       "width": 768,
@@ -325,12 +347,34 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
-      "id": "dev2-015",
-      "image": "assets/dev2-015.jpg",
+      "id": "dev2-016",
+      "image": "assets/dev2-016.jpg",
+      "sha256": "703ba18f248923a4f19c034cae34559bef787e8cb0c8f9ca9d7a612d1b19d7c7",
+      "bytes": 168002,
+      "width": 1024,
+      "height": 576,
+      "group": "bottoms",
+      "caseKind": "independent-dev-domain-photo",
+      "sourceGroupCode": "commons-series:fluoranje-lange-joggingbroek-at-the-lidl-zevenkamp-rotterdam",
+      "sourceCategory": "Shorts (sports clothing)",
+      "source": {
+        "uri": "https://commons.wikimedia.org/wiki/File:Fluoranje_lange_joggingbroek_at_the_Lidl,_Zevenkamp,_Rotterdam_(2021)_01.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/75/Fluoranje_lange_joggingbroek_at_the_Lidl%2C_Zevenkamp%2C_Rotterdam_%282021%29_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Fluoranje lange joggingbroek at the Lidl, Zevenkamp, Rotterdam (2021) 01.jpg",
+        "author": "Donald Trung Quoc Don (Chữ Hán: 徵國單) - Wikimedia Commons - © CC BY-SA 4.0 International . ( Want to use this image? ) Original publication 📤: -- Donald Trung 『徵國單』 ( No Fake News 💬 ) ( WikiProject Numismatics 💴) ( Articles 📚 ) 20:46, 29 May 2021 (UTC)",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
+      }
+    },
+    {
+      "id": "dev2-017",
+      "image": "assets/dev2-017.jpg",
       "sha256": "8eefad4883ac5516f2d5ca3779dcf21b29332c10844916ef94dfb282bed40469",
       "bytes": 120476,
       "width": 768,
@@ -347,73 +391,29 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
-      }
-    },
-    {
-      "id": "dev2-016",
-      "image": "assets/dev2-016.jpg",
-      "sha256": "bb004831dba62460ef44d3a4a3dabe26e7271822b143c6eeab7af771e7aedb5a",
-      "bytes": 275220,
-      "width": 768,
-      "height": 1024,
-      "group": "bottoms",
-      "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:grey-cycle-tour",
-      "sourceCategory": "Cycling shorts",
-      "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Grey_Cycle_Tour_2008.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Grey_Cycle_Tour_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Grey Cycle Tour 2008.jpg",
-        "author": "Rogan p",
-        "licenseCode": "Public domain",
-        "licenseUrl": "",
-        "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
-      }
-    },
-    {
-      "id": "dev2-017",
-      "image": "assets/dev2-017.jpg",
-      "sha256": "c503fcaa4da2ec62132beb8f1d703b76ca1625f6900325ea9e9e53ae80198b73",
-      "bytes": 259442,
-      "width": 1024,
-      "height": 692,
-      "group": "bottoms",
-      "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:killeen-karabelas",
-      "sourceCategory": "Cycling shorts",
-      "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Killeen_Karabelas_1986.jpeg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/11/Killeen_Karabelas_1986.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Killeen Karabelas 1986.jpeg",
-        "author": "Nikos D. Karabelas",
-        "licenseCode": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "attribution": "Photograph collection of Actia Nicopolis Foundation , Preveza, Greece",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-018",
       "image": "assets/dev2-018.jpg",
-      "sha256": "8788f4b42ce5b1e0bf9db4f974caaf809ad18ac70721f64d91497b637399b933",
-      "bytes": 208970,
-      "width": 1024,
-      "height": 576,
+      "sha256": "c21c6c3beded636a38b2633c02d1c5c7c4f305d7ffe740bb779457acbc0f5deb",
+      "bytes": 225465,
+      "width": 694,
+      "height": 1024,
       "group": "bottoms",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:sitzcreme",
-      "sourceCategory": "Cycling shorts",
+      "sourceGroupCode": "commons-series:nz-walk-shorts-in-beige-brown",
+      "sourceCategory": "Shorts (sports clothing)",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Sitzcreme.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/11/Sitzcreme.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Sitzcreme.jpg",
-        "author": "Nicor",
+        "uri": "https://commons.wikimedia.org/wiki/File:NZ_Walk_Shorts_in_Beige_%26_Brown.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/88/NZ_Walk_Shorts_in_Beige_%26_Brown.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:NZ Walk Shorts in Beige & Brown.jpg",
+        "author": "DickyDickieDuck",
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -435,29 +435,29 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "Cycling Ascent",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-020",
       "image": "assets/dev2-020.jpg",
-      "sha256": "edcc67f67c1d2edd52b7fc685ca41c6b8619d393788f52e0134b0ce316c4421d",
-      "bytes": 171404,
-      "width": 948,
-      "height": 1024,
+      "sha256": "c23683bc3a7754be87cdf4305f58f14cd9ee4954867813ff5baf31637faaaeb6",
+      "bytes": 153401,
+      "width": 1024,
+      "height": 682,
       "group": "bottoms",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:radlerhose",
-      "sourceCategory": "Cycling shorts",
+      "sourceGroupCode": "commons-series:professional-volleyball-shorts",
+      "sourceCategory": "Shorts (sports clothing)",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Radlerhose.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/94/Radlerhose.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Radlerhose.jpg",
-        "author": "Ralf Roletschek",
-        "licenseCode": "CC BY-SA 3.0",
-        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-        "attribution": "vom Autor fotografiert",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "uri": "https://commons.wikimedia.org/wiki/File:Professional_volleyball_shorts.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Professional_volleyball_shorts.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Professional volleyball shorts.jpg",
+        "author": "Psandi",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -479,7 +479,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -501,29 +501,29 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "AUSTRALIAN FIJIANS V NSW MAORI",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-023",
       "image": "assets/dev2-023.jpg",
-      "sha256": "9777f739db2a69a24b7a5d3a132745568bd3f210862acba8dc5451fa54482074",
-      "bytes": 311364,
-      "width": 1024,
-      "height": 768,
+      "sha256": "1d94cd054664859797b88d19c00eacb3be4ddc221e271f11999835d55ee35ec3",
+      "bytes": 72611,
+      "width": 962,
+      "height": 730,
       "group": "uniforms",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:equip-del-lawn-hockey-club-calassan-c-font-vella-fira",
+      "sourceGroupCode": "commons-series:hockey-braian",
       "sourceCategory": "Field hockey players",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:18_Equip_del_Lawn_Hockey_Club_Calassan%C3%A7,_c._Font_Vella,_Fira_Modernista_de_Terrassa_2022.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a2/18_Equip_del_Lawn_Hockey_Club_Calassan%C3%A7%2C_c._Font_Vella%2C_Fira_Modernista_de_Terrassa_2022.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:18 Equip del Lawn Hockey Club Calassanç, c. Font Vella, Fira Modernista de Terrassa 2022.jpg",
-        "author": "Enric",
+        "uri": "https://commons.wikimedia.org/wiki/File:HOCKEY_BRAIAN.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/d3/HOCKEY_BRAIAN.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:HOCKEY BRAIAN.png",
+        "author": "Braguzman",
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -545,7 +545,7 @@
         "licenseCode": "Public domain",
         "licenseUrl": "",
         "attribution": "Library of Congress Catalog: https://lccn.loc.gov/2016841518 Image download: https://cdn.loc.gov/service/pnp/npcc/15200/15254v.jpg Original url: https://www.loc.gov/pictures/item/2016841518/",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -567,7 +567,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -589,29 +589,29 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "AUSTRALIAN FIJIANS V NSW MAORI",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-027",
       "image": "assets/dev2-027.jpg",
-      "sha256": "1d94cd054664859797b88d19c00eacb3be4ddc221e271f11999835d55ee35ec3",
-      "bytes": 72611,
-      "width": 962,
-      "height": 730,
+      "sha256": "7be06985c14ddc859a5e7d165c3a9d88b30225ccd583c811d5f04ee4cd40674c",
+      "bytes": 202458,
+      "width": 624,
+      "height": 992,
       "group": "uniforms",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:hockey-braian",
+      "sourceGroupCode": "commons-series:hockeyspieler-leonard",
       "sourceCategory": "Field hockey players",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:HOCKEY_BRAIAN.png",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/d3/HOCKEY_BRAIAN.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:HOCKEY BRAIAN.png",
-        "author": "Braguzman",
-        "licenseCode": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "uri": "https://commons.wikimedia.org/wiki/File:Hockeyspieler_Leonard.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/73/Hockeyspieler_Leonard.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Hockeyspieler Leonard.jpg",
+        "author": "Christoph Wagener",
+        "licenseCode": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -633,7 +633,7 @@
         "licenseCode": "CC BY-SA 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
         "attribution": "Imported from 500px ( archived version ) by the Archive Team . ( detail page )",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -655,29 +655,29 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-030",
       "image": "assets/dev2-030.jpg",
-      "sha256": "7be06985c14ddc859a5e7d165c3a9d88b30225ccd583c811d5f04ee4cd40674c",
-      "bytes": 202458,
-      "width": 624,
-      "height": 992,
+      "sha256": "7d2559ce87d8c5aacd670e0aebe063255b15d2c737d297d58eb2fb1baf5dfdcb",
+      "bytes": 105042,
+      "width": 589,
+      "height": 561,
       "group": "uniforms",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:hockeyspieler-leonard",
+      "sourceGroupCode": "commons-series:maahockeilija-tommi-rantala",
       "sourceCategory": "Field hockey players",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Hockeyspieler_Leonard.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/73/Hockeyspieler_Leonard.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Hockeyspieler Leonard.jpg",
-        "author": "Christoph Wagener",
-        "licenseCode": "CC BY 3.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "uri": "https://commons.wikimedia.org/wiki/File:Maahockeilija_Tommi_Rantala.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/5/53/Maahockeilija_Tommi_Rantala.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Maahockeilija Tommi Rantala.jpg",
+        "author": "B9725",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -699,7 +699,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -721,7 +721,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "Cleveland Museum of Art",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -743,7 +743,7 @@
         "licenseCode": "CC BY-SA 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
         "attribution": "IonutDragu",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -765,7 +765,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "260927_Lynx_Liberty_JohnMc91",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -787,7 +787,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -809,7 +809,7 @@
         "licenseCode": "Public domain",
         "licenseUrl": "",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -831,7 +831,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -853,7 +853,7 @@
         "licenseCode": "CC BY-SA 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
         "attribution": "BYU Sports Nation",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -875,7 +875,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -897,29 +897,29 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-041",
       "image": "assets/dev2-041.jpg",
-      "sha256": "79894ff08670e110c2485a1a6180c0e617dd7a77d055d61ced1da9e26c8b1c2d",
-      "bytes": 336885,
-      "width": 815,
+      "sha256": "64952817a7675db77f58764656cd8f7e4c21f70e999e685f79410137d691542d",
+      "bytes": 304614,
+      "width": 1024,
       "height": 1024,
       "group": "accessories",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:bryceharperswing",
+      "sourceGroupCode": "commons-series:chase-headley-on-may",
       "sourceCategory": "Shin guards",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Bryceharperswing_(05).jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/11/Bryceharperswing_%2805%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Bryceharperswing (05).jpg",
-        "author": "Johnmaxmena2",
-        "licenseCode": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "uri": "https://commons.wikimedia.org/wiki/File:Chase_Headley_on_May_24,_2015.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Chase_Headley_on_May_24%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Chase Headley on May 24, 2015.jpg",
+        "author": "Arturo Pardavila III on Flickr (Original version) UCinternational (Crop)",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Originally posted to Flickr as \" Rangers vs. Yankees: 5/24/2015 \" Cropped by UCinternational",
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -941,51 +941,51 @@
         "licenseCode": "CC BY 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-043",
       "image": "assets/dev2-043.jpg",
-      "sha256": "31eaa1aacaba1604c6d8a472ebfad027b393827fe50ede27c5651537670d0a55",
-      "bytes": 218600,
+      "sha256": "9252018aa11d488543e5f79d3b596da325bcfc3ab06639aa3e3dd4997aad0b11",
+      "bytes": 131350,
       "width": 1024,
-      "height": 682,
+      "height": 681,
       "group": "accessories",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:dirty-water-spilling-from-a-bottle",
+      "sourceGroupCode": "commons-series:jan-kumbh-mela-jags-for-jaal",
       "sourceCategory": "Water bottles",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:2008-09-20_Dirty_water_spilling_from_a_bottle.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/b8/2008-09-20_Dirty_water_spilling_from_a_bottle.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:2008-09-20 Dirty water spilling from a bottle.jpg",
-        "author": "Ildar Sagdejev ( Specious )",
+        "uri": "https://commons.wikimedia.org/wiki/File:2019_Jan_15_-_Kumbh_Mela_-_Jags_for_Jaal.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/e0/2019_Jan_15_-_Kumbh_Mela_-_Jags_for_Jaal.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:2019 Jan 15 - Kumbh Mela - Jags for Jaal.jpg",
+        "author": "Balone21",
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-044",
       "image": "assets/dev2-044.jpg",
-      "sha256": "e23152bf32ce08772b1174a2972d2988a3434be1408978d533e0796ce2e7d735",
-      "bytes": 264194,
-      "width": 737,
+      "sha256": "6f5a8704df1c0a8172048f01b865ce95dfb9100a84a496b663a875a7f8820080",
+      "bytes": 193173,
+      "width": 683,
       "height": 1024,
       "group": "accessories",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:carlos-beltr-n-on-august",
+      "sourceGroupCode": "commons-series:dodgers-whitesox-avisail-garcia",
       "sourceCategory": "Shin guards",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Carlos_Beltr%C3%A1n_on_August_4,_2016.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/87/Carlos_Beltr%C3%A1n_on_August_4%2C_2016.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Carlos Beltrán on August 4, 2016.jpg",
-        "author": "Keith Allison on Flickr (Original version) UCinternational (Crop)",
-        "licenseCode": "CC BY-SA 2.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-        "attribution": "Originally posted to Flickr as \" Carlos Beltran \" Cropped by UCinternational",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "uri": "https://commons.wikimedia.org/wiki/File:20170718_Dodgers-WhiteSox_Avisail_Garcia_(1).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/78/20170718_Dodgers-WhiteSox_Avisail_Garcia_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:20170718 Dodgers-WhiteSox Avisail Garcia (1).jpg",
+        "author": "TonyTheTiger",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1007,29 +1007,29 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "USA Boxing",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-046",
       "image": "assets/dev2-046.jpg",
-      "sha256": "91d16d7518f1e1919740d99063181d6c4ca373b8a3cc77d93be43f8ad5aa6d28",
-      "bytes": 370452,
-      "width": 1024,
-      "height": 683,
+      "sha256": "dc009473b90a00a8187c9a4e29e0ed4c16aeed2cf2a876382bfbc38e34047752",
+      "bytes": 135970,
+      "width": 768,
+      "height": 1024,
       "group": "accessories",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:tour-de-france-caravane-vittel-free-image-spielvogel-zero-copyright",
+      "sourceGroupCode": "commons-series:image",
       "sourceCategory": "Water bottles",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:2014_Tour_de_France._Caravane_Vittel_1._Free_image_Spielvogel._Zero_copyright.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/37/2014_Tour_de_France._Caravane_Vittel_1._Free_image_Spielvogel._Zero_copyright.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:2014 Tour de France. Caravane Vittel 1. Free image Spielvogel. Zero copyright.jpg",
-        "author": "For a gallery of some more of my uploaded pictures see: here .",
-        "licenseCode": "CC0",
-        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "uri": "https://commons.wikimedia.org/wiki/File:415-image1.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/d9/415-image1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:415-image1.jpg",
+        "author": "Euclidia13",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1051,29 +1051,29 @@
         "licenseCode": "CC BY-SA 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-048",
       "image": "assets/dev2-048.jpg",
-      "sha256": "ea58300c47b2b541a2ec3c967de4874146365714c0a61717dff71cc9570dd8af",
-      "bytes": 294575,
-      "width": 1024,
-      "height": 682,
+      "sha256": "9116a2a3450b5c846240d9f49fc3dca8a4c7122930a6b0bc1ae2045935b1b9e6",
+      "bytes": 134741,
+      "width": 491,
+      "height": 1024,
       "group": "accessories",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:carlos-gonz-lez",
+      "sourceGroupCode": "commons-series:ayaq-qoruyucu",
       "sourceCategory": "Shin guards",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:Carlos_Gonz%C3%A1lez_(4903574018).jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/84/Carlos_Gonz%C3%A1lez_%284903574018%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:Carlos González (4903574018).jpg",
-        "author": "Jonathan Konrath from Oakland, USA",
-        "licenseCode": "CC BY 2.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-        "attribution": "IMG_2353",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "uri": "https://commons.wikimedia.org/wiki/File:Ayaq_qoruyucu.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Ayaq_qoruyucu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:Ayaq qoruyucu.jpg",
+        "author": "Hilal knight",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1095,29 +1095,29 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-050",
       "image": "assets/dev2-050.jpg",
-      "sha256": "165adc3488d49dd994dd9cacadf2166ffbd1fa9afea665960dfcfe479e52a091",
-      "bytes": 271649,
+      "sha256": "dcfe61b6f8676826286c3c56c9def1fe0953a6a60c51405b3a6944682f9f8a16",
+      "bytes": 46936,
       "width": 1024,
-      "height": 682,
+      "height": 266,
       "group": "accessories",
       "caseKind": "independent-dev-domain-photo",
-      "sourceGroupCode": "commons-series:osec-lsc",
-      "sourceCategory": "Water bottles",
+      "sourceGroupCode": "commons-series:ger-by-m-nchen-veranstaltung-schabernackt-ball-b-ndchen-mattes",
+      "sourceCategory": "Wristbands",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:20160628-OSEC-LSC-0001_(27499411513).jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/5/56/20160628-OSEC-LSC-0001_%2827499411513%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:20160628-OSEC-LSC-0001 (27499411513).jpg",
-        "author": "U.S. Department of Agriculture",
+        "uri": "https://commons.wikimedia.org/wiki/File:GER_%E2%80%94_BY_%E2%80%94_M%C3%BCnchen_%E2%80%94_Veranstaltung_Schabernackt-Ball_(B%C3%A4ndchen)_2020_Mattes.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/97/GER_%E2%80%94_BY_%E2%80%94_M%C3%BCnchen_%E2%80%94_Veranstaltung_Schabernackt-Ball_%28B%C3%A4ndchen%29_2020_Mattes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:GER — BY — München — Veranstaltung Schabernackt-Ball (Bändchen) 2020 Mattes.jpg",
+        "author": "User:Mateus2019",
         "licenseCode": "Public domain",
         "licenseUrl": "",
-        "attribution": "20160628-OSEC-LSC-0001",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "attribution": "Self-scanned",
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1139,7 +1139,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1161,7 +1161,7 @@
         "licenseCode": "Public domain",
         "licenseUrl": "",
         "attribution": "Nathan Mayo Collection",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1183,7 +1183,7 @@
         "licenseCode": "CC BY 2.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
         "attribution": "16.8.20 1 Borovany Poklady z diecéze 154",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1205,7 +1205,7 @@
         "licenseCode": "CC0",
         "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1227,7 +1227,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1249,7 +1249,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1271,7 +1271,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1293,29 +1293,29 @@
         "licenseCode": "CC BY 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
         "attribution": "ines lukic",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
       "id": "dev2-059",
       "image": "assets/dev2-059.jpg",
-      "sha256": "aeee0b6939be08011b90d56f05f9a88dd19e3b07d19447d22595e525dc11cf94",
-      "bytes": 253747,
-      "width": 768,
+      "sha256": "898bfaea6c04c76016e045ffcccba3d2d92439708a85d4de580c8cdeab2efb2d",
+      "bytes": 150959,
+      "width": 575,
       "height": 1024,
       "group": "unknown",
       "caseKind": "independent-dev-negative-photo",
-      "sourceGroupCode": "commons-series:porcelain-lamp-on-flea-market-moscow-vintage-in-danilov-monastery",
+      "sourceGroupCode": "commons-series:lampe",
       "sourceCategory": "Table lamps",
       "source": {
-        "uri": "https://commons.wikimedia.org/wiki/File:2024.12.08_Porcelain_Lamp_on_Flea_Market_Moscow_Vintage_in_Danilov_Monastery_Event_Hall.jpg",
-        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/f8/2024.12.08_Porcelain_Lamp_on_Flea_Market_Moscow_Vintage_in_Danilov_Monastery_Event_Hall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-        "title": "File:2024.12.08 Porcelain Lamp on Flea Market Moscow Vintage in Danilov Monastery Event Hall.jpg",
-        "author": "Tess Mattew",
+        "uri": "https://commons.wikimedia.org/wiki/File:210.Lampe1.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/87/210.Lampe1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "title": "File:210.Lampe1.jpg",
+        "author": "Dümpeltiger",
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Own work",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     },
     {
@@ -1337,7 +1337,7 @@
         "licenseCode": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
         "attribution": "Self-photographed",
-        "acquiredAt": "2026-11-02T15:16:09.834344+00:00"
+        "acquiredAt": "2026-11-03T05:31:27.918101+00:00"
       }
     }
   ]

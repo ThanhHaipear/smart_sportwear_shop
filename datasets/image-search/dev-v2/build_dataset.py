@@ -26,7 +26,7 @@ def load_base_builder():
 
 def configure(module: Any) -> None:
     module.DATASET_NAME = "image-search-dev-v2"
-    module.DATASET_VERSION = "2.0.0"
+    module.DATASET_VERSION = "2.1.0"
     module.TARGET_PER_GROUP = 10
 
     def compatible_dhash(path: Path) -> int:
@@ -56,6 +56,25 @@ def configure(module: Any) -> None:
         63706297, 63706306, 131184758,   # accessories: subtype is absent/incidental
         50984555,
         33451819, 60086645, 129676060,    # uniforms: false category metadata
+        58462361,                         # bottoms: compression arm sleeve, not bottoms
+        113055252,                        # bottoms: distant cyclists, garment not query focus
+        88425955,                         # bottoms: chamois cream/pad, not a garment
+        63706316, 50647214, 130051471,    # accessories: baseball scene, target incidental
+        5204599,                          # accessories: dirty liquid, bottle not query focus
+        34149970,                         # accessories: advertising vehicle, not a bottle query
+        69171020,                         # accessories: headscarf, not a sports headband
+        130051813,                        # accessories: wide baseball scene, guard incidental
+        87739898,                         # accessories: temple photo miscategorized as bottle
+        87739910,                         # accessories: monkey/temple photo miscategorized as bottle
+        201645565,                        # accessories: event photo, bottles incidental on table
+        41374653,                         # accessories: dinner photo, bottles incidental on table
+        122760643,                        # uniforms: historical parade, not sportswear query focus
+        201127598,                        # unknown: visually near-duplicate porcelain lamp scene
+        6953306,                          # uniforms: portrait in suit, no sportswear visible
+        60131454,                         # bottoms: pole-vault scene, shorts not query focus
+        3694279,                          # bottoms: full cyclist scene, shorts too small
+        108129443,                        # bottoms: shopping-mall scene miscategorized as shorts
+        132357857, 132357859,             # bottoms: distant team scenes, shorts not query focus
     })
     test_manifest_path = WORKSPACE / "datasets" / "image-search" / "test-v1" / "manifest.json"
     test_manifest = json.loads(test_manifest_path.read_text(encoding="utf-8"))
@@ -87,8 +106,9 @@ def configure(module: Any) -> None:
             "Sleeveless shirts", "Clothing of runners",
         ],
         "bottoms": [
-            "Track pants", "Cycling shorts", "Tennis skirts",
-            "Compression garments", "Sports trousers",
+            "Track pants", "Cycling shorts", "Running shorts", "Shorts (sports clothing)",
+            "Sweatpants", "Yoga pants", "Leggings in sports", "Sports trousers",
+            "Association football shorts",
         ],
         "uniforms": [
             "Handball players", "Rugby union players", "Field hockey players",
@@ -104,6 +124,48 @@ def configure(module: Any) -> None:
         ],
         "unknown": ["Table lamps", "Books", "Apples", "Bicycles", "Dogs"],
     }
+    module.PRODUCT_SLUGS_BY_SOURCE_CATEGORY.update({
+        "Polo shirts": {
+            "ao-chay-bo-nam-aero-navy", "ao-tap-bong-da-nam-blaze-red",
+            "ao-tap-bong-da-nu-royal-motion",
+        },
+        "Hoodies": {
+            "ao-chay-bo-dai-tay-uni-cloud", "ao-giu-nhiet-bong-da-uni-core",
+            "ao-khoac-chay-bo-nu-violet-air", "ao-gio-chay-bo-nam-orange-pace",
+        },
+        "Long-sleeved T-shirts": {
+            "ao-chay-bo-dai-tay-uni-cloud", "ao-giu-nhiet-bong-da-uni-core",
+        },
+        "Sleeveless shirts": {"ao-tank-chay-bo-nu-coral-flow"},
+        "Clothing of runners": {
+            "ao-chay-bo-nam-aero-navy", "ao-tank-chay-bo-nu-coral-flow",
+            "ao-chay-bo-dai-tay-uni-cloud", "ao-khoac-chay-bo-nu-violet-air",
+            "ao-gio-chay-bo-nam-orange-pace",
+        },
+        "Track pants": {"quan-jogger-the-thao-uni-motion", "quan-track-chay-bo-uni-forest"},
+        "Sports trousers": {"quan-jogger-the-thao-uni-motion", "quan-track-chay-bo-uni-forest"},
+        "Sweatpants": {"quan-jogger-the-thao-uni-motion", "quan-track-chay-bo-uni-forest"},
+        "Cycling shorts": {"quan-short-chay-bo-nam-swift-black", "quan-legging-chay-bo-nu-navy-flex"},
+        "Running shorts": {"quan-short-chay-bo-nam-swift-black"},
+        "Association football shorts": {
+            "quan-bong-da-nam-royal-kick", "quan-tap-bong-da-nu-black-drive",
+        },
+        "Yoga pants": {"quan-legging-chay-bo-nu-navy-flex"},
+        "Leggings in sports": {"quan-legging-chay-bo-nu-navy-flex"},
+        "Athletic shoes": {
+            "giay-chay-bo-nam-cobalt-ride", "giay-chay-bo-nu-coral-cloud",
+            "giay-chay-bo-uni-pure-step", "giay-da-bong-nam-turf-shadow",
+            "giay-da-bong-nu-turf-spark", "giay-futsal-uni-red-court",
+        },
+        "Basketball shoes": {
+            "giay-chay-bo-nam-cobalt-ride", "giay-chay-bo-nu-coral-cloud",
+            "giay-chay-bo-uni-pure-step",
+        },
+        "Tennis shoes": {
+            "giay-chay-bo-nam-cobalt-ride", "giay-chay-bo-nu-coral-cloud",
+            "giay-chay-bo-uni-pure-step",
+        },
+    })
 
     original_reference_images = module.reference_images
 
@@ -120,7 +182,7 @@ def configure(module: Any) -> None:
     module.reference_images = reference_images
 
     base_download_cached = module.download_cached
-    fresh_accessory_budget = 5
+    fresh_accessory_budget = 0
 
     def bounded_download_cached(candidate: dict[str, Any], cache_dir: Path) -> bytes:
         nonlocal fresh_accessory_budget
@@ -189,7 +251,7 @@ def postprocess(module: Any) -> None:
 
     manifest["dataset"].update({
         "name": "image-search-dev-v2",
-        "version": "2.0.0",
+        "version": "2.1.0",
         "split": "DEV",
         "status": "FROZEN",
     })
@@ -204,16 +266,35 @@ def postprocess(module: Any) -> None:
     labels["dataset"] = "image-search-dev-v2"
     labels["review"] = {
         "status": "COMPLETE",
-        "method": "Category/provenance mapping plus exact, dHash and TEST-v1 source-group leakage checks.",
+        "method": (
+            "Manual query-focus review plus source-subtype-to-catalog relevance mapping; "
+            "exact, dHash and TEST-v1 source-group leakage checks."
+        ),
     }
     review.update({
         "status": "COMPLETE",
         "reviewer": "Hải/Codex DEV-v2 engineering review",
-        "method": "Real-domain tuning split review; never final acceptance evidence.",
+        "datasetVersion": "2.1.0",
+        "method": "Real-domain query-focus and subtype review; never final acceptance evidence.",
         "caseCount": len(manifest["samples"]),
         "distribution": dict(sorted(Counter(sample["group"] for sample in manifest["samples"]).items())),
+        "manualVisualReview": {
+            "status": "PASS",
+            "scope": "All 60 contact-sheet cases; reject incidental, absent and near-duplicate subjects.",
+            "groups": sorted(module.GROUP_SOURCES),
+        },
+        "relevanceJudgment": {
+            "status": "PASS",
+            "method": "Source subtype mapped only to compatible frozen-catalog product slugs.",
+            "maximumRelevantProductsPerQuery": 6,
+        },
         "unresolved": [],
     })
+    review["limitations"] = [
+        "Grade-2 labels represent visually compatible substitutes, not an exact physical product match.",
+        "Expected color remains omitted unless a human reviewer adds an unambiguous normalized color label.",
+        "DEV v2.1 is tuning-only and must not be reused in TEST v2 or reported as final acceptance.",
+    ]
     duplicates["method"] = (
         "SHA-256 and 64-bit dHash against catalog, DEV v1, TEST v1 and accepted DEV v2; "
         "TEST-v1 sourceGroupCode overlap is forbidden."

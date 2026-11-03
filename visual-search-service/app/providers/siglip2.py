@@ -21,20 +21,25 @@ CATEGORY_PROMPTS = {
         "upper-body athletic clothing",
     ),
     "bottoms": (
-        "a photo of sports shorts, trousers, leggings or pants",
-        "lower-body athletic clothing",
+        "a product photo focused on athletic shorts or sports pants",
+        "running shorts, leggings, track pants or sports trousers",
+        "padded cycling bib shorts worn on the lower body",
+        "lower-body athletic clothing with the shorts or pants clearly visible",
     ),
     "uniforms": (
-        "a photo of a complete football or sports uniform kit",
-        "a matching team jersey and shorts uniform",
+        "a team-sport athlete wearing a numbered jersey and matching shorts uniform",
+        "a football, rugby, handball, field-hockey or American-football team uniform",
+        "a complete sports kit with clear team colors, jersey or protective uniform",
     ),
     "shoes": (
-        "a photo of sports shoes, sneakers or football boots",
-        "athletic footwear",
+        "a close-up product photo focused on an athletic shoe, sneaker or sports footwear",
+        "a running shoe or athletic shoe worn on a foot",
+        "a football boot, basketball shoe or tennis shoe",
     ),
     "accessories": (
-        "a photo of a sports accessory such as a ball, bag, cap, gloves or bottle",
-        "athletic equipment or an accessory that is not clothing or footwear",
+        "a sports sock, shin guard, water bottle, headband or wristband as the main object",
+        "a close-up of protective sports equipment or a wearable athletic accessory",
+        "sports equipment that is not a shirt, shorts, uniform or shoe",
     ),
     "unknown": (
         "a photo that does not show a sportswear product or sports equipment",
