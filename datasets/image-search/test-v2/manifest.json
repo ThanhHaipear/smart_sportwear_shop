@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "dataset": {
     "name": "image-search-test-v2",
-    "version": "2.0.0-rc1",
+    "version": "2.0.0",
     "split": "TEST",
-    "status": "REVIEW_REQUIRED",
-    "frozenAt": "2026-11-03T10:32:48.946963+00:00",
+    "status": "FROZEN",
+    "frozenAt": "2026-11-03T20:52:00+07:00",
     "catalogSnapshot": {
       "version": "image-catalog-v2-2026-10-23",
       "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"

@@ -1,18 +1,17 @@
-# Image Search TEST v2 Candidate
+# Image Search TEST v2
 
-**Version:** `image-search-test-v2:2.0.0-rc1`
+**Version:** `image-search-test-v2:2.0.0`
 
-**Status:** `REVIEW_REQUIRED`
+**Status:** `FROZEN`
 
 TEST v2 is an independent acceptance candidate. Its assets and source groups
 must not overlap the catalog, DEV v1, DEV v2, or TEST v1. It contains 100
 positive queries balanced across five catalog groups and 20 unknown queries.
 
-The final benchmark is intentionally blocked until another project team member
-reviews the contact sheets, provenance, relevance judgments, and duplicate
-report, records sign-off in `review-report.json`, changes the dataset status to
-`FROZEN`, and locks the final artifact hashes. TEST v2 must then be run exactly
-once with the threshold and ranking configuration frozen by DEV v2.2.
+Dũng independently reviewed the dataset and Hải relayed the sign-off on
+2026-11-03. The review is recorded in `review-report.json`; the dataset and its
+artifact hashes are frozen. TEST v2 is authorized to run exactly once with the
+threshold and ranking configuration frozen by DEV v2.2.
 
 ```powershell
 visual-search-service\.venv\Scripts\python.exe datasets\image-search\test-v2\build_dataset.py --collect --contact-sheets

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "status": "REVIEW_REQUIRED",
-  "reviewer": "Codex-assisted category/provenance review; independent team-member sign-off still required by final project checklist",
+  "status": "COMPLETE",
+  "reviewer": "Codex-assisted category/provenance review followed by independent project-team review by Dũng",
   "method": "Every query is sourced from a group-specific Commons category. Tops, bottoms, shoes and accessories use source-category/subtype grade-2 substitutes; uniforms use sports-uniform category substitutes; unknown queries have no relevant product.",
   "limitations": [
     "Subcategory/category judgments do not claim an exact-product match.",
     "Expected color is intentionally omitted unless a human reviewer adds an unambiguous normalized color label.",
-    "A second team member must visually review all queries before final academic submission."
+    "Independent sign-off was relayed by Hải after Dũng completed the project-team review."
   ],
   "caseCount": 120,
   "distribution": {
@@ -19,8 +19,11 @@
   },
   "unresolved": [],
   "reviewerSignoff": {
-    "status": "PENDING",
-    "requiredRole": "independent project team member"
+    "status": "APPROVED",
+    "reviewer": "Dũng",
+    "role": "independent project team member",
+    "confirmedAt": "2026-11-03T20:52:00+07:00",
+    "confirmationSource": "Hải relayed Dũng's confirmation in the project session"
   },
-  "blockedAction": "Do not run the final TEST v2 benchmark before sign-off and freeze."
+  "authorizedAction": "Run the frozen TEST v2 final benchmark exactly once with the DEV v2.2 locked configuration."
 }
