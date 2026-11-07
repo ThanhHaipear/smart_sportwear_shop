@@ -239,6 +239,10 @@ info:
 logging:
   level:
     com.dunghaiquyen.ecommerce: ${LOG_LEVEL:INFO}
+    # A SePay webhook is intentionally bound as byte[] so its HMAC can be
+    # verified over the exact bytes. Never let Spring DEBUG logging print that
+    # raw financial payload before the application applies its redaction.
+    org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor: INFO
 
 synthetic:
   data:

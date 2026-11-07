@@ -53,6 +53,7 @@ public class SecurityConfig {
             "/api/v1/visual-search/status",
             "/api/v1/recommendations/logs",
             "/api/v1/payments/callback",
+            "/api/v1/webhooks/sepay",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html",

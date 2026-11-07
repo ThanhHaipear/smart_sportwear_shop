@@ -35,6 +35,8 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
     /** Plain (unlocked) lookup - for read-only callers outside a write transaction. */
     Optional<Payment> findByTransactionRef(String transactionRef);
 
+    Optional<Payment> findByProviderAndTransactionRef(PaymentProvider provider, String transactionRef);
+
     /**
      * Row-locked read used by the callback handler: transactionRef is unique
      * (DB-enforced), so locking the one row by that key before inspecting its
@@ -45,4 +47,9 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Payment p where p.transactionRef = :ref")
     Optional<Payment> findByTransactionRefForUpdate(@Param("ref") String ref);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Payment p where p.provider = :provider and p.transactionRef = :ref")
+    Optional<Payment> findByProviderAndTransactionRefForUpdate(
+            @Param("provider") PaymentProvider provider, @Param("ref") String ref);
 }

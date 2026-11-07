@@ -6,7 +6,7 @@
 
 Contract chính thức cần đối chiếu khi code: [Webhook SePay](https://docs.sepay.vn/tich-hop-webhooks.html), [HMAC-SHA256](https://developer.sepay.vn/vi/sepay-webhooks/xac-thuc), [API v2 transactions](https://developer.sepay.vn/vi/sepay-api/v2/giao-dich/danh-sach) và [Test Mode](https://docs.sepay.vn/test-mode.html).
 
-**Tiến độ 07/11/2026:** Phase 1–2 đã hoàn thành: migration V9, enum `VIETQR`/`BANK_TRANSFER`, properties fail-fast, API tạo/resume payment VietQR, financial policy và expiry cho VietQR. Unit test và integration test endpoint chạy thành công trên PostgreSQL 16 + pgvector với Flyway V1–V9. Feature flags vẫn tắt; webhook, matching, reconciliation runtime và storefront chưa triển khai.
+**Tiến độ 07/11/2026:** Phase 1–4 đã hoàn thành: migration V9, enum `VIETQR`/`BANK_TRANSFER`, properties fail-fast, API tạo/resume payment VietQR, financial policy/expiry, webhook SePay HMAC-SHA256 và matching idempotent. Unit test và integration test chạy thành công trên PostgreSQL 16 + pgvector với Flyway V1–V9. Feature flags vẫn tắt; reconciliation runtime, storefront và admin exception queue chưa triển khai.
 
 ## 0. Chốt phạm vi để hoàn thành trong ngày
 
@@ -604,14 +604,14 @@ Danh sách test P0:
 - [x] Double-click trả lại cùng pending payment.
 - [x] User khác không thấy order.
 - [x] Amount payment luôn lấy từ order.
-- [ ] Webhook signature sai không insert bank transaction.
-- [ ] Webhook đúng, đúng account/ref/amount -> payment/order `PAID`.
-- [ ] Cùng SePay ID gửi hai lần -> chỉ một bank transaction và một transition.
-- [ ] Hai webhook đồng thời -> không xác nhận hai lần.
-- [ ] Sai amount -> `AMOUNT_MISMATCH`, payment vẫn pending.
-- [ ] Không ref -> `UNMATCHED`.
-- [ ] Amount âm -> `IGNORED_OUTGOING`.
-- [ ] Order expired/cancelled -> `LATE_PAYMENT`, không hồi sinh order.
+- [x] Webhook signature sai không insert bank transaction.
+- [x] Webhook đúng, đúng account/ref/amount -> payment/order `PAID`.
+- [x] Cùng SePay ID gửi hai lần -> chỉ một bank transaction và một transition.
+- [x] Hai webhook đồng thời -> không xác nhận hai lần.
+- [x] Sai amount -> `AMOUNT_MISMATCH`, payment vẫn pending.
+- [x] Không ref -> `UNMATCHED`.
+- [x] Amount âm -> `IGNORED_OUTGOING`.
+- [x] Order expired/cancelled -> `LATE_PAYMENT`, không hồi sinh order.
 - [ ] Reconciliation ingest lại event webhook -> idempotent.
 - [x] Online financial policy chặn confirm VietQR chưa paid.
 - [ ] Expiry nhả reservation đúng một lần.
