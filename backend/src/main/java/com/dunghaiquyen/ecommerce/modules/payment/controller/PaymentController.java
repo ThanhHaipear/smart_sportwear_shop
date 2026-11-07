@@ -4,8 +4,11 @@ import com.dunghaiquyen.ecommerce.common.response.ApiResponse;
 import com.dunghaiquyen.ecommerce.common.security.CustomUserDetails;
 import com.dunghaiquyen.ecommerce.modules.payment.dto.CreatePaymentRequest;
 import com.dunghaiquyen.ecommerce.modules.payment.dto.CreatePaymentResponse;
+import com.dunghaiquyen.ecommerce.modules.payment.dto.CreateVietQrPaymentRequest;
+import com.dunghaiquyen.ecommerce.modules.payment.dto.CreateVietQrPaymentResponse;
 import com.dunghaiquyen.ecommerce.modules.payment.dto.PaymentResponse;
 import com.dunghaiquyen.ecommerce.modules.payment.service.PaymentService;
+import com.dunghaiquyen.ecommerce.modules.payment.service.VietQrPaymentService;
 import com.dunghaiquyen.ecommerce.modules.payment.service.VnpayTransactionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -32,10 +35,26 @@ public class PaymentController {
 
     private final PaymentService paymentService;
     private final VnpayTransactionService transactionService;
+    private final VietQrPaymentService vietQrPaymentService;
 
-    public PaymentController(PaymentService paymentService, VnpayTransactionService transactionService) {
+    public PaymentController(
+            PaymentService paymentService,
+            VnpayTransactionService transactionService,
+            VietQrPaymentService vietQrPaymentService) {
         this.paymentService = paymentService;
         this.transactionService = transactionService;
+        this.vietQrPaymentService = vietQrPaymentService;
+    }
+
+    @PostMapping("/vietqr")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ApiResponse<CreateVietQrPaymentResponse>> createVietQr(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @Valid @RequestBody CreateVietQrPaymentRequest request) {
+        CreateVietQrPaymentResponse response =
+                vietQrPaymentService.createOrResume(principal.getUserId(), request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("VietQR payment ready", response));
     }
 
     @PostMapping("/create")

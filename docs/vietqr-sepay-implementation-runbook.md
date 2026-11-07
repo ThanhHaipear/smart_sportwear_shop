@@ -6,7 +6,7 @@
 
 Contract chính thức cần đối chiếu khi code: [Webhook SePay](https://docs.sepay.vn/tich-hop-webhooks.html), [HMAC-SHA256](https://developer.sepay.vn/vi/sepay-webhooks/xac-thuc), [API v2 transactions](https://developer.sepay.vn/vi/sepay-api/v2/giao-dich/danh-sach) và [Test Mode](https://docs.sepay.vn/test-mode.html).
 
-**Tiến độ 07/11/2026:** Phase 1 đã hoàn thành: migration V9, enum `VIETQR`/`BANK_TRANSFER`, properties fail-fast, cấu hình sandbox và migration/property tests. Flyway V1–V9 cùng contract test chạy thành công trên PostgreSQL 16 + pgvector tạm. Feature flags vẫn tắt; API tạo payment, webhook, reconciliation runtime và storefront chưa triển khai.
+**Tiến độ 07/11/2026:** Phase 1–2 đã hoàn thành: migration V9, enum `VIETQR`/`BANK_TRANSFER`, properties fail-fast, API tạo/resume payment VietQR, financial policy và expiry cho VietQR. Unit test và integration test endpoint chạy thành công trên PostgreSQL 16 + pgvector với Flyway V1–V9. Feature flags vẫn tắt; webhook, matching, reconciliation runtime và storefront chưa triển khai.
 
 ## 0. Chốt phạm vi để hoàn thành trong ngày
 
@@ -600,10 +600,10 @@ backend/src/test/java/.../modules/payment/SePayReconciliationIntegrationTest.jav
 
 Danh sách test P0:
 
-- [ ] Customer tạo payment VietQR cho order của mình.
-- [ ] Double-click trả lại cùng pending payment.
-- [ ] User khác không thấy order.
-- [ ] Amount payment luôn lấy từ order.
+- [x] Customer tạo payment VietQR cho order của mình.
+- [x] Double-click trả lại cùng pending payment.
+- [x] User khác không thấy order.
+- [x] Amount payment luôn lấy từ order.
 - [ ] Webhook signature sai không insert bank transaction.
 - [ ] Webhook đúng, đúng account/ref/amount -> payment/order `PAID`.
 - [ ] Cùng SePay ID gửi hai lần -> chỉ một bank transaction và một transition.
@@ -613,7 +613,7 @@ Danh sách test P0:
 - [ ] Amount âm -> `IGNORED_OUTGOING`.
 - [ ] Order expired/cancelled -> `LATE_PAYMENT`, không hồi sinh order.
 - [ ] Reconciliation ingest lại event webhook -> idempotent.
-- [ ] Online financial policy chặn confirm VietQR chưa paid.
+- [x] Online financial policy chặn confirm VietQR chưa paid.
 - [ ] Expiry nhả reservation đúng một lần.
 
 Chạy targeted tests:

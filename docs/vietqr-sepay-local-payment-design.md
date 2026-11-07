@@ -1,6 +1,6 @@
 # Thiết kế thanh toán VietQR + SePay trên môi trường local
 
-**Trạng thái:** IN PROGRESS — Phase 1 schema/config đã triển khai và kiểm thử local
+**Trạng thái:** IN PROGRESS — Phase 1–2 schema/config và API tạo/resume VietQR đã triển khai, kiểm thử local
 **Ngày chốt bản nháp:** 07/11/2026
 **Phạm vi:** thay luồng tạo thanh toán online mới bằng VietQR + SePay; giữ dữ liệu và mã VNPay cũ trong giai đoạn chuyển tiếp.
 
@@ -519,8 +519,8 @@ Nếu rollback, tắt tạo payment VietQR mới nhưng vẫn giữ webhook/reco
 
 ## 16. Phân rã triển khai
 
-1. **Database:** migration V9, entity/repository, migration tests.
-2. **Payment issuance:** properties, VietQR service/controller/DTO, expiry và financial policy.
+1. **Database — DONE:** migration V9, entity/repository, migration tests.
+2. **Payment issuance — DONE:** properties, VietQR service/controller/DTO, expiry và financial policy.
 3. **Webhook ingestion:** raw-body signature verification, bank ledger, idempotency.
 4. **Matching:** rules, locks, late/duplicate payment handling, realtime notification.
 5. **Storefront:** checkout, trang QR, polling/countdown.

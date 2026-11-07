@@ -1,6 +1,7 @@
 package com.dunghaiquyen.ecommerce.modules.payment.repository;
 
 import com.dunghaiquyen.ecommerce.modules.payment.entity.Payment;
+import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentProvider;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import jakarta.persistence.LockModeType;
 import java.util.List;
@@ -18,7 +19,15 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
     Optional<Payment> findFirstByOrderIdOrderByCreatedAtDesc(UUID orderId);
 
+    Optional<Payment> findFirstByOrderIdAndProviderOrderByCreatedAtDesc(
+            UUID orderId, PaymentProvider provider);
+
+    boolean existsByProviderAndTransactionRef(PaymentProvider provider, String transactionRef);
+
     Optional<Payment> findFirstByOrderIdAndStatusOrderByCreatedAtDesc(UUID orderId, PaymentStatus status);
+
+    Optional<Payment> findFirstByOrderIdAndProviderAndStatusOrderByCreatedAtDesc(
+            UUID orderId, PaymentProvider provider, PaymentStatus status);
 
     Optional<Payment> findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
             UUID orderId, Collection<PaymentStatus> statuses);

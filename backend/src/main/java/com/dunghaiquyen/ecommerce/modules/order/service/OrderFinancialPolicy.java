@@ -24,11 +24,15 @@ final class OrderFinancialPolicy {
                 || target == OrderStatus.PACKING
                 || target == OrderStatus.SHIPPING
                 || target == OrderStatus.DELIVERED)
-                && order.getPaymentMethod() == PaymentMethod.VNPAY
+                && isOnlinePrepaid(order.getPaymentMethod())
                 && order.getPaymentStatus() != PaymentStatus.PAID) {
             throw new BusinessRuleException(
                     HttpStatus.CONFLICT,
-                    "VNPAY order must be paid before confirmation");
+                    order.getPaymentMethod() + " order must be paid before confirmation");
         }
+    }
+
+    private static boolean isOnlinePrepaid(PaymentMethod paymentMethod) {
+        return paymentMethod == PaymentMethod.VNPAY || paymentMethod == PaymentMethod.VIETQR;
     }
 }

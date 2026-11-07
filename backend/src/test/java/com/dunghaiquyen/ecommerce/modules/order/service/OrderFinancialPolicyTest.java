@@ -30,9 +30,27 @@ class OrderFinancialPolicyTest {
     }
 
     @Test
-    void paidVnpayAndUnpaidCodOrdersCanBeConfirmed() {
+    void unpaidVietQrOrderCannotEnterFulfilment() {
+        for (OrderStatus target : new OrderStatus[] {
+                OrderStatus.CONFIRMED,
+                OrderStatus.PACKING,
+                OrderStatus.SHIPPING,
+                OrderStatus.DELIVERED
+        }) {
+            assertThatThrownBy(() -> OrderFinancialPolicy.validateTransition(
+                            order(PaymentMethod.VIETQR, PaymentStatus.PENDING), target))
+                    .isInstanceOf(BusinessRuleException.class)
+                    .hasMessage("VIETQR order must be paid before confirmation");
+        }
+    }
+
+    @Test
+    void paidOnlineAndUnpaidCodOrdersCanBeConfirmed() {
         assertThatCode(() -> OrderFinancialPolicy.validateTransition(
                         order(PaymentMethod.VNPAY, PaymentStatus.PAID), OrderStatus.CONFIRMED))
+                .doesNotThrowAnyException();
+        assertThatCode(() -> OrderFinancialPolicy.validateTransition(
+                        order(PaymentMethod.VIETQR, PaymentStatus.PAID), OrderStatus.CONFIRMED))
                 .doesNotThrowAnyException();
         assertThatCode(() -> OrderFinancialPolicy.validateTransition(
                         order(PaymentMethod.COD, PaymentStatus.UNPAID), OrderStatus.CONFIRMED))
