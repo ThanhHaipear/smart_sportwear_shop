@@ -2,5 +2,6 @@ package com.dunghaiquyen.ecommerce.modules.payment.entity;
 
 public enum PaymentProvider {
     COD,
-    VNPAY
+    VNPAY,
+    BANK_TRANSFER
 }

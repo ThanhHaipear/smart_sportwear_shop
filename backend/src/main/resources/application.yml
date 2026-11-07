@@ -179,6 +179,20 @@ app:
     return-url: ${PAYMENT_RETURN_URL:http://localhost:3000/payment/result}
     callback-url: ${PAYMENT_CALLBACK_URL:http://localhost:8080/api/v1/payments/callback}
     transaction-api-url: ${VNPAY_TRANSACTION_API_URL:https://sandbox.vnpayment.vn/merchant_webapi/api/transaction}
+  vietqr:
+    enabled: ${VIETQR_ENABLED:false}
+    bank-bin: ${VIETQR_BANK_BIN:}
+    account-number: ${VIETQR_ACCOUNT_NUMBER:}
+    account-name: ${VIETQR_ACCOUNT_NAME:}
+    payment-expiry-minutes: ${VIETQR_PAYMENT_EXPIRY_MINUTES:30}
+  sepay:
+    webhook-enabled: ${SEPAY_WEBHOOK_ENABLED:false}
+    webhook-secret: ${SEPAY_WEBHOOK_SECRET:}
+    webhook-timestamp-tolerance-seconds: ${SEPAY_WEBHOOK_TIMESTAMP_TOLERANCE_SECONDS:300}
+    api-token: ${SEPAY_API_TOKEN:}
+    api-base-url: ${SEPAY_API_BASE_URL:https://userapi-sandbox.sepay.vn/v2}
+    reconciliation-enabled: ${SEPAY_RECONCILIATION_ENABLED:false}
+    reconciliation-delay-ms: ${SEPAY_RECONCILIATION_DELAY_MS:300000}
   report:
     # No threshold is given anywhere in the Phase 1 spec docs - 10 units
     # (available = stock - reserved) is this project's own default, tunable

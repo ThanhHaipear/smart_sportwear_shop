@@ -34,7 +34,7 @@ class V2OneCMigrationTest {
                 .cleanDisabled(false)
                 .load();
         flyway.clean();
-        assertEquals(8, flyway.migrate().migrationsExecuted);
+        assertEquals(9, flyway.migrate().migrationsExecuted);
         flyway.validate();
         assertEquals(0, flyway.migrate().migrationsExecuted);
         seedFixture();
@@ -243,6 +243,67 @@ class V2OneCMigrationTest {
                     )
                     """));
         }
+    }
+
+    @Test
+    void createsVietQrSepayLedgerAndExtendsPaymentConstraints() throws Exception {
+        try (Connection connection = open()) {
+            assertTrue(queryBoolean(connection, "select to_regclass('public.bank_transactions') is not null"));
+            assertTrue(queryBoolean(connection, "select to_regclass('public.bank_reconciliation_runs') is not null"));
+            assertTrue(queryBoolean(connection, """
+                    select pg_get_constraintdef(oid) like '%VIETQR%'
+                      from pg_constraint
+                     where conname='chk_orders_payment_method'
+                    """));
+            assertTrue(queryBoolean(connection, """
+                    select pg_get_constraintdef(oid) like '%BANK_TRANSFER%'
+                      from pg_constraint
+                     where conname='chk_payments_provider'
+                    """));
+            assertTrue(queryBoolean(connection, """
+                    select pg_get_constraintdef(oid) like '%BANK_TRANSFER%'
+                      from pg_constraint
+                     where conname='chk_payment_events_provider'
+                    """));
+        }
+
+        execute("""
+                insert into bank_transactions
+                    (source, external_transaction_id, account_number, amount,
+                     transaction_time, match_status)
+                values ('SEPAY', '92704', '1326045980', 100000, now(), 'RECEIVED')
+                """);
+        assertSqlState("23505", """
+                insert into bank_transactions
+                    (source, external_transaction_id, account_number, amount,
+                     transaction_time, match_status)
+                values ('SEPAY', '92704', '1326045980', 100000, now(), 'RECEIVED')
+                """);
+        execute("""
+                insert into bank_transactions
+                    (source, external_transaction_uuid, account_number, amount,
+                     transaction_time, match_status)
+                values ('SEPAY', '76000000-0000-0000-0000-000000000001',
+                        '1326045980', 100000, now(), 'RECEIVED')
+                """);
+        assertSqlState("23505", """
+                insert into bank_transactions
+                    (source, external_transaction_uuid, account_number, amount,
+                     transaction_time, match_status)
+                values ('SEPAY', '76000000-0000-0000-0000-000000000001',
+                        '1326045980', 100000, now(), 'RECEIVED')
+                """);
+        assertSqlState("23514", """
+                insert into bank_transactions
+                    (source, account_number, amount, transaction_time, match_status)
+                values ('SEPAY', '1326045980', 100000, now(), 'RECEIVED')
+                """);
+        assertSqlState("23514", """
+                insert into bank_transactions
+                    (source, external_transaction_id, account_number, amount,
+                     transaction_time, match_status)
+                values ('SEPAY', '92705', '1326045980', 100000, now(), 'UNKNOWN')
+                """);
     }
 
     private static Connection open() throws SQLException {
