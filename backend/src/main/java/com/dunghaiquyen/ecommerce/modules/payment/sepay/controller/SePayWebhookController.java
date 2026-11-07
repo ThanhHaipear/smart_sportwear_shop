@@ -54,6 +54,9 @@ public class SePayWebhookController {
         }
         signatureService.verify(signature, timestamp, rawBody);
         SePayWebhookRequest request = parseAndValidate(rawBody);
+        if (request.id() == 0L) {
+            return ResponseEntity.ok(Map.of("success", true));
+        }
         var result = ingestionService.ingestWebhook(request);
 
         Map<String, Object> response = new LinkedHashMap<>();

@@ -4,12 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Digits;
 import java.math.BigDecimal;
 
 public record SePayWebhookRequest(
-        @NotNull @Positive Long id,
+        @NotNull @PositiveOrZero Long id,
         @Size(max = 100) String gateway,
         @NotBlank @Size(max = 30) String transactionDate,
         @NotBlank @Size(max = 50) String accountNumber,

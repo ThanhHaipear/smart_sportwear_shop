@@ -124,6 +124,18 @@ class SePayWebhookIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void signedDashboardTestPayloadReturnsSuccessWithoutInsertingLedgerRow() throws Exception {
+        MvcResult result = sendSigned(payload(0L, "DHABCDEFG234", "in", "10000.00", "1326045980"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat(json(result.getResponse().getContentAsString()).path("success").asBoolean()).isTrue();
+        assertThat(json(result.getResponse().getContentAsString()).has("alreadyProcessed")).isFalse();
+        assertThat(bankTransactionRepository.findBySourceAndExternalTransactionId(
+                BankTransactionSource.SEPAY, "0")).isEmpty();
+    }
+
+    @Test
     void amountMismatchIsRecordedWithoutPayingOrder() throws Exception {
         PaymentContext context = createPendingVietQrPayment("sepay-amount");
         long externalId = EXTERNAL_IDS.incrementAndGet();
