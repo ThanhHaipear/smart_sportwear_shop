@@ -661,11 +661,22 @@ Backend health: http://localhost:8082/actuator/health
 Storefront:     http://localhost:3000
 ```
 
-Mở tunnel đúng cổng backend của repo:
+Lần đầu, cài SDK ngrok local vào thư mục đã được Git ignore:
 
 ```powershell
-ngrok http 8082
+npm install --prefix .tools\ngrok-sdk @ngrok/ngrok@1.7.0
 ```
+
+Điền `NGROK_AUTHTOKEN` và, sau lần chạy đầu, ghim dev domain được cấp vào
+`NGROK_DOMAIN` trong `backend/.env`. Sau đó mở tunnel bằng launcher của repo:
+
+```powershell
+.\start-sepay-tunnel.cmd
+```
+
+Launcher tạo proxy `127.0.0.1:18083` chỉ cho phép đúng
+`POST /api/v1/webhooks/sepay`; không tunnel trực tiếp port `8082` và không public
+actuator hoặc các API khác.
 
 Webhook URL:
 
@@ -685,7 +696,9 @@ Trên SePay:
 8. Bấm **Gửi thử** và kiểm tra endpoint trả HTTP 201 cùng `{"success":true}`.
 9. Mô phỏng một giao dịch trong Test Mode; xác nhận test event chỉ match đúng payment test.
 
-Nếu Ngrok URL đổi sau restart, cập nhật lại SePay.
+Dev domain miễn phí gắn với tài khoản ngrok là cố định. Giữ `NGROK_DOMAIN` để
+launcher yêu cầu lại đúng hostname sau mỗi lần restart; chỉ cập nhật SePay nếu
+chủ động đổi domain hoặc tài khoản ngrok.
 
 ## 14. Kịch bản nghiệm thu trong ngày
 

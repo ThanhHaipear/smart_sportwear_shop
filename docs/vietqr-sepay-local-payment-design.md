@@ -402,19 +402,24 @@ Nút “Tôi đã thanh toán”, nếu có, chỉ yêu cầu backend trigger m�
 ```text
 Storefront: http://localhost:3000
 Backend:    http://localhost:8082
-Tunnel:     https://<public-host> -> localhost:8082
-Webhook:    https://<public-host>/api/v1/webhooks/sepay
+Proxy:      http://127.0.0.1:18083 -> POST webhook trên localhost:8082
+Tunnel:     https://<ngrok-dev-domain> -> localhost:18083
+Webhook:    https://<ngrok-dev-domain>/api/v1/webhooks/sepay
 ```
 
 Quy trình:
 
 1. Chạy database, backend và storefront.
-2. Mở tunnel cho port 8082 bằng Ngrok hoặc Cloudflare Tunnel.
-3. Cập nhật URL webhook trên SePay mỗi khi URL tunnel thay đổi.
+2. Chạy `start-sepay-tunnel.cmd`; launcher chỉ public exact webhook route qua
+   proxy local, không expose trực tiếp backend `8082`.
+3. Dùng dev domain cố định của tài khoản ngrok và ghim hostname trong
+   `NGROK_DOMAIN`; URL vẫn giữ nguyên sau khi restart launcher.
 4. Dùng “Gọi thử” trên SePay và xác nhận signature verification hoạt động.
 5. Chỉ sau đó mới chuyển khoản thật với số tiền nhỏ.
 
-Không expose PostgreSQL, admin UI hoặc actuator nhạy cảm qua tunnel. Chỉ public backend HTTP cần thiết; các endpoint khác vẫn được bảo vệ bằng Spring Security.
+Không expose PostgreSQL, admin UI, actuator hoặc toàn bộ backend qua tunnel.
+Proxy phải trả `404` cho mọi route/phương thức ngoài
+`POST /api/v1/webhooks/sepay`; Spring Security và HMAC vẫn là lớp bảo vệ tiếp theo.
 
 ## 12. Security và dữ liệu nhạy cảm
 
