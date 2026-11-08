@@ -13,6 +13,7 @@ import com.dunghaiquyen.ecommerce.modules.cart.entity.CartItem;
 import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
 import com.dunghaiquyen.ecommerce.modules.cart.repository.CartRepository;
 import com.dunghaiquyen.ecommerce.modules.inventory.service.InventoryService;
+import com.dunghaiquyen.ecommerce.modules.notification.service.NotificationService;
 import com.dunghaiquyen.ecommerce.modules.order.dto.AdminOrderListQuery;
 import com.dunghaiquyen.ecommerce.modules.order.dto.AdminOrderResponse;
 import com.dunghaiquyen.ecommerce.modules.order.dto.CreateOrderRequest;
@@ -99,6 +100,7 @@ public class OrderService {
     private final com.dunghaiquyen.ecommerce.modules.inventory.repository.InventoryTransactionRepository
             inventoryTransactionRepository;
     private final OrderMapper orderMapper;
+    private final NotificationService notificationService;
     private final AppShippingProperties shippingProperties;
 
     public OrderService(
@@ -116,6 +118,7 @@ public class OrderService {
             com.dunghaiquyen.ecommerce.modules.inventory.repository.InventoryTransactionRepository
                     inventoryTransactionRepository,
             OrderMapper orderMapper,
+            NotificationService notificationService,
             AppShippingProperties shippingProperties) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
@@ -130,6 +133,7 @@ public class OrderService {
         this.inventoryService = inventoryService;
         this.inventoryTransactionRepository = inventoryTransactionRepository;
         this.orderMapper = orderMapper;
+        this.notificationService = notificationService;
         this.shippingProperties = shippingProperties;
     }
 
@@ -268,6 +272,8 @@ public class OrderService {
         if (!buyNow) {
             cartItemRepository.deleteAll(cartItems);
         }
+
+        notificationService.notifyOrderCreated(order);
 
         return assembleResponse(order);
     }
@@ -559,7 +565,28 @@ public class OrderService {
         order = orderRepository.save(order);
         appendStatusHistory(order, current, target, actor, null);
 
+        if (target == OrderStatus.CANCELLED) {
+            notificationService.notifyOrderCancelled(order);
+            notificationService.notifyAdminsOrderCancelled(order);
+        } else if (target == OrderStatus.DELIVERED) {
+            notificationService.notifyOrderDelivered(order);
+        } else if (ADMIN_EDITABLE_STATUSES.contains(target)) {
+            notificationService.notifyOrderStatusUpdated(
+                    order, orderStatusLabel(current), orderStatusLabel(target));
+        }
+
         return order;
+    }
+
+    private String orderStatusLabel(OrderStatus status) {
+        return switch (status) {
+            case PENDING_CONFIRMATION -> "Chờ xác nhận";
+            case CONFIRMED -> "Đã xác nhận";
+            case PACKING -> "Đang đóng gói";
+            case SHIPPING -> "Đang giao";
+            case DELIVERED -> "Đã giao";
+            case CANCELLED -> "Đã hủy";
+        };
     }
 
     private void appendStatusHistory(

@@ -37,7 +37,7 @@ class V2OneBMigrationTest {
                 .cleanDisabled(false)
                 .load();
         flyway.clean();
-        assertEquals(7, flyway.migrate().migrationsExecuted);
+        assertEquals(10, flyway.migrate().migrationsExecuted);
         flyway.validate();
         assertEquals(0, flyway.migrate().migrationsExecuted);
         seedCommerceFixture();
@@ -49,7 +49,8 @@ class V2OneBMigrationTest {
                 "carts", "cart_items", "orders", "order_items", "order_status_history",
                 "payments", "payment_events", "returns", "return_items", "refunds",
                 "inventory_transactions", "site_settings", "audit_logs", "integration_outbox",
-                "user_interactions");
+                "user_interactions", "wishlists", "wishlist_items", "notifications",
+                "notification_templates");
         try (Connection connection = open()) {
             for (String table : expected) {
                 assertTrue(tableExists(connection, table), "Thiếu bảng " + table);
@@ -78,7 +79,9 @@ class V2OneBMigrationTest {
                 "com.dunghaiquyen.ecommerce.modules.inventory.entity",
                 "com.dunghaiquyen.ecommerce.modules.setting.entity",
                 "com.dunghaiquyen.ecommerce.modules.audit.entity",
-                "com.dunghaiquyen.ecommerce.modules.interaction.entity");
+                "com.dunghaiquyen.ecommerce.modules.interaction.entity",
+                "com.dunghaiquyen.ecommerce.modules.wishlist.entity",
+                "com.dunghaiquyen.ecommerce.modules.notification.entity");
         factory.setJpaPropertyMap(java.util.Map.of(
                 "hibernate.hbm2ddl.auto", "validate",
                 "hibernate.show_sql", "false"));

@@ -12,6 +12,8 @@ import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
 import com.dunghaiquyen.ecommerce.modules.notification.entity.Notification;
 import com.dunghaiquyen.ecommerce.modules.notification.entity.NotificationType;
 import com.dunghaiquyen.ecommerce.modules.notification.repository.NotificationRepository;
+import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
+import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +30,12 @@ class NotificationIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductImageRepository productImageRepository;
 
     private record AdminContext(String token, String categoryId, String brandId) {
     }
@@ -60,21 +68,46 @@ class NotificationIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"DRAFT\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String productId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        return productId;
     }
 
     private String createVariant(AdminContext ctx, String productId) throws Exception {
+        return createVariant(ctx, productId, "M", "Black");
+    }
+
+    private String createVariant(AdminContext ctx, String productId, String size, String color) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"M\",\"color\":\"Black\",\"price\":80000,\"stockQuantity\":20}")
-                                .formatted(UUID.randomUUID())))
+                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"%s\",\"color\":\"%s\",\"price\":80000,\"stockQuantity\":20}")
+                                .formatted(UUID.randomUUID(), size, color)))
                 .andExpect(status().isCreated())
                 .andReturn();
+        if (productRepository.findById(UUID.fromString(productId)).orElseThrow().getStatus()
+                == com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus.DRAFT) {
+            mockMvc.perform(post("/api/v1/admin/products/" + productId + "/images")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(("{\"imageUrl\":\"https://res.cloudinary.com/demo/image/upload/%s.jpg\",\"publicId\":\"notification/%s\",\"isPrimary\":true}")
+                                    .formatted(productId, UUID.randomUUID())))
+                    .andExpect(status().isCreated());
+            var image = productImageRepository.findAllByProductIdOrderBySortOrderAsc(UUID.fromString(productId)).getFirst();
+            image.setChecksum("0".repeat(64));
+            image.setBytes(1L);
+            image.setWidth(1);
+            image.setHeight(1);
+            productImageRepository.save(image);
+            mockMvc.perform(patch("/api/v1/admin/products/" + productId)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"status\":\"ACTIVE\"}"))
+                    .andExpect(status().isOk());
+        }
         return json(result.getResponse().getContentAsString()).at("/data/id").asText();
     }
 
@@ -278,7 +311,7 @@ class NotificationIntegrationTest extends AbstractIntegrationTest {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx, "Notify SelfView");
         String variantId1 = createVariant(ctx, productId);
-        String variantId2 = createVariant(ctx, productId);
+        String variantId2 = createVariant(ctx, productId, "L", "Black");
 
         String buyerEmail = uniqueEmail("ntf-self-buyer");
         TokenPair buyer = registerUser(buyerEmail);

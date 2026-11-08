@@ -3,18 +3,24 @@ package com.dunghaiquyen.ecommerce.modules.wishlist;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dunghaiquyen.ecommerce.AbstractIntegrationTest;
+import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 class WishlistIntegrationTest extends AbstractIntegrationTest {
+
+    @Autowired
+    private ProductImageRepository productImageRepository;
 
     private record AdminContext(String token, String categoryId, String brandId) {
     }
@@ -47,11 +53,37 @@ class WishlistIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"%s\"}")
-                                .formatted(name, slug, ctx.categoryId(), ctx.brandId(), status)))
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"DRAFT\"}")
+                                .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String productId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        if ("ACTIVE".equals(status)) {
+            mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(("{\"sku\":\"SKU-%s\",\"size\":\"M\",\"color\":\"Black\",\"price\":80000,\"stockQuantity\":10}")
+                                    .formatted(UUID.randomUUID())))
+                    .andExpect(status().isCreated());
+            mockMvc.perform(post("/api/v1/admin/products/" + productId + "/images")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(("{\"imageUrl\":\"https://res.cloudinary.com/demo/image/upload/%s.jpg\",\"publicId\":\"wishlist/%s\",\"isPrimary\":true}")
+                                    .formatted(productId, UUID.randomUUID())))
+                    .andExpect(status().isCreated());
+            var image = productImageRepository.findAllByProductIdOrderBySortOrderAsc(UUID.fromString(productId)).getFirst();
+            image.setChecksum("0".repeat(64));
+            image.setBytes(1L);
+            image.setWidth(1);
+            image.setHeight(1);
+            productImageRepository.save(image);
+            mockMvc.perform(patch("/api/v1/admin/products/" + productId)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"status\":\"ACTIVE\"}"))
+                    .andExpect(status().isOk());
+        }
+        return productId;
     }
 
     private String addItemBody(String productId) {

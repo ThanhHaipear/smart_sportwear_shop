@@ -16,12 +16,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     "com.dunghaiquyen.ecommerce.modules.category.entity",
     "com.dunghaiquyen.ecommerce.modules.interaction.entity",
     "com.dunghaiquyen.ecommerce.modules.inventory.entity",
+    "com.dunghaiquyen.ecommerce.modules.notification.entity",
     "com.dunghaiquyen.ecommerce.modules.order.entity",
     "com.dunghaiquyen.ecommerce.modules.payment.entity",
     "com.dunghaiquyen.ecommerce.modules.product.entity",
     "com.dunghaiquyen.ecommerce.modules.returns.entity",
     "com.dunghaiquyen.ecommerce.modules.setting.entity",
-    "com.dunghaiquyen.ecommerce.modules.user.entity"
+    "com.dunghaiquyen.ecommerce.modules.user.entity",
+    "com.dunghaiquyen.ecommerce.modules.wishlist.entity"
 })
 @EnableJpaRepositories(basePackages = {
     "com.dunghaiquyen.ecommerce.modules.address.repository",
@@ -33,13 +35,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     "com.dunghaiquyen.ecommerce.modules.category.repository",
     "com.dunghaiquyen.ecommerce.modules.interaction.repository",
     "com.dunghaiquyen.ecommerce.modules.inventory.repository",
+    "com.dunghaiquyen.ecommerce.modules.notification.repository",
     "com.dunghaiquyen.ecommerce.modules.order.repository",
     "com.dunghaiquyen.ecommerce.modules.payment.repository",
     "com.dunghaiquyen.ecommerce.modules.product.repository",
     "com.dunghaiquyen.ecommerce.modules.report.repository",
     "com.dunghaiquyen.ecommerce.modules.returns.repository",
     "com.dunghaiquyen.ecommerce.modules.setting.repository",
-    "com.dunghaiquyen.ecommerce.modules.user.repository"
+    "com.dunghaiquyen.ecommerce.modules.user.repository",
+    "com.dunghaiquyen.ecommerce.modules.wishlist.repository"
 })
 public class V2PersistenceConfig {
 }

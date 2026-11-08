@@ -176,7 +176,7 @@ Review thiết kế từng bảng đã hoàn thành và được Chủ dự án 
 ### 9.1. Rà soát runtime sau khi bỏ migration legacy (10/10/2026)
 
 - Đã giới hạn JPA vào đúng entity/repository thuộc baseline 1A–1B; Spring context không còn yêu cầu các bảng legacy ngoài V1–V4.
-- Các module `banner`, `collection`, `combo`, `notification`, `page`, `promotion`, `recommendation`, `review`, `shipping`, `wishlist` và seed cũ được giữ trong mã nguồn nhưng loại khỏi runtime. Chỉ bật lại sau khi có migration, owner và test riêng.
+- Các module `banner`, `collection`, `combo`, `page`, `promotion`, `recommendation`, `review`, `shipping` và seed cũ được giữ trong mã nguồn nhưng loại khỏi runtime. `wishlist` và `notification` được bật lại bằng migration V10 cùng integration test riêng.
 - Luồng lõi đã bỏ phụ thuộc vào combo/promotion/collection/review/notification: checkout dùng giá SKU hiện tại và discount bằng 0; password reset gửi qua `MailService`; sản phẩm chưa trả review/collection/promotion legacy.
 - Đã xóa repository aggregate review đặt nhầm trong module product và các endpoint gắn collection khỏi controller baseline.
 - Bằng chứng: backend compile và `OrderFinancialPolicyTest` thành công; PostgreSQL Testcontainers sạch chạy Flyway `V1 → V4`, validate 4 migration, Hibernate validate và `EcommerceBackendApplicationTests.contextLoads` thành công; 8/8 ca `ForgotPasswordIntegrationTest` đã đạt trên baseline trước đó.
