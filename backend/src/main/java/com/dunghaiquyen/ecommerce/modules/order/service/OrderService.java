@@ -155,6 +155,9 @@ public class OrderService {
             @CacheEvict(value = CacheConfig.REPORT_PRODUCTS, allEntries = true)
     })
     public OrderResponse createOrderFromCart(UUID userId, CreateOrderRequest request) {
+        if (request.paymentMethod() != PaymentMethod.COD && request.paymentMethod() != PaymentMethod.VIETQR) {
+            throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Unsupported payment method");
+        }
         boolean buyNow = request.buyNowVariantId() != null;
         if (buyNow && request.cartItemIds() != null && !request.cartItemIds().isEmpty()) {
             throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Choose either buy now or cart checkout");

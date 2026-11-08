@@ -44,7 +44,5 @@ export const adminEndpoints = {
   adminReturnRefunds: (id: string) => `/api/v1/admin/returns/${id}/refunds`,
   adminReturnRefund: (id: string) => `/api/v1/admin/returns/${id}/refund`,
   adminRefundStatus: (id: string) => `/api/v1/admin/refunds/${id}/status`,
-  adminRefundSubmit: (id: string) => `/api/v1/admin/refunds/${id}/submit`,
-  adminRefundRefresh: (id: string) => `/api/v1/admin/refunds/${id}/refresh`,
   adminRefundManualConfirmation: (id: string) => `/api/v1/admin/refunds/${id}/manual-confirmation`,
 } as const;

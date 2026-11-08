@@ -39,14 +39,6 @@ export async function createOrder(payload: {
   return result.data;
 }
 
-export async function createVnpayPayment(orderId: string) {
-  const result = await apiFetch<{ paymentUrl: string; transactionRef: string }>(endpoints.payments.create, {
-    method: "POST",
-    body: JSON.stringify({ orderId }),
-  });
-  return result.data;
-}
-
 export async function createVietQrPayment(orderId: string) {
   const result = await apiFetch<import("@/modules/payment/api").VietQrPaymentResponse>(
     endpoints.payments.createVietQr,

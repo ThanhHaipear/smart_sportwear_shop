@@ -1,7 +1,6 @@
 package com.dunghaiquyen.ecommerce.infra.seed;
 
 import com.dunghaiquyen.ecommerce.config.AppSeedProperties;
-import com.dunghaiquyen.ecommerce.config.AppVnpayProperties;
 import com.dunghaiquyen.ecommerce.modules.address.entity.Address;
 import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
 import com.dunghaiquyen.ecommerce.modules.brand.entity.Brand;
@@ -21,10 +20,6 @@ import com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatus;
 import com.dunghaiquyen.ecommerce.modules.order.entity.PaymentMethod;
 import com.dunghaiquyen.ecommerce.modules.order.repository.OrderRepository;
 import com.dunghaiquyen.ecommerce.modules.order.service.OrderService;
-import com.dunghaiquyen.ecommerce.modules.payment.dto.CreatePaymentRequest;
-import com.dunghaiquyen.ecommerce.modules.payment.dto.CreatePaymentResponse;
-import com.dunghaiquyen.ecommerce.modules.payment.service.PaymentService;
-import com.dunghaiquyen.ecommerce.modules.payment.service.VnpaySignatureService;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Gender;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductImage;
@@ -44,9 +39,7 @@ import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserStatus;
 import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -92,10 +85,8 @@ public class SeedDataService {
             "SEED-WIND-BLK-M",
             "SEED-WIND-BLK-L");
     private static final List<String> SEED_ORDER_NOTES = List.of(
-            "[SEED] pending-vnpay-paid",
             "[SEED] confirmed-cod",
-            "[SEED] delivered-cod",
-            "[SEED] cancelled-vnpay");
+            "[SEED] delivered-cod");
 
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
@@ -108,11 +99,8 @@ public class SeedDataService {
     private final CartItemRepository cartItemRepository;
     private final OrderRepository orderRepository;
     private final OrderService orderService;
-    private final PaymentService paymentService;
-    private final VnpaySignatureService vnpaySignatureService;
     private final PasswordEncoder passwordEncoder;
     private final AppSeedProperties seedProperties;
-    private final AppVnpayProperties vnpayProperties;
     private final ProductReviewRepository productReviewRepository;
     private final ReviewService reviewService;
 
@@ -128,11 +116,8 @@ public class SeedDataService {
             CartItemRepository cartItemRepository,
             OrderRepository orderRepository,
             OrderService orderService,
-            PaymentService paymentService,
-            VnpaySignatureService vnpaySignatureService,
             PasswordEncoder passwordEncoder,
             AppSeedProperties seedProperties,
-            AppVnpayProperties vnpayProperties,
             ProductReviewRepository productReviewRepository,
             ReviewService reviewService) {
         this.userRepository = userRepository;
@@ -148,11 +133,8 @@ public class SeedDataService {
         this.orderService = orderService;
         this.productReviewRepository = productReviewRepository;
         this.reviewService = reviewService;
-        this.paymentService = paymentService;
-        this.vnpaySignatureService = vnpaySignatureService;
         this.passwordEncoder = passwordEncoder;
         this.seedProperties = seedProperties;
-        this.vnpayProperties = vnpayProperties;
     }
 
     public record SeedSummary(long users, long products, long variants, long orders) {
@@ -302,22 +284,12 @@ public class SeedDataService {
         // They render the neutral "no image" placeholder until a real image is added.
 
         ensureSeedOrder(
-                "[SEED] pending-vnpay-paid",
-                customerOne,
-                runningTeeM,
-                2,
-                PaymentMethod.VNPAY,
-                List.of(),
-                true,
-                false);
-        ensureSeedOrder(
                 "[SEED] confirmed-cod",
                 customerTwo,
                 footballBoots42,
                 2,
                 PaymentMethod.COD,
                 List.of(OrderStatus.CONFIRMED),
-                false,
                 false);
         ensureSeedOrder(
                 "[SEED] delivered-cod",
@@ -326,18 +298,7 @@ public class SeedDataService {
                 3,
                 PaymentMethod.COD,
                 List.of(OrderStatus.CONFIRMED, OrderStatus.PACKING, OrderStatus.SHIPPING, OrderStatus.DELIVERED),
-                false,
                 false);
-        ensureSeedOrder(
-                "[SEED] cancelled-vnpay",
-                customerOne,
-                windbreakerM,
-                1,
-                PaymentMethod.VNPAY,
-                List.of(),
-                false,
-                true);
-
         // Phase N5: a small, illustrative amount of review data (per the explicit
         // "khong nhoi seed qua lon" instruction) so a fresh local/demo environment
         // already has something to look at on the PDP.
@@ -469,7 +430,6 @@ public class SeedDataService {
             int quantity,
             PaymentMethod paymentMethod,
             List<OrderStatus> transitions,
-            boolean markPaid,
             boolean cancelByCustomer) {
         if (orderRepository.existsByNote(note)) {
             return;
@@ -490,12 +450,6 @@ public class SeedDataService {
                 customer.getId(),
                 new CreateOrderRequest(address.getId(), paymentMethod, note, null, null, null, null, null, null, null));
         UUID orderId = createdOrder.id();
-
-        if (markPaid) {
-            CreatePaymentResponse payment =
-                    paymentService.createPaymentSession(customer.getId(), new CreatePaymentRequest(orderId));
-            paymentService.handleCallback(buildSuccessCallback(payment.transactionRef(), createdOrder.totalAmount()));
-        }
 
         for (OrderStatus status : transitions) {
             User admin = userRepository.findByEmail(DEMO_ADMIN_EMAIL).orElseThrow();
@@ -528,20 +482,6 @@ public class SeedDataService {
             cart.setUser(user);
             return cartRepository.save(cart);
         });
-    }
-
-    private Map<String, String> buildSuccessCallback(String transactionRef, BigDecimal amount) {
-        Map<String, String> params = new LinkedHashMap<>();
-        params.put("vnp_TxnRef", transactionRef);
-        params.put("vnp_ResponseCode", "00");
-        params.put("vnp_TransactionStatus", "00");
-        params.put("vnp_TmnCode", vnpayProperties.tmnCode());
-        params.put("vnp_Amount", amount.movePointRight(2).toBigIntegerExact().toString());
-        params.put("vnp_TransactionNo", "SEED-" + UUID.randomUUID());
-        params.put("vnp_BankCode", "NCB");
-        params.put("vnp_PayDate", "20260101120000");
-        params.put("vnp_SecureHash", vnpaySignatureService.hash(params));
-        return params;
     }
 
     private String demoPassword() {

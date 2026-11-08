@@ -4,7 +4,7 @@ import { Fragment, memo, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ApiRequestError } from "@/modules/api/common";
-import { cancelOrderByStaff, confirmManualRefund, fetchOrderDetail, fetchOrderRefunds, refreshVnpayRefund, submitVnpayRefund, updateOrderStatus } from "@/modules/orders/browser-api";
+import { cancelOrderByStaff, confirmManualRefund, fetchOrderDetail, fetchOrderRefunds, updateOrderStatus } from "@/modules/orders/browser-api";
 import type { OrderRefundResponse } from "@/modules/orders/browser-api";
 import type { AdminOrderResponse, PageMeta } from "@/modules/orders/types";
 import { PackingSlipQueueModal } from "@/components/orders/PackingSlipQueueModal";
@@ -50,7 +50,6 @@ const OrderRow = memo(function OrderRow({
   onLoadDetail,
   onSaveStatus,
   onStaffCancel,
-  onRefreshRefund,
   onManualConfirmRefund,
 }: {
   order: AdminOrderResponse;
@@ -64,7 +63,6 @@ const OrderRow = memo(function OrderRow({
   onLoadDetail: () => void;
   onSaveStatus: () => void;
   onStaffCancel: () => void;
-  onRefreshRefund: (refundId: string) => void;
   onManualConfirmRefund: (refund: OrderRefundResponse) => void;
 }) {
   const isTerminal = ["DELIVERED", "CANCELLED"].includes(order.orderStatus);
@@ -133,13 +131,6 @@ const OrderRow = memo(function OrderRow({
                       Chuyển đúng số tiền và nhập nội dung <strong>{refund.refundCode}</strong>; SePay sẽ tự xác nhận giao dịch tiền ra.
                     </span>
                   ) : null}
-                {refund.provider === "VNPAY" && ["PENDING", "PROCESSING"].includes(refund.status) ? (
-                  <button className="admin-btn secondary" type="button" onClick={() => onRefreshRefund(refund.id)} disabled={savingId === `refresh-refund:${refund.id}`}>
-                    {savingId === `refresh-refund:${refund.id}`
-                      ? "Đang xử lý..."
-                      : refund.status === "PENDING" ? "Gửi hoàn tiền VNPay" : "Kiểm tra VNPay"}
-                  </button>
-                ) : null}
                 {refund.provider === "MANUAL" && !['COMPLETED', 'CANCELLED'].includes(refund.status) ? (
                   <button className="admin-btn secondary" type="button" onClick={() => onManualConfirmRefund(refund)} disabled={savingId === `manual-refund:${refund.id}`}>
                     {savingId === `manual-refund:${refund.id}` ? "Đang xác nhận..." : "Xác nhận đã hoàn thủ công"}
@@ -308,32 +299,6 @@ export function AdminOrdersClient({
     }
   }
 
-  async function handleRefreshRefund(orderId: string, refundId: string) {
-    try {
-      setSavingId(`refresh-refund:${refundId}`);
-      setMessage(null);
-      const currentRefund = refundsByOrder[orderId]?.find((item) => item.id === refundId);
-      const refund = currentRefund?.status === "PENDING"
-        ? await submitVnpayRefund(refundId)
-        : await refreshVnpayRefund(refundId);
-      const updated = await fetchOrderDetail(orderId);
-      setRefundsByOrder((current) => ({
-        ...current,
-        [orderId]: [refund, ...(current[orderId] ?? []).filter((item) => item.id !== refund.id)]
-      }));
-      setOrders((current) => current.map((item) => item.id === orderId ? updated : item));
-      setOrderDetails((current) => ({ ...current, [orderId]: updated }));
-      setStatusDrafts((current) => ({ ...current, [orderId]: updated.orderStatus }));
-      setMessage(refund.status === "COMPLETED"
-        ? `VNPay xác nhận đã hoàn tiền ${refund.refundCode}; đơn đã được hủy.`
-        : `Trạng thái hoàn tiền ${refund.refundCode}: ${refund.status}.`);
-    } catch (error) {
-      setMessage(extractError(error, "Không kiểm tra được trạng thái hoàn tiền VNPay"));
-    } finally {
-      setSavingId(null);
-    }
-  }
-
   async function handleManualConfirmRefund(orderId: string, refund: OrderRefundResponse) {
     if (refund.provider === "MANUAL" && !refund.refundAccountNumber) {
       setMessage("Chưa thể xác nhận: khách hàng chưa cung cấp tài khoản nhận hoàn.");
@@ -446,7 +411,6 @@ export function AdminOrdersClient({
                 onLoadDetail={() => void handleLoadDetail(order.id)}
                 onSaveStatus={() => void handleUpdate(order.id)}
                 onStaffCancel={() => void handleStaffCancel(order.id)}
-                onRefreshRefund={(refundId) => void handleRefreshRefund(order.id, refundId)}
                 onManualConfirmRefund={(refund) => void handleManualConfirmRefund(order.id, refund)}
               />
             ))}

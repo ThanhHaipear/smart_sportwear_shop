@@ -3,8 +3,8 @@
 import { useDeferredValue, useMemo, useState } from "react";
 import { ApiRequestError } from "@/modules/api/common";
 import {
-  confirmManualRefund, createRefund, fetchAdminReturnDetail, fetchRefundsForReturn, listAdminReturnsPage,
-  refreshVnpayRefund, submitVnpayRefund, updateRefundStatus, updateReturnStatus
+  createRefund, fetchAdminReturnDetail, fetchRefundsForReturn, listAdminReturnsPage,
+  updateRefundStatus, updateReturnStatus
 } from "@/modules/returns/browser-api";
 import type { PageMeta, RefundResponse, ReturnItemResolutionDraft, ReturnResponse } from "@/modules/returns/types";
 
@@ -132,44 +132,6 @@ export function AdminReturnsClient({ initialReturns, initialMeta, initialRefunds
     finally { setSaving(null); }
   }
 
-  function replaceRefund(returnId: string, updated: RefundResponse) {
-    setRefundsByReturn((current) => ({
-      ...current,
-      [returnId]: (current[returnId] ?? []).map((entry) => entry.id === updated.id ? updated : entry)
-    }));
-    setRefundStatusDrafts((current) => ({ ...current, [updated.id]: updated.status }));
-  }
-
-  async function processVnpayRefund(returnId: string, refund: RefundResponse) {
-    try {
-      setSaving(`vnpay:${refund.id}`); setMessage(null);
-      const updated = refund.status === "PENDING"
-        ? await submitVnpayRefund(refund.id)
-        : await refreshVnpayRefund(refund.id);
-      replaceRefund(returnId, updated);
-      if (updated.status === "COMPLETED") replaceReturn(await fetchAdminReturnDetail(returnId));
-      setMessage(updated.status === "COMPLETED"
-        ? `VNPay xác nhận đã hoàn tiền ${updated.refundCode} thành công.`
-        : `Giao dịch ${updated.refundCode} đang ở trạng thái ${updated.status}.`);
-    } catch (error) { setMessage(extractError(error, "Không xử lý được giao dịch hoàn tiền VNPay")); }
-    finally { setSaving(null); }
-  }
-
-  async function manuallyConfirmRefund(returnId: string, refund: RefundResponse) {
-    const reference = window.prompt("Nhập mã giao dịch chuyển khoản/biên nhận hoàn tiền:")?.trim();
-    if (!reference) { setMessage("Cần nhập mã giao dịch hoặc biên nhận để xác nhận hoàn tiền."); return; }
-    const note = window.prompt("Ghi chú hoàn tiền (không bắt buộc):")?.trim();
-    if (!window.confirm(`Xác nhận đã thực sự hoàn ${Math.round(refund.amount).toLocaleString("vi-VN")}₫ cho khách?`)) return;
-    try {
-      setSaving(`manual:${refund.id}`); setMessage(null);
-      const updated = await confirmManualRefund(refund.id, reference, note);
-      replaceRefund(returnId, updated);
-      replaceReturn(await fetchAdminReturnDetail(returnId));
-      setMessage(`Đã xác nhận hoàn tiền thủ công ${updated.refundCode}.`);
-    } catch (error) { setMessage(extractError(error, "Không xác nhận được hoàn tiền thủ công")); }
-    finally { setSaving(null); }
-  }
-
   return <section className="card panel">
     <div className="panel-header"><div><h2>Quản lý đổi trả và hoàn tiền</h2><p className="panel-copy">Duyệt yêu cầu, kiểm định hàng nhận lại và xử lý hoàn tiền.</p></div></div>
     {message ? <p className="action-message">{message}</p> : null}
@@ -211,23 +173,10 @@ export function AdminReturnsClient({ initialReturns, initialMeta, initialRefunds
                 {refund.provider} · {Math.round(refund.amount).toLocaleString("vi-VN")}₫ · {refund.status}
                 {refund.gatewayTransactionNo ? ` · GD: ${refund.gatewayTransactionNo}` : ""}
               </span>
-              {refund.provider === "VNPAY" ? (
-                !["COMPLETED", "CANCELLED"].includes(refund.status) ? (<>
-                  {["PENDING", "PROCESSING"].includes(refund.status) ? <button className="admin-btn secondary" type="button" disabled={saving === `vnpay:${refund.id}`} onClick={() => void processVnpayRefund(item.id, refund)}>
-                    {saving === `vnpay:${refund.id}` ? "Đang xử lý..." : refund.status === "PENDING" ? "Gửi hoàn tiền VNPay" : "Kiểm tra VNPay"}
-                  </button> : null}
-                  <button className="admin-btn secondary" type="button" disabled={saving === `manual:${refund.id}`} onClick={() => void manuallyConfirmRefund(item.id, refund)}>
-                    {saving === `manual:${refund.id}` ? "Đang xác nhận..." : "Xác nhận đã hoàn thủ công"}
-                  </button>
-                </>) : <span className="table-subtle">{refund.manualReference ? `Biên nhận: ${refund.manualReference}` : ""}</span>
-              ) : (
-                <>
-                  <select className="select" value={refundStatusDrafts[refund.id] ?? refund.status} disabled={(nextRefundStatuses[refund.status] ?? []).length === 0} onChange={(event) => setRefundStatusDrafts((current) => ({ ...current, [refund.id]: event.target.value }))}>
-                    {[refund.status, ...(nextRefundStatuses[refund.status] ?? [])].map((status) => <option key={status}>{status}</option>)}
-                  </select>
-                  <button className="admin-btn secondary" type="button" disabled={saving === `refund:${refund.id}` || (refundStatusDrafts[refund.id] ?? refund.status) === refund.status} onClick={() => void saveRefund(item.id, refund)}>Lưu hoàn tiền</button>
-                </>
-              )}
+              <select className="select" value={refundStatusDrafts[refund.id] ?? refund.status} disabled={(nextRefundStatuses[refund.status] ?? []).length === 0} onChange={(event) => setRefundStatusDrafts((current) => ({ ...current, [refund.id]: event.target.value }))}>
+                {[refund.status, ...(nextRefundStatuses[refund.status] ?? [])].map((status) => <option key={status}>{status}</option>)}
+              </select>
+              <button className="admin-btn secondary" type="button" disabled={saving === `refund:${refund.id}` || (refundStatusDrafts[refund.id] ?? refund.status) === refund.status} onClick={() => void saveRefund(item.id, refund)}>Lưu hoàn tiền</button>
             </div>
           )) : <div className="empty-state">Nhấn “Tải chi tiết” để kiểm tra lịch sử hoàn tiền.</div>}</div>
         </article>;

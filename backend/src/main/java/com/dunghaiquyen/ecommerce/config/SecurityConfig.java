@@ -45,14 +45,12 @@ public class SecurityConfig {
     };
 
     // All methods public: guest cart (session_id-based, no JWT) needs full
-    // read/write, and the payment gateway calls the callback directly with no
-    // JWT (auth is the checksum check inside the handler) - API_SPEC_PHASE1.md 8.2.
+    // read/write, while inbound bank notifications use the dedicated SePay webhook.
     private static final String[] PUBLIC_ANY_METHOD_ENDPOINTS = {
             "/api/v1/cart/**",
             "/api/v1/products/search-by-image",
             "/api/v1/visual-search/status",
             "/api/v1/recommendations/logs",
-            "/api/v1/payments/callback",
             "/api/v1/webhooks/sepay",
             "/v3/api-docs/**",
             "/swagger-ui/**",

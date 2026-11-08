@@ -20,7 +20,6 @@ import com.dunghaiquyen.ecommerce.modules.payment.entity.Payment;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentProvider;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import com.dunghaiquyen.ecommerce.modules.inventory.service.InventoryService;
-import com.dunghaiquyen.ecommerce.modules.payment.service.VnpayTransactionService;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
 import com.dunghaiquyen.ecommerce.modules.returns.dto.AdminReturnListQuery;
 import com.dunghaiquyen.ecommerce.modules.returns.dto.CreateRefundRequest;
@@ -120,7 +119,6 @@ public class ReturnService {
     private final PaymentRepository paymentRepository;
     private final AuditLogService auditLogService;
     private final InventoryService inventoryService;
-    private final VnpayTransactionService vnpayTransactionService;
     private final OrderService orderService;
     private final NotificationService notificationService;
     private final UiRealtimeService uiRealtimeService;
@@ -134,7 +132,6 @@ public class ReturnService {
             PaymentRepository paymentRepository,
             AuditLogService auditLogService,
             InventoryService inventoryService,
-            VnpayTransactionService vnpayTransactionService,
             OrderService orderService,
             NotificationService notificationService,
             UiRealtimeService uiRealtimeService) {
@@ -146,7 +143,6 @@ public class ReturnService {
         this.paymentRepository = paymentRepository;
         this.auditLogService = auditLogService;
         this.inventoryService = inventoryService;
-        this.vnpayTransactionService = vnpayTransactionService;
         this.orderService = orderService;
         this.notificationService = notificationService;
         this.uiRealtimeService = uiRealtimeService;
@@ -220,7 +216,7 @@ public class ReturnService {
                             orderId, paymentProvider, PaymentStatus.PAID)
                     .orElseThrow(() -> new BusinessRuleException(HttpStatus.CONFLICT,
                             "Paid transaction not found"));
-            provider = paymentProvider == PaymentProvider.VNPAY ? RefundProvider.VNPAY : RefundProvider.MANUAL;
+            provider = RefundProvider.MANUAL;
             amount = payment.getAmount();
         }
         Refund refund = new Refund();
@@ -495,12 +491,12 @@ public class ReturnService {
                     Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING, RefundStatus.COMPLETED));
             if (alreadyCommitted.add(total).compareTo(latestPayment.getAmount()) > 0) {
                 throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY,
-                        "Total refunds would exceed the paid VNPay amount");
+                        "Total refunds would exceed the paid amount");
             }
         }
-        RefundProvider provider = latestPayment == null
+        RefundProvider provider = latestPayment == null || latestPayment.getProvider() != PaymentProvider.COD
                 ? RefundProvider.MANUAL
-                : (latestPayment.getProvider() == PaymentProvider.VNPAY ? RefundProvider.VNPAY : RefundProvider.COD);
+                : RefundProvider.COD;
 
         Refund refund = new Refund();
         refund.setReturnRequest(returnRequest);
@@ -538,10 +534,6 @@ public class ReturnService {
         Refund refund = refundRepository.findByIdForUpdate(refundId)
                 .orElseThrow(() -> new ResourceNotFoundException("Refund not found"));
         RefundStatus current = refund.getStatus();
-        if (refund.getProvider() == RefundProvider.VNPAY && request.status() == RefundStatus.COMPLETED) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT,
-                    "VNPay refunds must be completed through the gateway submit endpoint");
-        }
         if (!REFUND_ALLOWED_TRANSITIONS.getOrDefault(current, Set.of()).contains(request.status())) {
             throw new BusinessRuleException(
                     HttpStatus.CONFLICT, "Cannot transition refund from " + current + " to " + request.status());
@@ -609,48 +601,6 @@ public class ReturnService {
                 refund.getId().toString(), null,
                 Map.of("bankCode", refund.getRefundBankCode(),
                         "accountLast4", lastFour(refund.getRefundAccountNumber())));
-        return toRefundResponse(refund);
-    }
-
-    @Transactional
-    public RefundResponse submitVnpayRefund(UUID refundId, User actor, String ipAddress) {
-        Refund refund = refundRepository.findByIdForUpdate(refundId)
-                .orElseThrow(() -> new ResourceNotFoundException("Refund not found"));
-        if (refund.getProvider() != RefundProvider.VNPAY) {
-            throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Refund is not a VNPay refund");
-        }
-        if (refund.getStatus() != RefundStatus.PENDING) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "Refund is not eligible for gateway submission");
-        }
-        vnpayTransactionService.refund(refund, actor != null ? actor.getFullName() : "system", ipAddress);
-        if (refund.getStatus() == RefundStatus.COMPLETED) refund.setRefundedAt(Instant.now());
-        refund = refundRepository.save(refund);
-        if (refund.getStatus() == RefundStatus.COMPLETED) syncCompletedRefund(refund);
-        auditLogService.record(actor, "VNPAY_REFUND_SUBMIT", "Refund", refundId.toString(), null,
-                Map.of("status", refund.getStatus().name(), "requestId", refund.getGatewayRequestId()));
-        return toRefundResponse(refund);
-    }
-
-    @Transactional
-    public RefundResponse refreshVnpayRefund(UUID refundId, User actor, String ipAddress) {
-        Refund refund = refundRepository.findByIdForUpdate(refundId)
-                .orElseThrow(() -> new ResourceNotFoundException("Refund not found"));
-        if (refund.getProvider() != RefundProvider.VNPAY) {
-            throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Refund is not a VNPay refund");
-        }
-        if (!Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING).contains(refund.getStatus())) {
-            return toRefundResponse(refund);
-        }
-        vnpayTransactionService.queryRefund(refund, ipAddress);
-        if (refund.getStatus() == RefundStatus.COMPLETED) {
-            refund.setRefundedAt(Instant.now());
-        }
-        refund = refundRepository.save(refund);
-        auditLogService.record(actor, "VNPAY_REFUND_QUERY", "Refund", refundId.toString(), null,
-                Map.of("status", refund.getStatus().name()));
-        if (refund.getStatus() == RefundStatus.COMPLETED) {
-            syncCompletedRefund(refund);
-        }
         return toRefundResponse(refund);
     }
 

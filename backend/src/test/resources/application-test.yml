@@ -20,16 +20,9 @@ spring:
     hikari:
       maximum-pool-size: 20
 
-# No real VNPay sandbox account exists for this project - tests sign their own
-# callback payloads with the same VnpaySignatureService bean (autowired in
-# PaymentIntegrationTest), so only a deterministic, non-blank secret matters
-# here, not a real merchant credential.
 app:
   # Never let a developer's backend/.env route automated tests to real SMTP.
   # Notification integration tests verify persisted delivery state using the
   # deterministic logging provider.
   mail:
     provider: logging
-  vnpay:
-    tmn-code: TESTTMN1
-    hash-secret: test-only-vnpay-hash-secret-do-not-use-in-prod

@@ -9,20 +9,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.dunghaiquyen.ecommerce.AbstractIntegrationTest;
 import com.dunghaiquyen.ecommerce.modules.address.entity.Address;
 import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
-import com.dunghaiquyen.ecommerce.modules.payment.service.VnpaySignatureService;
-import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
+import com.dunghaiquyen.ecommerce.modules.order.repository.OrderRepository;
+import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 class ReportIntegrationTest extends AbstractIntegrationTest {
 
@@ -30,10 +27,7 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
     private AddressRepository addressRepository;
 
     @Autowired
-    private VnpaySignatureService signatureService;
-
-    @Autowired
-    private PaymentRepository paymentRepository;
+    private OrderRepository orderRepository;
 
     private record AdminContext(String token, String categoryId, String brandId) {
     }
@@ -128,32 +122,10 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    private String createPaymentSession(String token, String orderId) throws Exception {
-        MvcResult result = mockMvc.perform(post("/api/v1/payments/create")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"orderId\":\"" + orderId + "\"}"))
-                .andExpect(status().isCreated())
-                .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/transactionRef").asText();
-    }
-
-    private void sendSuccessCallback(String transactionRef) throws Exception {
-        var payment = paymentRepository.findByTransactionRef(transactionRef).orElseThrow();
-        Map<String, String> params = new LinkedHashMap<>();
-        params.put("vnp_TxnRef", transactionRef);
-        params.put("vnp_ResponseCode", "00");
-        params.put("vnp_TransactionStatus", "00");
-        params.put("vnp_TmnCode", "TESTTMN1");
-        params.put("vnp_Amount", payment.getAmount().movePointRight(2).toBigIntegerExact().toString());
-        String hash = signatureService.hash(params);
-        params.put("vnp_SecureHash", hash);
-
-        MockHttpServletRequestBuilder builder = post("/api/v1/payments/callback");
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            builder = builder.param(entry.getKey(), entry.getValue());
-        }
-        mockMvc.perform(builder).andExpect(status().isOk());
+    private void markOrderPaid(String orderId) {
+        var order = orderRepository.findById(UUID.fromString(orderId)).orElseThrow();
+        order.setPaymentStatus(PaymentStatus.PAID);
+        orderRepository.save(order);
     }
 
     private JsonNode getOverview(String token) throws Exception {
@@ -178,16 +150,15 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
         long totalBefore = before.at("/totalOrders").asLong();
         long pendingBefore = before.at("/pendingOrders").asLong();
 
-        // Order A: VNPAY, paid via callback, but never confirmed/delivered -
+        // Order A: VietQR, paid but never confirmed/delivered -
         // counts toward grossRevenue (paymentStatus=PAID) and stays "pending",
         // but must NOT count toward realizedRevenue.
         String buyerA = uniqueEmail("rpt-buyer-a");
         TokenPair tokenA = registerUser(buyerA);
         addToCart(tokenA.accessToken(), variantId, 2);
         String addressA = createAddressForUser(buyerA);
-        OrderResult orderA = createOrder(tokenA.accessToken(), addressA, "VNPAY");
-        String txnRefA = createPaymentSession(tokenA.accessToken(), orderA.id());
-        sendSuccessCallback(txnRefA);
+        OrderResult orderA = createOrder(tokenA.accessToken(), addressA, "VIETQR");
+        markOrderPaid(orderA.id());
 
         // Order B: COD, progressed all the way to DELIVERED. Delivery records
         // cash collection, so it counts toward both gross and realized revenue.
@@ -201,13 +172,13 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
         adminSetStatus(ctx, orderB.id(), "SHIPPING");
         adminSetStatus(ctx, orderB.id(), "DELIVERED");
 
-        // Order C: VNPAY, customer cancels before any payment - must count
+        // Order C: VietQR, customer cancels before any payment - must count
         // toward NEITHER revenue figure, and must not still be "pending".
         String buyerC = uniqueEmail("rpt-buyer-c");
         TokenPair tokenC = registerUser(buyerC);
         addToCart(tokenC.accessToken(), variantId, 1);
         String addressC = createAddressForUser(buyerC);
-        OrderResult orderC = createOrder(tokenC.accessToken(), addressC, "VNPAY");
+        OrderResult orderC = createOrder(tokenC.accessToken(), addressC, "VIETQR");
         mockMvc.perform(post("/api/v1/orders/" + orderC.id() + "/cancel")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenC.accessToken()))
                 .andExpect(status().isOk());
@@ -225,7 +196,7 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
         long pendingAfter = after.at("/pendingOrders").asLong();
 
         assertThat(grossAfter.subtract(grossBefore))
-                .as("grossRevenue includes paid VNPAY and delivered/collected COD, never cancelled order C")
+                .as("grossRevenue includes paid VietQR and delivered/collected COD, never cancelled order C")
                 .isEqualByComparingTo(orderA.totalAmount().add(orderB.totalAmount()));
         assertThat(realizedAfter.subtract(realizedBefore))
                 .as("realizedRevenue must equal exactly order B's total (orderStatus=DELIVERED), not A or C")
@@ -246,9 +217,8 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
         TokenPair paidToken = registerUser(paidBuyer);
         addToCart(paidToken.accessToken(), variantId, 1);
         String paidAddress = createAddressForUser(paidBuyer);
-        OrderResult paidOrder = createOrder(paidToken.accessToken(), paidAddress, "VNPAY");
-        String txnRef = createPaymentSession(paidToken.accessToken(), paidOrder.id());
-        sendSuccessCallback(txnRef);
+        OrderResult paidOrder = createOrder(paidToken.accessToken(), paidAddress, "VIETQR");
+        markOrderPaid(paidOrder.id());
 
         String codBuyer = uniqueEmail("rpt-breakdown-cod");
         TokenPair codToken = registerUser(codBuyer);

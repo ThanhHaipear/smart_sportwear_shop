@@ -38,10 +38,8 @@ export const endpoints = {
     refundDestination: (id: string) => `/api/v1/orders/${id}/refund-destination`,
   },
   payments: {
-    create: "/api/v1/payments/create",
     createVietQr: "/api/v1/payments/vietqr",
     vietQr: (paymentId: string) => `/api/v1/payments/vietqr/${paymentId}`,
-    callback: "/api/v1/payments/callback",
     byOrder: (orderId: string) => `/api/v1/payments/${orderId}`,
   },
   notifications: {

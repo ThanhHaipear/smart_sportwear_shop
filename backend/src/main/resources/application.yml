@@ -171,18 +171,6 @@ app:
     # Token verification endpoint - externalised so tests can override it to
     # point at a WireMock stub (application-test.yml sets this).
     token-info-url: ${GOOGLE_TOKENINFO_URL:https://oauth2.googleapis.com/tokeninfo}
-  vnpay:
-    tmn-code: ${VNPAY_TMN_CODE:DEVTMN01}
-    # Must never be empty: HMAC-SHA512 (VnpaySignatureService) rejects a
-    # zero-length key outright (IllegalArgumentException), which previously
-    # crashed any VNPAY flow - including this project's own seed data, caught
-    # by actually running it - whenever this var was left unset outside the
-    # test profile (application-test.yml has always set its own real value).
-    hash-secret: ${VNPAY_HASH_SECRET:dev-only-vnpay-hash-secret-change-me-please}
-    pay-url: ${VNPAY_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
-    return-url: ${PAYMENT_RETURN_URL:http://localhost:3000/payment/result}
-    callback-url: ${PAYMENT_CALLBACK_URL:http://localhost:8080/api/v1/payments/callback}
-    transaction-api-url: ${VNPAY_TRANSACTION_API_URL:https://sandbox.vnpayment.vn/merchant_webapi/api/transaction}
   vietqr:
     enabled: ${VIETQR_ENABLED:false}
     bank-bin: ${VIETQR_BANK_BIN:}
