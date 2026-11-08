@@ -2,6 +2,7 @@ package com.dunghaiquyen.ecommerce.modules.notification.template;
 
 import com.dunghaiquyen.ecommerce.modules.notification.entity.NotificationType;
 import java.util.Map;
+import java.util.EnumMap;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +19,11 @@ public final class NotificationPlaceholders {
 
     private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{([a-zA-Z]+)\\}");
 
-    private static final Map<NotificationType, Set<String>> ALLOWED = Map.of(
+    private static final Map<NotificationType, Set<String>> ALLOWED = createAllowed();
+
+    private static Map<NotificationType, Set<String>> createAllowed() {
+        Map<NotificationType, Set<String>> allowed = new EnumMap<>(NotificationType.class);
+        allowed.putAll(Map.of(
             NotificationType.ORDER_CREATED, Set.of("customerName", "orderCode", "totalAmount", "paymentMethod"),
             NotificationType.ORDER_CANCELLED, Set.of("customerName", "orderCode", "totalAmount"),
             NotificationType.ORDER_DELIVERED, Set.of("customerName", "orderCode", "totalAmount"),
@@ -28,7 +33,13 @@ public final class NotificationPlaceholders {
             NotificationType.ADMIN_ORDER_CANCELLED, Set.of("customerName", "orderCode", "totalAmount"),
             NotificationType.CANCELLATION_APPROVED, Set.of("customerName", "orderCode", "totalAmount"),
             NotificationType.CANCELLATION_REJECTED, Set.of("customerName", "orderCode", "rejectionReason"),
-            NotificationType.PASSWORD_RESET, Set.of("resetLink", "ttlMinutes"));
+            NotificationType.PASSWORD_RESET, Set.of("resetLink", "ttlMinutes")));
+        allowed.put(NotificationType.REFUND_COMPLETED,
+                Set.of("customerName", "orderCode", "refundCode", "refundAmount"));
+        allowed.put(NotificationType.PAYMENT_COMPLETED,
+                Set.of("customerName", "orderCode", "paymentAmount"));
+        return Map.copyOf(allowed);
+    }
 
     private NotificationPlaceholders() {
     }

@@ -3,7 +3,9 @@ package com.dunghaiquyen.ecommerce.modules.returns.service;
 import com.dunghaiquyen.ecommerce.common.exception.BusinessRuleException;
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
 import com.dunghaiquyen.ecommerce.common.response.PageMeta;
+import com.dunghaiquyen.ecommerce.common.realtime.UiRealtimeService;
 import com.dunghaiquyen.ecommerce.modules.audit.service.AuditLogService;
+import com.dunghaiquyen.ecommerce.modules.notification.service.NotificationService;
 import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderItem;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatus;
@@ -120,6 +122,8 @@ public class ReturnService {
     private final InventoryService inventoryService;
     private final VnpayTransactionService vnpayTransactionService;
     private final OrderService orderService;
+    private final NotificationService notificationService;
+    private final UiRealtimeService uiRealtimeService;
 
     public ReturnService(
             ReturnRepository returnRepository,
@@ -131,7 +135,9 @@ public class ReturnService {
             AuditLogService auditLogService,
             InventoryService inventoryService,
             VnpayTransactionService vnpayTransactionService,
-            OrderService orderService) {
+            OrderService orderService,
+            NotificationService notificationService,
+            UiRealtimeService uiRealtimeService) {
         this.returnRepository = returnRepository;
         this.returnItemRepository = returnItemRepository;
         this.refundRepository = refundRepository;
@@ -142,6 +148,8 @@ public class ReturnService {
         this.inventoryService = inventoryService;
         this.vnpayTransactionService = vnpayTransactionService;
         this.orderService = orderService;
+        this.notificationService = notificationService;
+        this.uiRealtimeService = uiRealtimeService;
     }
 
     public record ListResult<T>(List<T> items, PageMeta meta) {
@@ -730,6 +738,8 @@ public class ReturnService {
             payment.setStatus(nextStatus);
             paymentRepository.save(payment);
         }
+        notificationService.notifyRefundCompleted(order, refund.getRefundCode(), refund.getAmount());
+        uiRealtimeService.publishScopeAfterCommit("orders");
     }
 
     private void applyTransition(Return returnRequest, ReturnStatus target, User actor) {

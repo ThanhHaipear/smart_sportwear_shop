@@ -3,6 +3,8 @@ package com.dunghaiquyen.ecommerce.modules.payment.sepay.service;
 import com.dunghaiquyen.ecommerce.common.time.AppTimeZone;
 import com.dunghaiquyen.ecommerce.config.AppVietQrProperties;
 import com.dunghaiquyen.ecommerce.config.CacheConfig;
+import com.dunghaiquyen.ecommerce.common.realtime.UiRealtimeService;
+import com.dunghaiquyen.ecommerce.modules.notification.service.NotificationService;
 import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatus;
 import com.dunghaiquyen.ecommerce.modules.order.entity.PaymentMethod;
@@ -62,6 +64,8 @@ public class BankTransactionIngestionService {
     private final OrderRepository orderRepository;
     private final RefundRepository refundRepository;
     private final ReturnService returnService;
+    private final NotificationService notificationService;
+    private final UiRealtimeService uiRealtimeService;
     private final AppVietQrProperties vietQrProperties;
     private final JdbcTemplate jdbcTemplate;
 
@@ -72,6 +76,8 @@ public class BankTransactionIngestionService {
             OrderRepository orderRepository,
             RefundRepository refundRepository,
             ReturnService returnService,
+            NotificationService notificationService,
+            UiRealtimeService uiRealtimeService,
             AppVietQrProperties vietQrProperties,
             JdbcTemplate jdbcTemplate) {
         this.bankTransactionRepository = bankTransactionRepository;
@@ -80,6 +86,8 @@ public class BankTransactionIngestionService {
         this.orderRepository = orderRepository;
         this.refundRepository = refundRepository;
         this.returnService = returnService;
+        this.notificationService = notificationService;
+        this.uiRealtimeService = uiRealtimeService;
         this.vietQrProperties = vietQrProperties;
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -195,6 +203,8 @@ public class BankTransactionIngestionService {
         transaction.setMatchReason("EXACT_REFERENCE_ACCOUNT_AMOUNT_MATCH");
         transaction.setReconciledAt(matchedAt);
         savePaymentEvent(payment, request, transaction.getRawPayloadRedacted());
+        notificationService.notifyPaymentCompleted(order, payment.getAmount());
+        uiRealtimeService.publishScopeAfterCommit("orders");
     }
 
     private void matchOutgoingRefund(BankTransaction transaction, SePayWebhookRequest request) {

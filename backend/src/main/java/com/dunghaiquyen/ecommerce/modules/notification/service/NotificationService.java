@@ -22,6 +22,7 @@ import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserStatus;
 import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
 import java.time.Duration;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.util.List;
@@ -144,6 +145,18 @@ public class NotificationService {
     public void notifyOrderStatusUpdated(Order order, String oldStatus, String newStatus) {
         queueAfterCommit(order.getUser(), order, NotificationType.ORDER_STATUS_UPDATED,
                 notificationTemplates.orderStatusUpdated(order, oldStatus, newStatus));
+    }
+
+    @Transactional
+    public void notifyRefundCompleted(Order order, String refundCode, BigDecimal refundAmount) {
+        queueAfterCommit(order.getUser(), order, NotificationType.REFUND_COMPLETED,
+                notificationTemplates.refundCompleted(order, refundCode, refundAmount));
+    }
+
+    @Transactional
+    public void notifyPaymentCompleted(Order order, BigDecimal paymentAmount) {
+        queueAfterCommit(order.getUser(), order, NotificationType.PAYMENT_COMPLETED,
+                notificationTemplates.paymentCompleted(order, paymentAmount));
     }
 
     @Transactional

@@ -6,6 +6,8 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 public class UiRealtimeService {
@@ -33,6 +35,23 @@ public class UiRealtimeService {
         String[] parts = path.split("/");
         String scope = parts.length > 4 && "admin".equals(parts[3]) ? parts[4]
                 : parts.length > 3 ? parts[3] : "application";
+        publishScope(scope);
+    }
+
+    public void publishScopeAfterCommit(String scope) {
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    publishScope(scope);
+                }
+            });
+        } else {
+            publishScope(scope);
+        }
+    }
+
+    private void publishScope(String scope) {
         DataChanged event = new DataChanged(UUID.randomUUID().toString(), scope, Instant.now());
         for (SseEmitter emitter : emitters) {
             try {

@@ -93,7 +93,10 @@ export function NotificationBell() {
         const item = JSON.parse(evt.data) as NotificationItem;
         setItems((prev) => [item, ...prev.filter((n) => n.id !== item.id)].slice(0, 30));
         setUnread((c) => c + 1);
-        if (item.orderId && (item.type.startsWith("ORDER_") || item.type.startsWith("CANCELLATION_"))) {
+        if (item.orderId && (item.type.startsWith("ORDER_")
+          || item.type.startsWith("CANCELLATION_")
+          || item.type.startsWith("PAYMENT_")
+          || item.type.startsWith("REFUND_"))) {
           window.dispatchEvent(new CustomEvent(CUSTOMER_ORDER_CHANGED_EVENT, { detail: { orderId: item.orderId } }));
         }
       } catch {

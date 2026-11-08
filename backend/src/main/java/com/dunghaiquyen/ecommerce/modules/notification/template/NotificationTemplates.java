@@ -3,6 +3,8 @@ package com.dunghaiquyen.ecommerce.modules.notification.template;
 import com.dunghaiquyen.ecommerce.modules.notification.entity.NotificationType;
 import com.dunghaiquyen.ecommerce.modules.notification.repository.NotificationTemplateRepository;
 import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
+import java.math.BigDecimal;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -33,7 +35,11 @@ public class NotificationTemplates {
      * (un-customized) output is therefore unchanged, which is exactly what
      * NotificationIntegrationTest's exact-string assertions depend on.
      */
-    private static final Map<NotificationType, EmailContent> DEFAULTS = Map.of(
+    private static final Map<NotificationType, EmailContent> DEFAULTS = createDefaults();
+
+    private static Map<NotificationType, EmailContent> createDefaults() {
+        Map<NotificationType, EmailContent> defaults = new EnumMap<>(NotificationType.class);
+        defaults.putAll(Map.of(
             NotificationType.ORDER_CREATED, new EmailContent(
                     "Xác nhận đơn hàng {orderCode}",
                     """
@@ -111,7 +117,16 @@ public class NotificationTemplates {
 
                     Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.
 
-                    Trân trọng."""));
+                    Trân trọng.""")));
+        defaults.put(NotificationType.REFUND_COMPLETED, new EmailContent(
+                "Hoàn tiền đơn hàng {orderCode} thành công",
+                "Xin chào {customerName}, cửa hàng đã hoàn {refundAmount} cho đơn hàng {orderCode}. "
+                        + "Mã hoàn tiền: {refundCode}."));
+        defaults.put(NotificationType.PAYMENT_COMPLETED, new EmailContent(
+                "Thanh toán đơn hàng {orderCode} thành công",
+                "Xin chào {customerName}, thanh toán {paymentAmount} cho đơn hàng {orderCode} đã được xác nhận."));
+        return Map.copyOf(defaults);
+    }
 
     private final NotificationTemplateRepository templateRepository;
 
@@ -193,6 +208,19 @@ public class NotificationTemplates {
         params.put("oldStatus", oldStatus);
         params.put("newStatus", newStatus);
         return render(NotificationType.ORDER_STATUS_UPDATED, params);
+    }
+
+    public EmailContent refundCompleted(Order order, String refundCode, BigDecimal refundAmount) {
+        Map<String, String> params = orderParams(order);
+        params.put("refundCode", refundCode);
+        params.put("refundAmount", refundAmount.toPlainString());
+        return render(NotificationType.REFUND_COMPLETED, params);
+    }
+
+    public EmailContent paymentCompleted(Order order, BigDecimal paymentAmount) {
+        Map<String, String> params = orderParams(order);
+        params.put("paymentAmount", paymentAmount.toPlainString());
+        return render(NotificationType.PAYMENT_COMPLETED, params);
     }
 
     public EmailContent passwordReset(String resetLink, int ttlMinutes) {

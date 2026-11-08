@@ -449,6 +449,14 @@ Proxy phải trả `404` cho mọi route/phương thức ngoài
 - `sales` chỉ ghi order một lần khi đủ điều kiện.
 - Giao dịch `UNMATCHED`, `AMOUNT_MISMATCH`, `LATE_PAYMENT` và thu trùng xuất hiện trong báo cáo đối soát, không được tính là doanh thu bán hàng.
 
+### 13.1 Cập nhật realtime cho thanh toán và hoàn tiền
+
+- Không tạo thêm WebSocket hoặc EventSource riêng cho payment/refund. Storefront tái sử dụng SSE thông báo cá nhân đã xác thực; Admin tái sử dụng SSE `data-changed` hiện có.
+- Chỉ phát `PAYMENT_COMPLETED` hoặc `REFUND_COMPLETED` sau khi transaction database commit thành công. Event trùng bị idempotency của bank transaction chặn nên không tạo notification lặp.
+- SSE cá nhân đi qua Redis pub/sub để browser vẫn nhận được event khi webhook và stream nằm ở hai backend instance khác nhau.
+- Storefront dùng `orderId` trong notification để chỉ tải lại đúng đơn/payment/refund. Trang VietQR giữ fallback 30 giây khi còn `PENDING` để tự phục hồi nếu trình duyệt mất kết nối đúng thời điểm event được phát.
+- Admin nhận scope `orders`, refresh server data và tải lại refund cho cả `PAID`, `PARTIALLY_REFUNDED` và `REFUNDED`.
+
 ## 14. Test matrix bắt buộc
 
 ### 14.1 Tạo payment

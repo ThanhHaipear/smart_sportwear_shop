@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/api-errors";
 import { getVietQrPayment, type VietQrPaymentResponse } from "@/modules/payment/api";
+import { CUSTOMER_ORDER_CHANGED_EVENT } from "@/modules/notifications/types";
 
-const POLL_INTERVAL_MS = 3_000;
+const FALLBACK_POLL_INTERVAL_MS = 30_000;
 const TERMINAL_STATUSES = new Set(["PAID", "FAILED", "CANCELLED", "REFUNDED"]);
 
 function formatMoney(amount: number, currency: string) {
@@ -49,13 +50,13 @@ export function VietQrPaymentClient({ paymentId }: { paymentId: string }) {
         setError(null);
         setLoading(false);
         if (!TERMINAL_STATUSES.has(next.status)) {
-          pollTimer = window.setTimeout(poll, POLL_INTERVAL_MS);
+          pollTimer = window.setTimeout(poll, FALLBACK_POLL_INTERVAL_MS);
         }
       } catch (cause) {
         if (!active) return;
         setError(getApiErrorMessage(cause, "Không thể tải thông tin thanh toán VietQR."));
         setLoading(false);
-        pollTimer = window.setTimeout(poll, POLL_INTERVAL_MS);
+        pollTimer = window.setTimeout(poll, FALLBACK_POLL_INTERVAL_MS);
       }
     };
 
@@ -65,6 +66,20 @@ export function VietQrPaymentClient({ paymentId }: { paymentId: string }) {
       if (pollTimer !== undefined) window.clearTimeout(pollTimer);
     };
   }, [paymentId]);
+
+  useEffect(() => {
+    const refresh = (event: Event) => {
+      const changedOrderId = (event as CustomEvent<{ orderId?: string }>).detail?.orderId;
+      if (payment?.orderId && changedOrderId && changedOrderId !== payment.orderId) return;
+      void getVietQrPayment(paymentId).then((next) => {
+        setPayment(next);
+        setError(null);
+        setLoading(false);
+      }).catch(() => undefined);
+    };
+    window.addEventListener(CUSTOMER_ORDER_CHANGED_EVENT, refresh);
+    return () => window.removeEventListener(CUSTOMER_ORDER_CHANGED_EVENT, refresh);
+  }, [payment?.orderId, paymentId]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1_000);

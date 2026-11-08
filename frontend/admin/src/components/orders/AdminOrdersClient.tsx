@@ -248,7 +248,7 @@ export function AdminOrdersClient({
   useEffect(() => {
     const cancellationOrders = initialOrders.filter((order) =>
       order.orderStatus === "CANCELLED"
-      && ["PAID", "PARTIALLY_REFUNDED"].includes(order.paymentStatus));
+      && ["PAID", "PARTIALLY_REFUNDED", "REFUNDED"].includes(order.paymentStatus));
     if (!cancellationOrders.length) return;
     void Promise.all(cancellationOrders.map(async (order) => {
       const refunds = await fetchOrderRefunds(order.id);

@@ -111,6 +111,7 @@ class SePayWebhookIntegrationTest extends AbstractIntegrationTest {
                     assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.PENDING_CONFIRMATION);
                 });
         assertThat(paymentEventCount(context.paymentId())).isEqualTo(1);
+        assertThat(notificationCount(context.orderId(), "PAYMENT_COMPLETED")).isEqualTo(1);
     }
 
     @Test
@@ -225,6 +226,7 @@ class SePayWebhookIntegrationTest extends AbstractIntegrationTest {
         assertThat(orderRepository.findById(order.getId()).orElseThrow().getPaymentStatus())
                 .isEqualTo(PaymentStatus.REFUNDED);
         assertThat(paymentEventCount(payment.getId())).isEqualTo(1);
+        assertThat(notificationCount(order.getId(), "REFUND_COMPLETED")).isEqualTo(1);
     }
 
     @Test
@@ -400,6 +402,15 @@ class SePayWebhookIntegrationTest extends AbstractIntegrationTest {
                 "select count(*) from payment_events where payment_id = ? and provider = 'BANK_TRANSFER'",
                 Integer.class,
                 paymentId);
+        return count == null ? 0 : count;
+    }
+
+    private int notificationCount(UUID orderId, String type) {
+        Integer count = jdbcTemplate.queryForObject(
+                "select count(*) from notifications where order_id = ? and type = ?",
+                Integer.class,
+                orderId,
+                type);
         return count == null ? 0 : count;
     }
 
