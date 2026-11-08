@@ -2,6 +2,10 @@ spring:
   application:
     name: ecommerce-backend
 
+  output:
+    ansi:
+      enabled: ${SPRING_OUTPUT_ANSI_ENABLED:ALWAYS}
+
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:dunghaiquyen}${DB_PARAMS:}
     username: ${DB_USERNAME:postgres}
