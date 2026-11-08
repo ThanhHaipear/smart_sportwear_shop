@@ -57,6 +57,13 @@ public class PaymentController {
                 .body(ApiResponse.ok("VietQR payment ready", response));
     }
 
+    @GetMapping("/vietqr/{paymentId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ApiResponse<CreateVietQrPaymentResponse> getVietQr(
+            @AuthenticationPrincipal CustomUserDetails principal, @PathVariable UUID paymentId) {
+        return ApiResponse.ok(vietQrPaymentService.getPayment(principal.getUserId(), paymentId));
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<CreatePaymentResponse>> create(

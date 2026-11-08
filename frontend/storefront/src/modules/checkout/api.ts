@@ -22,7 +22,7 @@ export async function previewCheckout(
 
 export async function createOrder(payload: {
   addressId: string;
-  paymentMethod: "COD" | "VNPAY";
+  paymentMethod: "COD" | "VIETQR";
   note?: string;
   cartItemIds?: string[];
   buyNowVariantId?: string;
@@ -44,6 +44,17 @@ export async function createVnpayPayment(orderId: string) {
     method: "POST",
     body: JSON.stringify({ orderId }),
   });
+  return result.data;
+}
+
+export async function createVietQrPayment(orderId: string) {
+  const result = await apiFetch<import("@/modules/payment/api").VietQrPaymentResponse>(
+    endpoints.payments.createVietQr,
+    {
+      method: "POST",
+      body: JSON.stringify({ orderId }),
+    },
+  );
   return result.data;
 }
 

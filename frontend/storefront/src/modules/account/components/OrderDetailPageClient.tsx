@@ -7,7 +7,7 @@ import { cancelOrder, getOrderDetail } from "@/modules/account/api";
 import type { OrderResponse } from "@/modules/account/types";
 import { getApiErrorMessage } from "@/lib/api-errors";
 import { getAccessToken } from "@/lib/session";
-import { createVnpayPayment } from "@/modules/checkout/api";
+import { createVietQrPayment } from "@/modules/checkout/api";
 import { getOrderStatusLabel, isInvoiceEligible } from "@/modules/account/order-labels";
 import { CUSTOMER_ORDER_CHANGED_EVENT } from "@/modules/notifications/types";
 import { InvoicePrintLink } from "@/modules/account/components/InvoicePrintLink";
@@ -67,7 +67,7 @@ export function OrderDetailPageClient({ orderId }: { orderId: string }) {
     if (!window.confirm(immediate
       ? "Bạn chắc chắn muốn hủy đơn này?"
       : paid
-        ? "Gửi yêu cầu hủy đơn và hoàn lại toàn bộ tiền qua VNPay?"
+        ? "Gửi yêu cầu hủy đơn và hoàn lại toàn bộ tiền?"
         : "Gửi yêu cầu hủy đơn? Cửa hàng sẽ xem xét và xác nhận.")) return;
     setCancelling(true);
     try {
@@ -85,11 +85,10 @@ export function OrderDetailPageClient({ orderId }: { orderId: string }) {
     setPaying(true);
     setError(null);
     try {
-      const payment = await createVnpayPayment(order.id);
-      sessionStorage.setItem("vnpay-pending-order-id", order.id);
-      window.location.assign(payment.paymentUrl);
+      const payment = await createVietQrPayment(order.id);
+      window.location.assign(`/payment/vietqr/${payment.paymentId}`);
     } catch (err) {
-      setError(getApiErrorMessage(err, "Không thể mở cổng VNPay."));
+      setError(getApiErrorMessage(err, "Không thể tạo mã thanh toán VietQR."));
       setPaying(false);
     }
   };
@@ -97,7 +96,7 @@ export function OrderDetailPageClient({ orderId }: { orderId: string }) {
   const canCancel = order != null
     && ["PENDING_CONFIRMATION", "CONFIRMED", "PACKING"].includes(order.orderStatus);
   const canPay = order?.orderStatus === "PENDING_CONFIRMATION"
-    && order.paymentMethod === "VNPAY" && order.paymentStatus !== "PAID";
+    && order.paymentMethod === "VIETQR" && order.paymentStatus !== "PAID";
   const canPrintInvoice = order != null && isInvoiceEligible(order);
 
   return (
@@ -164,7 +163,7 @@ export function OrderDetailPageClient({ orderId }: { orderId: string }) {
                     disabled={paying}
                     className="inline-flex h-10 items-center justify-center rounded-tl-[18px] rounded-br-[18px] bg-ivy-dark px-5 text-[12px] font-semibold uppercase tracking-[0.05em] text-white disabled:opacity-60"
                   >
-                    {paying ? "Đang mở VNPay..." : "Thanh toán VNPay"}
+                    {paying ? "Đang tạo VietQR..." : "Thanh toán VietQR"}
                   </button>
                 ) : null}
               </div>

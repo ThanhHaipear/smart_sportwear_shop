@@ -110,6 +110,19 @@ public class VietQrPaymentService {
         return toResponse(payment);
     }
 
+    @Transactional(readOnly = true)
+    public CreateVietQrPaymentResponse getPayment(UUID userId, UUID paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
+        Order order = payment.getOrder();
+        if (!order.getUser().getId().equals(userId)
+                || payment.getProvider() != PaymentProvider.BANK_TRANSFER
+                || order.getPaymentMethod() != PaymentMethod.VIETQR) {
+            throw new ResourceNotFoundException("Payment not found");
+        }
+        return toResponse(payment);
+    }
+
     private String generateUniqueReference() {
         for (int attempt = 0; attempt < MAX_REFERENCE_GENERATION_ATTEMPTS; attempt++) {
             StringBuilder reference = new StringBuilder("DH");
@@ -136,6 +149,7 @@ public class VietQrPaymentService {
                 properties.bankBin(),
                 properties.accountNumber(),
                 properties.accountName(),
+                payment.getStatus(),
                 payment.getExpiresAt());
     }
 }

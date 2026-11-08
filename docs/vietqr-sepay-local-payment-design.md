@@ -528,7 +528,7 @@ Nếu rollback, tắt tạo payment VietQR mới nhưng vẫn giữ webhook/reco
 2. **Payment issuance — DONE:** properties, VietQR service/controller/DTO, expiry và financial policy.
 3. **Webhook ingestion — DONE:** raw-body signature verification, bank ledger, idempotency.
 4. **Matching — DONE (trừ realtime notification):** rules, locks, late/duplicate payment handling.
-5. **Storefront:** checkout, trang QR, polling/countdown.
+5. **Storefront — DONE:** checkout VietQR, QR offline, reload owner-only, polling/countdown và resume từ chi tiết đơn.
 6. **Reconciliation:** SePay client, scheduler lock, run history/backoff.
 7. **Admin:** exception queue, manual match/ignore, audit.
 8. **Refund/report:** manual bank refund và reconciliation reporting.

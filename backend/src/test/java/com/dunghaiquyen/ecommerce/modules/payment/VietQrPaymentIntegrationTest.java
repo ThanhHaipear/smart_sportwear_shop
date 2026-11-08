@@ -1,6 +1,7 @@
 package com.dunghaiquyen.ecommerce.modules.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -120,6 +121,34 @@ class VietQrPaymentIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(status().isNotFound());
 
         assertThat(paymentRepository.findAllByOrderIdOrderByCreatedAtDesc(order.getId())).isEmpty();
+    }
+
+    @Test
+    void ownerCanReloadVietQrPaymentButAnotherCustomerCannot() throws Exception {
+        String email = uniqueEmail("vietqr-reload-owner");
+        TokenPair owner = registerUser(email);
+        Order order = saveOrder(email, PaymentMethod.VIETQR);
+        MvcResult created = mockMvc.perform(post("/api/v1/payments/vietqr")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + owner.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"orderId\":\"" + order.getId() + "\"}"))
+                .andExpect(status().isCreated())
+                .andReturn();
+        String paymentId = json(created.getResponse().getContentAsString()).at("/data/paymentId").asText();
+
+        MvcResult detail = mockMvc.perform(get("/api/v1/payments/vietqr/{paymentId}", paymentId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + owner.accessToken()))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(json(detail.getResponse().getContentAsString()).at("/data/status").asText())
+                .isEqualTo("PENDING");
+        assertThat(json(detail.getResponse().getContentAsString()).at("/data/orderId").asText())
+                .isEqualTo(order.getId().toString());
+
+        TokenPair other = registerUser(uniqueEmail("vietqr-reload-other"));
+        mockMvc.perform(get("/api/v1/payments/vietqr/{paymentId}", paymentId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + other.accessToken()))
+                .andExpect(status().isNotFound());
     }
 
     @Test

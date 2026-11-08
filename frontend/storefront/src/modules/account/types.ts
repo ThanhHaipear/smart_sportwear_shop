@@ -52,7 +52,7 @@ export interface OrderResponse {
   orderCode: string;
   orderStatus: string;
   paymentStatus: string;
-  paymentMethod: "COD" | "VNPAY";
+  paymentMethod: "COD" | "VNPAY" | "VIETQR";
   subtotalAmount: number;
   shippingFee: number;
   discountAmount: number;

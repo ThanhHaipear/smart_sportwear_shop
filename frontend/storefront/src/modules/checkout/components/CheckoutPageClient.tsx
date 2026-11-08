@@ -12,11 +12,11 @@ import {
   setDefaultAddress,
   type AddressResponse,
 } from "@/modules/account/api";
-import { createOrder, createVnpayPayment, previewCheckout } from "@/modules/checkout/api";
+import { createOrder, createVietQrPayment, previewCheckout } from "@/modules/checkout/api";
 import { clearCheckoutSelection, loadBuyNowSelection, loadCheckoutSelection } from "@/modules/checkout/selection";
 import type { CheckoutPreviewResponse } from "@/modules/checkout/types";
 
-type PaymentMethod = "COD" | "VNPAY";
+type PaymentMethod = "COD" | "VIETQR";
 
 const EMPTY_ADDRESS_FORM = {
   receiverName: "",
@@ -168,14 +168,13 @@ export function CheckoutPageClient() {
         invoiceCompanyAddress: invoiceForm.requested ? invoiceForm.companyAddress.trim() : undefined,
       });
       clearCheckoutSelection();
-      if (paymentMethod === "VNPAY") {
-        sessionStorage.setItem("vnpay-pending-order-id", order.id);
+      if (paymentMethod === "VIETQR") {
         try {
-          const payment = await createVnpayPayment(order.id);
-          window.location.assign(payment.paymentUrl);
+          const payment = await createVietQrPayment(order.id);
+          router.replace(`/payment/vietqr/${payment.paymentId}`);
         } catch (paymentError) {
           setSuccess(`Đơn ${order.orderCode} đã được tạo và đang giữ hàng.`);
-          setError(getApiErrorMessage(paymentError, "Không thể mở cổng VNPay. Hãy thử thanh toán lại từ đơn hàng."));
+          setError(getApiErrorMessage(paymentError, "Không thể tạo mã VietQR. Hãy thử thanh toán lại từ đơn hàng."));
           router.replace(`/tai-khoan/don-hang/${order.id}`);
         }
         return;
@@ -415,11 +414,11 @@ export function CheckoutPageClient() {
                       <input
                         type="radio"
                         name="payment"
-                        checked={paymentMethod === "VNPAY"}
-                        onChange={() => setPaymentMethod("VNPAY")}
+                        checked={paymentMethod === "VIETQR"}
+                        onChange={() => setPaymentMethod("VIETQR")}
                         className="size-4 accent-ivy-dark"
                       />
-                      <span>Thanh toán qua VNPay</span>
+                      <span>Chuyển khoản ngân hàng qua VietQR</span>
                     </label>
                   </div>
                 </fieldset>
@@ -431,8 +430,8 @@ export function CheckoutPageClient() {
                 >
                   {submitting
                     ? "Đang xử lý..."
-                    : paymentMethod === "VNPAY"
-                      ? "Thanh toán qua VNPay"
+                    : paymentMethod === "VIETQR"
+                      ? "Tạo mã thanh toán VietQR"
                       : "Hoàn tất đặt hàng COD"}
                 </button>
 

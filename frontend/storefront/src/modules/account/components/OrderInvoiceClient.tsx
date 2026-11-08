@@ -13,7 +13,8 @@ const money = (n: number) => `${Math.round(n).toLocaleString("vi-VN")}đ`;
 
 const paymentMethodLabels: Record<string, string> = {
   COD: "Thanh toán khi nhận hàng (COD)",
-  VNPAY: "Chuyển khoản qua VNPay"
+  VNPAY: "Chuyển khoản qua VNPay",
+  VIETQR: "Chuyển khoản VietQR",
 };
 
 const paymentStatusLabels: Record<string, string> = {

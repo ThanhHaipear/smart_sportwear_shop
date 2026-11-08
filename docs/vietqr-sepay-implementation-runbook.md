@@ -6,7 +6,7 @@
 
 Contract chính thức cần đối chiếu khi code: [Webhook SePay](https://docs.sepay.vn/tich-hop-webhooks.html), [HMAC-SHA256](https://developer.sepay.vn/vi/sepay-webhooks/xac-thuc), [API v2 transactions](https://developer.sepay.vn/vi/sepay-api/v2/giao-dich/danh-sach) và [Test Mode](https://docs.sepay.vn/test-mode.html).
 
-**Tiến độ 07/11/2026:** Phase 1–4 đã hoàn thành: migration V9, enum `VIETQR`/`BANK_TRANSFER`, properties fail-fast, API tạo/resume payment VietQR, financial policy/expiry, webhook SePay HMAC-SHA256 và matching idempotent. Unit test và integration test chạy thành công trên PostgreSQL 16 + pgvector với Flyway V1–V9. Feature flags vẫn tắt; reconciliation runtime, storefront và admin exception queue chưa triển khai.
+**Tiến độ 08/11/2026:** Phase 1–5 đã hoàn thành: migration V9, enum `VIETQR`/`BANK_TRANSFER`, properties fail-fast, API tạo/resume/reload payment VietQR, financial policy/expiry, webhook SePay HMAC-SHA256, matching idempotent và storefront VietQR có QR offline, countdown, polling/resume. Targeted integration test chạy thành công trên PostgreSQL 16 + pgvector với Flyway V1–V9; storefront typecheck/lint/build đều xanh. Feature flags đã bật trong môi trường local để kiểm thử; reconciliation runtime và admin exception queue chưa triển khai.
 
 ## 0. Chốt phạm vi để hoàn thành trong ngày
 

@@ -3,7 +3,7 @@ import { endpoints } from "@/lib/endpoints";
 
 export interface PaymentResponse {
   id: string;
-  provider: "COD" | "VNPAY";
+  provider: "COD" | "VNPAY" | "BANK_TRANSFER";
   transactionRef: string;
   amount: number;
   status: "UNPAID" | "PENDING" | "PAID" | "FAILED" | "CANCELLED" | "REFUNDED";
@@ -11,6 +11,28 @@ export interface PaymentResponse {
   bankCode?: string | null;
   paidAt?: string | null;
   createdAt: string;
+}
+
+export type VietQrPaymentStatus = "UNPAID" | "PENDING" | "PAID" | "FAILED" | "CANCELLED" | "REFUNDED";
+
+export interface VietQrPaymentResponse {
+  paymentId: string;
+  orderId: string;
+  transactionRef: string;
+  amount: number;
+  currency: string;
+  bankBin: string;
+  accountNumber: string;
+  accountName: string;
+  status: VietQrPaymentStatus;
+  expiresAt: string;
+}
+
+export async function getVietQrPayment(paymentId: string) {
+  const result = await apiFetch<VietQrPaymentResponse>(endpoints.payments.vietQr(paymentId), {
+    cache: "no-store",
+  });
+  return result.data;
 }
 
 export async function getPaymentsByOrder(orderId: string) {
