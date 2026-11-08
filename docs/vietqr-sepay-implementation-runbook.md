@@ -6,7 +6,7 @@
 
 Contract chính thức cần đối chiếu khi code: [Webhook SePay](https://docs.sepay.vn/tich-hop-webhooks.html), [HMAC-SHA256](https://developer.sepay.vn/vi/sepay-webhooks/xac-thuc), [API v2 transactions](https://developer.sepay.vn/vi/sepay-api/v2/giao-dich/danh-sach) và [Test Mode](https://docs.sepay.vn/test-mode.html).
 
-**Tiến độ 08/11/2026:** Phase 1–5 đã hoàn thành: migration V9, enum `VIETQR`/`BANK_TRANSFER`, properties fail-fast, API tạo/resume/reload payment VietQR, financial policy/expiry, webhook SePay HMAC-SHA256, matching idempotent và storefront VietQR có QR offline, countdown, polling/resume. Targeted integration test chạy thành công trên PostgreSQL 16 + pgvector với Flyway V1–V9; storefront typecheck/lint/build đều xanh. Feature flags đã bật trong môi trường local để kiểm thử; reconciliation runtime và admin exception queue chưa triển khai.
+**Tiến độ 08/11/2026:** Phase 1–5 và luồng hoàn tiền VietQR thủ công đã hoàn thành: migration V9/V11, enum `VIETQR`/`BANK_TRANSFER`, properties fail-fast, API tạo/resume/reload payment VietQR, financial policy/expiry, webhook SePay HMAC-SHA256, matching idempotent, storefront VietQR và yêu cầu hoàn tiền có tài khoản thụ hưởng. Admin chỉ được hoàn tất refund sau khi nhập mã giao dịch thực tế. Storefront/admin lint + typecheck, backend compile và test-compile đều xanh; targeted integration test V11 chờ Docker/Testcontainers hoạt động lại. Feature flags đã bật trong môi trường local để kiểm thử; reconciliation runtime và admin exception queue chưa triển khai.
 
 ## 0. Chốt phạm vi để hoàn thành trong ngày
 
@@ -688,10 +688,10 @@ Trên SePay:
 
 1. Bật **Test Mode** và chọn đúng tài khoản ngân hàng test.
 2. Vào **Tích hợp -> Webhooks -> Thêm webhook**.
-3. Chọn sự kiện **Có tiền vào**, `Content-Type: application/json` và nhập URL tunnel.
+3. Chọn sự kiện **Tất cả** (tiền vào và tiền ra), `Content-Type: application/json` và nhập URL tunnel.
 4. Bật tự động gửi lại khi server trả non-2xx.
 5. Chọn xác thực **HMAC-SHA256**, tạo secret và lưu ngay vào `SEPAY_WEBHOOK_SECRET` vì SePay chỉ hiển thị đầy đủ một lần.
-6. Nếu dùng tiền tố lọc mã thanh toán, đặt `DH`; không bật bỏ qua giao dịch không có mã trong giai đoạn test exception path.
+6. Tắt **Chỉ gửi khi có mã thanh toán** để cùng webhook nhận được cả mã thanh toán `DH...` và mã hoàn `RFD...`; backend tự lọc và lưu trạng thái an toàn. Không cần đổi HMAC secret hiện tại.
 7. Restart backend sau khi đổi `.env`.
 8. Bấm **Gửi thử** và kiểm tra endpoint trả HTTP 201 cùng `{"success":true}`.
 9. Mô phỏng một giao dịch trong Test Mode; xác nhận test event chỉ match đúng payment test.

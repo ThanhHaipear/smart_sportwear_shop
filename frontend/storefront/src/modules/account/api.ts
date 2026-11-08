@@ -4,6 +4,7 @@ import type {
   AddressResponse,
   OrderResponse,
   PagedResult,
+  RefundResponse,
   WishlistResponse,
 } from "@/modules/account/types";
 
@@ -103,10 +104,39 @@ export async function getOrderInvoice(id: string) {
   return result.data;
 }
 
-export async function cancelOrder(id: string, reason?: string) {
+export type RefundDestinationInput = {
+  bankCode: string;
+  bankName: string;
+  accountNumber: string;
+  accountName: string;
+};
+
+export async function cancelOrder(
+  id: string,
+  input?: { reason?: string } & Partial<RefundDestinationInput>,
+) {
   const result = await apiFetch<OrderResponse>(`${endpoints.orders.detail(id)}/cancel`, {
     method: "POST",
-    body: JSON.stringify({ reason: reason || null }),
+    body: JSON.stringify({
+      reason: input?.reason || null,
+      bankCode: input?.bankCode || null,
+      bankName: input?.bankName || null,
+      accountNumber: input?.accountNumber || null,
+      accountName: input?.accountName || null,
+    }),
+  });
+  return result.data;
+}
+
+export async function getOrderRefunds(id: string) {
+  const result = await apiFetch<RefundResponse[]>(endpoints.orders.refunds(id), { cache: "no-store" });
+  return result.data;
+}
+
+export async function updateRefundDestination(id: string, input: RefundDestinationInput) {
+  const result = await apiFetch<RefundResponse>(endpoints.orders.refundDestination(id), {
+    method: "PUT",
+    body: JSON.stringify(input),
   });
   return result.data;
 }
@@ -116,6 +146,7 @@ export type {
   OrderItem,
   OrderResponse,
   PagedResult,
+  RefundResponse,
   WishlistItem,
   WishlistResponse,
 } from "@/modules/account/types";

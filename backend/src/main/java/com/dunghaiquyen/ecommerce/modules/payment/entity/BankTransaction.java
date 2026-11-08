@@ -1,6 +1,7 @@
 package com.dunghaiquyen.ecommerce.modules.payment.entity;
 
 import com.dunghaiquyen.ecommerce.common.entity.AbstractAuditEntity;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.Refund;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -55,6 +56,10 @@ public class BankTransaction extends AbstractAuditEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     private Payment payment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "refund_id")
+    private Refund refund;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "match_status", nullable = false, length = 30)

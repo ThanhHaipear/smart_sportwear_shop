@@ -8,6 +8,7 @@ import com.dunghaiquyen.ecommerce.modules.order.dto.OrderListQuery;
 import com.dunghaiquyen.ecommerce.modules.order.dto.OrderResponse;
 import com.dunghaiquyen.ecommerce.modules.order.service.OrderService;
 import com.dunghaiquyen.ecommerce.modules.returns.dto.RefundResponse;
+import com.dunghaiquyen.ecommerce.modules.returns.dto.UpdateRefundDestinationRequest;
 import com.dunghaiquyen.ecommerce.modules.returns.service.ReturnService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,9 +77,11 @@ public class OrderController {
     public ApiResponse<OrderResponse> cancel(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id,
-            @RequestBody(required = false) CancelOrderRequest request) {
-        String reason = request != null ? request.reason() : null;
-        OrderResponse response = returnService.cancelOwnOrder(id, principal.getUserId(), reason);
+            @Valid @RequestBody(required = false) CancelOrderRequest request) {
+        CancelOrderRequest effective = request != null
+                ? request
+                : new CancelOrderRequest(null, null, null, null, null);
+        OrderResponse response = returnService.cancelOwnOrder(id, principal.getUserId(), effective);
         return ApiResponse.ok(response.paymentStatus() == com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus.PAID
                 ? "Order cancelled; refund is pending"
                 : "Order cancelled", response);
@@ -102,5 +106,15 @@ public class OrderController {
     public ApiResponse<List<RefundResponse>> refunds(
             @AuthenticationPrincipal CustomUserDetails principal, @PathVariable UUID id) {
         return ApiResponse.ok(returnService.listOrderRefunds(id, principal.getUserId()));
+    }
+
+    @PutMapping("/{id}/refund-destination")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ApiResponse<RefundResponse> updateRefundDestination(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateRefundDestinationRequest request) {
+        return ApiResponse.ok("Refund destination updated",
+                returnService.updateRefundDestination(id, principal.getUserId(), request));
     }
 }

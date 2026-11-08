@@ -84,4 +84,16 @@ public class Refund extends AbstractAuditEntity {
 
     @Column(name = "manual_note", columnDefinition = "text")
     private String manualNote;
+
+    @Column(name = "refund_bank_code", length = 20)
+    private String refundBankCode;
+
+    @Column(name = "refund_bank_name", length = 100)
+    private String refundBankName;
+
+    @Column(name = "refund_account_number", length = 30)
+    private String refundAccountNumber;
+
+    @Column(name = "refund_account_name", length = 100)
+    private String refundAccountName;
 }

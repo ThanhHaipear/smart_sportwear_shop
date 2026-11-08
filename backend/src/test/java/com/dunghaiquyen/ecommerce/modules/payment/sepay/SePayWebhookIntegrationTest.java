@@ -14,6 +14,10 @@ import com.dunghaiquyen.ecommerce.modules.payment.entity.BankTransactionSource;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.BankTransactionRepository;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.Refund;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.RefundProvider;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.RefundStatus;
+import com.dunghaiquyen.ecommerce.modules.returns.repository.RefundRepository;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -59,6 +63,9 @@ class SePayWebhookIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private BankTransactionRepository bankTransactionRepository;
+
+    @Autowired
+    private RefundRepository refundRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -164,6 +171,100 @@ class SePayWebhookIntegrationTest extends AbstractIntegrationTest {
         assertThat(bankTransaction.getMatchStatus()).isEqualTo(BankTransactionMatchStatus.IGNORED_OUTGOING);
         assertThat(bankTransaction.getAmount()).isEqualByComparingTo("-10000.00");
         assertThat(bankTransaction.getPayment()).isNull();
+    }
+
+    @Test
+    void signedOutgoingWebhookCompletesMatchingVietQrRefundExactlyOnce() throws Exception {
+        PaymentContext context = createPendingVietQrPayment("sepay-refund");
+        var payment = paymentRepository.findById(context.paymentId()).orElseThrow();
+        payment.setStatus(PaymentStatus.PAID);
+        payment.setPaidAt(Instant.now());
+        paymentRepository.saveAndFlush(payment);
+
+        var order = orderRepository.findById(context.orderId()).orElseThrow();
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        order.setPaymentStatus(PaymentStatus.PAID);
+        orderRepository.saveAndFlush(order);
+
+        Refund refund = new Refund();
+        refund.setOrder(order);
+        refund.setPayment(payment);
+        refund.setRefundCode("RFD2026110800001");
+        refund.setAmount(payment.getAmount());
+        refund.setProvider(RefundProvider.MANUAL);
+        refund.setStatus(RefundStatus.PENDING);
+        refund.setReason("Test outgoing confirmation");
+        refund.setRefundBankCode("MB");
+        refund.setRefundBankName("MB Bank");
+        refund.setRefundAccountNumber("0123456789");
+        refund.setRefundAccountName("TEST CUSTOMER");
+        refund = refundRepository.saveAndFlush(refund);
+
+        long externalId = EXTERNAL_IDS.incrementAndGet();
+        String body = payload(externalId, refund.getRefundCode(), "out", "250000.00", "1326045980");
+        sendSigned(body).andExpect(status().isCreated());
+        MvcResult replay = sendSigned(body).andExpect(status().isCreated()).andReturn();
+
+        assertThat(json(replay.getResponse().getContentAsString()).path("alreadyProcessed").asBoolean()).isTrue();
+        var bankTransaction = bankTransactionRepository.findBySourceAndExternalTransactionId(
+                BankTransactionSource.SEPAY, Long.toString(externalId)).orElseThrow();
+        assertThat(bankTransaction.getMatchStatus()).isEqualTo(BankTransactionMatchStatus.MATCHED);
+        assertThat(bankTransaction.getMatchReason())
+                .isEqualTo("EXACT_REFUND_REFERENCE_ACCOUNT_AMOUNT_MATCH");
+        assertThat(bankTransaction.getAmount()).isEqualByComparingTo("-250000.00");
+        assertThat(bankTransaction.getPayment().getId()).isEqualTo(payment.getId());
+        assertThat(bankTransaction.getRefund().getId()).isEqualTo(refund.getId());
+
+        assertThat(refundRepository.findById(refund.getId()).orElseThrow()).satisfies(completed -> {
+            assertThat(completed.getStatus()).isEqualTo(RefundStatus.COMPLETED);
+            assertThat(completed.getManualReference()).isEqualTo("FT" + externalId);
+            assertThat(completed.getRefundedAt()).isNotNull();
+        });
+        assertThat(paymentRepository.findById(payment.getId()).orElseThrow().getStatus())
+                .isEqualTo(PaymentStatus.REFUNDED);
+        assertThat(orderRepository.findById(order.getId()).orElseThrow().getPaymentStatus())
+                .isEqualTo(PaymentStatus.REFUNDED);
+        assertThat(paymentEventCount(payment.getId())).isEqualTo(1);
+    }
+
+    @Test
+    void outgoingRefundAmountMismatchDoesNotCompleteRefund() throws Exception {
+        PaymentContext context = createPendingVietQrPayment("sepay-refund-mismatch");
+        var payment = paymentRepository.findById(context.paymentId()).orElseThrow();
+        payment.setStatus(PaymentStatus.PAID);
+        payment.setPaidAt(Instant.now());
+        paymentRepository.saveAndFlush(payment);
+        var order = orderRepository.findById(context.orderId()).orElseThrow();
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        order.setPaymentStatus(PaymentStatus.PAID);
+        orderRepository.saveAndFlush(order);
+
+        Refund refund = new Refund();
+        refund.setOrder(order);
+        refund.setPayment(payment);
+        refund.setRefundCode("RFD2026110800002");
+        refund.setAmount(payment.getAmount());
+        refund.setProvider(RefundProvider.MANUAL);
+        refund.setStatus(RefundStatus.PENDING);
+        refund.setReason("Test amount mismatch");
+        refund.setRefundBankCode("MB");
+        refund.setRefundBankName("MB Bank");
+        refund.setRefundAccountNumber("0123456789");
+        refund.setRefundAccountName("TEST CUSTOMER");
+        refund = refundRepository.saveAndFlush(refund);
+
+        long externalId = EXTERNAL_IDS.incrementAndGet();
+        sendSigned(payload(externalId, refund.getRefundCode(), "out", "249999.00", "1326045980"))
+                .andExpect(status().isCreated());
+
+        var bankTransaction = bankTransactionRepository.findBySourceAndExternalTransactionId(
+                BankTransactionSource.SEPAY, Long.toString(externalId)).orElseThrow();
+        assertThat(bankTransaction.getMatchStatus()).isEqualTo(BankTransactionMatchStatus.AMOUNT_MISMATCH);
+        assertThat(bankTransaction.getRefund().getId()).isEqualTo(refund.getId());
+        assertThat(refundRepository.findById(refund.getId()).orElseThrow().getStatus())
+                .isEqualTo(RefundStatus.PENDING);
+        assertThat(paymentRepository.findById(payment.getId()).orElseThrow().getStatus())
+                .isEqualTo(PaymentStatus.PAID);
     }
 
     @Test

@@ -8,7 +8,9 @@ import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderItem;
 import com.dunghaiquyen.ecommerce.modules.order.entity.OrderStatus;
 import com.dunghaiquyen.ecommerce.modules.order.dto.AdminOrderResponse;
+import com.dunghaiquyen.ecommerce.modules.order.dto.CancelOrderRequest;
 import com.dunghaiquyen.ecommerce.modules.order.dto.OrderResponse;
+import com.dunghaiquyen.ecommerce.modules.order.entity.PaymentMethod;
 import com.dunghaiquyen.ecommerce.modules.order.repository.OrderItemRepository;
 import com.dunghaiquyen.ecommerce.modules.order.repository.OrderRepository;
 import com.dunghaiquyen.ecommerce.modules.order.service.OrderService;
@@ -28,6 +30,7 @@ import com.dunghaiquyen.ecommerce.modules.returns.dto.ReturnItemResolutionReques
 import com.dunghaiquyen.ecommerce.modules.returns.dto.ReturnItemResponse;
 import com.dunghaiquyen.ecommerce.modules.returns.dto.ReturnResponse;
 import com.dunghaiquyen.ecommerce.modules.returns.dto.UpdateRefundStatusRequest;
+import com.dunghaiquyen.ecommerce.modules.returns.dto.UpdateRefundDestinationRequest;
 import com.dunghaiquyen.ecommerce.modules.returns.dto.UpdateReturnStatusRequest;
 import com.dunghaiquyen.ecommerce.modules.returns.entity.Refund;
 import com.dunghaiquyen.ecommerce.modules.returns.entity.RefundProvider;
@@ -150,12 +153,18 @@ public class ReturnService {
      * calls, so stock is restored and a refund is created at most once.
      */
     @Transactional
-    public OrderResponse cancelOwnOrder(UUID orderId, UUID customerId, String reason) {
+    public OrderResponse cancelOwnOrder(UUID orderId, UUID customerId, CancelOrderRequest request) {
+        String reason = request.reason();
         OrderResponse response = orderService.cancelOwnOrder(orderId, customerId, reason);
+        if (response.paymentMethod() == PaymentMethod.VIETQR
+                && response.paymentStatus() == PaymentStatus.PAID) {
+            requireCompleteDestination(request.bankCode(), request.bankName(),
+                    request.accountNumber(), request.accountName());
+        }
         User actor = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"))
                 .getUser();
-        ensurePendingCancellationRefund(orderId, reason, actor);
+        ensurePendingCancellationRefund(orderId, reason, actor, request);
         return response;
     }
 
@@ -167,24 +176,43 @@ public class ReturnService {
     }
 
     public void ensurePendingCancellationRefund(UUID orderId, String reason, User actor) {
+        ensurePendingCancellationRefund(orderId, reason, actor, null);
+    }
+
+    private void ensurePendingCancellationRefund(
+            UUID orderId, String reason, User actor, CancelOrderRequest destination) {
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         if (order.getOrderStatus() != OrderStatus.CANCELLED || order.getPaymentStatus() != PaymentStatus.PAID) {
             return;
         }
-        if (refundRepository.existsByOrderIdAndStatusIn(orderId,
-                Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING, RefundStatus.COMPLETED))) {
+        var existingRefund = refundRepository.findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(orderId,
+                Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING, RefundStatus.COMPLETED));
+        if (existingRefund.isPresent()) {
+            if (destination != null && existingRefund.get().getStatus() == RefundStatus.PENDING
+                    && hasCompleteDestination(destination.bankCode(), destination.bankName(),
+                            destination.accountNumber(), destination.accountName())) {
+                applyDestination(existingRefund.get(), destination.bankCode(), destination.bankName(),
+                        destination.accountNumber(), destination.accountName());
+                refundRepository.save(existingRefund.get());
+            }
             return;
         }
         Payment payment = null;
         RefundProvider provider = RefundProvider.MANUAL;
         BigDecimal amount = order.getTotalAmount();
-        if (order.getPaymentMethod() == com.dunghaiquyen.ecommerce.modules.order.entity.PaymentMethod.VNPAY) {
+        PaymentProvider paymentProvider = switch (order.getPaymentMethod()) {
+            case VNPAY -> PaymentProvider.VNPAY;
+            case VIETQR -> PaymentProvider.BANK_TRANSFER;
+            default -> null;
+        };
+        if (paymentProvider != null) {
             payment = paymentRepository
-                    .findFirstByOrderIdAndStatusOrderByCreatedAtDesc(orderId, PaymentStatus.PAID)
+                    .findFirstByOrderIdAndProviderAndStatusOrderByCreatedAtDesc(
+                            orderId, paymentProvider, PaymentStatus.PAID)
                     .orElseThrow(() -> new BusinessRuleException(HttpStatus.CONFLICT,
-                            "Paid VNPay transaction not found"));
-            provider = RefundProvider.VNPAY;
+                            "Paid transaction not found"));
+            provider = paymentProvider == PaymentProvider.VNPAY ? RefundProvider.VNPAY : RefundProvider.MANUAL;
             amount = payment.getAmount();
         }
         Refund refund = new Refund();
@@ -196,6 +224,11 @@ public class ReturnService {
         refund.setStatus(RefundStatus.PENDING);
         refund.setReason(reason == null || reason.isBlank() ? "Cancelled order" : reason.trim());
         refund.setCreatedBy(actor);
+        if (destination != null && hasCompleteDestination(destination.bankCode(), destination.bankName(),
+                destination.accountNumber(), destination.accountName())) {
+            applyDestination(refund, destination.bankCode(), destination.bankName(),
+                    destination.accountNumber(), destination.accountName());
+        }
         refund = saveRefundWithCodeRetry(refund);
         if (actor != null) {
             auditLogService.record(actor, "CANCELLATION_REFUND_CREATED", "Refund", refund.getId().toString(), null,
@@ -505,6 +538,12 @@ public class ReturnService {
             throw new BusinessRuleException(
                     HttpStatus.CONFLICT, "Cannot transition refund from " + current + " to " + request.status());
         }
+        if (request.status() == RefundStatus.COMPLETED
+                && refund.getReturnRequest() == null
+                && refund.getProvider() == RefundProvider.MANUAL) {
+            throw new BusinessRuleException(HttpStatus.CONFLICT,
+                    "Manual cancellation refunds must be completed with a transfer reference");
+        }
         refund.setStatus(request.status());
         if (request.status() == RefundStatus.COMPLETED) {
             refund.setRefundedAt(Instant.now());
@@ -518,71 +557,6 @@ public class ReturnService {
             syncCompletedRefund(refund);
         }
 
-        return toRefundResponse(refund);
-    }
-
-    /**
-     * Completes a cancellation refund from the admin decision itself.
-     *
-     * <p>The project does not have a production VNPay refund API, so the admin
-     * approval is the operational proof that the money was returned outside the
-     * system. Persist it as a completed MANUAL refund and finalize the order in
-     * the same transaction instead of leaving its lifecycle waiting on a gateway.
-     */
-    @Transactional
-    public RefundResponse refundCancellation(UUID orderId, String reason, User actor, String ipAddress) {
-        Order order = orderRepository.findByIdForUpdate(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        if (order.getOrderStatus() != OrderStatus.CANCELLED) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "Order must be cancelled before refund");
-        }
-        var activeRefund = refundRepository.findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(orderId,
-                Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING, RefundStatus.COMPLETED));
-        if (activeRefund.isPresent() && activeRefund.get().getStatus() == RefundStatus.COMPLETED) {
-            return toRefundResponse(activeRefund.get());
-        }
-        if (!Set.of(PaymentStatus.PAID, PaymentStatus.PARTIALLY_REFUNDED)
-                .contains(order.getPaymentStatus())) {
-            throw new BusinessRuleException(HttpStatus.CONFLICT, "A paid order is required for cancellation refund");
-        }
-        if (activeRefund.isPresent()) {
-            Refund existing = activeRefund.get();
-            // Also close refunds created by the former gateway-based flow, so
-            // old PENDING/PROCESSING orders do not remain stuck forever.
-            if (existing.getStatus() != RefundStatus.COMPLETED) {
-                existing.setProvider(RefundProvider.MANUAL);
-                existing.setStatus(RefundStatus.COMPLETED);
-                existing.setManualReference("ADMIN-APPROVED-" + order.getOrderCode());
-                existing.setManualNote("Admin approval represents a completed out-of-band refund");
-                existing.setRefundedAt(Instant.now());
-                existing = refundRepository.save(existing);
-            }
-            syncCompletedRefund(existing);
-            return toRefundResponse(existing);
-        }
-
-        Payment payment = paymentRepository
-                .findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
-                        orderId, Set.of(PaymentStatus.PAID, PaymentStatus.PARTIALLY_REFUNDED))
-                .orElseThrow(() -> new BusinessRuleException(HttpStatus.CONFLICT,
-                        "Paid transaction not found"));
-
-        Refund refund = new Refund();
-        refund.setOrder(order);
-        refund.setPayment(payment);
-        refund.setRefundCode(generateCode("RFD"));
-        refund.setAmount(payment.getAmount());
-        refund.setProvider(RefundProvider.MANUAL);
-        refund.setStatus(RefundStatus.COMPLETED);
-        refund.setReason(reason == null || reason.isBlank() ? "Customer cancellation request" : reason.trim());
-        refund.setCreatedBy(actor);
-        refund.setManualReference("ADMIN-APPROVED-" + order.getOrderCode());
-        refund.setManualNote("Admin approval represents a completed out-of-band refund");
-        refund.setRefundedAt(Instant.now());
-        refund = saveRefundWithCodeRetry(refund);
-        auditLogService.record(actor, "CANCELLATION_REFUND_COMPLETE", "Refund", refund.getId().toString(), null,
-                Map.of("orderId", orderId.toString(), "status", refund.getStatus().name(), "mode", "ADMIN_APPROVAL"));
-        syncCompletedRefund(refund);
         return toRefundResponse(refund);
     }
 
@@ -604,6 +578,30 @@ public class ReturnService {
         return refundRepository.findAllByOrderIdOrderByCreatedAtDesc(orderId).stream()
                 .map(this::toRefundResponse)
                 .toList();
+    }
+
+    @Transactional
+    public RefundResponse updateRefundDestination(
+            UUID orderId, UUID customerId, UpdateRefundDestinationRequest request) {
+        Order order = orderRepository.findByIdForUpdate(orderId)
+                .filter(candidate -> candidate.getUser().getId().equals(customerId))
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        if (order.getPaymentMethod() != PaymentMethod.VIETQR) {
+            throw new BusinessRuleException(
+                    HttpStatus.UNPROCESSABLE_ENTITY, "Refund destination is only used for VietQR orders");
+        }
+        Refund refund = refundRepository.findFirstByOrderIdAndStatusInOrderByCreatedAtDesc(
+                        orderId, Set.of(RefundStatus.PENDING))
+                .orElseThrow(() -> new BusinessRuleException(
+                        HttpStatus.CONFLICT, "No editable pending refund exists for this order"));
+        applyDestination(refund, request.bankCode(), request.bankName(),
+                request.accountNumber(), request.accountName());
+        refund = refundRepository.save(refund);
+        auditLogService.record(order.getUser(), "REFUND_DESTINATION_UPDATE", "Refund",
+                refund.getId().toString(), null,
+                Map.of("bankCode", refund.getRefundBankCode(),
+                        "accountLast4", lastFour(refund.getRefundAccountNumber())));
+        return toRefundResponse(refund);
     }
 
     @Transactional
@@ -653,11 +651,18 @@ public class ReturnService {
     public RefundResponse confirmManualRefund(UUID refundId, ConfirmManualRefundRequest request, User actor) {
         Refund refund = refundRepository.findByIdForUpdate(refundId)
                 .orElseThrow(() -> new ResourceNotFoundException("Refund not found"));
+        if (refund.getProvider() != RefundProvider.MANUAL) {
+            throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY, "Refund is not a manual refund");
+        }
         if (refund.getStatus() == RefundStatus.COMPLETED) {
             return toRefundResponse(refund);
         }
         if (refund.getStatus() == RefundStatus.CANCELLED) {
             throw new BusinessRuleException(HttpStatus.CONFLICT, "Refund has been cancelled");
+        }
+        if (refund.getOrder().getPaymentMethod() == PaymentMethod.VIETQR) {
+            requireCompleteDestination(refund.getRefundBankCode(), refund.getRefundBankName(),
+                    refund.getRefundAccountNumber(), refund.getRefundAccountName());
         }
         refund.setManualReference(request.reference().trim());
         refund.setManualNote(request.note() == null || request.note().isBlank() ? null : request.note().trim());
@@ -668,6 +673,35 @@ public class ReturnService {
                 Map.of("reference", refund.getManualReference(), "amount", refund.getAmount().toString()));
         syncCompletedRefund(refund);
         return toRefundResponse(refund);
+    }
+
+    /**
+     * Completes a manual VietQR refund only after a signed SePay debit has
+     * already been matched by refund code, source account and exact amount.
+     * The bank transaction ledger is the system audit trail for this path.
+     */
+    @Transactional
+    public Refund completeManualRefundFromBankTransaction(
+            UUID refundId, String bankReference, Instant transactionTime) {
+        Refund refund = refundRepository.findByIdForUpdate(refundId)
+                .orElseThrow(() -> new ResourceNotFoundException("Refund not found"));
+        if (refund.getProvider() != RefundProvider.MANUAL
+                || !Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING).contains(refund.getStatus())) {
+            throw new BusinessRuleException(HttpStatus.CONFLICT, "Refund is not awaiting a manual bank transfer");
+        }
+        if (refund.getOrder().getPaymentMethod() != PaymentMethod.VIETQR) {
+            throw new BusinessRuleException(HttpStatus.CONFLICT, "Refund is not for a VietQR order");
+        }
+        requireCompleteDestination(refund.getRefundBankCode(), refund.getRefundBankName(),
+                refund.getRefundAccountNumber(), refund.getRefundAccountName());
+
+        refund.setManualReference(bankReference);
+        refund.setManualNote("Automatically confirmed from a signed SePay outgoing transaction");
+        refund.setStatus(RefundStatus.COMPLETED);
+        refund.setRefundedAt(transactionTime);
+        refund = refundRepository.save(refund);
+        syncCompletedRefund(refund);
+        return refund;
     }
 
     private void syncCompletedRefund(Refund refund) {
@@ -818,9 +852,44 @@ public class ReturnService {
                 refund.getGatewayTransactionNo(),
                 refund.getManualReference(),
                 refund.getManualNote(),
+                refund.getRefundBankCode(),
+                refund.getRefundBankName(),
+                refund.getRefundAccountNumber(),
+                refund.getRefundAccountName(),
                 refund.getReason(),
                 refund.getRefundedAt(),
                 refund.getCreatedAt(),
                 refund.getUpdatedAt());
+    }
+
+    private void applyDestination(
+            Refund refund, String bankCode, String bankName, String accountNumber, String accountName) {
+        requireCompleteDestination(bankCode, bankName, accountNumber, accountName);
+        refund.setRefundBankCode(bankCode.trim().toUpperCase(java.util.Locale.ROOT));
+        refund.setRefundBankName(bankName.trim());
+        refund.setRefundAccountNumber(accountNumber.trim());
+        refund.setRefundAccountName(accountName.trim().toUpperCase(java.util.Locale.forLanguageTag("vi")));
+    }
+
+    private void requireCompleteDestination(
+            String bankCode, String bankName, String accountNumber, String accountName) {
+        if (!hasCompleteDestination(bankCode, bankName, accountNumber, accountName)) {
+            throw new BusinessRuleException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Bank name, account number and account holder are required for a VietQR refund");
+        }
+    }
+
+    private boolean hasCompleteDestination(
+            String bankCode, String bankName, String accountNumber, String accountName) {
+        return bankCode != null && !bankCode.isBlank()
+                && bankName != null && !bankName.isBlank()
+                && accountNumber != null && !accountNumber.isBlank()
+                && accountName != null && !accountName.isBlank();
+    }
+
+    private String lastFour(String accountNumber) {
+        return accountNumber.length() <= 4
+                ? accountNumber
+                : accountNumber.substring(accountNumber.length() - 4);
     }
 }

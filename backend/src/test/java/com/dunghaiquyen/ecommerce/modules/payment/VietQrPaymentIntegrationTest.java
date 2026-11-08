@@ -2,7 +2,9 @@ package com.dunghaiquyen.ecommerce.modules.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dunghaiquyen.ecommerce.AbstractIntegrationTest;
@@ -12,7 +14,10 @@ import com.dunghaiquyen.ecommerce.modules.order.repository.OrderRepository;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentProvider;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.RefundStatus;
+import com.dunghaiquyen.ecommerce.modules.returns.repository.RefundRepository;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,6 +44,9 @@ class VietQrPaymentIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private RefundRepository refundRepository;
 
     @Test
     void endpointCreatesThenResumesTheSamePendingPayment() throws Exception {
@@ -162,6 +170,95 @@ class VietQrPaymentIntegrationTest extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"orderId\":\"" + order.getId() + "\"}"))
                 .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void paidVietQrCancellationRequiresDestinationAndCompletesOnlyAfterManualConfirmation() throws Exception {
+        String email = uniqueEmail("vietqr-refund-owner");
+        TokenPair owner = registerUser(email);
+        Order order = saveOrder(email, PaymentMethod.VIETQR);
+        MvcResult created = mockMvc.perform(post("/api/v1/payments/vietqr")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + owner.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"orderId\":\"" + order.getId() + "\"}"))
+                .andExpect(status().isCreated())
+                .andReturn();
+        UUID paymentId = UUID.fromString(json(created.getResponse().getContentAsString())
+                .at("/data/paymentId").asText());
+        var payment = paymentRepository.findById(paymentId).orElseThrow();
+        payment.setStatus(PaymentStatus.PAID);
+        payment.setPaidAt(Instant.now());
+        paymentRepository.saveAndFlush(payment);
+        order.setPaymentStatus(PaymentStatus.PAID);
+        orderRepository.saveAndFlush(order);
+
+        mockMvc.perform(post("/api/v1/orders/{id}/cancel", order.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + owner.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"reason\":\"Changed my mind\"}"))
+                .andExpect(status().isUnprocessableEntity());
+        assertThat(orderRepository.findById(order.getId()).orElseThrow().getOrderStatus().name())
+                .isEqualTo("PENDING_CONFIRMATION");
+        assertThat(refundRepository.findAllByOrderIdOrderByCreatedAtDesc(order.getId())).isEmpty();
+
+        String cancellation = """
+                {"reason":"Changed my mind","bankCode":"MB","bankName":"MB Bank",
+                 "accountNumber":"0123456789","accountName":"LE THANH HAI"}
+                """;
+        mockMvc.perform(post("/api/v1/orders/{id}/cancel", order.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + owner.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(cancellation))
+                .andExpect(status().isOk());
+
+        var refund = refundRepository.findAllByOrderIdOrderByCreatedAtDesc(order.getId())
+                .stream().findFirst().orElseThrow();
+        assertThat(refund.getStatus()).isEqualTo(RefundStatus.PENDING);
+        assertThat(refund.getAmount()).isEqualByComparingTo(payment.getAmount());
+        assertThat(refund.getPayment().getId()).isEqualTo(paymentId);
+        assertThat(refund.getRefundBankCode()).isEqualTo("MB");
+        assertThat(refund.getRefundAccountNumber()).isEqualTo("0123456789");
+        assertThat(paymentRepository.findById(paymentId).orElseThrow().getStatus()).isEqualTo(PaymentStatus.PAID);
+
+        TokenPair stranger = registerUser(uniqueEmail("vietqr-refund-stranger"));
+        mockMvc.perform(put("/api/v1/orders/{id}/refund-destination", order.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + stranger.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"bankCode\":\"VCB\",\"bankName\":\"Vietcombank\"," +
+                                "\"accountNumber\":\"9999999999\",\"accountName\":\"OTHER USER\"}"))
+                .andExpect(status().isNotFound());
+
+        MvcResult updatedDestination = mockMvc.perform(put("/api/v1/orders/{id}/refund-destination", order.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + owner.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"bankCode\":\"VCB\",\"bankName\":\"Vietcombank\"," +
+                                "\"accountNumber\":\"001234567890\",\"accountName\":\"LE THANH HAI\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(json(updatedDestination.getResponse().getContentAsString())
+                .at("/data/refundAccountNumber").asText()).isEqualTo("001234567890");
+
+        String adminToken = registerAdminAndGetAccessToken(uniqueEmail("vietqr-refund-admin"));
+        mockMvc.perform(patch("/api/v1/admin/refunds/{id}/status", refund.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"status\":\"COMPLETED\"}"))
+                .andExpect(status().isConflict());
+        assertThat(refundRepository.findById(refund.getId()).orElseThrow().getStatus())
+                .isEqualTo(RefundStatus.PENDING);
+
+        mockMvc.perform(post("/api/v1/admin/refunds/{id}/manual-confirmation", refund.getId())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"reference\":\"MB-REFUND-0001\",\"note\":\"Transferred manually\"}"))
+                .andExpect(status().isOk());
+
+        assertThat(refundRepository.findById(refund.getId()).orElseThrow().getStatus())
+                .isEqualTo(RefundStatus.COMPLETED);
+        assertThat(paymentRepository.findById(paymentId).orElseThrow().getStatus())
+                .isEqualTo(PaymentStatus.REFUNDED);
+        assertThat(orderRepository.findById(order.getId()).orElseThrow().getPaymentStatus())
+                .isEqualTo(PaymentStatus.REFUNDED);
     }
 
     private Order saveOrder(String email, PaymentMethod paymentMethod) {

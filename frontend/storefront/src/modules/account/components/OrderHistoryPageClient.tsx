@@ -61,19 +61,14 @@ export function OrderHistoryPageClient() {
   const handleCancel = async (id: string) => {
     const target = orders.find((order) => order.id === id);
     if (!target) return;
-    const paid = target.paymentStatus === "PAID";
-    if (!window.confirm(paid
-      ? "Hủy đơn ngay? Giao dịch hoàn tiền VNPay sẽ được tạo để cửa hàng xử lý."
-      : "Bạn chắc chắn muốn hủy đơn này?")) return;
+    if (!window.confirm("Bạn chắc chắn muốn hủy đơn này?")) return;
     setCancellingId(id);
     setError(null);
     setSuccess(null);
     try {
-      await cancelOrder(id, paid ? "Khách hàng yêu cầu hủy và hoàn tiền" : "Khách hàng yêu cầu hủy");
+      await cancelOrder(id, { reason: "Khách hàng yêu cầu hủy" });
       await loadOrders();
-      setSuccess(paid
-        ? "Đơn hàng đã được hủy. Giao dịch hoàn tiền VNPay đang chờ cửa hàng xử lý."
-        : "Đơn hàng đã được hủy.");
+      setSuccess("Đơn hàng đã được hủy.");
     } catch (err) {
       setError(getApiErrorMessage(err, "Không thể hủy đơn hàng."));
     } finally {
@@ -138,7 +133,14 @@ export function OrderHistoryPageClient() {
                           className="inline-flex h-10 items-center justify-center rounded-tl-[18px] rounded-br-[18px] border border-ivy-dark px-5 text-[12px] font-semibold uppercase tracking-[0.05em] text-ivy-dark"
                         />
                       ) : null}
-                      {canCancel(order) ? (
+                      {canCancel(order) && order.paymentStatus === "PAID" && order.paymentMethod === "VIETQR" ? (
+                        <Link
+                          href={`/tai-khoan/don-hang/${order.id}`}
+                          className="inline-flex h-10 items-center justify-center rounded-tl-[18px] rounded-br-[18px] border border-ivy-dark px-5 text-[12px] font-semibold uppercase tracking-[0.05em] text-ivy-dark"
+                        >
+                          Yêu cầu hoàn tiền
+                        </Link>
+                      ) : canCancel(order) ? (
                         <button
                           type="button"
                           onClick={() => void handleCancel(order.id)}
@@ -147,11 +149,7 @@ export function OrderHistoryPageClient() {
                         >
                           {cancellingId === order.id
                             ? "Đang xử lý..."
-                            : order.orderStatus === "PENDING_CONFIRMATION" && order.paymentStatus !== "PAID"
-                              ? "Hủy đơn"
-                            : order.paymentStatus === "PAID"
-                                ? "Hủy đơn & hoàn tiền"
-                                : "Hủy đơn"}
+                            : "Hủy đơn"}
                         </button>
                       ) : null}
                     </div>

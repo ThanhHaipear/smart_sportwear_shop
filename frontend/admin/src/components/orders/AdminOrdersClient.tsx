@@ -119,6 +119,20 @@ const OrderRow = memo(function OrderRow({
                   {refund.refundCode} · {refund.provider} · {Math.round(refund.amount).toLocaleString("vi-VN")}₫ · <strong>{refund.status}</strong>
                   {refund.gatewayTransactionNo ? ` · GD: ${refund.gatewayTransactionNo}` : ""}
                 </span>
+                {refund.refundAccountNumber ? (
+                  <span className="table-subtle">
+                    Nhận hoàn: <strong>{refund.refundBankName}</strong> · {refund.refundAccountNumber} · {refund.refundAccountName}
+                  </span>
+                ) : refund.provider === "MANUAL" ? (
+                  <span className="table-subtle" style={{ color: "#b45309" }}>Khách chưa cung cấp tài khoản nhận hoàn.</span>
+                ) : null}
+                {refund.provider === "MANUAL"
+                  && refund.refundAccountNumber
+                  && ["PENDING", "PROCESSING"].includes(refund.status) ? (
+                    <span className="table-subtle" style={{ color: "#166534" }}>
+                      Chuyển đúng số tiền và nhập nội dung <strong>{refund.refundCode}</strong>; SePay sẽ tự xác nhận giao dịch tiền ra.
+                    </span>
+                  ) : null}
                 {refund.provider === "VNPAY" && ["PENDING", "PROCESSING"].includes(refund.status) ? (
                   <button className="admin-btn secondary" type="button" onClick={() => onRefreshRefund(refund.id)} disabled={savingId === `refresh-refund:${refund.id}`}>
                     {savingId === `refresh-refund:${refund.id}`
@@ -126,7 +140,7 @@ const OrderRow = memo(function OrderRow({
                       : refund.status === "PENDING" ? "Gửi hoàn tiền VNPay" : "Kiểm tra VNPay"}
                   </button>
                 ) : null}
-                {!['COMPLETED', 'CANCELLED'].includes(refund.status) ? (
+                {refund.provider === "MANUAL" && !['COMPLETED', 'CANCELLED'].includes(refund.status) ? (
                   <button className="admin-btn secondary" type="button" onClick={() => onManualConfirmRefund(refund)} disabled={savingId === `manual-refund:${refund.id}`}>
                     {savingId === `manual-refund:${refund.id}` ? "Đang xác nhận..." : "Xác nhận đã hoàn thủ công"}
                   </button>
@@ -321,6 +335,10 @@ export function AdminOrdersClient({
   }
 
   async function handleManualConfirmRefund(orderId: string, refund: OrderRefundResponse) {
+    if (refund.provider === "MANUAL" && !refund.refundAccountNumber) {
+      setMessage("Chưa thể xác nhận: khách hàng chưa cung cấp tài khoản nhận hoàn.");
+      return;
+    }
     const reference = window.prompt("Nhập mã giao dịch chuyển khoản/biên nhận hoàn tiền:")?.trim();
     if (!reference) { setMessage("Cần nhập mã giao dịch hoặc biên nhận để xác nhận hoàn tiền."); return; }
     const note = window.prompt("Ghi chú hoàn tiền (không bắt buộc):")?.trim();

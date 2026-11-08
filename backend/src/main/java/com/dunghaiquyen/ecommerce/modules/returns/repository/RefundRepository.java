@@ -29,6 +29,10 @@ public interface RefundRepository extends JpaRepository<Refund, UUID>, JpaSpecif
     @Query("select r from Refund r where r.id = :id")
     Optional<Refund> findByIdForUpdate(@Param("id") UUID id);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select r from Refund r where r.refundCode = :refundCode")
+    Optional<Refund> findByRefundCodeForUpdate(@Param("refundCode") String refundCode);
+
     @Query("select coalesce(sum(r.amount), 0) from Refund r where r.order.id = :orderId and r.status = com.dunghaiquyen.ecommerce.modules.returns.entity.RefundStatus.COMPLETED")
     BigDecimal sumCompletedAmountByOrderId(@Param("orderId") UUID orderId);
 

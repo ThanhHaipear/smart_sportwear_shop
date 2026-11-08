@@ -10,7 +10,6 @@ import com.dunghaiquyen.ecommerce.modules.order.dto.CancelOrderRequest;
 import com.dunghaiquyen.ecommerce.modules.order.service.OrderService;
 import com.dunghaiquyen.ecommerce.modules.returns.dto.RefundResponse;
 import com.dunghaiquyen.ecommerce.modules.returns.service.ReturnService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -68,18 +67,6 @@ public class AdminOrderController {
     @GetMapping("/{id}/refunds")
     public ApiResponse<List<RefundResponse>> refunds(@PathVariable UUID id) {
         return ApiResponse.ok(returnService.listOrderRefundsForAdmin(id));
-    }
-
-    /** Completes the refund work item created when a paid order was cancelled. */
-    @PostMapping("/{id}/cancellation-refund")
-    public ApiResponse<Object> refundCancellation(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @PathVariable UUID id,
-            HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        RefundResponse response = returnService.refundCancellation(
-                id, "Refund for cancelled order", principal.getUser(), ipAddress);
-        return ApiResponse.ok("Cancellation refund completed", response);
     }
 
     /** Cancels immediately; a paid order gets a separate pending refund. */

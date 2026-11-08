@@ -101,7 +101,7 @@ Triển khai bằng migration mới `V9__add_vietqr_bank_reconciliation.sql`; kh
 | `external_transaction_uuid` | `uuid` | UUID trong SePay API v2, nullable khi record đến từ webhook trước |
 | `bank_reference` | `varchar(150)` | mã giao dịch phía ngân hàng, nullable |
 | `account_number` | `varchar(50)` | tài khoản nhận; không trả ra API customer |
-| `amount` | `numeric(14,2)` | chuẩn hóa tiền vào dương, tiền ra âm; chỉ `transfer_type=in` và amount dương được match |
+| `amount` | `numeric(14,2)` | chuẩn hóa tiền vào dương, tiền ra âm; tiền vào match payment `DH...`, tiền ra match refund `RFD...` theo các điều kiện chặt chẽ |
 | `description` | `text` | nội dung đã nhận từ ngân hàng |
 | `transaction_time` | `timestamptz` | thời điểm ngân hàng/SePay cung cấp |
 | `running_balance` | `numeric(18,2)` | nullable |
@@ -437,7 +437,13 @@ Proxy phải trả `404` cho mọi route/phương thức ngoài
 ## 13. Refund và báo cáo
 
 - Bank transfer refund đợt đầu dùng `RefundProvider.MANUAL`.
+- Khi khách hủy đơn VietQR đã thanh toán, request bắt buộc có ngân hàng, số tài khoản và tên chủ tài khoản; số tiền không nhận từ browser mà lấy từ payment đã thu.
+- Thông tin thụ hưởng được lưu trên refund `PENDING`; khách sở hữu đơn được xem và sửa khi refund còn `PENDING`, người dùng khác nhận `404`.
+- Admin nhìn thấy thông tin thụ hưởng nhưng không được đánh dấu `COMPLETED` bằng status endpoint chung. Luồng thủ công bắt buộc nhập mã giao dịch/biên nhận qua endpoint xác nhận riêng.
 - Admin nhập mã giao dịch/biên nhận sau khi thực sự hoàn tiền.
+- Webhook hiện nhận cả `in` và `out`. Giao dịch `out` chỉ tự động hoàn tất refund khi cùng lúc khớp tài khoản nguồn đã cấu hình, mã `RFD...`, đúng tuyệt đối số tiền và refund còn `PENDING/PROCESSING`.
+- Giao dịch tiền ra không có mã `RFD...` vẫn được lưu idempotent với `IGNORED_OUTGOING`; sai tiền thành `AMOUNT_MISMATCH`; refund đã xử lý hoặc thiếu dữ liệu thụ hưởng thành `MANUAL_REVIEW`.
+- SePay xác nhận tiền đã rời tài khoản nguồn nhưng payload không phải bằng chứng độc lập về tài khoản người nhận. Vì vậy nhân viên phải chuyển đúng thông tin thụ hưởng đang hiển thị và nhập nguyên mã `RFD...` vào nội dung chuyển khoản. Xác nhận thủ công có mã biên nhận vẫn là fallback.
 - Tổng refund `PENDING/PROCESSING/COMPLETED` không vượt số tiền đã thu.
 - `gross_collected` lấy mọi payment thực thu, kể cả thu trùng/thu muộn.
 - `sales` chỉ ghi order một lần khi đủ điều kiện.
@@ -469,7 +475,9 @@ Proxy phải trả `404` cho mọi route/phương thức ngoài
 - sai account -> `MANUAL_REVIEW`;
 - không reference -> `UNMATCHED`;
 - nhiều reference -> `AMBIGUOUS`;
-- amount âm/0 -> `IGNORED_OUTGOING`;
+- tiền ra khớp `RFD...` + account + amount -> refund/payment/order `REFUNDED` đúng một lần;
+- tiền ra không có mã refund -> `IGNORED_OUTGOING`;
+- tiền ra đúng mã nhưng sai amount -> `AMOUNT_MISMATCH`, refund vẫn chờ;
 - order cancelled -> `LATE_PAYMENT` và refund liability đúng một lần;
 - order đã paid nhận lần hai -> duplicate collection, sales không cộng hai lần.
 

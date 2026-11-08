@@ -18,6 +18,11 @@ import com.dunghaiquyen.ecommerce.modules.payment.repository.BankTransactionRepo
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentEventRepository;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
 import com.dunghaiquyen.ecommerce.modules.payment.sepay.dto.SePayWebhookRequest;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.Refund;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.RefundProvider;
+import com.dunghaiquyen.ecommerce.modules.returns.entity.RefundStatus;
+import com.dunghaiquyen.ecommerce.modules.returns.repository.RefundRepository;
+import com.dunghaiquyen.ecommerce.modules.returns.service.ReturnService;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -48,11 +53,15 @@ public class BankTransactionIngestionService {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final Pattern PAYMENT_REFERENCE =
             Pattern.compile("(?<![A-Z0-9])DH[A-Z0-9]{10}(?![A-Z0-9])");
+    private static final Pattern REFUND_REFERENCE =
+            Pattern.compile("(?<![A-Z0-9])RFD[0-9]{13}(?![A-Z0-9])");
 
     private final BankTransactionRepository bankTransactionRepository;
     private final PaymentRepository paymentRepository;
     private final PaymentEventRepository paymentEventRepository;
     private final OrderRepository orderRepository;
+    private final RefundRepository refundRepository;
+    private final ReturnService returnService;
     private final AppVietQrProperties vietQrProperties;
     private final JdbcTemplate jdbcTemplate;
 
@@ -61,12 +70,16 @@ public class BankTransactionIngestionService {
             PaymentRepository paymentRepository,
             PaymentEventRepository paymentEventRepository,
             OrderRepository orderRepository,
+            RefundRepository refundRepository,
+            ReturnService returnService,
             AppVietQrProperties vietQrProperties,
             JdbcTemplate jdbcTemplate) {
         this.bankTransactionRepository = bankTransactionRepository;
         this.paymentRepository = paymentRepository;
         this.paymentEventRepository = paymentEventRepository;
         this.orderRepository = orderRepository;
+        this.refundRepository = refundRepository;
+        this.returnService = returnService;
         this.vietQrProperties = vietQrProperties;
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -103,12 +116,16 @@ public class BankTransactionIngestionService {
     }
 
     private void match(BankTransaction transaction, SePayWebhookRequest request) {
-        if (!"in".equals(request.transferType()) || transaction.getAmount().signum() <= 0) {
-            reject(transaction, BankTransactionMatchStatus.IGNORED_OUTGOING, "OUTGOING_TRANSACTION");
-            return;
-        }
         if (!vietQrProperties.accountNumber().equals(transaction.getAccountNumber())) {
             reject(transaction, BankTransactionMatchStatus.MANUAL_REVIEW, "ACCOUNT_MISMATCH");
+            return;
+        }
+        if ("out".equals(request.transferType()) && transaction.getAmount().signum() < 0) {
+            matchOutgoingRefund(transaction, request);
+            return;
+        }
+        if (!"in".equals(request.transferType()) || transaction.getAmount().signum() <= 0) {
+            reject(transaction, BankTransactionMatchStatus.MANUAL_REVIEW, "INVALID_TRANSFER_DIRECTION");
             return;
         }
 
@@ -180,6 +197,57 @@ public class BankTransactionIngestionService {
         savePaymentEvent(payment, request, transaction.getRawPayloadRedacted());
     }
 
+    private void matchOutgoingRefund(BankTransaction transaction, SePayWebhookRequest request) {
+        ReferenceResult reference = extractReference(request, REFUND_REFERENCE);
+        if (reference.ambiguous()) {
+            reject(transaction, BankTransactionMatchStatus.AMBIGUOUS, "MULTIPLE_REFUND_REFERENCES");
+            return;
+        }
+        if (reference.value() == null) {
+            reject(transaction, BankTransactionMatchStatus.IGNORED_OUTGOING, "REFUND_REFERENCE_NOT_FOUND");
+            return;
+        }
+
+        Refund refund = refundRepository.findByRefundCodeForUpdate(reference.value()).orElse(null);
+        if (refund == null) {
+            reject(transaction, BankTransactionMatchStatus.UNMATCHED, "REFUND_NOT_FOUND");
+            return;
+        }
+        transaction.setRefund(refund);
+        transaction.setPayment(refund.getPayment());
+
+        if (refund.getPayment() == null
+                || refund.getPayment().getProvider() != PaymentProvider.BANK_TRANSFER
+                || refund.getOrder().getPaymentMethod() != PaymentMethod.VIETQR
+                || refund.getProvider() != RefundProvider.MANUAL) {
+            reject(transaction, BankTransactionMatchStatus.MANUAL_REVIEW, "REFUND_NOT_MATCHABLE");
+            return;
+        }
+        if (!Set.of(RefundStatus.PENDING, RefundStatus.PROCESSING).contains(refund.getStatus())) {
+            reject(transaction, BankTransactionMatchStatus.MANUAL_REVIEW, "REFUND_ALREADY_RESOLVED");
+            return;
+        }
+        if (refund.getAmount().compareTo(transaction.getAmount().abs()) != 0) {
+            reject(transaction, BankTransactionMatchStatus.AMOUNT_MISMATCH, "REFUND_AMOUNT_MISMATCH");
+            return;
+        }
+        if (!hasCompleteDestination(refund)) {
+            reject(transaction, BankTransactionMatchStatus.MANUAL_REVIEW, "REFUND_DESTINATION_MISSING");
+            return;
+        }
+
+        Instant matchedAt = Instant.now();
+        String bankReference = firstNonBlank(request.referenceCode(), request.id().toString());
+        Refund completed = returnService.completeManualRefundFromBankTransaction(
+                refund.getId(), truncate(bankReference, 100), transaction.getTransactionTime());
+        transaction.setRefund(completed);
+        transaction.setPayment(completed.getPayment());
+        transaction.setMatchStatus(BankTransactionMatchStatus.MATCHED);
+        transaction.setMatchReason("EXACT_REFUND_REFERENCE_ACCOUNT_AMOUNT_MATCH");
+        transaction.setReconciledAt(matchedAt);
+        saveRefundPaymentEvent(completed, request, transaction.getRawPayloadRedacted());
+    }
+
     private void savePaymentEvent(
             Payment payment, SePayWebhookRequest request, Map<String, Object> redactedPayload) {
         PaymentEvent event = new PaymentEvent();
@@ -192,11 +260,27 @@ public class BankTransactionIngestionService {
         paymentEventRepository.save(event);
     }
 
+    private void saveRefundPaymentEvent(
+            Refund refund, SePayWebhookRequest request, Map<String, Object> redactedPayload) {
+        PaymentEvent event = new PaymentEvent();
+        event.setPayment(refund.getPayment());
+        event.setProvider(PaymentProvider.BANK_TRANSFER);
+        event.setProviderEventKey(sha256("SEPAY|" + request.id()));
+        event.setEventType("BANK_DEBIT_REFUND_MATCHED");
+        event.setVerified(true);
+        event.setPayloadRedacted(redactedPayload);
+        paymentEventRepository.save(event);
+    }
+
     private ReferenceResult extractReference(SePayWebhookRequest request) {
-        Set<String> codeReferences = referencesIn(request.code());
+        return extractReference(request, PAYMENT_REFERENCE);
+    }
+
+    private ReferenceResult extractReference(SePayWebhookRequest request, Pattern pattern) {
+        Set<String> codeReferences = referencesIn(request.code(), pattern);
         Set<String> textReferences = new LinkedHashSet<>();
-        textReferences.addAll(referencesIn(request.content()));
-        textReferences.addAll(referencesIn(request.description()));
+        textReferences.addAll(referencesIn(request.content(), pattern));
+        textReferences.addAll(referencesIn(request.description(), pattern));
 
         Set<String> all = new LinkedHashSet<>(codeReferences);
         all.addAll(textReferences);
@@ -211,12 +295,19 @@ public class BankTransactionIngestionService {
                 : new ReferenceResult(all.iterator().next(), false);
     }
 
-    private Set<String> referencesIn(String value) {
+    private Set<String> referencesIn(String value, Pattern pattern) {
         Set<String> references = new LinkedHashSet<>();
         if (value == null || value.isBlank()) return references;
-        Matcher matcher = PAYMENT_REFERENCE.matcher(value.toUpperCase(Locale.ROOT));
+        Matcher matcher = pattern.matcher(value.toUpperCase(Locale.ROOT));
         while (matcher.find()) references.add(matcher.group());
         return references;
+    }
+
+    private boolean hasCompleteDestination(Refund refund) {
+        return trimToNull(refund.getRefundBankCode()) != null
+                && trimToNull(refund.getRefundBankName()) != null
+                && trimToNull(refund.getRefundAccountNumber()) != null
+                && trimToNull(refund.getRefundAccountName()) != null;
     }
 
     private Instant parseTransactionTime(String value) {

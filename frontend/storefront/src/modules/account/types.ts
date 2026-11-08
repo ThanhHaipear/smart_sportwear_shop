@@ -71,6 +71,28 @@ export interface OrderResponse {
   createdAt: string;
 }
 
+export type RefundStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "CANCELLED";
+
+export interface RefundResponse {
+  id: string;
+  orderId: string;
+  paymentId: string | null;
+  refundCode: string;
+  amount: number;
+  provider: "COD" | "VNPAY" | "MANUAL";
+  status: RefundStatus;
+  manualReference: string | null;
+  manualNote: string | null;
+  refundBankCode: string | null;
+  refundBankName: string | null;
+  refundAccountNumber: string | null;
+  refundAccountName: string | null;
+  reason: string | null;
+  refundedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface PageMeta {
   page: number;
   limit: number;

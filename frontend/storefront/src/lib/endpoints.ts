@@ -34,6 +34,8 @@ export const endpoints = {
     root: "/api/v1/orders",
     mine: "/api/v1/orders/me",
     detail: (id: string) => `/api/v1/orders/${id}`,
+    refunds: (id: string) => `/api/v1/orders/${id}/refunds`,
+    refundDestination: (id: string) => `/api/v1/orders/${id}/refund-destination`,
   },
   payments: {
     create: "/api/v1/payments/create",

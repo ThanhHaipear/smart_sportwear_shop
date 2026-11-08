@@ -14,7 +14,6 @@ export const adminEndpoints = {
   packingSlipBatch: "/api/v1/admin/orders/packing-slip-batch",
   orderDetail: (id: string) => `/api/v1/admin/orders/${id}`,
   orderStatus: (id: string) => `/api/v1/admin/orders/${id}/status`,
-  orderCancellationRefund: (id: string) => `/api/v1/admin/orders/${id}/cancellation-refund`,
   orderRefunds: (id: string) => `/api/v1/admin/orders/${id}/refunds`,
   orderCancel: (id: string) => `/api/v1/admin/orders/${id}/cancel`,
   orderCancellationRejection: (id: string) => `/api/v1/admin/orders/${id}/cancellation-rejection`,
