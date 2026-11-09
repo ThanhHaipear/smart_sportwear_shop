@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface AddressRepository extends JpaRepository<Address, UUID> {
 
+    boolean existsByIdAndUserId(UUID id, UUID userId);
+
     Optional<Address> findFirstByUserIdOrderByCreatedAtAsc(UUID userId);
 
     List<Address> findAllByUserIdOrderByCreatedAtDesc(UUID userId);

@@ -148,6 +148,26 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void checkoutPreview_rejectsAddressOwnedByAnotherUser() throws Exception {
+        AdminContext ctx = setUpAdmin();
+        String productId = createActiveProduct(ctx, "Checkout Address Boundary");
+        String variantId = createVariant(ctx, productId, 125000, 5);
+
+        String ownerEmail = uniqueEmail("address-owner");
+        registerUser(ownerEmail);
+        String foreignAddressId = createAddressForUser(ownerEmail);
+
+        TokenPair buyer = registerUser(uniqueEmail("address-buyer"));
+        addToCart(buyer.accessToken(), variantId, 1);
+
+        mockMvc.perform(post("/api/v1/checkout/preview")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + buyer.accessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"addressId\":\"" + foreignAddressId + "\"}"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void buyNow_previewsAndCreatesOrderWithoutAddingOrRemovingCartItems() throws Exception {
         AdminContext ctx = setUpAdmin();
         String buyNowProductId = createActiveProduct(ctx, "Buy Now Shirt");

@@ -1,8 +1,7 @@
 package com.dunghaiquyen.ecommerce.modules.checkout.service;
 
 import com.dunghaiquyen.ecommerce.common.exception.BusinessRuleException;
-import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
-import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
+import com.dunghaiquyen.ecommerce.modules.address.api.AddressOwnershipQuery;
 import com.dunghaiquyen.ecommerce.modules.checkout.dto.CheckoutItemPreview;
 import com.dunghaiquyen.ecommerce.modules.checkout.dto.CheckoutPreviewRequest;
 import com.dunghaiquyen.ecommerce.modules.checkout.dto.CheckoutPreviewResponse;
@@ -24,11 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class CheckoutPreviewService {
 
     private final OrderService orderService;
-    private final AddressRepository addressRepository;
+    private final AddressOwnershipQuery addressOwnershipQuery;
 
-    public CheckoutPreviewService(OrderService orderService, AddressRepository addressRepository) {
+    public CheckoutPreviewService(OrderService orderService, AddressOwnershipQuery addressOwnershipQuery) {
         this.orderService = orderService;
-        this.addressRepository = addressRepository;
+        this.addressOwnershipQuery = addressOwnershipQuery;
     }
 
     /**
@@ -50,9 +49,7 @@ public class CheckoutPreviewService {
         }
 
         if (request.addressId() != null) {
-            addressRepository.findById(request.addressId())
-                    .filter(a -> a.getUser().getId().equals(userId))
-                    .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+            addressOwnershipQuery.requireOwnedAddress(userId, request.addressId());
         }
 
         boolean allItemsValid = linesResult.allValid();

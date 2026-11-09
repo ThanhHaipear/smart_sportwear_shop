@@ -5,7 +5,7 @@
 | Giai đoạn | Trạng thái | Bằng chứng |
 |---|---|---|
 | 0. Chốt baseline | `DONE` | [Phase 0 baseline](microservice-phase-0-baseline.md): current-runtime gate 351/351 |
-| 1. Cứng hóa modular boundary | `READY` | Exit gate Phase 0 đã đạt; chưa thay đổi Supabase production |
+| 1. Cứng hóa modular boundary | `IN_PROGRESS` | [Boundary hardening log](microservice-phase-1-boundaries.md); chưa thay đổi Supabase production |
 | 2-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.

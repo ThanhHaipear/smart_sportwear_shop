@@ -1,6 +1,7 @@
 package com.dunghaiquyen.ecommerce.modules.address.service;
 
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
+import com.dunghaiquyen.ecommerce.modules.address.api.AddressOwnershipQuery;
 import com.dunghaiquyen.ecommerce.modules.address.dto.AddressCreateRequest;
 import com.dunghaiquyen.ecommerce.modules.address.dto.AddressResponse;
 import com.dunghaiquyen.ecommerce.modules.address.dto.AddressUpdateRequest;
@@ -29,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  * explicitly is the safer, more predictable behavior.
  */
 @Service
-public class AddressService {
+public class AddressService implements AddressOwnershipQuery {
 
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
@@ -37,6 +38,14 @@ public class AddressService {
     public AddressService(AddressRepository addressRepository, UserRepository userRepository) {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void requireOwnedAddress(UUID userId, UUID addressId) {
+        if (!addressRepository.existsByIdAndUserId(addressId, userId)) {
+            throw new ResourceNotFoundException("Address not found");
+        }
     }
 
     @Transactional(readOnly = true)
