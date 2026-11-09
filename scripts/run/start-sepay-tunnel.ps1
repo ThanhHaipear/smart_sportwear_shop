@@ -1,5 +1,5 @@
 $ErrorActionPreference = "Stop"
-$projectRoot = $PSScriptRoot
+$projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
 $envFile = Join-Path $projectRoot "backend\.env"
 $scriptFile = Join-Path $projectRoot "scripts\sepay-ngrok-tunnel.js"
 $sdkEntry = Join-Path $projectRoot ".tools\ngrok-sdk\node_modules\@ngrok\ngrok\index.js"

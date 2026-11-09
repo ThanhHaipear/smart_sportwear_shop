@@ -1,8 +1,9 @@
 $ErrorActionPreference = "Stop"
 
-$serviceDir = Join-Path $PSScriptRoot "chatbot-service"
+$projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
+$serviceDir = Join-Path $projectRoot "chatbot-service"
 $pythonExe = Join-Path $serviceDir ".venv\Scripts\python.exe"
-$backendEnv = Join-Path $PSScriptRoot "backend\.env"
+$backendEnv = Join-Path $projectRoot "backend\.env"
 
 if (-not (Test-Path -LiteralPath $pythonExe -PathType Leaf)) {
     throw "Missing chatbot-service virtual environment at $pythonExe"

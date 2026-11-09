@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
-$toolsDir = Join-Path $PSScriptRoot ".tools"
+$projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
+$toolsDir = Join-Path $projectRoot ".tools"
 $javaHome = Join-Path $toolsDir "jdk-21"
 $javaExe = Join-Path $javaHome "bin\java.exe"
 

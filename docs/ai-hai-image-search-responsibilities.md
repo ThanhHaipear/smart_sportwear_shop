@@ -102,9 +102,9 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 ### Lệnh chạy
 
 ```powershell
-.\backfill-product-embeddings.ps1 -Modality image -CoverageOnly
-.\backfill-product-embeddings.ps1 -Modality image -Verify
-.\backfill-product-embeddings.ps1 -Modality image -Verify
+.\scripts\maintenance\backfill-product-embeddings.ps1 -Modality image -CoverageOnly
+.\scripts\maintenance\backfill-product-embeddings.ps1 -Modality image -Verify
+.\scripts\maintenance\backfill-product-embeddings.ps1 -Modality image -Verify
 ```
 
 Lần chạy cuối chứng minh idempotency và phải skip các vector còn hợp lệ.

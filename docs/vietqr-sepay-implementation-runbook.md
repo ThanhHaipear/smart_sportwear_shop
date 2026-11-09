@@ -647,11 +647,11 @@ docker compose up -d redis rabbitmq
 ```
 
 ```powershell
-.\start-backend.ps1
+.\scripts\run\start-backend.ps1
 ```
 
 ```powershell
-.\start-storefront.ps1
+.\scripts\run\start-storefront.ps1
 ```
 
 Kiểm tra:
@@ -671,7 +671,7 @@ npm install --prefix .tools\ngrok-sdk @ngrok/ngrok@1.7.0
 `NGROK_DOMAIN` trong `backend/.env`. Sau đó mở tunnel bằng launcher của repo:
 
 ```powershell
-.\start-sepay-tunnel.cmd
+.\scripts\run\start-sepay-tunnel.cmd
 ```
 
 Launcher tạo proxy `127.0.0.1:18083` chỉ cho phép đúng

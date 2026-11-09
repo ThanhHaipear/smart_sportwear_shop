@@ -7,7 +7,7 @@ Redis và RabbitMQ chạy bằng Docker. Backend, admin, storefront, AI service 
 Mở Docker Desktop, sau đó chạy:
 
 ```powershell
-.\setup-local-tools.cmd
+.\scripts\setup\setup-local-tools.cmd
 ```
 
 Cấu hình local được đọc từ:
@@ -39,7 +39,7 @@ docker compose stop redis rabbitmq
 Mở một cửa sổ PowerShell riêng:
 
 ```powershell
-.\start-backend.cmd
+.\scripts\run\start-backend.cmd
 ```
 
 ### 3. Admin
@@ -47,7 +47,7 @@ Mở một cửa sổ PowerShell riêng:
 Mở một cửa sổ PowerShell riêng:
 
 ```powershell
-.\start-admin.cmd
+.\scripts\run\start-admin.cmd
 ```
 
 ### 4. Storefront
@@ -55,7 +55,7 @@ Mở một cửa sổ PowerShell riêng:
 Mở một cửa sổ PowerShell riêng:
 
 ```powershell
-.\start-storefront.cmd
+.\scripts\run\start-storefront.cmd
 ```
 
 ### 5. Visual search (khi cần)
@@ -72,7 +72,7 @@ python -m venv .venv
 Sau đó chạy API từ thư mục gốc:
 
 ```powershell
-.\start-visual-search.cmd
+.\scripts\run\start-visual-search.cmd
 ```
 
 Launcher lấy connection Supabase từ `backend/.env` để backend, backfill và visual
@@ -115,9 +115,9 @@ chatbot service, its indexing worker, and the Spring backend.
 
 ```powershell
 docker compose up -d redis rabbitmq
-.\start-chatbot-service.ps1
-.\start-product-search-indexer.ps1
-.\start-backend.ps1
+.\scripts\run\start-chatbot-service.ps1
+.\scripts\run\start-product-search-indexer.ps1
+.\scripts\run\start-backend.ps1
 ```
 
 Use the corresponding `.cmd` launchers when starting from Command Prompt.

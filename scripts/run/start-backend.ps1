@@ -1,11 +1,12 @@
 $ErrorActionPreference = "Stop"
-$envFile = Join-Path $PSScriptRoot "backend\.env"
-$javaHome = Join-Path $PSScriptRoot ".tools\jdk-21"
+$projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
+$envFile = Join-Path $projectRoot "backend\.env"
+$javaHome = Join-Path $projectRoot ".tools\jdk-21"
 $javaExe = Join-Path $javaHome "bin\java.exe"
 
 if (-not (Test-Path -LiteralPath $envFile -PathType Leaf)) { throw "Missing $envFile" }
 if (-not (Test-Path -LiteralPath $javaExe -PathType Leaf)) {
-    throw "Project-local Java 21 is missing at $javaHome. Run .\setup-local-tools.cmd first."
+    throw "Project-local Java 21 is missing at $javaHome. Run .\scripts\setup\setup-local-tools.cmd first."
 }
 
 Get-Content -LiteralPath $envFile | ForEach-Object {
@@ -51,6 +52,6 @@ if (-not (Test-TcpPort 6379)) {
 
 Write-Host "Java: $(& $javaExe --version | Select-Object -First 1)" -ForegroundColor Cyan
 Write-Host "Backend: http://localhost:$port (Supabase: $env:DB_HOST)" -ForegroundColor Green
-Set-Location (Join-Path $PSScriptRoot "backend")
+Set-Location (Join-Path $projectRoot "backend")
 & .\mvnw.cmd spring-boot:run
 exit $LASTEXITCODE

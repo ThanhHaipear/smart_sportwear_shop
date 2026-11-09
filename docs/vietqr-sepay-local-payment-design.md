@@ -410,7 +410,7 @@ Webhook:    https://<ngrok-dev-domain>/api/v1/webhooks/sepay
 Quy trình:
 
 1. Chạy database, backend và storefront.
-2. Chạy `start-sepay-tunnel.cmd`; launcher chỉ public exact webhook route qua
+2. Chạy `scripts/run/start-sepay-tunnel.cmd`; launcher chỉ public exact webhook route qua
    proxy local, không expose trực tiếp backend `8082`.
 3. Dùng dev domain cố định của tài khoản ngrok và ghim hostname trong
    `NGROK_DOMAIN`; URL vẫn giữ nguyên sau khi restart launcher.

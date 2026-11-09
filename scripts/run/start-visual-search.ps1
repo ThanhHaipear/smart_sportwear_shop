@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-$workspace = $PSScriptRoot
+$workspace = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
 $serviceDir = Join-Path $workspace "visual-search-service"
 $pythonExe = Join-Path $serviceDir ".venv\Scripts\python.exe"
 $backendEnv = Join-Path $workspace "backend\.env"

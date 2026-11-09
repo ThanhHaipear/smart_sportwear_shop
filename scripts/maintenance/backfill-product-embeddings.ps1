@@ -6,7 +6,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$workspace = Split-Path -Parent $MyInvocation.MyCommand.Path
+$workspace = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
 $service = Join-Path $workspace "chatbot-service"
 $python = Join-Path $service ".venv\Scripts\python.exe"
 $backendEnv = Join-Path $workspace "backend\.env"

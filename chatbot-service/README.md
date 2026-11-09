@@ -8,9 +8,9 @@ Canonical V2 embeddings use schema `ai_retrieval`, not the legacy OpenAI/Voyage 
 cd chatbot-service
 .venv\Scripts\python.exe -m pip install -r requirements-embeddings.txt
 cd ..
-.\backfill-product-embeddings.ps1 -Modality text
-.\backfill-product-embeddings.ps1 -Modality image
-.\backfill-product-embeddings.ps1 -Verify
+.\scripts\maintenance\backfill-product-embeddings.ps1 -Modality text
+.\scripts\maintenance\backfill-product-embeddings.ps1 -Modality image
+.\scripts\maintenance\backfill-product-embeddings.ps1 -Verify
 ```
 
 - BGE-M3 `5617a9f61b028005a4858fdac845db406aefb181`: `vector(1024)` for product documents.

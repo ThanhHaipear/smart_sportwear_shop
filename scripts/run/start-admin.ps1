@@ -1,7 +1,8 @@
 $ErrorActionPreference = "Stop"
-$nodeDir = Join-Path $PSScriptRoot ".tools\node-v24.14.1-win-x64"
+$projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
+$nodeDir = Join-Path $projectRoot ".tools\node-v24.14.1-win-x64"
 $nodeExe = Join-Path $nodeDir "node.exe"
-$appDir = Join-Path $PSScriptRoot "frontend\admin"
+$appDir = Join-Path $projectRoot "frontend\admin"
 
 if (-not (Test-Path -LiteralPath $nodeExe -PathType Leaf)) { throw "Project-local Node.js 24 is missing at $nodeDir" }
 function Test-TcpPort([int]$TargetPort) {
