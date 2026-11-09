@@ -145,8 +145,8 @@ Hiện trạng cần xử lý:
 | Evidence | Phạm vi | Trạng thái |
 |---|---|---|
 | Backup/TOC/checksum/restore drill ngày 25/10/2026 | Flyway V8 và AI Retrieval | Có bằng chứng lịch sử |
-| Migration fresh database V1-V13 | PostgreSQL/pgvector Testcontainers | Được integration startup xác minh |
-| Backup/restore hiện hành trước microservice migration | Supabase đang ở V13 và có dữ liệu hiện tại | **Chưa thực hiện; là gate bắt buộc trước schema migration đầu tiên** |
+| Migration rehearsal V1-V13 | PostgreSQL/pgvector 17 local chuyên dụng | 16 test, 0 failure/error; Flyway clean/migrate/validate/idempotency đạt | PASS |
+| [Backup/restore hiện hành trước microservice migration](microservice-phase-0-backup-restore.md) | Supabase V13, schema `public` và `ai_retrieval` | PASS ngày 09/11/2026; archive mã hóa, SHA-256/TOC và restore PostgreSQL 17 đã kiểm tra |
 
 Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên Supabase cho đến khi backup V13 hiện hành được mã hóa, kiểm tra checksum/TOC và restore thử vào database tạm.
 
@@ -161,8 +161,8 @@ Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên S
 - [ ] Backend integration suite đạt khi có Docker, không tính ba migration rehearsal test.
   - [x] Lát cắt Cart integration đạt 23/23 với fixture hợp lệ theo publishability V2.
   - [x] Lát cắt Order runtime hiện hành đạt 23/23; còn 3 ca Combo dormant được theo dõi riêng.
-- [ ] Ba migration test đạt trên PostgreSQL/pgvector local chuyên dụng.
-- [ ] Tạo backup Supabase V13 hiện hành và restore drill thành công.
+- [x] Ba migration test đạt trên PostgreSQL/pgvector 17 local chuyên dụng (16/16 test).
+- [x] Tạo backup Supabase V13 hiện hành và restore drill thành công.
 - [ ] Chụp smoke baseline cho đăng nhập, catalog, COD và VietQR/SePay.
 
 Chỉ sau khi các mục còn lại hoàn tất mới chuyển trạng thái Phase 0 thành `DONE` và bắt đầu thay đổi boundary code ở Phase 1.

@@ -197,7 +197,7 @@ Yêu cầu cho mọi consumer:
 
 ### 8.2 Supabase
 
-- [ ] Backup database và kiểm tra restore trước migration đầu tiên.
+- [x] Backup database và kiểm tra restore trước migration đầu tiên ([evidence](microservice-phase-0-backup-restore.md)).
 - [ ] Tạo các schema `identity`, `catalog`, `sales`, `ai_search`, `chatbot`, `recommendation`.
 - [ ] Tạo role ứng dụng và role migration riêng cho từng service.
 - [ ] Thu hồi `CREATE` không cần thiết trên `public`.
