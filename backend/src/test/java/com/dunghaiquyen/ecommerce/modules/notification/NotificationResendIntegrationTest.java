@@ -112,7 +112,7 @@ class NotificationResendIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -127,7 +127,9 @@ class NotificationResendIntegrationTest extends AbstractIntegrationTest {
                                 .formatted(UUID.randomUUID())))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        makeProductPublishableForTest(productId);
+        return variantId;
     }
 
     private void addToCart(String token, String variantId) throws Exception {

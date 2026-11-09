@@ -35,6 +35,12 @@ Chạy lại baseline ổn định bằng:
 
 Thêm `-IncludeBackendIntegration` khi Docker hoạt động và cần tái hiện test debt integration hiện tại.
 
+Chạy smoke baseline nghiệp vụ bằng:
+
+```powershell
+.\scripts\verify-microservice-smoke.ps1
+```
+
 | Hạng mục | Lệnh | Kết quả ngày 09/11/2026 | Trạng thái |
 |---|---|---|---|
 | Backend package | `backend\\mvnw.cmd -DskipTests package` | Build JAR thành công | PASS |
@@ -46,6 +52,9 @@ Thêm `-IncludeBackendIntegration` khi Docker hoạt động và cần tái hi�
 | Product Catalog current-runtime slice | `ProductCatalogIntegrationTest` | 15 test, 0 failure/error; duplicate SKU được ánh xạ ổn định thành 409 | PASS |
 | Product Search current-runtime slice | `ProductSearchIntegrationTest` | 14 test, 0 failure/error | PASS |
 | Admin Product current-runtime slice | `AdminProductListIntegrationTest` | 6/7 ca đạt; riêng filter `featured=true` chưa thể hoạt động vì `Product.featured` là `@Transient` và V1-V13 không có cột tương ứng | PASS WITH DOCUMENTED EXCLUSION |
+| Sales Report current-runtime slice | `ReportIntegrationTest` | 9 test, 0 failure/error; COD delivered được đối chiếu theo payment semantics hiện hành | PASS |
+| Notification Resend current-runtime slice | `NotificationResendIntegrationTest` | 8 test, 0 failure/error; fixture order/product tuân thủ publishability V2 | PASS |
+| Business smoke baseline | `scripts\verify-microservice-smoke.ps1` | 5 test đại diện: login, catalog public detail, tạo đơn COD, tạo/resume VietQR, webhook SePay đồng thời/idempotent | PASS |
 | Visual Search | `python -m pytest -q` | 127 passed, 2 skipped | PASS |
 | Chatbot/Product Search | `.venv\\Scripts\\python.exe -m pytest -q` | 242 passed | PASS |
 | Storefront lint | `npm.cmd run lint` | Thành công | PASS |
@@ -64,7 +73,10 @@ Ghi chú:
 - Đã ổn định thêm Inventory và Return/Refund (31/31), Product Catalog (15/15), Product Search (14/14), cùng 6/7 ca Admin Product. Fixture đều tạo `DRAFT`, variant bán được và primary image test-only trước khi kích hoạt; chỉ ghi vào PostgreSQL Testcontainers.
 - Ca Admin Product lọc `featured=true` được theo dõi riêng: entity đánh dấu `featured` là `@Transient`, trong khi migration V1-V13 không có cột lưu trạng thái. Sửa đúng cần một quyết định schema/migration ở phase sau; Phase 0 không tự ý đổi Supabase.
 - `ProductVariantService` đã flush lúc tạo variant để lỗi unique SKU được bắt trong transaction service và trả về business conflict 409, thay vì rơi ra 500 lúc commit.
-- Full suite sau các lát cắt trên còn 74 failure và 24 error. Toàn bộ 24 error thuộc Shipping/Seed dormant; nhóm failure lớn còn lại tập trung ở Collection/Review/Banner/Page dormant và các lát cắt Report, Notification, Product Image Upload, Google Login, Category cần xử lý tiếp.
+- Lần chạy full suite gần nhất còn 74 failure và 24 error, trong đó có 8 failure Report và 7 failure Notification Resend đã được xử lý sau lần chạy đó. Toàn bộ 24 error thuộc Shipping/Seed dormant; nhóm failure lớn còn lại tập trung ở Collection/Review/Banner/Page dormant và các lát cắt Product Image Upload, Google Login, Category cần xử lý tiếp.
+- Smoke baseline chỉ dùng PostgreSQL/pgvector Testcontainers và cấu hình provider test; không gọi Supabase production, ngân hàng hoặc webhook SePay thật.
+- Lát cắt Sales Report đạt 9/9 sau khi fixture tuân thủ publishability V2 và kỳ vọng `codDeliveredUnpaid` được đồng bộ với quy tắc: đơn COD chuyển `DELIVERED` đồng thời ghi nhận thu tiền (`PAID`).
+- Lát cắt Notification Resend đạt 8/8 sau khi product fixture chỉ kích hoạt sau khi có variant và primary image test-only hợp lệ.
 - Runtime hiện tại chủ động loại các package `banner`, `collection`, `combo`, `page`, `promotion`, `recommendation`, `review`, `shipping` và `infra.seed` khỏi component scan. Chúng phải được phân loại là dormant/legacy hoặc được kích hoạt bằng migration/schema đầy đủ trước khi tính vào service đích.
 
 ## 4. Module ownership baseline
@@ -172,8 +184,10 @@ Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên S
   - [x] Lát cắt Inventory + Return/Refund runtime hiện hành đạt 31/31.
   - [x] Lát cắt Product Catalog và Product Search runtime hiện hành đạt 29/29.
   - [x] Lát cắt Admin Product đạt 6/7; filter featured chờ quyết định migration/schema.
+  - [x] Lát cắt Sales Report runtime hiện hành đạt 9/9.
+  - [x] Lát cắt Notification Resend runtime hiện hành đạt 8/8.
 - [x] Ba migration test đạt trên PostgreSQL/pgvector 17 local chuyên dụng (16/16 test).
 - [x] Tạo backup Supabase V13 hiện hành và restore drill thành công.
-- [ ] Chụp smoke baseline cho đăng nhập, catalog, COD và VietQR/SePay.
+- [x] Chụp smoke baseline cho đăng nhập, catalog, COD và VietQR/SePay (5/5 test, có script tái lập).
 
 Chỉ sau khi các mục còn lại hoàn tất mới chuyển trạng thái Phase 0 thành `DONE` và bắt đầu thay đổi boundary code ở Phase 1.

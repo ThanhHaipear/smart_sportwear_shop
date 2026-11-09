@@ -60,7 +60,7 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -68,14 +68,21 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
     }
 
     private String createVariant(AdminContext ctx, String productId, int price, int stockQuantity) throws Exception {
+        return createVariant(ctx, productId, price, stockQuantity, "M");
+    }
+
+    private String createVariant(
+            AdminContext ctx, String productId, int price, int stockQuantity, String size) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"M\",\"color\":\"Black\",\"price\":%d,\"stockQuantity\":%d}")
-                                .formatted(UUID.randomUUID(), price, stockQuantity)))
+                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"%s\",\"color\":\"Black\",\"price\":%d,\"stockQuantity\":%d}")
+                                .formatted(UUID.randomUUID(), size, price, stockQuantity)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        makeProductPublishableForTest(productId);
+        return variantId;
     }
 
     private void addToCart(String token, String variantId, int quantity) throws Exception {
@@ -239,7 +246,9 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
         assertThat(body.at("/breakdownAvailable").asBoolean()).isTrue();
         assertThat(new BigDecimal(body.at("/grossRevenue").asText())).isGreaterThanOrEqualTo(paidOrder.totalAmount());
         assertThat(new BigDecimal(body.at("/realizedRevenue").asText())).isGreaterThanOrEqualTo(codOrder.totalAmount());
-        assertThat(new BigDecimal(body.at("/codDeliveredUnpaid/amount").asText())).isGreaterThanOrEqualTo(codOrder.totalAmount());
+        assertThat(new BigDecimal(body.at("/codDeliveredUnpaid/amount").asText()))
+                .as("delivering a COD order records cash collection, so it is no longer unpaid")
+                .isZero();
         assertThat(new BigDecimal(body.at("/paidNotDelivered/amount").asText())).isGreaterThanOrEqualTo(paidOrder.totalAmount());
         assertThat(body.at("/byPaymentStatus").isArray()).isTrue();
         assertThat(body.at("/byOrderStatus").isArray()).isTrue();
@@ -256,7 +265,7 @@ class ReportIntegrationTest extends AbstractIntegrationTest {
         long lowStockBefore = before.at("/lowStockCount").asLong();
 
         createVariant(ctx, productId, 50000, 20); // available=20, above the default threshold (10) - not low stock
-        createVariant(ctx, productId, 50000, 5); // available=5, at/under threshold - low stock
+        createVariant(ctx, productId, 50000, 5, "L"); // available=5, at/under threshold - low stock
 
         JsonNode after = getOverview(ctx.token());
         long lowStockAfter = after.at("/lowStockCount").asLong();
