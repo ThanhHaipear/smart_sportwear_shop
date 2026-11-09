@@ -1,0 +1,162 @@
+# Microservice migration - Phase 0 baseline
+
+Ngày ghi nhận: 09/11/2026
+
+Git baseline: `da5205f` (`main`)
+
+Trạng thái: `IN_PROGRESS`
+
+## 1. Mục đích
+
+Phase 0 khóa hiện trạng trước khi thay đổi ranh giới runtime hoặc dữ liệu. Tài liệu này là mốc đối chiếu để phát hiện regression trong các phase tách service tiếp theo.
+
+Không có bảng Supabase, API public hoặc luồng SePay nào bị thay đổi trong phase này.
+
+## 2. Thành phần runtime hiện tại
+
+| Thành phần | Công nghệ | Trạng thái kiến trúc | Service đích |
+|---|---|---|---|
+| `backend` | Spring Boot, JPA, Flyway | Modular monolith, 26 package nghiệp vụ nhưng một số package bị loại khỏi runtime; một datasource | Tách dần thành Identity, Catalog và Sales |
+| `visual-search-service` | Python | Process độc lập, dùng schema AI/read model | `search-service` |
+| `chatbot-service` | Python | Process độc lập; hiện chứa cả chatbot và product search/indexer | Tách Search concern khỏi `chatbot-service` |
+| `frontend/storefront` | Next.js | Client public | Đi qua Gateway/BFF |
+| `frontend/admin` | Next.js | Client quản trị | Đi qua Gateway/BFF |
+| RabbitMQ | RabbitMQ 3.13 | Catalog event/outbox đã tồn tại | Event backbone dùng chung |
+| Redis | Redis 7 | Cache và pub/sub tùy cấu hình | Hạ tầng dùng chung |
+| Supabase | PostgreSQL + pgvector | Một database vật lý; `public` và `ai_retrieval` | Một project, schema/role theo service |
+
+## 3. Kết quả build và test baseline
+
+Chạy lại baseline ổn định bằng:
+
+```powershell
+.\scripts\verify-microservice-baseline.ps1
+```
+
+Thêm `-IncludeBackendIntegration` khi Docker hoạt động và cần tái hiện test debt integration hiện tại.
+
+| Hạng mục | Lệnh | Kết quả ngày 09/11/2026 | Trạng thái |
+|---|---|---|---|
+| Backend package | `backend\\mvnw.cmd -DskipTests package` | Build JAR thành công | PASS |
+| Backend unit subset | 17 test class không cần container | 76 test, 0 failure/error | PASS |
+| Backend integration | Testcontainers, loại ba migration rehearsal test | 418 test; 160 failure, 37 error, 0 skipped | FAIL - PRE-EXISTING BASELINE DEBT |
+| Visual Search | `python -m pytest -q` | 127 passed, 2 skipped | PASS |
+| Chatbot/Product Search | `.venv\\Scripts\\python.exe -m pytest -q` | 242 passed | PASS |
+| Storefront lint | `npm.cmd run lint` | Thành công | PASS |
+| Storefront production build | `npm.cmd run build` | Thành công; cần network để tải Google Font lúc build | PASS |
+| Admin lint | `npm.cmd run lint` | Thành công | PASS |
+| Admin production build | `npm.cmd run build` | Thành công; cần network để tải Google Font lúc build | PASS |
+
+Ghi chú:
+
+- Chạy toàn bộ `mvnw test` trong sandbox thất bại do không truy cập được Docker daemon, không phải do assertion nghiệp vụ.
+- Ba lớp `V2OneAMigrationTest`, `V2OneBMigrationTest`, `V2OneCMigrationTest` cố ý yêu cầu URL database local chuyên dụng. Chúng thuộc database rehearsal, không được trỏ vào Supabase chung.
+- Chạy Chatbot bằng Python global thất bại vì thiếu dependency; baseline hợp lệ sử dụng `.venv` đã khóa của service.
+- Khi chạy bằng Docker thật, integration suite khởi tạo thành công PostgreSQL/pgvector và áp dụng Flyway V1-V13, sau đó bộc lộ test debt có sẵn. Nhóm lỗi lớn nhất là fixture tạo product `ACTIVE` khi chưa có primary image hợp lệ; các test shipping/recommendation/seed còn kỳ vọng bean của package đang bị runtime loại khỏi component/persistence scan.
+- Runtime hiện tại chủ động loại các package `banner`, `collection`, `combo`, `page`, `promotion`, `recommendation`, `review`, `shipping` và `infra.seed` khỏi component scan. Chúng phải được phân loại là dormant/legacy hoặc được kích hoạt bằng migration/schema đầy đủ trước khi tính vào service đích.
+
+## 4. Module ownership baseline
+
+| Bounded context đích | Module hiện tại | Ghi chú chuyển đổi |
+|---|---|---|
+| Identity | `auth`, `user`, `address` | Tách sau Catalog để giảm số consumer phải đổi cùng lúc |
+| Catalog | `catalog`, `category`, `brand`, `product`, `collection`, `promotion`, `combo`, `inventory`, `wishlist`, `review`, `banner`, `page`, `setting` | Inventory ở cùng Catalog trong giai đoạn đầu |
+| Sales | `cart`, `checkout`, `order`, `payment`, `shipping`, `returns`, `notification`, `audit`, `report` | Giữ Payment/SePay/Refund trong cùng transaction boundary |
+| Search | Spring adapter `product.search`, `visual-search-service`, product search/indexer trong `chatbot-service` | Semantic + Image Search dùng chung read model/index lifecycle |
+| Chatbot | Phần chat/RAG trong `chatbot-service` | Chỉ gọi Search/Catalog API, không sở hữu catalog |
+| Recommendation | `recommendation`, `interaction` | Thay entity reference bằng ID/snapshot/event |
+
+## 5. Phụ thuộc chéo giữa module Spring
+
+Phân tích import tĩnh ghi nhận **69 cặp phụ thuộc chéo**. Các cặp lớn nhất:
+
+| Nguồn | Đích | Số import | Hướng xử lý |
+|---|---:|---:|---|
+| Catalog module | Product | 23 | Gom cùng Catalog boundary trước khi tách process |
+| Recommendation | Product | 17 | Thay bằng product snapshot/contract |
+| Recommendation | Cart | 16 | Thay bằng interaction/cart context contract |
+| Returns | Order | 14 | Giữ cùng Sales boundary |
+| Inventory | Product | 14 | Giữ cùng Catalog boundary |
+| Order | Payment | 14 | Giữ cùng Sales boundary |
+| Auth | User | 13 | Giữ cùng Identity boundary |
+| Product | Catalog module | 12 | Gom cùng Catalog boundary |
+| Cart | Product | 12 | Thay bằng `SaleProductSnapshotPort` |
+| Payment | Order | 11 | Giữ cùng Sales boundary |
+| Order | Product | 9 | Thay entity bằng immutable order-item snapshot |
+| Report | Order | 9 | Giai đoạn đầu giữ trong Sales; sau đó dùng read model |
+| Collection | Product | 9 | Gom cùng Catalog boundary |
+| Payment | Returns | 6 | Giữ cùng Sales boundary |
+| Wishlist | Product | 6 | Gom cùng Catalog boundary |
+
+Quy tắc cho Phase 1:
+
+1. Không cố xóa mọi import chéo trong cùng bounded context.
+2. Ưu tiên xóa import chéo **giữa** Identity, Catalog, Sales và Recommendation.
+3. Không thay JPA relation bằng remote call trong entity lifecycle.
+4. Tạo port/facade và DTO snapshot trước; sau đó mới tách process.
+
+## 6. API inventory theo service đích
+
+| Service đích | API family hiện tại | Quyết định |
+|---|---|---|
+| Identity | `/api/v1/auth`, `/api/v1/me`, `/api/v1/me/addresses`, `/api/v1/admin/users` | Giữ URL public qua Gateway; backend route đổi nội bộ |
+| Catalog | `/api/v1/products`, `/api/v1/categories`, `/api/v1/brands`, `/api/v1/collections`, `/api/v1/promotions`, `/api/v1/wishlist`, `/api/v1/reviews`, `/api/v1/banners`, `/api/v1/pages` và các route admin tương ứng | Chuyển nguyên contract sang Catalog trước khi tối ưu API |
+| Catalog inventory | `/api/v1/admin/inventory`, `/api/v1/inventory/stream` | Bổ sung internal reservation API trước khi Sales bị tách |
+| Sales | `/api/v1/cart`, `/api/v1/checkout`, `/api/v1/orders`, `/api/v1/payments`, `/api/v1/webhooks/sepay`, `/api/v1/returns`, `/api/v1/admin/orders`, `/api/v1/admin/refunds`, `/api/v1/admin/shipments` | Giữ contract và transaction semantics |
+| Notification | `/api/v1/notifications`, `/api/v1/admin/notifications`, `/api/v1/admin/notification-templates` | Giai đoạn đầu thuộc Sales |
+| Reporting | `/api/v1/admin/reports` | Giai đoạn đầu thuộc Sales/read model |
+| Search | `/api/v1/products/hybrid-search`, `/api/v1/products/search-by-image`, internal search endpoints | Public URL giữ qua Gateway; xử lý chuyển sang Search |
+| Recommendation | `/api/v1/recommendations/*`, `/api/v1/products/{id}/frequently-bought-together`, admin recommendation endpoints | Chuyển sang Recommendation service |
+
+## 7. Database ownership baseline
+
+| Owner đích | Nguồn hiện tại | Bảng/nhóm dữ liệu chính |
+|---|---|---|
+| Identity | `public` | `users`, `user_identities`, `addresses`, `refresh_tokens`, `password_reset_tokens` |
+| Catalog | `public` | taxonomy, category, brand, dataset, product, variant, image, promotion, inventory, wishlist, review và CMS catalog |
+| Sales | `public` | cart, order, order history, payment, payment event, bank transaction/reconciliation, return, refund, shipment, notification, audit |
+| Search | `ai_retrieval` | model registry, search documents/facets, text/image embedding, processed event, indexing job, usage event |
+| Chatbot | Chưa có schema ownership hoàn chỉnh | Chat session/message và retrieval trace cần migration riêng |
+| Recommendation | `public` và một phần `ai_retrieval` | interaction, association rule/log, recommendation model/request/item |
+
+Hiện trạng cần xử lý:
+
+- `public` đang chứa dữ liệu của nhiều owner.
+- JPA relation và foreign key còn đi xuyên ranh giới đích.
+- Các Python service đang dùng chung connection information từ backend launcher.
+- Role riêng và permission test cho từng service chưa tồn tại.
+
+## 8. Contract và event baseline
+
+| Thành phần | Hiện trạng | Việc kế tiếp |
+|---|---|---|
+| Catalog event | Có `contracts/catalog-event-v1.schema.json` | Giữ backward compatibility; bổ sung contract test producer/consumer |
+| Transactional outbox | Có `integration_outbox` và relay catalog | Tổng quát hóa thành event platform nhưng không đổi semantics hiện tại |
+| Consumer deduplication | Search đã có `processed_events` | Chuẩn hóa inbox/idempotency cho service khác |
+| Sales event | Chưa có contract chuẩn cho order/payment/refund | Thiết kế ở Phase 2, chưa phát production trong Phase 0/1 |
+| DLQ/retry | RabbitMQ có cấu hình phục vụ visual search | Kiểm kê và chuẩn hóa tên exchange/queue/routing key |
+
+## 9. Backup và rollback evidence
+
+| Evidence | Phạm vi | Trạng thái |
+|---|---|---|
+| Backup/TOC/checksum/restore drill ngày 25/10/2026 | Flyway V8 và AI Retrieval | Có bằng chứng lịch sử |
+| Migration fresh database V1-V13 | PostgreSQL/pgvector Testcontainers | Được integration startup xác minh |
+| Backup/restore hiện hành trước microservice migration | Supabase đang ở V13 và có dữ liệu hiện tại | **Chưa thực hiện; là gate bắt buộc trước schema migration đầu tiên** |
+
+Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên Supabase cho đến khi backup V13 hiện hành được mã hóa, kiểm tra checksum/TOC và restore thử vào database tạm.
+
+## 10. Phase 0 exit gate
+
+- [x] Chốt Git baseline và kiến trúc runtime hiện tại.
+- [x] Lập module ownership matrix.
+- [x] Lập API family inventory.
+- [x] Lập database ownership matrix.
+- [x] Ghi nhận dependency graph và các coupling lớn nhất.
+- [x] Backend unit, Python service, frontend lint/build đạt.
+- [ ] Backend integration suite đạt khi có Docker, không tính ba migration rehearsal test.
+- [ ] Ba migration test đạt trên PostgreSQL/pgvector local chuyên dụng.
+- [ ] Tạo backup Supabase V13 hiện hành và restore drill thành công.
+- [ ] Chụp smoke baseline cho đăng nhập, catalog, COD và VietQR/SePay.
+
+Chỉ sau khi các mục còn lại hoàn tất mới chuyển trạng thái Phase 0 thành `DONE` và bắt đầu thay đổi boundary code ở Phase 1.
