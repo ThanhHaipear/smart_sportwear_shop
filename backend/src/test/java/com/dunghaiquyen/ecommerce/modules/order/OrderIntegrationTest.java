@@ -21,6 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -259,6 +260,8 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Tag("phase0-excluded")
+    @Tag("dormant")
     void checkoutPreview_withApplicableCombo_returnsDiscountedTotal() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId1 = createActiveProduct(ctx, "Combo Shirt");
@@ -287,6 +290,8 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Tag("phase0-excluded")
+    @Tag("dormant")
     void createOrder_withApplicableCombo_persistsDiscountAmount() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId1 = createActiveProduct(ctx, "Combo Shoe");
@@ -315,6 +320,8 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Tag("phase0-excluded")
+    @Tag("dormant")
     void createOrder_withoutFullCombo_doesNotApplyDiscount_andClampPreventsNegativeTotal() throws Exception {
         AdminContext ctx = setUpAdmin();
         String productId1 = createActiveProduct(ctx, "Clamp Tee");

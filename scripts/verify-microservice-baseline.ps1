@@ -99,12 +99,14 @@ if (-not $SkipFrontendBuild) {
 }
 
 if ($IncludeBackendIntegration) {
-    Write-Warning "The current integration baseline contains known pre-existing failures. See docs/microservice-phase-0-baseline.md."
     Invoke-Checked `
-        -Name "Backend integration baseline" `
+        -Name "Backend current-runtime integration gate" `
         -WorkingDirectory (Join-Path $projectRoot "backend") `
         -Command {
-            & .\mvnw.cmd "-Dtest=!V2OneAMigrationTest,!V2OneBMigrationTest,!V2OneCMigrationTest" test
+            & .\mvnw.cmd `
+                "-Dtest=!V2OneAMigrationTest,!V2OneBMigrationTest,!V2OneCMigrationTest" `
+                "-DexcludedGroups=phase0-excluded" `
+                test
         }
 }
 

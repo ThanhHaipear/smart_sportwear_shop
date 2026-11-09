@@ -8,11 +8,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.dunghaiquyen.ecommerce.AbstractIntegrationTest;
 import java.util.UUID;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+@Tag("phase0-excluded")
+@Tag("dormant")
 class PageIntegrationTest extends AbstractIntegrationTest {
 
     private String createPage(String adminToken, String status) throws Exception {

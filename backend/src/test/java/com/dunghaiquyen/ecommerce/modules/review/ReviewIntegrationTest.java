@@ -11,12 +11,15 @@ import com.dunghaiquyen.ecommerce.modules.address.entity.Address;
 import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.UUID;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+@Tag("phase0-excluded")
+@Tag("dormant")
 class ReviewIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired

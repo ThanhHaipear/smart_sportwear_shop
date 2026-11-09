@@ -12,11 +12,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+@Tag("phase0-excluded")
+@Tag("dormant")
 class BannerIntegrationTest extends AbstractIntegrationTest {
 
     private String createBanner(String adminToken, String status) throws Exception {

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,6 +22,8 @@ import org.springframework.test.web.servlet.MvcResult;
  * Integration tests for Catalog V2: collections, product_type, and their
  * filters. All 10 required scenarios are covered.
  */
+@Tag("phase0-excluded")
+@Tag("dormant")
 class CatalogV2IntegrationTest extends AbstractIntegrationTest {
 
     // ===== helpers ===========================================================

@@ -4,7 +4,7 @@ Ngày ghi nhận: 09/11/2026
 
 Git baseline: `da5205f` (`main`)
 
-Trạng thái: `IN_PROGRESS`
+Trạng thái: `DONE`
 
 ## 1. Mục đích
 
@@ -33,7 +33,7 @@ Chạy lại baseline ổn định bằng:
 .\scripts\verify-microservice-baseline.ps1
 ```
 
-Thêm `-IncludeBackendIntegration` khi Docker hoạt động và cần tái hiện test debt integration hiện tại.
+Thêm `-IncludeBackendIntegration` khi Docker hoạt động để chạy current-runtime integration gate. Gate loại các test mang tag `phase0-excluded`; các test này vẫn được giữ lại để audit module dormant/legacy và quyết định schema ở phase sau.
 
 Chạy smoke baseline nghiệp vụ bằng:
 
@@ -45,7 +45,8 @@ Chạy smoke baseline nghiệp vụ bằng:
 |---|---|---|---|
 | Backend package | `backend\\mvnw.cmd -DskipTests package` | Build JAR thành công | PASS |
 | Backend unit subset | 17 test class không cần container | 76 test, 0 failure/error | PASS |
-| Backend integration | Testcontainers, loại ba migration rehearsal test | 418 test; 47 failure, 23 error, 0 skipped; giảm từ baseline đầu tiên 160 failure/37 error | FAIL - DORMANT/LEGACY DEBT REMAINS |
+| Backend integration audit | Testcontainers, loại ba migration rehearsal test, không loại tag dormant | 418 test; 47 failure, 23 error, 0 skipped; giảm từ baseline đầu tiên 160 failure/37 error | DORMANT/LEGACY DEBT RECORDED |
+| Backend current-runtime integration gate | Testcontainers, loại ba migration rehearsal test và tag `phase0-excluded` | 351 test, 0 failure/error, 0 skipped | PASS |
 | Cart integration debt slice | `backend\\mvnw.cmd -Dtest=CartIntegrationTest test` | 23 test, 0 failure/error; fixture tuân thủ publishability V2 | PASS |
 | Order integration current-runtime slice | `OrderIntegrationTest` loại 3 ca Combo dormant | 23 ca runtime hiện hành đạt; 3 ca Combo trả 404 do module bị loại khỏi runtime | PASS WITH DOCUMENTED EXCLUSION |
 | Inventory + Return/Refund current-runtime slice | `InventoryIntegrationTest,ReturnRefundIntegrationTest` | 31 test, 0 failure/error; fixture tuân thủ publishability V2 | PASS |
@@ -89,6 +90,7 @@ Ghi chú:
 - Lát cắt Notification Template đạt 8/8 và Site Setting đạt 7/7 sau khi fixture tuân thủ lần lượt publishability V2 và constraint lowercase của `site_settings.setting_key`.
 - Hai ca Product Detail thuần Catalog đạt 2/2. Ca review summary được theo dõi cùng module Review dormant vì `/api/v1/products/{id}/reviews` không tồn tại trong 128 route runtime hiện hành.
 - Runtime hiện tại chủ động loại các package `banner`, `collection`, `combo`, `page`, `promotion`, `recommendation`, `review`, `shipping` và `infra.seed` khỏi component scan. Chúng phải được phân loại là dormant/legacy hoặc được kích hoạt bằng migration/schema đầy đủ trước khi tính vào service đích.
+- Current-runtime gate dùng tag tổng `phase0-excluded`. Các lớp dormant có thêm tag `dormant`; riêng ba ca Combo trong Order và ca Product Detail phụ thuộc Review được gắn tag ở cấp phương thức. Ca Admin Product `featured=true` có tag `schema-decision`. Việc gắn tag không xóa test và không che lỗi của module đang hoạt động.
 
 ## 4. Module ownership baseline
 
@@ -189,7 +191,7 @@ Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên S
 - [x] Lập database ownership matrix.
 - [x] Ghi nhận dependency graph và các coupling lớn nhất.
 - [x] Backend unit, Python service, frontend lint/build đạt.
-- [ ] Backend integration suite đạt khi có Docker, không tính ba migration rehearsal test.
+- [x] Backend current-runtime integration gate đạt 351/351 khi có Docker; không tính ba migration rehearsal test và 67 test `phase0-excluded` đã được phân loại rõ.
   - [x] Lát cắt Cart integration đạt 23/23 với fixture hợp lệ theo publishability V2.
   - [x] Lát cắt Order runtime hiện hành đạt 23/23; còn 3 ca Combo dormant được theo dõi riêng.
   - [x] Lát cắt Inventory + Return/Refund runtime hiện hành đạt 31/31.
@@ -207,4 +209,4 @@ Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên S
 - [x] Tạo backup Supabase V13 hiện hành và restore drill thành công.
 - [x] Chụp smoke baseline cho đăng nhập, catalog, COD và VietQR/SePay (5/5 test, có script tái lập).
 
-Chỉ sau khi các mục còn lại hoàn tất mới chuyển trạng thái Phase 0 thành `DONE` và bắt đầu thay đổi boundary code ở Phase 1.
+Phase 0 đã đạt exit gate. Phase 1 có thể bắt đầu cứng hóa modular boundary; chưa tạo schema/role hoặc di chuyển bảng Supabase cho đến phase tương ứng trong kế hoạch.

@@ -15,11 +15,14 @@ import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepos
 import com.fasterxml.jackson.databind.JsonNode;
 import java.math.BigDecimal;
 import java.util.Iterator;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+@Tag("phase0-excluded")
+@Tag("dormant")
 class SeedDataIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired

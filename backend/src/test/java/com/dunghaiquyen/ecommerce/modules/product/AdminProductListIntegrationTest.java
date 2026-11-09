@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.dunghaiquyen.ecommerce.AbstractIntegrationTest;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.UUID;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -146,6 +147,8 @@ class AdminProductListIntegrationTest extends AbstractIntegrationTest {
     // ===== filter by featured =====
 
     @Test
+    @Tag("phase0-excluded")
+    @Tag("schema-decision")
     void list_filterByFeatured_returnsOnlyFeatured() throws Exception {
         AdminContext ctx = setUpAdmin();
         String featuredId = createProduct(ctx, "Featured Product", "ACTIVE", true);

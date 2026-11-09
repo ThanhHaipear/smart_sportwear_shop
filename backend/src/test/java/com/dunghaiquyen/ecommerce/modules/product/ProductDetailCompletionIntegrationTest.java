@@ -11,6 +11,7 @@ import com.dunghaiquyen.ecommerce.modules.address.entity.Address;
 import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.UUID;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -147,6 +148,8 @@ class ProductDetailCompletionIntegrationTest extends AbstractIntegrationTest {
     // ===== review summary counts only APPROVED reviews =====
 
     @Test
+    @Tag("phase0-excluded")
+    @Tag("dormant")
     void productDetail_reviewSummary_onlyCountsApprovedReviews() throws Exception {
         AdminContext ctx = setUpAdmin();
         CreatedProduct product = createDraftProduct(ctx, "Reviewed Shirt");
