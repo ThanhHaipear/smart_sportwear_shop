@@ -44,6 +44,17 @@ class BoundedContextArchitectureTest {
                 .isEmpty();
     }
 
+    @Test
+    void orderUsesAddressApiInsteadOfAddressPersistence() throws IOException {
+        List<String> violations = new ArrayList<>();
+        collectPersistenceImportsFrom(
+                MODULE_SOURCES.resolve("order"), Set.of("address"), violations);
+
+        assertThat(violations)
+                .as("Order must use address.api contracts, not Address entity/repository types")
+                .isEmpty();
+    }
+
     private void collectPersistenceImportsOutside(
             Path sourceRoot, Set<String> allowedModules, List<String> violations) throws IOException {
         inspectJavaSources(sourceRoot, (file, importedModule, importedLayer, importLine) -> {

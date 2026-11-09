@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface AddressOwnershipQuery {
 
     void requireOwnedAddress(UUID userId, UUID addressId);
+
+    AddressSnapshot getOwnedAddress(UUID userId, UUID addressId);
 }

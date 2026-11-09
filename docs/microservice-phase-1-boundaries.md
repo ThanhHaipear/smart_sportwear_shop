@@ -33,18 +33,30 @@ Sau thay đổi:
   - Checkout không import entity/repository Identity.
 - `BoundedContextArchitectureTest` được đưa vào baseline verification script.
 
+## Lát cắt 2 - Order sang Identity
+
+Trước thay đổi, `OrderService` đọc trực tiếp `AddressRepository` và chuyển entity `Address` thành JSON snapshot. Điều này gắn transaction tạo đơn với persistence model của Identity.
+
+Sau thay đổi:
+
+- Identity công bố record bất biến `AddressSnapshot` qua `address.api`.
+- `AddressOwnershipQuery.getOwnedAddress` trả snapshot chỉ sau khi xác nhận địa chỉ thuộc đúng người dùng.
+- `OrderService` chỉ nhận contract API và tự lưu bản chụp vào `orders.address_snapshot_json` như trước.
+- Architecture test khóa Order không được import `address.entity` hoặc `address.repository`.
+- Không thay đổi bảng, migration hay dữ liệu Supabase.
+
 ## Bằng chứng kiểm thử
 
 | Kiểm thử | Kết quả |
 |---|---|
-| Backend unit baseline có architecture gate | 78 test, 0 failure/error |
-| `BoundedContextArchitectureTest` | 2 test, 0 failure/error |
+| Backend unit baseline có architecture gate | 79 test, 0 failure/error |
+| `BoundedContextArchitectureTest` | 3 test, 0 failure/error |
 | `OrderIntegrationTest` current-runtime slice | 24 test, 0 failure/error; gồm ca từ chối địa chỉ thuộc người dùng khác |
 
 ## Việc tiếp theo
 
-1. Loại truy cập `AddressRepository` trực tiếp còn lại trong `OrderService` và Shipping bằng Identity API/snapshot phù hợp.
-2. Mở rộng architecture rule từ Checkout sang toàn bộ Sales -> Identity.
+1. Loại truy cập `AddressRepository` trực tiếp còn lại trong Shipping bằng Identity API/snapshot phù hợp.
+2. Loại dần phụ thuộc `User` entity/repository trong Sales trước khi mở rộng rule sang toàn bộ Sales -> Identity.
 3. Sau đó xử lý các chiều Sales -> Catalog và Recommendation -> Catalog/Sales theo mức coupling trong baseline.
 
 ## Exit gate Phase 1

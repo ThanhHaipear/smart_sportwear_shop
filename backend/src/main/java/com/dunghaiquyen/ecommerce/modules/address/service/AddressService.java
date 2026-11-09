@@ -2,6 +2,7 @@ package com.dunghaiquyen.ecommerce.modules.address.service;
 
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
 import com.dunghaiquyen.ecommerce.modules.address.api.AddressOwnershipQuery;
+import com.dunghaiquyen.ecommerce.modules.address.api.AddressSnapshot;
 import com.dunghaiquyen.ecommerce.modules.address.dto.AddressCreateRequest;
 import com.dunghaiquyen.ecommerce.modules.address.dto.AddressResponse;
 import com.dunghaiquyen.ecommerce.modules.address.dto.AddressUpdateRequest;
@@ -46,6 +47,19 @@ public class AddressService implements AddressOwnershipQuery {
         if (!addressRepository.existsByIdAndUserId(addressId, userId)) {
             throw new ResourceNotFoundException("Address not found");
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AddressSnapshot getOwnedAddress(UUID userId, UUID addressId) {
+        Address address = findOwned(userId, addressId);
+        return new AddressSnapshot(
+                address.getReceiverName(),
+                address.getPhone(),
+                address.getProvince(),
+                address.getDistrict(),
+                address.getWard(),
+                address.getAddressLine());
     }
 
     @Transactional(readOnly = true)

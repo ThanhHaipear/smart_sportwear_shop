@@ -6,8 +6,8 @@ import com.dunghaiquyen.ecommerce.common.response.PageMeta;
 import com.dunghaiquyen.ecommerce.common.time.AppTimeZone;
 import com.dunghaiquyen.ecommerce.config.AppShippingProperties;
 import com.dunghaiquyen.ecommerce.config.CacheConfig;
-import com.dunghaiquyen.ecommerce.modules.address.entity.Address;
-import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
+import com.dunghaiquyen.ecommerce.modules.address.api.AddressOwnershipQuery;
+import com.dunghaiquyen.ecommerce.modules.address.api.AddressSnapshot;
 import com.dunghaiquyen.ecommerce.modules.cart.entity.Cart;
 import com.dunghaiquyen.ecommerce.modules.cart.entity.CartItem;
 import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
@@ -88,7 +88,7 @@ public class OrderService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final AddressRepository addressRepository;
+    private final AddressOwnershipQuery addressOwnershipQuery;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderStatusHistoryRepository orderStatusHistoryRepository;
@@ -106,7 +106,7 @@ public class OrderService {
     public OrderService(
             CartRepository cartRepository,
             CartItemRepository cartItemRepository,
-            AddressRepository addressRepository,
+            AddressOwnershipQuery addressOwnershipQuery,
             OrderRepository orderRepository,
             OrderItemRepository orderItemRepository,
             OrderStatusHistoryRepository orderStatusHistoryRepository,
@@ -122,7 +122,7 @@ public class OrderService {
             AppShippingProperties shippingProperties) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
-        this.addressRepository = addressRepository;
+        this.addressOwnershipQuery = addressOwnershipQuery;
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderStatusHistoryRepository = orderStatusHistoryRepository;
@@ -194,9 +194,7 @@ public class OrderService {
             }
         }
 
-        Address address = addressRepository.findById(request.addressId())
-                .filter(a -> a.getUser().getId().equals(userId))
-                .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+        AddressSnapshot address = addressOwnershipQuery.getOwnedAddress(userId, request.addressId());
 
         // Phase 2: build the order using prices read just now, under lock - never
         // anything cached from an earlier cart response.
@@ -795,14 +793,14 @@ public class OrderService {
         return "ORD" + datePart + uniquePart;
     }
 
-    private Map<String, Object> buildAddressSnapshot(Address address) {
+    private Map<String, Object> buildAddressSnapshot(AddressSnapshot address) {
         Map<String, Object> snapshot = new LinkedHashMap<>();
-        snapshot.put("receiverName", address.getReceiverName());
-        snapshot.put("phone", address.getPhone());
-        snapshot.put("province", address.getProvince());
-        snapshot.put("district", address.getDistrict());
-        snapshot.put("ward", address.getWard());
-        snapshot.put("addressLine", address.getAddressLine());
+        snapshot.put("receiverName", address.receiverName());
+        snapshot.put("phone", address.phone());
+        snapshot.put("province", address.province());
+        snapshot.put("district", address.district());
+        snapshot.put("ward", address.ward());
+        snapshot.put("addressLine", address.addressLine());
         return snapshot;
     }
 
