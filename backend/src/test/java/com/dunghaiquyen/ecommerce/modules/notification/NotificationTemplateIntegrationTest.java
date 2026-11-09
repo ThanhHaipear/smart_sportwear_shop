@@ -54,12 +54,12 @@ class NotificationTemplateIntegrationTest extends AbstractIntegrationTest {
         return new AdminContext(token, categoryId, brandId);
     }
 
-    private String createActiveProduct(AdminContext ctx, String name) throws Exception {
+    private String createDraftProduct(AdminContext ctx, String name) throws Exception {
         String slug = "ntpl-prod-" + UUID.randomUUID();
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -74,6 +74,7 @@ class NotificationTemplateIntegrationTest extends AbstractIntegrationTest {
                                 .formatted(UUID.randomUUID())))
                 .andExpect(status().isCreated())
                 .andReturn();
+        makeProductPublishableForTest(productId);
         return json(result.getResponse().getContentAsString()).at("/data/id").asText();
     }
 
@@ -171,7 +172,7 @@ class NotificationTemplateIntegrationTest extends AbstractIntegrationTest {
             // Trigger a real ORDER_CREATED send and confirm the customized template - not the
             // old hardcoded default - is what actually went out.
             AdminContext ctx = setUpAdmin();
-            String productId = createActiveProduct(ctx, "Template Shirt");
+            String productId = createDraftProduct(ctx, "Template Shirt");
             String variantId = createVariant(ctx, productId);
             String buyerEmail = uniqueEmail("ntpl-update-buyer");
             TokenPair buyer = registerUser(buyerEmail);

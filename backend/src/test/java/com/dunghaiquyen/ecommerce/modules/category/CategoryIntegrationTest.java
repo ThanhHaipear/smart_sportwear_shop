@@ -139,7 +139,7 @@ class CategoryIntegrationTest extends AbstractIntegrationTest {
     @Test
     void publicDetail_inactiveCategory_returns404() throws Exception {
         String token = registerAdminAndGetAccessToken(uniqueEmail("cat-detail-inactive-admin"));
-        String slug = "cat-detail-inactive-" + java.util.UUID.randomUUID();
+        String slug = "cat-detail-inactive-" + java.util.UUID.randomUUID().toString().substring(0, 8);
 
         mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
@@ -154,7 +154,7 @@ class CategoryIntegrationTest extends AbstractIntegrationTest {
     @Test
     void publicTree_returnsRootWithItsLeafChildren() throws Exception {
         String token = registerAdminAndGetAccessToken(uniqueEmail("cat-tree-admin"));
-        String suffix = java.util.UUID.randomUUID().toString();
+        String suffix = java.util.UUID.randomUUID().toString().substring(0, 8);
 
         var rootResult = mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
@@ -183,9 +183,9 @@ class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void create_groupWithParent_returns409_preventingThirdLevel() throws Exception {
+    void create_thirdLevel_returns409() throws Exception {
         String token = registerAdminAndGetAccessToken(uniqueEmail("cat-depth-admin"));
-        String suffix = java.util.UUID.randomUUID().toString();
+        String suffix = java.util.UUID.randomUUID().toString().substring(0, 8);
 
         var rootResult = mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
@@ -199,16 +199,20 @@ class CategoryIntegrationTest extends AbstractIntegrationTest {
         var childResult = mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"Child group\",\"slug\":\"child-group-%s\","
-                                        + "\"nodeType\":\"GROUP\",\"parentId\":\"%s\"}")
+                        .content(("{\"name\":\"Child\",\"slug\":\"child-%s\","
+                                        + "\"parentId\":\"%s\"}")
                                 .formatted(suffix, rootId)))
-                .andExpect(status().isConflict())
+                .andExpect(status().isCreated())
                 .andReturn();
+        String childId = json(childResult.getResponse().getContentAsString()).at("/data/id").asText();
 
-        // A GROUP cannot become a child, so the API prevents a hierarchy that
-        // could later accept a third level.
-        org.assertj.core.api.Assertions.assertThat(
-                        json(childResult.getResponse().getContentAsString()).at("/message").asText())
-                .contains("GROUP category must be a root");
+        mockMvc.perform(post("/api/v1/admin/categories")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(("{\"name\":\"Grandchild\",\"slug\":\"grandchild-%s\","
+                                        + "\"parentId\":\"%s\"}")
+                                .formatted(suffix, childId)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("Parent category must be GROUP."));
     }
 }

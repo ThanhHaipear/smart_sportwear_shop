@@ -45,7 +45,7 @@ Chạy smoke baseline nghiệp vụ bằng:
 |---|---|---|---|
 | Backend package | `backend\\mvnw.cmd -DskipTests package` | Build JAR thành công | PASS |
 | Backend unit subset | 17 test class không cần container | 76 test, 0 failure/error | PASS |
-| Backend integration | Testcontainers, loại ba migration rehearsal test | 418 test; 74 failure, 24 error, 0 skipped; giảm từ baseline đầu tiên 160 failure/37 error | FAIL - PRE-EXISTING BASELINE DEBT |
+| Backend integration | Testcontainers, loại ba migration rehearsal test | 418 test; 47 failure, 23 error, 0 skipped; giảm từ baseline đầu tiên 160 failure/37 error | FAIL - DORMANT/LEGACY DEBT REMAINS |
 | Cart integration debt slice | `backend\\mvnw.cmd -Dtest=CartIntegrationTest test` | 23 test, 0 failure/error; fixture tuân thủ publishability V2 | PASS |
 | Order integration current-runtime slice | `OrderIntegrationTest` loại 3 ca Combo dormant | 23 ca runtime hiện hành đạt; 3 ca Combo trả 404 do module bị loại khỏi runtime | PASS WITH DOCUMENTED EXCLUSION |
 | Inventory + Return/Refund current-runtime slice | `InventoryIntegrationTest,ReturnRefundIntegrationTest` | 31 test, 0 failure/error; fixture tuân thủ publishability V2 | PASS |
@@ -54,6 +54,12 @@ Chạy smoke baseline nghiệp vụ bằng:
 | Admin Product current-runtime slice | `AdminProductListIntegrationTest` | 6/7 ca đạt; riêng filter `featured=true` chưa thể hoạt động vì `Product.featured` là `@Transient` và V1-V13 không có cột tương ứng | PASS WITH DOCUMENTED EXCLUSION |
 | Sales Report current-runtime slice | `ReportIntegrationTest` | 9 test, 0 failure/error; COD delivered được đối chiếu theo payment semantics hiện hành | PASS |
 | Notification Resend current-runtime slice | `NotificationResendIntegrationTest` | 8 test, 0 failure/error; fixture order/product tuân thủ publishability V2 | PASS |
+| Product Image Upload current-runtime slice | `ProductImageUploadIntegrationTest` | 7 test, 0 failure/error; quản lý ảnh được kiểm tra khi product còn ở lifecycle `DRAFT` | PASS |
+| Category current-runtime slice | `CategoryIntegrationTest` | 10 test, 0 failure/error; taxonomy hai tầng và giới hạn `code` hiện hành được phản ánh đúng trong fixture | PASS |
+| Google Login current-runtime slice | `GoogleLoginIntegrationTest` | 9 test, 0 failure/error; mỗi fixture có Google `provider_subject` riêng theo identity schema 1A | PASS |
+| Notification Template current-runtime slice | `NotificationTemplateIntegrationTest` | 8 test, 0 failure/error; product fixture tuân thủ lifecycle publishability V2 | PASS |
+| Site Setting current-runtime slice | `SiteSettingIntegrationTest` | 7 test, 0 failure/error; key fixture tuân thủ constraint lowercase | PASS |
+| Product Detail current-runtime slice | 2 ca không phụ thuộc Review trong `ProductDetailCompletionIntegrationTest` | 2 test, 0 failure/error; ca review summary được loại vì Review đang dormant và route trả 404 | PASS WITH DOCUMENTED EXCLUSION |
 | Business smoke baseline | `scripts\verify-microservice-smoke.ps1` | 5 test đại diện: login, catalog public detail, tạo đơn COD, tạo/resume VietQR, webhook SePay đồng thời/idempotent | PASS |
 | Visual Search | `python -m pytest -q` | 127 passed, 2 skipped | PASS |
 | Chatbot/Product Search | `.venv\\Scripts\\python.exe -m pytest -q` | 242 passed | PASS |
@@ -73,10 +79,15 @@ Ghi chú:
 - Đã ổn định thêm Inventory và Return/Refund (31/31), Product Catalog (15/15), Product Search (14/14), cùng 6/7 ca Admin Product. Fixture đều tạo `DRAFT`, variant bán được và primary image test-only trước khi kích hoạt; chỉ ghi vào PostgreSQL Testcontainers.
 - Ca Admin Product lọc `featured=true` được theo dõi riêng: entity đánh dấu `featured` là `@Transient`, trong khi migration V1-V13 không có cột lưu trạng thái. Sửa đúng cần một quyết định schema/migration ở phase sau; Phase 0 không tự ý đổi Supabase.
 - `ProductVariantService` đã flush lúc tạo variant để lỗi unique SKU được bắt trong transaction service và trả về business conflict 409, thay vì rơi ra 500 lúc commit.
-- Lần chạy full suite gần nhất còn 74 failure và 24 error, trong đó có 8 failure Report và 7 failure Notification Resend đã được xử lý sau lần chạy đó. Toàn bộ 24 error thuộc Shipping/Seed dormant; nhóm failure lớn còn lại tập trung ở Collection/Review/Banner/Page dormant và các lát cắt Product Image Upload, Google Login, Category cần xử lý tiếp.
+- Lần chạy full suite gần nhất còn 47 failure và 23 error. Toàn bộ 23 error thuộc Shipping/Seed dormant. Failure được phân nhóm thành Collection (15), Review (11), Banner (7), Page (5), Product Detail phụ thuộc Review (3 tại thời điểm full run), Combo trong Order (3), cùng một ca ở Notification Template, Admin Product featured và Site Setting. Sau lần full này, Notification Template đạt 8/8, Site Setting đạt 7/7 và hai ca Product Detail không phụ thuộc Review đạt 2/2; ca Product Detail review summary còn lại được xác nhận trả 404 vì Review bị loại khỏi runtime.
 - Smoke baseline chỉ dùng PostgreSQL/pgvector Testcontainers và cấu hình provider test; không gọi Supabase production, ngân hàng hoặc webhook SePay thật.
 - Lát cắt Sales Report đạt 9/9 sau khi fixture tuân thủ publishability V2 và kỳ vọng `codDeliveredUnpaid` được đồng bộ với quy tắc: đơn COD chuyển `DELIVERED` đồng thời ghi nhận thu tiền (`PAID`).
 - Lát cắt Notification Resend đạt 8/8 sau khi product fixture chỉ kích hoạt sau khi có variant và primary image test-only hợp lệ.
+- Lát cắt Product Image Upload đạt 7/7 khi fixture giữ product ở `DRAFT` trong lúc quản lý ảnh, đúng lifecycle trước khi publish.
+- Lát cắt Category đạt 10/10: slug ngẫu nhiên không còn làm `code` vượt `varchar(50)`, và test độ sâu kiểm tra trực tiếp root -> child -> từ chối grandchild theo taxonomy hai tầng của schema 1A.
+- Lát cắt Google Login đạt 9/9 sau khi mỗi Google identity test dùng `provider_subject` riêng; điều này khớp nguồn định danh `(provider, provider_subject)` trong `user_identities`.
+- Lát cắt Notification Template đạt 8/8 và Site Setting đạt 7/7 sau khi fixture tuân thủ lần lượt publishability V2 và constraint lowercase của `site_settings.setting_key`.
+- Hai ca Product Detail thuần Catalog đạt 2/2. Ca review summary được theo dõi cùng module Review dormant vì `/api/v1/products/{id}/reviews` không tồn tại trong 128 route runtime hiện hành.
 - Runtime hiện tại chủ động loại các package `banner`, `collection`, `combo`, `page`, `promotion`, `recommendation`, `review`, `shipping` và `infra.seed` khỏi component scan. Chúng phải được phân loại là dormant/legacy hoặc được kích hoạt bằng migration/schema đầy đủ trước khi tính vào service đích.
 
 ## 4. Module ownership baseline
@@ -186,6 +197,12 @@ Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên S
   - [x] Lát cắt Admin Product đạt 6/7; filter featured chờ quyết định migration/schema.
   - [x] Lát cắt Sales Report runtime hiện hành đạt 9/9.
   - [x] Lát cắt Notification Resend runtime hiện hành đạt 8/8.
+  - [x] Lát cắt Product Image Upload runtime hiện hành đạt 7/7.
+  - [x] Lát cắt Category runtime hiện hành đạt 10/10.
+  - [x] Lát cắt Google Login runtime hiện hành đạt 9/9.
+  - [x] Lát cắt Notification Template runtime hiện hành đạt 8/8.
+  - [x] Lát cắt Site Setting runtime hiện hành đạt 7/7.
+  - [x] Hai ca Product Detail không phụ thuộc Review đạt 2/2; ca review summary được theo dõi cùng Review dormant.
 - [x] Ba migration test đạt trên PostgreSQL/pgvector 17 local chuyên dụng (16/16 test).
 - [x] Tạo backup Supabase V13 hiện hành và restore drill thành công.
 - [x] Chụp smoke baseline cho đăng nhập, catalog, COD và VietQR/SePay (5/5 test, có script tái lập).

@@ -55,10 +55,10 @@ class GoogleLoginIntegrationTest extends AbstractIntegrationTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
-                                {"sub":"114711234567890","email":"%s","email_verified":"true",
+                                {"sub":"sub-%s","email":"%s","email_verified":"true",
                                 "name":"%s","picture":"https://lh3.googleusercontent.com/photo.jpg",
                                 "aud":"test-client-id.apps.googleusercontent.com"}
-                                """.formatted(email, name))));
+                                """.formatted(email, email, name))));
     }
 
     private void stubInvalidToken() {
@@ -145,7 +145,7 @@ class GoogleLoginIntegrationTest extends AbstractIntegrationTest {
                 .andReturn();
         assertThat(result.getResponse().getStatus()).isEqualTo(422);
         assertThat(json(result.getResponse().getContentAsString()).at("/message").asText())
-                .containsIgnoringCase("email/password");
+                .containsIgnoringCase("original sign-in method");
     }
 
     // ===== Reverse: Google user trying email+password login returns 422 =====

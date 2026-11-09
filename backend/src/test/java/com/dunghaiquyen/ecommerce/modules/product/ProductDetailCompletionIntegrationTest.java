@@ -52,12 +52,12 @@ class ProductDetailCompletionIntegrationTest extends AbstractIntegrationTest {
     private record CreatedProduct(String id, String slug) {
     }
 
-    private CreatedProduct createActiveProduct(AdminContext ctx, String name) throws Exception {
+    private CreatedProduct createDraftProduct(AdminContext ctx, String name) throws Exception {
         String slug = "pdp-prod-" + UUID.randomUUID();
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -149,21 +149,20 @@ class ProductDetailCompletionIntegrationTest extends AbstractIntegrationTest {
     @Test
     void productDetail_reviewSummary_onlyCountsApprovedReviews() throws Exception {
         AdminContext ctx = setUpAdmin();
-        CreatedProduct product = createActiveProduct(ctx, "Reviewed Shirt");
-        String variantId1 = createVariant(ctx, product.id());
-        String variantId2 = createVariant(ctx, product.id());
-        String variantId3 = createVariant(ctx, product.id());
+        CreatedProduct product = createDraftProduct(ctx, "Reviewed Shirt");
+        String variantId = createVariant(ctx, product.id());
+        makeProductPublishableForTest(product.id());
 
-        String approvedReviewId = buyDeliverAndReview(ctx, product.id(), variantId1, 5);
+        String approvedReviewId = buyDeliverAndReview(ctx, product.id(), variantId, 5);
         approveReview(ctx, approvedReviewId);
 
-        String secondApprovedId = buyDeliverAndReview(ctx, product.id(), variantId2, 3);
+        String secondApprovedId = buyDeliverAndReview(ctx, product.id(), variantId, 3);
         approveReview(ctx, secondApprovedId);
 
-        String rejectedReviewId = buyDeliverAndReview(ctx, product.id(), variantId3, 1);
+        String rejectedReviewId = buyDeliverAndReview(ctx, product.id(), variantId, 1);
         rejectReview(ctx, rejectedReviewId);
         // a freshly-submitted (still-PENDING) review must also not count
-        buyDeliverAndReview(ctx, product.id(), createVariant(ctx, product.id()), 2);
+        buyDeliverAndReview(ctx, product.id(), variantId, 2);
 
         MvcResult result = mockMvc.perform(get("/api/v1/products/" + product.slug()))
                 .andExpect(status().isOk())
@@ -176,7 +175,9 @@ class ProductDetailCompletionIntegrationTest extends AbstractIntegrationTest {
     @Test
     void productDetail_noReviews_summaryIsZeroNotNullOrError() throws Exception {
         AdminContext ctx = setUpAdmin();
-        CreatedProduct product = createActiveProduct(ctx, "Unreviewed Shirt");
+        CreatedProduct product = createDraftProduct(ctx, "Unreviewed Shirt");
+        createVariant(ctx, product.id());
+        makeProductPublishableForTest(product.id());
 
         MvcResult result = mockMvc.perform(get("/api/v1/products/" + product.slug()))
                 .andExpect(status().isOk())
@@ -191,11 +192,15 @@ class ProductDetailCompletionIntegrationTest extends AbstractIntegrationTest {
     @Test
     void productDetail_relatedProducts_sameCategoryOrBrand_excludesSelfAndInactive() throws Exception {
         AdminContext ctx = setUpAdmin();
-        CreatedProduct main = createActiveProduct(ctx, "Main Product");
-        CreatedProduct sameCategory = createActiveProduct(ctx, "Same Category Product");
+        CreatedProduct main = createDraftProduct(ctx, "Main Product");
+        CreatedProduct sameCategory = createDraftProduct(ctx, "Same Category Product");
+        createVariant(ctx, main.id());
+        createVariant(ctx, sameCategory.id());
+        makeProductPublishableForTest(main.id());
+        makeProductPublishableForTest(sameCategory.id());
 
         // A second category/brand combo for a product that must NOT show up as related.
-        String otherCategorySlug = "pdp-other-cat-" + UUID.randomUUID();
+        String otherCategorySlug = "pdp-other-cat-" + UUID.randomUUID().toString().substring(0, 8);
         MvcResult otherCat = mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -203,7 +208,7 @@ class ProductDetailCompletionIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         String otherCategoryId = json(otherCat.getResponse().getContentAsString()).at("/data/id").asText();
-        String otherBrandSlug = "pdp-other-brand-" + UUID.randomUUID();
+        String otherBrandSlug = "pdp-other-brand-" + UUID.randomUUID().toString().substring(0, 8);
         MvcResult otherBrand = mockMvc.perform(post("/api/v1/admin/brands")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -213,12 +218,16 @@ class ProductDetailCompletionIntegrationTest extends AbstractIntegrationTest {
         String otherBrandId = json(otherBrand.getResponse().getContentAsString()).at("/data/id").asText();
 
         String unrelatedSlug = "pdp-unrelated-" + UUID.randomUUID();
-        mockMvc.perform(post("/api/v1/admin/products")
+        MvcResult unrelatedResult = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"Unrelated Product\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"Unrelated Product\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\"}")
                                 .formatted(unrelatedSlug, otherCategoryId, otherBrandId)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andReturn();
+        String unrelatedId = json(unrelatedResult.getResponse().getContentAsString()).at("/data/id").asText();
+        createVariant(ctx, unrelatedId);
+        makeProductPublishableForTest(unrelatedId);
 
         // DRAFT product in the same category must not appear either.
         String draftSlug = "pdp-draft-" + UUID.randomUUID();

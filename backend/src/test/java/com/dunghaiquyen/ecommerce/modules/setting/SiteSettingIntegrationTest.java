@@ -104,7 +104,7 @@ class SiteSettingIntegrationTest extends AbstractIntegrationTest {
     void public_onlyReturnsPublicSettings_noAuthRequired() throws Exception {
         String adminToken = registerAdminAndGetAccessToken(uniqueEmail("setting-public-admin"));
         String publicKey = "site.contact.hotline." + UUID.randomUUID();
-        String privateKey = "site.internal.apiSecret." + UUID.randomUUID();
+        String privateKey = "site.internal.api-secret." + UUID.randomUUID();
 
         mockMvc.perform(put("/api/v1/admin/settings/" + publicKey)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken)
