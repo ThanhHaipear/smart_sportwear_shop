@@ -9,12 +9,11 @@ import static org.mockito.Mockito.when;
 
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
 import com.dunghaiquyen.ecommerce.modules.cart.entity.Cart;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartRepository;
+import com.dunghaiquyen.ecommerce.modules.cart.api.CartReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.cart.web.CartOwner;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
+import com.dunghaiquyen.ecommerce.modules.product.api.ProductReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.recommendation.dto.RecommendationLogRequest;
 import com.dunghaiquyen.ecommerce.modules.recommendation.entity.AssociationRule;
 import com.dunghaiquyen.ecommerce.modules.recommendation.entity.RecommendationAlgorithm;
@@ -42,13 +41,11 @@ class RecommendationLogServiceTest {
     @Mock
     private RecommendationLogRepository logRepository;
     @Mock
-    private ProductRepository productRepository;
+    private ProductReferenceQuery productReferenceQuery;
     @Mock
     private AssociationRuleRepository ruleRepository;
     @Mock
-    private CartRepository cartRepository;
-    @Mock
-    private CartItemRepository cartItemRepository;
+    private CartReferenceQuery cartReferenceQuery;
     @Mock
     private EntityManager entityManager;
 
@@ -58,10 +55,9 @@ class RecommendationLogServiceTest {
     void setUp() {
         service = new RecommendationLogService(
                 logRepository,
-                productRepository,
+                productReferenceQuery,
                 ruleRepository,
-                cartRepository,
-                cartItemRepository,
+                cartReferenceQuery,
                 entityManager
         );
     }
@@ -77,8 +73,8 @@ class RecommendationLogServiceTest {
         rule.setLift(1.4);
         rule.setPairCount(9);
 
-        when(productRepository.findById(recommended.getId())).thenReturn(Optional.of(recommended));
-        when(productRepository.findById(source.getId())).thenReturn(Optional.of(source));
+        when(productReferenceQuery.findProduct(recommended.getId())).thenReturn(Optional.of(recommended));
+        when(productReferenceQuery.findProduct(source.getId())).thenReturn(Optional.of(source));
         when(ruleRepository.findBestActiveRule(eq(List.of(source.getId())), eq(recommended.getId()), any()))
                 .thenReturn(List.of(rule));
         when(entityManager.getReference(User.class, userId)).thenReturn(new User());
@@ -119,8 +115,8 @@ class RecommendationLogServiceTest {
         Cart anotherCart = new Cart();
         anotherCart.setId(UUID.randomUUID());
 
-        when(productRepository.findById(recommended.getId())).thenReturn(Optional.of(recommended));
-        when(cartRepository.findByUserId(userId)).thenReturn(Optional.of(anotherCart));
+        when(productReferenceQuery.findProduct(recommended.getId())).thenReturn(Optional.of(recommended));
+        when(cartReferenceQuery.findCart(any())).thenReturn(Optional.of(anotherCart));
 
         RecommendationLogRequest request = new RecommendationLogRequest(
                 RecommendationEventType.IMPRESSION,

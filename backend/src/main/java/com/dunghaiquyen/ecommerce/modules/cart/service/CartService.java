@@ -16,10 +16,9 @@ import com.dunghaiquyen.ecommerce.modules.product.entity.ProductImage;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductVariant;
 import com.dunghaiquyen.ecommerce.modules.product.entity.VariantStatus;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepository;
+import com.dunghaiquyen.ecommerce.modules.product.api.ProductReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.product.util.ThumbnailResolver;
-import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
+import com.dunghaiquyen.ecommerce.modules.user.api.UserReferenceQuery;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -41,21 +40,18 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final ProductVariantRepository variantRepository;
-    private final ProductImageRepository imageRepository;
-    private final UserRepository userRepository;
+    private final ProductReferenceQuery productReferenceQuery;
+    private final UserReferenceQuery userReferenceQuery;
 
     public CartService(
             CartRepository cartRepository,
             CartItemRepository cartItemRepository,
-            ProductVariantRepository variantRepository,
-            ProductImageRepository imageRepository,
-            UserRepository userRepository) {
+            ProductReferenceQuery productReferenceQuery,
+            UserReferenceQuery userReferenceQuery) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
-        this.variantRepository = variantRepository;
-        this.imageRepository = imageRepository;
-        this.userRepository = userRepository;
+        this.productReferenceQuery = productReferenceQuery;
+        this.userReferenceQuery = userReferenceQuery;
     }
 
     @Transactional
@@ -66,7 +62,7 @@ public class CartService {
     @Transactional
     public CartResponse addItem(CartOwner owner, AddCartItemRequest request) {
         Cart cart = lockCart(findOrCreateCart(owner));
-        ProductVariant variant = variantRepository.findById(request.variantId())
+        ProductVariant variant = productReferenceQuery.findVariant(request.variantId())
                 .orElseThrow(() -> new ResourceNotFoundException("Variant not found"));
         validateAddable(variant);
         int available = availableQuantity(variant);
@@ -186,7 +182,7 @@ public class CartService {
     private Cart createCart(CartOwner owner) {
         Cart cart = new Cart();
         if (owner.isUser()) {
-            cart.setUser(userRepository.getReferenceById(owner.userId()));
+            cart.setUser(userReferenceQuery.getReference(owner.userId()));
         } else {
             cart.setSessionId(owner.sessionId());
         }
@@ -224,7 +220,7 @@ public class CartService {
         if (productIds.isEmpty()) {
             return Map.of();
         }
-        return imageRepository.findAllByProductIdIn(productIds).stream()
+        return productReferenceQuery.findImagesByProductIds(productIds).stream()
                 .collect(Collectors.groupingBy(image -> image.getProduct().getId()))
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> ThumbnailResolver.resolve(e.getValue())));

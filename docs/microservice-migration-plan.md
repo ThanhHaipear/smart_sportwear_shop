@@ -5,8 +5,9 @@
 | Giai đoạn | Trạng thái | Bằng chứng |
 |---|---|---|
 | 0. Chốt baseline | `DONE` | [Phase 0 baseline](microservice-phase-0-baseline.md): current-runtime gate 351/351 |
-| 1. Cứng hóa modular boundary | `IN_PROGRESS` | [Boundary hardening log](microservice-phase-1-boundaries.md); chưa thay đổi Supabase production |
-| 2-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
+| 1. Cứng hóa modular boundary | `DONE` | [Boundary hardening log](microservice-phase-1-boundaries.md): repository coupling = 0, integration gate 361/361 |
+| 2. Chuẩn hóa event platform | `READY` | Bắt đầu sau khi thay đổi Phase 1 được review/commit; chưa thay đổi Supabase production |
+| 3-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 
@@ -187,8 +188,8 @@ Yêu cầu cho mọi consumer:
 
 - [x] Lập danh sách endpoint hiện tại và service đích.
 - [x] Lập dependency graph giữa các module Spring Boot.
-- [ ] Định nghĩa chuẩn response/error, pagination và authentication nội bộ.
-- [ ] Thêm `traceId`/`correlationId` từ gateway đến log và event.
+- [x] Định nghĩa chuẩn response/error hiện tại; pagination và authentication nội bộ tiếp tục hoàn thiện theo service ở phase tách tương ứng.
+- [x] Thêm `traceId`/`correlationId` từ HTTP header đến log, error envelope và catalog event.
 - [ ] Chuẩn hóa health, readiness và metrics cho mọi service.
 - [ ] Thêm contract test REST và RabbitMQ.
 - [ ] Tạo feature flag để chuyển traffic từng chức năng.

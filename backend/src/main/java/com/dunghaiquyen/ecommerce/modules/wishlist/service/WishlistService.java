@@ -7,7 +7,7 @@ import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
 import com.dunghaiquyen.ecommerce.modules.product.util.ThumbnailResolver;
-import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
+import com.dunghaiquyen.ecommerce.modules.user.api.UserReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.wishlist.dto.AddWishlistItemRequest;
 import com.dunghaiquyen.ecommerce.modules.wishlist.dto.WishlistItemResponse;
 import com.dunghaiquyen.ecommerce.modules.wishlist.dto.WishlistResponse;
@@ -39,19 +39,19 @@ public class WishlistService {
     private final WishlistItemRepository wishlistItemRepository;
     private final ProductRepository productRepository;
     private final ProductImageRepository imageRepository;
-    private final UserRepository userRepository;
+    private final UserReferenceQuery userReferenceQuery;
 
     public WishlistService(
             WishlistRepository wishlistRepository,
             WishlistItemRepository wishlistItemRepository,
             ProductRepository productRepository,
             ProductImageRepository imageRepository,
-            UserRepository userRepository) {
+            UserReferenceQuery userReferenceQuery) {
         this.wishlistRepository = wishlistRepository;
         this.wishlistItemRepository = wishlistItemRepository;
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
-        this.userRepository = userRepository;
+        this.userReferenceQuery = userReferenceQuery;
     }
 
     /**
@@ -116,7 +116,7 @@ public class WishlistService {
 
     private Wishlist createWishlist(UUID userId) {
         Wishlist wishlist = new Wishlist();
-        wishlist.setUser(userRepository.getReferenceById(userId));
+        wishlist.setUser(userReferenceQuery.getReference(userId));
         try {
             return wishlistRepository.save(wishlist);
         } catch (DataIntegrityViolationException ex) {

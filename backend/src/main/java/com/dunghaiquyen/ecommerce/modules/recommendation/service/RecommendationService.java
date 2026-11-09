@@ -4,8 +4,7 @@ import com.dunghaiquyen.ecommerce.common.exception.BusinessRuleException;
 import com.dunghaiquyen.ecommerce.modules.brand.entity.Brand;
 import com.dunghaiquyen.ecommerce.modules.cart.entity.Cart;
 import com.dunghaiquyen.ecommerce.modules.cart.entity.CartItem;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartRepository;
+import com.dunghaiquyen.ecommerce.modules.cart.api.CartReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.cart.web.CartOwner;
 import com.dunghaiquyen.ecommerce.modules.category.entity.Category;
 import com.dunghaiquyen.ecommerce.modules.product.dto.CatalogRefResponse;
@@ -14,9 +13,7 @@ import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductImage;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductVariant;
 import com.dunghaiquyen.ecommerce.modules.product.entity.VariantStatus;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepository;
+import com.dunghaiquyen.ecommerce.modules.product.api.ProductReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.product.util.ThumbnailResolver;
 import com.dunghaiquyen.ecommerce.modules.recommendation.dto.CartRecommendationResponse;
 import com.dunghaiquyen.ecommerce.modules.recommendation.dto.RecommendationItemResponse;
@@ -52,27 +49,18 @@ public class RecommendationService {
     private static final String CART_RECOMMENDATION = "CART_RECOMMENDATION";
 
     private final AssociationRuleRepository associationRuleRepository;
-    private final ProductRepository productRepository;
-    private final ProductVariantRepository variantRepository;
-    private final ProductImageRepository imageRepository;
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    private final ProductReferenceQuery productReferenceQuery;
+    private final CartReferenceQuery cartReferenceQuery;
     private final RecommendationCacheService recommendationCacheService;
 
     public RecommendationService(
             AssociationRuleRepository associationRuleRepository,
-            ProductRepository productRepository,
-            ProductVariantRepository variantRepository,
-            ProductImageRepository imageRepository,
-            CartRepository cartRepository,
-            CartItemRepository cartItemRepository,
+            ProductReferenceQuery productReferenceQuery,
+            CartReferenceQuery cartReferenceQuery,
             RecommendationCacheService recommendationCacheService) {
         this.associationRuleRepository = associationRuleRepository;
-        this.productRepository = productRepository;
-        this.variantRepository = variantRepository;
-        this.imageRepository = imageRepository;
-        this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
+        this.productReferenceQuery = productReferenceQuery;
+        this.cartReferenceQuery = cartReferenceQuery;
         this.recommendationCacheService = recommendationCacheService;
     }
 
@@ -80,7 +68,7 @@ public class RecommendationService {
     public RecommendationResponse getFrequentlyBoughtTogether(UUID productId, Integer limit) {
         int resolvedLimit = resolveLimit(limit);
 
-        productRepository.findActiveByIdWithBrandAndCategory(productId)
+        productReferenceQuery.findActiveProductWithBrandAndCategory(productId)
                 .orElseThrow(() -> new com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException(
                         "Product not found"
                 ));
@@ -161,7 +149,7 @@ public class RecommendationService {
 
         Cart cart = optionalCart.get();
 
-        List<CartItem> cartItems = cartItemRepository.findAllByCartIdWithVariantAndProduct(cart.getId());
+        List<CartItem> cartItems = cartReferenceQuery.findItemsWithVariantAndProduct(cart.getId());
 
         List<UUID> sourceProductIds = cartItems.stream()
                 .map(item -> item.getVariant().getProduct().getId())
@@ -243,10 +231,7 @@ public class RecommendationService {
     }
 
     private Optional<Cart> findCart(CartOwner owner) {
-        if (owner.isUser()) {
-            return cartRepository.findByUserId(owner.userId());
-        }
-        return cartRepository.findBySessionId(owner.sessionId());
+        return cartReferenceQuery.findCart(owner);
     }
 
     private List<AssociationRule> selectBestRulesForCart(
@@ -288,7 +273,7 @@ public class RecommendationService {
     }
 
     private List<RecommendationItemResponse> buildProductDetailFallbackItems(UUID productId, int limit) {
-        Optional<Product> optionalSourceProduct = productRepository.findActiveByIdWithBrandAndCategory(productId);
+        Optional<Product> optionalSourceProduct = productReferenceQuery.findActiveProductWithBrandAndCategory(productId);
 
         if (optionalSourceProduct.isEmpty()) {
             return List.of();
@@ -297,7 +282,7 @@ public class RecommendationService {
         Product sourceProduct = optionalSourceProduct.get();
 
         List<Product> fallbackProducts = new ArrayList<>(
-                productRepository.findSimilarActiveProducts(
+                productReferenceQuery.findSimilarActiveProducts(
                         sourceProduct.getCategory().getId(),
                         sourceProduct.getBrand().getId(),
                         sourceProduct.getId(),
@@ -312,7 +297,7 @@ public class RecommendationService {
                     .map(Product::getId)
                     .forEach(excludedProductIds::add);
 
-            List<Product> extraProducts = productRepository.findActiveFallbackProductsExcluding(
+            List<Product> extraProducts = productReferenceQuery.findActiveFallbackProductsExcluding(
                     excludedProductIds,
                     PageRequest.of(0, candidateLimit(limit - fallbackProducts.size()))
             );
@@ -335,7 +320,7 @@ public class RecommendationService {
             return List.of();
         }
 
-        List<Product> fallbackProducts = productRepository.findActiveFallbackProductsExcluding(
+        List<Product> fallbackProducts = productReferenceQuery.findActiveFallbackProductsExcluding(
                 productIdsInCart,
                 PageRequest.of(0, candidateLimit(limit))
         );
@@ -362,12 +347,12 @@ public class RecommendationService {
                 .toList();
 
         Map<UUID, List<ProductVariant>> variantsByProduct =
-                variantRepository.findAllByProductIdIn(recommendedProductIds)
+                productReferenceQuery.findVariantsByProductIds(recommendedProductIds)
                         .stream()
                         .collect(Collectors.groupingBy(variant -> variant.getProduct().getId()));
 
         Map<UUID, List<ProductImage>> imagesByProduct =
-                imageRepository.findAllByProductIdIn(recommendedProductIds)
+                productReferenceQuery.findImagesByProductIds(recommendedProductIds)
                         .stream()
                         .collect(Collectors.groupingBy(image -> image.getProduct().getId()));
 
@@ -420,12 +405,12 @@ public class RecommendationService {
                 .toList();
 
         Map<UUID, List<ProductVariant>> variantsByProduct =
-                variantRepository.findAllByProductIdIn(productIds)
+                productReferenceQuery.findVariantsByProductIds(productIds)
                         .stream()
                         .collect(Collectors.groupingBy(variant -> variant.getProduct().getId()));
 
         Map<UUID, List<ProductImage>> imagesByProduct =
-                imageRepository.findAllByProductIdIn(productIds)
+                productReferenceQuery.findImagesByProductIds(productIds)
                         .stream()
                         .collect(Collectors.groupingBy(image -> image.getProduct().getId()));
 
@@ -522,18 +507,18 @@ public class RecommendationService {
                 .distinct()
                 .toList();
 
-        Map<UUID, Product> productsById = productRepository
-                .findActiveByIdInWithBrandAndCategory(productIds)
+        Map<UUID, Product> productsById = productReferenceQuery
+                .findActiveProductsWithBrandAndCategory(productIds)
                 .stream()
                 .collect(Collectors.toMap(Product::getId, product -> product));
 
-        Map<UUID, List<ProductVariant>> variantsByProduct = variantRepository
-                .findAllByProductIdIn(productIds)
+        Map<UUID, List<ProductVariant>> variantsByProduct = productReferenceQuery
+                .findVariantsByProductIds(productIds)
                 .stream()
                 .collect(Collectors.groupingBy(variant -> variant.getProduct().getId()));
 
-        Map<UUID, List<ProductImage>> imagesByProduct = imageRepository
-                .findAllByProductIdIn(productIds)
+        Map<UUID, List<ProductImage>> imagesByProduct = productReferenceQuery
+                .findImagesByProductIds(productIds)
                 .stream()
                 .collect(Collectors.groupingBy(image -> image.getProduct().getId()));
 

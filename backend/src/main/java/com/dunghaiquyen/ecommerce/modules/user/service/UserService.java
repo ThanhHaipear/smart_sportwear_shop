@@ -1,12 +1,16 @@
 package com.dunghaiquyen.ecommerce.modules.user.service;
 
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
+import com.dunghaiquyen.ecommerce.modules.user.api.UserReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.user.dto.UpdateMeRequest;
 import com.dunghaiquyen.ecommerce.modules.user.dto.UserResponse;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
+import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
+import com.dunghaiquyen.ecommerce.modules.user.entity.UserStatus;
 import com.dunghaiquyen.ecommerce.modules.user.mapper.UserMapper;
 import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
 import java.util.UUID;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  * lock/unlock, role change) is a separate concern, out of scope here.
  */
 @Service
-public class UserService {
+public class UserService implements UserReferenceQuery {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -23,6 +27,18 @@ public class UserService {
     public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User getReference(UUID userId) {
+        return userRepository.getReferenceById(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> findActiveAdmins() {
+        return userRepository.findAllByRoleAndStatus(UserRole.ADMIN, UserStatus.ACTIVE);
     }
 
     @Transactional(readOnly = true)

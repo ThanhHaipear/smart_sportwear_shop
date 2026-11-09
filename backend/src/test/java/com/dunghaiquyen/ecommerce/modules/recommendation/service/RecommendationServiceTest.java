@@ -10,17 +10,14 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import com.dunghaiquyen.ecommerce.modules.brand.entity.Brand;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartRepository;
+import com.dunghaiquyen.ecommerce.modules.cart.api.CartReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.category.entity.Category;
 import com.dunghaiquyen.ecommerce.modules.product.dto.ProductListItemResponse;
+import com.dunghaiquyen.ecommerce.modules.product.api.ProductReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductVariant;
 import com.dunghaiquyen.ecommerce.modules.product.entity.VariantStatus;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepository;
 import com.dunghaiquyen.ecommerce.modules.recommendation.dto.RecommendationItemResponse;
 import com.dunghaiquyen.ecommerce.modules.recommendation.dto.RecommendationResponse;
 import com.dunghaiquyen.ecommerce.modules.recommendation.entity.AssociationRule;
@@ -41,15 +38,9 @@ class RecommendationServiceTest {
     @Mock
     private AssociationRuleRepository ruleRepository;
     @Mock
-    private ProductRepository productRepository;
+    private ProductReferenceQuery productReferenceQuery;
     @Mock
-    private ProductVariantRepository variantRepository;
-    @Mock
-    private ProductImageRepository imageRepository;
-    @Mock
-    private CartRepository cartRepository;
-    @Mock
-    private CartItemRepository cartItemRepository;
+    private CartReferenceQuery cartReferenceQuery;
     @Mock
     private RecommendationCacheService cacheService;
 
@@ -60,15 +51,12 @@ class RecommendationServiceTest {
     void setUp() {
         service = new RecommendationService(
                 ruleRepository,
-                productRepository,
-                variantRepository,
-                imageRepository,
-                cartRepository,
-                cartItemRepository,
+                productReferenceQuery,
+                cartReferenceQuery,
                 cacheService
         );
         sourceProduct = product("Source product");
-        when(productRepository.findActiveByIdWithBrandAndCategory(sourceProduct.getId()))
+        when(productReferenceQuery.findActiveProductWithBrandAndCategory(sourceProduct.getId()))
                 .thenReturn(Optional.of(sourceProduct));
         when(cacheService.productFrequentlyBoughtTogetherKey(any(), anyInt())).thenReturn("cache-key");
     }
@@ -82,10 +70,10 @@ class RecommendationServiceTest {
         when(cacheService.get(anyString(), eq(RecommendationResponse.class))).thenReturn(Optional.empty());
         when(ruleRepository.findActiveRulesByAntecedentProductId(eq(sourceProduct.getId()), any()))
                 .thenReturn(List.of(rule));
-        when(variantRepository.findAllByProductIdIn(anyList())).thenReturn(List.of(unavailable));
-        when(imageRepository.findAllByProductIdIn(anyList())).thenReturn(List.of());
-        when(productRepository.findSimilarActiveProducts(any(), any(), any(), any())).thenReturn(List.of());
-        when(productRepository.findActiveFallbackProductsExcluding(anySet(), any())).thenReturn(List.of());
+        when(productReferenceQuery.findVariantsByProductIds(anyList())).thenReturn(List.of(unavailable));
+        when(productReferenceQuery.findImagesByProductIds(anyList())).thenReturn(List.of());
+        when(productReferenceQuery.findSimilarActiveProducts(any(), any(), any(), any())).thenReturn(List.of());
+        when(productReferenceQuery.findActiveFallbackProductsExcluding(anySet(), any())).thenReturn(List.of());
 
         RecommendationResponse response = service.getFrequentlyBoughtTogether(sourceProduct.getId(), 8);
 
@@ -120,11 +108,11 @@ class RecommendationServiceTest {
 
         when(cacheService.get(anyString(), eq(RecommendationResponse.class)))
                 .thenReturn(Optional.of(cached));
-        when(productRepository.findActiveByIdInWithBrandAndCategory(List.of(recommended.getId())))
+        when(productReferenceQuery.findActiveProductsWithBrandAndCategory(List.of(recommended.getId())))
                 .thenReturn(List.of(recommended));
-        when(variantRepository.findAllByProductIdIn(List.of(recommended.getId())))
+        when(productReferenceQuery.findVariantsByProductIds(List.of(recommended.getId())))
                 .thenReturn(List.of(variant(recommended, 5, 0, new BigDecimal("250000"))));
-        when(imageRepository.findAllByProductIdIn(List.of(recommended.getId())))
+        when(productReferenceQuery.findImagesByProductIds(List.of(recommended.getId())))
                 .thenReturn(List.of());
 
         RecommendationResponse response = service.getFrequentlyBoughtTogether(sourceProduct.getId(), 8);

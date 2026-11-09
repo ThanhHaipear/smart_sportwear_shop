@@ -31,9 +31,8 @@ import com.dunghaiquyen.ecommerce.modules.product.mapper.ProductMapper;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
 import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepository;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
 import com.dunghaiquyen.ecommerce.modules.inventory.repository.InventoryTransactionRepository;
-import com.dunghaiquyen.ecommerce.modules.order.repository.OrderItemRepository;
+import com.dunghaiquyen.ecommerce.modules.order.api.SalesProductUsage;
 import com.dunghaiquyen.ecommerce.modules.product.repository.spec.ProductSpecifications;
 import com.dunghaiquyen.ecommerce.modules.product.util.ThumbnailResolver;
 import com.dunghaiquyen.ecommerce.visualsearch.outbox.CatalogEventType;
@@ -74,9 +73,8 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
     private final ProductMapper productMapper;
-    private final CartItemRepository cartItemRepository;
+    private final SalesProductUsage salesProductUsage;
     private final InventoryTransactionRepository inventoryTransactionRepository;
-    private final OrderItemRepository orderItemRepository;
     private final CatalogOutboxService catalogOutboxService;
     private final CatalogReferenceService catalogReferenceService;
 
@@ -87,9 +85,8 @@ public class ProductService {
             CategoryRepository categoryRepository,
             BrandRepository brandRepository,
             ProductMapper productMapper,
-            CartItemRepository cartItemRepository,
+            SalesProductUsage salesProductUsage,
             InventoryTransactionRepository inventoryTransactionRepository,
-            OrderItemRepository orderItemRepository,
             CatalogOutboxService catalogOutboxService,
             CatalogReferenceService catalogReferenceService) {
         this.productRepository = productRepository;
@@ -98,9 +95,8 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
         this.brandRepository = brandRepository;
         this.productMapper = productMapper;
-        this.cartItemRepository = cartItemRepository;
+        this.salesProductUsage = salesProductUsage;
         this.inventoryTransactionRepository = inventoryTransactionRepository;
-        this.orderItemRepository = orderItemRepository;
         this.catalogOutboxService = catalogOutboxService;
         this.catalogReferenceService = catalogReferenceService;
     }
@@ -372,13 +368,13 @@ public class ProductService {
                 .map(ProductVariant::getId)
                 .toList();
 
-        if (!variantIds.isEmpty() && orderItemRepository.existsByVariantIdIn(variantIds)) {
+        if (!variantIds.isEmpty() && salesProductUsage.hasOrderHistory(variantIds)) {
             throw new BusinessRuleException(
                     "Không thể xóa sản phẩm đã có lịch sử đơn hàng. Hãy chuyển trạng thái sang INACTIVE thay thế.");
         }
 
         if (!variantIds.isEmpty()) {
-            cartItemRepository.deleteAllByVariantIdIn(variantIds);
+            salesProductUsage.deleteCartItems(variantIds);
             inventoryTransactionRepository.deleteAllByVariantIdIn(variantIds);
         }
 

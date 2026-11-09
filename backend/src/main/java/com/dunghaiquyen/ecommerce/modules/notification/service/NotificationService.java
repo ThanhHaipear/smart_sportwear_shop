@@ -20,7 +20,7 @@ import com.dunghaiquyen.ecommerce.modules.order.entity.Order;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserStatus;
-import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
+import com.dunghaiquyen.ecommerce.modules.user.api.UserReferenceQuery;
 import java.time.Duration;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -71,7 +71,7 @@ public class NotificationService {
     private final NotificationTemplates notificationTemplates;
     private final NotificationBroadcaster broadcaster;
     private final NotificationDeliveryService deliveryService;
-    private final UserRepository userRepository;
+    private final UserReferenceQuery userReferenceQuery;
 
     public NotificationService(
             NotificationRepository notificationRepository,
@@ -79,13 +79,13 @@ public class NotificationService {
             NotificationTemplates notificationTemplates,
             NotificationBroadcaster broadcaster,
             NotificationDeliveryService deliveryService,
-            UserRepository userRepository) {
+            UserReferenceQuery userReferenceQuery) {
         this.notificationRepository = notificationRepository;
         this.mailService = mailService;
         this.notificationTemplates = notificationTemplates;
         this.broadcaster = broadcaster;
         this.deliveryService = deliveryService;
-        this.userRepository = userRepository;
+        this.userReferenceQuery = userReferenceQuery;
     }
 
     public record ListResult(List<NotificationResponse> items, PageMeta meta) {
@@ -115,7 +115,7 @@ public class NotificationService {
     }
 
     private void notifyActiveAdmins(Order order, NotificationType type, EmailContent content) {
-        userRepository.findAllByRoleAndStatus(UserRole.ADMIN, UserStatus.ACTIVE)
+        userReferenceQuery.findActiveAdmins()
                 .forEach(admin -> queueAfterCommit(admin, order, type, content));
     }
 

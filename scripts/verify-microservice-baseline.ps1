@@ -33,6 +33,7 @@ function Invoke-Checked {
 
 $backendUnitTests = @(
     "BoundedContextArchitectureTest",
+    "CorrelationIdFilterTest",
     "MailProviderSelectionTest",
     "ImageStorageProviderSelectionTest",
     "PaymentProviderPropertiesTest",

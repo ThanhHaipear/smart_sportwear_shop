@@ -229,6 +229,8 @@ info:
     health: /actuator/health
 
 logging:
+  pattern:
+    level: "%5p [traceId:%X{traceId:-}]"
   level:
     com.dunghaiquyen.ecommerce: ${LOG_LEVEL:INFO}
     # A SePay webhook is intentionally bound as byte[] so its HMAC can be

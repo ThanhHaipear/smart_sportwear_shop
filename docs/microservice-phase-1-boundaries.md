@@ -2,66 +2,100 @@
 
 Ngày cập nhật: 09/11/2026
 
-Trạng thái: `IN_PROGRESS`
+Trạng thái: `DONE`
 
-## Mục tiêu
+## Mục tiêu và phạm vi
 
-Phase 1 loại dần truy cập trực tiếp `entity` và `repository` xuyên bounded context, thay bằng API/port tường minh trước khi tách process hoặc dữ liệu vật lý.
-
-Phase này không tạo schema/role, không di chuyển bảng và không thay đổi dữ liệu Supabase production.
-
-## Boundary đang áp dụng
+Phase 1 làm cứng ranh giới giữa bốn bounded context hiện có trước khi tách process hoặc dữ liệu vật lý:
 
 | Bounded context | Module |
 |---|---|
 | Identity | `address`, `auth`, `user` |
-| Catalog | `catalog`, `category`, `brand`, `product`, `collection`, `promotion`, `combo`, `inventory`, `wishlist`, `review`, `banner`, `page`, `setting` |
-| Sales | `cart`, `checkout`, `order`, `payment`, `shipping`, `returns`, `notification`, `audit`, `report` |
-| Recommendation | `recommendation`, `interaction` |
+| Catalog | `banner`, `brand`, `catalog`, `category`, `collection`, `combo`, `inventory`, `page`, `product`, `promotion`, `review`, `setting`, `wishlist` |
+| Sales | `audit`, `cart`, `checkout`, `notification`, `order`, `payment`, `report`, `returns`, `shipping` |
+| Recommendation | `interaction`, `recommendation` |
 
-## Lát cắt 1 - Checkout sang Identity
+Phase này không tạo schema/role, không di chuyển bảng và không thay đổi dữ liệu Supabase production.
 
-Trước thay đổi, `CheckoutPreviewService` import trực tiếp `AddressRepository` rồi đọc quan hệ JPA `Address.user` để kiểm tra quyền sở hữu. Điều này làm Sales phụ thuộc persistence nội bộ của Identity.
+## Kết quả boundary
 
-Sau thay đổi:
+### Identity API
 
-- Identity công bố `AddressOwnershipQuery` trong package `address.api`.
-- `AddressService` triển khai contract và giữ toàn bộ truy cập `AddressRepository` bên trong Identity.
-- Checkout chỉ gọi `requireOwnedAddress(userId, addressId)` và không biết entity/repository Identity.
-- Architecture test khóa hai quy tắc đầu tiên:
-  - Identity không import entity/repository của bounded context khác.
-  - Checkout không import entity/repository Identity.
-- `BoundedContextArchitectureTest` được đưa vào baseline verification script.
+- `AddressOwnershipQuery` và `AddressSnapshot` thay thế việc Checkout, Order và Shipping đọc trực tiếp `AddressRepository`/`Address`.
+- `UserReferenceQuery` thay thế việc Cart, Order, Wishlist và Notification đọc trực tiếp `UserRepository`.
+- Persistence của Identity chỉ còn được truy cập bên trong Identity.
 
-## Lát cắt 2 - Order sang Identity
+### Catalog API
 
-Trước thay đổi, `OrderService` đọc trực tiếp `AddressRepository` và chuyển entity `Address` thành JSON snapshot. Điều này gắn transaction tạo đơn với persistence model của Identity.
+- `ProductReferenceQuery` cung cấp các phép đọc Product/Variant/Image đã được duyệt cho Sales và Recommendation.
+- `ProductReferenceService` giữ các repository Catalog ở phía provider.
+- `SalesProductUsage` cho Catalog kiểm tra lịch sử đơn và xóa cart item qua API của Sales, thay cho import repository Sales.
 
-Sau thay đổi:
+### Sales API
 
-- Identity công bố record bất biến `AddressSnapshot` qua `address.api`.
-- `AddressOwnershipQuery.getOwnedAddress` trả snapshot chỉ sau khi xác nhận địa chỉ thuộc đúng người dùng.
-- `OrderService` chỉ nhận contract API và tự lưu bản chụp vào `orders.address_snapshot_json` như trước.
-- Architecture test khóa Order không được import `address.entity` hoặc `address.repository`.
-- Không thay đổi bảng, migration hay dữ liệu Supabase.
+- `CartReferenceQuery` cung cấp cart và cart item cho Recommendation.
+- `SalesProductUsageService` là adapter sở hữu truy cập `CartItemRepository` và `OrderItemRepository`.
+- Shipping vẫn là module dormant; Phase 1 không tự ý kích hoạt component hoặc persistence scan của Shipping.
+
+### Recommendation
+
+- `RecommendationService` và `RecommendationLogService` chỉ dùng `ProductReferenceQuery` và `CartReferenceQuery`.
+- Không còn import repository Catalog/Sales trực tiếp.
+
+## Architecture gate
+
+`BoundedContextArchitectureTest` chạy trong baseline và áp dụng cho toàn bộ Identity, Catalog, Sales và Recommendation:
+
+- Import repository xuyên bounded context: **0**.
+- Các dependency entity/JPA chuyển tiếp còn lại: **84**, được duyệt và khóa bằng snapshot chính xác.
+- SHA-256 snapshot: `76ddb12967a3bb0e05f8fc3a3f52c70223505c333aaf1c84c4496ca414964d2a`.
+- Mọi dependency entity mới, bị xóa hoặc thay đổi đều làm architecture test thất bại và buộc phải review.
+
+Phân bố 84 ngoại lệ chuyển tiếp:
+
+| Hướng dependency | Số lượng |
+|---|---:|
+| Sales -> Catalog | 20 |
+| Recommendation -> Catalog | 17 |
+| Sales -> Identity | 16 |
+| Catalog -> Sales | 12 |
+| Catalog -> Identity | 8 |
+| Recommendation -> Sales | 7 |
+| Recommendation -> Identity | 4 |
+
+Các ngoại lệ này là quan hệ JPA cũ đã biết, không phải quyền tạo dependency mới. Chúng sẽ được loại bỏ khi tách schema/process ở các phase sau.
+
+## Correlation ID và error contract
+
+- Mọi HTTP request đi qua `CorrelationIdFilter`.
+- Header chuẩn là `X-Correlation-ID`; giá trị hợp lệ từ client được giữ lại, nếu thiếu hoặc không an toàn thì tạo UUID.
+- Cùng một ID được trả trong response header, đặt vào MDC `traceId`, xuất hiện trong log và được `CatalogOutboxService` đưa vào event payload.
+- Error envelope chuẩn có trường `traceId` để đối chiếu log.
+- Success envelope giữ `traceId = null`; correlation vẫn có trong header. Cách này giữ tương thích response và bảo đảm hai response forgot-password vẫn giống hệt nhau để chống dò email.
+- CORS expose `X-Correlation-ID` cho storefront/admin.
 
 ## Bằng chứng kiểm thử
 
-| Kiểm thử | Kết quả |
+| Gate | Kết quả |
 |---|---|
-| Backend unit baseline có architecture gate | 79 test, 0 failure/error |
-| `BoundedContextArchitectureTest` | 3 test, 0 failure/error |
-| `OrderIntegrationTest` current-runtime slice | 24 test, 0 failure/error; gồm ca từ chối địa chỉ thuộc người dùng khác |
+| Backend unit baseline | 84 test, 0 failure/error |
+| `BoundedContextArchitectureTest` | 6 test, 0 failure/error |
+| Backend current-runtime integration | 361 test, 0 failure/error |
+| Phase smoke: login, catalog, COD, VietQR, SePay concurrent delivery | 5 test, 0 failure/error |
+| Visual Search | 127 passed, 2 skipped |
+| Chatbot và Product Search | 242 passed |
+| Storefront/Admin lint | Đạt |
+| Storefront/Admin production build | Đạt |
 
-## Việc tiếp theo
-
-1. Loại truy cập `AddressRepository` trực tiếp còn lại trong Shipping bằng Identity API/snapshot phù hợp.
-2. Loại dần phụ thuộc `User` entity/repository trong Sales trước khi mở rộng rule sang toàn bộ Sales -> Identity.
-3. Sau đó xử lý các chiều Sales -> Catalog và Recommendation -> Catalog/Sales theo mức coupling trong baseline.
+Integration gate đã bao phủ thêm error/correlation contract, checkout/order, payment và return/refund. Toàn bộ database integration sử dụng PostgreSQL Testcontainers tạm thời, không ghi vào Supabase dùng chung.
 
 ## Exit gate Phase 1
 
-- [x] Có architecture test chạy trong baseline.
-- [ ] Không còn import repository/entity xuyên Identity, Catalog, Sales và Recommendation nếu chưa có ngoại lệ được duyệt.
-- [ ] Các luồng login, catalog, checkout, COD, VietQR/SePay và refund vẫn đạt smoke/integration gate.
-- [ ] Correlation ID và error contract nội bộ được chuẩn hóa.
+- [x] Architecture test chạy trong baseline.
+- [x] Không còn import repository xuyên bounded context.
+- [x] Entity/JPA exception cũ có danh sách duyệt và snapshot chống phát sinh âm thầm.
+- [x] Login, catalog, checkout, COD, VietQR/SePay và refund đạt smoke/integration gate.
+- [x] Correlation ID, log context, event trace và error contract đã chuẩn hóa.
+- [x] Không thay đổi schema hoặc dữ liệu Supabase production.
+
+Phase 1 hoàn tất. Công việc tiếp theo là Phase 2: chuẩn hóa event platform, contract v1, retry/DLQ và consumer idempotency.

@@ -4,12 +4,11 @@ import com.dunghaiquyen.ecommerce.common.exception.BusinessRuleException;
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
 import com.dunghaiquyen.ecommerce.modules.cart.entity.Cart;
 import com.dunghaiquyen.ecommerce.modules.cart.entity.CartItem;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartItemRepository;
-import com.dunghaiquyen.ecommerce.modules.cart.repository.CartRepository;
+import com.dunghaiquyen.ecommerce.modules.cart.api.CartReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.cart.web.CartOwner;
 import com.dunghaiquyen.ecommerce.modules.product.entity.Product;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductRepository;
+import com.dunghaiquyen.ecommerce.modules.product.api.ProductReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.recommendation.dto.RecommendationLogProductStatsResponse;
 import com.dunghaiquyen.ecommerce.modules.recommendation.dto.RecommendationLogRequest;
 import com.dunghaiquyen.ecommerce.modules.recommendation.dto.RecommendationLogResponse;
@@ -44,24 +43,21 @@ public class RecommendationLogService {
     private static final int MAX_LIMIT = 50;
 
     private final RecommendationLogRepository recommendationLogRepository;
-    private final ProductRepository productRepository;
+    private final ProductReferenceQuery productReferenceQuery;
     private final AssociationRuleRepository associationRuleRepository;
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    private final CartReferenceQuery cartReferenceQuery;
     private final EntityManager entityManager;
 
     public RecommendationLogService(
             RecommendationLogRepository recommendationLogRepository,
-            ProductRepository productRepository,
+            ProductReferenceQuery productReferenceQuery,
             AssociationRuleRepository associationRuleRepository,
-            CartRepository cartRepository,
-            CartItemRepository cartItemRepository,
+            CartReferenceQuery cartReferenceQuery,
             EntityManager entityManager) {
         this.recommendationLogRepository = recommendationLogRepository;
-        this.productRepository = productRepository;
+        this.productReferenceQuery = productReferenceQuery;
         this.associationRuleRepository = associationRuleRepository;
-        this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
+        this.cartReferenceQuery = cartReferenceQuery;
         this.entityManager = entityManager;
     }
 
@@ -69,7 +65,7 @@ public class RecommendationLogService {
     public RecommendationLogResponse logEvent(CartOwner owner, RecommendationLogRequest request) {
         validateLogRequest(request);
 
-        Product recommendedProduct = productRepository.findById(request.recommendedProductId())
+        Product recommendedProduct = productReferenceQuery.findProduct(request.recommendedProductId())
                 .filter(product -> product.getStatus() == ProductStatus.ACTIVE)
                 .orElseThrow(() -> new ResourceNotFoundException("Recommended product not found"));
         VerifiedSource source = verifySource(owner, request);
@@ -197,7 +193,7 @@ public class RecommendationLogService {
 
     private VerifiedSource verifySource(CartOwner owner, RecommendationLogRequest request) {
         if (request.sourceType() == RecommendationSourceType.PRODUCT_DETAIL) {
-            Product sourceProduct = productRepository.findById(request.sourceProductId())
+            Product sourceProduct = productReferenceQuery.findProduct(request.sourceProductId())
                     .filter(product -> product.getStatus() == ProductStatus.ACTIVE)
                     .orElseThrow(() -> new ResourceNotFoundException("Source product not found"));
             return new VerifiedSource(
@@ -208,15 +204,13 @@ public class RecommendationLogService {
             );
         }
 
-        Optional<Cart> ownedCart = owner.isUser()
-                ? cartRepository.findByUserId(owner.userId())
-                : cartRepository.findBySessionId(owner.sessionId());
+        Optional<Cart> ownedCart = cartReferenceQuery.findCart(owner);
 
         Cart cart = ownedCart
                 .filter(candidate -> candidate.getId().equals(request.cartId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
 
-        List<UUID> productIds = cartItemRepository.findAllByCartIdWithVariantAndProduct(cart.getId())
+        List<UUID> productIds = cartReferenceQuery.findItemsWithVariantAndProduct(cart.getId())
                 .stream()
                 .map(CartItem::getVariant)
                 .map(variant -> variant.getProduct().getId())

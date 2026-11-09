@@ -7,7 +7,7 @@ import com.dunghaiquyen.ecommerce.modules.cart.repository.CartRepository;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductVariant;
 import com.dunghaiquyen.ecommerce.modules.product.entity.VariantStatus;
-import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
+import com.dunghaiquyen.ecommerce.modules.user.api.UserReferenceQuery;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,13 +27,15 @@ public class CartMergeService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
+    private final UserReferenceQuery userReferenceQuery;
 
     public CartMergeService(
-            CartRepository cartRepository, CartItemRepository cartItemRepository, UserRepository userRepository) {
+            CartRepository cartRepository,
+            CartItemRepository cartItemRepository,
+            UserReferenceQuery userReferenceQuery) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
-        this.userRepository = userRepository;
+        this.userReferenceQuery = userReferenceQuery;
     }
 
     @Transactional
@@ -87,7 +89,7 @@ public class CartMergeService {
     private Cart findOrCreateUserCart(UUID userId) {
         return cartRepository.findByUserId(userId).orElseGet(() -> {
             Cart cart = new Cart();
-            cart.setUser(userRepository.getReferenceById(userId));
+            cart.setUser(userReferenceQuery.getReference(userId));
             try {
                 return cartRepository.save(cart);
             } catch (DataIntegrityViolationException ex) {

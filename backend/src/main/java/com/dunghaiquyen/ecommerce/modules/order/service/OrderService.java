@@ -34,8 +34,7 @@ import com.dunghaiquyen.ecommerce.modules.order.repository.spec.OrderSpecificati
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductStatus;
 import com.dunghaiquyen.ecommerce.modules.product.entity.ProductVariant;
 import com.dunghaiquyen.ecommerce.modules.product.entity.VariantStatus;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductVariantRepository;
-import com.dunghaiquyen.ecommerce.modules.product.repository.ProductImageRepository;
+import com.dunghaiquyen.ecommerce.modules.product.api.ProductReferenceQuery;
 import com.dunghaiquyen.ecommerce.modules.product.util.ThumbnailResolver;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentStatus;
 import com.dunghaiquyen.ecommerce.modules.payment.entity.Payment;
@@ -43,7 +42,7 @@ import com.dunghaiquyen.ecommerce.modules.payment.entity.PaymentProvider;
 import com.dunghaiquyen.ecommerce.modules.payment.repository.PaymentRepository;
 import com.dunghaiquyen.ecommerce.modules.user.entity.User;
 import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
-import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
+import com.dunghaiquyen.ecommerce.modules.user.api.UserReferenceQuery;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -93,9 +92,8 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderStatusHistoryRepository orderStatusHistoryRepository;
     private final PaymentRepository paymentRepository;
-    private final ProductVariantRepository variantRepository;
-    private final ProductImageRepository productImageRepository;
-    private final UserRepository userRepository;
+    private final ProductReferenceQuery productReferenceQuery;
+    private final UserReferenceQuery userReferenceQuery;
     private final InventoryService inventoryService;
     private final com.dunghaiquyen.ecommerce.modules.inventory.repository.InventoryTransactionRepository
             inventoryTransactionRepository;
@@ -111,9 +109,8 @@ public class OrderService {
             OrderItemRepository orderItemRepository,
             OrderStatusHistoryRepository orderStatusHistoryRepository,
             PaymentRepository paymentRepository,
-            ProductVariantRepository variantRepository,
-            ProductImageRepository productImageRepository,
-            UserRepository userRepository,
+            ProductReferenceQuery productReferenceQuery,
+            UserReferenceQuery userReferenceQuery,
             InventoryService inventoryService,
             com.dunghaiquyen.ecommerce.modules.inventory.repository.InventoryTransactionRepository
                     inventoryTransactionRepository,
@@ -127,9 +124,8 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
         this.orderStatusHistoryRepository = orderStatusHistoryRepository;
         this.paymentRepository = paymentRepository;
-        this.variantRepository = variantRepository;
-        this.productImageRepository = productImageRepository;
-        this.userRepository = userRepository;
+        this.productReferenceQuery = productReferenceQuery;
+        this.userReferenceQuery = userReferenceQuery;
         this.inventoryService = inventoryService;
         this.inventoryTransactionRepository = inventoryTransactionRepository;
         this.orderMapper = orderMapper;
@@ -198,7 +194,7 @@ public class OrderService {
 
         // Phase 2: build the order using prices read just now, under lock - never
         // anything cached from an earlier cart response.
-        User user = userRepository.getReferenceById(userId);
+        User user = userReferenceQuery.getReference(userId);
         Order order = new Order();
         order.setUser(user);
         order.setOrderCode(generateOrderCode());
@@ -635,8 +631,8 @@ public class OrderService {
 
     private VariantCheck checkVariant(UUID variantId, int quantity, boolean lockForUpdate) {
         var variantOpt = lockForUpdate
-                ? variantRepository.findByIdForUpdate(variantId)
-                : variantRepository.findById(variantId);
+                ? productReferenceQuery.findVariantForUpdate(variantId)
+                : productReferenceQuery.findVariant(variantId);
         if (variantOpt.isEmpty()) {
             return new VariantCheck(null, null, HttpStatus.NOT_FOUND, "Variant not found");
         }
@@ -881,7 +877,7 @@ public class OrderService {
         if (productIds.isEmpty()) {
             return Map.of();
         }
-        return productImageRepository.findAllByProductIdIn(productIds).stream()
+        return productReferenceQuery.findImagesByProductIds(productIds).stream()
                 .collect(Collectors.groupingBy(image -> image.getProduct().getId()))
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> ThumbnailResolver.resolve(entry.getValue())));

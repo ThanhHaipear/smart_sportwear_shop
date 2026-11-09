@@ -3,7 +3,7 @@ package com.dunghaiquyen.ecommerce.modules.shipping.service;
 import com.dunghaiquyen.ecommerce.common.exception.BusinessRuleException;
 import com.dunghaiquyen.ecommerce.common.exception.ResourceNotFoundException;
 import com.dunghaiquyen.ecommerce.config.AppShippingProperties;
-import com.dunghaiquyen.ecommerce.modules.address.repository.AddressRepository;
+import com.dunghaiquyen.ecommerce.modules.address.api.AddressOwnershipQuery;
 import com.dunghaiquyen.ecommerce.modules.order.service.OrderService;
 import com.dunghaiquyen.ecommerce.modules.shipping.dto.ShippingFeePreviewRequest;
 import com.dunghaiquyen.ecommerce.modules.shipping.dto.ShippingFeePreviewResponse;
@@ -34,26 +34,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShippingFeePreviewService {
 
     private final OrderService orderService;
-    private final AddressRepository addressRepository;
+    private final AddressOwnershipQuery addressOwnershipQuery;
     private final ShippingMethodRepository shippingMethodRepository;
     private final AppShippingProperties shippingProperties;
 
     public ShippingFeePreviewService(
             OrderService orderService,
-            AddressRepository addressRepository,
+            AddressOwnershipQuery addressOwnershipQuery,
             ShippingMethodRepository shippingMethodRepository,
             AppShippingProperties shippingProperties) {
         this.orderService = orderService;
-        this.addressRepository = addressRepository;
+        this.addressOwnershipQuery = addressOwnershipQuery;
         this.shippingMethodRepository = shippingMethodRepository;
         this.shippingProperties = shippingProperties;
     }
 
     @Transactional(readOnly = true)
     public ShippingFeePreviewResponse preview(UUID userId, ShippingFeePreviewRequest request) {
-        addressRepository.findById(request.addressId())
-                .filter(a -> a.getUser().getId().equals(userId))
-                .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+        addressOwnershipQuery.requireOwnedAddress(userId, request.addressId());
 
         ShippingMethod method = shippingMethodRepository.findById(request.shippingMethodId())
                 .orElseThrow(() -> new ResourceNotFoundException("Shipping method not found"));
