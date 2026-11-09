@@ -39,9 +39,13 @@ Thêm `-IncludeBackendIntegration` khi Docker hoạt động và cần tái hi�
 |---|---|---|---|
 | Backend package | `backend\\mvnw.cmd -DskipTests package` | Build JAR thành công | PASS |
 | Backend unit subset | 17 test class không cần container | 76 test, 0 failure/error | PASS |
-| Backend integration | Testcontainers, loại ba migration rehearsal test | 418 test; 160 failure, 37 error, 0 skipped | FAIL - PRE-EXISTING BASELINE DEBT |
+| Backend integration | Testcontainers, loại ba migration rehearsal test | 418 test; 74 failure, 24 error, 0 skipped; giảm từ baseline đầu tiên 160 failure/37 error | FAIL - PRE-EXISTING BASELINE DEBT |
 | Cart integration debt slice | `backend\\mvnw.cmd -Dtest=CartIntegrationTest test` | 23 test, 0 failure/error; fixture tuân thủ publishability V2 | PASS |
 | Order integration current-runtime slice | `OrderIntegrationTest` loại 3 ca Combo dormant | 23 ca runtime hiện hành đạt; 3 ca Combo trả 404 do module bị loại khỏi runtime | PASS WITH DOCUMENTED EXCLUSION |
+| Inventory + Return/Refund current-runtime slice | `InventoryIntegrationTest,ReturnRefundIntegrationTest` | 31 test, 0 failure/error; fixture tuân thủ publishability V2 | PASS |
+| Product Catalog current-runtime slice | `ProductCatalogIntegrationTest` | 15 test, 0 failure/error; duplicate SKU được ánh xạ ổn định thành 409 | PASS |
+| Product Search current-runtime slice | `ProductSearchIntegrationTest` | 14 test, 0 failure/error | PASS |
+| Admin Product current-runtime slice | `AdminProductListIntegrationTest` | 6/7 ca đạt; riêng filter `featured=true` chưa thể hoạt động vì `Product.featured` là `@Transient` và V1-V13 không có cột tương ứng | PASS WITH DOCUMENTED EXCLUSION |
 | Visual Search | `python -m pytest -q` | 127 passed, 2 skipped | PASS |
 | Chatbot/Product Search | `.venv\\Scripts\\python.exe -m pytest -q` | 242 passed | PASS |
 | Storefront lint | `npm.cmd run lint` | Thành công | PASS |
@@ -57,6 +61,10 @@ Ghi chú:
 - Khi chạy bằng Docker thật, integration suite khởi tạo thành công PostgreSQL/pgvector và áp dụng Flyway V1-V13, sau đó bộc lộ test debt có sẵn. Nhóm lỗi lớn nhất là fixture tạo product `ACTIVE` khi chưa có primary image hợp lệ; các test shipping/recommendation/seed còn kỳ vọng bean của package đang bị runtime loại khỏi component/persistence scan.
 - Đã xử lý lát cắt Cart của test debt: test tạo product ở trạng thái `DRAFT`, tạo variant và primary image test-only có đủ metadata rồi mới chuyển sang `ACTIVE`. `CartIntegrationTest` hiện đạt 23/23; helper chỉ ghi vào PostgreSQL Testcontainers dùng một lần, không chạm Supabase.
 - Đã áp dụng cùng fixture hợp lệ cho Order: 23 ca thuộc runtime hiện hành đạt. Ba ca Combo vẫn bị loại khỏi gate tạm thời vì `/api/v1/admin/combos` không tồn tại trong 128 route runtime; đây là quyết định dormant/legacy cần chốt, không phải lỗi dữ liệu Supabase.
+- Đã ổn định thêm Inventory và Return/Refund (31/31), Product Catalog (15/15), Product Search (14/14), cùng 6/7 ca Admin Product. Fixture đều tạo `DRAFT`, variant bán được và primary image test-only trước khi kích hoạt; chỉ ghi vào PostgreSQL Testcontainers.
+- Ca Admin Product lọc `featured=true` được theo dõi riêng: entity đánh dấu `featured` là `@Transient`, trong khi migration V1-V13 không có cột lưu trạng thái. Sửa đúng cần một quyết định schema/migration ở phase sau; Phase 0 không tự ý đổi Supabase.
+- `ProductVariantService` đã flush lúc tạo variant để lỗi unique SKU được bắt trong transaction service và trả về business conflict 409, thay vì rơi ra 500 lúc commit.
+- Full suite sau các lát cắt trên còn 74 failure và 24 error. Toàn bộ 24 error thuộc Shipping/Seed dormant; nhóm failure lớn còn lại tập trung ở Collection/Review/Banner/Page dormant và các lát cắt Report, Notification, Product Image Upload, Google Login, Category cần xử lý tiếp.
 - Runtime hiện tại chủ động loại các package `banner`, `collection`, `combo`, `page`, `promotion`, `recommendation`, `review`, `shipping` và `infra.seed` khỏi component scan. Chúng phải được phân loại là dormant/legacy hoặc được kích hoạt bằng migration/schema đầy đủ trước khi tính vào service đích.
 
 ## 4. Module ownership baseline
@@ -161,6 +169,9 @@ Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên S
 - [ ] Backend integration suite đạt khi có Docker, không tính ba migration rehearsal test.
   - [x] Lát cắt Cart integration đạt 23/23 với fixture hợp lệ theo publishability V2.
   - [x] Lát cắt Order runtime hiện hành đạt 23/23; còn 3 ca Combo dormant được theo dõi riêng.
+  - [x] Lát cắt Inventory + Return/Refund runtime hiện hành đạt 31/31.
+  - [x] Lát cắt Product Catalog và Product Search runtime hiện hành đạt 29/29.
+  - [x] Lát cắt Admin Product đạt 6/7; filter featured chờ quyết định migration/schema.
 - [x] Ba migration test đạt trên PostgreSQL/pgvector 17 local chuyên dụng (16/16 test).
 - [x] Tạo backup Supabase V13 hiện hành và restore drill thành công.
 - [ ] Chụp smoke baseline cho đăng nhập, catalog, COD và VietQR/SePay.

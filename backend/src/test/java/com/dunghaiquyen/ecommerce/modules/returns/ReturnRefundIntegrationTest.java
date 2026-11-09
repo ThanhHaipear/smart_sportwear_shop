@@ -97,11 +97,7 @@ class ReturnRefundIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
-        mockMvc.perform(patch("/api/v1/admin/products/" + productId)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"status\":\"ACTIVE\"}"))
-                .andExpect(status().isOk());
+        makeProductPublishableForTest(productId);
         return variantId;
     }
 

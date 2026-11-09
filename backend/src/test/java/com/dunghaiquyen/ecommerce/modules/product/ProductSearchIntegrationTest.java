@@ -30,7 +30,8 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
         MvcResult cat = mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Cat\",\"slug\":\"" + categorySlug + "\"}"))
+                        .content("{\"name\":\"Cat " + categorySlug.substring(categorySlug.length() - 8)
+                                + "\",\"slug\":\"" + categorySlug + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         String categoryId = json(cat.getResponse().getContentAsString()).at("/data/id").asText();
@@ -39,7 +40,8 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
         MvcResult brand = mockMvc.perform(post("/api/v1/admin/brands")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Brand\",\"slug\":\"" + brandSlug + "\"}"))
+                        .content("{\"name\":\"Brand " + brandSlug.substring(brandSlug.length() - 8)
+                                + "\",\"slug\":\"" + brandSlug + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         String brandId = json(brand.getResponse().getContentAsString()).at("/data/id").asText();
@@ -52,7 +54,8 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
         MvcResult cat = mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Cat2\",\"slug\":\"" + categorySlug + "\"}"))
+                        .content("{\"name\":\"Cat2 " + categorySlug.substring(categorySlug.length() - 8)
+                                + "\",\"slug\":\"" + categorySlug + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         String categoryId = json(cat.getResponse().getContentAsString()).at("/data/id").asText();
@@ -61,7 +64,8 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
         MvcResult brand = mockMvc.perform(post("/api/v1/admin/brands")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Brand2\",\"slug\":\"" + brandSlug + "\"}"))
+                        .content("{\"name\":\"Brand2 " + brandSlug.substring(brandSlug.length() - 8)
+                                + "\",\"slug\":\"" + brandSlug + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         String brandId = json(brand.getResponse().getContentAsString()).at("/data/id").asText();
@@ -70,15 +74,22 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
     }
 
     private String createActiveProduct(AdminContext ctx, String name) throws Exception {
+        return createActiveProduct(ctx, name, 100000);
+    }
+
+    private String createActiveProduct(AdminContext ctx, String name, int price) throws Exception {
         String slug = "search-prod-" + UUID.randomUUID();
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\"}")
                                 .formatted(name, slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String productId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        createVariant(ctx, productId, price);
+        makeProductPublishableForTest(productId);
+        return productId;
     }
 
     private String createVariant(AdminContext ctx, String productId, int price) throws Exception {
@@ -90,6 +101,13 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+    }
+
+    private String firstVariantId(String productId) {
+        return jdbcTemplate.queryForObject(
+                "select id::text from product_variants where product_id = ? order by created_at limit 1",
+                String.class,
+                UUID.fromString(productId));
     }
 
     private void addToCart(String token, String variantId, int quantity) throws Exception {
@@ -208,12 +226,9 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
     @Test
     void filter_byPriceRange_excludesOutOfRangeProducts() throws Exception {
         AdminContext ctx = setUpAdmin();
-        String cheapId = createActiveProduct(ctx, "Cheap Item");
-        createVariant(ctx, cheapId, 50000);
-        String midId = createActiveProduct(ctx, "Mid Item");
-        createVariant(ctx, midId, 150000);
-        String expensiveId = createActiveProduct(ctx, "Expensive Item");
-        createVariant(ctx, expensiveId, 500000);
+        String cheapId = createActiveProduct(ctx, "Cheap Item", 50000);
+        String midId = createActiveProduct(ctx, "Mid Item", 150000);
+        String expensiveId = createActiveProduct(ctx, "Expensive Item", 500000);
 
         MvcResult result = mockMvc.perform(get("/api/v1/products")
                         .param("categoryId", ctx.categoryId())
@@ -231,10 +246,8 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
     @Test
     void sort_priceAscAndDesc_ordersCorrectly() throws Exception {
         AdminContext ctx = setUpAdmin();
-        String lowId = createActiveProduct(ctx, "Low Price");
-        createVariant(ctx, lowId, 30000);
-        String highId = createActiveProduct(ctx, "High Price");
-        createVariant(ctx, highId, 900000);
+        String lowId = createActiveProduct(ctx, "Low Price", 30000);
+        String highId = createActiveProduct(ctx, "High Price", 900000);
 
         MvcResult asc = mockMvc.perform(get("/api/v1/products")
                         .param("categoryId", ctx.categoryId())
@@ -259,11 +272,11 @@ class ProductSearchIntegrationTest extends AbstractIntegrationTest {
     void sort_bestselling_ranksByNonCancelledQuantitySold() throws Exception {
         AdminContext ctx = setUpAdmin();
         String bestId = createActiveProduct(ctx, "Best Seller");
-        String bestVariant = createVariant(ctx, bestId, 100000);
+        String bestVariant = firstVariantId(bestId);
         String worstId = createActiveProduct(ctx, "Worst Seller");
-        String worstVariant = createVariant(ctx, worstId, 100000);
+        String worstVariant = firstVariantId(worstId);
         String cancelledOnlyId = createActiveProduct(ctx, "Cancelled Only Seller");
-        String cancelledVariant = createVariant(ctx, cancelledOnlyId, 100000);
+        String cancelledVariant = firstVariantId(cancelledOnlyId);
 
         buy(bestVariant, 5);
         buy(worstVariant, 1);

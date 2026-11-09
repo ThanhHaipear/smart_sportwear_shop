@@ -24,16 +24,18 @@ class AdminProductListIntegrationTest extends AbstractIntegrationTest {
         MvcResult cat = mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Cat\",\"slug\":\"" + categorySlug + "\"}"))
+                        .content("{\"name\":\"Cat " + categorySlug.substring(categorySlug.length() - 8)
+                                + "\",\"slug\":\"" + categorySlug + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         String categoryId = json(cat.getResponse().getContentAsString()).at("/data/id").asText();
 
-        String brandSlug = "adminlist-brand-" + UUID.randomUUID();
+        String brandSlug = "adminlist-brand-" + UUID.randomUUID().toString().substring(0, 8);
         MvcResult brand = mockMvc.perform(post("/api/v1/admin/brands")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Brand\",\"slug\":\"" + brandSlug + "\"}"))
+                        .content("{\"name\":\"Brand " + brandSlug.substring(brandSlug.length() - 8)
+                                + "\",\"slug\":\"" + brandSlug + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         String brandId = json(brand.getResponse().getContentAsString()).at("/data/id").asText();
@@ -43,16 +45,27 @@ class AdminProductListIntegrationTest extends AbstractIntegrationTest {
 
     private String createProduct(AdminContext ctx, String name, String status, boolean featured) throws Exception {
         String slug = "adminlist-prod-" + UUID.randomUUID();
+        String initialStatus = "ACTIVE".equals(status) ? "DRAFT" : status;
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(("{\"name\":\"%s\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\","
                                         + "\"status\":\"%s\",\"isFeatured\":%s}")
-                                .formatted(name, slug, ctx.categoryId(), ctx.brandId(), status, featured))
+                                .formatted(name, slug, ctx.categoryId(), ctx.brandId(), initialStatus, featured))
                 )
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String productId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        if ("ACTIVE".equals(status)) {
+            mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"sku\":\"SKU-" + UUID.randomUUID()
+                                    + "\",\"size\":\"M\",\"color\":\"Black\",\"price\":100000,\"stockQuantity\":1}"))
+                    .andExpect(status().isCreated());
+            makeProductPublishableForTest(productId);
+        }
+        return productId;
     }
 
     // ===== sees draft/inactive, not just active =====

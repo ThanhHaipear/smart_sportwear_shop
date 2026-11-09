@@ -41,7 +41,8 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/categories")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Cat\",\"slug\":\"" + slug + "\"}"))
+                        .content("{\"name\":\"Cat " + slug.substring(slug.length() - 8)
+                                + "\",\"slug\":\"" + slug + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         return json(result.getResponse().getContentAsString()).at("/data/id").asText();
@@ -52,7 +53,8 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/brands")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Brand\",\"slug\":\"" + slug + "\"}"))
+                        .content("{\"name\":\"Brand " + slug.substring(slug.length() - 8)
+                                + "\",\"slug\":\"" + slug + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         return json(result.getResponse().getContentAsString()).at("/data/id").asText();
@@ -151,7 +153,7 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
     @Test
     void update_blankName_returns422_butNullFieldsLeaveOthersUnchanged() throws Exception {
         AdminContext ctx = setUpAdminWithCatalogRefs();
-        String productId = createActiveProduct(ctx);
+        String productId = createDraftProduct(ctx);
 
         mockMvc.perform(patch("/api/v1/admin/products/" + productId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
@@ -173,7 +175,7 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
     @Test
     void variant_duplicateSku_returns409_andInvalidPriceReturns422() throws Exception {
         AdminContext ctx = setUpAdminWithCatalogRefs();
-        String productId = createActiveProduct(ctx);
+        String productId = createDraftProduct(ctx);
         String sku = "SKU-" + UUID.randomUUID();
 
         mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
@@ -200,7 +202,7 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
     @Test
     void variantUpdate_cannotMutateStock_evenIfClientSendsTheField() throws Exception {
         AdminContext ctx = setUpAdminWithCatalogRefs();
-        String productId = createActiveProduct(ctx);
+        String productId = createDraftProduct(ctx);
         String sku = "SKU-" + UUID.randomUUID();
 
         MvcResult created = mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
@@ -226,7 +228,7 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
     @Test
     void variantUpdate_blankSizeOrColor_returns422() throws Exception {
         AdminContext ctx = setUpAdminWithCatalogRefs();
-        String productId = createActiveProduct(ctx);
+        String productId = createDraftProduct(ctx);
         MvcResult created = mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -256,25 +258,25 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
                         .content("{\"price\":120000}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.size").value("M"))
-                .andExpect(jsonPath("$.data.color").value("Black"))
+                .andExpect(jsonPath("$.data.color").value("Đen"))
                 .andExpect(jsonPath("$.data.price").value(120000));
     }
 
     @Test
     void image_secondPrimary_unsetsFirstPrimary() throws Exception {
         AdminContext ctx = setUpAdminWithCatalogRefs();
-        String productId = createActiveProduct(ctx);
+        String productId = createDraftProduct(ctx);
 
         mockMvc.perform(post("/api/v1/admin/products/" + productId + "/images")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"imageUrl\":\"https://example.com/1.jpg\",\"isPrimary\":true,\"sortOrder\":0}"))
+                        .content("{\"imageUrl\":\"https://res.cloudinary.com/test/image/upload/1.jpg\",\"isPrimary\":true,\"sortOrder\":0}"))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(post("/api/v1/admin/products/" + productId + "/images")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"imageUrl\":\"https://example.com/2.jpg\",\"isPrimary\":true,\"sortOrder\":1}"))
+                        .content("{\"imageUrl\":\"https://res.cloudinary.com/test/image/upload/2.jpg\",\"isPrimary\":true,\"sortOrder\":1}"))
                 .andExpect(status().isCreated());
 
         MvcResult detail = mockMvc.perform(get("/api/v1/admin/products/" + productId)
@@ -287,7 +289,8 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
         for (JsonNode image : images) {
             if (image.get("isPrimary").asBoolean()) {
                 primaryCount++;
-                assertThat(image.get("imageUrl").asText()).isEqualTo("https://example.com/2.jpg");
+                assertThat(image.get("imageUrl").asText())
+                        .isEqualTo("https://res.cloudinary.com/test/image/upload/2.jpg");
             }
         }
         assertThat(primaryCount).isEqualTo(1);
@@ -301,12 +304,12 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
         // a second is_primary=true row for the same product; this must fail at
         // the database regardless of any service-level logic.
         AdminContext ctx = setUpAdminWithCatalogRefs();
-        String productId = createActiveProduct(ctx);
+        String productId = createDraftProduct(ctx);
 
         mockMvc.perform(post("/api/v1/admin/products/" + productId + "/images")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"imageUrl\":\"https://example.com/first.jpg\",\"isPrimary\":true}"))
+                        .content("{\"imageUrl\":\"https://res.cloudinary.com/test/image/upload/first.jpg\",\"isPrimary\":true}"))
                 .andExpect(status().isCreated());
 
         ProductImage rogue = new ProductImage();
@@ -336,7 +339,7 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
         // 201 or 409 (never 500), at least one request succeeds, and the
         // product ends up with exactly one primary image row.
         AdminContext ctx = setUpAdminWithCatalogRefs();
-        String productId = createActiveProduct(ctx);
+        String productId = createDraftProduct(ctx);
         int concurrency = 10;
 
         ExecutorService pool = Executors.newFixedThreadPool(concurrency);
@@ -344,7 +347,7 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
             Callable<Integer> call = () -> mockMvc.perform(post("/api/v1/admin/products/" + productId + "/images")
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"imageUrl\":\"https://example.com/race.jpg\",\"isPrimary\":true}"))
+                            .content("{\"imageUrl\":\"https://res.cloudinary.com/test/image/upload/race.jpg\",\"isPrimary\":true}"))
                     .andReturn()
                     .getResponse()
                     .getStatus();
@@ -381,14 +384,18 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
         mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"sku\":\"SKU-" + UUID.randomUUID() + "\",\"size\":\"M\",\"color\":\"Black\","
+                        .content("{\"sku\":\"SKU-" + UUID.randomUUID() + "\",\"size\":\"L\",\"color\":\"White\","
                                 + "\"price\":100000,\"stockQuantity\":7}"))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/api/v1/products/" + slug))
+        MvcResult detail = mockMvc.perform(get("/api/v1/products/" + slug))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.variants[0].availableQuantity").value(7))
-                .andExpect(jsonPath("$.data.variants[0].status").value("ACTIVE"));
+                .andReturn();
+        assertThat(json(detail.getResponse().getContentAsString()).at("/data/variants"))
+                .anySatisfy(variant -> {
+                    assertThat(variant.at("/availableQuantity").asInt()).isEqualTo(7);
+                    assertThat(variant.at("/status").asText()).isEqualTo("ACTIVE");
+                });
     }
 
     @Test
@@ -432,10 +439,21 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
     }
 
     private String createActiveProduct(AdminContext ctx, String slug) throws Exception {
+        String productId = createDraftProduct(ctx, slug);
+        createSellableVariant(ctx, productId);
+        makeProductPublishableForTest(productId);
+        return productId;
+    }
+
+    private String createDraftProduct(AdminContext ctx) throws Exception {
+        return createDraftProduct(ctx, "prod-" + UUID.randomUUID());
+    }
+
+    private String createDraftProduct(AdminContext ctx, String slug) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"Shirt\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"Shirt\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\"}")
                                 .formatted(slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -443,12 +461,25 @@ class ProductCatalogIntegrationTest extends AbstractIntegrationTest {
     }
 
     private void createActiveProductWithGender(AdminContext ctx, String slug, String gender) throws Exception {
-        mockMvc.perform(post("/api/v1/admin/products")
+        MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(("{\"name\":\"Shirt\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\","
-                                + "\"gender\":\"%s\",\"status\":\"ACTIVE\"}")
+                                + "\"gender\":\"%s\"}")
                                 .formatted(slug, ctx.categoryId(), ctx.brandId(), gender)))
+                .andExpect(status().isCreated())
+                .andReturn();
+        String productId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        createSellableVariant(ctx, productId);
+        makeProductPublishableForTest(productId);
+    }
+
+    private void createSellableVariant(AdminContext ctx, String productId) throws Exception {
+        mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"sku\":\"FIXTURE-" + UUID.randomUUID()
+                                + "\",\"size\":\"M\",\"color\":\"Black\",\"price\":100000,\"stockQuantity\":1}"))
                 .andExpect(status().isCreated());
     }
 }

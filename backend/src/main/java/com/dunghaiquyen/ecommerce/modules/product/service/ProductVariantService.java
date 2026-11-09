@@ -75,7 +75,7 @@ public class ProductVariantService {
         variant.setStatus(request.status() != null ? request.status() : VariantStatus.ACTIVE);
 
         try {
-            variant = variantRepository.save(variant);
+            variant = variantRepository.saveAndFlush(variant);
         } catch (DataIntegrityViolationException ex) {
             throw new BusinessRuleException("SKU already exists: " + request.sku());
         }

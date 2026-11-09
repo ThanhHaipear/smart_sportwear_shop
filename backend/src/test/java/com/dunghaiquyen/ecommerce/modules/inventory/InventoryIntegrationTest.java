@@ -75,19 +75,20 @@ class InventoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     private String createVariant(AdminContext ctx, String productId, int price, int stockQuantity) throws Exception {
+        return createVariant(ctx, productId, price, stockQuantity, "M");
+    }
+
+    private String createVariant(
+            AdminContext ctx, String productId, int price, int stockQuantity, String size) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"M\",\"color\":\"Black\",\"price\":%d,\"stockQuantity\":%d}")
-                                .formatted(UUID.randomUUID(), price, stockQuantity)))
+                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"%s\",\"color\":\"Black\",\"price\":%d,\"stockQuantity\":%d}")
+                                .formatted(UUID.randomUUID(), size, price, stockQuantity)))
                 .andExpect(status().isCreated())
                 .andReturn();
         String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
-        mockMvc.perform(patch("/api/v1/admin/products/" + productId)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"status\":\"ACTIVE\"}"))
-                .andExpect(status().isOk());
+        makeProductPublishableForTest(productId);
         return variantId;
     }
 
@@ -505,6 +506,7 @@ class InventoryIntegrationTest extends AbstractIntegrationTest {
         String variantId1 = createVariant(ctx, productId1, 120000, 8);
         String productId2 = createActiveProduct(ctx, "Other Pants");
         String variantId2 = createVariant(ctx, productId2, 60000, 3);
+        createVariant(ctx, productId2, 60000, 1, "L");
 
         mockMvc.perform(patch("/api/v1/admin/variants/" + variantId2)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
@@ -525,18 +527,19 @@ class InventoryIntegrationTest extends AbstractIntegrationTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + warehouseToken))
                 .andReturn();
         JsonNode productData = json(byProduct.getResponse().getContentAsString()).at("/data");
-        assertThat(productData).hasSize(1);
-        assertThat(productData.get(0).at("/variantId").asText()).isEqualTo(variantId2);
+        assertThat(productData).hasSize(2);
+        assertThat(productData).anySatisfy(item ->
+                assertThat(item.at("/variantId").asText()).isEqualTo(variantId2));
 
         MvcResult byCategory = mockMvc.perform(get("/api/v1/admin/inventory?categoryId=" + ctx.categoryId())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + warehouseToken))
                 .andReturn();
-        assertThat(json(byCategory.getResponse().getContentAsString()).at("/data")).hasSize(2);
+        assertThat(json(byCategory.getResponse().getContentAsString()).at("/data")).hasSize(3);
 
         MvcResult byBrand = mockMvc.perform(get("/api/v1/admin/inventory?brandId=" + ctx.brandId())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + warehouseToken))
                 .andReturn();
-        assertThat(json(byBrand.getResponse().getContentAsString()).at("/data")).hasSize(2);
+        assertThat(json(byBrand.getResponse().getContentAsString()).at("/data")).hasSize(3);
 
         // Combined with categoryId (unique to this test's own category) so this is
         // not polluted by INACTIVE variants other test classes created earlier in
