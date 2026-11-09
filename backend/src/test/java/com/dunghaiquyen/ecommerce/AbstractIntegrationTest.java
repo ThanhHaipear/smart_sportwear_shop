@@ -7,6 +7,7 @@ import com.dunghaiquyen.ecommerce.modules.user.entity.UserRole;
 import com.dunghaiquyen.ecommerce.modules.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -77,12 +79,54 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     protected UserRepository userRepository;
 
+    @Autowired
+    protected JdbcTemplate jdbcTemplate;
+
     protected String uniqueEmail(String prefix) {
         return prefix + "-" + java.util.UUID.randomUUID() + "@example.com";
     }
 
     protected JsonNode json(String content) throws Exception {
         return objectMapper.readTree(content);
+    }
+
+    /**
+     * Adds the minimum deterministic image metadata required by the V2
+     * publishability constraint, then activates the product. Call this only
+     * after the test has created at least one ACTIVE or OUT_OF_STOCK variant.
+     *
+     * <p>The image is test-only metadata in the disposable Testcontainers
+     * database; no remote asset is uploaded and no Supabase data is touched.
+     */
+    protected void makeProductPublishableForTest(String productId) {
+        makeProductPublishableForTest(UUID.fromString(productId));
+    }
+
+    protected void makeProductPublishableForTest(UUID productId) {
+        Integer primaryCount = jdbcTemplate.queryForObject(
+                "select count(*) from product_images where product_id = ? and is_primary",
+                Integer.class,
+                productId);
+        if (primaryCount == null || primaryCount == 0) {
+            UUID imageId = UUID.randomUUID();
+            jdbcTemplate.update(
+                    """
+                    insert into product_images (
+                        id, product_id, storage_provider, public_id,
+                        asset_version, secure_url, format, bytes,
+                        sort_order, is_primary, checksum, width, height,
+                        source_kind, source_uri, license_code
+                    ) values (?, ?, 'CLOUDINARY', ?, 'test-v1', ?, 'jpg', 1,
+                              0, true, ?, 1, 1, 'SYNTHETIC', ?, 'TEST_ONLY')
+                    """,
+                    imageId,
+                    productId,
+                    "test/products/" + imageId,
+                    "https://res.cloudinary.com/test/image/upload/" + imageId + ".jpg",
+                    "0".repeat(64),
+                    "https://example.test/fixtures/" + imageId + ".jpg");
+        }
+        jdbcTemplate.update("update products set status = 'ACTIVE', updated_at = now() where id = ?", productId);
     }
 
     public record TokenPair(String accessToken, String refreshToken) {

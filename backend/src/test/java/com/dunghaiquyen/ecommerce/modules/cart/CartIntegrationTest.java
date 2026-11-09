@@ -70,7 +70,7 @@ class CartIntegrationTest extends AbstractIntegrationTest {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"name\":\"Shirt\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"ACTIVE\"}")
+                        .content(("{\"name\":\"Shirt\",\"slug\":\"%s\",\"categoryId\":\"%s\",\"brandId\":\"%s\",\"status\":\"DRAFT\"}")
                                 .formatted(slug, ctx.categoryId(), ctx.brandId())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -78,14 +78,20 @@ class CartIntegrationTest extends AbstractIntegrationTest {
     }
 
     private String createVariant(AdminContext ctx, String productId, int stockQuantity) throws Exception {
+        return createVariant(ctx, productId, stockQuantity, "M");
+    }
+
+    private String createVariant(AdminContext ctx, String productId, int stockQuantity, String size) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"M\",\"color\":\"Black\",\"price\":100000,\"stockQuantity\":%d}")
-                                .formatted(UUID.randomUUID(), stockQuantity)))
+                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"%s\",\"color\":\"Black\",\"price\":100000,\"stockQuantity\":%d}")
+                                .formatted(UUID.randomUUID(), size, stockQuantity)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
+        makeProductPublishableForTest(productId);
+        return variantId;
     }
 
     private Cookie sessionCookie(String value) {
@@ -141,7 +147,8 @@ class CartIntegrationTest extends AbstractIntegrationTest {
         JsonNode firstBody = json(first.getResponse().getContentAsString());
         assertThat(firstBody.at("/data/items")).hasSize(1);
         assertThat(firstBody.at("/data/items/0/quantity").asInt()).isEqualTo(2);
-        assertThat(firstBody.at("/data/items/0/thumbnail").isNull()).isTrue();
+        assertThat(firstBody.at("/data/items/0/thumbnail").asText())
+                .startsWith("https://res.cloudinary.com/test/image/upload/");
         String itemId = firstBody.at("/data/items/0/id").asText();
 
         MvcResult second = perform(
@@ -369,6 +376,7 @@ class CartIntegrationTest extends AbstractIntegrationTest {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx);
         String variantId = createVariant(ctx, productId, 10);
+        createVariant(ctx, productId, 1, "L");
 
         mockMvc.perform(patch("/api/v1/admin/variants/" + variantId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
@@ -588,6 +596,7 @@ class CartIntegrationTest extends AbstractIntegrationTest {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx);
         String variantId = createVariant(ctx, productId, 10);
+        createVariant(ctx, productId, 1, "L");
 
         MvcResult guestAdded = perform(
                 post("/api/v1/cart/items").contentType(MediaType.APPLICATION_JSON).content(addItemBody(variantId, 2)),

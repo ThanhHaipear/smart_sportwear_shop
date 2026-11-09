@@ -40,6 +40,8 @@ Thêm `-IncludeBackendIntegration` khi Docker hoạt động và cần tái hi�
 | Backend package | `backend\\mvnw.cmd -DskipTests package` | Build JAR thành công | PASS |
 | Backend unit subset | 17 test class không cần container | 76 test, 0 failure/error | PASS |
 | Backend integration | Testcontainers, loại ba migration rehearsal test | 418 test; 160 failure, 37 error, 0 skipped | FAIL - PRE-EXISTING BASELINE DEBT |
+| Cart integration debt slice | `backend\\mvnw.cmd -Dtest=CartIntegrationTest test` | 23 test, 0 failure/error; fixture tuân thủ publishability V2 | PASS |
+| Order integration current-runtime slice | `OrderIntegrationTest` loại 3 ca Combo dormant | 23 ca runtime hiện hành đạt; 3 ca Combo trả 404 do module bị loại khỏi runtime | PASS WITH DOCUMENTED EXCLUSION |
 | Visual Search | `python -m pytest -q` | 127 passed, 2 skipped | PASS |
 | Chatbot/Product Search | `.venv\\Scripts\\python.exe -m pytest -q` | 242 passed | PASS |
 | Storefront lint | `npm.cmd run lint` | Thành công | PASS |
@@ -53,6 +55,8 @@ Ghi chú:
 - Ba lớp `V2OneAMigrationTest`, `V2OneBMigrationTest`, `V2OneCMigrationTest` cố ý yêu cầu URL database local chuyên dụng. Chúng thuộc database rehearsal, không được trỏ vào Supabase chung.
 - Chạy Chatbot bằng Python global thất bại vì thiếu dependency; baseline hợp lệ sử dụng `.venv` đã khóa của service.
 - Khi chạy bằng Docker thật, integration suite khởi tạo thành công PostgreSQL/pgvector và áp dụng Flyway V1-V13, sau đó bộc lộ test debt có sẵn. Nhóm lỗi lớn nhất là fixture tạo product `ACTIVE` khi chưa có primary image hợp lệ; các test shipping/recommendation/seed còn kỳ vọng bean của package đang bị runtime loại khỏi component/persistence scan.
+- Đã xử lý lát cắt Cart của test debt: test tạo product ở trạng thái `DRAFT`, tạo variant và primary image test-only có đủ metadata rồi mới chuyển sang `ACTIVE`. `CartIntegrationTest` hiện đạt 23/23; helper chỉ ghi vào PostgreSQL Testcontainers dùng một lần, không chạm Supabase.
+- Đã áp dụng cùng fixture hợp lệ cho Order: 23 ca thuộc runtime hiện hành đạt. Ba ca Combo vẫn bị loại khỏi gate tạm thời vì `/api/v1/admin/combos` không tồn tại trong 128 route runtime; đây là quyết định dormant/legacy cần chốt, không phải lỗi dữ liệu Supabase.
 - Runtime hiện tại chủ động loại các package `banner`, `collection`, `combo`, `page`, `promotion`, `recommendation`, `review`, `shipping` và `infra.seed` khỏi component scan. Chúng phải được phân loại là dormant/legacy hoặc được kích hoạt bằng migration/schema đầy đủ trước khi tính vào service đích.
 
 ## 4. Module ownership baseline
@@ -155,6 +159,8 @@ Không được bắt đầu di chuyển bảng hoặc thay đổi GRANT trên S
 - [x] Ghi nhận dependency graph và các coupling lớn nhất.
 - [x] Backend unit, Python service, frontend lint/build đạt.
 - [ ] Backend integration suite đạt khi có Docker, không tính ba migration rehearsal test.
+  - [x] Lát cắt Cart integration đạt 23/23 với fixture hợp lệ theo publishability V2.
+  - [x] Lát cắt Order runtime hiện hành đạt 23/23; còn 3 ca Combo dormant được theo dõi riêng.
 - [ ] Ba migration test đạt trên PostgreSQL/pgvector local chuyên dụng.
 - [ ] Tạo backup Supabase V13 hiện hành và restore drill thành công.
 - [ ] Chụp smoke baseline cho đăng nhập, catalog, COD và VietQR/SePay.

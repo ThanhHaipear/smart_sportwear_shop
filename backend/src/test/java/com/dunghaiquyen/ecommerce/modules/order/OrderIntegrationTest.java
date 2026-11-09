@@ -83,19 +83,20 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
     }
 
     private String createVariant(AdminContext ctx, String productId, int price, int stockQuantity) throws Exception {
+        return createVariant(ctx, productId, price, stockQuantity, "M");
+    }
+
+    private String createVariant(
+            AdminContext ctx, String productId, int price, int stockQuantity, String size) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/admin/products/" + productId + "/variants")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"M\",\"color\":\"Black\",\"price\":%d,\"stockQuantity\":%d}")
-                                .formatted(UUID.randomUUID(), price, stockQuantity)))
+                        .content(("{\"sku\":\"SKU-%s\",\"size\":\"%s\",\"color\":\"Black\",\"price\":%d,\"stockQuantity\":%d}")
+                                .formatted(UUID.randomUUID(), size, price, stockQuantity)))
                 .andExpect(status().isCreated())
                 .andReturn();
         String variantId = json(result.getResponse().getContentAsString()).at("/data/id").asText();
-        mockMvc.perform(patch("/api/v1/admin/products/" + productId)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + ctx.token())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"status\":\"ACTIVE\"}"))
-                .andExpect(status().isOk());
+        makeProductPublishableForTest(productId);
         return variantId;
     }
 
@@ -397,7 +398,7 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
                 assertThat(item.at("/unitPrice").asDouble()).isEqualTo(100000.0);
                 assertThat(item.at("/lineTotal").asDouble()).isEqualTo(200000.0);
                 assertThat(item.at("/size").asText()).isEqualTo("M");
-                assertThat(item.at("/color").asText()).isEqualTo("Black");
+                assertThat(item.at("/color").asText()).isEqualTo("Đen");
             }
             if (item.at("/productName").asText().equals("Shorts")) {
                 foundShorts = true;
@@ -449,6 +450,7 @@ class OrderIntegrationTest extends AbstractIntegrationTest {
         AdminContext ctx = setUpAdmin();
         String productId = createActiveProduct(ctx, "Cap");
         String variantId = createVariant(ctx, productId, 80000, 10);
+        createVariant(ctx, productId, 80000, 1, "L");
 
         String email = uniqueEmail("order-inactive-variant");
         TokenPair buyer = registerUser(email);
