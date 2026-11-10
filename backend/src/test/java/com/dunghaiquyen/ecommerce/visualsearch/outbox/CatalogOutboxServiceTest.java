@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,6 +49,9 @@ class CatalogOutboxServiceTest {
         assertThat(payload.path("imageId").asText()).isEqualTo(imageId.toString());
         assertThat(payload.path("traceId").asText()).isNotBlank();
         assertThat(payload.path("occurredAt").asText()).isNotBlank();
+        assertThat(toSet(payload.fieldNames())).containsExactlyInAnyOrder(
+                "eventId", "eventType", "eventVersion", "productId", "sourceVersion",
+                "imageId", "occurredAt", "traceId");
     }
 
     @Test
@@ -63,5 +67,11 @@ class CatalogOutboxServiceTest {
         JsonNode payload = objectMapper.readTree((String) args.getValue()[6]);
         assertThat(payload.path("eventType").asText()).isEqualTo("PRODUCT_ACTIVATED");
         assertThat(payload.has("imageId")).isFalse();
+    }
+
+    private Set<String> toSet(java.util.Iterator<String> fieldNames) {
+        java.util.Set<String> result = new java.util.HashSet<>();
+        fieldNames.forEachRemaining(result::add);
+        return result;
     }
 }

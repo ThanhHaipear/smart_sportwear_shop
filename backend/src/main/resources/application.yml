@@ -100,7 +100,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,integrationevents
   endpoint:
     health:
       probes:
@@ -224,7 +224,7 @@ app:
 info:
   app:
     name: Smart Sportswear Shop Backend
-    phase: Phase 1
+    phase: Phase 2
     docs: /swagger-ui/index.html
     health: /actuator/health
 

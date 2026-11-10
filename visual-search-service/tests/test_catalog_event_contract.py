@@ -17,6 +17,7 @@ def test_contract_contains_only_approved_message_metadata() -> None:
         "eventType",
         "eventVersion",
         "productId",
+        "sourceVersion",
         "imageId",
         "occurredAt",
         "traceId",
@@ -26,6 +27,7 @@ def test_contract_contains_only_approved_message_metadata() -> None:
         "eventType",
         "eventVersion",
         "productId",
+        "sourceVersion",
         "occurredAt",
         "traceId",
     }
@@ -37,6 +39,7 @@ def test_contract_has_exact_supported_event_types() -> None:
         "PRODUCT_IMAGE_DELETED",
         "PRODUCT_ACTIVATED",
         "PRODUCT_DEACTIVATED",
+        "PRODUCT_DELETED",
         "PRODUCT_REINDEX_REQUESTED",
     }
 
@@ -49,3 +52,4 @@ def test_image_events_require_image_id() -> None:
         "PRODUCT_IMAGE_DELETED",
     }
     assert conditional["then"]["required"] == ["imageId"]
+    assert conditional["then"]["properties"]["imageId"]["type"] == "string"

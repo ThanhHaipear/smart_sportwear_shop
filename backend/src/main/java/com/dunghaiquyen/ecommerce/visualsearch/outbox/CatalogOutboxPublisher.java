@@ -92,13 +92,15 @@ public class CatalogOutboxPublisher {
         });
     }
 
-    private void publish(OutboxRecord record) {
+    void publish(OutboxRecord record) {
         try {
             MessageProperties properties = new MessageProperties();
             properties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
             properties.setContentEncoding(StandardCharsets.UTF_8.name());
             properties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
             properties.setMessageId(record.id().toString());
+            properties.setType(record.type().name());
+            properties.setHeader("eventVersion", 1);
             Message message = new Message(record.payload().getBytes(StandardCharsets.UTF_8), properties);
             CorrelationData correlation = new CorrelationData(record.id().toString());
 
@@ -117,17 +119,33 @@ public class CatalogOutboxPublisher {
                     where id = ? and status = 'PUBLISHING'
                     """, record.id());
         } catch (Exception ex) {
-            int attempt = record.attempts() + 1;
-            long backoffSeconds = Math.min(300, 1L << Math.min(attempt, 8));
+            markFailed(record, ex);
+        }
+    }
+
+    void markFailed(OutboxRecord record, Exception error) {
+        int attempt = record.attempts() + 1;
+        String errorMessage = error.getMessage() == null ? error.getClass().getSimpleName() : error.getMessage();
+        if (attempt >= maxAttempts) {
+            String exhausted = "EXHAUSTED after " + attempt + " attempts: " + errorMessage;
             jdbcTemplate.update("""
                     update integration_outbox
-                    set status = 'FAILED',
-                        available_at = now() + (? * interval '1 second'),
-                        last_error = left(?, 4000)
+                    set status = 'FAILED', available_at = now(), last_error = left(?, 4000)
                     where id = ? and status = 'PUBLISHING'
-                    """, backoffSeconds, ex.getMessage(), record.id());
-            log.warn("Catalog outbox event {} publish failed (attempt {}): {}", record.id(), attempt, ex.getMessage());
+                    """, exhausted, record.id());
+            log.error("Catalog outbox event {} exhausted after {} attempts: {}", record.id(), attempt, errorMessage);
+            return;
         }
+
+        long backoffSeconds = Math.min(300, 1L << Math.min(attempt, 8));
+        jdbcTemplate.update("""
+                update integration_outbox
+                set status = 'FAILED',
+                    available_at = now() + (? * interval '1 second'),
+                    last_error = left(?, 4000)
+                where id = ? and status = 'PUBLISHING'
+                """, backoffSeconds, errorMessage, record.id());
+        log.warn("Catalog outbox event {} publish failed (attempt {}): {}", record.id(), attempt, errorMessage);
     }
 
     record OutboxRecord(UUID id, CatalogEventType type, String payload, int attempts) {

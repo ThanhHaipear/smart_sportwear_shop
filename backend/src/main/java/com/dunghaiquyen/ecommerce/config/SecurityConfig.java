@@ -94,6 +94,7 @@ public class SecurityConfig {
                         // Valid authentication, rule just denies this URL/method -> 403.
                         .accessDeniedHandler(restAccessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/integrationevents").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS).permitAll()
                         .requestMatchers(PUBLIC_ANY_METHOD_ENDPOINTS).permitAll()
                         .requestMatchers(PUBLIC_AUTH_ENDPOINTS).permitAll()

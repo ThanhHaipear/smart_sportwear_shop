@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 from types import SimpleNamespace
 from uuid import uuid4
 
@@ -6,6 +8,19 @@ import pytest
 from app.indexing.consumer import ProductIndexingConsumer
 from app.indexing.events import CatalogEvent
 from app.indexing.worker import ProductIndexingWorker
+
+
+ROOT = Path(__file__).resolve().parents[3]
+SHARED_CONTRACT = json.loads((ROOT / "contracts" / "catalog-event-v1.schema.json").read_text())
+
+
+def test_consumer_event_types_are_a_supported_subset_of_shared_contract():
+    supported = set(CatalogEvent.model_fields["eventType"].annotation.__args__)
+    declared = set(SHARED_CONTRACT["properties"]["eventType"]["enum"])
+
+    assert supported <= declared
+    assert SHARED_CONTRACT["properties"]["eventVersion"] == {"const": 1}
+    assert "sourceVersion" in SHARED_CONTRACT["required"]
 
 
 def test_catalog_event_rejects_visual_only_event():

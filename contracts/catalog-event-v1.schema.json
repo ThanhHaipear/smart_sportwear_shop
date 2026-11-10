@@ -9,6 +9,7 @@
     "eventType",
     "eventVersion",
     "productId",
+    "sourceVersion",
     "occurredAt",
     "traceId"
   ],
@@ -21,11 +22,13 @@
         "PRODUCT_IMAGE_DELETED",
         "PRODUCT_ACTIVATED",
         "PRODUCT_DEACTIVATED",
+        "PRODUCT_DELETED",
         "PRODUCT_REINDEX_REQUESTED"
       ]
     },
     "eventVersion": { "const": 1 },
     "productId": { "type": "string", "format": "uuid" },
+    "sourceVersion": { "type": "integer", "minimum": 0 },
     "imageId": { "type": ["string", "null"], "format": "uuid" },
     "occurredAt": { "type": "string", "format": "date-time" },
     "traceId": { "type": "string", "minLength": 1, "maxLength": 128 }
@@ -39,7 +42,12 @@
           }
         }
       },
-      "then": { "required": ["imageId"] }
+      "then": {
+        "required": ["imageId"],
+        "properties": {
+          "imageId": { "type": "string", "format": "uuid" }
+        }
+      }
     }
   ]
 }

@@ -50,7 +50,10 @@ $backendUnitTests = @(
     "VisualSearchClientTest",
     "VisualSearchRateLimiterTest",
     "VisualSearchServiceTest",
-    "CatalogOutboxServiceTest"
+    "CatalogOutboxServiceTest",
+    "CatalogEventContractTest",
+    "CatalogOutboxPublisherTest",
+    "IntegrationEventsEndpointTest"
 ) -join ","
 
 Invoke-Checked `

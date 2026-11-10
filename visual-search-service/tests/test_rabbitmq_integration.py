@@ -49,6 +49,7 @@ async def _scenario():
         "eventType": "PRODUCT_IMAGE_CREATED",
         "eventVersion": 1,
         "productId": str(uuid4()),
+        "sourceVersion": 1,
         "imageId": str(uuid4()),
         "occurredAt": datetime.now(timezone.utc).isoformat(),
         "traceId": "rabbit-integration",

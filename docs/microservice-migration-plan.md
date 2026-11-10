@@ -6,8 +6,9 @@
 |---|---|---|
 | 0. Chốt baseline | `DONE` | [Phase 0 baseline](microservice-phase-0-baseline.md): current-runtime gate 351/351 |
 | 1. Cứng hóa modular boundary | `DONE` | [Boundary hardening log](microservice-phase-1-boundaries.md): repository coupling = 0, integration gate 361/361 |
-| 2. Chuẩn hóa event platform | `READY` | Bắt đầu sau khi thay đổi Phase 1 được review/commit; chưa thay đổi Supabase production |
-| 3-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
+| 2. Chuẩn hóa event platform | `DONE` | [Phase 2 event platform](microservice-phase-2-event-platform.md): contract v1, outbox confirm/retry, idempotent consumer và DLQ |
+| 3. Hoàn thiện `search-service` | `READY` | Bắt đầu sau khi thay đổi Phase 2 được review/commit; chưa thay đổi Supabase production |
+| 4-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 
@@ -191,11 +192,11 @@ Yêu cầu cho mọi consumer:
 - [x] Định nghĩa chuẩn response/error hiện tại; pagination và authentication nội bộ tiếp tục hoàn thiện theo service ở phase tách tương ứng.
 - [x] Thêm `traceId`/`correlationId` từ HTTP header đến log, error envelope và catalog event.
 - [ ] Chuẩn hóa health, readiness và metrics cho mọi service.
-- [ ] Thêm contract test REST và RabbitMQ.
-- [ ] Tạo feature flag để chuyển traffic từng chức năng.
+- [x] Thêm contract test cho event Catalog/RabbitMQ; REST contract tiếp tục bổ sung theo service được tách.
+- [x] Có feature flag độc lập cho outbox relay và hai indexing consumer; traffic API sẽ chuyển theo từng phase service.
 - [ ] Tách cấu hình/secret theo service.
 - [ ] Thiết lập CI build/test/image độc lập.
-- [ ] Ghi runbook backup, deploy, rollback và xử lý DLQ.
+- [x] Ghi runbook rollback/replay và xử lý DLQ cho event platform; runbook deploy/backup riêng tiếp tục theo từng service.
 
 ### 8.2 Supabase
 

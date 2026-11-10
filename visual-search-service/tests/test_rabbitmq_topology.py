@@ -63,3 +63,39 @@ def test_main_queue_rejections_are_dead_lettered() -> None:
         "x-dead-letter-exchange": "",
         "x-dead-letter-routing-key": "visual-search.indexing.dlq",
     }
+
+
+def test_product_search_has_exact_catalog_bindings() -> None:
+    keys = {
+        item["routing_key"]
+        for item in DEFINITIONS["bindings"]
+        if item["source"] == "catalog.events"
+        and item["destination"] == "product-search.indexing"
+    }
+
+    assert keys == {
+        "product.activated",
+        "product.deactivated",
+        "product.deleted",
+        "product.reindex.requested",
+    }
+
+
+def test_product_search_retry_queues_and_dlq_are_durable() -> None:
+    queues = {item["name"]: item for item in DEFINITIONS["queues"]}
+    expected = {
+        "product-search.indexing.retry.30s": 30_000,
+        "product-search.indexing.retry.5m": 300_000,
+        "product-search.indexing.retry.1h": 3_600_000,
+    }
+
+    assert queues["product-search.indexing"]["arguments"] == {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "product-search.indexing.dlq",
+    }
+    assert queues["product-search.indexing.dlq"]["durable"] is True
+    for name, ttl in expected.items():
+        arguments = queues[name]["arguments"]
+        assert queues[name]["durable"] is True
+        assert arguments["x-message-ttl"] == ttl
+        assert arguments["x-dead-letter-routing-key"] == "product-search.indexing"
