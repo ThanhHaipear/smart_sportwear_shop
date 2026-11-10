@@ -112,10 +112,16 @@ async def search_image(
     try:
         provider = build_provider(settings)
         result = (await provider.embed_query(normalized.content)).validate_dimensions(settings.visual_embedding_dims)
-        rows = await SearchRepository(settings).image_search(result.vector, limit)
+        category_scores = (
+            await provider.category_scores(result.vector)
+            if hasattr(provider, "category_scores") else None
+        )
+        rows = await SearchRepository(settings).image_search(result.vector, limit, category_scores)
+        rows = [row for row in rows if float(row["similarity"]) >= settings.visual_min_similarity]
     except Exception as error:
         raise HTTPException(status_code=503, detail="Image search is temporarily unavailable") from error
     return {"candidates": [{
         "product_id": str(row["product_id"]), "image_id": str(row["image_id"]),
         "matched_image_url": row["image_url"], "similarity": float(row["similarity"]),
+        "category_group": row.get("category_group"),
     } for row in rows]}

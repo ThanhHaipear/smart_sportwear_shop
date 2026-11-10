@@ -29,7 +29,7 @@ exit gate Phase 3 và chưa áp dụng migration/role lên Supabase production.
 
 Ngày 2026-11-10:
 
-- `chatbot-service`: `248 passed` (unit, integration, contract và boundary).
+- `chatbot-service`: `249 passed` (unit, integration, contract và boundary).
 - Backend catalog contract: Maven compile thành công sau khi bổ sung `slug` vào
   index document (thay đổi tương thích cộng thêm).
 - Boundary test xác nhận các runtime service không import commercial repository
@@ -38,8 +38,11 @@ Ngày 2026-11-10:
 Chạy lại:
 
 ```powershell
-.\scripts\verify-microservice-phase-4.ps1
+.\scripts\verify-microservice-phase-4.ps1 -ImplementationOnly
 ```
+
+Acceptance gate mặc định còn chạy permission probe bằng DSN
+`CHATBOT_PERMISSION_TEST_URL` của chính role `chatbot_app`.
 
 ## Deploy và rollback
 
@@ -57,3 +60,5 @@ không xóa bảng trong cửa sổ rollback. Dữ liệu retrieval trace có th
 - Phase 3 chưa đạt quality gate của image TEST v2, nên chưa cut-over chuỗi
   Search -> Chatbot trên production.
 - Chưa có credential production để chạy permission test `chatbot_app` và migration drill.
+- Audit read-only ngày 10/11/2026 xác nhận database đang cấu hình kết nối được,
+  nhưng role không phải `chatbot_app` và schema `chatbot` chưa tồn tại.

@@ -29,7 +29,7 @@ class InternalCatalogIndexControllerTest {
     void returnsVersionedIndexDocument() {
         UUID id = UUID.randomUUID();
         var document = new CatalogIndexDocumentResponse(
-                id, 7, "ACTIVE", "Áo chạy", "Nhẹ", UUID.randomUUID(), "Áo", "ao",
+                id, 7, "ACTIVE", "Áo chạy", "ao-chay", "Nhẹ", UUID.randomUUID(), "Áo", "ao",
                 UUID.randomUUID(), "Demo", "demo", "APPAREL",
                 "UNISEX", List.of("RUNNING"), Map.of(), List.of(), List.of());
         when(service.find(id)).thenReturn(document);
@@ -38,5 +38,6 @@ class InternalCatalogIndexControllerTest {
         var response = controller.get(id, "secret");
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody().sourceVersion()).isEqualTo(7);
+        assertThat(response.getBody().slug()).isEqualTo("ao-chay");
     }
 }

@@ -30,6 +30,10 @@ All search endpoints require `X-Internal-Service-Token` (the legacy
 `X-Internal-Token` header remains accepted during cut-over). Query images are
 never persisted.
 
+Image results use the locked DEV v2.2 category-consensus weight and similarity
+threshold. Changing either value requires a new DEV/independent TEST cycle; do
+not retune against TEST v2.
+
 ## Backfill and rollback
 
 Use `scripts/backfill.py --ids products.txt` to rebuild from the Catalog API.

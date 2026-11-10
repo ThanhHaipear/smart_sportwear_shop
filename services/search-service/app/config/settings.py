@@ -54,6 +54,8 @@ class Settings(BaseSettings):
     catalog_download_max_redirects: int = 3
     visual_color_rerank_weight: float = 0
     visual_category_consensus_weight: float = 0.60
+    # Locked on DEV v2.2. Any change requires a new DEV/independent TEST cycle.
+    visual_min_similarity: float = Field(default=0.755936, ge=-1, le=1)
     monthly_budget_usd: float = 0
     image_cost_per_megapixel_usd: float = 0
     store_query_images: bool = False

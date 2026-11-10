@@ -1,4 +1,9 @@
-param([switch]$SkipBackendTests)
+param(
+    [switch]$SkipBackendTests,
+    [switch]$ImplementationOnly,
+    [string]$AcceptanceReport = "evidence\image-search-v3\test-v3-final\metrics.json",
+    [string]$AcceptanceConfig = "evidence\image-search-v3\test-v3-final\benchmark-config.json"
+)
 
 $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -29,8 +34,31 @@ if ($forbidden) {
 
 if (-not $SkipBackendTests) {
     Invoke-Checked "Catalog snapshot and image-client contracts" (Join-Path $projectRoot "backend") {
-        & .\mvnw.cmd '-Dtest=VisualSearchClientTest,InternalCatalogIndexControllerTest' test
+        & .\mvnw.cmd clean '-Dtest=VisualSearchClientTest,InternalCatalogIndexControllerTest' test
     }
 }
 
-Write-Host "Phase 3 implementation gate passed. Retrieval-quality acceptance remains governed by the locked TEST reports."
+Write-Host "Phase 3 implementation gate passed."
+
+if (-not $ImplementationOnly) {
+    $reportPath = Join-Path $projectRoot $AcceptanceReport
+    $configPath = Join-Path $projectRoot $AcceptanceConfig
+    if (-not (Test-Path $reportPath) -or -not (Test-Path $configPath)) {
+        throw "Phase 3 acceptance evidence is missing. Freeze and independently review TEST v3 first."
+    }
+    $report = Get-Content -Raw $reportPath | ConvertFrom-Json
+    $config = Get-Content -Raw $configPath | ConvertFrom-Json
+    if ($config.dataset.split -ne 'TEST' -or $config.dataset.status -ne 'FROZEN') {
+        throw "Acceptance dataset must be a frozen TEST split"
+    }
+    if (-not $report.acceptance.eligible -or -not $report.acceptance.passed) {
+        throw "Phase 3 retrieval quality gate failed"
+    }
+    if ($report.positive.recall.at5 -lt 0.80 -or
+        $report.positive.categoryAccuracy.value -lt 0.90 -or
+        $report.requestFailureRate.value -ne 0 -or
+        $report.latencyMs.p95 -gt 3000) {
+        throw "Phase 3 locked acceptance thresholds are not satisfied"
+    }
+    Write-Host "Phase 3 acceptance gate passed."
+}

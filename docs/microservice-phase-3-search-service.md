@@ -18,6 +18,9 @@ public rollout khi bộ TEST độc lập chưa đạt ngưỡng đã khóa.
 - Consumer hợp nhất `search.indexing`, retry 30s/5m/1h, DLQ và idempotency.
 - Backfill dry-run mặc định, evaluation runner Recall/MRR/NDCG, health,
   readiness, metrics, correlation ID và runbook rollback.
+- Unified image path giữ category zero-shot/consensus reranking, khử trùng theo
+  product và locked threshold `0.755936`; các cấu hình này không được retune
+  trên TEST v2.
 - Spring image client chuyển sang `/internal/v1/search/image`; product search mặc
   định chuyển từ cổng chatbot `8002` sang search service `8090`.
 
@@ -34,7 +37,7 @@ cũ và đối chiếu trong giai đoạn cut-over.
 
 | Gate | Kết quả |
 |---|---|
-| Search service unit/contract | `7 passed` |
+| Search service unit/contract | `11 passed` |
 | Backend snapshot + image client contract | `12 passed` |
 | Backend package | `BUILD SUCCESS` |
 | RabbitMQ definitions | JSON hợp lệ, có main/retry/DLQ cho `search.indexing` |
@@ -67,5 +70,12 @@ contract không cần container nêu trên vẫn đạt `12/12`.
 Chạy implementation gate:
 
 ```powershell
-.\scripts\verify-microservice-phase-3.ps1
+.\scripts\verify-microservice-phase-3.ps1 -ImplementationOnly
 ```
+
+Acceptance gate mặc định yêu cầu `evidence/image-search-v3/test-v3-final` chứa
+dataset TEST `FROZEN`, report `passed=true`, Recall@5 >= 80%, category >= 90%,
+request failure = 0 và p95 <= 3 giây. Gate hiện cố ý thất bại vì chưa có TEST v3.
+
+Audit read-only ngày 10/11/2026 cho thấy database đang cấu hình chưa có schema
+`ai_search`; chưa có migration production nào được thực hiện trong phase này.

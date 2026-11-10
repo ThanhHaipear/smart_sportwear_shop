@@ -9,6 +9,7 @@ from psycopg.rows import dict_row
 from app.catalog.client import CatalogIndexDocument
 from app.config import Settings
 from app.services.documents import canonical_text, content_hash, stable_json
+from app.services.visual_ranking import rerank_visual_candidates
 
 
 def vector_literal(values: list[float]) -> str:
@@ -149,11 +150,32 @@ class SearchRepository:
             )
             return list(await cursor.fetchall())
 
-    async def image_search(self, vector: list[float], limit: int) -> list[dict]:
+    async def image_search(
+        self, vector: list[float], limit: int,
+        query_category_scores: dict[str, float] | None = None,
+    ) -> list[dict]:
         async with self.connection() as connection, connection.cursor() as cursor:
             await cursor.execute(
-                "select product_id,image_id,image_url,1-(embedding <=> %s::extensions.vector) similarity "
-                "from ai_search.image_embeddings where status='READY' order by embedding <=> %s::extensions.vector limit %s",
-                (vector_literal(vector), vector_literal(vector), limit),
+                """with ranked as (
+                       select e.product_id,e.image_id,e.image_url,
+                              1-(e.embedding <=> %s::extensions.vector) similarity,
+                              d.product_type,
+                              row_number() over (
+                                  partition by e.product_id
+                                  order by e.embedding <=> %s::extensions.vector,e.image_id
+                              ) product_rank
+                       from ai_search.image_embeddings e
+                       join ai_search.search_documents d using(product_id)
+                       where e.status='READY' and d.status='ACTIVE'
+                   )
+                   select product_id,image_id,image_url,similarity,product_type
+                   from ranked where product_rank=1
+                   order by similarity desc,product_id,image_id limit %s""",
+                (vector_literal(vector), vector_literal(vector), min(max(limit * 10, 50), 100)),
             )
-            return list(await cursor.fetchall())
+            rows = list(await cursor.fetchall())
+        return rerank_visual_candidates(
+            rows,
+            category_weight=self.settings.visual_category_consensus_weight,
+            query_category_scores=query_category_scores,
+        )[:limit]

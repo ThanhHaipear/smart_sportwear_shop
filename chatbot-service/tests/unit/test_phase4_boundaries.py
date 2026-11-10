@@ -56,3 +56,10 @@ def test_history_sql_is_schema_qualified():
     assert "chatbot.chat_sessions" in source
     assert "chatbot.chat_messages" in source
     assert "chatbot.retrieval_logs" in source
+
+
+def test_migration_enforces_chatbot_role_boundary():
+    migration = (Path(__file__).parents[2] / "migrations" / "V1__create_chatbot_schema.sql").read_text("utf-8")
+    assert "REVOKE CREATE ON SCHEMA public FROM chatbot_app" in migration
+    assert "GRANT USAGE ON SCHEMA chatbot TO chatbot_app" in migration
+    assert "GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA chatbot" in migration
