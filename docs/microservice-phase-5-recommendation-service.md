@@ -2,9 +2,9 @@
 
 ## Kết quả
 
-Phase 5 đã hoàn thành ở implementation gate. Public cut-over mặc định giữ tắt
-(`RECOMMENDATION_ENABLED=false`) cho đến khi migration/permission probe trên môi
-trường đích và TEST evaluation độc lập được phê duyệt.
+Phase 5 đã hoàn thành implementation và Supabase acceptance gate. Public cut-over
+mặc định giữ tắt (`RECOMMENDATION_ENABLED=false`) cho đến khi TEST evaluation độc
+lập được phê duyệt.
 
 ## Ranh giới runtime
 
@@ -44,14 +44,26 @@ Implementation gate ngày 10/11/2026:
   recommendation/interaction.
 - RabbitMQ definitions và Docker Compose hợp lệ.
 
+Supabase acceptance gate ngày 10/11/2026:
+
+- Tạo schema `recommendation`, owner role `recommendation_owner` và runtime role
+  `recommendation_app` với secret riêng.
+- `recommendation_app` không có superuser/createdb/createrole, có `USAGE` trên
+  schema sở hữu và không có `CREATE` trên `public`.
+- Write-own/deny-public probe đạt khi chạy trực tiếp bằng runtime DSN.
+- Backfill idempotent hoàn tất với count interaction/rule/log đều bằng 0 vì nguồn
+  legacy không có bản ghi; không drop hoặc đổi tên bảng legacy.
+- Evidence: `evidence/microservice-phase-5-supabase-2026-11-10.json`.
+- Runtime và public traffic tiếp tục tắt; secret không được in hoặc commit.
+
 Chạy lại:
 
 ```powershell
 .\scripts\verify-microservice-phase-5.ps1 -ImplementationOnly
 ```
 
-Acceptance gate mặc định yêu cầu DSN `RECOMMENDATION_PERMISSION_TEST_URL` của
-chính role `recommendation_app` để chứng minh write-own/deny-public.
+Acceptance gate dùng DSN `RECOMMENDATION_PERMISSION_TEST_URL` của chính role
+`recommendation_app` để chứng minh write-own/deny-public.
 
 ## Deploy, backfill và rollback
 
