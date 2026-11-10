@@ -1,0 +1,15 @@
+{
+  "title": "Smart Sportswear - Phase 9 Operations",
+  "uid": "phase9-operations",
+  "schemaVersion": 39,
+  "refresh": "15s",
+  "time": {"from": "now-1h", "to": "now"},
+  "panels": [
+    {"id": 1, "type": "stat", "title": "Services up", "gridPos": {"x": 0, "y": 0, "w": 8, "h": 6}, "targets": [{"expr": "sum(up{job=~\"gateway|identity-service|catalog-service|sales-service|search-service|chatbot-service|recommendation-service\"})", "refId": "A"}]},
+    {"id": 2, "type": "timeseries", "title": "Gateway request rate", "gridPos": {"x": 8, "y": 0, "w": 8, "h": 6}, "targets": [{"expr": "sum by (status) (rate(gateway_http_requests_total[5m]))", "legendFormat": "{{status}}", "refId": "A"}]},
+    {"id": 3, "type": "timeseries", "title": "Gateway upstream failures", "gridPos": {"x": 16, "y": 0, "w": 8, "h": 6}, "targets": [{"expr": "sum by (upstream) (rate(gateway_upstream_failures_total[5m]))", "legendFormat": "{{upstream}}", "refId": "A"}]},
+    {"id": 4, "type": "timeseries", "title": "Gateway mean latency", "gridPos": {"x": 0, "y": 6, "w": 12, "h": 7}, "targets": [{"expr": "sum(rate(gateway_http_request_duration_seconds_sum[5m])) / clamp_min(sum(rate(gateway_http_requests_total[5m])), 0.001)", "refId": "A"}]},
+    {"id": 5, "type": "timeseries", "title": "JVM HTTP requests", "gridPos": {"x": 12, "y": 6, "w": 12, "h": 7}, "targets": [{"expr": "sum by (job, status) (rate(http_server_requests_seconds_count[5m]))", "legendFormat": "{{job}} {{status}}", "refId": "A"}]}
+  ]
+}
+

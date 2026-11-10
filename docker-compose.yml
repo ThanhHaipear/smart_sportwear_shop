@@ -2,7 +2,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -15,7 +15,7 @@ services:
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
     ports:
-      - "5672:5672"
+      - "127.0.0.1:5672:5672"
       - "127.0.0.1:15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-visual_search}
@@ -35,8 +35,7 @@ services:
   search-service:
     profiles: ["search", "chatbot"]
     build: ./services/search-service
-    ports:
-      - "8090:8090"
+    expose: ["8090"]
     env_file: ./services/search-service/.env.example
     environment:
       SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
@@ -70,8 +69,7 @@ services:
   chatbot-service:
     profiles: ["chatbot"]
     build: ./chatbot-service
-    ports:
-      - "8002:8002"
+    expose: ["8002"]
     env_file: ./chatbot-service/.env.example
     environment:
       SEARCH_API_BASE_URL: http://search-service:8090
@@ -90,8 +88,7 @@ services:
   recommendation-service:
     profiles: ["recommendation"]
     build: ./recommendation-service
-    ports:
-      - "8091:8091"
+    expose: ["8091"]
     env_file: ./recommendation-service/.env.example
     environment:
       RECOMMENDATION_ENABLED: ${RECOMMENDATION_ENABLED:-false}
@@ -120,8 +117,7 @@ services:
   catalog-service:
     profiles: ["catalog"]
     build: ./catalog-service
-    ports:
-      - "8092:8092"
+    expose: ["8092"]
     env_file: ./catalog-service/.env.example
     environment:
       CATALOG_DATABASE_URL: ${CATALOG_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen?currentSchema=catalog}
@@ -143,8 +139,7 @@ services:
   identity-service:
     profiles: ["identity"]
     build: ./identity-service
-    ports:
-      - "8093:8093"
+    expose: ["8093"]
     env_file: ./identity-service/.env.example
     environment:
       IDENTITY_DATABASE_URL: ${IDENTITY_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen?currentSchema=identity}
@@ -170,8 +165,7 @@ services:
   sales-service:
     profiles: ["sales"]
     build: ./sales-service
-    ports:
-      - "8094:8094"
+    expose: ["8094"]
     env_file: ./sales-service/.env.example
     environment:
       SALES_DATABASE_URL: ${SALES_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen?currentSchema=sales}
@@ -197,6 +191,83 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  gateway:
+    profiles: ["gateway"]
+    build: ./gateway
+    ports:
+      - "8080:8080"
+    env_file: ./gateway/.env.example
+    environment:
+      IDENTITY_UPSTREAM: http://identity-service:8093
+      SALES_UPSTREAM: http://sales-service:8094
+      CHATBOT_UPSTREAM: http://chatbot-service:8002
+      RECOMMENDATION_UPSTREAM: http://recommendation-service:8091
+      LEGACY_UPSTREAM: ${LEGACY_UPSTREAM:-http://host.docker.internal:8080}
+      GATEWAY_REQUEST_TIMEOUT_SECONDS: ${GATEWAY_REQUEST_TIMEOUT_SECONDS:-10}
+      GATEWAY_RATE_LIMIT_PER_MINUTE: ${GATEWAY_RATE_LIMIT_PER_MINUTE:-120}
+      GATEWAY_RATE_LIMIT_BURST: ${GATEWAY_RATE_LIMIT_BURST:-30}
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/ready', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+    restart: unless-stopped
+
+  prometheus:
+    profiles: ["observability"]
+    image: prom/prometheus:v3.1.0
+    command: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.retention.time=7d"]
+    volumes:
+      - ./infra/observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./infra/observability/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    restart: unless-stopped
+
+  tempo:
+    profiles: ["observability"]
+    image: grafana/tempo:2.6.1
+    command: ["-config.file=/etc/tempo.yml"]
+    volumes:
+      - ./infra/observability/tempo.yml:/etc/tempo.yml:ro
+      - tempo_data:/var/tempo
+    expose: ["3200", "4317", "4318"]
+    restart: unless-stopped
+
+  otel-collector:
+    profiles: ["observability"]
+    image: otel/opentelemetry-collector-contrib:0.116.1
+    command: ["--config=/etc/otelcol/config.yml"]
+    volumes:
+      - ./infra/observability/otel-collector.yml:/etc/otelcol/config.yml:ro
+    expose: ["4317", "4318"]
+    depends_on:
+      - tempo
+    restart: unless-stopped
+
+  grafana:
+    profiles: ["observability"]
+    image: grafana/grafana:11.4.0
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-change-me}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./infra/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3001:3000"
+    depends_on:
+      - prometheus
+      - tempo
+    restart: unless-stopped
+
 volumes:
   redis_data:
   rabbitmq_data:
+  prometheus_data:
+  tempo_data:
+  grafana_data:

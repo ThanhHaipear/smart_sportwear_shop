@@ -25,6 +25,9 @@ spring:
 server:
   port: ${SERVER_PORT:8093}
 management:
+  health:
+    livenessstate.enabled: true
+    readinessstate.enabled: true
   endpoint:
     health:
       probes:
@@ -54,4 +57,4 @@ app:
     public-url: ${IDENTITY_RESET_PUBLIC_URL:http://localhost:3000/reset-password}
 logging:
   pattern:
-    level: "%5p [correlationId:%X{correlationId:-}]"
+    level: "%5p [correlationId:%X{correlationId:-}] [traceparent:%X{traceparent:-}]"

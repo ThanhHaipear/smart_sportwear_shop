@@ -28,6 +28,9 @@ management:
   health:
     livenessstate.enabled: true
     readinessstate.enabled: true
+logging:
+  pattern:
+    level: "%5p [correlationId:%X{correlationId:-}] [traceparent:%X{traceparent:-}]"
 sales:
   internal-token: ${SALES_INTERNAL_TOKEN:change-me}
   catalog-base-url: ${CATALOG_API_BASE_URL:http://localhost:8092}

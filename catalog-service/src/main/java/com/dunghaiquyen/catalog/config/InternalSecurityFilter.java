@@ -30,6 +30,10 @@ public class InternalSecurityFilter extends OncePerRequestFilter {
         String incoming = request.getHeader("X-Correlation-Id");
         String correlationId = incoming != null && incoming.matches("[A-Za-z0-9._:-]{1,100}") ? incoming : UUID.randomUUID().toString();
         MDC.put("correlationId", correlationId);
+        String traceparent = request.getHeader("traceparent");
+        if (traceparent != null && traceparent.matches("00-[0-9a-f]{32}-[0-9a-f]{16}-0[01]")) {
+            MDC.put("traceparent", traceparent); response.setHeader("traceparent", traceparent);
+        }
         response.setHeader("X-Correlation-Id", correlationId);
         try {
             if (request.getRequestURI().startsWith("/internal/") && !matches(request.getHeader("X-Internal-Service-Token"))) {
@@ -38,7 +42,7 @@ public class InternalSecurityFilter extends OncePerRequestFilter {
                 return;
             }
             chain.doFilter(request, response);
-        } finally { MDC.remove("correlationId"); }
+        } finally { MDC.remove("correlationId"); MDC.remove("traceparent"); }
     }
 
     private boolean matches(String actual) {

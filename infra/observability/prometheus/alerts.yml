@@ -1,0 +1,25 @@
+groups:
+  - name: smart-sportswear-slo
+    rules:
+      - alert: ServiceDown
+        expr: up{job=~"gateway|identity-service|catalog-service|sales-service|search-service|chatbot-service|recommendation-service"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.job }} is unavailable"
+      - alert: GatewayHigh5xxRate
+        expr: sum(rate(gateway_http_requests_total{status=~"5.."}[5m])) / clamp_min(sum(rate(gateway_http_requests_total[5m])), 0.001) > 0.02
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Gateway 5xx error budget is being consumed"
+      - alert: GatewayUpstreamFailures
+        expr: sum(increase(gateway_upstream_failures_total[5m])) > 5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Repeated gateway-to-service transport failures"
+

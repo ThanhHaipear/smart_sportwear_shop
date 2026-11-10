@@ -41,4 +41,4 @@ app:
     poll-delay-ms: ${CATALOG_OUTBOX_POLL_DELAY_MS:1000}
 logging:
   pattern:
-    level: "%5p [correlationId:%X{correlationId:-}]"
+    level: "%5p [correlationId:%X{correlationId:-}] [traceparent:%X{traceparent:-}]"

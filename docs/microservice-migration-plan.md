@@ -13,7 +13,8 @@
 | 6. Tách `catalog-service` | `DONE / CUTOVER_HELD` | [Phase 6 catalog service](microservice-phase-6-catalog-service.md): Spring Boot service, schema `catalog`, runtime role và write-own/deny-public probe đạt; backfill 36 products/178 variants/81 images; route/event giữ tắt chờ shadow-read và Sales cut-over window |
 | 7. Tách `identity-service` | `DONE / CUTOVER_HELD` | [Phase 7 identity service](microservice-phase-7-identity-service.md): service và 6/6 tests đạt; schema `identity`, runtime role, backfill 3 users/1 identity/2 addresses/18 refresh tokens và write-own/deny-public probe đạt; route/event giữ tắt chờ cửa sổ cut-over |
 | 8. Đổi core thành `sales-service` | `DONE / CUTOVER_HELD` | [Phase 8 sales service](microservice-phase-8-sales-service.md): implementation gate đạt; schema `sales`, runtime role, backfill 14 bảng và write-own/deny-public acceptance đạt; route/event/SePay writer giữ tắt chờ cut-over |
-| 9-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
+| 9. Gateway và vận hành | `DONE / ROUTE_CUTOVER_HELD` | [Phase 9 gateway và vận hành](microservice-phase-9-gateway-operations.md): gateway allowlist/rate-limit/trace, application port isolation, Prometheus/Grafana/Tempo manifests, SLO/alert/runbook và resilience gate đạt; từng route vẫn theo cut-over gate của service sở hữu |
+| 10. Dọn shared database | `NOT_STARTED` | Chỉ bắt đầu sau khi route/write cut-over và thời gian ổn định được duyệt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 
@@ -196,10 +197,10 @@ Yêu cầu cho mọi consumer:
 - [x] Lập dependency graph giữa các module Spring Boot.
 - [x] Định nghĩa chuẩn response/error hiện tại; pagination và authentication nội bộ tiếp tục hoàn thiện theo service ở phase tách tương ứng.
 - [x] Thêm `traceId`/`correlationId` từ HTTP header đến log, error envelope và catalog event.
-- [ ] Chuẩn hóa health, readiness và metrics cho mọi service.
+- [x] Chuẩn hóa health, readiness và metrics cho mọi service.
 - [x] Thêm contract test cho event Catalog/RabbitMQ; REST contract tiếp tục bổ sung theo service được tách.
 - [x] Có feature flag độc lập cho outbox relay và hai indexing consumer; traffic API sẽ chuyển theo từng phase service.
-- [ ] Tách cấu hình/secret theo service.
+- [x] Tách cấu hình/secret theo service; Compose chỉ tham chiếu biến môi trường, `.env.example` không chứa production secret.
 - [ ] Thiết lập CI build/test/image độc lập.
 - [x] Ghi runbook rollback/replay và xử lý DLQ cho event platform; runbook deploy/backup riêng tiếp tục theo từng service.
 
