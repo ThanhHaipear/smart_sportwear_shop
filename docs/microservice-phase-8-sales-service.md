@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Implementation Phase 8 đã hoàn thành và gate độc lập đạt ngày 10/11/2026. Supabase acceptance đang chờ phê duyệt rõ ràng cho thay đổi live shared database, vì vậy trạng thái hiện tại là `IMPLEMENTATION_DONE / DB_ACCEPTANCE_PENDING / CUTOVER_HELD`.
+Phase 8 đã hoàn thành implementation và Supabase acceptance ngày 10/11/2026, ở trạng thái `DONE / CUTOVER_HELD`.
 
 Không có public route, event publisher hay SePay writer mới nào được bật. Core cũ vẫn là write authority cho đến cửa sổ cut-over được duyệt.
 
@@ -33,15 +33,22 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-microservic
 
 Gate kiểm tra test domain COD/VietQR/reservation, rollback/compensation, webhook duplicate, late payment, amount mismatch, refund; exact-byte HMAC; source boundary; migration permission invariant; REST/event contract và Docker Compose surface.
 
-## Supabase acceptance còn lại
+## Supabase acceptance
 
-Sau khi người vận hành phê duyệt live mutation, chạy:
+Acceptance đã được thực thi bằng:
 
 ```powershell
 .\chatbot-service\.venv\Scripts\python.exe scripts\maintenance\apply-phase-8-supabase.py
 ```
 
-Script tạo/rotate credential `sales_app`, áp dụng V1/V2, đối chiếu count 14 bảng, chạy write-own/deny-public probe, ghi credential vào `sales-service/.env` đã gitignore và evidence không chứa secret. Chỉ khi evidence đạt mới đổi trạng thái Phase 8 sang `DONE / CUTOVER_HELD`.
+Kết quả:
+
+- Đã tạo `sales_owner`, `sales_app` và schema `sales`; runtime role không có superuser/createdb/createrole, có `USAGE` trên `sales` và không có `CREATE` trên `public`.
+- Write-own/deny-public probe đạt bằng chính runtime credential; credential được ghi vào `sales-service/.env` đã gitignore và không xuất hiện trong evidence.
+- Backfill khớp legacy: 17 carts, 0 cart items, 3 orders, 3 order items, 6 status history, 3 payments, 2 payment events, 0 returns/items, 1 refund, 3 bank transactions, 0 shipping methods/shipments và 2 notifications.
+- Bảng legacy không tồn tại được đối chiếu count 0; mọi bảng legacy tồn tại đều được copy idempotent và giữ nguyên cho rollback.
+- Evidence: `evidence/microservice-phase-8-supabase-2026-11-10.json`.
+- `SALES_EVENTS_ENABLED=false`, `SEPAY_WEBHOOK_ENABLED=false` và public route cut-over tiếp tục tắt.
 
 ## Cut-over và rollback
 

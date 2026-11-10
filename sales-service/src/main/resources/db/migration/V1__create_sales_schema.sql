@@ -108,9 +108,12 @@ create table if not exists shipments (
   shipped_at timestamptz, delivered_at timestamptz, created_at timestamptz not null default now(), updated_at timestamptz not null default now()
 );
 create table if not exists notifications (
-  id uuid primary key default gen_random_uuid(), user_ref uuid not null, order_id uuid references orders(id),
-  type varchar(50) not null, channel varchar(20) not null, title varchar(200) not null, content text not null,
-  status varchar(20) not null default 'PENDING', sent_at timestamptz, created_at timestamptz not null default now()
+  id uuid primary key default gen_random_uuid(), user_ref uuid, order_id uuid references orders(id),
+  type varchar(50) not null, channel varchar(20) not null default 'EMAIL', recipient varchar(255) not null,
+  subject varchar(255) not null, body text, status varchar(20) not null default 'PENDING', error_message text,
+  sent_at timestamptz, read_at timestamptz, resend_of_id uuid references notifications(id) on delete set null,
+  resend_count integer not null default 0 check(resend_count>=0), last_resend_at timestamptz,
+  created_at timestamptz not null default now()
 );
 create table if not exists integration_outbox (
   id uuid primary key default gen_random_uuid(), event_type varchar(100) not null, aggregate_type varchar(50) not null,

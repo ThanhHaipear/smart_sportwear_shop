@@ -26,7 +26,9 @@ async def apply(admin_dsn):
    await c.execute(f"grant sales_owner to {admin}");await c.execute(f"alter role sales_app login password {pw}");db=await c.fetchval("select quote_ident(current_database())");await c.execute(f"grant connect on database {db} to sales_app")
    for name in ("V1__create_sales_schema.sql","V2__backfill_legacy_sales.sql"):await c.execute((ROOT/"sales-service/src/main/resources/db/migration"/name).read_text("utf-8"))
    await c.execute("alter role sales_app set search_path=sales,pg_catalog")
-   target={t:await c.fetchval(f"select count(*) from sales.{t}") for t in TABLES};legacy={t:await c.fetchval(f"select count(*) from public.{t}") for t in TABLES}
+   target={t:await c.fetchval(f"select count(*) from sales.{t}") for t in TABLES};legacy={}
+   for t in TABLES:
+    legacy[t]=await c.fetchval(f"select count(*) from public.{t}") if await c.fetchval("select to_regclass($1)",f"public.{t}") else 0
    if target!=legacy:raise RuntimeError(f"sales backfill mismatch: target={target}, legacy={legacy}")
   dsn=runtime_dsn(normalized,"sales_app",password)
  finally:await c.close()

@@ -1,0 +1,57 @@
+{
+  "appliedAt": "2026-11-10T15:20:56.256651+00:00",
+  "database": "configured-supabase-postgres",
+  "schemasCreated": [
+    "sales"
+  ],
+  "rolesConfigured": [
+    "sales_owner",
+    "sales_app"
+  ],
+  "permissions": {
+    "role": "sales_app",
+    "superuser": false,
+    "createDatabase": false,
+    "createRole": false,
+    "ownedSchemaUsage": true,
+    "publicCreate": false
+  },
+  "backfillCounts": {
+    "carts": 17,
+    "cart_items": 0,
+    "orders": 3,
+    "order_items": 3,
+    "order_status_history": 6,
+    "payments": 3,
+    "payment_events": 2,
+    "returns": 0,
+    "return_items": 0,
+    "refunds": 1,
+    "bank_transactions": 3,
+    "shipping_methods": 0,
+    "shipments": 0,
+    "notifications": 2
+  },
+  "legacyCounts": {
+    "carts": 17,
+    "cart_items": 0,
+    "orders": 3,
+    "order_items": 3,
+    "order_status_history": 6,
+    "payments": 3,
+    "payment_events": 2,
+    "returns": 0,
+    "return_items": 0,
+    "refunds": 1,
+    "bank_transactions": 3,
+    "shipping_methods": 0,
+    "shipments": 0,
+    "notifications": 2
+  },
+  "countsMatch": true,
+  "salesEventsEnabled": false,
+  "sepayIngressEnabled": false,
+  "publicRouteCutover": false,
+  "secretsPrinted": false,
+  "rollback": "Keep schema; route to the prior core release, disable Sales/SePay writers, and optionally revoke sales_app LOGIN."
+}

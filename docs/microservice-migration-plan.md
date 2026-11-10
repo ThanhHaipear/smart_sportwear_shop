@@ -12,7 +12,7 @@
 | 5. Tách `recommendation-service` | `DONE / CUTOVER_HELD` | [Phase 5 recommendation service](microservice-phase-5-recommendation-service.md): 11 tests, core repository = 0, schema `recommendation`, runtime role và write/deny permission probes đạt; public cut-over giữ tắt chờ TEST evaluation độc lập |
 | 6. Tách `catalog-service` | `DONE / CUTOVER_HELD` | [Phase 6 catalog service](microservice-phase-6-catalog-service.md): Spring Boot service, schema `catalog`, runtime role và write-own/deny-public probe đạt; backfill 36 products/178 variants/81 images; route/event giữ tắt chờ shadow-read và Sales cut-over window |
 | 7. Tách `identity-service` | `DONE / CUTOVER_HELD` | [Phase 7 identity service](microservice-phase-7-identity-service.md): service và 6/6 tests đạt; schema `identity`, runtime role, backfill 3 users/1 identity/2 addresses/18 refresh tokens và write-own/deny-public probe đạt; route/event giữ tắt chờ cửa sổ cut-over |
-| 8. Đổi core thành `sales-service` | `IMPLEMENTATION_DONE / DB_ACCEPTANCE_PENDING / CUTOVER_HELD` | [Phase 8 sales service](microservice-phase-8-sales-service.md): service/schema/contracts/gate độc lập đạt; chờ phê duyệt live Supabase migration và permission evidence |
+| 8. Đổi core thành `sales-service` | `DONE / CUTOVER_HELD` | [Phase 8 sales service](microservice-phase-8-sales-service.md): implementation gate đạt; schema `sales`, runtime role, backfill 14 bảng và write-own/deny-public acceptance đạt; route/event/SePay writer giữ tắt chờ cut-over |
 | 9-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
