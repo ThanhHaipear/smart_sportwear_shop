@@ -1,0 +1,6 @@
+package com.dunghaiquyen.sales;
+import static org.assertj.core.api.Assertions.*;import com.dunghaiquyen.sales.api.SePaySignatureVerifier;import com.dunghaiquyen.sales.config.SalesProperties;import java.nio.charset.StandardCharsets;import java.time.Instant;import javax.crypto.Mac;import javax.crypto.spec.SecretKeySpec;import java.util.HexFormat;import org.junit.jupiter.api.Test;
+class SePaySignatureVerifierTest{
+ @Test void verifiesExactRawBytesAndRejectsMutation()throws Exception{var p=new SalesProperties("x","x","x",false,1000,new SalesProperties.VietQr("1",900),new SalesProperties.SePay(true,"secret",300));var v=new SePaySignatureVerifier(p);String ts=String.valueOf(Instant.now().getEpochSecond());byte[] body="{\"id\":1,\"amount\":100}".getBytes(StandardCharsets.UTF_8);String sig=sign("secret",ts,body);v.verify(sig,ts,body);assertThatThrownBy(()->v.verify(sig,ts,"{ \"id\":1,\"amount\":100}".getBytes(StandardCharsets.UTF_8))).isInstanceOf(SecurityException.class);}
+ private String sign(String secret,String ts,byte[] body)throws Exception{Mac m=Mac.getInstance("HmacSHA256");m.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),"HmacSHA256"));m.update(ts.getBytes(StandardCharsets.UTF_8));m.update((byte)'.');return "sha256="+HexFormat.of().formatHex(m.doFinal(body));}
+}

@@ -167,6 +167,36 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  sales-service:
+    profiles: ["sales"]
+    build: ./sales-service
+    ports:
+      - "8094:8094"
+    env_file: ./sales-service/.env.example
+    environment:
+      SALES_DATABASE_URL: ${SALES_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen?currentSchema=sales}
+      SALES_DB_USERNAME: ${SALES_DB_USERNAME:-sales_app}
+      SALES_DB_PASSWORD: ${SALES_DB_PASSWORD:-change-me}
+      SALES_MIGRATION_DATABASE_URL: ${SALES_MIGRATION_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen}
+      SALES_MIGRATION_DB_USERNAME: ${SALES_MIGRATION_DB_USERNAME:-postgres}
+      SALES_MIGRATION_DB_PASSWORD: ${SALES_MIGRATION_DB_PASSWORD:-change-me}
+      SALES_INTERNAL_TOKEN: ${SALES_INTERNAL_TOKEN:-change-me}
+      CATALOG_API_BASE_URL: http://catalog-service:8092
+      CATALOG_INTERNAL_TOKEN: ${CATALOG_INTERNAL_TOKEN:-change-me}
+      SEPAY_WEBHOOK_ENABLED: ${SEPAY_WEBHOOK_ENABLED:-false}
+      SEPAY_WEBHOOK_SECRET: ${SEPAY_WEBHOOK_SECRET:-change-me}
+      VIETQR_ACCOUNT_NUMBER: ${VIETQR_ACCOUNT_NUMBER:-}
+      SALES_EVENTS_ENABLED: ${SALES_EVENTS_ENABLED:-false}
+      RABBITMQ_ADDRESSES: rabbitmq:5672
+      RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER:-visual_search}
+      RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS:-change-me}
+    depends_on:
+      catalog-service:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   redis_data:
   rabbitmq_data:

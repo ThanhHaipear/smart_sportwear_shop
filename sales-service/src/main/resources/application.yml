@@ -1,0 +1,43 @@
+server:
+  port: 8094
+spring:
+  application:
+    name: sales-service
+  datasource:
+    url: ${SALES_DATABASE_URL:jdbc:postgresql://localhost:5432/dunghaiquyen?currentSchema=sales}
+    username: ${SALES_DB_USERNAME:sales_app}
+    password: ${SALES_DB_PASSWORD:change-me}
+    hikari:
+      minimum-idle: ${SALES_DB_POOL_MIN:2}
+      maximum-pool-size: ${SALES_DB_POOL_MAX:4}
+      connection-init-sql: SET search_path TO sales,pg_catalog
+  flyway:
+    enabled: true
+    url: ${SALES_MIGRATION_DATABASE_URL:${SALES_DATABASE_URL}}
+    user: ${SALES_MIGRATION_DB_USERNAME:${SALES_DB_USERNAME}}
+    password: ${SALES_MIGRATION_DB_PASSWORD:${SALES_DB_PASSWORD}}
+    locations: classpath:db/migration
+  rabbitmq:
+    addresses: ${RABBITMQ_ADDRESSES:localhost:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    publisher-confirm-type: correlated
+management:
+  endpoints.web.exposure.include: health,info,prometheus,metrics
+  endpoint.health.probes.enabled: true
+  health:
+    livenessstate.enabled: true
+    readinessstate.enabled: true
+sales:
+  internal-token: ${SALES_INTERNAL_TOKEN:change-me}
+  catalog-base-url: ${CATALOG_API_BASE_URL:http://localhost:8092}
+  catalog-token: ${CATALOG_INTERNAL_TOKEN:change-me}
+  events-enabled: ${SALES_EVENTS_ENABLED:false}
+  outbox-delay-ms: ${SALES_OUTBOX_DELAY_MS:1000}
+  vietqr:
+    account-number: ${VIETQR_ACCOUNT_NUMBER:}
+    payment-ttl-seconds: ${VIETQR_PAYMENT_TTL_SECONDS:900}
+  sepay:
+    webhook-enabled: ${SEPAY_WEBHOOK_ENABLED:false}
+    webhook-secret: ${SEPAY_WEBHOOK_SECRET:change-me}
+    timestamp-tolerance-seconds: ${SEPAY_TIMESTAMP_TOLERANCE_SECONDS:300}

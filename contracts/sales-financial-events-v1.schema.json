@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-sportswear.local/contracts/sales-financial-events-v1.schema.json",
+  "title": "Sales financial events v1",
+  "oneOf": [
+    {"$ref": "#/$defs/paymentCompleted"},
+    {"$ref": "#/$defs/refundCompleted"},
+    {"$ref": "#/$defs/orderCancelled"}
+  ],
+  "$defs": {
+    "base": {"type":"object","required":["eventId","occurredAt"],"properties":{"eventId":{"type":"string","format":"uuid"},"occurredAt":{"type":"string","format":"date-time"}}},
+    "paymentCompleted": {"allOf":[{"$ref":"#/$defs/base"},{"type":"object","required":["paymentId","orderId","amount","provider","paidAt"],"properties":{"paymentId":{"type":"string","format":"uuid"},"orderId":{"type":"string","format":"uuid"},"amount":{"type":"number"},"provider":{"type":"string"},"paidAt":{"type":"string","format":"date-time"}}}]},
+    "refundCompleted": {"allOf":[{"$ref":"#/$defs/base"},{"type":"object","required":["refundId","orderId","amount","completedAt"],"properties":{"refundId":{"type":"string","format":"uuid"},"orderId":{"type":"string","format":"uuid"},"amount":{"type":"number"},"completedAt":{"type":"string","format":"date-time"}}}]},
+    "orderCancelled": {"allOf":[{"$ref":"#/$defs/base"},{"type":"object","required":["orderId","reason"],"properties":{"orderId":{"type":"string","format":"uuid"},"reason":{"type":"string"}}}]}
+  }
+}

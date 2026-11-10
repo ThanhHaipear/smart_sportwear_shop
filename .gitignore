@@ -44,6 +44,7 @@ ai-website-cloner-template/
 **/.venv/
 *.py[cod]
 chatbot-admin-service/data/
+sales-service/.env
 # Database backups
 backups/
 *.dump
