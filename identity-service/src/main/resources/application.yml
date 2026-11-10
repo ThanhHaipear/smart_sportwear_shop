@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: identity-service
+  datasource:
+    url: ${IDENTITY_DATABASE_URL:jdbc:postgresql://localhost:5432/dunghaiquyen?currentSchema=identity}
+    username: ${IDENTITY_DB_USERNAME:identity_app}
+    password: ${IDENTITY_DB_PASSWORD:change-me}
+    hikari:
+      maximum-pool-size: ${IDENTITY_DB_POOL_MAX:4}
+      minimum-idle: ${IDENTITY_DB_POOL_MIN:2}
+      connection-timeout: 20000
+  flyway:
+    enabled: ${IDENTITY_FLYWAY_ENABLED:true}
+    locations: classpath:db/migration
+    default-schema: identity
+    url: ${IDENTITY_MIGRATION_DATABASE_URL:${IDENTITY_DATABASE_URL:jdbc:postgresql://localhost:5432/dunghaiquyen}}
+    user: ${IDENTITY_MIGRATION_DB_USERNAME:${IDENTITY_DB_USERNAME:identity_app}}
+    password: ${IDENTITY_MIGRATION_DB_PASSWORD:${IDENTITY_DB_PASSWORD:change-me}}
+  rabbitmq:
+    addresses: ${RABBITMQ_ADDRESSES:localhost:5672}
+    username: ${RABBITMQ_USERNAME:identity}
+    password: ${RABBITMQ_PASSWORD:change-me}
+    publisher-confirm-type: correlated
+    publisher-returns: true
+server:
+  port: ${SERVER_PORT:8093}
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+app:
+  jwt:
+    access-secret: ${JWT_ACCESS_SECRET:dev-only-access-secret-change-me-please-32-bytes-min}
+    refresh-secret: ${JWT_REFRESH_SECRET:dev-only-refresh-secret-change-me-please-32-bytes}
+    previous-access-secret: ${JWT_PREVIOUS_ACCESS_SECRET:}
+    previous-refresh-secret: ${JWT_PREVIOUS_REFRESH_SECRET:}
+    access-token-ttl-minutes: ${JWT_ACCESS_TTL_MINUTES:15}
+    refresh-token-ttl-days: ${JWT_REFRESH_TTL_DAYS:30}
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:}
+    token-info-url: ${GOOGLE_TOKEN_INFO_URL:https://oauth2.googleapis.com/tokeninfo}
+  events:
+    enabled: ${IDENTITY_EVENTS_ENABLED:false}
+    exchange: ${IDENTITY_EVENTS_EXCHANGE:identity.events}
+    poll-delay-ms: ${IDENTITY_OUTBOX_POLL_DELAY_MS:1000}
+  password-reset:
+    mail-enabled: ${IDENTITY_RESET_MAIL_ENABLED:false}
+    from: ${IDENTITY_RESET_MAIL_FROM:no-reply@example.invalid}
+    public-url: ${IDENTITY_RESET_PUBLIC_URL:http://localhost:3000/reset-password}
+logging:
+  pattern:
+    level: "%5p [correlationId:%X{correlationId:-}]"

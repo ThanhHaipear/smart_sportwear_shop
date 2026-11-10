@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:identity;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=10000
+    username: sa
+    password:
+  flyway:
+    enabled: false
+  mail:
+    host: localhost
+    port: 1025
+app:
+  jwt:
+    access-secret: test-access-secret-at-least-thirty-two-bytes-long
+    refresh-secret: test-refresh-secret-at-least-thirty-two-bytes-long
+    previous-access-secret:
+    previous-refresh-secret:
+    access-token-ttl-minutes: 15
+    refresh-token-ttl-days: 30
+  google:
+    client-id:
+    token-info-url: http://localhost:1/tokeninfo
+  events:
+    enabled: false
+    exchange: identity.events
+    poll-delay-ms: 1000
+  password-reset:
+    mail-enabled: false
+    from: test@example.invalid
+    public-url: http://localhost/reset

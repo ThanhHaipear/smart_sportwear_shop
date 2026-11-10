@@ -20,3 +20,4 @@ Các file trong thư mục này là contract dùng chung giữa producer và con
 | `sales-order-created-event-v1.schema.json` | Sales | Recommendation | `business.events` / `order.created` |
 | `recommendation-interaction-event-v1.schema.json` | Gateway/Catalog/Sales | Recommendation | `business.events` / `interaction.recorded` |
 | `recommendation-catalog-product-event-v1.schema.json` | Catalog | Recommendation | `catalog.events` / `product.#` |
+| `identity-user-event-v1.schema.json` | Identity | Cac service luu user reference | `identity.events` / `identity.user.*.v1` |

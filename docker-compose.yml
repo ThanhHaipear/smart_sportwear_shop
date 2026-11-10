@@ -140,6 +140,33 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  identity-service:
+    profiles: ["identity"]
+    build: ./identity-service
+    ports:
+      - "8093:8093"
+    env_file: ./identity-service/.env.example
+    environment:
+      IDENTITY_DATABASE_URL: ${IDENTITY_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen?currentSchema=identity}
+      IDENTITY_DB_USERNAME: ${IDENTITY_DB_USERNAME:-identity_app}
+      IDENTITY_DB_PASSWORD: ${IDENTITY_DB_PASSWORD:-change-me}
+      IDENTITY_MIGRATION_DATABASE_URL: ${IDENTITY_MIGRATION_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen}
+      IDENTITY_MIGRATION_DB_USERNAME: ${IDENTITY_MIGRATION_DB_USERNAME:-postgres}
+      IDENTITY_MIGRATION_DB_PASSWORD: ${IDENTITY_MIGRATION_DB_PASSWORD:-change-me}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-dev-only-access-secret-change-me-please-32-bytes-min}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-dev-only-refresh-secret-change-me-please-32-bytes}
+      JWT_PREVIOUS_ACCESS_SECRET: ${JWT_PREVIOUS_ACCESS_SECRET:-}
+      JWT_PREVIOUS_REFRESH_SECRET: ${JWT_PREVIOUS_REFRESH_SECRET:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      IDENTITY_EVENTS_ENABLED: ${IDENTITY_EVENTS_ENABLED:-false}
+      RABBITMQ_ADDRESSES: rabbitmq:5672
+      RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER:-visual_search}
+      RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS:-change-me}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   redis_data:
   rabbitmq_data:

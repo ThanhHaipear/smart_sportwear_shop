@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-sportswear.local/contracts/identity-user-event-v1.schema.json",
+  "title": "Identity user event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventId", "eventType", "eventVersion", "userId", "role", "status", "version", "occurredAt", "traceId"],
+  "properties": {
+    "eventId": {"type": "string", "format": "uuid"},
+    "eventType": {"type": "string", "enum": ["identity.user.created.v1", "identity.user.updated.v1"]},
+    "eventVersion": {"const": 1},
+    "userId": {"type": "string", "format": "uuid"},
+    "role": {"type": "string", "enum": ["CUSTOMER", "SALES_STAFF", "WAREHOUSE_STAFF", "ADMIN"]},
+    "status": {"type": "string", "enum": ["ACTIVE", "LOCKED", "DEACTIVATED"]},
+    "version": {"type": "integer", "minimum": 1},
+    "occurredAt": {"type": "string", "format": "date-time"},
+    "traceId": {"type": "string", "minLength": 1, "maxLength": 128}
+  }
+}

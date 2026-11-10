@@ -1,0 +1,35 @@
+openapi: 3.0.3
+info:
+  title: Identity Service API
+  version: 1.0.0
+paths:
+  /api/v1/auth/register:
+    post: {summary: Register a customer, responses: {'201': {description: Registered}, '409': {description: Email exists}}}
+  /api/v1/auth/login:
+    post: {summary: Password login, responses: {'200': {description: JWT pair}, '401': {description: Invalid credentials}}}
+  /api/v1/auth/google:
+    post: {summary: Google ID token login, responses: {'200': {description: JWT pair}, '422': {description: Invalid Google credential}}}
+  /api/v1/auth/refresh:
+    post: {summary: Rotate a one-time refresh token, responses: {'200': {description: Rotated JWT pair}, '401': {description: Invalid or reused token}}}
+  /api/v1/auth/logout:
+    post:
+      summary: Revoke the caller refresh token
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: Revoked or already absent}}
+  /api/v1/auth/forgot-password:
+    post: {summary: Request a non-enumerating reset instruction, responses: {'200': {description: Generic response}}}
+  /api/v1/auth/reset-password:
+    post: {summary: Claim a one-time reset token, responses: {'200': {description: Password changed}, '422': {description: Invalid token}}}
+  /api/v1/users/me:
+    get: {security: [{bearerAuth: []}], responses: {'200': {description: Current profile}}}
+    patch: {security: [{bearerAuth: []}], responses: {'200': {description: Updated profile}}}
+  /api/v1/users/me/addresses:
+    get: {security: [{bearerAuth: []}], responses: {'200': {description: Address list}}}
+    post: {security: [{bearerAuth: []}], responses: {'201': {description: Address created}}}
+  /api/v1/users/me/addresses/{id}:
+    parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+    patch: {security: [{bearerAuth: []}], responses: {'200': {description: Address updated}}}
+    delete: {security: [{bearerAuth: []}], responses: {'200': {description: Address deleted}}}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer, bearerFormat: JWT}
