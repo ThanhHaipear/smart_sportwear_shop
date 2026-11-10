@@ -1,0 +1,33 @@
+{
+  "appliedAt": "2026-11-10T09:36:14.945163+00:00",
+  "database": "configured-supabase-postgres",
+  "schemasCreated": [
+    "ai_search",
+    "chatbot"
+  ],
+  "rolesConfigured": [
+    "search_owner",
+    "search_app",
+    "chatbot_owner",
+    "chatbot_app"
+  ],
+  "searchPermissions": {
+    "role": "search_app",
+    "superuser": false,
+    "createDatabase": false,
+    "createRole": false,
+    "ownedSchemaUsage": true,
+    "publicCreate": false
+  },
+  "chatbotPermissions": {
+    "role": "chatbot_app",
+    "superuser": false,
+    "createDatabase": false,
+    "createRole": false,
+    "ownedSchemaUsage": true,
+    "publicCreate": false
+  },
+  "visualSearchEnabled": false,
+  "secretsPrinted": false,
+  "rollback": "Disable services; preserve schemas. Revoke LOGIN from app roles if isolation is required."
+}

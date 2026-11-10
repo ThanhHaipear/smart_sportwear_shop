@@ -55,10 +55,11 @@ Rollback chỉ đổi route về chatbot release cũ. Giữ nguyên schema/sessi
 không xóa bảng trong cửa sổ rollback. Dữ liệu retrieval trace có thể giữ lại để
 đối chiếu và không phải nguồn dữ liệu thương mại.
 
-## Việc còn bị chặn ngoài phạm vi implementation
+## Trạng thái migration
 
-- Phase 3 chưa đạt quality gate của image TEST v2, nên chưa cut-over chuỗi
-  Search -> Chatbot trên production.
-- Chưa có credential production để chạy permission test `chatbot_app` và migration drill.
-- Audit read-only ngày 10/11/2026 xác nhận database đang cấu hình kết nối được,
-  nhưng role không phải `chatbot_app` và schema `chatbot` chưa tồn tại.
+- Schema `chatbot` và role `chatbot_owner`/`chatbot_app` đã được tạo trên
+  Supabase được chấp thuận.
+- `chatbot_app` không có superuser/createdb/createrole, ghi được schema riêng và
+  không có `CREATE` trên `public`; write/deny probe đã rollback sạch.
+- Phase 4 được đóng `DONE / CUTOVER_HELD`. Public cut-over vẫn giữ tắt cùng
+  Search; session schema được giữ nguyên để smoke/cut-over sau.

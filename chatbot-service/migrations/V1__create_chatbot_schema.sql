@@ -1,4 +1,6 @@
-CREATE SCHEMA IF NOT EXISTS chatbot;
+CREATE SCHEMA IF NOT EXISTS chatbot AUTHORIZATION chatbot_owner;
+SET ROLE chatbot_owner;
+SET search_path = chatbot, pg_catalog;
 
 CREATE TABLE IF NOT EXISTS chatbot.chat_sessions (
     id varchar(128) PRIMARY KEY,
@@ -32,16 +34,13 @@ CREATE TABLE IF NOT EXISTS chatbot.retrieval_logs (
 CREATE INDEX IF NOT EXISTS ix_retrieval_logs_session_created
     ON chatbot.retrieval_logs(session_id, created_at DESC);
 
-DO $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'chatbot_app') THEN
-        REVOKE CREATE ON SCHEMA public FROM chatbot_app;
-        GRANT USAGE ON SCHEMA chatbot TO chatbot_app;
-        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA chatbot TO chatbot_app;
-        GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA chatbot TO chatbot_app;
-        ALTER DEFAULT PRIVILEGES IN SCHEMA chatbot
-            GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO chatbot_app;
-        ALTER DEFAULT PRIVILEGES IN SCHEMA chatbot
-            GRANT USAGE, SELECT ON SEQUENCES TO chatbot_app;
-    END IF;
-END $$;
+RESET ROLE;
+ALTER SCHEMA chatbot OWNER TO chatbot_owner;
+REVOKE CREATE ON SCHEMA public FROM chatbot_app;
+GRANT USAGE ON SCHEMA chatbot TO chatbot_app;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA chatbot TO chatbot_app;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA chatbot TO chatbot_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE chatbot_owner IN SCHEMA chatbot
+    GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO chatbot_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE chatbot_owner IN SCHEMA chatbot
+    GRANT USAGE, SELECT ON SEQUENCES TO chatbot_app;

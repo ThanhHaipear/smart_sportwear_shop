@@ -77,5 +77,14 @@ Acceptance gate mặc định yêu cầu `evidence/image-search-v3/test-v3-final
 dataset TEST `FROZEN`, report `passed=true`, Recall@5 >= 80%, category >= 90%,
 request failure = 0 và p95 <= 3 giây. Gate hiện cố ý thất bại vì chưa có TEST v3.
 
-Audit read-only ngày 10/11/2026 cho thấy database đang cấu hình chưa có schema
-`ai_search`; chưa có migration production nào được thực hiện trong phase này.
+Ngày 10/11/2026, schema `ai_search` và role `search_owner`/`search_app` đã được
+tạo trên Supabase đã chấp thuận. Permission probe xác nhận `search_app` ghi được
+schema riêng, không có `CREATE` trên `public`, và probe rollback sạch.
+
+Theo exception được người dùng chấp thuận, phase được đóng ở trạng thái
+`DONE_WITH_VISUAL_HOLD` để có thể bắt đầu Phase 5. `VISUAL_SEARCH_ENABLED=false`
+vẫn bắt buộc; TEST v3 độc lập vẫn là gate trước khi bật tính năng, không bị waive.
+
+```powershell
+.\scripts\verify-microservice-phase-3.ps1 -AcceptVisualHold
+```

@@ -18,6 +18,7 @@ def configured_settings():
 def enabled_settings():
     settings = configured_settings()
     settings.search_enabled = True
+    settings.visual_search_enabled = True
     settings.database_url = "postgresql://unused"
     return settings
 

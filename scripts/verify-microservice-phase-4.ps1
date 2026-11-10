@@ -1,7 +1,8 @@
 param(
     [switch]$SkipBackendCompile,
     [switch]$ImplementationOnly,
-    [string]$ChatbotDatabaseUrl = $env:CHATBOT_PERMISSION_TEST_URL
+    [string]$ChatbotDatabaseUrl = $env:CHATBOT_PERMISSION_TEST_URL,
+    [string]$ChatbotEnvFile = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -33,12 +34,18 @@ if (-not $SkipBackendCompile) {
 Write-Host "Phase 4 implementation gate passed."
 
 if (-not $ImplementationOnly) {
-    if ([string]::IsNullOrWhiteSpace($ChatbotDatabaseUrl)) {
-        throw "CHATBOT_PERMISSION_TEST_URL for chatbot_app is required by the Phase 4 acceptance gate"
+    if ([string]::IsNullOrWhiteSpace($ChatbotEnvFile)) {
+        $ChatbotEnvFile = Join-Path $root "chatbot-service\.env"
     }
     Push-Location (Join-Path $root "chatbot-service")
     try {
-        & .\.venv\Scripts\python.exe .\scripts\verify_schema_permissions.py $ChatbotDatabaseUrl
+        if (-not [string]::IsNullOrWhiteSpace($ChatbotDatabaseUrl)) {
+            & .\.venv\Scripts\python.exe .\scripts\verify_schema_permissions.py $ChatbotDatabaseUrl
+        } elseif (Test-Path $ChatbotEnvFile) {
+            & .\.venv\Scripts\python.exe .\scripts\verify_schema_permissions.py --env-file $ChatbotEnvFile
+        } else {
+            throw "chatbot_app DSN or env file is required by the Phase 4 acceptance gate"
+        }
         if ($LASTEXITCODE -ne 0) { throw "chatbot_app permission test failed" }
     } finally {
         Pop-Location

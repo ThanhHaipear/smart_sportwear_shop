@@ -4,6 +4,7 @@ import argparse
 import asyncio
 
 import asyncpg
+from dotenv import dotenv_values
 
 
 class RollbackProbe(Exception):
@@ -37,9 +38,15 @@ async def verify(dsn: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("dsn", help="chatbot_app DSN; never use the migration-owner DSN")
+    parser.add_argument("dsn", nargs="?", help="chatbot_app DSN; never use the migration-owner DSN")
+    parser.add_argument("--env-file")
     args = parser.parse_args()
-    asyncio.run(verify(args.dsn))
+    dsn = args.dsn
+    if args.env_file:
+        dsn = dotenv_values(args.env_file).get("CHATBOT_DATABASE_URL") or ""
+    if not dsn:
+        raise SystemExit("chatbot_app DSN is required")
+    asyncio.run(verify(dsn))
     print("chatbot_app schema permission test passed")
 
 
