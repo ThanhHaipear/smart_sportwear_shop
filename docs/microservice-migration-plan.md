@@ -11,7 +11,7 @@
 | 4. Hoàn thiện `chatbot-service` | `DONE / CUTOVER_HELD` | [Phase 4 chatbot service](microservice-phase-4-chatbot-service.md): 249 tests, schema `chatbot`, runtime role và write/deny permission probes đạt; public cut-over giữ tắt cùng Search |
 | 5. Tách `recommendation-service` | `DONE / CUTOVER_HELD` | [Phase 5 recommendation service](microservice-phase-5-recommendation-service.md): 11 tests, core repository = 0, schema `recommendation`, runtime role và write/deny permission probes đạt; public cut-over giữ tắt chờ TEST evaluation độc lập |
 | 6. Tách `catalog-service` | `DONE / CUTOVER_HELD` | [Phase 6 catalog service](microservice-phase-6-catalog-service.md): Spring Boot service, schema `catalog`, runtime role và write-own/deny-public probe đạt; backfill 36 products/178 variants/81 images; route/event giữ tắt chờ shadow-read và Sales cut-over window |
-| 7. Tách `identity-service` | `IMPLEMENTED / SUPABASE_ACCEPTANCE_PENDING` | [Phase 7 identity service](microservice-phase-7-identity-service.md): service, schema migration/backfill, JWT rotation, auth/profile/address API, event contract và 3/3 tests đạt; chưa áp dụng role/schema/probe lên Supabase dùng chung |
+| 7. Tách `identity-service` | `DONE / CUTOVER_HELD` | [Phase 7 identity service](microservice-phase-7-identity-service.md): service và 6/6 tests đạt; schema `identity`, runtime role, backfill 3 users/1 identity/2 addresses/18 refresh tokens và write-own/deny-public probe đạt; route/event giữ tắt chờ cửa sổ cut-over |
 | 8-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.

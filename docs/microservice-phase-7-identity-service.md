@@ -2,10 +2,9 @@
 
 ## Kết quả
 
-Phase 7 đã hoàn thành implementation ngày 10/11/2026 và đang ở trạng thái
-`IMPLEMENTED / SUPABASE_ACCEPTANCE_PENDING`. Chưa được đánh dấu `DONE` vì thao tác tạo role/schema,
-backfill và permission probe trên Supabase dùng chung chưa được phê duyệt rõ ràng. Public route, write
-authority và `IDENTITY_EVENTS_ENABLED` tiếp tục giữ tắt; core cũ vẫn là nguồn ghi chuẩn.
+Phase 7 đã hoàn thành implementation và Supabase acceptance gate ngày 10/11/2026, ở trạng thái
+`DONE / CUTOVER_HELD`. Public route, write authority và `IDENTITY_EVENTS_ENABLED` tiếp tục giữ tắt;
+core cũ vẫn là nguồn ghi chuẩn cho tới cửa sổ cut-over được duyệt.
 
 ## Ranh giới runtime
 
@@ -56,19 +55,20 @@ Gate hiện tại đạt 6/6 tests:
 - Architecture: không import legacy core, migration không có FK sang `public`, runtime role bị revoke `public`.
 - Contract/Compose: REST v1, user event v1 và profile `identity` tồn tại.
 
-## Acceptance còn lại
+## Supabase acceptance
 
-Sau khi có phê duyệt thay đổi Supabase dùng chung:
+Acceptance đã được thực thi bằng:
 
 ```powershell
-python scripts/maintenance/apply-phase-7-supabase.py
-$env:IDENTITY_PERMISSION_TEST_URL = '<identity_app DSN>'
-.\scripts\verify-microservice-phase-7.ps1
+.\chatbot-service\.venv\Scripts\python.exe scripts\maintenance\apply-phase-7-supabase.py
 ```
 
-Acceptance bắt buộc phải tạo `identity_owner`/`identity_app`, áp dụng V1/V2, chứng minh count năm bảng khớp
-legacy và `identity_app` write-own/deny-public. Script không in secret, ghi runtime credential vào file
-`identity-service/.env` đã bị gitignore và tạo evidence JSON không chứa secret.
+- Đã tạo `identity_owner`, `identity_app` và schema `identity`.
+- Backfill khớp legacy: 3 users, 1 user identity, 2 addresses, 18 refresh tokens và 0 password-reset tokens.
+- `identity_app` không có superuser/createdb/createrole, có `USAGE` trên `identity`, không có `CREATE` trên `public`.
+- Write-own/deny-public probe đạt bằng chính runtime credential.
+- Script không in secret; runtime credential nằm trong `identity-service/.env` đã bị gitignore.
+- Evidence: `evidence/microservice-phase-7-supabase-2026-11-10.json`.
 
 ## Cut-over và rollback
 
