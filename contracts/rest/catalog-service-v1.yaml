@@ -1,0 +1,30 @@
+openapi: 3.0.3
+info: {title: Catalog Service Internal API, version: 1.0.0}
+paths:
+  /internal/v1/variants/{id}/sale-snapshot:
+    get:
+      security: [{serviceToken: []}]
+      parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+      responses: {'200': {description: Immutable sale-time snapshot}, '404': {description: Variant not found}}
+  /internal/v1/products/{id}/index-document:
+    get:
+      security: [{serviceToken: []}]
+      parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+      responses: {'200': {description: Search indexing document}}
+  /internal/v1/inventory/reservations:
+    post:
+      security: [{serviceToken: []}]
+      responses: {'201': {description: Reserved atomically}, '409': {description: Not saleable or insufficient inventory}}
+  /internal/v1/inventory/reservations/{id}/confirm:
+    post:
+      security: [{serviceToken: []}]
+      parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+      responses: {'200': {description: Reservation confirmed idempotently}}
+  /internal/v1/inventory/reservations/{id}:
+    delete:
+      security: [{serviceToken: []}]
+      parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
+      responses: {'204': {description: Reservation released idempotently}}
+components:
+  securitySchemes:
+    serviceToken: {type: apiKey, in: header, name: X-Internal-Service-Token}

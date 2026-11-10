@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: catalog-service
+  datasource:
+    url: ${CATALOG_DATABASE_URL:jdbc:postgresql://localhost:5432/dunghaiquyen?currentSchema=catalog}
+    username: ${CATALOG_DB_USERNAME:catalog_app}
+    password: ${CATALOG_DB_PASSWORD:change-me}
+    hikari:
+      maximum-pool-size: ${CATALOG_DB_POOL_MAX:4}
+      minimum-idle: ${CATALOG_DB_POOL_MIN:2}
+      connection-timeout: 20000
+  flyway:
+    enabled: ${CATALOG_FLYWAY_ENABLED:true}
+    locations: classpath:db/migration
+    default-schema: catalog
+    url: ${CATALOG_MIGRATION_DATABASE_URL:${CATALOG_DATABASE_URL:jdbc:postgresql://localhost:5432/dunghaiquyen}}
+    user: ${CATALOG_MIGRATION_DB_USERNAME:${CATALOG_DB_USERNAME:catalog_app}}
+    password: ${CATALOG_MIGRATION_DB_PASSWORD:${CATALOG_DB_PASSWORD:change-me}}
+  rabbitmq:
+    addresses: ${RABBITMQ_ADDRESSES:localhost:5672}
+    username: ${RABBITMQ_USERNAME:catalog}
+    password: ${RABBITMQ_PASSWORD:change-me}
+    publisher-confirm-type: correlated
+    publisher-returns: true
+server:
+  port: ${SERVER_PORT:8092}
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+app:
+  internal-token: ${CATALOG_INTERNAL_TOKEN:change-me}
+  events:
+    enabled: ${CATALOG_EVENTS_ENABLED:false}
+    exchange: ${CATALOG_EVENTS_EXCHANGE:catalog.events}
+    poll-delay-ms: ${CATALOG_OUTBOX_POLL_DELAY_MS:1000}
+logging:
+  pattern:
+    level: "%5p [correlationId:%X{correlationId:-}]"

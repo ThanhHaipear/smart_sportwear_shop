@@ -117,6 +117,29 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  catalog-service:
+    profiles: ["catalog"]
+    build: ./catalog-service
+    ports:
+      - "8092:8092"
+    env_file: ./catalog-service/.env.example
+    environment:
+      CATALOG_DATABASE_URL: ${CATALOG_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen?currentSchema=catalog}
+      CATALOG_DB_USERNAME: ${CATALOG_DB_USERNAME:-catalog_app}
+      CATALOG_DB_PASSWORD: ${CATALOG_DB_PASSWORD:-change-me}
+      CATALOG_MIGRATION_DATABASE_URL: ${CATALOG_MIGRATION_DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/dunghaiquyen}
+      CATALOG_MIGRATION_DB_USERNAME: ${CATALOG_MIGRATION_DB_USERNAME:-postgres}
+      CATALOG_MIGRATION_DB_PASSWORD: ${CATALOG_MIGRATION_DB_PASSWORD:-change-me}
+      CATALOG_INTERNAL_TOKEN: ${CATALOG_INTERNAL_TOKEN:-change-me}
+      CATALOG_EVENTS_ENABLED: ${CATALOG_EVENTS_ENABLED:-false}
+      RABBITMQ_ADDRESSES: rabbitmq:5672
+      RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER:-visual_search}
+      RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS:-change-me}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   redis_data:
   rabbitmq_data:
