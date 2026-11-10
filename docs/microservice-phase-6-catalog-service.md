@@ -2,10 +2,9 @@
 
 ## Kết quả
 
-Phase 6 đã hoàn thành implementation gate ngày 10/11/2026. Public/write cut-over đang giữ tắt
-cho đến khi migration được áp dụng trên môi trường đích, count/checksum backfill, shadow read và
-permission probe bằng chính role `catalog_app` đều đạt. Việc giữ cut-over không làm core hiện tại
-dual-write và là điều kiện an toàn đã quy định trong kế hoạch migration.
+Phase 6 đã hoàn thành implementation và Supabase acceptance gate ngày 10/11/2026. Public/write
+cut-over đang giữ tắt cho đến khi shadow read và cửa sổ chuyển Sales được duyệt. Việc giữ cut-over
+không làm core hiện tại dual-write và là điều kiện an toàn đã quy định trong kế hoạch migration.
 
 ## Ranh giới runtime
 
@@ -58,5 +57,12 @@ REST contract và Docker Compose surface.
 Rollback bằng route/feature flag về core release trước. Tắt writer mới trước khi bật writer cũ;
 giữ schema/reservation/bảng legacy để điều tra và replay, không reverse-copy hay drop dữ liệu.
 
-Không có `CATALOG_PERMISSION_TEST_URL` trong workspace hiện tại nên acceptance trên Supabase chưa
-được tuyên bố đạt. Đây là hold vận hành duy nhất; implementation và concurrency gate đã hoàn tất.
+Supabase acceptance gate:
+
+- Tạo schema `catalog`, owner role `catalog_owner` và runtime role `catalog_app` với secret riêng.
+- `catalog_app` không có superuser/createdb/createrole, có `USAGE` trên schema sở hữu và không có
+  `CREATE` trên `public`; write-own/deny-public probe đạt bằng chính runtime credential.
+- Backfill idempotent: 8 categories, 3 brands, 36 products, 178 variants và 81 images; promotion,
+  wishlist, review đều 0 theo nguồn legacy hiện tại. Không drop/rename bảng legacy.
+- Evidence: `evidence/microservice-phase-6-supabase-2026-11-10.json`.
+- `CATALOG_EVENTS_ENABLED=false`, route và write cut-over tiếp tục tắt; secret không được in hoặc commit.

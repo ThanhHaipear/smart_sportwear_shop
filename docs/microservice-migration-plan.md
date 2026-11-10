@@ -10,7 +10,7 @@
 | 3. Hoàn thiện `search-service` | `DONE_WITH_VISUAL_HOLD` | [Phase 3 search service](microservice-phase-3-search-service.md): implementation/contracts, schema `ai_search`, runtime role và permission gate đạt; Visual Search giữ tắt theo exception đã chấp thuận, TEST v3 vẫn bắt buộc trước enablement |
 | 4. Hoàn thiện `chatbot-service` | `DONE / CUTOVER_HELD` | [Phase 4 chatbot service](microservice-phase-4-chatbot-service.md): 249 tests, schema `chatbot`, runtime role và write/deny permission probes đạt; public cut-over giữ tắt cùng Search |
 | 5. Tách `recommendation-service` | `DONE / CUTOVER_HELD` | [Phase 5 recommendation service](microservice-phase-5-recommendation-service.md): 11 tests, core repository = 0, schema `recommendation`, runtime role và write/deny permission probes đạt; public cut-over giữ tắt chờ TEST evaluation độc lập |
-| 6. Tách `catalog-service` | `IMPLEMENTATION_DONE / CUTOVER_HELD` | [Phase 6 catalog service](microservice-phase-6-catalog-service.md): Spring Boot service, schema/role migration, REST contract, idempotent reservation và concurrency gate đạt; Supabase permission/backfill/shadow-read gate cần DSN vận hành trước cut-over |
+| 6. Tách `catalog-service` | `DONE / CUTOVER_HELD` | [Phase 6 catalog service](microservice-phase-6-catalog-service.md): Spring Boot service, schema `catalog`, runtime role và write-own/deny-public probe đạt; backfill 36 products/178 variants/81 images; route/event giữ tắt chờ shadow-read và Sales cut-over window |
 | 7-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.

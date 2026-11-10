@@ -1,0 +1,32 @@
+{
+  "appliedAt": "2026-11-10T14:30:20.348239+00:00",
+  "database": "configured-supabase-postgres",
+  "schemasCreated": [
+    "catalog"
+  ],
+  "rolesConfigured": [
+    "catalog_owner",
+    "catalog_app"
+  ],
+  "permissions": {
+    "role": "catalog_app",
+    "superuser": false,
+    "createDatabase": false,
+    "createRole": false,
+    "ownedSchemaUsage": true,
+    "publicCreate": false
+  },
+  "backfillCounts": {
+    "categories": 8,
+    "brands": 3,
+    "products": 36,
+    "variants": 178,
+    "images": 81,
+    "promotions": 0,
+    "wishlists": 0,
+    "reviews": 0
+  },
+  "catalogEventsEnabled": false,
+  "secretsPrinted": false,
+  "rollback": "Keep schema; disable route/events and optionally revoke catalog_app LOGIN."
+}
