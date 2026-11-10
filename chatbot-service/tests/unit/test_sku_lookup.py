@@ -20,51 +20,44 @@ def test_extract_sku(message, expected):
     assert extract_sku(message) == expected
 
 
-def _row(sku: str) -> dict:
+def _document(*skus: str) -> dict:
     return {
-        "product_id": "product-1",
-        "variant_id": "variant-1",
+        "productId": "product-1",
         "name": "Giày chạy bộ",
         "slug": "giay-chay-bo",
-        "sku": sku,
-        "category_name": "Giày chạy bộ",
-        "brand_name": "Nike",
-        "color": "Đen",
-        "size": "42",
-        "price": 900000,
-        "available": 4,
-        "variant_status": "ACTIVE",
-        "primary_image": None,
+        "category": "Giày chạy bộ",
+        "brand": "Nike",
+        "images": [],
+        "variants": [{
+            "id": f"variant-{i}", "sku": sku, "color": "Đen", "size": str(42 + i),
+            "price": 900000, "availableQuantity": 4, "status": "ACTIVE",
+        } for i, sku in enumerate(skus)],
     }
 
 
 @pytest.mark.asyncio
 async def test_exact_lookup_does_not_run_partial(monkeypatch):
-    calls = []
-
-    async def fake_lookup(sku, *, exact, limit):
-        calls.append(exact)
-        return [_row(sku)] if exact else []
-
-    monkeypatch.setattr(sku_lookup_service.product_repository, "find_variants_by_sku", fake_lookup)
+    async def fake_search(*_args, **_kwargs):
+        return {"items": [{"productId": "product-1"}]}
+    async def fake_documents(_ids):
+        return [_document("SEED-BOOT-RED-43", "SEED-BOOT-RED-42")]
+    monkeypatch.setattr(sku_lookup_service.search_api_client, "search_products", fake_search)
+    monkeypatch.setattr(sku_lookup_service.catalog_api_client, "get_index_documents", fake_documents)
     result = await sku_lookup_service.lookup("seed-boot-red-43")
 
-    assert calls == [True]
     assert result.matchType == "exact"
     assert result.items[0].sku == "SEED-BOOT-RED-43"
 
 
 @pytest.mark.asyncio
 async def test_partial_lookup_runs_only_after_exact_miss(monkeypatch):
-    calls = []
-
-    async def fake_lookup(sku, *, exact, limit):
-        calls.append(exact)
-        return [] if exact else [_row("SEED-BOOT-RED-42"), _row("SEED-BOOT-RED-43")]
-
-    monkeypatch.setattr(sku_lookup_service.product_repository, "find_variants_by_sku", fake_lookup)
+    async def fake_search(*_args, **_kwargs):
+        return {"items": [{"productId": "product-1"}]}
+    async def fake_documents(_ids):
+        return [_document("SEED-BOOT-RED-42", "SEED-BOOT-RED-43")]
+    monkeypatch.setattr(sku_lookup_service.search_api_client, "search_products", fake_search)
+    monkeypatch.setattr(sku_lookup_service.catalog_api_client, "get_index_documents", fake_documents)
     result = await sku_lookup_service.lookup("boot-red")
 
-    assert calls == [True, False]
     assert result.matchType == "partial"
     assert result.total == 2

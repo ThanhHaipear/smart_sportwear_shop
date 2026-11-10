@@ -1,68 +1,30 @@
 from __future__ import annotations
 
+from app.clients.catalog_api_client import get_index_document
 from app.schemas.product import ProductDetailResult, VariantAvailabilityItem
-from app.repositories import product_repository
-from app.observability.trace_logger import get_logger
-
-logger = get_logger(__name__)
 
 
-async def get_detail(
-    product_id: str,
-    size_hint: str | None = None,
-    color_hint: str | None = None,
-) -> ProductDetailResult:
-    """
-    Fetch full product detail + all variants.
-    Returns ProductDetailResult with found=False when product_id is empty or not found.
-    """
+async def get_detail(product_id: str, size_hint: str | None = None,
+                     color_hint: str | None = None) -> ProductDetailResult:
     if not product_id:
-        # Caller could not resolve a product reference from context
         return ProductDetailResult(found=False)
-
-    product = await product_repository.get_product_by_id(product_id)
-    if not product:
-        logger.info(f"product_detail_service | not_found product_id={product_id}")
+    document = await get_index_document(product_id)
+    if not document or document.get("status") != "ACTIVE":
         return ProductDetailResult(found=False, productId=product_id)
-
-    variants_raw = await product_repository.get_product_variants(product_id)
-    images = await product_repository.get_product_images(product_id)
-
-    variants: list[VariantAvailabilityItem] = []
-    for r in variants_raw:
-        avail = max(int(r.get("stock_quantity", 0)) - int(r.get("reserved_quantity", 0)), 0)
-        variants.append(VariantAvailabilityItem(
-            variantId=str(r["variant_id"]),
-            color=r.get("color"),
-            size=r.get("size"),
-            price=float(r["price"]),
-            available=avail,
-            sku=r.get("sku"),
-        ))
-
-    prices = [v.price for v in variants]
-    price_min = min(prices) if prices else None
-    price_max = max(prices) if prices else None
-
-    logger.info(
-        f"product_detail_service | found product_id={product_id} "
-        f"variants={len(variants)} size_hint={size_hint} color_hint={color_hint}"
-    )
-
+    variants = [VariantAvailabilityItem(
+        variantId=str(row["id"]), color=row.get("color"), size=row.get("size"),
+        price=float(row["price"]), available=int(row.get("availableQuantity") or 0),
+        sku=row.get("sku"),
+    ) for row in document.get("variants", []) if row.get("status") != "INACTIVE"]
+    prices = [variant.price for variant in variants]
+    images = [row["url"] for row in sorted(
+        document.get("images") or [], key=lambda row: row.get("sortOrder", 0)
+    ) if row.get("url")]
     return ProductDetailResult(
-        found=True,
-        productId=str(product["id"]),
-        name=product["name"],
-        slug=product.get("slug"),
-        category=product.get("category_name"),
-        brandName=product.get("brand_name"),
-        sportType=product.get("sport_type"),
-        gender=product.get("gender"),
-        description=product.get("short_description"),
-        priceMin=price_min,
-        priceMax=price_max,
-        variants=variants,
-        images=images,
-        sizeHint=size_hint,
-        colorHint=color_hint,
+        found=True, productId=str(document["productId"]), name=document.get("name"),
+        slug=document.get("slug") or str(document["productId"]), category=document.get("category"),
+        brandName=document.get("brand"), sportType=(document.get("sportCodes") or [None])[0],
+        gender=document.get("gender"), description=document.get("description"),
+        priceMin=min(prices) if prices else None, priceMax=max(prices) if prices else None,
+        variants=variants, images=images, sizeHint=size_hint, colorHint=color_hint,
     )

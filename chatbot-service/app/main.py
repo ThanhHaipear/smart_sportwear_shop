@@ -14,20 +14,22 @@ async def lifespan(app: FastAPI):
     setup_logging(settings.LOG_LEVEL)
     logger = get_logger(__name__)
 
+    if settings.CHATBOT_ENV.lower() == "production":
+        required = {
+            "JWT_ACCESS_SECRET": settings.JWT_ACCESS_SECRET,
+            "CHATBOT_DATABASE_URL": settings.CHATBOT_DATABASE_URL or settings.DB_WRITE_URL,
+            "SEARCH_SERVICE_TOKEN": settings.SEARCH_SERVICE_TOKEN,
+            "CATALOG_SERVICE_TOKEN": settings.CATALOG_SERVICE_TOKEN,
+        }
+        missing = [name for name, value in required.items() if not value]
+        if missing:
+            raise RuntimeError("Missing production configuration: " + ", ".join(missing))
     if not settings.JWT_ACCESS_SECRET:
-        if settings.CHATBOT_ENV.lower() == "production":
-            raise RuntimeError("JWT_ACCESS_SECRET is required in production")
         logger.warning("chatbot-service | JWT_ACCESS_SECRET not set — authenticated tools are disabled")
 
-    # DB pool (Phase 3+) — skipped gracefully if DB_READ_URL is empty
-    if settings.DB_READ_URL:
-        await db_pool.init_pool(settings.DB_READ_URL)
-        logger.info("chatbot-service | db_pool=ready")
-    else:
-        logger.warning("chatbot-service | DB_READ_URL not set — product search will return empty")
-
-    if settings.DB_WRITE_URL:
-        await db_pool.init_write_pool(settings.DB_WRITE_URL)
+    database_url = settings.CHATBOT_DATABASE_URL or settings.DB_WRITE_URL
+    if database_url:
+        await db_pool.init_write_pool(database_url)
         logger.info("chatbot-service | db_write_pool=ready")
     else:
         logger.warning("chatbot-service | DB_WRITE_URL not set — durable chat history disabled")
@@ -39,14 +41,6 @@ async def lifespan(app: FastAPI):
     )
 
     setup_registry()
-
-    # Catalog context — auto-generate từ DB và cache vào file
-    if settings.DB_READ_URL:
-        try:
-            from app.services.catalog_context import refresh_catalog_context
-            await refresh_catalog_context()
-        except Exception as _cat_err:
-            logger.warning(f"chatbot-service | catalog_context refresh failed: {_cat_err!r}")
 
     logger.info(
         f"chatbot-service starting | env={settings.CHATBOT_ENV} "
@@ -76,5 +70,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from app.observability.http_middleware import CorrelationIdMiddleware
+app.add_middleware(CorrelationIdMiddleware)
 
 app.include_router(router)

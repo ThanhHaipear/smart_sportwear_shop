@@ -18,7 +18,7 @@ async def test_load_history_binds_user_and_limit_to_distinct_parameters():
     pool = MagicMock()
     pool.acquire.return_value = acquire
 
-    with patch("app.db.chat_history_repository.get_pool", return_value=pool):
+    with patch("app.db.chat_history_repository.get_write_pool", return_value=pool):
         messages = await load_last_messages("user:u1:s1", "u1", limit=7)
 
     sql, session_id, user_id, limit = connection.fetch.await_args.args

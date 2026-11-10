@@ -1,6 +1,7 @@
 import logging
 import sys
 from typing import Any
+from app.observability.http_middleware import current_correlation_id
 
 
 def setup_logging(level: str = "INFO") -> None:
@@ -29,7 +30,8 @@ def log_chat_request(
     message: str,
 ) -> None:
     logger.info(
-        f"[{session_id}] chat_request | user={user_id} channel={channel} len={len(message)}"
+        f"[{session_id}] chat_request | correlation_id={current_correlation_id()} "
+        f"user={user_id} channel={channel} len={len(message)}"
     )
 
 

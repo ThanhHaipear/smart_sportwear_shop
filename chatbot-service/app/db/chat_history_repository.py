@@ -15,13 +15,13 @@ from app.observability.trace_logger import get_logger
 logger = get_logger(__name__)
 
 _INSERT_SQL = """
-    INSERT INTO chat_messages (session_id, user_id, role, content, intent, created_at)
+    INSERT INTO chatbot.chat_messages (session_id, user_id, role, content, intent, created_at)
     VALUES ($1, $2, $3, $4, $5, now())
 """
 
 _SELECT_SQL = """
     SELECT role, content
-    FROM chat_messages
+    FROM chatbot.chat_messages
     WHERE session_id = $1
       AND (($2::text IS NULL AND user_id IS NULL) OR user_id = $2)
     ORDER BY created_at DESC
@@ -34,7 +34,7 @@ async def load_last_messages(session_id: str, user_id: str | None, limit: int = 
     Load the last `limit` messages for a session, ordered oldest-first.
     Returns [] when pool is unavailable, table missing, or any error.
     """
-    pool = get_pool()
+    pool = get_write_pool()
     if pool is None:
         return []
     try:
@@ -64,7 +64,34 @@ async def save_turn(
     try:
         async with pool.acquire() as conn:
             async with conn.transaction():
+                await conn.execute(
+                    """INSERT INTO chatbot.chat_sessions (id, user_id)
+                       VALUES ($1, $2)
+                       ON CONFLICT (id) DO UPDATE SET
+                           user_id = COALESCE(EXCLUDED.user_id, chatbot.chat_sessions.user_id),
+                           updated_at = now()""",
+                    session_id, user_id,
+                )
                 await conn.execute(_INSERT_SQL, session_id, user_id, "user",      user_message,    None)
                 await conn.execute(_INSERT_SQL, session_id, user_id, "assistant", assistant_reply, intent)
     except Exception as exc:
         logger.warning(f"chat_history_repository | save_error={exc!r} session={session_id}")
+
+
+async def save_retrieval_trace(session_id: str | None, query: str,
+                               candidate_ids: list[str], search_mode: str | None,
+                               latency_ms: int) -> None:
+    pool = get_write_pool()
+    if pool is None:
+        return
+    try:
+        import json
+        async with pool.acquire() as conn:
+            await conn.execute(
+                """INSERT INTO chatbot.retrieval_logs
+                   (session_id, query, candidate_product_ids, search_mode, latency_ms)
+                   VALUES ($1, $2, $3::jsonb, $4, $5)""",
+                session_id, query, json.dumps(candidate_ids), search_mode, latency_ms,
+            )
+    except Exception as exc:
+        logger.warning(f"chat_history_repository | trace_error={exc!r} session={session_id}")

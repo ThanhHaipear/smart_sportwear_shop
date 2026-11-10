@@ -20,7 +20,9 @@ async def _run_one(session_id: str, tool_name: str, args: dict) -> tuple[str, di
     _, fn = entry
     log_tool_call(logger, session_id, tool_name, args)
     try:
-        result = await fn(args)
+        call_args = dict(args)
+        call_args["_session_id"] = session_id
+        result = await fn(call_args)
         logger.info(f"[{session_id}] tool_executed | tool={tool_name} ok=true")
         return tool_name, result, None
     except Exception as exc:

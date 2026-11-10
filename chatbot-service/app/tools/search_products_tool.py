@@ -16,5 +16,7 @@ DEFINITION = ToolDefinition(
 
 async def run(args: dict[str, Any]) -> dict[str, Any]:
     query = args.get("query", "")
-    result = await product_search_service.search(query, parsed_query=args.get("parsed_query"))
+    result = await product_search_service.search(
+        query, parsed_query=args.get("parsed_query"), session_id=args.get("_session_id")
+    )
     return result.model_dump()

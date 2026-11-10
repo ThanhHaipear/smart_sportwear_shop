@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
 
   search-service:
-    profiles: ["search"]
+    profiles: ["search", "chatbot"]
     build: ./services/search-service
     ports:
       - "8090:8090"
@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
 
   search-worker:
-    profiles: ["search"]
+    profiles: ["search", "chatbot"]
     build: ./services/search-service
     command: ["python", "-m", "app.worker"]
     env_file: ./services/search-service/.env.example
@@ -65,6 +65,26 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+    restart: unless-stopped
+
+  chatbot-service:
+    profiles: ["chatbot"]
+    build: ./chatbot-service
+    ports:
+      - "8002:8002"
+    env_file: ./chatbot-service/.env.example
+    environment:
+      SEARCH_API_BASE_URL: http://search-service:8090
+      SEARCH_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
+      CATALOG_API_BASE_URL: http://host.docker.internal:8080
+      CATALOG_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
+      CHATBOT_DATABASE_URL: ${CHATBOT_DATABASE_URL:-}
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+      search-service:
+        condition: service_started
     restart: unless-stopped
 
 volumes:

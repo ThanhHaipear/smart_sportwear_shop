@@ -1,5 +1,16 @@
 # chatbot-service
 
+## Microservice migration Phase 4
+
+The API runtime is now database-isolated from Catalog. Product RAG calls
+`search-service`, then enriches candidate IDs through the Catalog API. Its only
+database connection is `CHATBOT_DATABASE_URL` using the `chatbot_app` role and
+the `chatbot` schema. See
+[`docs/microservice-phase-4-chatbot-service.md`](../docs/microservice-phase-4-chatbot-service.md).
+
+The older local retrieval/indexing modules remain only as rollback/offline
+utilities; they are not initialized or imported by the chatbot API runtime.
+
 ## V2 1C.2 local product embeddings
 
 Canonical V2 embeddings use schema `ai_retrieval`, not the legacy OpenAI/Voyage tables described later in this file.
@@ -32,7 +43,7 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env
-# Điền DB_READ_URL và BACKEND_API_BASE_URL vào .env
+# Điền SEARCH_API_BASE_URL, CATALOG_API_BASE_URL và service token vào .env
 python run.py
 ```
 
@@ -289,8 +300,11 @@ ChatRequest nhận `accessToken` từ client:
 | Biến                        | Default                | Dùng từ phase |
 |-----------------------------|------------------------|---------------|
 | CHATBOT_PORT                | 8002                   | Phase 0       |
-| DB_READ_URL                 | (trống)                | Phase 3       |
-| DB_WRITE_URL                | (trống)                | Durable chat history; disabled when empty |
+| CHATBOT_DATABASE_URL        | (trống)                | Schema `chatbot`; durable session/message/trace |
+| SEARCH_API_BASE_URL         | localhost:8090         | Phase 4 microservice migration |
+| SEARCH_SERVICE_TOKEN        | (trống)                | Token gọi Search API |
+| CATALOG_API_BASE_URL        | localhost:8082         | Phase 4; Catalog API hiện tại |
+| CATALOG_SERVICE_TOKEN       | (trống)                | Token gọi internal Catalog API |
 | BACKEND_API_BASE_URL        | localhost:8082         | Phase 5       |
 | JWT_ACCESS_SECRET           | (trống)                | Phải giống backend; xác minh JWT và khóa API admin |
 | LOG_LEVEL                   | INFO                   | Phase 0       |

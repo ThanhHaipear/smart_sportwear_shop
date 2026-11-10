@@ -19,7 +19,8 @@ public class CatalogIndexDocumentService {
         if (product == null) return null;
         return new CatalogIndexDocumentResponse(
                 product.getId(), product.getCatalogVersion(), product.getStatus().name(),
-                product.getName(), product.getDescription() == null ? product.getShortDescription() : product.getDescription(),
+                product.getName(), product.getSlug(),
+                product.getDescription() == null ? product.getShortDescription() : product.getDescription(),
                 product.getCategory().getId(), product.getCategory().getName(), product.getCategory().getSlug(),
                 product.getBrand().getId(), product.getBrand().getName(), product.getBrand().getSlug(),
                 product.getProductTypeDefinition().getCode(), product.getGender().name(),

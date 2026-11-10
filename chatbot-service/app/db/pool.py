@@ -21,7 +21,10 @@ async def init_write_pool(dsn: str) -> None:
     global _write_pool
     if not dsn:
         return
-    _write_pool = await asyncpg.create_pool(_normalize_dsn(dsn), min_size=1, max_size=3)
+    _write_pool = await asyncpg.create_pool(
+        _normalize_dsn(dsn), min_size=1, max_size=3,
+        server_settings={"search_path": "chatbot,public"},
+    )
 
 
 async def close_pool() -> None:
@@ -40,3 +43,13 @@ def get_pool() -> asyncpg.Pool | None:
 
 def get_write_pool() -> asyncpg.Pool | None:
     return _write_pool
+
+
+async def write_ready() -> bool:
+    if _write_pool is None:
+        return False
+    try:
+        async with _write_pool.acquire() as conn:
+            return bool(await conn.fetchval("SELECT 1"))
+    except Exception:
+        return False

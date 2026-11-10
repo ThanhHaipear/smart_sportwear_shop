@@ -8,7 +8,8 @@
 | 1. Cứng hóa modular boundary | `DONE` | [Boundary hardening log](microservice-phase-1-boundaries.md): repository coupling = 0, integration gate 361/361 |
 | 2. Chuẩn hóa event platform | `DONE` | [Phase 2 event platform](microservice-phase-2-event-platform.md): contract v1, outbox confirm/retry, idempotent consumer và DLQ |
 | 3. Hoàn thiện `search-service` | `IMPLEMENTED / GATE_BLOCKED` | [Phase 3 search service](microservice-phase-3-search-service.md): implementation đạt; image TEST v2 Recall@5 73,75% và category 79% chưa đạt gate; chưa thay đổi Supabase production |
-| 4-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
+| 4. Hoàn thiện `chatbot-service` | `IMPLEMENTED / CUTOVER_BLOCKED` | [Phase 4 chatbot service](microservice-phase-4-chatbot-service.md): RAG/catalog runtime chỉ gọi Search/Catalog API; schema/session/message/RAG trace riêng; 248 tests đạt; cut-over chờ gate Phase 3 và Supabase production |
+| 5-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 

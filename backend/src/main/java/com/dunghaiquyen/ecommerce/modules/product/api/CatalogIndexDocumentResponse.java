@@ -10,6 +10,7 @@ public record CatalogIndexDocumentResponse(
         long sourceVersion,
         String status,
         String name,
+        String slug,
         String description,
         UUID categoryId,
         String category,

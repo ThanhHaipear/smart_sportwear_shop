@@ -51,6 +51,18 @@ async def test_health(http_client):
     assert body["service"] == "chatbot-service"
 
 
+async def test_correlation_id_is_propagated(http_client):
+    resp = await http_client.get("/health/live", headers={"X-Correlation-ID": "phase4-test"})
+    assert resp.status_code == 200
+    assert resp.headers["X-Correlation-ID"] == "phase4-test"
+
+
+async def test_metrics_endpoint(http_client):
+    resp = await http_client.get("/metrics")
+    assert resp.status_code == 200
+    assert "chatbot_http_requests_total" in resp.text
+
+
 # ── 2. UNKNOWN intent (no tool) ───────────────────────────────────────────────
 
 async def test_unknown_intent(http_client):
