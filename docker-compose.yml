@@ -87,6 +87,36 @@ services:
         condition: service_started
     restart: unless-stopped
 
+  recommendation-service:
+    profiles: ["recommendation"]
+    build: ./recommendation-service
+    ports:
+      - "8091:8091"
+    env_file: ./recommendation-service/.env.example
+    environment:
+      RECOMMENDATION_ENABLED: ${RECOMMENDATION_ENABLED:-false}
+      RECOMMENDATION_DATABASE_URL: ${RECOMMENDATION_DATABASE_URL:-}
+      RECOMMENDATION_INTERNAL_TOKEN: ${RECOMMENDATION_INTERNAL_TOKEN:-}
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-visual_search}:${RABBITMQ_DEFAULT_PASS:-change-me}@rabbitmq:5672/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  recommendation-worker:
+    profiles: ["recommendation"]
+    build: ./recommendation-service
+    command: ["python", "-m", "app.worker"]
+    env_file: ./recommendation-service/.env.example
+    environment:
+      RECOMMENDATION_ENABLED: ${RECOMMENDATION_ENABLED:-false}
+      RECOMMENDATION_DATABASE_URL: ${RECOMMENDATION_DATABASE_URL:-}
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-visual_search}:${RABBITMQ_DEFAULT_PASS:-change-me}@rabbitmq:5672/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   redis_data:
   rabbitmq_data:

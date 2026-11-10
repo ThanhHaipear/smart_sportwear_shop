@@ -79,7 +79,6 @@ class V2OneBMigrationTest {
                 "com.dunghaiquyen.ecommerce.modules.inventory.entity",
                 "com.dunghaiquyen.ecommerce.modules.setting.entity",
                 "com.dunghaiquyen.ecommerce.modules.audit.entity",
-                "com.dunghaiquyen.ecommerce.modules.interaction.entity",
                 "com.dunghaiquyen.ecommerce.modules.wishlist.entity",
                 "com.dunghaiquyen.ecommerce.modules.notification.entity");
         factory.setJpaPropertyMap(java.util.Map.of(

@@ -17,3 +17,6 @@ Các file trong thư mục này là contract dùng chung giữa producer và con
 | Contract | Producer | Consumer | Routing |
 |---|---|---|---|
 | `catalog-event-v1.schema.json` | Spring Boot Catalog | Visual Search, Product Search | topic exchange `catalog.events` |
+| `sales-order-created-event-v1.schema.json` | Sales | Recommendation | `business.events` / `order.created` |
+| `recommendation-interaction-event-v1.schema.json` | Gateway/Catalog/Sales | Recommendation | `business.events` / `interaction.recorded` |
+| `recommendation-catalog-product-event-v1.schema.json` | Catalog | Recommendation | `catalog.events` / `product.#` |

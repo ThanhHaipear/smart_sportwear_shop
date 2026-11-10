@@ -28,6 +28,15 @@
       "auto_delete": false,
       "internal": false,
       "arguments": {}
+    },
+    {
+      "name": "business.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
     }
   ],
   "queues": [
@@ -165,6 +174,41 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {}
+    },
+    {
+      "name": "recommendation.events",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {"x-dead-letter-exchange": "", "x-dead-letter-routing-key": "recommendation.events.dlq"}
+    },
+    {
+      "name": "recommendation.events.retry.30s",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {"x-message-ttl": 30000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "recommendation.events"}
+    },
+    {
+      "name": "recommendation.events.retry.5m",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {"x-message-ttl": 300000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "recommendation.events"}
+    },
+    {
+      "name": "recommendation.events.retry.1h",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {"x-message-ttl": 3600000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "recommendation.events"}
+    },
+    {
+      "name": "recommendation.events.dlq",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
     }
   ],
   "bindings": [
@@ -214,6 +258,30 @@
       "destination": "product-search.indexing",
       "destination_type": "queue",
       "routing_key": "product.reindex.requested",
+      "arguments": {}
+    },
+    {
+      "source": "catalog.events",
+      "vhost": "/",
+      "destination": "recommendation.events",
+      "destination_type": "queue",
+      "routing_key": "product.#",
+      "arguments": {}
+    },
+    {
+      "source": "business.events",
+      "vhost": "/",
+      "destination": "recommendation.events",
+      "destination_type": "queue",
+      "routing_key": "order.created",
+      "arguments": {}
+    },
+    {
+      "source": "business.events",
+      "vhost": "/",
+      "destination": "recommendation.events",
+      "destination_type": "queue",
+      "routing_key": "interaction.recorded",
       "arguments": {}
     },
     {

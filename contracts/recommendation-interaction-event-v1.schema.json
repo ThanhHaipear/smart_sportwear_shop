@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-sportswear.local/contracts/recommendation-interaction-event-v1.schema.json",
+  "title": "Interaction recorded event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventId", "eventType", "eventVersion", "occurredAt", "traceId", "source", "dataSource"],
+  "properties": {
+    "eventId": {"type": "string", "format": "uuid"},
+    "eventType": {"const": "INTERACTION_RECORDED"},
+    "eventVersion": {"const": 1},
+    "occurredAt": {"type": "string", "format": "date-time"},
+    "traceId": {"type": "string", "minLength": 1, "maxLength": 128},
+    "userRef": {"type": ["string", "null"], "maxLength": 100},
+    "anonymousId": {"type": ["string", "null"], "maxLength": 100},
+    "productId": {"type": ["string", "null"], "format": "uuid"},
+    "variantId": {"type": ["string", "null"], "format": "uuid"},
+    "requestId": {"type": ["string", "null"], "format": "uuid"},
+    "source": {"type": "string", "minLength": 1, "maxLength": 50},
+    "dataSource": {"enum": ["REAL", "DEMO", "SYNTHETIC"]},
+    "metadata": {"type": "object"}
+  },
+  "anyOf": [{"required": ["userRef"]}, {"required": ["anonymousId"]}]
+}

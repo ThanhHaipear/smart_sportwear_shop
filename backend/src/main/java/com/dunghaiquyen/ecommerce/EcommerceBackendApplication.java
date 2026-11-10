@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
             @ComponentScan.Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class),
             @ComponentScan.Filter(
                     type = FilterType.REGEX,
-                    pattern = "com\\.dunghaiquyen\\.ecommerce\\.modules\\.(banner|collection|combo|page|promotion|recommendation|review|shipping)(\\..*)?"),
+                    pattern = "com\\.dunghaiquyen\\.ecommerce\\.modules\\.(banner|collection|combo|page|promotion|review|shipping)(\\..*)?"),
             @ComponentScan.Filter(
                     type = FilterType.REGEX,
                     pattern = "com\\.dunghaiquyen\\.ecommerce\\.infra\\.seed(\\..*)?")

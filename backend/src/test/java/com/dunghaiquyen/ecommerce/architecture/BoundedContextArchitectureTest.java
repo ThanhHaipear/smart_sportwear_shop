@@ -28,10 +28,23 @@ class BoundedContextArchitectureTest {
             "page", "product", "promotion", "review", "setting", "wishlist");
     private static final Set<String> SALES_MODULES = Set.of(
             "audit", "cart", "checkout", "notification", "order", "payment", "report", "returns", "shipping");
-    private static final Set<String> RECOMMENDATION_MODULES = Set.of("interaction", "recommendation");
-    private static final int APPROVED_ENTITY_EXCEPTION_COUNT = 84;
+    private static final int APPROVED_ENTITY_EXCEPTION_COUNT = 56;
     private static final String APPROVED_ENTITY_EXCEPTION_SHA256 =
-            "76ddb12967a3bb0e05f8fc3a3f52c70223505c333aaf1c84c4496ca414964d2a";
+            "7bb709fe0a2dde4832699b7a9f1517d6cac188ca120c8f0f0eb0199d08e903d2";
+
+    @Test
+    void recommendationPersistenceHasLeftTheCoreRuntime() throws IOException {
+        for (String module : List.of("recommendation", "interaction")) {
+            Path path = MODULE_SOURCES.resolve(module);
+            if (Files.exists(path)) {
+                try (Stream<Path> files = Files.walk(path)) {
+                    assertThat(files.filter(file -> file.toString().endsWith(".java")).toList())
+                            .as("Core must not compile recommendation/interaction persistence")
+                            .isEmpty();
+                }
+            }
+        }
+    }
 
     @Test
     void identityDoesNotImportPersistenceFromOtherBoundedContexts() throws IOException {
@@ -157,7 +170,6 @@ class BoundedContextArchitectureTest {
         if (IDENTITY_MODULES.contains(module)) return "identity";
         if (CATALOG_MODULES.contains(module)) return "catalog";
         if (SALES_MODULES.contains(module)) return "sales";
-        if (RECOMMENDATION_MODULES.contains(module)) return "recommendation";
         return "unclassified:" + module;
     }
 

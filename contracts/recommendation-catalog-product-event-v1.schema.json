@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-sportswear.local/contracts/recommendation-catalog-product-event-v1.schema.json",
+  "title": "Recommendation catalog product event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventId", "eventType", "eventVersion", "occurredAt", "traceId", "productId", "sourceVersion", "product"],
+  "properties": {
+    "eventId": {"type": "string", "format": "uuid"},
+    "eventType": {"enum": ["PRODUCT_CHANGED", "INVENTORY_CHANGED"]},
+    "eventVersion": {"const": 1},
+    "occurredAt": {"type": "string", "format": "date-time"},
+    "traceId": {"type": "string", "minLength": 1, "maxLength": 128},
+    "productId": {"type": "string", "format": "uuid"},
+    "sourceVersion": {"type": "integer", "minimum": 0},
+    "product": {
+      "type": "object",
+      "required": ["id", "name", "slug", "availableQuantity", "status"],
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "name": {"type": "string", "minLength": 1},
+        "slug": {"type": "string", "minLength": 1},
+        "thumbnailUrl": {"type": ["string", "null"]},
+        "minPrice": {"type": ["number", "null"], "minimum": 0},
+        "maxPrice": {"type": ["number", "null"], "minimum": 0},
+        "availableQuantity": {"type": "integer", "minimum": 0},
+        "status": {"type": "string"},
+        "categoryId": {"type": ["string", "null"], "format": "uuid"},
+        "brandId": {"type": ["string", "null"], "format": "uuid"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
