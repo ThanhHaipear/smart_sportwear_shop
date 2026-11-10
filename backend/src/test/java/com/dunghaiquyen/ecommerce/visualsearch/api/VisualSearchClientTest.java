@@ -26,7 +26,7 @@ class VisualSearchClientTest {
     @ParameterizedTest
     @CsvSource({"400,422", "413,422", "415,422", "422,422", "429,429", "503,503", "401,503"})
     void preservesSupportedPublicStatusCodes(int upstreamStatus, int expectedStatus) {
-        visualSearchStub.stubFor(post(urlPathEqualTo("/internal/v1/search"))
+        visualSearchStub.stubFor(post(urlPathEqualTo("/internal/v1/search/image"))
                 .willReturn(aResponse().withStatus(upstreamStatus).withBody("{}")));
 
         BusinessRuleException error = catchThrowableOfType(
@@ -48,7 +48,7 @@ class VisualSearchClientTest {
 
     @Test
     void upstreamTimeoutReturns503() {
-        visualSearchStub.stubFor(post(urlPathEqualTo("/internal/v1/search"))
+        visualSearchStub.stubFor(post(urlPathEqualTo("/internal/v1/search/image"))
                 .willReturn(aResponse().withStatus(200).withFixedDelay(1_250).withBody("{\"candidates\":[]}")));
 
         BusinessRuleException error = catchThrowableOfType(
@@ -59,7 +59,7 @@ class VisualSearchClientTest {
 
     @Test
     void upstreamAuthenticationDetailsAreMappedToGeneric503() {
-        visualSearchStub.stubFor(post(urlPathEqualTo("/internal/v1/search"))
+        visualSearchStub.stubFor(post(urlPathEqualTo("/internal/v1/search/image"))
                 .willReturn(aResponse().withStatus(401).withBody("internal-token=must-not-leak")));
 
         BusinessRuleException error = catchThrowableOfType(

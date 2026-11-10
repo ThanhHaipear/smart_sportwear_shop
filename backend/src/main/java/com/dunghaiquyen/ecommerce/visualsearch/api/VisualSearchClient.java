@@ -57,7 +57,7 @@ public class VisualSearchClient {
                     .filename(imageResource.getFilename())
                     .contentType(imageType);
             VisualSearchInternalResponse response = restClient.post()
-                    .uri(uri -> uri.path("/internal/v1/search").queryParam("limit", limit).build())
+                    .uri(uri -> uri.path("/internal/v1/search/image").queryParam("limit", limit).build())
                     .header("X-Internal-Service-Token", properties.internalToken())
                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     .body(body.build())

@@ -32,6 +32,41 @@ services:
       start_period: 10s
     restart: unless-stopped
 
+  search-service:
+    profiles: ["search"]
+    build: ./services/search-service
+    ports:
+      - "8090:8090"
+    env_file: ./services/search-service/.env.example
+    environment:
+      SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
+      DATABASE_URL: ${SEARCH_DATABASE_URL:-}
+      INTERNAL_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      CATALOG_API_URL: http://host.docker.internal:8080
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-visual_search}:${RABBITMQ_DEFAULT_PASS:-change-me}@rabbitmq:5672/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  search-worker:
+    profiles: ["search"]
+    build: ./services/search-service
+    command: ["python", "-m", "app.worker"]
+    env_file: ./services/search-service/.env.example
+    environment:
+      SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
+      DATABASE_URL: ${SEARCH_DATABASE_URL:-}
+      INTERNAL_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      CATALOG_API_URL: http://host.docker.internal:8080
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-visual_search}:${RABBITMQ_DEFAULT_PASS:-change-me}@rabbitmq:5672/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   redis_data:
   rabbitmq_data:

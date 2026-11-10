@@ -94,6 +94,9 @@ public class SecurityConfig {
                         // Valid authentication, rule just denies this URL/method -> 403.
                         .accessDeniedHandler(restAccessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
+                        // Authentication for service-to-service catalog snapshots is
+                        // performed by the controller using a dedicated constant-time token.
+                        .requestMatchers(HttpMethod.GET, "/internal/v1/products/*/index-document").permitAll()
                         .requestMatchers("/actuator/integrationevents").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS).permitAll()
                         .requestMatchers(PUBLIC_ANY_METHOD_ENDPOINTS).permitAll()

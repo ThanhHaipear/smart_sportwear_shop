@@ -7,7 +7,7 @@
 | 0. Chốt baseline | `DONE` | [Phase 0 baseline](microservice-phase-0-baseline.md): current-runtime gate 351/351 |
 | 1. Cứng hóa modular boundary | `DONE` | [Boundary hardening log](microservice-phase-1-boundaries.md): repository coupling = 0, integration gate 361/361 |
 | 2. Chuẩn hóa event platform | `DONE` | [Phase 2 event platform](microservice-phase-2-event-platform.md): contract v1, outbox confirm/retry, idempotent consumer và DLQ |
-| 3. Hoàn thiện `search-service` | `READY` | Bắt đầu sau khi thay đổi Phase 2 được review/commit; chưa thay đổi Supabase production |
+| 3. Hoàn thiện `search-service` | `IMPLEMENTED / GATE_BLOCKED` | [Phase 3 search service](microservice-phase-3-search-service.md): implementation đạt; image TEST v2 Recall@5 73,75% và category 79% chưa đạt gate; chưa thay đổi Supabase production |
 | 4-10 | `NOT_STARTED` | Chỉ bắt đầu khi exit gate của giai đoạn trước đạt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
@@ -221,12 +221,12 @@ Yêu cầu cho mọi consumer:
 
 ### 8.4 AI
 
-- [ ] Catalog event là nguồn cập nhật index chính; backfill API chỉ dùng cho rebuild.
-- [ ] Version hóa embedding model và document schema.
-- [ ] Đảm bảo có thể xóa và tái tạo toàn bộ embedding/read model.
+- [x] Catalog event là nguồn cập nhật index chính; backfill API chỉ dùng cho rebuild.
+- [x] Version hóa embedding model và document schema.
+- [x] Đảm bảo có thể xóa và tái tạo toàn bộ embedding/read model.
 - [ ] Tách DEV/TEST evaluation dataset khỏi dữ liệu demo trình bày.
 - [ ] Lưu kết quả Precision@K, Recall@K, MRR và NDCG@K theo model/version.
-- [ ] Không gửi secret, dữ liệu thanh toán hoặc PII không cần thiết sang model provider.
+- [x] Không gửi secret, dữ liệu thanh toán hoặc PII không cần thiết sang model provider.
 
 ## 9. Chiến lược di chuyển dữ liệu
 
