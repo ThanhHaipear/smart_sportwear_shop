@@ -35,6 +35,9 @@ management:
         include: health,info,metrics,prometheus
 app:
   internal-token: ${CATALOG_INTERNAL_TOKEN:change-me}
+  sales-base-url: ${SALES_API_BASE_URL:http://localhost:8094}
+  sales-token: ${SALES_INTERNAL_TOKEN:change-me}
+  image-storage-directory: ${CATALOG_IMAGE_STORAGE_DIRECTORY:./data/catalog-images}
   events:
     enabled: ${CATALOG_EVENTS_ENABLED:false}
     exchange: ${CATALOG_EVENTS_EXCHANGE:catalog.events}

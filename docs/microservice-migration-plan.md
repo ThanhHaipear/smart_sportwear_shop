@@ -15,7 +15,7 @@
 | 8. Đổi core thành `sales-service` | `DONE / EXPANDED_LOCAL_CUTOVER` | [Phase 8 sales service](microservice-phase-8-sales-service.md): gateway local đã chuyển cart, checkout, create/query order, payment, notification, public settings và phần API quản trị; các workflow cancel/return/refund/SSE còn nằm trong backlog Phase 11 |
 | 9. Gateway và vận hành | `DONE` | [Phase 9 gateway và vận hành](microservice-phase-9-gateway-operations.md): gateway allowlist/rate-limit/trace, application port isolation, Prometheus/Grafana/Tempo, SLO/alert/runbook và resilience gate đạt; kill switch riêng giữ từng context trên stable upstream cho tới cut-over gate của service sở hữu |
 | 10. Dọn shared database | `IMPLEMENTED / FINALIZATION_HELD` | [Phase 10 database cleanup](microservice-phase-10-database-cleanup.md): GRANT/FK/legacy cleanup, ownership audit và rollback policy đã có; V3 giữ chưa chạy cho tới khi route/write cut-over, stability window và restore-point được duyệt |
-| 11. Loại bỏ backend legacy | `IN_PROGRESS / LOCAL_CUTOVER` | [Phase 11 legacy retirement](microservice-phase-11-legacy-retirement.md): hoàn thiện API còn thiếu, bỏ gateway fallback, chạy E2E/stability window và tạo restore point trước khi mở khóa cleanup V3 |
+| 11. Loại bỏ backend legacy | `IMPLEMENTED / ACCEPTANCE_HELD` | [Phase 11 legacy retirement](microservice-phase-11-legacy-retirement.md): API/endpoint inventory/gateway no-fallback và local regression đã hoàn tất; E2E acceptance, stability window, writer-stop và restore point còn là gate trước cleanup V3 |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 

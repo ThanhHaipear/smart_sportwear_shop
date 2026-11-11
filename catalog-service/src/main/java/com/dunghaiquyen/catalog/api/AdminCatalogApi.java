@@ -7,12 +7,14 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/admin")
 public class AdminCatalogApi {
-    private final PublicCatalogRepository repository;
-    public AdminCatalogApi(PublicCatalogRepository repository){this.repository=repository;}
+    private final PublicCatalogRepository repository; private final CatalogImageStorage images;
+    public AdminCatalogApi(PublicCatalogRepository repository,CatalogImageStorage images){this.repository=repository;this.images=images;}
     public record StockRequest(UUID requestId,UUID variantId,int quantity,String note,String type){}
     @GetMapping("/products") ApiResponse<List<Map<String,Object>>> products(@RequestParam(defaultValue="1")int page,@RequestParam(defaultValue="20")int limit){
         int p=Math.max(1,page),l=Math.max(1,Math.min(limit,100));long total=repository.adminProductCount();
@@ -30,6 +32,8 @@ public class AdminCatalogApi {
     @PostMapping("/products/{id}/variants") @ResponseStatus(HttpStatus.CREATED) ApiResponse<Map<String,Object>> createVariant(@PathVariable UUID id,@RequestBody Map<String,Object> body){return ApiResponse.ok(repository.createVariant(id,body));}
     @PatchMapping("/variants/{id}") ApiResponse<Map<String,Object>> updateVariant(@PathVariable UUID id,@RequestBody Map<String,Object> body){return ApiResponse.ok(repository.updateVariant(id,body));}
     @PostMapping("/products/{id}/images") @ResponseStatus(HttpStatus.CREATED) ApiResponse<Map<String,Object>> addImage(@PathVariable UUID id,@RequestBody Map<String,Object> body){return ApiResponse.ok(repository.addImage(id,body));}
+    @PostMapping(value="/products/{id}/images/upload",consumes=MediaType.MULTIPART_FORM_DATA_VALUE) @ResponseStatus(HttpStatus.CREATED)
+    ApiResponse<Map<String,Object>> uploadImage(@PathVariable UUID id,@RequestParam("file")MultipartFile file,@RequestParam(required=false)String altText,@RequestParam(required=false)String color,@RequestParam(required=false)Boolean isPrimary,@RequestParam(required=false)Integer sortOrder){var stored=images.store(file);Map<String,Object> body=new java.util.LinkedHashMap<>();body.put("imageUrl",stored.url());body.put("altText",altText);body.put("color",color);body.put("isPrimary",Boolean.TRUE.equals(isPrimary));body.put("sortOrder",sortOrder==null?0:sortOrder);Map<String,Object> result=new java.util.LinkedHashMap<>(repository.addImage(id,body));result.put("publicId",stored.publicId());result.put("width",stored.width());result.put("height",stored.height());return ApiResponse.ok(result);}
     @DeleteMapping("/products/{productId}/images/{imageId}") ApiResponse<List<Map<String,Object>>> deleteImage(@PathVariable UUID productId,@PathVariable UUID imageId){return ApiResponse.ok(repository.deleteImage(productId,imageId));}
     @PatchMapping("/products/{productId}/images/{imageId}/primary") ApiResponse<List<Map<String,Object>>> primaryImage(@PathVariable UUID productId,@PathVariable UUID imageId){return ApiResponse.ok(repository.primaryImage(productId,imageId));}
     @PostMapping("/categories") @ResponseStatus(HttpStatus.CREATED) ApiResponse<Map<String,Object>> createCategory(@RequestBody Map<String,Object> body){return ApiResponse.ok(repository.createCategory(body));}

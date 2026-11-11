@@ -126,6 +126,13 @@ public class SalesQueryRepository {
                 """).param("order",orderId).param("user",userId).query().listOfRows();
     }
 
+    @Transactional public Map<String,Object> invoice(UUID userId,UUID orderId){
+        Map<String,Object> current=jdbc.sql("select payment_status,order_status from orders where id=:id and user_ref=:user for update").param("id",orderId).param("user",userId).query().singleRow();
+        if(!"PAID".equals(current.get("payment_status"))||"CANCELLED".equals(current.get("order_status")))throw new IllegalStateException("Order is not invoice eligible");
+        jdbc.sql("update orders set invoice_number=coalesce(invoice_number,'INV-'||lpad(nextval('orders_invoice_number_seq')::text,10,'0')),updated_at=current_timestamp where id=:id").param("id",orderId).update();
+        return order(userId,orderId,false).orElseThrow(()->new IllegalArgumentException("Order not found"));
+    }
+
     private Map<String,Object> order(ResultSet rs) throws SQLException {
         Map<String,Object> result=map(
                 "id",uuid(rs,"id"),"orderCode",rs.getString("order_code"),"orderStatus",rs.getString("order_status"),

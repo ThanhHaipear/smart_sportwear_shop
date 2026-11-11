@@ -1,0 +1,22 @@
+{
+  "phase": 11,
+  "capturedAt": "2026-11-11",
+  "scope": "local-regression",
+  "status": "PASS_WITH_EXTERNAL_GATES_OPEN",
+  "checks": {
+    "gatewayPytest": "12 passed",
+    "salesMavenTest": "passed",
+    "catalogMavenTest": "passed",
+    "storefrontTypecheck": "passed",
+    "adminLint": "passed",
+    "legacyFallbackStaticGate": "passed",
+    "deprecatedFrontendSseStaticGate": "passed"
+  },
+  "externalGates": {
+    "acceptanceE2e": "pending",
+    "writerStopAndIncrementalParity": "pending",
+    "stabilityWindow": "pending",
+    "restorePointAndRestoreDrill": "pending",
+    "phase10V3": "locked"
+  }
+}

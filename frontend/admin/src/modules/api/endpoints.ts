@@ -16,7 +16,6 @@ export const adminEndpoints = {
   orderStatus: (id: string) => `/api/v1/admin/orders/${id}/status`,
   orderRefunds: (id: string) => `/api/v1/admin/orders/${id}/refunds`,
   orderCancel: (id: string) => `/api/v1/admin/orders/${id}/cancel`,
-  orderCancellationRejection: (id: string) => `/api/v1/admin/orders/${id}/cancellation-rejection`,
   users: "/api/v1/admin/users",
   userDetail: (id: string) => `/api/v1/admin/users/${id}`,
   userStatus: (id: string) => `/api/v1/admin/users/${id}/status`,

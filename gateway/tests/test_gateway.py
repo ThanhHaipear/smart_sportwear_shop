@@ -3,10 +3,12 @@ import hashlib
 import hmac
 import json
 import time
+import inspect
 
 import httpx
 from fastapi.testclient import TestClient
 
+from app import main as gateway_main
 from app.main import Settings, create_app
 
 
@@ -26,11 +28,6 @@ def gateway(handler, **overrides):
     values = {
         "gateway_rate_limit_per_minute": 2,
         "gateway_rate_limit_burst": 0,
-        "gateway_identity_cutover_enabled": True,
-        "gateway_catalog_cutover_enabled": True,
-        "gateway_sales_cutover_enabled": True,
-        "gateway_chatbot_cutover_enabled": True,
-        "gateway_recommendation_cutover_enabled": True,
         "jwt_access_secret": JWT_SECRET,
     }
     values.update(overrides)
@@ -99,26 +96,49 @@ def test_method_allowlist_and_rate_limit():
     assert limited.headers["retry-after"] == "60"
 
 
-def test_cutover_flags_default_to_stable_upstreams():
+def test_phase11_routes_have_explicit_service_owners_and_unknown_api_is_blocked():
     hosts = []
     def upstream(request):
         hosts.append((request.url.host, request.url.port))
         return httpx.Response(204)
-    client = gateway(upstream, gateway_identity_cutover_enabled=False,
-                     gateway_catalog_cutover_enabled=False,
-                     gateway_sales_cutover_enabled=False,
-                     gateway_chatbot_cutover_enabled=False,
-                     gateway_rate_limit_per_minute=20)
+    client = gateway(upstream, gateway_rate_limit_per_minute=20)
     assert client.post("/api/v1/auth/login").status_code == 204
-    assert hosts[-1] == ("host.docker.internal", 8080)
+    assert hosts[-1] == ("identity-service", 8093)
     assert client.get("/api/v1/products").status_code == 204
-    assert hosts[-1] == ("host.docker.internal", 8080)
+    assert hosts[-1] == ("catalog-service", 8092)
     assert client.post("/api/v1/orders", headers={"Authorization": "Bearer " + access_token()}).status_code == 204
-    assert hosts[-1] == ("host.docker.internal", 8080)
-    # A fresh client avoids coupling this routing assertion to the rate-limit bucket.
-    chat = gateway(upstream, gateway_chatbot_cutover_enabled=False)
-    assert chat.post("/chat").status_code == 204
-    assert hosts[-1] == ("host.docker.internal", 8002)
+    assert hosts[-1] == ("sales-service", 8094)
+    assert client.get("/api/v1/not-in-inventory").status_code == 404
+    assert all(host != "host.docker.internal" for host, _ in hosts)
+
+
+def test_phase11_gateway_has_no_legacy_fallback_code_or_configuration():
+    source = inspect.getsource(gateway_main)
+    assert "legacy_upstream" not in source
+    assert "chatbot_legacy_upstream" not in source
+    assert "cutover_enabled" not in source
+
+
+def test_phase11_new_workflow_routes_reach_their_owners():
+    observed = []
+    def upstream(request):
+        observed.append(request.url.host)
+        return httpx.Response(204)
+    client = gateway(upstream, gateway_rate_limit_per_minute=50)
+    customer = {"Authorization": "Bearer " + access_token()}
+    admin = {"Authorization": "Bearer " + access_token(role="ADMIN")}
+    cases = (
+        ("POST", "/api/v1/orders/00000000-0000-0000-0000-000000000001/cancel", customer, "sales-service"),
+        ("PUT", "/api/v1/orders/00000000-0000-0000-0000-000000000001/refund-destination", customer, "sales-service"),
+        ("POST", "/api/v1/returns", customer, "sales-service"),
+        ("POST", "/api/v1/admin/refunds/00000000-0000-0000-0000-000000000001/manual-confirmation", admin, "sales-service"),
+        ("POST", "/api/v1/admin/products/00000000-0000-0000-0000-000000000001/images/upload", admin, "catalog-service"),
+        ("GET", "/api/v1/products/sample/reviews", {}, "catalog-service"),
+        ("PATCH", "/api/v1/admin/reviews/00000000-0000-0000-0000-000000000001/status", admin, "catalog-service"),
+    )
+    for method, path, headers, owner in cases:
+        assert client.request(method, path, headers=headers).status_code == 204
+        assert observed[-1] == owner
 
 
 def test_upstream_failure_is_bounded_and_safe():
@@ -139,6 +159,18 @@ def test_sales_customer_routes_require_verified_access_token():
     assert client.get("/api/v1/orders/me", headers={"Authorization": "Bearer invalid"}).status_code == 401
     assert client.get("/api/v1/me").status_code == 401
     assert client.get("/api/v1/me/addresses").status_code == 401
+
+
+def test_notification_sse_accepts_eventsource_token_without_forwarding_it():
+    observed = []
+    def upstream(request):
+        observed.append(request)
+        return httpx.Response(200, headers={"content-type": "text/event-stream"}, content=b"event: ready\ndata: ok\n\n")
+    token = access_token()
+    response = gateway(upstream, gateway_rate_limit_per_minute=20).get(f"/api/v1/notifications/me/stream?access_token={token}")
+    assert response.status_code == 200
+    assert observed[-1].headers["x-user-id"] == "00000000-0000-0000-0000-000000000123"
+    assert "access_token" not in str(observed[-1].url)
 
 
 def test_metrics_and_health_surface():

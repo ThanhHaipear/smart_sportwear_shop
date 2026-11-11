@@ -59,13 +59,6 @@ export async function cancelOrderByStaff(id: string, reason: string) {
   });
 }
 
-export async function rejectCancellationRequest(id: string, reason: string) {
-  return browserApiRequest<AdminOrderResponse>(adminEndpoints.orderCancellationRejection(id), {
-    method: "POST",
-    body: JSON.stringify({ reason })
-  });
-}
-
 export async function confirmManualRefund(id: string, reference: string, note?: string) {
   return browserApiRequest<OrderRefundResponse>(adminEndpoints.adminRefundManualConfirmation(id), {
     method: "POST",

@@ -15,11 +15,12 @@ import java.util.Objects;
 import java.util.UUID;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.jdbc.core.simple.JdbcClient;
 
 @RestController
 public class SalesApi {
-    private final SalesDomainService service; private final CheckoutApplicationService checkout; private final IdentityClient identity; private final SePaySignatureVerifier signatures; private final SalesProperties properties; private final ObjectMapper json; private final Validator validator;
-    public SalesApi(SalesDomainService service,CheckoutApplicationService checkout,IdentityClient identity,SePaySignatureVerifier signatures,SalesProperties properties,ObjectMapper json,Validator validator){this.service=service;this.checkout=checkout;this.identity=identity;this.signatures=signatures;this.properties=properties;this.json=json;this.validator=validator;}
+    private final SalesDomainService service; private final CheckoutApplicationService checkout; private final IdentityClient identity; private final SePaySignatureVerifier signatures; private final SalesProperties properties; private final ObjectMapper json; private final Validator validator; private final JdbcClient jdbc;
+    public SalesApi(SalesDomainService service,CheckoutApplicationService checkout,IdentityClient identity,SePaySignatureVerifier signatures,SalesProperties properties,ObjectMapper json,Validator validator,JdbcClient jdbc){this.service=service;this.checkout=checkout;this.identity=identity;this.signatures=signatures;this.properties=properties;this.json=json;this.validator=validator;this.jdbc=jdbc;}
     public record StorefrontOrderRequest(UUID userId,List<OrderLineRequest> items,PaymentMethod paymentMethod,Map<String,Object> address,
             BigDecimal shippingFee,String note,UUID addressId,List<UUID> cartItemIds,UUID buyNowVariantId,Integer buyNowQuantity){}
     @PostMapping("/api/v1/orders") public ResponseEntity<ApiResponse<OrderResponse>> order(@RequestHeader("X-User-Id") UUID user,@RequestBody StorefrontOrderRequest request){
@@ -40,5 +41,11 @@ public class SalesApi {
     @PostMapping("/internal/v1/refunds") public ResponseEntity<RefundResponse> refund(@RequestHeader("X-Internal-Service-Token")String token,@RequestHeader("X-Actor-Id")UUID actor,@Valid @RequestBody CreateRefundRequest request){
         if(!MessageDigestSupport.equals(token,properties.internalToken()))throw new SecurityException("Invalid internal service token");
         return ResponseEntity.status(201).body(service.createRefund(request,actor));
+    }
+    @GetMapping("/internal/v1/reviews/eligibility") public Map<String,Object> reviewEligibility(@RequestHeader("X-Internal-Service-Token")String token,@RequestParam UUID userId,@RequestParam UUID productId,@RequestParam(required=false)UUID orderItemId){
+        if(!MessageDigestSupport.equals(token,properties.internalToken()))throw new SecurityException("Invalid internal service token");
+        List<UUID> items=jdbc.sql("select oi.id from order_items oi join orders o on o.id=oi.order_id where o.user_ref=:user and oi.product_ref=:product and o.order_status='DELIVERED' and (:item is null or oi.id=:item) order by o.delivered_at desc nulls last")
+                .param("user",userId).param("product",productId).param("item",orderItemId).query(UUID.class).list();
+        return Map.of("eligible",!items.isEmpty(),"orderItemId",items.isEmpty()?"":items.getFirst().toString());
     }
 }

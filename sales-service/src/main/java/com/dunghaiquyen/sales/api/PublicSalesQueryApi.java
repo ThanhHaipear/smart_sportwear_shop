@@ -7,13 +7,15 @@ import java.util.Map;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/api/v1")
 public class PublicSalesQueryApi {
-    private final SalesQueryRepository repository; private final SalesProperties properties; private final String bankBin; private final String accountName;
+    private final SalesQueryRepository repository; private final SalesProperties properties; private final String bankBin; private final String accountName; private final NotificationStreamService streams;
     public PublicSalesQueryApi(SalesQueryRepository repository,SalesProperties properties,
-            @Value("${sales.vietqr.bank-bin:}")String bankBin,@Value("${sales.vietqr.account-name:}")String accountName){this.repository=repository;this.properties=properties;this.bankBin=bankBin;this.accountName=accountName;}
+            @Value("${sales.vietqr.bank-bin:}")String bankBin,@Value("${sales.vietqr.account-name:}")String accountName,NotificationStreamService streams){this.repository=repository;this.properties=properties;this.bankBin=bankBin;this.accountName=accountName;this.streams=streams;}
     public record VietQrRequest(UUID orderId){}
 
     @GetMapping("/orders/me")
@@ -33,6 +35,7 @@ public class PublicSalesQueryApi {
 
     @GetMapping("/orders/{id}/refunds")
     ApiResponse<List<Map<String,Object>>> refunds(@RequestHeader("X-User-Id")UUID user,@PathVariable UUID id){return ApiResponse.ok(repository.refunds(user,id));}
+    @GetMapping("/orders/{id}/invoice") ApiResponse<Map<String,Object>> invoice(@RequestHeader("X-User-Id")UUID user,@PathVariable UUID id){return ApiResponse.ok(repository.invoice(user,id));}
 
     @GetMapping("/payments/{orderId}")
     ApiResponse<List<Map<String,Object>>> payments(@RequestHeader("X-User-Id")UUID user,
@@ -56,7 +59,8 @@ public class PublicSalesQueryApi {
                 "page",safePage,"limit",safeLimit,"total",total,"totalPages",total==0?0:(total+safeLimit-1)/safeLimit));}
 
     @GetMapping("/notifications/me/unread-count") ApiResponse<Map<String,Long>> unread(@RequestHeader("X-User-Id")UUID user){return ApiResponse.ok(Map.of("unread",repository.unread(user)));}
-    @PostMapping("/notifications/me/{id}/read") ApiResponse<Void> read(@RequestHeader("X-User-Id")UUID user,@PathVariable UUID id){repository.markRead(user,id);return ApiResponse.ok(null);}
-    @PostMapping("/notifications/me/read-all") ApiResponse<Integer> readAll(@RequestHeader("X-User-Id")UUID user){return ApiResponse.ok(repository.markAllRead(user));}
+    @PostMapping("/notifications/me/{id}/read") ApiResponse<Void> read(@RequestHeader("X-User-Id")UUID user,@PathVariable UUID id){repository.markRead(user,id);streams.changed(user,"notification-read");return ApiResponse.ok(null);}
+    @PostMapping("/notifications/me/read-all") ApiResponse<Integer> readAll(@RequestHeader("X-User-Id")UUID user){int changed=repository.markAllRead(user);streams.changed(user,"notifications-read");return ApiResponse.ok(changed);}
+    @GetMapping(value="/notifications/me/stream",produces=MediaType.TEXT_EVENT_STREAM_VALUE) SseEmitter stream(@RequestHeader("X-User-Id")UUID user){return streams.register(user);}
     @GetMapping("/settings/public") ApiResponse<Map<String,Object>> settings(){return ApiResponse.ok(repository.publicSettings());}
 }

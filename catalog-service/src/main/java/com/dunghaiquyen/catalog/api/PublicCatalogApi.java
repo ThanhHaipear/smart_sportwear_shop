@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/v1")
 public class PublicCatalogApi {
-    private final PublicCatalogRepository repository;
+    private final PublicCatalogRepository repository; private final CatalogImageStorage imageStorage;
 
-    public PublicCatalogApi(PublicCatalogRepository repository) { this.repository = repository; }
+    public PublicCatalogApi(PublicCatalogRepository repository,CatalogImageStorage imageStorage) { this.repository = repository;this.imageStorage=imageStorage; }
     public record WishlistItem(java.util.UUID productId) {}
 
     @GetMapping("/categories")
@@ -101,6 +103,7 @@ public class PublicCatalogApi {
     public ApiResponse<Map<String, Object>> product(@PathVariable String slugOrId) {
         return ApiResponse.ok(repository.product(slugOrId).orElseThrow(() -> new NotFoundException("Product not found")));
     }
+    @GetMapping("/catalog-images/{name}") public ResponseEntity<byte[]> image(@PathVariable String name){String type=name.endsWith(".png")?MediaType.IMAGE_PNG_VALUE:name.endsWith(".webp")?"image/webp":MediaType.IMAGE_JPEG_VALUE;return ResponseEntity.ok().contentType(MediaType.parseMediaType(type)).header("Cache-Control","public,max-age=31536000,immutable").body(imageStorage.read(name));}
 
     @GetMapping("/wishlist")
     public ApiResponse<Map<String,Object>> wishlist(@RequestHeader("X-User-Id")java.util.UUID user){return ApiResponse.ok(repository.wishlist(user));}
