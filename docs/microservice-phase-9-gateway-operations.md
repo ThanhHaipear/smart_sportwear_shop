@@ -2,15 +2,16 @@
 
 ## Trạng thái
 
-Phase 9 hoàn thành implementation và acceptance ngày 10/11/2026, trạng thái `DONE / ROUTE_CUTOVER_HELD`.
+Phase 9 hoàn thành implementation và acceptance ngày 11/11/2026, trạng thái `DONE`.
 
-Gateway, observability manifests, SLO, alert và resilience drill đã đạt gate. Các feature flag và write authority của Phase 3-8 không thay đổi; route mới chỉ được chuyển theo từng cửa sổ cut-over đã duyệt.
+Gateway, observability manifests, SLO, alert và resilience drill đã đạt gate. Cut-over được điều khiển độc lập theo bounded context; các flag mặc định `false` nên deployment Phase 9 không tự đổi route hoặc write authority của Phase 3-8.
 
 ## Public entrypoint và network boundary
 
 - Gateway độc lập tại `gateway`, cổng public duy nhất của các application service là `8080`.
 - Identity, Catalog, Sales, Search, Chatbot và Recommendation chỉ dùng `expose` trong mạng Compose; Redis/RabbitMQ và UI vận hành chỉ bind loopback.
 - Gateway dùng allowlist ưu tiên cho Identity, Sales, Chatbot và Recommendation. Public `/api/**` chưa tách được chuyển về `LEGACY_UPSTREAM`, là core release ổn định trước đó.
+- `GATEWAY_IDENTITY_CUTOVER_ENABLED`, `GATEWAY_SALES_CUTOVER_ENABLED`, `GATEWAY_CHATBOT_CUTOVER_ENABLED` và `GATEWAY_RECOMMENDATION_CUTOVER_ENABLED` là kill switch riêng. Khi tắt, API tương ứng đi về stable upstream; bật/tắt một context không ảnh hưởng context khác.
 - `/internal/**`, mọi path chứa `/internal/`, `/actuator/**`, docs và admin surface không được khai báo đều trả 404 tại gateway.
 - Header nội bộ do client gửi vào bị loại bỏ. Gateway đặt `X-Forwarded-For`, `X-Forwarded-Proto`, correlation ID và W3C `traceparent` hợp lệ.
 - Rate limit mặc định 120 request/phút + burst 30 theo client; timeout upstream mặc định 10 giây; lỗi transport trả envelope 503 không lộ topology.
@@ -44,14 +45,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-microservic
 
 Gate kiểm tra:
 
-- route allowlist, method boundary, chặn internal/actuator và loại internal token từ client;
+- route allowlist, method boundary, controlled cut-over fallback, chặn internal/actuator và loại internal token từ client;
 - correlation/trace propagation, rate limit, streaming proxy và Prometheus metric;
 - service-down drill trả 503 có giới hạn, không lộ lỗi upstream;
 - health/readiness/metrics contract và Prometheus/Grafana/Tempo/alert manifests;
 - Compose config hợp lệ và không publish trực tiếp cổng application service;
 - test của Identity, Catalog và Sales vẫn đạt sau thay đổi observability.
 
-Kết quả acceptance ngày 10/11/2026: gateway/resilience 5/5; Identity/Catalog/Sales 20/20 (10 suites, 0 failure/error/skip); Docker Compose config hợp lệ; image `smart-sportswear-shop-gateway:latest` build thành công.
+Kết quả acceptance ban đầu ngày 10/11/2026: gateway/resilience 5/5; Identity/Catalog/Sales 20/20 (10 suites, 0 failure/error/skip); Docker Compose config hợp lệ; image `smart-sportswear-shop-gateway:latest` build thành công. Gate ngày 11/11/2026 bổ sung controlled-cutover fallback và đạt 6/6 gateway tests.
 
 ## Deploy, sự cố và rollback
 

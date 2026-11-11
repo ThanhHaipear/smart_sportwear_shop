@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 
 $gateway = Get-Content -Raw (Join-Path $root "gateway\app\main.py")
-foreach ($needle in @('traceparent','X-Correlation-ID','Rate limit exceeded','Upstream unavailable','/internal/','x-internal-service-token','StreamingResponse','/v1/traces')) {
+foreach ($needle in @('traceparent','X-Correlation-ID','Rate limit exceeded','Upstream unavailable','/internal/','x-internal-service-token','StreamingResponse','/v1/traces','gateway_identity_cutover_enabled','gateway_sales_cutover_enabled','gateway_chatbot_cutover_enabled','gateway_recommendation_cutover_enabled')) {
     if ($gateway -notmatch [regex]::Escape($needle)) { throw "missing gateway invariant: $needle" }
 }
 

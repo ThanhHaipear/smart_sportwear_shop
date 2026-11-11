@@ -8,7 +8,16 @@ TRACE = "00-0123456789abcdef0123456789abcdef-0123456789abcdef-01"
 
 
 def gateway(handler, **overrides):
-    settings = Settings(gateway_rate_limit_per_minute=2, gateway_rate_limit_burst=0, **overrides)
+    values = {
+        "gateway_rate_limit_per_minute": 2,
+        "gateway_rate_limit_burst": 0,
+        "gateway_identity_cutover_enabled": True,
+        "gateway_sales_cutover_enabled": True,
+        "gateway_chatbot_cutover_enabled": True,
+        "gateway_recommendation_cutover_enabled": True,
+    }
+    values.update(overrides)
+    settings = Settings(**values)
     return TestClient(create_app(settings, httpx.MockTransport(handler)))
 
 
@@ -34,16 +43,34 @@ def test_internal_and_operational_upstream_routes_are_never_public():
 def test_method_allowlist_and_rate_limit():
     hosts = []
     def upstream(request):
-        hosts.append(request.url.host)
+        hosts.append((request.url.host, request.url.port))
         return httpx.Response(204)
     client = gateway(upstream)
-    assert client.get("/api/v1/auth/login").status_code == 204
-    assert hosts[-1] == "host.docker.internal"
+    assert client.get("/api/v1/auth/login").status_code == 404
     assert client.post("/api/v1/auth/login").status_code == 204
-    assert hosts[-1] == "identity-service"
+    assert hosts[-1] == ("identity-service", 8093)
+    assert client.post("/api/v1/auth/login").status_code == 204
     limited = client.post("/api/v1/auth/login")
     assert limited.status_code == 429
     assert limited.headers["retry-after"] == "60"
+
+
+def test_cutover_flags_default_to_stable_upstreams():
+    hosts = []
+    def upstream(request):
+        hosts.append((request.url.host, request.url.port))
+        return httpx.Response(204)
+    client = gateway(upstream, gateway_identity_cutover_enabled=False,
+                     gateway_sales_cutover_enabled=False,
+                     gateway_chatbot_cutover_enabled=False)
+    assert client.post("/api/v1/auth/login").status_code == 204
+    assert hosts[-1] == ("host.docker.internal", 8080)
+    assert client.post("/api/v1/orders").status_code == 204
+    assert hosts[-1] == ("host.docker.internal", 8080)
+    # A fresh client avoids coupling this routing assertion to the rate-limit bucket.
+    chat = gateway(upstream, gateway_chatbot_cutover_enabled=False)
+    assert chat.post("/chat").status_code == 204
+    assert hosts[-1] == ("host.docker.internal", 8002)
 
 
 def test_upstream_failure_is_bounded_and_safe():

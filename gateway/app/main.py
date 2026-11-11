@@ -24,6 +24,11 @@ class Settings(BaseSettings):
     chatbot_upstream: str = "http://chatbot-service:8002"
     recommendation_upstream: str = "http://recommendation-service:8091"
     legacy_upstream: str = "http://host.docker.internal:8080"
+    chatbot_legacy_upstream: str = "http://host.docker.internal:8002"
+    gateway_identity_cutover_enabled: bool = False
+    gateway_sales_cutover_enabled: bool = False
+    gateway_chatbot_cutover_enabled: bool = False
+    gateway_recommendation_cutover_enabled: bool = False
     gateway_request_timeout_seconds: float = 10.0
     gateway_rate_limit_per_minute: int = 120
     gateway_rate_limit_burst: int = 30
@@ -35,20 +40,21 @@ class Route:
     methods: frozenset[str]
     pattern: re.Pattern[str]
     upstream_setting: str
+    cutover_setting: str | None = None
 
 
 ROUTES = (
-    Route(frozenset({"POST"}), re.compile(r"^/api/v1/auth/(register|login|refresh|logout|google|forgot-password|reset-password)$"), "identity_upstream"),
-    Route(frozenset({"GET", "PATCH"}), re.compile(r"^/api/v1/users/me$"), "identity_upstream"),
-    Route(frozenset({"GET", "POST"}), re.compile(r"^/api/v1/users/me/addresses$"), "identity_upstream"),
-    Route(frozenset({"PATCH", "DELETE"}), re.compile(r"^/api/v1/users/me/addresses/[0-9a-fA-F-]+(?:/default)?$"), "identity_upstream"),
-    Route(frozenset({"PATCH"}), re.compile(r"^/api/v1/admin/users/[0-9a-fA-F-]+/(role|status)$"), "identity_upstream"),
-    Route(frozenset({"POST"}), re.compile(r"^/api/v1/orders$"), "sales_upstream"),
-    Route(frozenset({"POST"}), re.compile(r"^/api/v1/webhooks/sepay$"), "sales_upstream"),
-    Route(frozenset({"POST"}), re.compile(r"^/chat(?:/stream)?$"), "chatbot_upstream"),
-    Route(frozenset({"GET"}), re.compile(r"^/api/v1/recommendations/products/[0-9a-fA-F-]+$"), "recommendation_upstream"),
-    Route(frozenset({"GET"}), re.compile(r"^/api/v1/products/[0-9a-fA-F-]+/frequently-bought-together$"), "recommendation_upstream"),
-    Route(frozenset({"POST"}), re.compile(r"^/api/v1/recommendations/(cart|interactions)$"), "recommendation_upstream"),
+    Route(frozenset({"POST"}), re.compile(r"^/api/v1/auth/(register|login|refresh|logout|google|forgot-password|reset-password)$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"GET", "PATCH"}), re.compile(r"^/api/v1/users/me$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"GET", "POST"}), re.compile(r"^/api/v1/users/me/addresses$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"PATCH", "DELETE"}), re.compile(r"^/api/v1/users/me/addresses/[0-9a-fA-F-]+(?:/default)?$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"PATCH"}), re.compile(r"^/api/v1/admin/users/[0-9a-fA-F-]+/(role|status)$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"POST"}), re.compile(r"^/api/v1/orders$"), "sales_upstream", "gateway_sales_cutover_enabled"),
+    Route(frozenset({"POST"}), re.compile(r"^/api/v1/webhooks/sepay$"), "sales_upstream", "gateway_sales_cutover_enabled"),
+    Route(frozenset({"POST"}), re.compile(r"^/chat(?:/stream)?$"), "chatbot_upstream", "gateway_chatbot_cutover_enabled"),
+    Route(frozenset({"GET"}), re.compile(r"^/api/v1/recommendations/products/[0-9a-fA-F-]+$"), "recommendation_upstream", "gateway_recommendation_cutover_enabled"),
+    Route(frozenset({"GET"}), re.compile(r"^/api/v1/products/[0-9a-fA-F-]+/frequently-bought-together$"), "recommendation_upstream", "gateway_recommendation_cutover_enabled"),
+    Route(frozenset({"POST"}), re.compile(r"^/api/v1/recommendations/(cart|interactions)$"), "recommendation_upstream", "gateway_recommendation_cutover_enabled"),
     # Controlled strangler fallback: keeps the last stable core release reachable
     # through the single entrypoint until each public bounded-context route cuts over.
     Route(frozenset({"GET", "POST", "PUT", "PATCH", "DELETE"}), re.compile(r"^/api(?:/.*)?$"), "legacy_upstream"),
@@ -99,7 +105,16 @@ class Metrics:
 def _route(method: str, path: str) -> Route | None:
     if path.startswith("/internal/") or "/internal/" in path or path.startswith("/actuator"):
         return None
-    return next((route for route in ROUTES if method in route.methods and route.pattern.fullmatch(path)), None)
+    for route in ROUTES:
+        if route.pattern.fullmatch(path):
+            return route if method in route.methods else None
+    return None
+
+
+def _upstream_setting(route: Route, path: str, config: Settings) -> str:
+    if not route.cutover_setting or getattr(config, route.cutover_setting):
+        return route.upstream_setting
+    return "legacy_upstream" if path.startswith("/api/") else "chatbot_legacy_upstream"
 
 
 def _request_headers(request: Request, correlation_id: str, traceparent: str) -> dict[str, str]:
@@ -148,7 +163,8 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         raw_trace = request.headers.get("traceparent", "").lower()
         traceparent = raw_trace if TRACEPARENT.fullmatch(raw_trace) else f"00-{secrets.token_hex(16)}-{secrets.token_hex(8)}-01"
         route = _route(request.method, request.url.path)
-        label = route.upstream_setting if route else "blocked"
+        upstream_setting = _upstream_setting(route, request.url.path, config) if route else "blocked"
+        label = upstream_setting
         status_code = 404
         response: Response
         peer = request.client.host if request.client else "unknown"
@@ -158,7 +174,7 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
             status_code = 429
             response = JSONResponse({"status": 429, "message": "Rate limit exceeded", "correlationId": correlation_id}, status_code=429, headers={"Retry-After": "60"})
         else:
-            target = getattr(config, route.upstream_setting).rstrip("/") + request.url.path
+            target = getattr(config, upstream_setting).rstrip("/") + request.url.path
             if request.url.query:
                 target += "?" + request.url.query
             try:
@@ -176,7 +192,7 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
                             await upstream.aclose()
                     response = StreamingResponse(body(), status_code=status_code, headers=response_headers, media_type=upstream.headers.get("content-type"))
             except (httpx.TimeoutException, httpx.NetworkError):
-                metrics.upstream_failures[route.upstream_setting] += 1
+                metrics.upstream_failures[upstream_setting] += 1
                 status_code = 503
                 response = JSONResponse({"status": 503, "message": "Upstream unavailable", "correlationId": correlation_id}, status_code=503)
         response.headers["X-Correlation-ID"] = correlation_id
