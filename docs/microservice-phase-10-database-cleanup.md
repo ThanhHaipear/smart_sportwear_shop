@@ -83,3 +83,32 @@ legacy và schema `ai_retrieval`, đúng với trạng thái chưa chạy V3. Ev
 - Approval và timestamp kết thúc stability window.
 - Restore-point mới ngay trước cleanup.
 - Live evidence sau V1/V2/V3, gồm audit `passed=true` và không còn relation/schema legacy.
+
+## Cut-over attempt ngày 11/11/2026
+
+Đã thực hiện các bước an toàn có thể hoàn thành mà không làm gián đoạn storefront:
+
+- Xác nhận không có container ứng dụng hoặc database session khác đang hoạt động; local legacy writer đã dừng.
+- Bổ sung ownership/backfill còn thiếu cho Catalog taxonomy/dataset/inventory ledger, Sales operational tables
+  và Search read model.
+- Transactional dry-run và live backfill đều đạt 22/22 cặp nguồn-đích.
+- Audit sau backfill: 44 bảng nghiệp vụ được map, 0 bảng chưa có đích, 0 count/PK/shared-data checksum mismatch.
+- Legacy outbox có 489 sự kiện và toàn bộ ở trạng thái `PUBLISHED`.
+- `ai_search` hiện có 36 document, 178 variant facet và 81 image embedding. Text embedding 1024 chiều
+  của legacy không được copy sang target 1536 chiều; text search dùng keyword cho tới khi re-embed bằng model mới.
+
+Evidence:
+
+- `evidence/microservice-phase-10-backfill-2026-11-11.json`
+- `evidence/microservice-phase-10-data-inventory-2026-11-11.json`
+
+Traffic cut-over chưa được bật vì không có runtime/deployment đang chạy và public API surface chưa đủ:
+
+- `catalog-service` mới cung cấp `/internal/v1` sale snapshot, index document và inventory reservation; chưa
+  thay thế các public product/category/admin/wishlist/review endpoint của storefront.
+- `sales-service` mới thay thế create-order, SePay webhook và internal refund; chưa thay thế cart, order query,
+  return và notification public/admin API.
+- Vì gateway fallback vẫn cần các endpoint trên, tắt/xóa `public` ở thời điểm này sẽ gây 503 hoặc mất chức năng.
+
+Do đó bước 5-6 và V3 tiếp tục fail-closed. Cần hoàn thiện public API surface, cung cấp deployment target,
+chạy E2E qua gateway rồi mới bắt đầu stability window.

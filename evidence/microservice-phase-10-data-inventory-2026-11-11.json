@@ -1,0 +1,949 @@
+{
+  "inspectedAt": "2026-11-11T01:44:44.119105+00:00",
+  "readOnly": true,
+  "relations": [
+    {
+      "source": "public.addresses",
+      "sourceCount": 2,
+      "target": "identity.addresses",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 2,
+      "countsMatch": true,
+      "sharedColumnCount": 11,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "b8c86b505694f976854820aa92b9f605",
+      "targetPrimaryKeyChecksum": "b8c86b505694f976854820aa92b9f605",
+      "sourceSharedChecksum": "87a612c32c590bc11abc558cfbb46116",
+      "targetSharedChecksum": "87a612c32c590bc11abc558cfbb46116",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.audit_logs",
+      "sourceCount": 3,
+      "target": "sales.audit_logs",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 10,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "435fcd2fe674a78ace7dea091a285fb4",
+      "targetPrimaryKeyChecksum": "435fcd2fe674a78ace7dea091a285fb4",
+      "sourceSharedChecksum": "e42c98ae4524a7264c8e966c53bc24fd",
+      "targetSharedChecksum": "e42c98ae4524a7264c8e966c53bc24fd",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.bank_reconciliation_runs",
+      "sourceCount": 0,
+      "target": "sales.bank_reconciliation_runs",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 15,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.bank_transactions",
+      "sourceCount": 3,
+      "target": "sales.bank_transactions",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 16,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "1d97d39ed7aa97e80aec13a79181a5c4",
+      "targetPrimaryKeyChecksum": "1d97d39ed7aa97e80aec13a79181a5c4",
+      "sourceSharedChecksum": "512af5f5c2de2a5007afa73f17437051",
+      "targetSharedChecksum": "512af5f5c2de2a5007afa73f17437051",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.brands",
+      "sourceCount": 3,
+      "target": "catalog.brands",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 8,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "889ee0d76d450fb949421950220240e7",
+      "targetPrimaryKeyChecksum": "889ee0d76d450fb949421950220240e7",
+      "sourceSharedChecksum": "a19727cc63b60c560328cbaa3e7592ef",
+      "targetSharedChecksum": "a19727cc63b60c560328cbaa3e7592ef",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.cart_items",
+      "sourceCount": 0,
+      "target": "sales.cart_items",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 5,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.carts",
+      "sourceCount": 17,
+      "target": "sales.carts",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 17,
+      "countsMatch": true,
+      "sharedColumnCount": 4,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "7dfa3eb2ccbc36fe4ea55f1c1e7a7dea",
+      "targetPrimaryKeyChecksum": "7dfa3eb2ccbc36fe4ea55f1c1e7a7dea",
+      "sourceSharedChecksum": "8c66ec666187479554816af8daa17577",
+      "targetSharedChecksum": "8c66ec666187479554816af8daa17577",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.catalog_dataset_items",
+      "sourceCount": 66,
+      "target": "catalog.catalog_dataset_items",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 66,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "dataset_id",
+        "product_id"
+      ],
+      "sourcePrimaryKeyChecksum": "5f39d43b8358ce2f9c9105914571d755",
+      "targetPrimaryKeyChecksum": "5f39d43b8358ce2f9c9105914571d755",
+      "sourceSharedChecksum": "f5b79bec2055918e856b514eed70828c",
+      "targetSharedChecksum": "f5b79bec2055918e856b514eed70828c",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.catalog_datasets",
+      "sourceCount": 3,
+      "target": "catalog.catalog_datasets",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 10,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "cb6739948178e0c0f02e4a45cdd1a1e8",
+      "targetPrimaryKeyChecksum": "cb6739948178e0c0f02e4a45cdd1a1e8",
+      "sourceSharedChecksum": "12a023339fef65ea9649bf3496b89f85",
+      "targetSharedChecksum": "12a023339fef65ea9649bf3496b89f85",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.categories",
+      "sourceCount": 8,
+      "target": "catalog.categories",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 8,
+      "countsMatch": true,
+      "sharedColumnCount": 10,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "8797a18f3db64465ed6babf39cf86975",
+      "targetPrimaryKeyChecksum": "8797a18f3db64465ed6babf39cf86975",
+      "sourceSharedChecksum": "6c5d501c89a1dfa0a78763035d6b8ea7",
+      "targetSharedChecksum": "6c5d501c89a1dfa0a78763035d6b8ea7",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.colors",
+      "sourceCount": 12,
+      "target": "catalog.colors",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 12,
+      "countsMatch": true,
+      "sharedColumnCount": 8,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "4e9a0799425ee16b586ca62a7c03bfd3",
+      "targetPrimaryKeyChecksum": "4e9a0799425ee16b586ca62a7c03bfd3",
+      "sourceSharedChecksum": "1e2d72ac0f79a8748455a84ae7444131",
+      "targetSharedChecksum": "1e2d72ac0f79a8748455a84ae7444131",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.flyway_schema_history",
+      "sourceCount": 13,
+      "target": null,
+      "decision": "retain_migration_metadata"
+    },
+    {
+      "source": "public.integration_outbox",
+      "sourceCount": 489,
+      "target": null,
+      "decision": "drain_and_retire"
+    },
+    {
+      "source": "public.inventory_transactions",
+      "sourceCount": 6,
+      "target": "catalog.inventory_transactions",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 6,
+      "countsMatch": true,
+      "sharedColumnCount": 10,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "84dcd3828d8e727a3577e2160192e064",
+      "targetPrimaryKeyChecksum": "84dcd3828d8e727a3577e2160192e064",
+      "sourceSharedChecksum": "48f52732a71ffc7687e91162e0df985f",
+      "targetSharedChecksum": "48f52732a71ffc7687e91162e0df985f",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.materials",
+      "sourceCount": 3,
+      "target": "catalog.materials",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "ab77a92fca325aa1fb593d91c2829ea1",
+      "targetPrimaryKeyChecksum": "ab77a92fca325aa1fb593d91c2829ea1",
+      "sourceSharedChecksum": "309bf53629bdb46f43c717370ddddafc",
+      "targetSharedChecksum": "309bf53629bdb46f43c717370ddddafc",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.notification_templates",
+      "sourceCount": 11,
+      "target": "sales.notification_templates",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 11,
+      "countsMatch": true,
+      "sharedColumnCount": 7,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "3e5256a69cf0ebb3ea321085ce9c875d",
+      "targetPrimaryKeyChecksum": "3e5256a69cf0ebb3ea321085ce9c875d",
+      "sourceSharedChecksum": "1b1aad7380118081ba329070e2f997ac",
+      "targetSharedChecksum": "1b1aad7380118081ba329070e2f997ac",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.notifications",
+      "sourceCount": 2,
+      "target": "sales.notifications",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 2,
+      "countsMatch": true,
+      "sharedColumnCount": 15,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "6dfaa0646cff29ec61ddf6abbc60d377",
+      "targetPrimaryKeyChecksum": "6dfaa0646cff29ec61ddf6abbc60d377",
+      "sourceSharedChecksum": "97a8f1582deddc558d0c6bfd87d6dfb3",
+      "targetSharedChecksum": "97a8f1582deddc558d0c6bfd87d6dfb3",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.order_items",
+      "sourceCount": 3,
+      "target": "sales.order_items",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 13,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "970617c7f9353685e79122f26a4d6712",
+      "targetPrimaryKeyChecksum": "970617c7f9353685e79122f26a4d6712",
+      "sourceSharedChecksum": "a727f3201512e50d190b99e6a18b2ec9",
+      "targetSharedChecksum": "a727f3201512e50d190b99e6a18b2ec9",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.order_status_history",
+      "sourceCount": 6,
+      "target": "sales.order_status_history",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 6,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "6919b99173491fcd58cc5d62f1d1dc82",
+      "targetPrimaryKeyChecksum": "6919b99173491fcd58cc5d62f1d1dc82",
+      "sourceSharedChecksum": "0dd76d0c6e76e8ef108a4d606e1fd886",
+      "targetSharedChecksum": "0dd76d0c6e76e8ef108a4d606e1fd886",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.orders",
+      "sourceCount": 3,
+      "target": "sales.orders",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 23,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "3266e9f85f4b8f9a062bdfe2f7a00c5a",
+      "targetPrimaryKeyChecksum": "3266e9f85f4b8f9a062bdfe2f7a00c5a",
+      "sourceSharedChecksum": "433ada3b6a54838a35c2c8dd5684a45f",
+      "targetSharedChecksum": "433ada3b6a54838a35c2c8dd5684a45f",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.password_reset_tokens",
+      "sourceCount": 0,
+      "target": "identity.password_reset_tokens",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.payment_events",
+      "sourceCount": 2,
+      "target": "sales.payment_events",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 2,
+      "countsMatch": true,
+      "sharedColumnCount": 8,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "3927f20b75d98d1c700a921ef7ad27d7",
+      "targetPrimaryKeyChecksum": "3927f20b75d98d1c700a921ef7ad27d7",
+      "sourceSharedChecksum": "3d78e8f34c12e057aebe078e30d767b7",
+      "targetSharedChecksum": "3d78e8f34c12e057aebe078e30d767b7",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.payments",
+      "sourceCount": 3,
+      "target": "sales.payments",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 14,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "17688730698d1bd2500d39f2b2788995",
+      "targetPrimaryKeyChecksum": "17688730698d1bd2500d39f2b2788995",
+      "sourceSharedChecksum": "04ba5ef60408a4d587fbf865506873d6",
+      "targetSharedChecksum": "04ba5ef60408a4d587fbf865506873d6",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.product_images",
+      "sourceCount": 81,
+      "target": "catalog.product_images",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 81,
+      "countsMatch": true,
+      "sharedColumnCount": 8,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "8b1e943a38f16d35bd122e73af432300",
+      "targetPrimaryKeyChecksum": "8b1e943a38f16d35bd122e73af432300",
+      "sourceSharedChecksum": "b0838e9193c2cda0dfea1908e420dce6",
+      "targetSharedChecksum": "b0838e9193c2cda0dfea1908e420dce6",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.product_materials",
+      "sourceCount": 0,
+      "target": "catalog.product_materials",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 3,
+      "primaryKey": [
+        "product_id",
+        "material_id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.product_sports",
+      "sourceCount": 36,
+      "target": "catalog.product_sports",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 36,
+      "countsMatch": true,
+      "sharedColumnCount": 2,
+      "primaryKey": [
+        "product_id",
+        "sport_id"
+      ],
+      "sourcePrimaryKeyChecksum": "6090089b4aa7f63cfb824f7f67a61951",
+      "targetPrimaryKeyChecksum": "6090089b4aa7f63cfb824f7f67a61951",
+      "sourceSharedChecksum": "6090089b4aa7f63cfb824f7f67a61951",
+      "targetSharedChecksum": "6090089b4aa7f63cfb824f7f67a61951",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.product_technologies",
+      "sourceCount": 0,
+      "target": "catalog.product_technologies",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 2,
+      "primaryKey": [
+        "product_id",
+        "technology_id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.product_types",
+      "sourceCount": 5,
+      "target": "catalog.product_types",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 5,
+      "countsMatch": true,
+      "sharedColumnCount": 7,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "484fc0036b599e71dbf5f70a9f2eaa2d",
+      "targetPrimaryKeyChecksum": "484fc0036b599e71dbf5f70a9f2eaa2d",
+      "sourceSharedChecksum": "81d4838eb6a652bc8d3d700f1a4e60b3",
+      "targetSharedChecksum": "81d4838eb6a652bc8d3d700f1a4e60b3",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.product_use_cases",
+      "sourceCount": 0,
+      "target": "catalog.product_use_cases",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 2,
+      "primaryKey": [
+        "product_id",
+        "use_case_id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.product_variants",
+      "sourceCount": 178,
+      "target": "catalog.product_variants",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 178,
+      "countsMatch": true,
+      "sharedColumnCount": 12,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "951977b137b329301c3c0ae474378a05",
+      "targetPrimaryKeyChecksum": "951977b137b329301c3c0ae474378a05",
+      "sourceSharedChecksum": "bb91c0ce92071731270e4c78496b955a",
+      "targetSharedChecksum": "bb91c0ce92071731270e4c78496b955a",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.products",
+      "sourceCount": 36,
+      "target": "catalog.products",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 36,
+      "countsMatch": true,
+      "sharedColumnCount": 10,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "12c40f200cc1aaa69d1493264a9879f9",
+      "targetPrimaryKeyChecksum": "12c40f200cc1aaa69d1493264a9879f9",
+      "sourceSharedChecksum": "1733f89b1e067fe30284cb918a7127fa",
+      "targetSharedChecksum": "1733f89b1e067fe30284cb918a7127fa",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.refresh_tokens",
+      "sourceCount": 18,
+      "target": "identity.refresh_tokens",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 18,
+      "countsMatch": true,
+      "sharedColumnCount": 7,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "92a74fa33e35b634da5c0d21829f9f29",
+      "targetPrimaryKeyChecksum": "92a74fa33e35b634da5c0d21829f9f29",
+      "sourceSharedChecksum": "8308664593f982209ef31a2cf1403367",
+      "targetSharedChecksum": "8308664593f982209ef31a2cf1403367",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.refunds",
+      "sourceCount": 1,
+      "target": "sales.refunds",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 1,
+      "countsMatch": true,
+      "sharedColumnCount": 22,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "7837fe22363259a857cdf45077377a8a",
+      "targetPrimaryKeyChecksum": "7837fe22363259a857cdf45077377a8a",
+      "sourceSharedChecksum": "41d0b2e94c005b41f02da08f2c455cc0",
+      "targetSharedChecksum": "41d0b2e94c005b41f02da08f2c455cc0",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.return_items",
+      "sourceCount": 0,
+      "target": "sales.return_items",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 11,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.returns",
+      "sourceCount": 0,
+      "target": "sales.returns",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 12,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.site_settings",
+      "sourceCount": 0,
+      "target": "sales.site_settings",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 8,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.size_systems",
+      "sourceCount": 3,
+      "target": "catalog.size_systems",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "dabbe1fcda3f7147f0ef639b9a9df53c",
+      "targetPrimaryKeyChecksum": "dabbe1fcda3f7147f0ef639b9a9df53c",
+      "sourceSharedChecksum": "fc84d511c8edc7c155bab0911ffc0e7c",
+      "targetSharedChecksum": "fc84d511c8edc7c155bab0911ffc0e7c",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.sizes",
+      "sourceCount": 17,
+      "target": "catalog.sizes",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 17,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "fb6864d621d5bf93d3931d2b215fcd0e",
+      "targetPrimaryKeyChecksum": "fb6864d621d5bf93d3931d2b215fcd0e",
+      "sourceSharedChecksum": "67597b49f4d205af1188b3b19e2b7ed7",
+      "targetSharedChecksum": "67597b49f4d205af1188b3b19e2b7ed7",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.sports",
+      "sourceCount": 2,
+      "target": "catalog.sports",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 2,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "aff5ab07f4e1962e038b13ed002d775d",
+      "targetPrimaryKeyChecksum": "aff5ab07f4e1962e038b13ed002d775d",
+      "sourceSharedChecksum": "f1f198223c8cbea64b1d842c98e01779",
+      "targetSharedChecksum": "f1f198223c8cbea64b1d842c98e01779",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.technologies",
+      "sourceCount": 3,
+      "target": "catalog.technologies",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "fd3d27395dbeeb505e6e4b070fad74d2",
+      "targetPrimaryKeyChecksum": "fd3d27395dbeeb505e6e4b070fad74d2",
+      "sourceSharedChecksum": "51df9b2666178afbfaac693004d54c7c",
+      "targetSharedChecksum": "51df9b2666178afbfaac693004d54c7c",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.use_cases",
+      "sourceCount": 3,
+      "target": "catalog.use_cases",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 6,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "910a04602560fbada0b5df258c1cd943",
+      "targetPrimaryKeyChecksum": "910a04602560fbada0b5df258c1cd943",
+      "sourceSharedChecksum": "f83471c148252030124a02e44eb45b8c",
+      "targetSharedChecksum": "f83471c148252030124a02e44eb45b8c",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.user_identities",
+      "sourceCount": 1,
+      "target": "identity.user_identities",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 1,
+      "countsMatch": true,
+      "sharedColumnCount": 8,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "0bc3b417afd339ef3dce6b64f8db28fa",
+      "targetPrimaryKeyChecksum": "0bc3b417afd339ef3dce6b64f8db28fa",
+      "sourceSharedChecksum": "42bd38ad9bdb43128825fca4d0885a67",
+      "targetSharedChecksum": "42bd38ad9bdb43128825fca4d0885a67",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.user_interactions",
+      "sourceCount": 0,
+      "target": "recommendation.user_interactions",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 11,
+      "primaryKey": [
+        "event_id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.users",
+      "sourceCount": 3,
+      "target": "identity.users",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 3,
+      "countsMatch": true,
+      "sharedColumnCount": 11,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "440b8e101af4c3f05be023cb6a23470f",
+      "targetPrimaryKeyChecksum": "440b8e101af4c3f05be023cb6a23470f",
+      "sourceSharedChecksum": "545f0e3b42fc0cdbaa22c2b29373bb04",
+      "targetSharedChecksum": "545f0e3b42fc0cdbaa22c2b29373bb04",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.wishlist_items",
+      "sourceCount": 0,
+      "target": "catalog.wishlist_items",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 3,
+      "primaryKey": [],
+      "sourcePrimaryKeyChecksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "targetPrimaryKeyChecksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    },
+    {
+      "source": "public.wishlists",
+      "sourceCount": 0,
+      "target": "catalog.wishlists",
+      "decision": null,
+      "targetExists": true,
+      "targetCount": 0,
+      "countsMatch": true,
+      "sharedColumnCount": 3,
+      "primaryKey": [
+        "id"
+      ],
+      "sourcePrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetPrimaryKeyChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "targetSharedChecksum": "d41d8cd98f00b204e9800998ecf8427e",
+      "primaryKeysMatch": true,
+      "sharedDataMatch": true
+    }
+  ],
+  "summary": {
+    "publicTableCount": 46,
+    "mappedTableCount": 44,
+    "unresolvedTables": [],
+    "missingTargetTables": [],
+    "mismatchedTables": [],
+    "readyForBackfill": true,
+    "readyForCutover": true
+  },
+  "legacySearchTables": [
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "embedding_models",
+      "row_count": 2
+    },
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "indexing_job_items",
+      "row_count": 621
+    },
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "indexing_jobs",
+      "row_count": 11
+    },
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "processed_events",
+      "row_count": 162
+    },
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "product_image_embeddings",
+      "row_count": 81
+    },
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "product_search_documents",
+      "row_count": 36
+    },
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "product_text_embeddings",
+      "row_count": 36
+    },
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "search_variant_facets",
+      "row_count": 178
+    },
+    {
+      "schema_name": "ai_retrieval",
+      "table_name": "usage_events",
+      "row_count": 81
+    }
+  ],
+  "targetSearchTables": [
+    {
+      "schema_name": "ai_search",
+      "table_name": "image_embeddings",
+      "row_count": 81
+    },
+    {
+      "schema_name": "ai_search",
+      "table_name": "indexing_jobs",
+      "row_count": 0
+    },
+    {
+      "schema_name": "ai_search",
+      "table_name": "processed_events",
+      "row_count": 0
+    },
+    {
+      "schema_name": "ai_search",
+      "table_name": "search_documents",
+      "row_count": 36
+    },
+    {
+      "schema_name": "ai_search",
+      "table_name": "text_embeddings",
+      "row_count": 0
+    },
+    {
+      "schema_name": "ai_search",
+      "table_name": "variant_facets",
+      "row_count": 178
+    }
+  ],
+  "legacyOutboxStatus": {
+    "PUBLISHED": 489
+  },
+  "otherActiveDatabaseSessions": 0
+}

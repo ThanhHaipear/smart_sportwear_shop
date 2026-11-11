@@ -1,0 +1,167 @@
+{
+  "appliedAt": "2026-11-11T01:44:04.972043+00:00",
+  "committed": true,
+  "migrations": [
+    "catalog-service/src/main/resources/db/migration/V3__complete_legacy_catalog_ownership.sql",
+    "sales-service/src/main/resources/db/migration/V3__complete_legacy_sales_ownership.sql",
+    "services/search-service/migrations/V2__backfill_legacy_search_read_model.sql"
+  ],
+  "counts": [
+    {
+      "source": "public.inventory_transactions",
+      "target": "catalog.inventory_transactions",
+      "sourceCount": 6,
+      "targetCount": 6,
+      "match": true
+    },
+    {
+      "source": "public.size_systems",
+      "target": "catalog.size_systems",
+      "sourceCount": 3,
+      "targetCount": 3,
+      "match": true
+    },
+    {
+      "source": "public.sizes",
+      "target": "catalog.sizes",
+      "sourceCount": 17,
+      "targetCount": 17,
+      "match": true
+    },
+    {
+      "source": "public.product_types",
+      "target": "catalog.product_types",
+      "sourceCount": 5,
+      "targetCount": 5,
+      "match": true
+    },
+    {
+      "source": "public.sports",
+      "target": "catalog.sports",
+      "sourceCount": 2,
+      "targetCount": 2,
+      "match": true
+    },
+    {
+      "source": "public.use_cases",
+      "target": "catalog.use_cases",
+      "sourceCount": 3,
+      "targetCount": 3,
+      "match": true
+    },
+    {
+      "source": "public.materials",
+      "target": "catalog.materials",
+      "sourceCount": 3,
+      "targetCount": 3,
+      "match": true
+    },
+    {
+      "source": "public.technologies",
+      "target": "catalog.technologies",
+      "sourceCount": 3,
+      "targetCount": 3,
+      "match": true
+    },
+    {
+      "source": "public.colors",
+      "target": "catalog.colors",
+      "sourceCount": 12,
+      "targetCount": 12,
+      "match": true
+    },
+    {
+      "source": "public.catalog_datasets",
+      "target": "catalog.catalog_datasets",
+      "sourceCount": 3,
+      "targetCount": 3,
+      "match": true
+    },
+    {
+      "source": "public.catalog_dataset_items",
+      "target": "catalog.catalog_dataset_items",
+      "sourceCount": 66,
+      "targetCount": 66,
+      "match": true
+    },
+    {
+      "source": "public.product_sports",
+      "target": "catalog.product_sports",
+      "sourceCount": 36,
+      "targetCount": 36,
+      "match": true
+    },
+    {
+      "source": "public.product_use_cases",
+      "target": "catalog.product_use_cases",
+      "sourceCount": 0,
+      "targetCount": 0,
+      "match": true
+    },
+    {
+      "source": "public.product_materials",
+      "target": "catalog.product_materials",
+      "sourceCount": 0,
+      "targetCount": 0,
+      "match": true
+    },
+    {
+      "source": "public.product_technologies",
+      "target": "catalog.product_technologies",
+      "sourceCount": 0,
+      "targetCount": 0,
+      "match": true
+    },
+    {
+      "source": "public.bank_reconciliation_runs",
+      "target": "sales.bank_reconciliation_runs",
+      "sourceCount": 0,
+      "targetCount": 0,
+      "match": true
+    },
+    {
+      "source": "public.notification_templates",
+      "target": "sales.notification_templates",
+      "sourceCount": 11,
+      "targetCount": 11,
+      "match": true
+    },
+    {
+      "source": "public.site_settings",
+      "target": "sales.site_settings",
+      "sourceCount": 0,
+      "targetCount": 0,
+      "match": true
+    },
+    {
+      "source": "public.audit_logs",
+      "target": "sales.audit_logs",
+      "sourceCount": 3,
+      "targetCount": 3,
+      "match": true
+    },
+    {
+      "source": "ai_retrieval.product_search_documents",
+      "target": "ai_search.search_documents",
+      "sourceCount": 36,
+      "targetCount": 36,
+      "match": true
+    },
+    {
+      "source": "ai_retrieval.search_variant_facets",
+      "target": "ai_search.variant_facets",
+      "sourceCount": 178,
+      "targetCount": 178,
+      "match": true
+    },
+    {
+      "source": "ai_retrieval.product_image_embeddings",
+      "target": "ai_search.image_embeddings",
+      "sourceCount": 81,
+      "targetCount": 81,
+      "match": true
+    }
+  ],
+  "allCountsMatch": true,
+  "secretsPrinted": false
+}
