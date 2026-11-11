@@ -1,0 +1,87 @@
+{
+  "auditedAt": "2026-11-11T12:26:56.794390+00:00",
+  "readOnly": true,
+  "sessions": [
+    {
+      "usename": "authenticator",
+      "application_name": "PostgREST 14.18",
+      "state": "idle",
+      "connection_count": 2
+    },
+    {
+      "usename": "catalog_app",
+      "application_name": "PostgreSQL JDBC Driver",
+      "state": "idle",
+      "connection_count": 2
+    },
+    {
+      "usename": "catalog_app",
+      "application_name": "Supavisor",
+      "state": "idle",
+      "connection_count": 1
+    },
+    {
+      "usename": "chatbot_app",
+      "application_name": "Supavisor",
+      "state": "idle",
+      "connection_count": 1
+    },
+    {
+      "usename": "identity_app",
+      "application_name": "PostgreSQL JDBC Driver",
+      "state": "idle",
+      "connection_count": 3
+    },
+    {
+      "usename": "pgbouncer",
+      "application_name": "Supavisor (auth_query)",
+      "state": "idle",
+      "connection_count": 5
+    },
+    {
+      "usename": "pgbouncer",
+      "application_name": "unspecified",
+      "state": "idle",
+      "connection_count": 1
+    },
+    {
+      "usename": "postgres",
+      "application_name": "pg_net 0.20.4",
+      "state": "idle",
+      "connection_count": 1
+    },
+    {
+      "usename": "sales_app",
+      "application_name": "PostgreSQL JDBC Driver",
+      "state": "idle",
+      "connection_count": 2
+    },
+    {
+      "usename": "supabase_admin",
+      "application_name": "pg_cron scheduler",
+      "state": null,
+      "connection_count": 1
+    },
+    {
+      "usename": "supabase_admin",
+      "application_name": "postgres_exporter",
+      "state": "idle",
+      "connection_count": 1
+    },
+    {
+      "usename": "supabase_admin",
+      "application_name": "unspecified",
+      "state": "idle",
+      "connection_count": 1
+    }
+  ],
+  "legacyMarkers": [
+    "legacy",
+    "ecommerce",
+    "backend-monolith",
+    "smart-sportswear-backend"
+  ],
+  "suspectedLegacySessions": [],
+  "legacyWriterSessionDetected": false,
+  "secretsPrinted": false
+}

@@ -18,8 +18,32 @@ begin
   end if;
 end $$;
 
--- Abort instead of cascading over an unknown dependency. The ownership audit
--- must report no legacy relation before Phase 10 can be marked DONE.
+-- Retire approved objects inside the legacy search schema explicitly. The
+-- query functions depend on legacy tables, while trigger/validation functions
+-- are released when those tables are removed. Every statement stays RESTRICT
+-- so an unexpected dependency outside this allowlist aborts the transaction.
+drop function if exists ai_retrieval.search_product_text_exact(uuid,extensions.vector,integer) restrict;
+drop function if exists ai_retrieval.search_product_images_exact(uuid,extensions.vector,integer) restrict;
+
+drop table if exists
+  ai_retrieval.embedding_models,
+  ai_retrieval.product_search_documents,
+  ai_retrieval.search_variant_facets,
+  ai_retrieval.processed_events,
+  ai_retrieval.product_text_embeddings,
+  ai_retrieval.product_image_embeddings,
+  ai_retrieval.indexing_jobs,
+  ai_retrieval.indexing_job_items,
+  ai_retrieval.usage_events
+restrict;
+
+drop function if exists ai_retrieval.set_updated_at() restrict;
+drop function if exists ai_retrieval.validate_product_text_embedding() restrict;
+drop function if exists ai_retrieval.validate_product_image_embedding() restrict;
+drop function if exists ai_retrieval.protect_embedding_model_identity() restrict;
+
+-- Abort instead of cascading over any object not covered above. The ownership
+-- audit must report no legacy relation before Phase 10 can be marked DONE.
 drop schema if exists ai_retrieval restrict;
 
 do $$

@@ -2,13 +2,12 @@
 
 ## Trạng thái
 
-Phase 10 đã hoàn thành phần implementation ngày 11/11/2026, trạng thái
-`READY_FOR_FINALIZATION / DESTRUCTIVE_APPROVAL_REQUIRED`.
+Phase 10 đã hoàn tất ngày 11/11/2026, trạng thái `DONE / FINALIZED`.
 
 Migration chốt GRANT, cleanup FK, manifest ownership, audit read-only, destructive-finalization gate và
-rollback policy đã có đầy đủ. Việc áp dụng V3 lên Supabase **chưa được thực hiện** vì bằng chứng Phase 6-8
-và cấu hình mặc định hiện vẫn ghi public route/write authority ở trạng thái `CUTOVER_HELD`. Đây là gate bắt
-buộc của chính kế hoạch migration, không phải lỗi implementation.
+rollback policy đã có đầy đủ. V3 đã commit trên Supabase lúc `2026-11-11T12:30:42Z` sau khi backup/restore,
+parity, writer audit, stability window và phê duyệt destructive đều đạt. Schema `ai_retrieval` và toàn bộ
+relation legacy thuộc allowlist trong `public` đã được retire; audit hậu kiểm bắt buộc đạt.
 
 ## Ownership cuối cùng
 
@@ -77,20 +76,24 @@ legacy và schema `ai_retrieval`, đúng với trạng thái chưa chạy V3. Ev
 - Sau mọi grant tạm phải revoke trước hạn và audit lại. Hướng dẫn chi tiết nằm tại
   `infra/database/phase10/README.md`.
 
-## Điều kiện còn thiếu để đóng Phase 10
+## Bằng chứng đóng Phase 10
 
 - Route/write cut-over runtime đã được redeploy từ source hiện tại; gateway runtime không còn fallback legacy.
 - Stability window sau redeploy đã kết thúc và đạt 20/20 check; evidence
   `evidence/microservice-phase-11-stability-window-2026-11-11.json`.
-- Restore-point mới ngay trước cleanup: đã tạo và restore thử thành công ngày 11/11/2026; evidence
-  `evidence/microservice-phase-10-restore-drill-2026-11-11.json`.
-- Còn thiếu xác nhận destructive rõ ràng để chạy V3 trên Supabase, sau đó chạy live audit
-  `--require-legacy-retired` và lưu evidence cuối.
+- Restore-point mới ngay trước cleanup đã được tạo lúc 19:28 và restore thử thành công; evidence
+  `evidence/microservice-phase-10-v3-restore-drill-2026-11-11.json`.
+- V3 đã commit trong một transaction: trước cleanup có 46 relation `public`; sau cleanup còn 0 relation
+  legacy và schema `ai_retrieval` không còn. Evidence:
+  `evidence/microservice-phase-10-finalization-2026-11-11.json`.
+- Live audit với `--require-legacy-retired` đạt: 6/6 role đúng ownership, 0 quyền ghi chéo, 0 FK xuyên service,
+  không còn legacy schema/relation. Evidence:
+  `evidence/microservice-phase-10-post-v3-audit-2026-11-11.json`.
 
 Incremental parity cuối ngày 11/11/2026 xác nhận mọi dòng nguồn legacy đều tồn tại và khớp dữ liệu dùng chung
 ở schema đích. `sales.carts` có thêm 3 dòng và `catalog.wishlists` có thêm 1 dòng được tạo sau cut-over;
 không có source-only row hoặc shared-data mismatch. Evidence:
-`evidence/microservice-phase-10-final-parity-2026-11-11.json` với `readyForLegacyRetirement=true`.
+`evidence/microservice-phase-10-pre-v3-parity-2026-11-11.json` với `readyForLegacyRetirement=true`.
 
 ## Cut-over attempt ngày 11/11/2026
 
@@ -137,7 +140,6 @@ Live Supabase audit cùng ngày tiếp tục đạt: 6/6 runtime role chỉ ghi 
 0 cross-schema write grant, 0 FK xuyên service và `passed=true`. Evidence:
 `evidence/microservice-phase-10-local-cutover-2026-11-11.json`.
 
-Phase 10 implementation vì vậy đã đủ điều kiện bàn giao sang Phase 11, nhưng destructive finalization vẫn
-**fail-closed**. Gateway còn fallback `legacy_upstream` cho surface chưa được thay thế hoàn toàn; các workflow
-cancel/return/refund, notification SSE, review và product-image upload vẫn cần hoàn thiện và E2E. V3 chỉ được
-mở khóa sau khi Phase 11 bỏ fallback, kết thúc stability window được duyệt và có restore point mới.
+Phase 11 đã loại bỏ gateway fallback, hoàn tất E2E cancel/return/refund và kết thúc stability window trước khi
+V3 được mở khóa. Sau finalization, gateway và các service Docker tiếp tục hoạt động; health, product và public
+settings smoke đều trả 200, log hậu kiểm không có lỗi truy cập relation legacy.

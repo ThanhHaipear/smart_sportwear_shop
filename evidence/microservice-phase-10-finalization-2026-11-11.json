@@ -1,0 +1,14 @@
+{
+  "phase": 10,
+  "finalizedAt": "2026-11-11T12:30:42.607725+00:00",
+  "approvalId": "user-explicit-v3-approval-2026-11-11",
+  "restoreEvidence": "backups/microservice-phase-10-v3-final/supabase-v13-20261111-192808.restore-evidence.json",
+  "parityEvidence": "evidence/microservice-phase-10-pre-v3-parity-2026-11-11.json",
+  "writerEvidence": "evidence/microservice-phase-11-pre-v3-writer-audit-2026-11-11.json",
+  "stabilityWindowEndedAt": "2026-11-11T12:10:28Z",
+  "transactionCommitted": true,
+  "publicRelationsBefore": 46,
+  "legacySchemaPresentAfter": false,
+  "legacyPublicRelationsAfter": 0,
+  "secretsPrinted": false
+}

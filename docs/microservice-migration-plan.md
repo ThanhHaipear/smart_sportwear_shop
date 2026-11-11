@@ -14,9 +14,9 @@
 | 7. Tách `identity-service` | `DONE / LOCAL_CUTOVER` | [Phase 7 identity service](microservice-phase-7-identity-service.md): gateway local đã chuyển auth/user allowlist và event writer; smoke tới `identity_upstream` đạt, stability window production chưa hoàn tất |
 | 8. Đổi core thành `sales-service` | `DONE / EXPANDED_LOCAL_CUTOVER` | [Phase 8 sales service](microservice-phase-8-sales-service.md): gateway local đã chuyển cart, checkout, create/query order, payment, notification, public settings và phần API quản trị; các workflow cancel/return/refund/SSE còn nằm trong backlog Phase 11 |
 | 9. Gateway và vận hành | `DONE` | [Phase 9 gateway và vận hành](microservice-phase-9-gateway-operations.md): gateway allowlist/rate-limit/trace, application port isolation, Prometheus/Grafana/Tempo, SLO/alert/runbook và resilience gate đạt; kill switch riêng giữ từng context trên stable upstream cho tới cut-over gate của service sở hữu |
-| 10. Dọn shared database | `READY_FOR_FINALIZATION / DESTRUCTIVE_APPROVAL_REQUIRED` | [Phase 10 database cleanup](microservice-phase-10-database-cleanup.md): restore drill, final parity, writer audit và stability window đã đạt; chỉ còn xác nhận destructive để chạy V3 và audit sau cleanup |
+| 10. Dọn shared database | `DONE / FINALIZED` | [Phase 10 database cleanup](microservice-phase-10-database-cleanup.md): V3 đã commit trên Supabase; `ai_retrieval` và 45 bảng nghiệp vụ legacy trong `public` đã được retire, audit hậu kiểm đạt |
 | 11. Loại bỏ backend legacy | `DONE / LOCAL_ACCEPTANCE` | [Phase 11 legacy retirement](microservice-phase-11-legacy-retirement.md): gateway no-fallback, E2E COD/VietQR/cancel/return/refund, writer-stop audit, redeploy và stability window đều đạt |
-| 12. Nghiệm thu hoàn tất tách service | `DONE / LOCAL_ACCEPTANCE` | [Phase 12 final acceptance](microservice-phase-12-final-acceptance.md): 6 REST contract v1, gate tổng hợp 20/20, toàn bộ service/gateway/frontend test đạt; finalization production của Phase 10-11 vẫn fail-closed |
+| 12. Nghiệm thu hoàn tất tách service | `DONE / LOCAL_ACCEPTANCE` | [Phase 12 final acceptance](microservice-phase-12-final-acceptance.md): 6 REST contract v1, gate tổng hợp 20/20, toàn bộ service/gateway/frontend test đạt; Phase 10 đã finalization thành công trên Supabase |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 
@@ -211,12 +211,12 @@ Yêu cầu cho mọi consumer:
 ### 8.2 Supabase
 
 - [x] Backup database và kiểm tra restore trước migration đầu tiên ([evidence](microservice-phase-0-backup-restore.md)).
-- [ ] Tạo các schema `identity`, `catalog`, `sales`, `ai_search`, `chatbot`, `recommendation`.
-- [ ] Tạo role ứng dụng và role migration riêng cho từng service.
-- [ ] Thu hồi `CREATE` không cần thiết trên `public`.
-- [ ] Định nghĩa search path tường minh cho từng datasource.
+- [x] Tạo các schema `identity`, `catalog`, `sales`, `ai_search`, `chatbot`, `recommendation`.
+- [x] Tạo role ứng dụng và role migration riêng cho từng service.
+- [x] Thu hồi `CREATE` không cần thiết trên `public`.
+- [x] Định nghĩa search path tường minh cho từng datasource.
 - [ ] Đặt pool khởi điểm 2-4 connection/service và theo dõi connection usage.
-- [ ] Viết permission test: role không được ghi ngoài schema sở hữu.
+- [x] Viết permission test: role không được ghi ngoài schema sở hữu.
 - [ ] Không sửa migration V1-V13 đã áp dụng; migration chuyển đổi phải là version mới.
 - [ ] Không di chuyển bảng bằng Table Editor; mọi thay đổi phải qua migration có review.
 
