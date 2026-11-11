@@ -1,0 +1,75 @@
+openapi: 3.1.0
+info:
+  title: Smart Sportswear Chatbot Service
+  version: 1.0.0
+paths:
+  /chat:
+    post:
+      summary: Process one conversation turn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ChatRequest' }
+      responses:
+        '200':
+          description: Completed conversation turn
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ChatResponse' }
+        '422': { description: Invalid request }
+  /chat/stream:
+    post:
+      summary: Process one conversation turn as Server-Sent Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ChatRequest' }
+      responses:
+        '200':
+          description: SSE delta frames followed by a done frame
+          content:
+            text/event-stream:
+              schema: { type: string }
+  /health/ready:
+    get:
+      summary: Report dependency readiness
+      responses:
+        '200': { description: Ready }
+        '503': { description: Not ready }
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required: [sessionId, message]
+      properties:
+        sessionId: { type: string, minLength: 1, maxLength: 128 }
+        accessToken: { type: [string, 'null'], maxLength: 4096 }
+        message: { type: string, minLength: 1, maxLength: 4000 }
+        channel: { type: string, minLength: 1, maxLength: 32, default: web }
+        isNewSession: { type: boolean, default: false }
+    ToolCall:
+      type: object
+      required: [tool, result]
+      properties:
+        tool: { type: string }
+        result: { type: object, additionalProperties: true }
+    SessionState:
+      type: object
+      required: [sessionId, awaitingConfirmation]
+      properties:
+        sessionId: { type: string }
+        intent: { type: [string, 'null'] }
+        selectedTool: { type: [string, 'null'] }
+        blockedReason: { type: [string, 'null'] }
+        awaitingConfirmation: { type: boolean }
+        pendingAction: { type: [string, 'null'] }
+    ChatResponse:
+      type: object
+      required: [reply, toolCalls, suggestions, sessionState]
+      properties:
+        reply: { type: string }
+        toolCalls: { type: array, items: { $ref: '#/components/schemas/ToolCall' } }
+        suggestions: { type: array, items: { type: string } }
+        sessionState: { $ref: '#/components/schemas/SessionState' }

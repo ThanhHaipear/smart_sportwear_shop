@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: Smart Sportswear Recommendation Service
+  version: 1.0.0
+paths:
+  /api/v1/recommendations/products/{product_id}:
+    get:
+      summary: Recommend products related to one product
+      parameters:
+        - { name: product_id, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100 } }
+      responses:
+        '200':
+          description: Ranked recommendations
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RecommendationResponse' }
+  /api/v1/recommendations/cart:
+    post:
+      summary: Recommend from the current cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sourceProductIds]
+              properties:
+                sourceProductIds:
+                  type: array
+                  minItems: 1
+                  maxItems: 100
+                  items: { type: string, format: uuid }
+                limit: { type: [integer, 'null'], minimum: 1, maximum: 100 }
+      responses:
+        '200':
+          description: Ranked recommendations
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RecommendationResponse' }
+  /api/v1/recommendations/interactions:
+    post:
+      summary: Record an idempotent versioned interaction event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, additionalProperties: true }
+      responses:
+        '202': { description: Accepted or already processed }
+  /internal/v1/events:
+    post:
+      summary: Apply a versioned integration event idempotently
+      security: [{ serviceToken: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, additionalProperties: true }
+      responses:
+        '200': { description: Processed or already processed }
+        '401': { description: Invalid service token }
+components:
+  securitySchemes:
+    serviceToken: { type: apiKey, in: header, name: X-Internal-Service-Token }
+  schemas:
+    ProductSnapshot:
+      type: object
+      required: [id, name, slug, availableQuantity, status]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        slug: { type: string }
+        thumbnailUrl: { type: [string, 'null'] }
+        minPrice: { type: [number, 'null'] }
+        maxPrice: { type: [number, 'null'] }
+        availableQuantity: { type: integer }
+        status: { type: string }
+    RecommendationItem:
+      type: object
+      required: [product, score, algorithm, reason]
+      properties:
+        product: { $ref: '#/components/schemas/ProductSnapshot' }
+        score: { type: number }
+        algorithm: { type: string }
+        reason: { type: string }
+        support: { type: number }
+        confidence: { type: number }
+        lift: { type: number }
+        pairCount: { type: integer }
+    RecommendationResponse:
+      type: object
+      required: [requestId, sourceProductIds, type, modelVersion, items]
+      properties:
+        requestId: { type: string, format: uuid }
+        sourceProductId: { type: [string, 'null'], format: uuid }
+        sourceProductIds: { type: array, items: { type: string, format: uuid } }
+        type: { type: string }
+        modelVersion: { type: string }
+        items: { type: array, items: { $ref: '#/components/schemas/RecommendationItem' } }

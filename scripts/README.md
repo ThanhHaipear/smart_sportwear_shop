@@ -33,3 +33,15 @@ cho file PowerShell `.ps1` cùng tên.
 .\scripts\maintenance\backfill-catalog-index.ps1
 .\scripts\maintenance\backfill-product-embeddings.ps1
 ```
+
+## Nghiệm thu microservice
+
+Gate tổng hợp cuối của sáu service:
+
+```powershell
+.\scripts\verify-microservice-phase-12.ps1 -StaticOnly
+.\scripts\verify-microservice-phase-12.ps1 -EvidencePath evidence/microservice-phase-12-local-acceptance.json
+```
+
+Xem điều kiện chạy permission probe live và các gate production còn giữ tại
+`docs/microservice-phase-12-final-acceptance.md`.

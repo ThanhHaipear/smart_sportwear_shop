@@ -1,6 +1,6 @@
-# Integration event contracts
+# Integration contracts
 
-Các file trong thư mục này là contract dùng chung giữa producer và consumer. Contract đã phát hành là bất biến; thay đổi không tương thích phải tạo version/file mới.
+Các file trong thư mục này là event và REST contract dùng chung giữa producer và consumer. Contract đã phát hành là bất biến; thay đổi không tương thích phải tạo version/file mới.
 
 ## Quy tắc v1
 
@@ -21,3 +21,6 @@ Các file trong thư mục này là contract dùng chung giữa producer và con
 | `recommendation-interaction-event-v1.schema.json` | Gateway/Catalog/Sales | Recommendation | `business.events` / `interaction.recorded` |
 | `recommendation-catalog-product-event-v1.schema.json` | Catalog | Recommendation | `catalog.events` / `product.#` |
 | `identity-user-event-v1.schema.json` | Identity | Cac service luu user reference | `identity.events` / `identity.user.*.v1` |
+
+REST contract OpenAPI v1 của cả sáu service nằm trong `contracts/rest/*-service-v1.yaml`. File contract là
+nguồn version hóa để review compatibility; OpenAPI sinh động của từng runtime vẫn dùng để phát hiện drift trong test.

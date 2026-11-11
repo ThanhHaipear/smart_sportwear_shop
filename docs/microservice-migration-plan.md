@@ -16,6 +16,7 @@
 | 9. Gateway và vận hành | `DONE` | [Phase 9 gateway và vận hành](microservice-phase-9-gateway-operations.md): gateway allowlist/rate-limit/trace, application port isolation, Prometheus/Grafana/Tempo, SLO/alert/runbook và resilience gate đạt; kill switch riêng giữ từng context trên stable upstream cho tới cut-over gate của service sở hữu |
 | 10. Dọn shared database | `IMPLEMENTED / FINALIZATION_HELD` | [Phase 10 database cleanup](microservice-phase-10-database-cleanup.md): GRANT/FK/legacy cleanup, ownership audit và rollback policy đã có; V3 giữ chưa chạy cho tới khi route/write cut-over, stability window và restore-point được duyệt |
 | 11. Loại bỏ backend legacy | `IMPLEMENTED / ACCEPTANCE_HELD` | [Phase 11 legacy retirement](microservice-phase-11-legacy-retirement.md): API/endpoint inventory/gateway no-fallback và local regression đã hoàn tất; E2E acceptance, stability window, writer-stop và restore point còn là gate trước cleanup V3 |
+| 12. Nghiệm thu hoàn tất tách service | `DONE / LOCAL_ACCEPTANCE` | [Phase 12 final acceptance](microservice-phase-12-final-acceptance.md): 6 REST contract v1, gate tổng hợp 20/20, toàn bộ service/gateway/frontend test đạt; finalization production của Phase 10-11 vẫn fail-closed |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 
@@ -189,6 +190,8 @@ Yêu cầu cho mọi consumer:
 | 8. Đổi core thành `sales-service` | Xóa module đã tách; chuyển sales tables sang schema; giữ SePay ingress, order/payment/refund transaction | Sales service độc lập, schema `sales` | E2E đặt hàng COD/VietQR, webhook trùng, late payment, refund đều đạt | Route về core release trước; restore database theo runbook |
 | 9. Gateway và vận hành | Đặt một public entrypoint; rate limit; health/readiness; metrics/log/tracing; deployment manifests | Gateway, dashboards, runbook, SLO | Không public internal API; trace xuyên service; diễn tập lỗi thành công | Route trực tiếp service release ổn định trước đó |
 | 10. Dọn shared database | Thu hồi quyền chéo; bỏ FK xuyên service; bỏ bảng/view tạm; chốt ownership | GRANT cuối cùng, migration cleanup, audit report | Mỗi role chỉ ghi schema sở hữu; permission test đạt | Khôi phục grant tạm thời bằng migration có thời hạn |
+| 11. Loại bỏ backend legacy | Đóng endpoint còn thiếu; bỏ gateway fallback; kiểm kê toàn bộ frontend surface | Owner mới cho mọi endpoint, no-fallback gate, E2E acceptance | Không còn traffic/writer legacy; E2E và stability window đạt | Rollback image/route trước V3; không dual-write |
+| 12. Nghiệm thu hoàn tất tách service | Chốt contract REST v1; kiểm tra đồng thời sáu service theo definition of done; tạo gate và evidence tổng hợp | 6 OpenAPI contract, acceptance script, evidence và runbook finalization | Gate local 20/20; live permission probe và production gate tách biệt, fail-closed | Không chạy V3; giữ schema/evidence để điều tra và chạy lại gate |
 
 ## 8. Backlog triển khai chi tiết
 

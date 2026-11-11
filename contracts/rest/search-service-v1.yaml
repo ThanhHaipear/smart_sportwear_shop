@@ -1,0 +1,113 @@
+openapi: 3.1.0
+info:
+  title: Smart Sportswear Search Service
+  version: 1.0.0
+paths:
+  /internal/v1/search:
+    post:
+      summary: Search the catalog read model by text and filters
+      security: [{ serviceToken: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TextSearchRequest' }
+      responses:
+        '200':
+          description: Ranked product identifiers
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TextSearchResponse' }
+        '401': { description: Invalid service token }
+        '503': { description: Search is disabled or unavailable }
+  /internal/v1/search/image:
+    post:
+      summary: Search by an uploaded query image
+      security: [{ serviceToken: [] }]
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [image]
+              properties:
+                image: { type: string, format: binary }
+      responses:
+        '200':
+          description: Ranked image candidates
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [candidates]
+                properties:
+                  candidates:
+                    type: array
+                    items: { $ref: '#/components/schemas/ImageCandidate' }
+        '401': { description: Invalid service token }
+        '422': { description: Invalid image }
+        '503': { description: Image search is disabled or unavailable }
+components:
+  securitySchemes:
+    serviceToken: { type: apiKey, in: header, name: X-Internal-Service-Token }
+  schemas:
+    SearchFilters:
+      type: object
+      properties:
+        categoryId: { type: [string, 'null'], format: uuid }
+        categorySlug: { type: [string, 'null'] }
+        brandId: { type: [string, 'null'], format: uuid }
+        brandSlug: { type: [string, 'null'] }
+        gender: { type: [string, 'null'] }
+        sportType: { type: [string, 'null'] }
+        productType: { type: [string, 'null'] }
+        surface: { type: [string, 'null'] }
+        color: { type: [string, 'null'] }
+        size: { type: [string, 'null'] }
+        minPrice: { type: [number, 'null'], minimum: 0 }
+        maxPrice: { type: [number, 'null'], minimum: 0 }
+        discount: { type: [string, 'null'] }
+        inStockOnly: { type: boolean, default: true }
+    TextSearchRequest:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string, minLength: 1, maxLength: 300 }
+        page: { type: integer, minimum: 1, default: 1 }
+        limit: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        filters: { $ref: '#/components/schemas/SearchFilters' }
+    TextSearchResponse:
+      type: object
+      required: [items, total, parsedQuery, searchMode, processingTimeMs, cacheHit]
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required: [productId, fusionScore, matchedReasons]
+            properties:
+              productId: { type: string, format: uuid }
+              keywordRank: { type: [number, 'null'] }
+              semanticRank: { type: [number, 'null'] }
+              semanticScore: { type: [number, 'null'] }
+              fusionScore: { type: number }
+              matchedReasons: { type: array, items: { type: string } }
+        total: { type: integer, minimum: 0 }
+        parsedQuery: { type: object, additionalProperties: true }
+        searchMode: { type: string, enum: [KEYWORD, HYBRID] }
+        processingTimeMs: { type: number, minimum: 0 }
+        cacheHit: { type: boolean }
+    ImageCandidate:
+      type: object
+      required: [product_id, image_id, matched_image_url, similarity]
+      properties:
+        product_id: { type: string, format: uuid }
+        image_id: { type: string, format: uuid }
+        matched_image_url: { type: string }
+        similarity: { type: number }
+        category_group: { type: [string, 'null'] }

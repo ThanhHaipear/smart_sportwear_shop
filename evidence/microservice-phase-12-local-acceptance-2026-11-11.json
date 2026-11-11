@@ -1,0 +1,110 @@
+﻿{
+    "phase":  12,
+    "status":  "passed",
+    "mode":  "full-local",
+    "startedAt":  "2026-11-11T11:20:47.9611268Z",
+    "finishedAt":  "2026-11-11T11:21:41.3877094Z",
+    "serviceCount":  6,
+    "checks":  [
+                   {
+                       "name":  "search-service-artifacts",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "chatbot-service-artifacts",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "recommendation-service-artifacts",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "catalog-service-artifacts",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "identity-service-artifacts",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "sales-service-artifacts",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "versioned-rest-contracts",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "independent-compose-deployments",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "no-legacy-fallback",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "permission-probes-compile",
+                       "kind":  "static",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "search-tests",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "chatbot-tests",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "recommendation-tests",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "catalog-service-tests",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "identity-service-tests",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "sales-service-tests",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "gateway-tests",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "storefront-typecheck",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "admin-lint",
+                       "kind":  "test",
+                       "result":  "passed"
+                   },
+                   {
+                       "name":  "compose-config",
+                       "kind":  "test",
+                       "result":  "passed"
+                   }
+               ]
+}
