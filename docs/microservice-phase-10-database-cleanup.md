@@ -102,13 +102,34 @@ Evidence:
 - `evidence/microservice-phase-10-backfill-2026-11-11.json`
 - `evidence/microservice-phase-10-data-inventory-2026-11-11.json`
 
-Traffic cut-over chưa được bật vì không có runtime/deployment đang chạy và public API surface chưa đủ:
+## Local traffic cut-over ngày 11/11/2026
 
-- `catalog-service` mới cung cấp `/internal/v1` sale snapshot, index document và inventory reservation; chưa
-  thay thế các public product/category/admin/wishlist/review endpoint của storefront.
-- `sales-service` mới thay thế create-order, SePay webhook và internal refund; chưa thay thế cart, order query,
-  return và notification public/admin API.
-- Vì gateway fallback vẫn cần các endpoint trên, tắt/xóa `public` ở thời điểm này sẽ gây 503 hoặc mất chức năng.
+Toàn bộ runtime đã được dựng bằng Docker Compose và gateway chạy tại `http://127.0.0.1:8085`. Cổng `8085`
+được dùng vì cổng `8080` trên máy đang do một tiến trình Apache ngoài stack chiếm giữ. Các cut-over flag của
+Identity, Catalog, Sales, Chatbot và Recommendation đều đang bật; Search phục vụ nội bộ và Visual Search vẫn
+giữ tắt theo exception đã được phê duyệt.
 
-Do đó bước 5-6 và V3 tiếp tục fail-closed. Cần hoàn thiện public API surface, cung cấp deployment target,
-chạy E2E qua gateway rồi mới bắt đầu stability window.
+API đã chuyển sang microservice trong cửa sổ local:
+
+- Identity: auth, profile/địa chỉ với cả contract `/api/v1/me/**` của frontend và alias `/api/v1/users/me/**`,
+  cùng API quản trị user.
+- Catalog: product/category/brand/promotion/collection/banner/page read, wishlist và phần API quản trị
+  product/category/brand/inventory.
+- Sales: guest/user cart, checkout preview, create/query order, payment/VietQR, notification, public settings,
+  SePay và phần API quản trị order/report/return/settings/audit.
+- Chatbot và Recommendation: các route đã được allowlist từ Phase 4-5.
+
+Smoke qua gateway đạt: public Catalog, guest cart và public settings trả 200; route được bảo vệ trả 401 khi
+thiếu JWT; customer JWT thật theo contract gateway trả 200 cho profile, address, order query, notification và
+wishlist; admin JWT trả 200 cho user, product, inventory, order, report, settings và audit-log read. Gateway
+test đạt 9/9; Identity 6/6, Catalog 4/4 và Sales 10/10 test đều đạt. Sau khi khai báo bổ sung exchange
+`identity.events`, log 10 phút gần nhất của Identity/Catalog/Sales/Gateway không còn ERROR/Exception.
+
+Live Supabase audit cùng ngày tiếp tục đạt: 6/6 runtime role chỉ ghi schema sở hữu, `PUBLIC CREATE=false`,
+0 cross-schema write grant, 0 FK xuyên service và `passed=true`. Evidence:
+`evidence/microservice-phase-10-local-cutover-2026-11-11.json`.
+
+Phase 10 implementation vì vậy đã đủ điều kiện bàn giao sang Phase 11, nhưng destructive finalization vẫn
+**fail-closed**. Gateway còn fallback `legacy_upstream` cho surface chưa được thay thế hoàn toàn; các workflow
+cancel/return/refund, notification SSE, review và product-image upload vẫn cần hoàn thiện và E2E. V3 chỉ được
+mở khóa sau khi Phase 11 bỏ fallback, kết thúc stability window được duyệt và có restore point mới.

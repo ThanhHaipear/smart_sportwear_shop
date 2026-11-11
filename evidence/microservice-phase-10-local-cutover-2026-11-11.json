@@ -1,0 +1,87 @@
+{
+  "phase": 10,
+  "capturedAt": "2026-11-11T13:42:00+07:00",
+  "scope": "local-docker-expanded-route-cutover",
+  "gateway": {
+    "url": "http://127.0.0.1:8085",
+    "liveStatus": 200,
+    "readyStatus": 200,
+    "portReason": "Host port 8080 is occupied by an Apache process outside this Compose stack."
+  },
+  "cutoverFlags": {
+    "identity": true,
+    "catalog": true,
+    "sales": true,
+    "chatbot": true,
+    "recommendation": true,
+    "visualSearch": false
+  },
+  "serviceReadiness": {
+    "identity": 200,
+    "catalog": 200,
+    "sales": 200,
+    "search": 200,
+    "chatbot": 200,
+    "recommendation": 200
+  },
+  "gatewaySmoke": {
+    "public": {
+      "GET /api/v1/products": 200,
+      "GET /api/v1/categories/tree": 200,
+      "GET /api/v1/brands": 200,
+      "GET /api/v1/promotions/active": 200,
+      "GET /api/v1/cart": 200,
+      "GET /api/v1/settings/public": 200
+    },
+    "authentication": {
+      "GET /api/v1/orders without JWT": 401,
+      "GET /api/v1/admin/products without JWT": 401
+    },
+    "customerJwt": {
+      "GET /api/v1/me": 200,
+      "GET /api/v1/me/addresses": 200,
+      "GET /api/v1/orders/me": 200,
+      "GET /api/v1/notifications/me": 200,
+      "GET /api/v1/notifications/me/unread-count": 200,
+      "GET /api/v1/wishlist": 200
+    },
+    "adminJwt": {
+      "GET /api/v1/admin/users": 200,
+      "GET /api/v1/admin/products": 200,
+      "GET /api/v1/admin/inventory": 200,
+      "GET /api/v1/admin/orders": 200,
+      "GET /api/v1/admin/reports/overview": 200,
+      "GET /api/v1/admin/settings": 200,
+      "GET /api/v1/admin/audit-logs": 200
+    }
+  },
+  "databaseAudit": {
+    "passed": true,
+    "runtimeRolesAudited": 6,
+    "crossSchemaWriteGrantCount": 0,
+    "crossServiceForeignKeyCount": 0,
+    "publicCreateAllowedRoleCount": 0,
+    "legacyRetirementRequired": false
+  },
+  "rabbitmq": {
+    "exchanges": ["catalog.events", "identity.events", "business.events"],
+    "recentApplicationErrors": 0
+  },
+  "verification": {
+    "gatewayPytest": "9 passed",
+    "identityMavenTests": "6 passed",
+    "catalogMavenTests": "4 passed",
+    "salesMavenTests": "10 passed",
+    "phase10LiveAudit": "passed"
+  },
+  "knownGaps": [
+    "Gateway still has a controlled legacy_upstream fallback for API surface not yet retired.",
+    "Customer cancellation and refund-destination workflows are not yet implemented in sales-service.",
+    "Return/refund administration, notification SSE, catalog review, and product-image upload remain Phase 11 work.",
+    "This is a local smoke window, not an approved production stability window.",
+    "A new restore point and explicit approval are still required before destructive V3 cleanup."
+  ],
+  "legacyCleanupAllowed": false,
+  "phaseStatus": "IMPLEMENTED / FINALIZATION_HELD",
+  "nextPhase": "11 - legacy backend retirement"
+}

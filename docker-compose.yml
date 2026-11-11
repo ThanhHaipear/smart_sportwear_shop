@@ -39,10 +39,12 @@ services:
     env_file: ./services/search-service/.env.example
     environment:
       SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
+      VISUAL_SEARCH_ENABLED: ${VISUAL_SEARCH_ENABLED:-false}
       DATABASE_URL: ${SEARCH_DATABASE_URL:-}
       INTERNAL_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
+      CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      CATALOG_API_URL: http://host.docker.internal:8080
+      CATALOG_API_URL: http://catalog-service:8092
       RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-visual_search}:${RABBITMQ_DEFAULT_PASS:-change-me}@rabbitmq:5672/
     depends_on:
       rabbitmq:
@@ -56,10 +58,12 @@ services:
     env_file: ./services/search-service/.env.example
     environment:
       SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
+      VISUAL_SEARCH_ENABLED: ${VISUAL_SEARCH_ENABLED:-false}
       DATABASE_URL: ${SEARCH_DATABASE_URL:-}
       INTERNAL_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
+      CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      CATALOG_API_URL: http://host.docker.internal:8080
+      CATALOG_API_URL: http://catalog-service:8092
       RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-visual_search}:${RABBITMQ_DEFAULT_PASS:-change-me}@rabbitmq:5672/
     depends_on:
       rabbitmq:
@@ -74,8 +78,8 @@ services:
     environment:
       SEARCH_API_BASE_URL: http://search-service:8090
       SEARCH_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
-      CATALOG_API_BASE_URL: http://host.docker.internal:8080
-      CATALOG_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
+      CATALOG_API_BASE_URL: http://catalog-service:8092
+      CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
       CHATBOT_DATABASE_URL: ${CHATBOT_DATABASE_URL:-}
       REDIS_URL: redis://redis:6379
     depends_on:
@@ -128,6 +132,7 @@ services:
       CATALOG_MIGRATION_DB_PASSWORD: ${CATALOG_MIGRATION_DB_PASSWORD:-change-me}
       CATALOG_INTERNAL_TOKEN: ${CATALOG_INTERNAL_TOKEN:-change-me}
       CATALOG_EVENTS_ENABLED: ${CATALOG_EVENTS_ENABLED:-false}
+      CATALOG_FLYWAY_ENABLED: ${CATALOG_FLYWAY_ENABLED:-false}
       RABBITMQ_ADDRESSES: rabbitmq:5672
       RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER:-visual_search}
       RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS:-change-me}
@@ -154,6 +159,8 @@ services:
       JWT_PREVIOUS_REFRESH_SECRET: ${JWT_PREVIOUS_REFRESH_SECRET:-}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       IDENTITY_EVENTS_ENABLED: ${IDENTITY_EVENTS_ENABLED:-false}
+      SALES_INTERNAL_TOKEN: ${SALES_INTERNAL_TOKEN:-change-me}
+      IDENTITY_FLYWAY_ENABLED: ${IDENTITY_FLYWAY_ENABLED:-false}
       RABBITMQ_ADDRESSES: rabbitmq:5672
       RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER:-visual_search}
       RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS:-change-me}
@@ -176,11 +183,15 @@ services:
       SALES_MIGRATION_DB_PASSWORD: ${SALES_MIGRATION_DB_PASSWORD:-change-me}
       SALES_INTERNAL_TOKEN: ${SALES_INTERNAL_TOKEN:-change-me}
       CATALOG_API_BASE_URL: http://catalog-service:8092
+      IDENTITY_API_BASE_URL: http://identity-service:8093
       CATALOG_INTERNAL_TOKEN: ${CATALOG_INTERNAL_TOKEN:-change-me}
       SEPAY_WEBHOOK_ENABLED: ${SEPAY_WEBHOOK_ENABLED:-false}
       SEPAY_WEBHOOK_SECRET: ${SEPAY_WEBHOOK_SECRET:-change-me}
       VIETQR_ACCOUNT_NUMBER: ${VIETQR_ACCOUNT_NUMBER:-}
+      VIETQR_BANK_BIN: ${VIETQR_BANK_BIN:-}
+      VIETQR_ACCOUNT_NAME: ${VIETQR_ACCOUNT_NAME:-}
       SALES_EVENTS_ENABLED: ${SALES_EVENTS_ENABLED:-false}
+      SALES_FLYWAY_ENABLED: ${SALES_FLYWAY_ENABLED:-false}
       RABBITMQ_ADDRESSES: rabbitmq:5672
       RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER:-visual_search}
       RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS:-change-me}
@@ -195,22 +206,26 @@ services:
     profiles: ["gateway"]
     build: ./gateway
     ports:
-      - "8080:8080"
+      - "${GATEWAY_PUBLIC_PORT:-8080}:8080"
     env_file: ./gateway/.env.example
     environment:
       IDENTITY_UPSTREAM: http://identity-service:8093
+      CATALOG_UPSTREAM: http://catalog-service:8092
       SALES_UPSTREAM: http://sales-service:8094
       CHATBOT_UPSTREAM: http://chatbot-service:8002
       RECOMMENDATION_UPSTREAM: http://recommendation-service:8091
       LEGACY_UPSTREAM: ${LEGACY_UPSTREAM:-http://host.docker.internal:8080}
       CHATBOT_LEGACY_UPSTREAM: ${CHATBOT_LEGACY_UPSTREAM:-http://host.docker.internal:8002}
       GATEWAY_IDENTITY_CUTOVER_ENABLED: ${GATEWAY_IDENTITY_CUTOVER_ENABLED:-false}
+      GATEWAY_CATALOG_CUTOVER_ENABLED: ${GATEWAY_CATALOG_CUTOVER_ENABLED:-false}
       GATEWAY_SALES_CUTOVER_ENABLED: ${GATEWAY_SALES_CUTOVER_ENABLED:-false}
       GATEWAY_CHATBOT_CUTOVER_ENABLED: ${GATEWAY_CHATBOT_CUTOVER_ENABLED:-false}
       GATEWAY_RECOMMENDATION_CUTOVER_ENABLED: ${GATEWAY_RECOMMENDATION_CUTOVER_ENABLED:-false}
       GATEWAY_REQUEST_TIMEOUT_SECONDS: ${GATEWAY_REQUEST_TIMEOUT_SECONDS:-10}
       GATEWAY_RATE_LIMIT_PER_MINUTE: ${GATEWAY_RATE_LIMIT_PER_MINUTE:-120}
       GATEWAY_RATE_LIMIT_BURST: ${GATEWAY_RATE_LIMIT_BURST:-30}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-dev-only-access-secret-change-me-please-32-bytes-min}
+      JWT_PREVIOUS_ACCESS_SECRET: ${JWT_PREVIOUS_ACCESS_SECRET:-}
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/ready', timeout=2)"]

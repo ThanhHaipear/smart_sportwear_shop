@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     database_url: str = ""
     catalog_api_url: str = "http://127.0.0.1:8080"
     internal_service_token: str = ""
+    catalog_service_token: str = ""
     catalog_request_timeout_seconds: float = Field(default=5, gt=0, le=30)
     redis_url: str = ""
 
@@ -68,6 +69,7 @@ class Settings(BaseSettings):
             ("DATABASE_URL", self.database_url),
             ("CATALOG_API_URL", self.catalog_api_url),
             ("INTERNAL_SERVICE_TOKEN", self.internal_service_token),
+            ("CATALOG_SERVICE_TOKEN", self.catalog_service_token),
         ) if not value.strip()]
         if self.text_embedding_provider == "openai" and not self.openai_api_key.strip():
             missing.append("OPENAI_API_KEY")

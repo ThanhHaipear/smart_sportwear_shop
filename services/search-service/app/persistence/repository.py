@@ -143,7 +143,10 @@ class SearchRepository:
     ) -> list[dict]:
         async with self.connection() as connection, connection.cursor() as cursor:
             await cursor.execute(
-                "select * from ai_search.search_text(%s,%s::extensions.vector,%s,%s::jsonb,%s,%s,%s,%s)",
+                """select * from ai_search.search_text(
+                       %s::text,%s::extensions.vector,%s::integer,%s::jsonb,
+                       %s::real,%s::integer,%s::real,%s::real
+                   )""",
                 (query, vector_literal(vector) if vector else None, limit,
                  stable_json(filters or {}), self.settings.text_min_similarity, self.settings.rrf_k,
                  self.settings.keyword_weight, self.settings.semantic_weight),

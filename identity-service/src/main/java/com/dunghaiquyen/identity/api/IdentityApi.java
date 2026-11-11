@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -44,16 +45,24 @@ public class IdentityApi {
     @PostMapping("/auth/forgot-password") public Envelope<Map<String,Object>> forgot(@Valid @RequestBody Forgot request){String token=service.requestPasswordReset(request.email());if(token!=null)resetDelivery.send(request.email(),token);return Envelope.ok("If the email exists, a reset instruction has been sent",Map.of());}
     @PostMapping("/auth/reset-password") public Envelope<Map<String,Object>> reset(@Valid @RequestBody Reset request){service.resetPassword(request.token(),request.newPassword());return Envelope.ok("Password reset successful",Map.of());}
 
-    @GetMapping("/users/me") public Envelope<UserView> me(@AuthenticationPrincipal JwtService.Principal p){return Envelope.ok(UserView.of(repository.userById(p.userId()).orElseThrow()));}
-    @PatchMapping("/users/me") public Envelope<UserView> updateMe(@AuthenticationPrincipal JwtService.Principal p,@Valid @RequestBody Profile request){return Envelope.ok(UserView.of(repository.updateProfile(p.userId(),request.fullName(),request.phone())));}
-    @GetMapping("/users/me/addresses") public Envelope<List<Address>> addresses(@AuthenticationPrincipal JwtService.Principal p){return Envelope.ok(repository.addresses(p.userId()));}
-    @PostMapping("/users/me/addresses") @ResponseStatus(HttpStatus.CREATED) public Envelope<Address> createAddress(@AuthenticationPrincipal JwtService.Principal p,@Valid @RequestBody AddressBody r){return Envelope.ok(repository.createAddress(p.userId(),r.receiverName(),r.phone(),r.province(),r.district(),r.ward(),r.addressLine(),Boolean.TRUE.equals(r.isDefault())));}
-    @PatchMapping("/users/me/addresses/{id}") public Envelope<Address> updateAddress(@AuthenticationPrincipal JwtService.Principal p,@PathVariable UUID id,@Valid @RequestBody AddressPatch r){return Envelope.ok(repository.updateAddress(p.userId(),id,r.receiverName(),r.phone(),r.province(),r.district(),r.ward(),r.addressLine()));}
-    @DeleteMapping("/users/me/addresses/{id}") public Envelope<Void> deleteAddress(@AuthenticationPrincipal JwtService.Principal p,@PathVariable UUID id){repository.deleteAddress(p.userId(),id);return Envelope.ok(null);}
-    @PatchMapping("/users/me/addresses/{id}/default") public Envelope<Address> defaultAddress(@AuthenticationPrincipal JwtService.Principal p,@PathVariable UUID id){return Envelope.ok(repository.setDefault(p.userId(),id));}
+    @GetMapping({"/users/me","/me"}) public Envelope<UserView> me(@AuthenticationPrincipal JwtService.Principal p){return Envelope.ok(UserView.of(repository.userById(p.userId()).orElseThrow()));}
+    @PatchMapping({"/users/me","/me"}) public Envelope<UserView> updateMe(@AuthenticationPrincipal JwtService.Principal p,@Valid @RequestBody Profile request){return Envelope.ok(UserView.of(repository.updateProfile(p.userId(),request.fullName(),request.phone())));}
+    @GetMapping({"/users/me/addresses","/me/addresses"}) public Envelope<List<Address>> addresses(@AuthenticationPrincipal JwtService.Principal p){return Envelope.ok(repository.addresses(p.userId()));}
+    @PostMapping({"/users/me/addresses","/me/addresses"}) @ResponseStatus(HttpStatus.CREATED) public Envelope<Address> createAddress(@AuthenticationPrincipal JwtService.Principal p,@Valid @RequestBody AddressBody r){return Envelope.ok(repository.createAddress(p.userId(),r.receiverName(),r.phone(),r.province(),r.district(),r.ward(),r.addressLine(),Boolean.TRUE.equals(r.isDefault())));}
+    @PatchMapping({"/users/me/addresses/{id}","/me/addresses/{id}"}) public Envelope<Address> updateAddress(@AuthenticationPrincipal JwtService.Principal p,@PathVariable UUID id,@Valid @RequestBody AddressPatch r){return Envelope.ok(repository.updateAddress(p.userId(),id,r.receiverName(),r.phone(),r.province(),r.district(),r.ward(),r.addressLine()));}
+    @DeleteMapping({"/users/me/addresses/{id}","/me/addresses/{id}"}) public Envelope<Void> deleteAddress(@AuthenticationPrincipal JwtService.Principal p,@PathVariable UUID id){repository.deleteAddress(p.userId(),id);return Envelope.ok(null);}
+    @PatchMapping({"/users/me/addresses/{id}/default","/me/addresses/{id}/default"}) public Envelope<Address> defaultAddress(@AuthenticationPrincipal JwtService.Principal p,@PathVariable UUID id){return Envelope.ok(repository.setDefault(p.userId(),id));}
 
     @PatchMapping("/admin/users/{id}/role") @PreAuthorize("hasRole('ADMIN')") public Envelope<UserView> role(@PathVariable UUID id,@RequestBody RoleBody body){return Envelope.ok(UserView.of(repository.updateRole(id,body.role())));}
     @PatchMapping("/admin/users/{id}/status") @PreAuthorize("hasRole('ADMIN')") public Envelope<UserView> status(@PathVariable UUID id,@RequestBody StatusBody body){return Envelope.ok(UserView.of(repository.updateStatus(id,body.status())));}
+    @GetMapping("/admin/users") @PreAuthorize("hasRole('ADMIN')") public Envelope<List<UserView>> users(
+            @RequestParam(required=false)String keyword,@RequestParam(required=false)String role,@RequestParam(required=false)String status,
+            @RequestParam(defaultValue="1")int page,@RequestParam(defaultValue="20")int limit){
+        int safePage=Math.max(1,page),safeLimit=Math.max(1,Math.min(limit,100));long total=repository.userCount(keyword,role,status);
+        return new Envelope<>(true,"OK",repository.users(keyword,role,status,safeLimit,(safePage-1)*safeLimit).stream().map(UserView::of).toList(),
+                Map.of("page",safePage,"limit",safeLimit,"total",total,"totalPages",total==0?0:(total+safeLimit-1)/safeLimit),null,null);
+    }
+    @GetMapping("/admin/users/{id}") @PreAuthorize("hasRole('ADMIN')") public Envelope<UserView> user(@PathVariable UUID id){return Envelope.ok(UserView.of(repository.userById(id).orElseThrow()));}
 
     public record Register(@NotBlank @Size(max=150) String fullName,@NotBlank @Email String email,@Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d).{8,72}$") String password,@Pattern(regexp="^[0-9+\\-() ]{8,20}$") String phone){}
     public record Login(@NotBlank @Email String email,@NotBlank String password){}

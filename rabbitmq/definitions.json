@@ -30,6 +30,15 @@
       "arguments": {}
     },
     {
+      "name": "identity.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
       "name": "business.events",
       "vhost": "/",
       "type": "topic",

@@ -37,6 +37,7 @@ management:
       exposure:
         include: health,info,metrics,prometheus
 app:
+  sales-token: ${SALES_INTERNAL_TOKEN:change-me}
   jwt:
     access-secret: ${JWT_ACCESS_SECRET:dev-only-access-secret-change-me-please-32-bytes-min}
     refresh-secret: ${JWT_REFRESH_SECRET:dev-only-refresh-secret-change-me-please-32-bytes}

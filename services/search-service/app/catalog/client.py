@@ -54,7 +54,7 @@ class CatalogClient:
         url = f"{self.settings.catalog_api_url.rstrip('/')}/internal/v1/products/{product_id}/index-document"
         async with httpx.AsyncClient(timeout=self.settings.catalog_request_timeout_seconds) as client:
             response = await client.get(url, headers={
-                "X-Internal-Service-Token": self.settings.internal_service_token,
+                "X-Internal-Service-Token": self.settings.catalog_service_token,
             })
         if response.status_code == 404:
             return None

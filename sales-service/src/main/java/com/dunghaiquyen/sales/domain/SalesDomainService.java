@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.*;
 import java.util.*;
 import java.util.regex.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,7 @@ public class SalesDomainService {
     private static final Pattern PAYMENT_REF=Pattern.compile("(?<![A-Z0-9])DH[A-Z0-9]{10}(?![A-Z0-9])");
     private static final Pattern REFUND_REF=Pattern.compile("(?<![A-Z0-9])RFD[0-9]{13}(?![A-Z0-9])");
     private final SalesRepository repository; private final CatalogClient catalog; private final SalesProperties properties; private final Clock clock;
-    public SalesDomainService(SalesRepository repository,CatalogClient catalog,SalesProperties properties){this(repository,catalog,properties,Clock.systemUTC());}
+    @Autowired public SalesDomainService(SalesRepository repository,CatalogClient catalog,SalesProperties properties){this(repository,catalog,properties,Clock.systemUTC());}
     SalesDomainService(SalesRepository repository,CatalogClient catalog,SalesProperties properties,Clock clock){this.repository=repository;this.catalog=catalog;this.properties=properties;this.clock=clock;}
 
     public OrderResponse createOrder(CreateOrderRequest request){

@@ -26,6 +26,16 @@ public class IdentityRepository {
     public Optional<User> userByEmail(String email) { return first(jdbc.query("select u.*,case when exists(select 1 from user_identities i where i.user_id=u.id and i.provider='GOOGLE') then 'GOOGLE' else 'LOCAL' end provider from users u where email=?", this::user, email)); }
     public Optional<User> userById(UUID id) { return first(jdbc.query("select u.*,case when exists(select 1 from user_identities i where i.user_id=u.id and i.provider='GOOGLE') then 'GOOGLE' else 'LOCAL' end provider from users u where id=?", this::user, id)); }
     public Optional<User> userByGoogleSubject(String subject) { return first(jdbc.query("select u.*,'GOOGLE' provider from users u join user_identities i on i.user_id=u.id where i.provider='GOOGLE' and i.provider_subject=?", this::user, subject)); }
+    public long userCount(String keyword,String role,String status){
+        String q=keyword==null?"":keyword.trim();
+        return jdbc.queryForObject("select count(*) from users where (?='' or lower(full_name) like lower(?) or lower(email) like lower(?)) and (?='' or role_code=?) and (?='' or status=?)",
+                Long.class,q,"%"+q+"%","%"+q+"%",role==null?"":role,role==null?"":role,status==null?"":status,status==null?"":status);
+    }
+    public List<User> users(String keyword,String role,String status,int limit,int offset){
+        String q=keyword==null?"":keyword.trim();
+        return jdbc.query("select u.*,case when exists(select 1 from user_identities i where i.user_id=u.id and i.provider='GOOGLE') then 'GOOGLE' else 'LOCAL' end provider from users u where (?='' or lower(full_name) like lower(?) or lower(email) like lower(?)) and (?='' or role_code=?) and (?='' or status=?) order by created_at desc,id limit ? offset ?",
+                this::user,q,"%"+q+"%","%"+q+"%",role==null?"":role,role==null?"":role,status==null?"":status,status==null?"":status,limit,offset);
+    }
 
     public User createLocal(String fullName, String email, String phone, String passwordHash) {
         UUID id=UUID.randomUUID(); jdbc.update("insert into users(id,email,password_hash,full_name,phone) values(?,?,?,?,?)",id,email,passwordHash,fullName,phone); return userById(id).orElseThrow();
@@ -65,6 +75,7 @@ public class IdentityRepository {
     public void deleteAddress(UUID userId,UUID id) { jdbc.update("delete from addresses where id=? and user_id=?",id,userId); }
     public Address setDefault(UUID userId,UUID id) { jdbc.update("update addresses set is_default=false where user_id=?",userId); if(jdbc.update("update addresses set is_default=true,updated_at=now() where id=? and user_id=?",id,userId)==0) throw new NotFound("Address not found"); return address(userId,id); }
     private Address address(UUID userId,UUID id) { return first(jdbc.query("select * from addresses where id=? and user_id=?",this::address,id,userId)).orElseThrow(()->new NotFound("Address not found")); }
+    public Address addressForUser(UUID userId,UUID id) { return address(userId,id); }
 
     private User user(ResultSet r,int n)throws SQLException { return new User(r.getObject("id",UUID.class),r.getString("full_name"),r.getString("email"),r.getString("phone"),r.getString("password_hash"),Role.valueOf(r.getString("role_code")),Status.valueOf(r.getString("status")),r.getString("provider"),r.getLong("version")); }
     private Address address(ResultSet r,int n)throws SQLException { return new Address(r.getObject("id",UUID.class),r.getObject("user_id",UUID.class),r.getString("receiver_name"),r.getString("phone"),r.getString("province_name"),r.getString("district_name"),r.getString("ward_name"),r.getString("address_line"),r.getBoolean("is_default"),r.getTimestamp("created_at").toInstant()); }

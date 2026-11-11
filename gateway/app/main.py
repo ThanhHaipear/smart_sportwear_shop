@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import hashlib
+import hmac
 import json
 import logging
 import re
@@ -20,18 +23,22 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
     identity_upstream: str = "http://identity-service:8093"
+    catalog_upstream: str = "http://catalog-service:8092"
     sales_upstream: str = "http://sales-service:8094"
     chatbot_upstream: str = "http://chatbot-service:8002"
     recommendation_upstream: str = "http://recommendation-service:8091"
     legacy_upstream: str = "http://host.docker.internal:8080"
     chatbot_legacy_upstream: str = "http://host.docker.internal:8002"
     gateway_identity_cutover_enabled: bool = False
+    gateway_catalog_cutover_enabled: bool = False
     gateway_sales_cutover_enabled: bool = False
     gateway_chatbot_cutover_enabled: bool = False
     gateway_recommendation_cutover_enabled: bool = False
     gateway_request_timeout_seconds: float = 10.0
     gateway_rate_limit_per_minute: int = 120
     gateway_rate_limit_burst: int = 30
+    jwt_access_secret: str = "dev-only-access-secret-change-me-please-32-bytes-min"
+    jwt_previous_access_secret: str = ""
     otel_exporter_otlp_endpoint: str = ""
 
 
@@ -45,20 +52,37 @@ class Route:
 
 ROUTES = (
     Route(frozenset({"POST"}), re.compile(r"^/api/v1/auth/(register|login|refresh|logout|google|forgot-password|reset-password)$"), "identity_upstream", "gateway_identity_cutover_enabled"),
-    Route(frozenset({"GET", "PATCH"}), re.compile(r"^/api/v1/users/me$"), "identity_upstream", "gateway_identity_cutover_enabled"),
-    Route(frozenset({"GET", "POST"}), re.compile(r"^/api/v1/users/me/addresses$"), "identity_upstream", "gateway_identity_cutover_enabled"),
-    Route(frozenset({"PATCH", "DELETE"}), re.compile(r"^/api/v1/users/me/addresses/[0-9a-fA-F-]+(?:/default)?$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"GET", "PATCH"}), re.compile(r"^/api/v1/(?:users/)?me$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"GET", "POST"}), re.compile(r"^/api/v1/(?:users/)?me/addresses$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"PATCH", "DELETE"}), re.compile(r"^/api/v1/(?:users/)?me/addresses/[0-9a-fA-F-]+(?:/default)?$"), "identity_upstream", "gateway_identity_cutover_enabled"),
     Route(frozenset({"PATCH"}), re.compile(r"^/api/v1/admin/users/[0-9a-fA-F-]+/(role|status)$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"GET"}), re.compile(r"^/api/v1/admin/users(?:/[0-9a-fA-F-]+)?$"), "identity_upstream", "gateway_identity_cutover_enabled"),
+    Route(frozenset({"GET", "POST", "PATCH", "DELETE"}), re.compile(r"^/api/v1/admin/(categories|brands|products|variants|inventory)(?:/.*)?$"), "catalog_upstream", "gateway_catalog_cutover_enabled"),
+    Route(frozenset({"GET", "POST", "PUT", "PATCH", "DELETE"}), re.compile(r"^/api/v1/admin/(orders|returns|refunds|reports|notifications|notification-templates|settings|audit-logs)(?:/.*)?$"), "sales_upstream", "gateway_sales_cutover_enabled"),
     Route(frozenset({"POST"}), re.compile(r"^/api/v1/orders$"), "sales_upstream", "gateway_sales_cutover_enabled"),
+    Route(frozenset({"GET", "POST", "PUT"}), re.compile(r"^/api/v1/orders(?:/.*)?$"), "sales_upstream", "gateway_sales_cutover_enabled"),
+    Route(frozenset({"GET", "POST"}), re.compile(r"^/api/v1/payments(?:/.*)?$"), "sales_upstream", "gateway_sales_cutover_enabled"),
+    Route(frozenset({"GET", "POST"}), re.compile(r"^/api/v1/notifications(?:/.*)?$"), "sales_upstream", "gateway_sales_cutover_enabled"),
+    Route(frozenset({"GET", "POST", "PATCH", "DELETE"}), re.compile(r"^/api/v1/cart(?:/.*)?$"), "sales_upstream", "gateway_sales_cutover_enabled"),
+    Route(frozenset({"POST"}), re.compile(r"^/api/v1/checkout/preview$"), "sales_upstream", "gateway_sales_cutover_enabled"),
+    Route(frozenset({"GET"}), re.compile(r"^/api/v1/settings/public$"), "sales_upstream", "gateway_sales_cutover_enabled"),
     Route(frozenset({"POST"}), re.compile(r"^/api/v1/webhooks/sepay$"), "sales_upstream", "gateway_sales_cutover_enabled"),
     Route(frozenset({"POST"}), re.compile(r"^/chat(?:/stream)?$"), "chatbot_upstream", "gateway_chatbot_cutover_enabled"),
     Route(frozenset({"GET"}), re.compile(r"^/api/v1/recommendations/products/[0-9a-fA-F-]+$"), "recommendation_upstream", "gateway_recommendation_cutover_enabled"),
     Route(frozenset({"GET"}), re.compile(r"^/api/v1/products/[0-9a-fA-F-]+/frequently-bought-together$"), "recommendation_upstream", "gateway_recommendation_cutover_enabled"),
     Route(frozenset({"POST"}), re.compile(r"^/api/v1/recommendations/(cart|interactions)$"), "recommendation_upstream", "gateway_recommendation_cutover_enabled"),
+    Route(frozenset({"GET"}), re.compile(r"^/api/v1/(categories(?:/.*)?|brands|promotions/active)$"), "catalog_upstream", "gateway_catalog_cutover_enabled"),
+    Route(frozenset({"GET"}), re.compile(r"^/api/v1/products(?:/.*)?$"), "catalog_upstream", "gateway_catalog_cutover_enabled"),
+    Route(frozenset({"GET", "POST", "DELETE"}), re.compile(r"^/api/v1/wishlist(?:/.*)?$"), "catalog_upstream", "gateway_catalog_cutover_enabled"),
+    Route(frozenset({"GET"}), re.compile(r"^/api/v1/(collections(?:/.*)?|banners/active|pages/[^/]+|visual-search/status)$"), "catalog_upstream", "gateway_catalog_cutover_enabled"),
+    Route(frozenset({"POST"}), re.compile(r"^/api/v1/products/search-by-image$"), "catalog_upstream", "gateway_catalog_cutover_enabled"),
     # Controlled strangler fallback: keeps the last stable core release reachable
     # through the single entrypoint until each public bounded-context route cuts over.
     Route(frozenset({"GET", "POST", "PUT", "PATCH", "DELETE"}), re.compile(r"^/api(?:/.*)?$"), "legacy_upstream"),
 )
+
+PROTECTED_PATHS = re.compile(r"^/api/v1/(orders|payments|notifications|checkout|wishlist|me)(?:/|$)")
+ADMIN_PATHS = re.compile(r"^/api/v1/admin(?:/|$)")
 
 SAFE_ID = re.compile(r"^[A-Za-z0-9._:-]{1,100}$")
 TRACEPARENT = re.compile(r"^00-[0-9a-f]{32}-[0-9a-f]{16}-0[01]$")
@@ -105,9 +129,14 @@ class Metrics:
 def _route(method: str, path: str) -> Route | None:
     if path.startswith("/internal/") or "/internal/" in path or path.startswith("/actuator"):
         return None
+    matched_specific_path = False
     for route in ROUTES:
+        if route.upstream_setting == "legacy_upstream" and matched_specific_path:
+            return None
         if route.pattern.fullmatch(path):
-            return route if method in route.methods else None
+            if method in route.methods:
+                return route
+            matched_specific_path = True
     return None
 
 
@@ -117,13 +146,44 @@ def _upstream_setting(route: Route, path: str, config: Settings) -> str:
     return "legacy_upstream" if path.startswith("/api/") else "chatbot_legacy_upstream"
 
 
-def _request_headers(request: Request, correlation_id: str, traceparent: str) -> dict[str, str]:
-    headers = {key: value for key, value in request.headers.items() if key.lower() not in HOP_BY_HOP and key.lower() not in {"x-internal-service-token", "x-forwarded-for"}}
+def _access_claims(authorization: str, settings: Settings) -> dict | None:
+    if not authorization.startswith("Bearer "):
+        return None
+    token = authorization[7:]
+    parts = token.split(".")
+    if len(parts) != 3:
+        return None
+    try:
+        header = json.loads(base64.urlsafe_b64decode(parts[0] + "=" * (-len(parts[0]) % 4)))
+        claims = json.loads(base64.urlsafe_b64decode(parts[1] + "=" * (-len(parts[1]) % 4)))
+        signature = base64.urlsafe_b64decode(parts[2] + "=" * (-len(parts[2]) % 4))
+    except (ValueError, json.JSONDecodeError):
+        return None
+    if header.get("alg") != "HS256" or claims.get("type") != "access" or claims.get("exp", 0) <= time.time():
+        return None
+    signed = f"{parts[0]}.{parts[1]}".encode()
+    secrets_to_try = (settings.jwt_access_secret, settings.jwt_previous_access_secret)
+    if not any(secret and hmac.compare_digest(signature, hmac.new(secret.encode(), signed, hashlib.sha256).digest())
+               for secret in secrets_to_try):
+        return None
+    subject, role = str(claims.get("sub", "")), str(claims.get("role", ""))
+    if not re.fullmatch(r"[0-9a-fA-F-]{36}", subject) or role not in {"CUSTOMER", "SALES_STAFF", "WAREHOUSE_STAFF", "ADMIN"}:
+        return None
+    return {"sub": subject, "role": role}
+
+
+def _request_headers(request: Request, correlation_id: str, traceparent: str, settings: Settings) -> dict[str, str]:
+    protected = {"x-internal-service-token", "x-forwarded-for", "x-user-id", "x-user-role"}
+    headers = {key: value for key, value in request.headers.items() if key.lower() not in HOP_BY_HOP and key.lower() not in protected}
     headers["x-correlation-id"] = correlation_id
     headers["traceparent"] = traceparent
     peer = request.client.host if request.client else "unknown"
     headers["x-forwarded-for"] = peer
     headers["x-forwarded-proto"] = request.url.scheme
+    claims = _access_claims(request.headers.get("authorization", ""), settings)
+    if claims:
+        headers["x-user-id"] = claims["sub"]
+        headers["x-user-role"] = claims["role"]
     return headers
 
 
@@ -170,6 +230,12 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         peer = request.client.host if request.client else "unknown"
         if not route:
             response = JSONResponse({"status": 404, "message": "Route not found", "correlationId": correlation_id}, status_code=404)
+        elif (PROTECTED_PATHS.match(request.url.path) or ADMIN_PATHS.match(request.url.path)) and _access_claims(request.headers.get("authorization", ""), config) is None:
+            status_code = 401
+            response = JSONResponse({"status": 401, "message": "Authentication required", "correlationId": correlation_id}, status_code=401)
+        elif ADMIN_PATHS.match(request.url.path) and _access_claims(request.headers.get("authorization", ""), config).get("role") != "ADMIN":
+            status_code = 403
+            response = JSONResponse({"status": 403, "message": "Admin role required", "correlationId": correlation_id}, status_code=403)
         elif not limiter.allow(peer, time.monotonic()):
             status_code = 429
             response = JSONResponse({"status": 429, "message": "Rate limit exceeded", "correlationId": correlation_id}, status_code=429, headers={"Retry-After": "60"})
@@ -178,7 +244,7 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
             if request.url.query:
                 target += "?" + request.url.query
             try:
-                upstream = await client.send(client.build_request(request.method, target, headers=_request_headers(request, correlation_id, traceparent), content=await request.body()), stream=True)
+                upstream = await client.send(client.build_request(request.method, target, headers=_request_headers(request, correlation_id, traceparent, config), content=await request.body()), stream=True)
                 status_code = upstream.status_code
                 response_headers = {key: value for key, value in upstream.headers.items() if key.lower() not in HOP_BY_HOP}
                 if upstream.is_stream_consumed:

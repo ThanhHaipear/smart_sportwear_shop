@@ -12,7 +12,7 @@ spring:
       maximum-pool-size: ${SALES_DB_POOL_MAX:4}
       connection-init-sql: SET search_path TO sales,pg_catalog
   flyway:
-    enabled: true
+    enabled: ${SALES_FLYWAY_ENABLED:true}
     url: ${SALES_MIGRATION_DATABASE_URL:${SALES_DATABASE_URL}}
     user: ${SALES_MIGRATION_DB_USERNAME:${SALES_DB_USERNAME}}
     password: ${SALES_MIGRATION_DB_PASSWORD:${SALES_DB_PASSWORD}}
@@ -35,10 +35,14 @@ sales:
   internal-token: ${SALES_INTERNAL_TOKEN:change-me}
   catalog-base-url: ${CATALOG_API_BASE_URL:http://localhost:8092}
   catalog-token: ${CATALOG_INTERNAL_TOKEN:change-me}
+  identity-base-url: ${IDENTITY_API_BASE_URL:http://localhost:8093}
+  identity-token: ${SALES_INTERNAL_TOKEN:change-me}
   events-enabled: ${SALES_EVENTS_ENABLED:false}
   outbox-delay-ms: ${SALES_OUTBOX_DELAY_MS:1000}
   vietqr:
     account-number: ${VIETQR_ACCOUNT_NUMBER:}
+    bank-bin: ${VIETQR_BANK_BIN:}
+    account-name: ${VIETQR_ACCOUNT_NAME:}
     payment-ttl-seconds: ${VIETQR_PAYMENT_TTL_SECONDS:900}
   sepay:
     webhook-enabled: ${SEPAY_WEBHOOK_ENABLED:false}

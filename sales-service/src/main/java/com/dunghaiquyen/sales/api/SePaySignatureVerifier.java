@@ -7,12 +7,13 @@ import java.time.*;
 import java.util.HexFormat;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SePaySignatureVerifier {
     private final SalesProperties properties; private final Clock clock;
-    public SePaySignatureVerifier(SalesProperties properties){this(properties,Clock.systemUTC());}
+    @Autowired public SePaySignatureVerifier(SalesProperties properties){this(properties,Clock.systemUTC());}
     SePaySignatureVerifier(SalesProperties properties,Clock clock){this.properties=properties;this.clock=clock;}
     public void verify(String signature,String timestamp,byte[] rawBody){
         long value;try{value=Long.parseLong(timestamp);}catch(Exception e){throw new SecurityException("Invalid SePay webhook timestamp");}

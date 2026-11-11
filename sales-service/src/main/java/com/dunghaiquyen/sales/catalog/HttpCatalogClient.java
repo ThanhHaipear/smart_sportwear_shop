@@ -18,8 +18,9 @@ public class HttpCatalogClient implements CatalogClient {
     @Override public VariantSnapshot snapshot(UUID id) {
         @SuppressWarnings("unchecked") Map<String,Object> r=client.get().uri("/internal/v1/variants/{id}/sale-snapshot",id).retrieve().body(Map.class);
         Map<String,Object> d=data(r); return new VariantSnapshot(id,uuid(d,"productId"),str(d,"sku"),str(d,"productName"),
-                str(d,"size"),str(d,"color"),new BigDecimal(String.valueOf(d.get("price"))),
-                "ACTIVE".equalsIgnoreCase(str(d,"status")),Integer.parseInt(String.valueOf(d.getOrDefault("availableQuantity",0))));
+                str(d,"size"),str(d,"color"),new BigDecimal(String.valueOf(d.get("unitPrice"))),
+                "ACTIVE".equalsIgnoreCase(str(d,"productStatus")) && "ACTIVE".equalsIgnoreCase(str(d,"variantStatus")),
+                Integer.parseInt(String.valueOf(d.getOrDefault("availableQuantity",0))));
     }
     @Override public Reservation reserve(UUID orderId,List<OrderLineRequest> items) {
         Map<String,Object> body=Map.of("orderRef",orderId,"idempotencyKey","sales-order:"+orderId,
