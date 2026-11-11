@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.Instant;
+import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class InventoryReservationService {
         Instant expiresAt = Instant.now().plusSeconds(900);
         jdbc.sql("insert into inventory_reservations(id,order_ref,idempotency_key,status,expires_at) values(:id,:order,:key,'ACTIVE',:expires)")
                 .param("id", reservationId).param("order", request.orderId()).param("key", request.idempotencyKey())
-                .param("expires", expiresAt).update();
+                .param("expires", Timestamp.from(expiresAt)).update();
         for (ReservationLine item : items) {
             jdbc.sql("insert into inventory_reservation_items(reservation_id,variant_id,quantity) values(:r,:v,:q)")
                     .param("r", reservationId).param("v", item.variantId()).param("q", item.quantity()).update();

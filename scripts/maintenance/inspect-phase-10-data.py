@@ -80,6 +80,32 @@ async def checksum(connection: asyncpg.Connection, schema: str, table: str, sele
     return await connection.fetchval(query)
 
 
+async def subset_metrics(connection: asyncpg.Connection, source_table: str, target_schema: str,
+                         target_table: str, primary_key: list[str], shared: list[str]) -> dict:
+    if not primary_key:
+        return {}
+    source = f"public.{quote_ident(source_table)}"
+    target = f"{quote_ident(target_schema)}.{quote_ident(target_table)}"
+    join = " and ".join(f"s.{quote_ident(name)}=t.{quote_ident(name)}" for name in primary_key)
+    source_missing = f"t.{quote_ident(primary_key[0])} is null"
+    target_missing = f"s.{quote_ident(primary_key[0])} is null"
+    source_json = ",".join(f"'{name}',s.{quote_ident(name)}" for name in shared)
+    target_json = ",".join(f"'{name}',t.{quote_ident(name)}" for name in shared)
+    mismatch = f"jsonb_build_object({source_json}) is distinct from jsonb_build_object({target_json})"
+    row = await connection.fetchrow(
+        f"""select
+              (select count(*) from {source} s left join {target} t on {join} where {source_missing}) source_only,
+              (select count(*) from {target} t left join {source} s on {join} where {target_missing}) target_only,
+              (select count(*) from {source} s join {target} t on {join} where {mismatch}) shared_mismatch"""
+    )
+    return {
+        "sourceOnlyCount": row["source_only"],
+        "targetOnlyCount": row["target_only"],
+        "sharedDataMismatchCount": row["shared_mismatch"],
+        "sourceSubsetMatch": row["source_only"] == 0 and row["shared_mismatch"] == 0,
+    }
+
+
 async def inspect(dsn: str) -> dict:
     connection = await asyncpg.connect(dsn.replace("postgresql+asyncpg://", "postgresql://"), timeout=20)
     try:
@@ -117,6 +143,11 @@ async def inspect(dsn: str) -> dict:
                     })
                     item["primaryKeysMatch"] = item["sourcePrimaryKeyChecksum"] == item["targetPrimaryKeyChecksum"]
                     item["sharedDataMatch"] = item["sourceSharedChecksum"] == item["targetSharedChecksum"]
+                    item.update(await subset_metrics(
+                        connection, source_table, target_schema, target_table, comparable_pk, shared
+                    ))
+                    if not comparable_pk:
+                        item["sourceSubsetMatch"] = item["countsMatch"] and item["sharedDataMatch"]
                 else:
                     item["targetExists"] = False
             results.append(item)
@@ -124,6 +155,7 @@ async def inspect(dsn: str) -> dict:
         mismatched = [item["source"] for item in results if item.get("targetExists") and not (
             item.get("countsMatch") and item.get("primaryKeysMatch") and item.get("sharedDataMatch")
         )]
+        retirement_mismatched = [item["source"] for item in results if item.get("targetExists") and not item.get("sourceSubsetMatch")]
         missing_targets = [item["source"] for item in results if item.get("target") and not item.get("targetExists")]
         legacy_schema_rows = await connection.fetch(
             """select n.nspname schema_name,c.relname table_name,
@@ -150,8 +182,10 @@ async def inspect(dsn: str) -> dict:
                 "publicTableCount": len(results), "mappedTableCount": sum(bool(item["target"]) for item in results),
                 "unresolvedTables": unresolved, "missingTargetTables": missing_targets,
                 "mismatchedTables": mismatched,
+                "retirementMismatchedTables": retirement_mismatched,
                 "readyForBackfill": not unresolved and not missing_targets,
                 "readyForCutover": not unresolved and not missing_targets and not mismatched,
+                "readyForLegacyRetirement": not unresolved and not missing_targets and not retirement_mismatched,
             },
             "legacySearchTables": [dict(row) for row in legacy_schema_rows],
             "targetSearchTables": [dict(row) for row in search_rows],

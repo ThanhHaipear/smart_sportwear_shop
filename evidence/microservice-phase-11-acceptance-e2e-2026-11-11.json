@@ -1,0 +1,23 @@
+{
+  "phase": 11,
+  "capturedAt": "2026-11-11T18:51:00+07:00",
+  "scope": "isolated-local-postgresql-acceptance",
+  "status": "PASS",
+  "productionDataUsed": false,
+  "gatewayPort": 18085,
+  "flows": {
+    "identityRegisterAndLogin": "passed",
+    "codOrderCreate": "passed",
+    "codOrderCancel": "passed",
+    "vietQrOrderCreate": "passed",
+    "sepaySignedWebhook": "MATCHED",
+    "orderDelivery": "DELIVERED",
+    "returnWorkflow": "RECEIVED",
+    "manualRefund": "COMPLETED"
+  },
+  "defectsFoundAndFixed": [
+    "Sales sent orderRef/read id while Catalog contract requires orderId/returns reservationId.",
+    "Catalog bound java.time.Instant directly to PostgreSQL timestamptz; binding now uses java.sql.Timestamp."
+  ],
+  "secretsPrinted": false
+}

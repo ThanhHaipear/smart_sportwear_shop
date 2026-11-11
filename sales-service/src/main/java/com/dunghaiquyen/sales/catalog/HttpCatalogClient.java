@@ -23,10 +23,10 @@ public class HttpCatalogClient implements CatalogClient {
                 Integer.parseInt(String.valueOf(d.getOrDefault("availableQuantity",0))));
     }
     @Override public Reservation reserve(UUID orderId,List<OrderLineRequest> items) {
-        Map<String,Object> body=Map.of("orderRef",orderId,"idempotencyKey","sales-order:"+orderId,
+        Map<String,Object> body=Map.of("orderId",orderId,"idempotencyKey","sales-order:"+orderId,
                 "items",items.stream().map(i->Map.of("variantId",i.variantId(),"quantity",i.quantity())).toList());
         @SuppressWarnings("unchecked") Map<String,Object> r=client.post().uri("/internal/v1/inventory/reservations").contentType(MediaType.APPLICATION_JSON).body(body).retrieve().body(Map.class);
-        Map<String,Object> d=data(r); return new Reservation(uuid(d,"id"),Instant.parse(str(d,"expiresAt")));
+        Map<String,Object> d=data(r); return new Reservation(uuid(d,"reservationId"),Instant.parse(str(d,"expiresAt")));
     }
     @Override public void confirm(UUID id) { client.post().uri("/internal/v1/inventory/reservations/{id}/confirm",id).retrieve().toBodilessEntity(); }
     @Override public void release(UUID id) { client.delete().uri("/internal/v1/inventory/reservations/{id}",id).retrieve().toBodilessEntity(); }

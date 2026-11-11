@@ -1,0 +1,21 @@
+{
+  "phase": 10,
+  "createdAt": "2026-11-11T18:53:01.9390990+07:00",
+  "source": "Supabase PostgreSQL",
+  "schemas": ["public", "ai_retrieval"],
+  "encryptedBackup": "backups/microservice-phase-10-final/supabase-v13-20261111-185251.dump.aes",
+  "keyProtection": "Windows DPAPI CurrentUser",
+  "plaintextSha256": "54898FFA635BA17F31A9BF002A021AFEF93D5CECB203E78DE752AD3793C74236",
+  "encryptedSha256": "528E567E81288B7488EBA32A2F60B38FD62A767EDA3335EBA1F9CB293F93E29F",
+  "restore": {
+    "image": "pgvector/pgvector:pg17",
+    "flywayVersion": 13,
+    "products": 36,
+    "activeProducts": 36,
+    "images": 81,
+    "readyImageEmbeddings": 81,
+    "publishedOutboxEvents": 489,
+    "verified": true
+  },
+  "secretsPrinted": false
+}

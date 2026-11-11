@@ -3,7 +3,7 @@
 ## Trạng thái
 
 Phase 10 đã hoàn thành phần implementation ngày 11/11/2026, trạng thái
-`IMPLEMENTED / FINALIZATION_HELD`.
+`READY_FOR_FINALIZATION / DESTRUCTIVE_APPROVAL_REQUIRED`.
 
 Migration chốt GRANT, cleanup FK, manifest ownership, audit read-only, destructive-finalization gate và
 rollback policy đã có đầy đủ. Việc áp dụng V3 lên Supabase **chưa được thực hiện** vì bằng chứng Phase 6-8
@@ -79,10 +79,18 @@ legacy và schema `ai_retrieval`, đúng với trạng thái chưa chạy V3. Ev
 
 ## Điều kiện còn thiếu để đóng Phase 10
 
-- Bằng chứng route/write cut-over thực tế của các phase đang `CUTOVER_HELD`.
-- Approval và timestamp kết thúc stability window.
-- Restore-point mới ngay trước cleanup.
-- Live evidence sau V1/V2/V3, gồm audit `passed=true` và không còn relation/schema legacy.
+- Route/write cut-over runtime đã được redeploy từ source hiện tại; gateway runtime không còn fallback legacy.
+- Stability window sau redeploy đã kết thúc và đạt 20/20 check; evidence
+  `evidence/microservice-phase-11-stability-window-2026-11-11.json`.
+- Restore-point mới ngay trước cleanup: đã tạo và restore thử thành công ngày 11/11/2026; evidence
+  `evidence/microservice-phase-10-restore-drill-2026-11-11.json`.
+- Còn thiếu xác nhận destructive rõ ràng để chạy V3 trên Supabase, sau đó chạy live audit
+  `--require-legacy-retired` và lưu evidence cuối.
+
+Incremental parity cuối ngày 11/11/2026 xác nhận mọi dòng nguồn legacy đều tồn tại và khớp dữ liệu dùng chung
+ở schema đích. `sales.carts` có thêm 3 dòng và `catalog.wishlists` có thêm 1 dòng được tạo sau cut-over;
+không có source-only row hoặc shared-data mismatch. Evidence:
+`evidence/microservice-phase-10-final-parity-2026-11-11.json` với `readyForLegacyRetirement=true`.
 
 ## Cut-over attempt ngày 11/11/2026
 
