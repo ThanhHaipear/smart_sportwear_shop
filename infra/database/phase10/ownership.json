@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "services": [
+    {"service": "identity-service", "schema": "identity", "ownerRole": "identity_owner", "runtimeRole": "identity_app", "searchPath": "identity,pg_catalog"},
+    {"service": "catalog-service", "schema": "catalog", "ownerRole": "catalog_owner", "runtimeRole": "catalog_app", "searchPath": "catalog,pg_catalog"},
+    {"service": "sales-service", "schema": "sales", "ownerRole": "sales_owner", "runtimeRole": "sales_app", "searchPath": "sales,pg_catalog"},
+    {"service": "search-service", "schema": "ai_search", "ownerRole": "search_owner", "runtimeRole": "search_app", "searchPath": "ai_search,extensions,pg_catalog"},
+    {"service": "chatbot-service", "schema": "chatbot", "ownerRole": "chatbot_owner", "runtimeRole": "chatbot_app", "searchPath": "chatbot,pg_catalog"},
+    {"service": "recommendation-service", "schema": "recommendation", "ownerRole": "recommendation_owner", "runtimeRole": "recommendation_app", "searchPath": "recommendation,pg_catalog"}
+  ],
+  "allowedExtraSchemaUsage": {"search_app": ["extensions"]},
+  "legacySchemas": ["ai_retrieval"],
+  "legacyPublicRelations": [
+    "addresses", "audit_logs", "bank_reconciliation_runs", "bank_transactions", "brands",
+    "cart_items", "carts", "catalog_dataset_items", "catalog_datasets", "categories", "colors",
+    "integration_outbox", "inventory_transactions", "materials", "notification_templates", "notifications",
+    "order_items", "order_status_history", "orders", "password_reset_tokens", "payment_events", "payments",
+    "product_images", "product_materials", "product_reviews", "product_sports", "product_technologies",
+    "product_types", "product_use_cases", "product_variants", "products", "promotion_products", "promotions",
+    "refresh_tokens", "refunds", "return_items", "returns", "site_settings", "size_systems", "sizes",
+    "sports", "technologies", "use_cases", "user_identities", "user_interactions", "users",
+    "wishlist_items", "wishlists"
+  ]
+}

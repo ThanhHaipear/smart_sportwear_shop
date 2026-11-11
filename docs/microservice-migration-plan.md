@@ -14,7 +14,7 @@
 | 7. Tách `identity-service` | `DONE / CUTOVER_HELD` | [Phase 7 identity service](microservice-phase-7-identity-service.md): service và 6/6 tests đạt; schema `identity`, runtime role, backfill 3 users/1 identity/2 addresses/18 refresh tokens và write-own/deny-public probe đạt; route/event giữ tắt chờ cửa sổ cut-over |
 | 8. Đổi core thành `sales-service` | `DONE / CUTOVER_HELD` | [Phase 8 sales service](microservice-phase-8-sales-service.md): implementation gate đạt; schema `sales`, runtime role, backfill 14 bảng và write-own/deny-public acceptance đạt; route/event/SePay writer giữ tắt chờ cut-over |
 | 9. Gateway và vận hành | `DONE` | [Phase 9 gateway và vận hành](microservice-phase-9-gateway-operations.md): gateway allowlist/rate-limit/trace, application port isolation, Prometheus/Grafana/Tempo, SLO/alert/runbook và resilience gate đạt; kill switch riêng giữ từng context trên stable upstream cho tới cut-over gate của service sở hữu |
-| 10. Dọn shared database | `NOT_STARTED` | Chỉ bắt đầu sau khi route/write cut-over và thời gian ổn định được duyệt |
+| 10. Dọn shared database | `IMPLEMENTED / FINALIZATION_HELD` | [Phase 10 database cleanup](microservice-phase-10-database-cleanup.md): GRANT/FK/legacy cleanup, ownership audit và rollback policy đã có; V3 giữ chưa chạy cho tới khi route/write cut-over, stability window và restore-point được duyệt |
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 
