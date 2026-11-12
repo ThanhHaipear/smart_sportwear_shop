@@ -48,6 +48,37 @@ def test_allowlisted_route_propagates_trace_and_correlation():
     assert response.headers["x-correlation-id"] == "phase9-test"
 
 
+def test_browser_preflight_allows_storefront_auth_requests_without_hitting_upstream():
+    upstream_calls = []
+    client = gateway(lambda request: upstream_calls.append(request) or httpx.Response(500))
+    response = client.options(
+        "/api/v1/auth/google",
+        headers={
+            "Origin": "http://localhost:3000",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type",
+        },
+    )
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "http://localhost:3000"
+    assert "POST" in response.headers["access-control-allow-methods"]
+    assert upstream_calls == []
+
+
+def test_cors_rejects_unconfigured_origins():
+    client = gateway(lambda _: httpx.Response(200))
+    response = client.options(
+        "/api/v1/auth/login",
+        headers={
+            "Origin": "https://untrusted.example",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type",
+        },
+    )
+    assert response.status_code == 400
+    assert "access-control-allow-origin" not in response.headers
+
+
 def test_internal_and_operational_upstream_routes_are_never_public():
     client = gateway(lambda _: httpx.Response(500))
     for path in ("/internal/v1/refunds", "/api/v1/internal/refunds", "/actuator/prometheus", "/admin", "/docs"):

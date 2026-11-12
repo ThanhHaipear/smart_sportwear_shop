@@ -16,6 +16,7 @@ from typing import Iterable
 
 import httpx
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -30,6 +31,7 @@ class Settings(BaseSettings):
     gateway_request_timeout_seconds: float = 10.0
     gateway_rate_limit_per_minute: int = 120
     gateway_rate_limit_burst: int = 30
+    gateway_cors_allowed_origins: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001"
     jwt_access_secret: str = "dev-only-access-secret-change-me-please-32-bytes-min"
     jwt_previous_access_secret: str = ""
     otel_exporter_otlp_endpoint: str = ""
@@ -191,6 +193,14 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         if telemetry_client:
             await telemetry_client.aclose()
     app = FastAPI(title="Smart Sportswear API Gateway", version="1.0.0", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
+    allowed_origins = [origin.strip() for origin in config.gateway_cors_allowed_origins.split(",") if origin.strip()]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=allowed_origins,
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type", "X-Correlation-ID", "traceparent"],
+        expose_headers=["X-Correlation-ID", "traceparent"],
+    )
 
     @app.get("/health/live")
     async def live() -> dict[str, str]:
