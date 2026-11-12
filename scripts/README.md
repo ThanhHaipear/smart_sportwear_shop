@@ -1,25 +1,28 @@
 # Project scripts
 
-Các script được chia theo mục đích sử dụng:
+Các script được chia theo mục đích:
 
-- `run/`: khởi động backend, frontend và các dịch vụ hỗ trợ.
+- `run/`: khởi động hạ tầng, sáu microservice, hai worker, gateway và frontend.
 - `setup/`: chuẩn bị công cụ phát triển trên máy local.
-- `maintenance/`: backfill và bảo trì dữ liệu; cần kiểm tra cấu hình trước khi chạy.
+- `maintenance/`: migration, audit và bảo trì dữ liệu có kiểm soát.
 
-Chạy các lệnh từ thư mục gốc của repository. File `.cmd` là launcher tiện dụng
-cho file PowerShell `.ps1` cùng tên.
+Chạy lệnh từ thư mục gốc repository. File `.cmd` là launcher cho file PowerShell
+`.ps1` cùng tên.
 
-## Khởi động
+## Khởi động runtime hiện tại
 
 ```powershell
-.\scripts\run\start-backend.cmd
-.\scripts\run\start-admin.cmd
-.\scripts\run\start-storefront.cmd
-.\scripts\run\start-chatbot-service.cmd
-.\scripts\run\start-product-search-indexer.cmd
-.\scripts\run\start-visual-search.cmd
-.\scripts\run\start-sepay-tunnel.cmd
+.\scripts\run\start-all-local.cmd
 ```
+
+Chỉ chạy backend services và gateway:
+
+```powershell
+.\scripts\run\start-all-local.cmd -NoFrontends
+```
+
+Các thành phần cũng có thể được chạy riêng bằng launcher tương ứng trong
+`scripts/run/`. Xem thứ tự phụ thuộc, cổng và cách đọc log trong `RUN_LOCAL.md`.
 
 ## Thiết lập
 
@@ -27,21 +30,12 @@ cho file PowerShell `.ps1` cùng tên.
 .\scripts\setup\setup-local-tools.cmd
 ```
 
-## Bảo trì dữ liệu
-
-```powershell
-.\scripts\maintenance\backfill-catalog-index.ps1
-.\scripts\maintenance\backfill-product-embeddings.ps1
-```
-
 ## Nghiệm thu microservice
-
-Gate tổng hợp cuối của sáu service:
 
 ```powershell
 .\scripts\verify-microservice-phase-12.ps1 -StaticOnly
 .\scripts\verify-microservice-phase-12.ps1 -EvidencePath evidence/microservice-phase-12-local-acceptance.json
 ```
 
-Xem điều kiện chạy permission probe live và các gate production còn giữ tại
-`docs/microservice-phase-12-final-acceptance.md`.
+Các script Phase 3-11 và `maintenance/` được giữ để audit lịch sử migration;
+chúng không phải launcher của runtime hiện tại.

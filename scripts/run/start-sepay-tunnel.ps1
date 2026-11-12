@@ -21,15 +21,6 @@ Get-Content -LiteralPath $envFile | ForEach-Object {
 }
 
 if ([string]::IsNullOrWhiteSpace($env:NGROK_AUTHTOKEN)) {
-    $legacyEnv = Join-Path $projectRoot "backend\.env"
-    if (Test-Path -LiteralPath $legacyEnv -PathType Leaf) {
-        Get-Content -LiteralPath $legacyEnv | ForEach-Object {
-            if ($_ -match '^NGROK_AUTHTOKEN=(.*)$') { $env:NGROK_AUTHTOKEN = $matches[1].Trim() }
-            if ($_ -match '^NGROK_DOMAIN=(.*)$') { $env:NGROK_DOMAIN = $matches[1].Trim() }
-        }
-    }
-}
-if ([string]::IsNullOrWhiteSpace($env:NGROK_AUTHTOKEN)) {
     throw "NGROK_AUTHTOKEN is not configured."
 }
 

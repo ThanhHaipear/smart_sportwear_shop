@@ -1,5 +1,3 @@
 # Phase 3+: read-only data access layer (Supabase PostgreSQL)
-# product_repository.py         (Phase 3)
-# inventory_read_repository.py  (Phase 3)
 # knowledge_repository.py       (Phase 4)
 # vector_repository.py          (Phase 8)

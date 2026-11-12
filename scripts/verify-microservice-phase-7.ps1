@@ -15,7 +15,7 @@ foreach ($needle in @('REUSE_DETECTED','previousAccessSecret','identity.user.cre
 }
 Push-Location (Join-Path $root "identity-service")
 try {
-    & ..\backend\mvnw.cmd -q -f pom.xml test
+    & ..\mvnw.cmd -q -f pom.xml test
     if ($LASTEXITCODE -ne 0) { throw "identity-service test gate failed" }
 } finally { Pop-Location }
 $contract = Get-Content -Raw (Join-Path $root "contracts\rest\identity-service-v1.yaml")

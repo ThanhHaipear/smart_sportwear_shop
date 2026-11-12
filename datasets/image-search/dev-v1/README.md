@@ -15,7 +15,7 @@ This split is only for choosing preprocessing, similarity threshold, candidate l
 Generated binaries are intentionally ignored by Git. Rebuild them from the repository root with:
 
 ```powershell
-visual-search-service\.venv\Scripts\python.exe datasets\image-search\dev-v1\build_dataset.py
+services\search-service\.venv\Scripts\python.exe datasets\image-search\dev-v1\build_dataset.py
 ```
 
 Committed reproducibility artifacts:

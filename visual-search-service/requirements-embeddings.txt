@@ -1,5 +1,0 @@
-# Install only on the host that serves local SigLIP2 image queries.
--r requirements.txt
-transformers==4.57.1
-torch==2.7.1
-sentencepiece==0.2.1

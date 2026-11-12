@@ -145,7 +145,7 @@ Không dùng `docker compose down -v`; tùy chọn `-v` sẽ xóa volume Redis/R
   database cũ.
 - Launcher host đổi Docker DNS (`catalog-service`, `rabbitmq`, `redis`...) thành `127.0.0.1`.
 - Flyway bị tắt trong launcher runtime. Migration/finalization database phải chạy bằng maintenance script riêng.
-- Không chạy `scripts/run/start-backend.cmd`; launcher này thuộc backend monolith đã retire.
+- Backend monolith cổng `8082` đã retire và launcher cũ đã được loại bỏ.
 - Visual Search tiếp tục tắt theo visual hold; text search vẫn hoạt động qua `search-service`.
 
 ## SePay tunnel

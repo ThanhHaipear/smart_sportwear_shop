@@ -10,8 +10,8 @@ $deprecated = rg -n '/api/v1/(realtime|inventory)/stream' (Join-Path $repo 'fron
 if ($LASTEXITCODE -eq 0 -and $deprecated) { throw "Deprecated frontend SSE contract remains:`n$deprecated" }
 if (-not $StaticOnly) {
     Push-Location (Join-Path $repo 'gateway'); try { python -m pytest -q; if ($LASTEXITCODE) { throw 'Gateway tests failed.' } } finally { Pop-Location }
-    Push-Location (Join-Path $repo 'sales-service'); try { & (Join-Path $repo 'backend/mvnw.cmd') -q -f pom.xml test; if ($LASTEXITCODE) { throw 'Sales tests failed.' } } finally { Pop-Location }
-    Push-Location (Join-Path $repo 'catalog-service'); try { & (Join-Path $repo 'backend/mvnw.cmd') -q -f pom.xml test; if ($LASTEXITCODE) { throw 'Catalog tests failed.' } } finally { Pop-Location }
+    Push-Location (Join-Path $repo 'sales-service'); try { & (Join-Path $repo 'mvnw.cmd') -q -f pom.xml test; if ($LASTEXITCODE) { throw 'Sales tests failed.' } } finally { Pop-Location }
+    Push-Location (Join-Path $repo 'catalog-service'); try { & (Join-Path $repo 'mvnw.cmd') -q -f pom.xml test; if ($LASTEXITCODE) { throw 'Catalog tests failed.' } } finally { Pop-Location }
     Push-Location (Join-Path $repo 'frontend/storefront'); try { npm.cmd run typecheck; if ($LASTEXITCODE) { throw 'Storefront typecheck failed.' } } finally { Pop-Location }
     Push-Location (Join-Path $repo 'frontend/admin'); try { npm.cmd run lint; if ($LASTEXITCODE) { throw 'Admin lint failed.' } } finally { Pop-Location }
 }

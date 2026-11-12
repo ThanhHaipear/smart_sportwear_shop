@@ -14,8 +14,8 @@ artifact hashes are frozen. TEST v2 is authorized to run exactly once with the
 threshold and ranking configuration frozen by DEV v2.2.
 
 ```powershell
-visual-search-service\.venv\Scripts\python.exe datasets\image-search\test-v2\build_dataset.py --collect --contact-sheets
-visual-search-service\.venv\Scripts\python.exe datasets\image-search\test-v2\build_dataset.py --contact-sheets
+services\search-service\.venv\Scripts\python.exe datasets\image-search\test-v2\build_dataset.py --collect --contact-sheets
+services\search-service\.venv\Scripts\python.exe datasets\image-search\test-v2\build_dataset.py --contact-sheets
 ```
 
 Image binaries and contact sheets remain ignored. Manifests, labels,

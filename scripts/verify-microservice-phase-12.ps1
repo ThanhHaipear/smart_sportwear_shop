@@ -104,7 +104,7 @@ if (-not $StaticOnly) {
     Invoke-Gate 'chatbot-tests' 'chatbot-service' $chatbotPython @('-m','pytest','-q')
     Invoke-Gate 'recommendation-tests' 'recommendation-service' $python @('-m','pytest','-q')
 
-    $maven = Join-Path $repo 'backend/mvnw.cmd'
+    $maven = Join-Path $repo 'mvnw.cmd'
     foreach ($service in @('catalog-service','identity-service','sales-service')) {
         Invoke-Gate "$service-tests" $service $maven @('-q','-f','pom.xml','test')
     }

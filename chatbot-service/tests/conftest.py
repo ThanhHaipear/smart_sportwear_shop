@@ -12,7 +12,6 @@ from __future__ import annotations
 import os
 
 # ── Set test env vars BEFORE any app module is imported ──────────────────────
-os.environ["DB_READ_URL"] = ""
 os.environ["REDIS_URL"] = ""
 os.environ["OPENAI_API_KEY"] = ""
 os.environ["ANTHROPIC_API_KEY"] = ""

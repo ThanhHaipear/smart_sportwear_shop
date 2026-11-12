@@ -22,8 +22,8 @@ display, a phone portrait, or boxing shoes displaced the labeled garment or
 accessory as the actual query focus.
 
 ```powershell
-visual-search-service\.venv\Scripts\python.exe datasets\image-search\dev-v2\build_dataset.py --collect --contact-sheets
-visual-search-service\.venv\Scripts\python.exe datasets\image-search\dev-v2\build_dataset.py
+services\search-service\.venv\Scripts\python.exe datasets\image-search\dev-v2\build_dataset.py --collect --contact-sheets
+services\search-service\.venv\Scripts\python.exe datasets\image-search\dev-v2\build_dataset.py
 ```
 
 Generated image binaries and review sheets are ignored by Git. The manifest,

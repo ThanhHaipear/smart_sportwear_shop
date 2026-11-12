@@ -4,7 +4,6 @@ Initialize-LocalServiceEnvironment -ServiceEnvFile (Join-Path $service ".env")
 $env:PYTHONUTF8 = "1"
 $env:CHATBOT_HOST = "0.0.0.0"
 $env:CHATBOT_PORT = "8002"
-$env:DB_READ_URL = $env:CHATBOT_DATABASE_URL
 $env:DB_WRITE_URL = $env:CHATBOT_DATABASE_URL
 
 $python = Get-LocalPython -PreferredPath (Join-Path $service ".venv\Scripts\python.exe")

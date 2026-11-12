@@ -44,8 +44,8 @@ def test_legacy_product_search_alias_uses_same_contract(monkeypatch):
     app.dependency_overrides[get_settings] = configured_settings
     client = TestClient(app)
     response = client.post(
-        "/internal/v1/product-search",
-        headers={"X-Internal-Token": "test-token"},
+        "/internal/v1/search",
+        headers={"X-Internal-Service-Token": "test-token"},
         json={"query": "áo chạy bộ"},
     )
     assert response.status_code == 503

@@ -17,11 +17,9 @@ router = APIRouter(prefix="/internal/v1", tags=["search"])
 
 def require_token(
     x_internal_service_token: str = Header(default="", alias="X-Internal-Service-Token"),
-    x_internal_token: str = Header(default="", alias="X-Internal-Token"),
     settings: Settings = Depends(get_settings),
 ) -> None:
-    supplied = x_internal_service_token or x_internal_token
-    if not settings.internal_service_token or not hmac.compare_digest(supplied, settings.internal_service_token):
+    if not settings.internal_service_token or not hmac.compare_digest(x_internal_service_token, settings.internal_service_token):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid internal service token")
 
 
@@ -50,7 +48,6 @@ class TextSearchRequest(BaseModel):
 
 
 @router.post("/search", dependencies=[Depends(require_token)])
-@router.post("/product-search", dependencies=[Depends(require_token)], include_in_schema=False)
 async def search_text(request: TextSearchRequest, settings: Settings = Depends(get_settings)) -> dict:
     if not settings.search_enabled:
         raise HTTPException(status_code=503, detail="Search is disabled")
@@ -97,7 +94,6 @@ async def search_text(request: TextSearchRequest, settings: Settings = Depends(g
 
 
 @router.post("/search/image", dependencies=[Depends(require_token)])
-@router.post("/visual-search", dependencies=[Depends(require_token)], include_in_schema=False)
 async def search_image(
     image: UploadFile = File(...), limit: int = Query(default=20, ge=1, le=50),
     settings: Settings = Depends(get_settings),

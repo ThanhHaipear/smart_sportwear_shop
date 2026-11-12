@@ -22,13 +22,11 @@ backend and this service.
 ## Contracts
 
 - `POST /internal/v1/search`: canonical JSON text/hybrid search API.
-- `POST /internal/v1/product-search`: compatibility alias for the Spring client.
 - `POST /internal/v1/search/image`: canonical multipart image search API.
 - `GET /health/live`, `GET /health/ready`, `GET /metrics`.
 
-All search endpoints require `X-Internal-Service-Token` (the legacy
-`X-Internal-Token` header remains accepted during cut-over). Query images are
-never persisted.
+All search endpoints require `X-Internal-Service-Token`. Query images are never
+persisted.
 
 Image results use the locked DEV v2.2 category-consensus weight and similarity
 threshold. Changing either value requires a new DEV/independent TEST cycle; do
@@ -38,6 +36,6 @@ not retune against TEST v2.
 
 Use `scripts/backfill.py --ids products.txt` to rebuild from the Catalog API.
 It is dry-run by default and requires `--execute` to write. Rollback is routing
-only: set Spring `PRODUCT_SEARCH_SERVICE_URL` back to the chatbot endpoint and
-`VISUAL_SEARCH_SERVICE_URL` back to the legacy visual service. `ai_search` is
-derived and can be dropped/rebuilt only after rollback verification.
+only: stop routing traffic to this service while preserving `ai_search` for
+investigation. The index is derived and can be rebuilt from Catalog after the
+incident is resolved.

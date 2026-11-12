@@ -14,7 +14,6 @@ class Settings(BaseSettings):
     # DB_WRITE_URL remains a temporary compatibility alias during cut-over.
     CHATBOT_DATABASE_URL: str = ""
     DB_WRITE_URL: str = ""
-    DB_READ_URL: str = ""  # legacy/offline scripts only; never opened by the API runtime
     SEARCH_API_BASE_URL: str = "http://localhost:8090"
     SEARCH_SERVICE_TOKEN: str = ""
     SEARCH_API_TIMEOUT_SECONDS: float = 5.0
@@ -37,37 +36,7 @@ class Settings(BaseSettings):
     # Vector search — OpenAI embeddings (independent of MODEL_PROVIDER)
     EMBEDDING_MODEL: str = "text-embedding-3-small"
     EMBEDDING_DIMS: int = 1536
-    PRODUCT_SEARCH_INTERNAL_TOKEN: str = ""
-    PRODUCT_SEARCH_SEMANTIC_ENABLED: bool = True
-    PRODUCT_SEARCH_LLM_REWRITE_ENABLED: bool = False
-    PRODUCT_SEARCH_RRF_K: int = 60
-    PRODUCT_SEARCH_KEYWORD_WEIGHT: float = 1.2
-    PRODUCT_SEARCH_SEMANTIC_WEIGHT: float = 1.0
-    PRODUCT_SEARCH_MIN_SIMILARITY: float = 0.40
     PRODUCT_SEARCH_QUERY_CACHE_TTL_SECONDS: int = 604800
-    PRODUCT_SEARCH_CANDIDATE_CACHE_TTL_SECONDS: int = 180
-    PRODUCT_SEARCH_INDEXING_ENABLED: bool = False
-    RABBITMQ_URL: str = "amqp://visual_search:change-me@localhost:5672/"
-    PRODUCT_SEARCH_INDEXING_QUEUE: str = "product-search.indexing"
-    PRODUCT_SEARCH_INDEXING_RETRY_QUEUES: str = (
-        "product-search.indexing.retry.30s,product-search.indexing.retry.5m,"
-        "product-search.indexing.retry.1h"
-    )
-    PRODUCT_SEARCH_INDEXING_DLQ: str = "product-search.indexing.dlq"
-    PRODUCT_SEARCH_INDEXING_PREFETCH: int = 5
-    PRODUCT_SEARCH_RECONCILIATION_INTERVAL_SECONDS: int = 3600
-    PRODUCT_SEARCH_RECONCILIATION_BATCH_SIZE: int = 100
-    CATALOG_INDEX_BACKFILL_ON_STARTUP: bool = True
-    CATALOG_INDEXING_MAX_ITEM_ATTEMPTS: int = 3
-
-    # 1C.2 local embedding workers. Model revisions are also registered by V7.
-    EMBEDDING_DEVICE: str = "auto"  # auto | cpu | cuda
-    EMBEDDING_MAX_TEXT_LENGTH: int = 512
-    EMBEDDING_MAX_IMAGE_BYTES: int = 15 * 1024 * 1024
-    EMBEDDING_MAX_IMAGE_PIXELS: int = 40_000_000
-    EMBEDDING_MAX_ITEM_ATTEMPTS: int = 3
-    EMBEDDING_HTTP_TIMEOUT_SECONDS: float = 30.0
-    EMBEDDING_CACHE_DIR: str = ""
 
     model_config = SettingsConfigDict(
         env_file=".env",

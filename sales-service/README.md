@@ -15,7 +15,7 @@ Spring Boot/Java 21 service owning carts, orders, payments, SePay reconciliation
 ## Run and verify
 
 ```powershell
-..\backend\mvnw.cmd -f pom.xml test
+..\mvnw.cmd -f pom.xml test
 powershell -ExecutionPolicy Bypass -File ..\scripts\verify-microservice-phase-8.ps1 -ImplementationOnly
 ```
 

@@ -82,11 +82,3 @@ async def _pipeline(query: str, limit: int, parsed: ParsedQuery | None = None,
             gender=parsed.gender, priceMin=parsed.price_min, priceMax=parsed.price_max,
         ),
     )
-
-
-async def search_internal(request) -> dict:
-    """Temporary response adapter; canonical endpoint is owned by search-service."""
-    return await search_api_client.search_products(
-        request.query, limit=request.limit,
-        filters=request.filters.model_dump(exclude_none=True),
-    )

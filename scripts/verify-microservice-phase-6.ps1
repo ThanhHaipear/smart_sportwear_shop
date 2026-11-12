@@ -18,7 +18,7 @@ foreach ($needle in $required) { if ($surface -notmatch [regex]::Escape($needle)
 
 Push-Location (Join-Path $root "catalog-service")
 try {
-    & ..\backend\mvnw.cmd -q -f pom.xml test
+    & ..\mvnw.cmd -q -f pom.xml test
     if ($LASTEXITCODE -ne 0) { throw "catalog-service test gate failed" }
 } finally { Pop-Location }
 

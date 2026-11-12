@@ -38,7 +38,7 @@ $null = $dashboard | ConvertFrom-Json
 
 if (-not $SkipServiceTests) {
     foreach ($service in @('identity-service','catalog-service','sales-service')) {
-        & (Join-Path $root "backend\mvnw.cmd") -q -f (Join-Path $root "$service\pom.xml") test
+        & (Join-Path $root "mvnw.cmd") -q -f (Join-Path $root "$service\pom.xml") test
         if ($LASTEXITCODE -ne 0) { throw "$service regression gate failed" }
     }
 }
