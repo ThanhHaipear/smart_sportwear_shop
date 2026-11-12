@@ -1,43 +1,14 @@
-$ErrorActionPreference = "Stop"
-
-$projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
-$serviceDir = Join-Path $projectRoot "chatbot-service"
-$pythonExe = Join-Path $serviceDir ".venv\Scripts\python.exe"
-$backendEnv = Join-Path $projectRoot "backend\.env"
-
-if (-not (Test-Path -LiteralPath $pythonExe -PathType Leaf)) {
-    throw "Missing chatbot-service virtual environment at $pythonExe"
-}
-if (-not (Test-Path -LiteralPath $backendEnv -PathType Leaf)) {
-    throw "Missing backend database configuration at $backendEnv"
-}
-
-# Keep every local service on the same Supabase project. The service-specific
-# .env still owns chatbot settings, but database credentials have one source of
-# truth so stale copied URLs cannot silently split the runtime across projects.
-$database = @{}
-foreach ($line in Get-Content -LiteralPath $backendEnv) {
-    if ($line -match '^([A-Za-z_][A-Za-z0-9_]*)=(.*)$') {
-        $database[$matches[1]] = $matches[2].Trim().Trim('"').Trim("'")
-    }
-}
-foreach ($required in @('DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USERNAME', 'DB_PASSWORD')) {
-    if (-not $database.ContainsKey($required) -or [string]::IsNullOrWhiteSpace($database[$required])) {
-        throw "Missing $required in backend database configuration"
-    }
-}
-
-$dbUser = [Uri]::EscapeDataString($database['DB_USERNAME'])
-$dbPassword = [Uri]::EscapeDataString($database['DB_PASSWORD'])
-$dbName = [Uri]::EscapeDataString($database['DB_NAME'])
-$dbParams = $database['DB_PARAMS']
-$query = if ([string]::IsNullOrWhiteSpace($dbParams)) { '' } else { '?' + $dbParams.TrimStart('?') }
-$databaseUrl = "postgresql://${dbUser}:${dbPassword}@$($database['DB_HOST']):$($database['DB_PORT'])/${dbName}${query}"
-$env:DB_READ_URL = $databaseUrl
-$env:DB_WRITE_URL = $databaseUrl
-
-Set-Location $serviceDir
+. (Join-Path $PSScriptRoot "common-local.ps1")
+$service = Join-Path $script:ProjectRoot "chatbot-service"
+Initialize-LocalServiceEnvironment -ServiceEnvFile (Join-Path $service ".env")
 $env:PYTHONUTF8 = "1"
-Write-Host "Chatbot Service: http://localhost:8002" -ForegroundColor Green
-& $pythonExe run.py
-exit $LASTEXITCODE
+$env:CHATBOT_HOST = "0.0.0.0"
+$env:CHATBOT_PORT = "8002"
+$env:DB_READ_URL = $env:CHATBOT_DATABASE_URL
+$env:DB_WRITE_URL = $env:CHATBOT_DATABASE_URL
+
+$python = Get-LocalPython -PreferredPath (Join-Path $service ".venv\Scripts\python.exe")
+$Host.UI.RawUI.WindowTitle = "Smart Sportswear - Chatbot :8002"
+Assert-LocalPortAvailable -Port 8002 -ServiceName "Chatbot service"
+$code = Invoke-LoggedCommand -Name "chatbot-service" -WorkingDirectory $service -Executable $python -Arguments @("run.py")
+exit $code

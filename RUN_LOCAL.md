@@ -1,133 +1,159 @@
-# Chạy dự án local
+# Chạy Smart Sportswear Shop cục bộ sau khi tách microservice
 
-Redis và RabbitMQ chạy bằng Docker. Backend, admin, storefront, AI service và visual-search service chạy trực tiếp trong các cửa sổ PowerShell riêng.
+## Mô hình runtime
 
-## Chuẩn bị lần đầu
+- Docker chỉ chạy Redis và RabbitMQ.
+- Gateway, sáu microservice, hai worker và frontend chạy trong terminal Windows riêng.
+- Mỗi microservice kết nối trực tiếp tới schema/role riêng trên cùng Supabase project qua
+  `.env.phase10.local`.
+- Backend monolith tại cổng `8082` đã retire và không còn nằm trong luồng chạy.
 
-Mở Docker Desktop, sau đó chạy:
+```text
+Storefront/Admin -> Gateway :8085
+                    |-- Identity :8093 -> Supabase schema identity
+                    |-- Catalog :8092 -> Supabase schema catalog
+                    |-- Sales :8094 -> Supabase schema sales
+                    |-- Chatbot :8002 -> Supabase schema chatbot
+                    |-- Recommendation :8091 -> Supabase schema recommendation
+                    `-- Search :8090 -> Supabase schema ai_search
 
-```powershell
-.\scripts\setup\setup-local-tools.cmd
+Docker: Redis :6379 + RabbitMQ :5672/:15672
 ```
 
-Cấu hình local được đọc từ:
+## Chạy toàn bộ bằng một lệnh
 
-- `backend/.env`
-- `chatbot-service/.env`
-- `visual-search-service/.env`
-- `frontend/admin/.env.local`
-- `frontend/storefront/.env.local`
-
-Các file này chứa thông tin riêng và không được commit. Các file `*.example` là cấu hình mẫu an toàn để đưa lên Git.
-
-## Chạy từng tác vụ
-
-### 1. Redis và RabbitMQ
+Từ thư mục gốc repository:
 
 ```powershell
-docker compose up -d redis rabbitmq
+.\scripts\run\start-all-local.cmd
 ```
 
-Dừng hạ tầng local:
+Launcher tổng sẽ:
+
+1. dừng các application container còn sót từ lần chạy Compose đầy đủ;
+2. chỉ khởi động `redis` và `rabbitmq` trong Docker;
+3. mở terminal Catalog và Identity, chờ hai service sẵn sàng;
+4. mở Sales, Search, Recommendation và các worker;
+5. mở Chatbot, Gateway, Storefront và Admin;
+6. ghi log riêng vào `logs/local`.
+
+Chỉ chạy backend/gateway, không mở frontend:
+
+```powershell
+.\scripts\run\start-all-local.cmd -NoFrontends
+```
+
+## Chạy thủ công từng thành phần
+
+Hạ tầng:
+
+```powershell
+.\scripts\run\start-infrastructure.cmd
+```
+
+Application services:
+
+```powershell
+.\scripts\run\start-catalog-service.cmd
+.\scripts\run\start-identity-service.cmd
+.\scripts\run\start-sales-service.cmd
+.\scripts\run\start-search-service.cmd
+.\scripts\run\start-search-worker.cmd
+.\scripts\run\start-recommendation-service.cmd
+.\scripts\run\start-recommendation-worker.cmd
+.\scripts\run\start-chatbot-service.cmd
+.\scripts\run\start-gateway.cmd
+```
+
+Frontend:
+
+```powershell
+.\scripts\run\start-storefront.cmd
+.\scripts\run\start-admin.cmd
+```
+
+Thứ tự phụ thuộc khi chạy thủ công:
+
+1. Redis và RabbitMQ.
+2. Catalog và Identity.
+3. Sales, Search và Recommendation.
+4. Search Worker và Recommendation Worker.
+5. Chatbot.
+6. Gateway.
+7. Storefront và Admin.
+
+## Địa chỉ cục bộ
+
+| Thành phần | URL |
+|---|---|
+| Storefront | <http://localhost:3000> |
+| Admin | <http://localhost:3001> |
+| Gateway | <http://localhost:8085> |
+| Gateway readiness | <http://localhost:8085/health/ready> |
+| Search | <http://localhost:8090/health/ready> |
+| Chatbot | <http://localhost:8002/health/ready> |
+| Recommendation | <http://localhost:8091/health/ready> |
+| Catalog | <http://localhost:8092/actuator/health> |
+| Identity | <http://localhost:8093/actuator/health> |
+| Sales | <http://localhost:8094/actuator/health> |
+| RabbitMQ management | <http://localhost:15672> |
+
+## Đọc log
+
+Mỗi service vừa ghi log ra terminal vừa append vào `logs/local/<service>.log`.
+
+Tìm lỗi trong toàn bộ service:
+
+```powershell
+.\scripts\run\show-local-logs.cmd
+```
+
+Theo dõi một service:
+
+```powershell
+.\scripts\run\show-local-logs.cmd gateway
+.\scripts\run\show-local-logs.cmd sales-service
+```
+
+Theo dõi Redis và RabbitMQ:
+
+```powershell
+.\scripts\run\show-local-logs.cmd infra
+```
+
+Khi một request lỗi, lấy `X-Correlation-ID` từ response/gateway log rồi tìm xuyên service:
+
+```powershell
+rg "<correlation-id>" .\logs\local
+```
+
+## Dừng hệ thống
+
+- Nhấn `Ctrl+C` trong từng terminal application/service.
+- Dừng hạ tầng Docker khi không còn dùng:
 
 ```powershell
 docker compose stop redis rabbitmq
 ```
 
-### 2. Backend
+Không dùng `docker compose down -v`; tùy chọn `-v` sẽ xóa volume Redis/RabbitMQ.
 
-Mở một cửa sổ PowerShell riêng:
+## Cấu hình và an toàn dữ liệu
 
-```powershell
-.\scripts\run\start-backend.cmd
-```
+- `.env.phase10.local` là nguồn runtime cho DSN, token nội bộ, JWT và RabbitMQ credential.
+- Các `.env` riêng chỉ là cấu hình service bổ sung; launcher nạp runtime chung sau cùng để tránh dùng nhầm
+  database cũ.
+- Launcher host đổi Docker DNS (`catalog-service`, `rabbitmq`, `redis`...) thành `127.0.0.1`.
+- Flyway bị tắt trong launcher runtime. Migration/finalization database phải chạy bằng maintenance script riêng.
+- Không chạy `scripts/run/start-backend.cmd`; launcher này thuộc backend monolith đã retire.
+- Visual Search tiếp tục tắt theo visual hold; text search vẫn hoạt động qua `search-service`.
 
-### 3. Admin
+## SePay tunnel
 
-Mở một cửa sổ PowerShell riêng:
-
-```powershell
-.\scripts\run\start-admin.cmd
-```
-
-### 4. Storefront
-
-Mở một cửa sổ PowerShell riêng:
+Sau khi Gateway `8085` sẵn sàng:
 
 ```powershell
-.\scripts\run\start-storefront.cmd
+.\scripts\run\start-sepay-tunnel.cmd
 ```
 
-### 5. Visual search (khi cần)
-
-Sao chép `visual-search-service/.env.example` thành `visual-search-service/.env`, điền cấu hình local và chỉ đặt `VISUAL_SEARCH_ENABLED=true` sau khi các giá trị bắt buộc đã có. Cài runtime và model dependencies một lần:
-
-```powershell
-cd visual-search-service
-python -m venv .venv
-.\.venv\Scripts\pip install -r requirements-test.txt
-.\.venv\Scripts\pip install -r requirements-embeddings.txt
-```
-
-Sau đó chạy API từ thư mục gốc:
-
-```powershell
-.\scripts\run\start-visual-search.cmd
-```
-
-Launcher lấy connection Supabase từ `backend/.env` để backend, backfill và visual
-search không trỏ nhầm tenant. Query V2 đọc model/vector trong `ai_retrieval`;
-không chạy `python -m app.worker` của pipeline Voyage legacy cho đường V2.
-
-Sau khi backend publisher và worker đều healthy, kiểm tra backfill ở chế độ dry-run
-trước khi enqueue. Không chạy lại backfill production nếu coverage đã đầy đủ:
-
-```powershell
-cd visual-search-service
-python scripts/backfill_embeddings.py
-```
-
-Quy trình benchmark, rollout theo nhóm nhỏ và rollback nằm tại
-`docs/visual-search-rollout.md`.
-
-RabbitMQ Management chỉ được bind vào loopback cho môi trường local: <http://127.0.0.1:15672>. Tài khoản mặc định local là `visual_search` / `change-me`; hãy đặt `RABBITMQ_DEFAULT_USER` và `RABBITMQ_DEFAULT_PASS` khác khi dùng ngoài máy phát triển.
-
-RabbitMQ tự nạp topology từ `rabbitmq/definitions.json`: exchange `catalog.events`, main queue, ba retry queue và DLQ. Nếu thay đổi topology trên một volume đã tồn tại, hãy dùng Management UI để kiểm tra trước; không xóa volume chứa message nếu chưa sao lưu hoặc chưa xác nhận dữ liệu có thể bỏ.
-
-Dừng backend, admin, storefront hoặc visual-search service bằng `Ctrl+C` trong đúng cửa sổ đang chạy tác vụ đó.
-
-## Địa chỉ local
-
-- Storefront: <http://localhost:3000>
-- Admin: <http://localhost:3001>
-- Backend: <http://localhost:8082>
-- Backend health: <http://localhost:8082/actuator/health>
-- Redis: `localhost:6379`
-- RabbitMQ AMQP: `localhost:5672`
-- RabbitMQ Management: <http://127.0.0.1:15672>
-- Visual search: <http://localhost:8090/health/ready>
-
-Dữ liệu chính nằm trên Supabase. Docker Compose không chạy PostgreSQL, backend, frontend hoặc visual-search service.
-# Product hybrid search
-
-Product hybrid search requires Redis and RabbitMQ from Docker, the customer
-chatbot service, its indexing worker, and the Spring backend.
-
-```powershell
-docker compose up -d redis rabbitmq
-.\scripts\run\start-chatbot-service.ps1
-.\scripts\run\start-product-search-indexer.ps1
-.\scripts\run\start-backend.ps1
-```
-
-Use the corresponding `.cmd` launchers when starting from Command Prompt.
-The chatbot and product-indexer launchers derive `DB_READ_URL`/`DB_WRITE_URL`
-from `backend/.env`, so local services cannot silently connect to different
-Supabase projects. Service-specific `.env` files still provide model, token,
-queue and feature settings.
-`PRODUCT_SEARCH_INTERNAL_TOKEN` must be present and identical in
-`backend/.env` and `chatbot-service/.env`. Keep
-`PRODUCT_HYBRID_SEARCH_ENABLED=false` until migrations, embedding coverage,
-the queue consumer, and the acceptance benchmark have been verified.
-For local development, keep `PRODUCT_SEARCH_TIMEOUT_SECONDS=12` in
-`backend/.env` so a cold semantic-search request has enough time to finish.
+Tunnel chỉ forward `POST /api/v1/webhooks/sepay` vào Gateway.

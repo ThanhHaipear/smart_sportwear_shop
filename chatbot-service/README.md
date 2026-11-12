@@ -305,7 +305,7 @@ ChatRequest nhận `accessToken` từ client:
 | SEARCH_SERVICE_TOKEN        | (trống)                | Token gọi Search API |
 | CATALOG_API_BASE_URL        | localhost:8082         | Phase 4; Catalog API hiện tại |
 | CATALOG_SERVICE_TOKEN       | (trống)                | Token gọi internal Catalog API |
-| BACKEND_API_BASE_URL        | localhost:8082         | Phase 5       |
+| BACKEND_API_BASE_URL        | localhost:8085         | Gateway API   |
 | JWT_ACCESS_SECRET           | (trống)                | Phải giống backend; xác minh JWT và khóa API admin |
 | LOG_LEVEL                   | INFO                   | Phase 0       |
 | MODEL_PROVIDER              | anthropic              | `anthropic` hoặc `openai` |

@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 $projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
-$envFile = Join-Path $projectRoot "backend\.env"
+$envFile = Join-Path $projectRoot ".env.phase10.local"
 $scriptFile = Join-Path $projectRoot "scripts\sepay-ngrok-tunnel.js"
 $sdkEntry = Join-Path $projectRoot ".tools\ngrok-sdk\node_modules\@ngrok\ngrok\index.js"
 
@@ -21,7 +21,16 @@ Get-Content -LiteralPath $envFile | ForEach-Object {
 }
 
 if ([string]::IsNullOrWhiteSpace($env:NGROK_AUTHTOKEN)) {
-    throw "NGROK_AUTHTOKEN is empty in backend\.env. Copy it from https://dashboard.ngrok.com/get-started/your-authtoken"
+    $legacyEnv = Join-Path $projectRoot "backend\.env"
+    if (Test-Path -LiteralPath $legacyEnv -PathType Leaf) {
+        Get-Content -LiteralPath $legacyEnv | ForEach-Object {
+            if ($_ -match '^NGROK_AUTHTOKEN=(.*)$') { $env:NGROK_AUTHTOKEN = $matches[1].Trim() }
+            if ($_ -match '^NGROK_DOMAIN=(.*)$') { $env:NGROK_DOMAIN = $matches[1].Trim() }
+        }
+    }
+}
+if ([string]::IsNullOrWhiteSpace($env:NGROK_AUTHTOKEN)) {
+    throw "NGROK_AUTHTOKEN is not configured."
 }
 
 function Test-TcpPort([int]$TargetPort) {
@@ -34,8 +43,8 @@ function Test-TcpPort([int]$TargetPort) {
     finally { $client.Dispose() }
 }
 
-if (-not (Test-TcpPort 8082)) {
-    throw "Backend is not running on port 8082. Start it before the SePay tunnel."
+if (-not (Test-TcpPort 8085)) {
+    throw "Gateway is not running on port 8085. Start it before the SePay tunnel."
 }
 if (Test-TcpPort 18083) {
     throw "Port 18083 is already in use. Stop the existing SePay tunnel before starting another one."

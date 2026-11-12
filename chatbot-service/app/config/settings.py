@@ -18,10 +18,10 @@ class Settings(BaseSettings):
     SEARCH_API_BASE_URL: str = "http://localhost:8090"
     SEARCH_SERVICE_TOKEN: str = ""
     SEARCH_API_TIMEOUT_SECONDS: float = 5.0
-    CATALOG_API_BASE_URL: str = "http://localhost:8082"
+    CATALOG_API_BASE_URL: str = "http://localhost:8092"
     CATALOG_SERVICE_TOKEN: str = ""
     CATALOG_API_TIMEOUT_SECONDS: float = 5.0
-    BACKEND_API_BASE_URL: str = "http://localhost:8082"
+    BACKEND_API_BASE_URL: str = "http://localhost:8085"
     JWT_ACCESS_SECRET: str = ""
     REDIS_URL: str = "redis://localhost:6379"
     SESSION_TTL_SECONDS: int = 3600          # Phase 9: Redis session TTL

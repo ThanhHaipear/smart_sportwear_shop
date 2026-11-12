@@ -3,7 +3,7 @@ import { endpoints } from "@/lib/endpoints";
 
 // Next.js inlines NEXT_PUBLIC_* at build time for both server and client code.
 export const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "http://localhost:8082";
+  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "http://localhost:8085";
 
 function getApiBase(): string {
   if (typeof window !== "undefined") return API_BASE;

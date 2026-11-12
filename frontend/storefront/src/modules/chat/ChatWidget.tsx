@@ -16,7 +16,7 @@ import {
   type StoredChatProduct,
 } from "@/modules/chat/chatStorage";
 
-const CHATBOT_BASE = (process.env.NEXT_PUBLIC_CHATBOT_API_BASE_URL ?? "http://localhost:8002").replace(/\/$/, "");
+const CHATBOT_BASE = (process.env.NEXT_PUBLIC_CHATBOT_API_BASE_URL ?? "http://localhost:8085").replace(/\/$/, "");
 const WELCOME =
   "Xin chào 👋 Mình là trợ lý của Điểm Đến Thể Thao. Bạn cần tìm sản phẩm, hỏi size, giá hay chính sách đổi trả — cứ hỏi mình nhé!";
 

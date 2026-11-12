@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+import logging
 from uuid import UUID
 
 from psycopg import AsyncConnection
@@ -10,6 +11,9 @@ from app.catalog.client import CatalogIndexDocument
 from app.config import Settings
 from app.services.documents import canonical_text, content_hash, stable_json
 from app.services.visual_ranking import rerank_visual_candidates
+
+
+logger = logging.getLogger(__name__)
 
 
 def vector_literal(values: list[float]) -> str:
@@ -34,6 +38,7 @@ class SearchRepository:
                 await cursor.execute("select 1 from ai_search.search_documents limit 1")
             return True
         except Exception:
+            logger.exception("search database readiness check failed")
             return False
 
     async def is_processed(self, consumer: str, event_id: UUID) -> bool:

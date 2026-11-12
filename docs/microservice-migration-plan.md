@@ -20,6 +20,13 @@
 
 Nguyên tắc thực hiện: tách lần lượt, không di chuyển schema hoặc đổi write authority khi baseline, backup/restore và rollback gate chưa đạt.
 
+## Runtime phát triển cục bộ sau migration
+
+Môi trường phát triển chuẩn chỉ chạy Redis và RabbitMQ trong Docker. Gateway, sáu service, Search Worker,
+Recommendation Worker và hai frontend chạy bằng terminal host; mỗi service nạp runtime role/DSN Supabase
+riêng từ `.env.phase10.local`. Launcher tổng, thứ tự phụ thuộc, cổng và cách đọc log được mô tả tại
+[RUN_LOCAL.md](../RUN_LOCAL.md). Backend monolith cổng `8082` không còn nằm trong runtime chuẩn.
+
 ## 1. Mục tiêu và phạm vi
 
 Tài liệu này lập kế hoạch chuyển hệ thống hiện tại từ **modular monolith kết hợp các AI service** sang kiến trúc microservice có ranh giới dữ liệu và triển khai rõ ràng.
