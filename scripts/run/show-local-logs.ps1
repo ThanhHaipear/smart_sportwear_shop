@@ -1,11 +1,37 @@
 param(
-    [string]$Service = "all",
+    [string]$Service = "active",
     [int]$Tail = 10
 )
 
 $ErrorActionPreference = "Stop"
-$projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
-$logDirectory = Join-Path $projectRoot "logs\local"
+. (Join-Path $PSScriptRoot "common-local.ps1")
+$projectRoot = $script:ProjectRoot
+$logDirectory = $script:LocalLogDirectory
+
+function Get-ActiveLocalServiceNames {
+    $servicePorts = [ordered]@{
+        storefront = 3000
+        admin = 3001
+        gateway = 8085
+        "chatbot-service" = 8002
+        "search-service" = 8090
+        "recommendation-service" = 8091
+        "catalog-service" = 8092
+        "identity-service" = 8093
+        "sales-service" = 8094
+    }
+
+    $active = @()
+    foreach ($entry in $servicePorts.GetEnumerator()) {
+        if (Test-LocalTcpPort -Port $entry.Value) { $active += [string]$entry.Key }
+    }
+    foreach ($workerName in @("search-worker", "recommendation-worker")) {
+        if ((Test-LocalProcessSlot -Name $workerName) -or (Test-ManagedLocalProcess -Name $workerName)) {
+            $active += $workerName
+        }
+    }
+    return @($active)
+}
 
 if ($Service -eq "infra") {
     Set-Location $projectRoot
@@ -36,7 +62,7 @@ if ($Service -eq "errors") {
     exit 0
 }
 
-if ($Service -ne "all") {
+if ($Service -ne "all" -and $Service -ne "active" -and -not $Service.Contains(",")) {
     $logFile = Join-Path $logDirectory "$Service.log"
     if (-not (Test-Path -LiteralPath $logFile -PathType Leaf)) {
         $available = (Get-ChildItem -LiteralPath $logDirectory -Filter "*.log" -File |
@@ -47,6 +73,16 @@ if ($Service -ne "all") {
     Write-Host "Following $Service in real time. Press Ctrl+C to stop watching." -ForegroundColor Green
     Get-Content -LiteralPath $logFile -Tail 150 -Wait
     exit 0
+}
+
+$selectedNames = if ($Service -eq "all") {
+    $null
+}
+elseif ($Service -eq "active") {
+    @(Get-ActiveLocalServiceNames)
+}
+else {
+    @($Service.Split(",") | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 }
 
 function Write-PrefixedLogLine {
@@ -117,14 +153,26 @@ function Read-AppendedLogContent {
 }
 
 $positions = @{}
-$files = @(Get-ChildItem -LiteralPath $logDirectory -Filter "*.log" -File | Sort-Object Name)
+$allFiles = @(Get-ChildItem -LiteralPath $logDirectory -Filter "*.log" -File | Sort-Object Name)
+$files = if ($null -eq $selectedNames) {
+    $allFiles
+}
+else {
+    @($allFiles | Where-Object { $selectedNames -contains $_.BaseName })
+}
 if (-not $files) {
-    Write-Host "No local logs have been created yet. Start the application first." -ForegroundColor Yellow
+    Write-Host "No matching local logs have been created yet. Start the selected services first." -ForegroundColor Yellow
     exit 0
 }
 
-Write-Host "Following all application logs in real time. Press Ctrl+C to stop watching." -ForegroundColor Green
-Write-Host "Tip: use 'show-local-logs.cmd gateway' for one service or 'show-local-logs.cmd errors' for errors only." -ForegroundColor DarkGray
+$scopeLabel = if ($Service -eq "all") { "all application services" }
+    elseif ($Service -eq "active") { "currently running services" }
+    else { $Service }
+Write-Host "Following $scopeLabel logs in real time. Press Ctrl+C to stop watching." -ForegroundColor Green
+if ($Service -eq "active") {
+    Write-Host ("Detected: " + ($selectedNames -join ", ")) -ForegroundColor DarkGray
+}
+Write-Host "Use 'all' for every log file or a comma-separated service list for a custom selection." -ForegroundColor DarkGray
 Write-Host ""
 
 foreach ($file in $files) {
@@ -135,7 +183,11 @@ foreach ($file in $files) {
 }
 
 while ($true) {
-    foreach ($file in @(Get-ChildItem -LiteralPath $logDirectory -Filter "*.log" -File | Sort-Object Name)) {
+    $currentFiles = @(Get-ChildItem -LiteralPath $logDirectory -Filter "*.log" -File | Sort-Object Name)
+    if ($null -ne $selectedNames) {
+        $currentFiles = @($currentFiles | Where-Object { $selectedNames -contains $_.BaseName })
+    }
+    foreach ($file in $currentFiles) {
         Read-AppendedLogContent -File $file -Positions $positions
     }
     Start-Sleep -Milliseconds 250

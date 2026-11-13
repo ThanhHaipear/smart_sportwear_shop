@@ -79,5 +79,5 @@ Write-Host "Status:     .\scripts\run\status-local.cmd" -ForegroundColor Cyan
 Write-Host "Stop:       .\scripts\run\stop-all-local.cmd" -ForegroundColor Cyan
 
 if ($FollowLogs) {
-    & (Join-Path $PSScriptRoot "show-local-logs.ps1") -Service "all"
+    & (Join-Path $PSScriptRoot "show-local-logs.ps1") -Service "active"
 }

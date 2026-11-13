@@ -111,7 +111,7 @@ Thứ tự phụ thuộc khi chạy thủ công:
 
 Mỗi backend, worker và frontend ghi log vào `logs/local/<service>.log`.
 
-Theo dõi realtime log của toàn bộ service trong cùng một terminal:
+Tự phát hiện các service/worker đang chạy và theo dõi log của đúng các tiến trình đó trong cùng một terminal:
 
 ```powershell
 .\scripts\run\show-local-logs.cmd
@@ -122,6 +122,18 @@ Theo dõi riêng một service:
 ```powershell
 .\scripts\run\show-local-logs.cmd gateway
 .\scripts\run\show-local-logs.cmd sales-service
+```
+
+Theo dõi mọi file log, kể cả service hiện không chạy:
+
+```powershell
+.\scripts\run\show-local-logs.cmd all
+```
+
+Theo dõi danh sách service tự chọn, phân cách bằng dấu phẩy:
+
+```powershell
+.\scripts\run\show-local-logs.cmd gateway,catalog-service,sales-service
 ```
 
 Tìm các lỗi đã ghi trong toàn bộ service:
