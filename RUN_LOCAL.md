@@ -3,7 +3,8 @@
 ## Mô hình runtime
 
 - Docker chỉ chạy Redis và RabbitMQ.
-- Gateway, sáu microservice, hai worker và frontend chạy trong terminal Windows riêng.
+- Gateway, sáu microservice, hai worker và frontend chạy nền dưới sự quản lý của launcher local.
+- Toàn bộ log được gom vào `logs/local`; không cần mở một terminal cho mỗi service.
 - Mỗi microservice kết nối trực tiếp tới schema/role riêng trên cùng Supabase project qua
   `.env.phase10.local`.
 - Backend monolith tại cổng `8082` đã retire và không còn nằm trong luồng chạy.
@@ -32,10 +33,18 @@ Launcher tổng sẽ:
 
 1. dừng các application container còn sót từ lần chạy Compose đầy đủ;
 2. chỉ khởi động `redis` và `rabbitmq` trong Docker;
-3. mở terminal Catalog và Identity, chờ hai service sẵn sàng;
-4. mở Sales, Search, Recommendation và các worker;
-5. mở Chatbot, Gateway, Storefront và Admin;
+3. chạy nền Catalog và Identity, chờ hai service sẵn sàng;
+4. chạy nền Sales, Search, Recommendation và các worker;
+5. chạy nền Chatbot, Gateway, Storefront và Admin;
 6. ghi log riêng vào `logs/local`.
+
+Không có nhiều tab terminal được mở. Để khởi động rồi theo dõi log ngay trong terminal hiện tại:
+
+```powershell
+.\scripts\run\start-all-local.cmd -FollowLogs
+```
+
+Nhấn `Ctrl+C` trong chế độ này chỉ dừng màn hình theo dõi log; các service vẫn chạy nền.
 
 Chỉ chạy backend/gateway, không mở frontend:
 
@@ -100,19 +109,25 @@ Thứ tự phụ thuộc khi chạy thủ công:
 
 ## Đọc log
 
-Mỗi service vừa ghi log ra terminal vừa append vào `logs/local/<service>.log`.
+Mỗi backend, worker và frontend ghi log vào `logs/local/<service>.log`.
 
-Tìm lỗi trong toàn bộ service:
+Theo dõi realtime log của toàn bộ service trong cùng một terminal:
 
 ```powershell
 .\scripts\run\show-local-logs.cmd
 ```
 
-Theo dõi một service:
+Theo dõi riêng một service:
 
 ```powershell
 .\scripts\run\show-local-logs.cmd gateway
 .\scripts\run\show-local-logs.cmd sales-service
+```
+
+Tìm các lỗi đã ghi trong toàn bộ service:
+
+```powershell
+.\scripts\run\show-local-logs.cmd errors
 ```
 
 Theo dõi Redis và RabbitMQ:
@@ -124,13 +139,34 @@ Theo dõi Redis và RabbitMQ:
 Khi một request lỗi, lấy `X-Correlation-ID` từ response/gateway log rồi tìm xuyên service:
 
 ```powershell
-rg "<correlation-id>" .\logs\local
+Get-ChildItem .\logs\local\*.log | Select-String -Pattern "<correlation-id>"
 ```
+
+## Kiểm tra trạng thái
+
+```powershell
+.\scripts\run\status-local.cmd
+```
+
+`RUNNING (managed)` là tiến trình do launcher nền quản lý. `RUNNING (external)` là tiến trình đã được mở thủ công trong terminal hoặc IDE.
 
 ## Dừng hệ thống
 
-- Nhấn `Ctrl+C` trong từng terminal application/service.
-- Dừng hạ tầng Docker khi không còn dùng:
+Dừng toàn bộ application service, worker và frontend do launcher quản lý:
+
+```powershell
+.\scripts\run\stop-all-local.cmd
+```
+
+Dừng cả application lẫn Redis/RabbitMQ:
+
+```powershell
+.\scripts\run\stop-all-local.cmd -Infrastructure
+```
+
+Nếu một service được chạy thủ công trong terminal/IDE (`RUNNING (external)`), dừng nó bằng `Ctrl+C` tại terminal hoặc nút Stop của IDE.
+
+Dừng riêng hạ tầng Docker khi không còn dùng:
 
 ```powershell
 docker compose stop redis rabbitmq

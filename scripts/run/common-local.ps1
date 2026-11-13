@@ -89,6 +89,98 @@ function Exit-LocalProcessSlot {
     if ($PidFile) { Remove-Item -LiteralPath $PidFile -Force -ErrorAction SilentlyContinue }
 }
 
+function Get-ManagedLocalPidFile {
+    param([Parameter(Mandatory = $true)][string]$Name)
+    return Join-Path $script:LocalRunDirectory "$Name.managed.pid"
+}
+
+function Get-ManagedLocalProcess {
+    param([Parameter(Mandatory = $true)][string]$Name)
+
+    $pidFile = Get-ManagedLocalPidFile -Name $Name
+    if (-not (Test-Path -LiteralPath $pidFile -PathType Leaf)) { return $null }
+
+    $savedContent = Get-Content -LiteralPath $pidFile -Raw -ErrorAction SilentlyContinue
+    $savedPid = $null
+    $savedStartTimeUtc = $null
+    if ($savedContent -match '^\s*\{') {
+        try {
+            $metadata = $savedContent | ConvertFrom-Json
+            $savedPid = [int]$metadata.pid
+            $savedStartTimeUtc = [datetime]$metadata.startTimeUtc
+        }
+        catch { $savedPid = $null }
+    }
+    elseif ($savedContent -match '^\s*(\d+)\s*$') {
+        $savedPid = [int]$Matches[1]
+    }
+
+    if (-not $savedPid) {
+        Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue
+        return $null
+    }
+
+    $process = Get-Process -Id $savedPid -ErrorAction SilentlyContinue
+    if (-not $process) {
+        Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue
+        return $null
+    }
+    if ($savedStartTimeUtc) {
+        $difference = [Math]::Abs(($process.StartTime.ToUniversalTime() - $savedStartTimeUtc.ToUniversalTime()).TotalSeconds)
+        if ($difference -gt 2) {
+            Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue
+            return $null
+        }
+    }
+    return $process
+}
+
+function Test-ManagedLocalProcess {
+    param([Parameter(Mandatory = $true)][string]$Name)
+    return $null -ne (Get-ManagedLocalProcess -Name $Name)
+}
+
+function Start-ManagedLocalProcess {
+    param(
+        [Parameter(Mandatory = $true)][string]$Name,
+        [Parameter(Mandatory = $true)][string]$ScriptPath,
+        [string[]]$Arguments = @(),
+        [switch]$Visible
+    )
+
+    New-Item -ItemType Directory -Force -Path $script:LocalRunDirectory | Out-Null
+    New-Item -ItemType Directory -Force -Path $script:LocalLogDirectory | Out-Null
+
+    $existing = Get-ManagedLocalProcess -Name $Name
+    if ($existing) { return $existing }
+
+    $runner = Join-Path $PSScriptRoot "run-managed-local.ps1"
+    $argumentJson = ConvertTo-Json -InputObject @($Arguments) -Compress
+    $argumentBase64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($argumentJson))
+    $processArgs = @(
+        "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $runner,
+        "-Name", $Name, "-TargetScript", $ScriptPath,
+        "-TargetArgumentsBase64", $argumentBase64
+    )
+
+    $startArgs = @{
+        FilePath = "powershell.exe"
+        ArgumentList = $processArgs
+        WorkingDirectory = $script:ProjectRoot
+        PassThru = $true
+    }
+    if (-not $Visible) { $startArgs.WindowStyle = "Hidden" }
+
+    $process = Start-Process @startArgs
+    $metadata = [ordered]@{
+        pid = $process.Id
+        startTimeUtc = $process.StartTime.ToUniversalTime().ToString("o")
+    }
+    $metadata | ConvertTo-Json -Compress |
+        Set-Content -LiteralPath (Get-ManagedLocalPidFile -Name $Name) -Encoding UTF8
+    return $process
+}
+
 function Test-LocalTcpPort {
     param([Parameter(Mandatory = $true)][int]$Port)
     $client = [System.Net.Sockets.TcpClient]::new()

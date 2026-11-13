@@ -1,8 +1,8 @@
-$ErrorActionPreference = "Stop"
-$projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
-$nodeDir = Join-Path $projectRoot ".tools\node-v24.14.1-win-x64"
+. (Join-Path $PSScriptRoot "common-local.ps1")
+$nodeDir = Join-Path $script:ProjectRoot ".tools\node-v24.14.1-win-x64"
 $nodeExe = Join-Path $nodeDir "node.exe"
-$appDir = Join-Path $projectRoot "frontend\admin"
+$npmCmd = Join-Path $nodeDir "npm.cmd"
+$appDir = Join-Path $script:ProjectRoot "frontend\admin"
 
 if (-not (Test-Path -LiteralPath $nodeExe -PathType Leaf)) { throw "Project-local Node.js 24 is missing at $nodeDir" }
 function Test-TcpPort([int]$TargetPort) {
@@ -30,5 +30,6 @@ $env:Path = "$nodeDir;$env:Path"
 Set-Location $appDir
 if (-not (Test-Path "node_modules\next\package.json")) { & npm.cmd ci; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
 Write-Host "Admin: http://localhost:3001" -ForegroundColor Green
-& npm.cmd run dev
-exit $LASTEXITCODE
+New-Item -ItemType Directory -Force -Path $script:LocalLogDirectory | Out-Null
+$code = Invoke-LoggedCommand -Name "admin" -WorkingDirectory $appDir -Executable $npmCmd -Arguments @("run", "dev")
+exit $code

@@ -21,4 +21,4 @@ if ($LASTEXITCODE -ne 0) { throw "Cannot stop application containers." }
 if ($LASTEXITCODE -ne 0) { throw "Cannot start Redis and RabbitMQ." }
 
 Write-Host "Docker infrastructure is ready: Redis :6379, RabbitMQ :5672/:15672." -ForegroundColor Green
-Write-Host "All application services will run in terminal processes." -ForegroundColor Cyan
+Write-Host "Application services can now run as managed background processes." -ForegroundColor Cyan
