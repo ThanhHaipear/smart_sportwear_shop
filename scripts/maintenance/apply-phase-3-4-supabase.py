@@ -133,7 +133,7 @@ async def apply(admin_dsn: str) -> dict:
     update_env(ROOT / "services/search-service/.env", {
         "SEARCH_ENABLED": "false",
         "DATABASE_URL": search_dsn,
-        "CATALOG_API_URL": "http://127.0.0.1:8082",
+        "CATALOG_API_URL": "http://127.0.0.1:8092",
         "INTERNAL_SERVICE_TOKEN": internal_token,
         "VISUAL_SEARCH_ENABLED": "false",
     })
@@ -141,13 +141,6 @@ async def apply(admin_dsn: str) -> dict:
         "CHATBOT_DATABASE_URL": chatbot_dsn,
         "SEARCH_SERVICE_TOKEN": internal_token,
         "CATALOG_SERVICE_TOKEN": internal_token,
-    })
-    update_env(ROOT / "backend/.env", {
-        "SEARCH_SERVICE_INTERNAL_TOKEN": internal_token,
-        "PRODUCT_SEARCH_INTERNAL_TOKEN": internal_token,
-        "VISUAL_SEARCH_INTERNAL_TOKEN": internal_token,
-        "PRODUCT_HYBRID_SEARCH_ENABLED": "false",
-        "VISUAL_SEARCH_ENABLED": "false",
     })
     return {
         "appliedAt": datetime.now(timezone.utc).isoformat(),

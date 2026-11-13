@@ -34,9 +34,7 @@ if ($forbidden) {
 }
 
 if (-not $SkipBackendTests) {
-    Invoke-Checked "Catalog snapshot and image-client contracts" (Join-Path $projectRoot "backend") {
-        & .\mvnw.cmd clean '-Dtest=VisualSearchClientTest,InternalCatalogIndexControllerTest' test
-    }
+    Write-Host "Legacy monolith contract tests retired; Search/Catalog boundaries are verified by service contract tests."
 }
 
 Write-Host "Phase 3 implementation gate passed."

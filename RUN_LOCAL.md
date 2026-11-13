@@ -189,6 +189,7 @@ Không dùng `docker compose down -v`; tùy chọn `-v` sẽ xóa volume Redis/R
 ## Cấu hình và an toàn dữ liệu
 
 - `.env.phase10.local` là nguồn runtime cho DSN, token nội bộ, JWT và RabbitMQ credential.
+- `.env.legacy-backend.local` là snapshot đã chuyển từ `backend/.env`; chỉ giữ để đối chiếu và cho công cụ backup/audit lịch sử, không được launcher nạp vào runtime.
 - Các `.env` riêng chỉ là cấu hình service bổ sung; launcher nạp runtime chung sau cùng để tránh dùng nhầm
   database cũ.
 - Launcher host đổi Docker DNS (`catalog-service`, `rabbitmq`, `redis`...) thành `127.0.0.1`.

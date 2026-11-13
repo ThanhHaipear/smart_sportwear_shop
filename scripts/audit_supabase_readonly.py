@@ -11,6 +11,7 @@ from psycopg.rows import dict_row
 
 
 WORKSPACE = Path(__file__).resolve().parents[1]
+LEGACY_BACKEND_ENV = WORKSPACE / ".env.legacy-backend.local"
 
 
 def load_env(path: Path) -> dict[str, str]:
@@ -24,8 +25,10 @@ def load_env(path: Path) -> dict[str, str]:
     return values
 
 
-def backend_database_url() -> str:
-    values = load_env(WORKSPACE / "backend" / ".env")
+def legacy_database_url() -> str:
+    # Historical public/ai_retrieval audit only. Current services use
+    # schema-specific DSNs from .env.phase10.local.
+    values = load_env(LEGACY_BACKEND_ENV)
     params = values.get("DB_PARAMS", "").lstrip("?")
     return (
         f"postgresql://{quote(values['DB_USERNAME'], safe='')}:{quote(values['DB_PASSWORD'], safe='')}"
@@ -44,7 +47,7 @@ def main() -> None:
     parser.add_argument("--database-url", default=os.getenv("DATABASE_URL", ""))
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    database_url = args.database_url or backend_database_url()
+    database_url = args.database_url or legacy_database_url()
 
     report: dict[str, object] = {"readOnly": True}
     with psycopg.connect(database_url, row_factory=dict_row, autocommit=False) as connection:

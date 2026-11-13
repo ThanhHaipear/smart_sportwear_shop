@@ -6,7 +6,9 @@ param(
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Security
 $projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
-$envFile = Join-Path $projectRoot "backend\.env"
+# Historical public/ai_retrieval backup source retained after monolith retirement.
+# Current microservice runtime configuration is .env.phase10.local.
+$envFile = Join-Path $projectRoot ".env.legacy-backend.local"
 $backupRoot = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     Join-Path $projectRoot "backups\microservice-phase-0"
 } else {

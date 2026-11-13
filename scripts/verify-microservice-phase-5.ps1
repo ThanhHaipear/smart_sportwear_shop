@@ -18,15 +18,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "recommendation-service test gate failed" }
 } finally { Pop-Location }
 
-$legacyRepositories = @(Get-ChildItem (Join-Path $root "backend\src\main\java\com\dunghaiquyen\ecommerce\modules") -Recurse -Filter "*Recommendation*Repository.java" -ErrorAction SilentlyContinue)
-if ($legacyRepositories.Count -ne 0) { throw "recommendation repositories remain in Spring core" }
-
 if (-not $SkipBackendTests) {
-    Push-Location (Join-Path $root "backend")
-    try {
-        & .\mvnw.cmd -q -Dtest=BoundedContextArchitectureTest test
-        if ($LASTEXITCODE -ne 0) { throw "backend Phase 5 architecture gate failed" }
-    } finally { Pop-Location }
+    Write-Host "Legacy monolith architecture gate retired; Recommendation boundaries are verified in recommendation-service."
 }
 
 Get-Content -Raw (Join-Path $root "rabbitmq\definitions.json") | ConvertFrom-Json | Out-Null

@@ -1,4 +1,7 @@
-param([string]$Output = ".env.phase10.local")
+param(
+    [string]$Output = ".env.phase10.local",
+    [string]$SecretSource = ".env.phase10.local"
+)
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 
@@ -21,7 +24,8 @@ function Require-Value($Values, [string]$Key, [string]$Source) {
     return $value
 }
 
-$backend = Read-DotEnv (Join-Path $root "backend\.env")
+$destination = Join-Path $root $Output
+$existingRuntime = Read-DotEnv (Join-Path $root $SecretSource)
 $catalog = Read-DotEnv (Join-Path $root "catalog-service\.env")
 $identity = Read-DotEnv (Join-Path $root "identity-service\.env")
 $sales = Read-DotEnv (Join-Path $root "sales-service\.env")
@@ -42,8 +46,8 @@ $runtime = [ordered]@{
     IDENTITY_DATABASE_URL = Require-Value $identity 'IDENTITY_DATABASE_URL' 'identity-service/.env'
     IDENTITY_DB_USERNAME = Require-Value $identity 'IDENTITY_DB_USERNAME' 'identity-service/.env'
     IDENTITY_DB_PASSWORD = Require-Value $identity 'IDENTITY_DB_PASSWORD' 'identity-service/.env'
-    JWT_ACCESS_SECRET = Require-Value $backend 'JWT_ACCESS_SECRET' 'backend/.env'
-    JWT_REFRESH_SECRET = Require-Value $backend 'JWT_REFRESH_SECRET' 'backend/.env'
+    JWT_ACCESS_SECRET = Require-Value $existingRuntime 'JWT_ACCESS_SECRET' $SecretSource
+    JWT_REFRESH_SECRET = Require-Value $existingRuntime 'JWT_REFRESH_SECRET' $SecretSource
     IDENTITY_EVENTS_ENABLED = 'true'
     IDENTITY_FLYWAY_ENABLED = 'false'
     SALES_DATABASE_URL = Require-Value $sales 'SALES_DATABASE_URL' 'sales-service/.env'
@@ -53,10 +57,10 @@ $runtime = [ordered]@{
     SALES_EVENTS_ENABLED = 'true'
     SALES_FLYWAY_ENABLED = 'false'
     SEPAY_WEBHOOK_ENABLED = 'true'
-    SEPAY_WEBHOOK_SECRET = Require-Value $backend 'SEPAY_WEBHOOK_SECRET' 'backend/.env'
-    VIETQR_ACCOUNT_NUMBER = Require-Value $backend 'VIETQR_ACCOUNT_NUMBER' 'backend/.env'
-    VIETQR_BANK_BIN = Require-Value $backend 'VIETQR_BANK_BIN' 'backend/.env'
-    VIETQR_ACCOUNT_NAME = Require-Value $backend 'VIETQR_ACCOUNT_NAME' 'backend/.env'
+    SEPAY_WEBHOOK_SECRET = Require-Value $existingRuntime 'SEPAY_WEBHOOK_SECRET' $SecretSource
+    VIETQR_ACCOUNT_NUMBER = Require-Value $existingRuntime 'VIETQR_ACCOUNT_NUMBER' $SecretSource
+    VIETQR_BANK_BIN = Require-Value $existingRuntime 'VIETQR_BANK_BIN' $SecretSource
+    VIETQR_ACCOUNT_NAME = Require-Value $existingRuntime 'VIETQR_ACCOUNT_NAME' $SecretSource
     SEARCH_DATABASE_URL = Require-Value $search 'DATABASE_URL' 'services/search-service/.env'
     SEARCH_SERVICE_INTERNAL_TOKEN = Require-Value $search 'INTERNAL_SERVICE_TOKEN' 'services/search-service/.env'
     SEARCH_ENABLED = 'true'
@@ -72,7 +76,6 @@ $runtime = [ordered]@{
     GATEWAY_RECOMMENDATION_CUTOVER_ENABLED = 'true'
 }
 
-$destination = Join-Path $root $Output
 $lines = $runtime.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }
 [System.IO.File]::WriteAllLines($destination, $lines, [System.Text.UTF8Encoding]::new($false))
 Write-Host "Prepared $Output with $($runtime.Count) runtime settings; values were not printed."

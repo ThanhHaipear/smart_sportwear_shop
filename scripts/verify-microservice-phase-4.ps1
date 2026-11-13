@@ -22,13 +22,7 @@ try {
 }
 
 if (-not $SkipBackendCompile) {
-    Push-Location (Join-Path $root "backend")
-    try {
-        & .\mvnw.cmd -q -DskipTests compile
-        if ($LASTEXITCODE -ne 0) { throw "backend contract compile gate failed" }
-    } finally {
-        Pop-Location
-    }
+    Write-Host "Legacy monolith compile gate retired; Chatbot contracts are verified in chatbot-service."
 }
 
 Write-Host "Phase 4 implementation gate passed."
