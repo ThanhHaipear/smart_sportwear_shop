@@ -153,7 +153,7 @@ export function ProductCard({ product }: { product: Product }) {
             <ins className="inline-block align-middle text-[16px] leading-6 font-semibold text-[#3E3E3F] no-underline md:text-[18px]">
               {formatPrice(product.price)}
             </ins>
-            {product.oldPrice ? (
+            {product.oldPrice != null && product.oldPrice > product.price ? (
               <del className="ml-2 inline-block align-middle text-xs leading-4 font-normal text-[#A8A9AD]">
                 {formatPrice(product.oldPrice)}
               </del>

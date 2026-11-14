@@ -1,4 +1,4 @@
-import { Headphones, Mail, MapPin, ShoppingBag } from "lucide-react";
+import { Headphones, MapPin, MessageCircle, ShoppingBag } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export interface ContactInfoCardData {
@@ -11,24 +11,23 @@ export const CONTACT_INFO_CARDS: ContactInfoCardData[] = [
   {
     icon: MapPin,
     label: "Địa chỉ",
-    lines: ["Tầng 14, Toà nhà Hapulico Complex 24T- 85 Vũ Trọng Phụng - Quận Thanh Xuân, HN"],
+    lines: ["267 Đ. Quang Trung, P. Quang Trung, Hà Đông, Hà Nội"],
   },
   {
-    icon: Mail,
-    label: "Email",
-    lines: ["cskh@ivy.com.vn"],
+    icon: MessageCircle,
+    label: "Hỗ trợ trực tuyến",
+    lines: ["Gửi yêu cầu bằng biểu mẫu hoặc trò chuyện trực tiếp trên website"],
   },
   {
     icon: ShoppingBag,
     label: "Mua hàng online",
-    lines: ["02466623434"],
+    lines: ["0243 834 1002"],
   },
   {
     icon: Headphones,
     label: "Chăm sóc khách hàng",
     lines: [
-      "Email: cskh@ivy.com.vn",
-      "Hotline: 0905 89 86 83",
+      "Hotline: 0243 834 1002",
       "Thứ Hai đến Thứ Bảy, từ 8:00 đến 17:30",
     ],
   },

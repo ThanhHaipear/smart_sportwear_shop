@@ -11,7 +11,7 @@ export function LifestyleHeader({ activeSlug }: LifestyleHeaderProps) {
   return (
     <div className="py-10 text-center">
       <h1 className="mb-8 text-4xl font-extrabold tracking-[2px] text-ivy-dark uppercase md:text-[56px]">
-        LIFESTYLE
+        TIN THỂ THAO
       </h1>
       <nav className="mb-10 flex justify-start gap-8 overflow-x-auto border-b border-ivy-hairline whitespace-nowrap md:justify-center">
         {LIFESTYLE_NAV_ITEMS.map((item) => {

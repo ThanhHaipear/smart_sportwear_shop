@@ -75,6 +75,16 @@ export function ChatWidget() {
     }
   }, [messages, open, loading]);
 
+  useEffect(() => {
+    const openFromContact = (event: Event) => {
+      const detail = (event as CustomEvent<{ message?: string }>).detail;
+      setOpen(true);
+      if (detail?.message) setInput(detail.message);
+    };
+    window.addEventListener("storefront:open-chat", openFromContact);
+    return () => window.removeEventListener("storefront:open-chat", openFromContact);
+  }, []);
+
   function appendToLastBot(delta: string) {
     setMessages((m) => {
       const next = [...m];
@@ -283,7 +293,7 @@ export function ChatWidget() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Đóng trợ lý" : "Mở trợ lý chat"}
-        className="fixed bottom-5 right-5 z-[120] flex size-14 items-center justify-center rounded-full bg-ivy-dark text-white shadow-xl transition-transform hover:scale-105"
+        className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-3 z-[120] flex size-12 items-center justify-center rounded-full bg-ivy-dark text-white shadow-xl transition-transform hover:scale-105 md:right-5 md:size-14"
       >
         {open ? <X className="size-6" /> : <MessageCircle className="size-6" />}
       </button>

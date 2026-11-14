@@ -66,6 +66,7 @@ async function NewProductsContent() {
 export function HomeScreen() {
   return (
     <main className="site-main page-below-header flex-1 border-b border-ivy-hairline">
+      <h1 className="sr-only">Điểm Đến Thể Thao - Đồ thể thao chính hãng</h1>
       <Suspense fallback={null}><HeroContent /></Suspense>
       <HomeUspStrip />
       <div className="mx-auto max-w-342 px-4 md:px-0">

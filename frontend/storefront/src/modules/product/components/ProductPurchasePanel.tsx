@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { shouldBypassImageOptimization } from "@/lib/image";
 import { Minus, Plus, Ruler, Star } from "lucide-react";
 import { HeartIcon } from "@/components/shared/icons";
@@ -74,6 +75,7 @@ export function ProductPurchasePanel({
   const [pending, setPending] = useState<"cart" | "buy" | "wishlist" | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
   const selectedColor = colors.find((color) => color.label === selectedColorLabel);
   const filledStars = Math.floor(ratingPercentage / 20);
@@ -250,7 +252,7 @@ export function ProductPurchasePanel({
 
       <div className="mb-6 flex flex-wrap items-center gap-3">
         <span className="text-[30px] font-semibold text-ivy-dark">{displayPrice.toLocaleString("vi-VN")}đ</span>
-        {compareAtPrice != null ? (
+        {compareAtPrice != null && compareAtPrice > displayPrice ? (
           <span className="text-[16px] text-ivy-text-muted line-through">{compareAtPrice.toLocaleString("vi-VN")}đ</span>
         ) : null}
         {discountPercent ? (
@@ -344,10 +346,21 @@ export function ProductPurchasePanel({
         {selectionUnavailable ? (
           <p className="mt-3 text-[13px] font-medium text-[#C62127]">Size/màu bạn chọn hiện đã hết hàng.</p>
         ) : null}
-        <a href="#" className="mt-3 inline-flex items-center gap-2 text-[14px] text-ivy-text underline">
+        <button
+          type="button"
+          onClick={() => setSizeGuideOpen((current) => !current)}
+          aria-expanded={sizeGuideOpen}
+          className="mt-3 inline-flex items-center gap-2 text-[14px] text-ivy-text underline"
+        >
           <Ruler size={16} />
-          Kiểm tra size của bạn
-        </a>
+          {sizeGuideOpen ? "Đóng hướng dẫn chọn size" : "Hướng dẫn chọn size"}
+        </button>
+        {sizeGuideOpen ? (
+          <div className="mt-3 rounded-lg bg-[#f7f8f9] p-4 text-[13px] leading-6 text-ivy-text">
+            <p className="font-semibold text-ivy-dark">Cách chọn kích thước phù hợp</p>
+            <p>Đối chiếu số đo cơ thể với thông số trong phần mô tả sản phẩm. Nếu ở giữa hai size, hãy chọn size lớn hơn để vận động thoải mái.</p>
+          </div>
+        ) : null}
       </div>
 
       <div className="mb-7 border-t border-ivy-hairline pt-6">
@@ -419,9 +432,9 @@ export function ProductPurchasePanel({
         </button>
       </div>
 
-      <a href="#" className="text-[14px] text-ivy-dark underline">
+      <Link href="/cua-hang" className="text-[14px] text-ivy-dark underline">
         Tìm tại cửa hàng
-      </a>
+      </Link>
     </div>
   );
 }

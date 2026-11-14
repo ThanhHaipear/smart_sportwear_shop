@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentType, InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import { useState, type ComponentType, type FormEvent, type InputHTMLAttributes, type TextareaHTMLAttributes } from "react";
 import { User, Phone, Mail, FileText, MessageCircle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -53,27 +53,48 @@ function IconTextarea({ icon: Icon, className, ...props }: IconTextareaProps) {
 }
 
 export function ContactForm() {
+  const [notice, setNotice] = useState<string | null>(null);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    if (String(form.get("captcha") ?? "").trim().toLowerCase() !== CAPTCHA_TEXT) {
+      setNotice("Mã captcha chưa đúng. Vui lòng kiểm tra lại.");
+      return;
+    }
+
+    const message = [
+      `Họ tên: ${form.get("fullName") ?? ""}`,
+      `Điện thoại: ${form.get("phone") ?? ""}`,
+      `Email: ${form.get("email") ?? ""}`,
+      `Chủ đề: ${form.get("subject") ?? ""}`,
+      `Nội dung: ${form.get("message") ?? ""}`,
+    ].join("\n");
+    window.dispatchEvent(new CustomEvent("storefront:open-chat", { detail: { message } }));
+    setNotice("Nội dung đã được chuyển sang cửa sổ chat. Vui lòng nhấn Gửi để hoàn tất.");
+  }
+
   return (
-    <div className="rounded-2xl border border-ivy-hairline p-10">
-      <h2 className="mb-3 text-[28px] font-bold text-ivy-dark">Email to Điểm Đến Thể Thao</h2>
+    <div className="rounded-2xl border border-ivy-hairline p-5 md:p-10">
+      <h2 className="mb-3 text-[28px] font-bold text-ivy-dark">Gửi yêu cầu hỗ trợ</h2>
       <p className="mb-6 text-sm leading-5.5 text-ivy-text">
-        We are here to help and answer any question you might have.Tell us about your issue so we
-        can help you more quickly. We look forward to hearing from you.
+        Hãy cho chúng tôi biết vấn đề bạn đang gặp phải. Nội dung sẽ được chuyển sang trợ lý trực tuyến để hỗ trợ nhanh hơn.
       </p>
 
       <form
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={handleSubmit}
         className="grid grid-cols-1 gap-4 md:grid-cols-2"
       >
-        <IconInput icon={User} type="text" name="fullName" placeholder="Họ và tên" />
-        <IconInput icon={Phone} type="tel" name="phone" placeholder="Điện thoại" />
-        <IconInput icon={Mail} type="email" name="email" placeholder="Địa chỉ email" />
-        <IconInput icon={FileText} type="text" name="subject" placeholder="Chủ đề" />
+        <IconInput icon={User} type="text" name="fullName" placeholder="Họ và tên" required />
+        <IconInput icon={Phone} type="tel" name="phone" placeholder="Điện thoại" required />
+        <IconInput icon={Mail} type="email" name="email" placeholder="Địa chỉ email" required />
+        <IconInput icon={FileText} type="text" name="subject" placeholder="Chủ đề" required />
         <IconTextarea
           icon={MessageCircle}
           name="message"
           placeholder="Nội dung"
           rows={4}
+          required
         />
 
         <div className="flex flex-col items-center gap-4 sm:flex-row md:col-span-2">
@@ -83,6 +104,7 @@ export function ContactForm() {
               type="text"
               name="captcha"
               placeholder="Nhập mã captcha"
+              required
               className="w-full rounded-lg border border-ivy-hairline py-3 pl-10 pr-4 text-sm text-ivy-dark placeholder:text-[#A8A9AD] focus:outline-none focus:ring-1 focus:ring-ivy-dark"
             />
           </div>
@@ -107,6 +129,8 @@ export function ContactForm() {
             })}
           </div>
         </div>
+
+        {notice ? <p role="status" className="text-sm text-ivy-accent md:col-span-2">{notice}</p> : null}
 
         <button
           type="submit"

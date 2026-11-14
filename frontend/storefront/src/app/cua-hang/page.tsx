@@ -2,6 +2,12 @@
 import { Breadcrumb } from "@/components/shared/Breadcrumb";
 import { StoreProvinceList } from "@/components/store/StoreProvinceList";
 import { StoreMapPanel } from "@/components/store/StoreMapPanel";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Hệ thống cửa hàng | Điểm Đến Thể Thao",
+  description: "Tìm cửa hàng Điểm Đến Thể Thao gần bạn và xem thông tin liên hệ.",
+};
 
 export default function StoreLocatorPage() {
   return (
@@ -15,7 +21,7 @@ export default function StoreLocatorPage() {
         <div className="mx-auto max-w-[1380px] px-4 pb-16">
           <div className="relative mb-10 aspect-[1380/440] overflow-hidden rounded-tl-[80px] rounded-br-[80px]">
             <Image
-              src="/images/ivymoda/pages/4cd60af946dee741391dae9b3cc624a1.webp"
+              src="/images/slideshow_5.webp"
               alt="Hệ thống cửa hàng Điểm Đến Thể Thao"
               fill
               priority

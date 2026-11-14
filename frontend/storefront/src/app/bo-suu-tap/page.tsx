@@ -3,6 +3,12 @@ import Link from "next/link";
 import { Breadcrumb } from "@/components/shared/Breadcrumb";
 import { fetchCollections } from "@/modules/category/queries";
 import type { CollectionSummary } from "@/modules/category/types";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Bộ sưu tập | Điểm Đến Thể Thao",
+  description: "Khám phá các bộ sưu tập thể thao mới tại Điểm Đến Thể Thao.",
+};
 
 export default async function CollectionListPage() {
   const collections: CollectionSummary[] = await fetchCollections();

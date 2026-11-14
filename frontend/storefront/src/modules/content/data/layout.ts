@@ -3,14 +3,12 @@ import type {
   CustomerServiceLink,
   FooterLinkItem,
   HeaderNavItem,
-  SocialLinkItem,
 } from "@/modules/content/types";
 
 export const CUSTOMER_SERVICE_LINKS: CustomerServiceLink[] = [
-  { label: "Hotline", href: "tel:02466623434" },
-  { label: "Live Chat", href: "#" },
-  { label: "Messenger", href: "http://messenger.com/t/thoitrangivymoda", external: true },
-  { label: "Email", href: "mailto:saleadmin@ivy.com.vn" },
+  { label: "Hotline", href: "tel:02438341002" },
+  { label: "Liên hệ", href: "/lien-he" },
+  { label: "Hệ thống cửa hàng", href: "/cua-hang" },
   { label: "Tra cứu đơn hàng", href: "/tra-cuu-don-hang" },
 ];
 
@@ -43,8 +41,8 @@ export const HEADER_NAV_ITEMS: HeaderNavItem[] = [
 
 export const FOOTER_INTRO_LINKS: FooterLinkItem[] = [
   { label: "Về Điểm Đến Thể Thao", href: "/about/gioi-thieu" },
-  { label: "Tuyển dụng", href: "https://tuyendung.ivy.com.vn", external: true },
   { label: "Hệ thống cửa hàng", href: "/cua-hang" },
+  { label: "Tin tức thể thao", href: "/tin-tuc/tin-chinh" },
 ];
 
 export const FOOTER_CUSTOMER_SERVICE_LINKS: FooterLinkItem[] = [
@@ -58,33 +56,8 @@ export const FOOTER_CUSTOMER_SERVICE_LINKS: FooterLinkItem[] = [
 ];
 
 export const FOOTER_CONTACT_LINKS: FooterLinkItem[] = [
-  { label: "Hotline", href: "tel:02466623434" },
-  { label: "Email", href: "mailto:saleadmin@ivy.com.vn" },
-  { label: "Live Chat", href: "#" },
-  { label: "Messenger", href: "http://messenger.com/t/thoitrangivymoda", external: true },
+  { label: "Hotline: 0243 834 1002", href: "tel:02438341002" },
+  { label: "Tra cứu đơn hàng", href: "/tra-cuu-don-hang" },
+  { label: "Hệ thống cửa hàng", href: "/cua-hang" },
   { label: "Liên hệ", href: "/lien-he" },
-];
-
-export const FOOTER_SOCIAL_LINKS: SocialLinkItem[] = [
-  {
-    label: "Facebook",
-    href: "https://www.facebook.com/thoitrangivymoda/",
-    src: "/images/ivymoda/common/ic_fb.svg",
-    width: 12,
-    height: 24,
-  },
-  {
-    label: "Google",
-    href: "/",
-    src: "/images/ivymoda/common/ic_gg.svg",
-    width: 22,
-    height: 22,
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/ivy_moda/",
-    src: "/images/ivymoda/common/ic_instagram.svg",
-    width: 28,
-    height: 28,
-  },
 ];

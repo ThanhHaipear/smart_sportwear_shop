@@ -2,6 +2,12 @@
 import { Breadcrumb } from "@/components/shared/Breadcrumb";
 import { ContactInfoCards } from "@/components/contact/ContactInfoCards";
 import { ContactForm } from "@/components/contact/ContactForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Liên hệ | Điểm Đến Thể Thao",
+  description: "Liên hệ Điểm Đến Thể Thao để được hỗ trợ sản phẩm, kích thước và đơn hàng.",
+};
 
 export default function ContactPage() {
   return (
@@ -13,14 +19,15 @@ export default function ContactPage() {
           ]}
         />
         <div className="mx-auto max-w-[1380px] px-4 pb-16">
+          <h1 className="mb-8 text-center text-3xl font-semibold uppercase tracking-[2px] text-ivy-dark">Liên hệ</h1>
           <div className="relative mb-10 aspect-[1380/440] overflow-hidden rounded-tl-[80px] rounded-br-[80px]">
             <Image
-              src="/images/ivymoda/pages/banner-lien-he.jpg"
+              src="/images/slideshow_9.webp"
               alt="Liên hệ Điểm Đến Thể Thao"
               fill
               priority
               sizes="(max-width: 1380px) 100vw, 1380px"
-              className="object-cover"
+              className="object-cover object-center"
             />
           </div>
 
@@ -31,16 +38,12 @@ export default function ContactPage() {
 
           <div className="mt-16">
             <h2 className="mb-4 text-2xl font-bold text-ivy-dark">
-              Find us on Google Maps
+              Hỗ trợ tại cửa hàng
             </h2>
             <p className="max-w-2xl text-sm leading-6 text-ivy-text">
-              Điểm Đến Thể Thao là thương hiệu thời trang Việt Nam với mong muốn đem
-              lại vẻ đẹp hiện đại và sự tự tin cho khách hàng, thông qua các
-              dòng sản phẩm thời trang thể hiện cá tính và xu hướng. Một trong
-              những &ldquo;tôn chỉ&rdquo; về thiết kế của Điểm Đến Thể Thao chính là sự
-              đa dạng, với mong muốn mang đến cho người mặc những sản phẩm phù
-              hợp nhất với ngoại hình và quan trọng hơn cả là cá tính của
-              chính mình.
+              Điểm Đến Thể Thao cung cấp trang phục, giày và phụ kiện thể thao chính hãng.
+              Khách hàng có thể đến hệ thống cửa hàng để thử sản phẩm, nhận tư vấn kích thước
+              hoặc kiểm tra tình trạng đơn hàng.
             </p>
           </div>
         </div>

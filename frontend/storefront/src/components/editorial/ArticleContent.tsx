@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { Share2 } from "lucide-react";
-import { ARTICLE_SHARE_LABELS } from "@/modules/content/data/editorial";
 import type { ArticleContentBlock, ArticleTagItem } from "@/modules/content/types";
 import { cn } from "@/lib/utils";
 
@@ -70,18 +68,6 @@ export function ArticleContent({ title, date, blocks, tags }: ArticleContentProp
           ))}
         </div>
 
-        <div className="flex gap-3">
-          {ARTICLE_SHARE_LABELS.map((label) => (
-            <a
-              key={label}
-              href="#"
-              aria-label={label}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F7F8F9] text-ivy-text transition-colors hover:bg-ivy-dark hover:text-white"
-            >
-              <Share2 className="h-4 w-4" />
-            </a>
-          ))}
-        </div>
       </div>
     </article>
   );

@@ -3,6 +3,20 @@ import {
   mergeCategoryRedirectQuery,
 } from "@/modules/category/catalogTaxonomy";
 import { CategoryListingPage } from "@/modules/category/pages/CategoryListingPage";
+import type { Metadata } from "next";
+
+function categoryTitle(slug: string) {
+  return slug.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const title = categoryTitle(slug);
+  return {
+    title: `${title} | Điểm Đến Thể Thao`,
+    description: `Khám phá ${title.toLowerCase()} chính hãng tại Điểm Đến Thể Thao.`,
+  };
+}
 
 type CategorySearchParams = {
   page?: string;

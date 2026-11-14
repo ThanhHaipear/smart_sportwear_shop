@@ -88,6 +88,7 @@ export interface LifestyleNavItem {
 }
 
 export interface MagazineItem {
+  href: string;
   image: string;
   caption: string;
   title: string;

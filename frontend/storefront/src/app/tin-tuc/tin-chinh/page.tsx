@@ -5,6 +5,12 @@ import { MagazineGrid } from "@/components/editorial/MagazineGrid";
 import { ProductRail } from "@/modules/product/components/ProductRail";
 import { mapProductListItem } from "@/modules/product/mappers";
 import { fetchNewestProducts } from "@/modules/product/queries";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tin tức thể thao | Điểm Đến Thể Thao",
+  description: "Cẩm nang lựa chọn trang phục, giày và phụ kiện thể thao.",
+};
 
 export default async function LifestyleNewsPage() {
   const newestProducts = await fetchNewestProducts(8).catch(() => []);
@@ -22,20 +28,20 @@ export default async function LifestyleNewsPage() {
         <LifestyleHeader activeSlug="tin-chinh" />
 
         <FeaturedStoryCard
-          image="/images/ivymoda/news/47b630796bec23aa195d7a59d1597231.jpg"
-          eyebrow="STORY"
-          title="ĐỘT NHẬP HẬU TRƯỜNG CỦA SHOW DIỄN EXPRESS_FW23 FASHION SHOW"
-          excerpt="Bên cạnh những hình ảnh trên sàn catwalk, khoảnh khắc tại hậu trường là nơi thể hiện sống động nhất tinh thần cống hiến hết mình của toàn bộ đội ngũ ekip thực hiện."
-          date="25/10/2023"
-          href="#"
+          image="/images/banner-hero-1.png"
+          eyebrow="CẨM NANG"
+          title="CHỌN TRANG PHỤC THỂ THAO PHÙ HỢP VỚI BẠN"
+          excerpt="Ưu tiên chất liệu thoáng khí, độ co giãn phù hợp và phom dáng không cản trở chuyển động để tập luyện thoải mái hơn."
+          date="Hướng dẫn mua sắm"
+          href="/danh-muc/ao-the-thao"
         />
         <FeaturedStoryCard
-          image="/images/ivymoda/news/5aaf578c14a70d76a45c36de9e77a037.jpg"
-          eyebrow="STORY"
-          title="QUIETLUXURY: KHI SỰ KHIÊM NHƯỜNG ẨN CHỨA NÉT CAO SANG"
-          excerpt="Quietluxury của Điểm Đến Thể Thao mang đến vẻ đẹp riêng biệt một cách thầm lặng. Giống như người phụ nữ an tĩnh và sâu sắc, họ vẫn luôn dùng trái tim yêu để đối diện với khó khăn, theo đuổi lối sống tinh tế, tao nhã và chẳng cần chưng diện những họa tiết logo để khẳng định mình là ai."
-          date="19/10/2023"
-          href="#"
+          image="/images/slideshow_10.webp"
+          eyebrow="KINH NGHIỆM"
+          title="BẢO QUẢN ĐỒ THỂ THAO BỀN ĐẸP SAU MỖI BUỔI TẬP"
+          excerpt="Giặt sớm sau khi sử dụng, hạn chế nhiệt độ cao và phơi ở nơi thông thoáng giúp chất liệu giữ được độ co giãn và màu sắc."
+          date="Hướng dẫn sử dụng"
+          href="/about/gioi-thieu"
           reverse
         />
 
