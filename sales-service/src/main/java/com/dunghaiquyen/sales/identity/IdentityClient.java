@@ -18,4 +18,8 @@ public class IdentityClient {
         return client.get().uri("/internal/v1/users/{userId}/addresses/{addressId}",userId,addressId)
                 .retrieve().body(Map.class);
     }
+    @SuppressWarnings("unchecked")
+    public Map<String,Object> user(UUID userId){
+        return client.get().uri("/internal/v1/users/{userId}",userId).retrieve().body(Map.class);
+    }
 }

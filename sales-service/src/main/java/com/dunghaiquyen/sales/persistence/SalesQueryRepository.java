@@ -135,11 +135,11 @@ public class SalesQueryRepository {
 
     private Map<String,Object> order(ResultSet rs) throws SQLException {
         Map<String,Object> result=map(
-                "id",uuid(rs,"id"),"orderCode",rs.getString("order_code"),"orderStatus",rs.getString("order_status"),
+                "id",uuid(rs,"id"),"orderCode",rs.getString("order_code"),"customerId",uuid(rs,"user_ref"),"orderStatus",rs.getString("order_status"),
                 "paymentStatus",rs.getString("payment_status"),"paymentMethod",rs.getString("payment_method"),
                 "subtotalAmount",rs.getBigDecimal("subtotal_amount"),"shippingFee",rs.getBigDecimal("shipping_fee"),
                 "discountAmount",rs.getBigDecimal("discount_amount"),"totalAmount",rs.getBigDecimal("total_amount"),
-                "note",rs.getString("note"),"cancellationRequestedBy",rs.getString("cancellation_requested_by"),
+                "note",rs.getString("note"),"internalNote",rs.getString("internal_note"),"cancellationRequestedBy",rs.getString("cancellation_requested_by"),
                 "cancellationReason",rs.getString("cancellation_reason"),
                 "cancellationRequestedAt",instant(rs,"cancellation_requested_at"),
                 "shippingAddress",jsonMap(rs.getString("address_snapshot_json")),"invoiceNumber",rs.getString("invoice_number"),

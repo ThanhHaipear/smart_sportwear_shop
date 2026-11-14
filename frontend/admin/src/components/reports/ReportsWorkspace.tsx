@@ -257,7 +257,7 @@ export function ReportsWorkspace({ overview, initialRevenue, initialCustomers, i
       </section>
 
       <section className="card panel">
-        <div className="panel-header"><div><h2>Bán hàng theo mặt hàng</h2><p className="panel-copy">Số lượng và doanh thu từ các đơn không bị hủy. Nhấn vào mặt hàng để xem các đơn đã mua.</p></div></div>
+        <div className="panel-header"><div><h2>Bán hàng theo mặt hàng</h2><p className="panel-copy">Số lượng và doanh thu từ các đơn đã giao. Nhấn vào mặt hàng để xem các đơn đã mua.</p></div></div>
         <form className="report-order-search" onSubmit={searchProductOrder}>
           <input aria-label="Tìm đơn hàng trong báo cáo mặt hàng" placeholder="Nhập mã đơn hàng để xem các sản phẩm đã mua..." value={productOrderSearch} onChange={(event) => setProductOrderSearch(event.target.value)} />
           <button className="filter-chip active" type="submit" disabled={orderLoading || !productOrderSearch.trim()}>{orderLoading ? "Đang tìm..." : "Tìm đơn"}</button>

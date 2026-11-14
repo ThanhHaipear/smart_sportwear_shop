@@ -11,10 +11,11 @@ import type { PageMeta, RefundResponse, ReturnItemResolutionDraft, ReturnRespons
 const returnStatuses = ["REQUESTED", "APPROVED", "REJECTED", "RECEIVED", "REFUNDED", "CANCELLED"] as const;
 const nextReturnStatuses: Record<string, readonly string[]> = {
   REQUESTED: ["APPROVED", "REJECTED", "CANCELLED"],
-  APPROVED: ["RECEIVED", "REJECTED", "CANCELLED"], RECEIVED: [], REJECTED: [], REFUNDED: [], CANCELLED: []
+  APPROVED: ["RECEIVED"], RECEIVED: [], REJECTED: [], REFUNDED: [], CANCELLED: []
 };
 const nextRefundStatuses: Record<string, readonly string[]> = {
-  PENDING: ["COMPLETED", "FAILED", "CANCELLED"], PROCESSING: [], COMPLETED: [], FAILED: [], CANCELLED: []
+  PENDING: ["PROCESSING", "COMPLETED", "FAILED", "CANCELLED"], PROCESSING: ["COMPLETED", "FAILED"],
+  COMPLETED: [], FAILED: ["PROCESSING", "COMPLETED", "CANCELLED"], CANCELLED: []
 };
 const conditionStatuses = ["UNOPENED", "LIKE_NEW", "USED", "DAMAGED"] as const;
 const resolutions = ["REFUND", "EXCHANGE", "STORE_CREDIT", "REJECT"] as const;

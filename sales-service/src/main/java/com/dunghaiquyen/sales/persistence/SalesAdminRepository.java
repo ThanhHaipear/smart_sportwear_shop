@@ -1,5 +1,6 @@
 package com.dunghaiquyen.sales.persistence;
 
+import com.dunghaiquyen.sales.identity.IdentityClient;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,12 +15,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class SalesAdminRepository {
-    private final JdbcClient jdbc; private final SalesQueryRepository queries;
-    public SalesAdminRepository(JdbcClient jdbc,SalesQueryRepository queries){this.jdbc=jdbc;this.queries=queries;}
-    public long orderCount(){return jdbc.sql("select count(*) from orders").query(Long.class).single();}
-    public List<Map<String,Object>> orders(int limit,int offset){return jdbc.sql("select * from orders order by placed_at desc,id limit :limit offset :offset")
-            .param("limit",limit).param("offset",offset).query((rs,row)->adminOrder(rs)).list();}
-    public Map<String,Object> order(UUID id){return queries.order(new UUID(0,0),id,true).orElseThrow(()->new IllegalArgumentException("Order not found"));}
+    private final JdbcClient jdbc; private final SalesQueryRepository queries; private final SalesWorkflowRepository workflows; private final IdentityClient identity;
+    public SalesAdminRepository(JdbcClient jdbc,SalesQueryRepository queries,SalesWorkflowRepository workflows,IdentityClient identity){this.jdbc=jdbc;this.queries=queries;this.workflows=workflows;this.identity=identity;}
+    public long orderCount(String keyword,String status,UUID customerId,LocalDate dateFrom,LocalDate dateTo,UUID productId){
+        return bindOrderFilters(jdbc.sql("select count(*) from orders o where "+orderFilters(keyword,status,customerId,dateFrom,dateTo,productId)),keyword,status,customerId,dateFrom,dateTo,productId).query(Long.class).single();
+    }
+    public List<Map<String,Object>> orders(int limit,int offset,String keyword,String status,UUID customerId,LocalDate dateFrom,LocalDate dateTo,UUID productId){
+        JdbcClient.StatementSpec statement=bindOrderFilters(jdbc.sql("select o.id from orders o where "+orderFilters(keyword,status,customerId,dateFrom,dateTo,productId)+" order by o.placed_at desc,o.id limit :limit offset :offset"),keyword,status,customerId,dateFrom,dateTo,productId)
+                .param("limit",limit).param("offset",offset);
+        return statement.query(UUID.class).list().stream().map(this::order).toList();
+    }
+    public Map<String,Object> order(UUID id){
+        Map<String,Object> result=new LinkedHashMap<>(queries.order(new UUID(0,0),id,true).orElseThrow(()->new IllegalArgumentException("Order not found")));
+        UUID customerId=(UUID)result.get("customerId"); Map<String,Object> profile=user(customerId);
+        @SuppressWarnings("unchecked") Map<String,Object> address=result.get("shippingAddress") instanceof Map<?,?> value?(Map<String,Object>)value:Map.of();
+        result.put("customerName",first(profile.get("fullName"),address.get("receiverName"),customerId));
+        result.put("customerPhone",first(profile.get("phone"),address.get("phone"),null));
+        return result;
+    }
     @Transactional public Map<String,Object> status(UUID id,String status,String reason,UUID actor){
         String before=jdbc.sql("select order_status from orders where id=:id for update").param("id",id).query(String.class).single();
         jdbc.sql("update orders set order_status=:status,updated_at=current_timestamp where id=:id").param("status",status).param("id",id).update();
@@ -70,18 +83,36 @@ public class SalesAdminRepository {
         points.forEach(point->{point.remove("period_from");point.remove("period_to");});
         return map("granularity",granularity,"dateFrom",first,"dateTo",last,"points",points);
     }
-    public Map<String,Object> productReport(int limit){return map("bestSelling",jdbc.sql("""
+    public Map<String,Object> productReport(int page,int limit,LocalDate dateFrom,LocalDate dateTo){
+        String dateSql=reportDateFilters("o.delivered_at",dateFrom,dateTo);
+        long total=bindDates(jdbc.sql("select count(distinct i.product_ref) from order_items i join orders o on o.id=i.order_id where o.order_status='DELIVERED' and o.data_source='REAL'"+dateSql),dateFrom,dateTo).query(Long.class).single();
+        JdbcClient.StatementSpec statement=bindDates(jdbc.sql("""
             select i.product_ref product_id,max(i.product_name_snapshot) product_name,sum(i.quantity) total_quantity_sold,
                    sum(i.net_line_amount) total_revenue
               from order_items i join orders o on o.id=i.order_id
              where o.order_status='DELIVERED' and o.data_source='REAL'
-             group by i.product_ref order by total_quantity_sold desc limit :limit
-            """).param("limit",limit).query((rs,row)->map("productId",uuid(rs,"product_id"),"productName",rs.getString("product_name"),"totalQuantitySold",rs.getLong("total_quantity_sold"),"totalRevenue",rs.getBigDecimal("total_revenue"))).list());}
-    public Map<String,Object> customerReport(){return map("items",jdbc.sql("select user_ref,count(*) order_count,sum(total_amount) total_spent from orders group by user_ref order by total_spent desc").query().listOfRows());}
+            """+dateSql+" group by i.product_ref order by total_quantity_sold desc limit :limit offset :offset"),dateFrom,dateTo)
+                .param("limit",limit).param("offset",(page-1)*limit);
+        List<Map<String,Object>> items=statement.query((rs,row)->map("productId",uuid(rs,"product_id"),"productName",rs.getString("product_name"),"totalQuantitySold",rs.getLong("total_quantity_sold"),"totalRevenue",rs.getBigDecimal("total_revenue"))).list();
+        return map("dateFrom",dateFrom==null?null:dateFrom.toString(),"dateTo",dateTo==null?null:dateTo.toString(),"bestSelling",items,"meta",meta(page,limit,total));
+    }
+    public Map<String,Object> customerReport(int page,int limit,LocalDate dateFrom,LocalDate dateTo){
+        String dateSql=reportDateFilters("o.placed_at",dateFrom,dateTo);
+        String base=" from orders o where o.order_status<>'CANCELLED' and o.data_source='REAL'"+dateSql;
+        long total=bindDates(jdbc.sql("select count(distinct o.user_ref)"+base),dateFrom,dateTo).query(Long.class).single();
+        JdbcClient.StatementSpec statement=bindDates(jdbc.sql("select o.user_ref customer_id,count(*) total_orders,sum(o.total_amount) total_revenue"+base+" group by o.user_ref order by total_revenue desc limit :limit offset :offset"),dateFrom,dateTo)
+                .param("limit",limit).param("offset",(page-1)*limit);
+        List<Map<String,Object>> customers=statement.query((rs,row)->{
+            UUID id=uuid(rs,"customer_id");Map<String,Object> profile=user(id);
+            return map("customerId",id,"customerName",first(profile.get("fullName"),null,id),"email",first(profile.get("email"),null,""),"totalOrders",rs.getLong("total_orders"),"totalRevenue",rs.getBigDecimal("total_revenue"));
+        }).list();
+        return map("dateFrom",dateFrom==null?null:dateFrom.toString(),"dateTo",dateTo==null?null:dateTo.toString(),"customers",customers,"meta",meta(page,limit,total));
+    }
     public Map<String,Object> inventoryReport(){return map("message","Inventory report is owned by catalog-service","items",List.of());}
-    public long returnCount(){return jdbc.sql("select count(*) from returns").query(Long.class).single();}
-    public List<Map<String,Object>> returns(int limit,int offset){return jdbc.sql("select * from returns order by requested_at desc,id limit :limit offset :offset").param("limit",limit).param("offset",offset).query().listOfRows();}
-    public Map<String,Object> returnDetail(UUID id){Map<String,Object> result=new LinkedHashMap<>(jdbc.sql("select * from returns where id=:id").param("id",id).query().singleRow());result.put("items",jdbc.sql("select * from return_items where return_id=:id").param("id",id).query().listOfRows());return result;}
+    public long returnCount(String status){JdbcClient.StatementSpec statement=jdbc.sql("select count(*) from returns where (:all=true or status=:status)").param("all",status==null).param("status",status==null?"":status);return statement.query(Long.class).single();}
+    public List<Map<String,Object>> returns(int limit,int offset,String status){return jdbc.sql("select id from returns where (:all=true or status=:status) order by requested_at desc,id limit :limit offset :offset")
+            .param("all",status==null).param("status",status==null?"":status).param("limit",limit).param("offset",offset).query(UUID.class).list().stream().map(id->workflows.returnDetail(id,null,true)).toList();}
+    public Map<String,Object> returnDetail(UUID id){return workflows.returnDetail(id,null,true);}
     @Transactional public Map<String,Object> returnStatus(UUID id,String status,UUID actor){jdbc.sql("update returns set status=:status,handled_by_ref=:actor,updated_at=current_timestamp where id=:id").param("status",status).param("actor",actor).param("id",id).update();return returnDetail(id);}
     public List<Map<String,Object>> refunds(UUID orderId){return jdbc.sql("select * from refunds where order_id=:id order by created_at desc").param("id",orderId).query().listOfRows();}
     public List<Map<String,Object>> settings(){return jdbc.sql("select setting_key key,setting_value value,value_type type,description,is_public from site_settings order by setting_key").query().listOfRows();}
@@ -95,7 +126,28 @@ public class SalesAdminRepository {
                 .param("description",description).param("public",isPublic).param("actor",actor).update();return jdbc.sql("select setting_key key,setting_value value,value_type type,description,is_public from site_settings where setting_key=:key").param("key",key).query().singleRow();}
     public long auditCount(){return jdbc.sql("select count(*) from audit_logs").query(Long.class).single();}
     public List<Map<String,Object>> audits(int limit,int offset){return jdbc.sql("select * from audit_logs order by created_at desc,id limit :limit offset :offset").param("limit",limit).param("offset",offset).query().listOfRows();}
-    private Map<String,Object> adminOrder(ResultSet rs)throws SQLException{return map("id",uuid(rs,"id"),"orderCode",rs.getString("order_code"),"userId",uuid(rs,"user_ref"),"orderStatus",rs.getString("order_status"),"paymentStatus",rs.getString("payment_status"),"paymentMethod",rs.getString("payment_method"),"totalAmount",rs.getBigDecimal("total_amount"),"createdAt",rs.getTimestamp("created_at").toInstant());}
+    private String orderFilters(String keyword,String status,UUID customerId,LocalDate dateFrom,LocalDate dateTo,UUID productId){
+        StringBuilder sql=new StringBuilder("o.data_source='REAL'");
+        if(keyword!=null&&!keyword.isBlank())sql.append(" and lower(o.order_code) like lower(:keyword)");
+        if(status!=null&&!status.isBlank())sql.append(" and o.order_status=:status");
+        if(customerId!=null)sql.append(" and o.user_ref=:customerId");
+        if(dateFrom!=null)sql.append(" and (o.placed_at at time zone 'Asia/Ho_Chi_Minh')::date>=:dateFrom");
+        if(dateTo!=null)sql.append(" and (o.placed_at at time zone 'Asia/Ho_Chi_Minh')::date<=:dateTo");
+        if(productId!=null)sql.append(" and exists(select 1 from order_items i where i.order_id=o.id and i.product_ref=:productId)");
+        return sql.toString();
+    }
+    private JdbcClient.StatementSpec bindOrderFilters(JdbcClient.StatementSpec statement,String keyword,String status,UUID customerId,LocalDate dateFrom,LocalDate dateTo,UUID productId){
+        if(keyword!=null&&!keyword.isBlank())statement=statement.param("keyword","%"+keyword.trim()+"%");
+        if(status!=null&&!status.isBlank())statement=statement.param("status",status);
+        if(customerId!=null)statement=statement.param("customerId",customerId);
+        if(productId!=null)statement=statement.param("productId",productId);
+        return bindDates(statement,dateFrom,dateTo);
+    }
+    private String reportDateFilters(String column,LocalDate dateFrom,LocalDate dateTo){return (dateFrom==null?"":" and ("+column+" at time zone 'Asia/Ho_Chi_Minh')::date>=:dateFrom")+(dateTo==null?"":" and ("+column+" at time zone 'Asia/Ho_Chi_Minh')::date<=:dateTo");}
+    private JdbcClient.StatementSpec bindDates(JdbcClient.StatementSpec statement,LocalDate dateFrom,LocalDate dateTo){if(dateFrom!=null)statement=statement.param("dateFrom",dateFrom);if(dateTo!=null)statement=statement.param("dateTo",dateTo);return statement;}
+    private Map<String,Object> user(UUID id){if(id==null)return Map.of();try{Map<String,Object> value=identity.user(id);return value==null?Map.of():value;}catch(RuntimeException ignored){return Map.of();}}
+    private Object first(Object primary,Object secondary,Object fallback){if(primary!=null&&!String.valueOf(primary).isBlank())return primary;if(secondary!=null&&!String.valueOf(secondary).isBlank())return secondary;return fallback;}
+    private Map<String,Object> meta(int page,int limit,long total){return map("page",page,"limit",limit,"total",total,"totalPages",total==0?0:(total+limit-1)/limit);}
     private static UUID uuid(ResultSet rs,String column)throws SQLException{return rs.getObject(column,UUID.class);}
     private static Map<String,Object> map(Object... values){Map<String,Object> result=new LinkedHashMap<>();for(int i=0;i<values.length;i+=2)result.put(String.valueOf(values[i]),values[i+1]);return result;}
 }

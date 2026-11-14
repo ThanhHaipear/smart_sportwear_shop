@@ -1,6 +1,7 @@
 package com.dunghaiquyen.identity.api;
 
 import com.dunghaiquyen.identity.domain.IdentityModels.Address;
+import com.dunghaiquyen.identity.domain.IdentityModels.User;
 import com.dunghaiquyen.identity.persistence.IdentityRepository;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -22,7 +23,17 @@ public class InternalIdentityApi {
     }
     @GetMapping("/users/{userId}/addresses/{addressId}")
     public Address address(@RequestHeader("X-Internal-Service-Token")String token,@PathVariable UUID userId,@PathVariable UUID addressId){
-        if(!MessageDigest.isEqual(expectedSalesToken,token.getBytes(StandardCharsets.UTF_8)))throw new SecurityException("Invalid service token");
+        authorize(token);
         return repository.addressForUser(userId,addressId);
+    }
+    public record UserSummary(UUID id,String fullName,String email,String phone){}
+    @GetMapping("/users/{userId}")
+    public UserSummary user(@RequestHeader("X-Internal-Service-Token")String token,@PathVariable UUID userId){
+        authorize(token);
+        User user=repository.userById(userId).orElseThrow(()->new IllegalArgumentException("User not found"));
+        return new UserSummary(user.id(),user.fullName(),user.email(),user.phone());
+    }
+    private void authorize(String token){
+        if(!MessageDigest.isEqual(expectedSalesToken,token.getBytes(StandardCharsets.UTF_8)))throw new SecurityException("Invalid service token");
     }
 }
