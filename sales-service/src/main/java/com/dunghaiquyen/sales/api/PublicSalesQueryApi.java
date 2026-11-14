@@ -17,6 +17,7 @@ public class PublicSalesQueryApi {
     public PublicSalesQueryApi(SalesQueryRepository repository,SalesProperties properties,
             @Value("${sales.vietqr.bank-bin:}")String bankBin,@Value("${sales.vietqr.account-name:}")String accountName,NotificationStreamService streams){this.repository=repository;this.properties=properties;this.bankBin=bankBin;this.accountName=accountName;this.streams=streams;}
     public record VietQrRequest(UUID orderId){}
+    private record VietQrConfiguration(String accountNumber,String bankBin,String accountName){}
 
     @GetMapping("/orders/me")
     ApiResponse<List<Map<String,Object>>> orders(@RequestHeader("X-User-Id") UUID user,
@@ -44,12 +45,22 @@ public class PublicSalesQueryApi {
 
     @GetMapping("/payments/vietqr/{paymentId}")
     ApiResponse<Map<String,Object>> vietQr(@RequestHeader("X-User-Id")UUID user,@PathVariable UUID paymentId){
-        return ApiResponse.ok(repository.vietQr(user,paymentId).orElseThrow(()->new IllegalArgumentException("Payment not found")));}
+        VietQrConfiguration config=vietQrConfiguration();
+        return ApiResponse.ok(repository.vietQr(user,paymentId,config.accountNumber(),config.bankBin(),config.accountName())
+                .orElseThrow(()->new IllegalArgumentException("Payment not found")));}
 
     @PostMapping("/payments/vietqr")
     ApiResponse<Map<String,Object>> createVietQr(@RequestHeader("X-User-Id")UUID user,@RequestBody VietQrRequest request){
-        return ApiResponse.ok(repository.vietQrByOrder(user,request.orderId(),properties.vietqr().accountNumber(),bankBin,accountName)
+        VietQrConfiguration config=vietQrConfiguration();
+        return ApiResponse.ok(repository.vietQrByOrder(user,request.orderId(),config.accountNumber(),config.bankBin(),config.accountName())
                 .orElseThrow(()->new IllegalArgumentException("VietQR payment not found")));}
+
+    private VietQrConfiguration vietQrConfiguration(){
+        String accountNumber=properties.vietqr().accountNumber();
+        if(accountNumber==null||accountNumber.isBlank()||bankBin==null||bankBin.isBlank()||accountName==null||accountName.isBlank())
+            throw new IllegalStateException("VietQR bank configuration is incomplete");
+        return new VietQrConfiguration(accountNumber.trim(),bankBin.trim(),accountName.trim());
+    }
 
     @GetMapping("/notifications/me")
     ApiResponse<List<Map<String,Object>>> notifications(@RequestHeader("X-User-Id")UUID user,

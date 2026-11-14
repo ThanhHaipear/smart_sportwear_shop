@@ -60,15 +60,15 @@ public class SalesQueryRepository {
                 .query((rs, row) -> payment(rs)).list();
     }
 
-    public Optional<Map<String, Object>> vietQr(UUID userId, UUID paymentId) {
+    public Optional<Map<String, Object>> vietQr(UUID userId, UUID paymentId, String accountNumber, String bankBin, String accountName) {
         return jdbc.sql("""
                 select p.*,o.user_ref from payments p join orders o on o.id=p.order_id
                  where p.id=:id and o.user_ref=:user and p.provider='BANK_TRANSFER'
                 """).param("id", paymentId).param("user", userId).query((rs, row) -> map(
                 "paymentId", uuid(rs,"id"), "orderId", uuid(rs,"order_id"),
                 "transactionRef", rs.getString("transaction_ref"), "amount", rs.getBigDecimal("amount"),
-                "currency", "VND", "bankBin", rs.getString("bank_code"),
-                "accountNumber", "", "accountName", "", "status", rs.getString("status"),
+                "currency", "VND", "bankBin", bankBin,
+                "accountNumber", accountNumber, "accountName", accountName, "status", rs.getString("status"),
                 "expiresAt", rs.getTimestamp("expires_at") == null ? null : rs.getTimestamp("expires_at").toInstant())).optional();
     }
 
