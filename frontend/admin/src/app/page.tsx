@@ -5,7 +5,8 @@ import { TopProductChart } from "@/components/ui/AdminCharts";
 import { getDashboardData, getOverviewReport, getRevenueReport } from "@/modules/analytics/api";
 import type { RevenueReport } from "@/modules/analytics/api";
 
-function formatVND(amount: number): string {
+function formatVND(amount: number | null | undefined): string {
+  if (typeof amount !== "number" || !Number.isFinite(amount)) return "—";
   if (amount >= 1_000_000_000) return `${(amount / 1_000_000_000).toFixed(1)} tỷ`;
   if (amount >= 1_000_000) return `${(amount / 1_000_000).toFixed(1)} triệu`;
   if (amount >= 1_000) return `${(amount / 1_000).toFixed(0)}k`;

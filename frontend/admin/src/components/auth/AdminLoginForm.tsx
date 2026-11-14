@@ -1,6 +1,6 @@
 "use client";
 
-import { SoccerBall } from "@phosphor-icons/react";
+import { SoccerBall } from "@phosphor-icons/react/SoccerBall";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { adminLogin } from "@/modules/auth/api";
@@ -29,8 +29,7 @@ export function AdminLoginForm() {
       }
 
       persistAuthSession(data.tokens, data.user.role);
-      router.push("/");
-      router.refresh();
+      router.replace("/");
     } catch (err: unknown) {
       if (
         err !== null &&

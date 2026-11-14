@@ -1,23 +1,21 @@
 "use client";
 
-import {
-  ArrowCounterClockwise,
-  ChartLineUp,
-  Flag,
-  GearSix,
-  House,
-  List,
-  MagnifyingGlass,
-  Package,
-  Receipt,
-  Scroll,
-  ShieldCheck,
-  SignOut,
-  TreeStructure,
-  TShirt,
-  Users,
-  X,
-} from "@phosphor-icons/react";
+import { ArrowCounterClockwise } from "@phosphor-icons/react/ArrowCounterClockwise";
+import { ChartLineUp } from "@phosphor-icons/react/ChartLineUp";
+import { Flag } from "@phosphor-icons/react/Flag";
+import { GearSix } from "@phosphor-icons/react/GearSix";
+import { House } from "@phosphor-icons/react/House";
+import { List } from "@phosphor-icons/react/List";
+import { MagnifyingGlass } from "@phosphor-icons/react/MagnifyingGlass";
+import { Package } from "@phosphor-icons/react/Package";
+import { Receipt } from "@phosphor-icons/react/Receipt";
+import { Scroll } from "@phosphor-icons/react/Scroll";
+import { ShieldCheck } from "@phosphor-icons/react/ShieldCheck";
+import { SignOut } from "@phosphor-icons/react/SignOut";
+import { TreeStructure } from "@phosphor-icons/react/TreeStructure";
+import { TShirt } from "@phosphor-icons/react/TShirt";
+import { Users } from "@phosphor-icons/react/Users";
+import { X } from "@phosphor-icons/react/X";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
