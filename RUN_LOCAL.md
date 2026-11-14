@@ -52,6 +52,13 @@ Chỉ chạy backend/gateway, không mở frontend:
 .\scripts\run\start-all-local.cmd -NoFrontends
 ```
 
+Chạy Storefront, Admin và các service nghiệp vụ (Catalog, Identity, Sales, Gateway), không chạy Search,
+Recommendation, Chatbot và các AI worker:
+
+```powershell
+.\scripts\run\start-all-local.cmd -NoAi
+```
+
 ## Chạy thủ công từng thành phần
 
 Hạ tầng:

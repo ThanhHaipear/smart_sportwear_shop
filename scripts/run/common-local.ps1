@@ -1,5 +1,15 @@
 $ErrorActionPreference = "Stop"
 
+# Windows PowerShell 5.1 can decode UTF-8 output from hidden native processes
+# using the legacy OEM code page. Set the encodings before Node, Maven or
+# Python starts so symbols in their output are preserved in local log files.
+$script:Utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+[Console]::InputEncoding = $script:Utf8NoBom
+[Console]::OutputEncoding = $script:Utf8NoBom
+$global:OutputEncoding = $script:Utf8NoBom
+$env:PYTHONIOENCODING = "utf-8"
+$env:PYTHONUTF8 = "1"
+
 $script:ProjectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
 $script:RuntimeEnvFile = Join-Path $script:ProjectRoot ".env.phase10.local"
 $script:LocalLogDirectory = Join-Path $script:ProjectRoot "logs\local"

@@ -1,5 +1,6 @@
 param(
     [switch]$NoFrontends,
+    [switch]$NoAi,
     [switch]$VisibleTerminals,
     [switch]$FollowLogs
 )
@@ -43,21 +44,24 @@ Wait-LocalPort -Port 8092 -Name "catalog-service"
 Wait-LocalPort -Port 8093 -Name "identity-service"
 
 if (-not (Test-LocalTcpPort -Port 8094)) { Start-LocalService -Name "sales-service" -ScriptName "start-sales-service.ps1" }
-if (-not (Test-LocalTcpPort -Port 8090)) { Start-LocalService -Name "search-service" -ScriptName "start-search-service.ps1" }
-if (-not (Test-LocalTcpPort -Port 8091)) { Start-LocalService -Name "recommendation-service" -ScriptName "start-recommendation-service.ps1" }
 Wait-LocalPort -Port 8094 -Name "sales-service"
-Wait-LocalPort -Port 8090 -Name "search-service"
-Wait-LocalPort -Port 8091 -Name "recommendation-service"
 
-if (-not (Test-LocalProcessSlot -Name "search-worker")) {
-    Start-LocalService -Name "search-worker" -ScriptName "start-search-service.ps1" -Arguments @("-Mode", "worker")
-}
-if (-not (Test-LocalProcessSlot -Name "recommendation-worker")) {
-    Start-LocalService -Name "recommendation-worker" -ScriptName "start-recommendation-service.ps1" -Arguments @("-Mode", "worker")
-}
+if (-not $NoAi) {
+    if (-not (Test-LocalTcpPort -Port 8090)) { Start-LocalService -Name "search-service" -ScriptName "start-search-service.ps1" }
+    if (-not (Test-LocalTcpPort -Port 8091)) { Start-LocalService -Name "recommendation-service" -ScriptName "start-recommendation-service.ps1" }
+    Wait-LocalPort -Port 8090 -Name "search-service"
+    Wait-LocalPort -Port 8091 -Name "recommendation-service"
 
-if (-not (Test-LocalTcpPort -Port 8002)) { Start-LocalService -Name "chatbot-service" -ScriptName "start-chatbot-service.ps1" }
-Wait-LocalPort -Port 8002 -Name "chatbot-service"
+    if (-not (Test-LocalProcessSlot -Name "search-worker")) {
+        Start-LocalService -Name "search-worker" -ScriptName "start-search-service.ps1" -Arguments @("-Mode", "worker")
+    }
+    if (-not (Test-LocalProcessSlot -Name "recommendation-worker")) {
+        Start-LocalService -Name "recommendation-worker" -ScriptName "start-recommendation-service.ps1" -Arguments @("-Mode", "worker")
+    }
+
+    if (-not (Test-LocalTcpPort -Port 8002)) { Start-LocalService -Name "chatbot-service" -ScriptName "start-chatbot-service.ps1" }
+    Wait-LocalPort -Port 8002 -Name "chatbot-service"
+}
 
 if (-not (Test-LocalTcpPort -Port 8085)) { Start-LocalService -Name "gateway" -ScriptName "start-gateway.ps1" }
 Wait-LocalPort -Port 8085 -Name "gateway"
@@ -71,6 +75,7 @@ if (-not $NoFrontends) {
 
 Write-Host ""
 Write-Host "Local microservice runtime started successfully." -ForegroundColor Green
+if ($NoAi) { Write-Host "AI services: disabled (Search, Recommendation, Chatbot and AI workers)." -ForegroundColor Yellow }
 Write-Host "Gateway:    http://localhost:8085" -ForegroundColor Cyan
 Write-Host "Storefront: http://localhost:3000" -ForegroundColor Cyan
 Write-Host "Admin:      http://localhost:3001" -ForegroundColor Cyan

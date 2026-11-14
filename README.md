@@ -111,6 +111,9 @@ Một số tùy chọn hữu ích:
 # Không chạy hai frontend
 .\scripts\run\start-all-local.cmd -NoFrontends
 
+# Chạy frontend và các service nghiệp vụ, không chạy service/worker AI
+.\scripts\run\start-all-local.cmd -NoAi
+
 # Khởi động và theo dõi log trong terminal hiện tại
 .\scripts\run\start-all-local.cmd -FollowLogs
 
