@@ -1,7 +1,9 @@
 package com.dunghaiquyen.sales.persistence;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,17 +26,57 @@ public class SalesAdminRepository {
         jdbc.sql("insert into order_status_history(order_id,from_status,to_status,reason,actor_ref) values(:id,:before,:after,:reason,:actor)")
                 .param("id",id).param("before",before).param("after",status).param("reason",reason).param("actor",actor).update();return order(id);}
     public Map<String,Object> overview(){return jdbc.sql("""
-            select count(*) orders,count(*) filter(where order_status not in ('DELIVERED','CANCELLED')) active_orders,
-                   coalesce(sum(total_amount) filter(where payment_status='PAID'),0) revenue,
-                   count(distinct user_ref) customers from orders
-            """).query((rs,row)->map("orders",rs.getLong("orders"),"activeOrders",rs.getLong("active_orders"),
-                    "revenue",rs.getBigDecimal("revenue"),"customers",rs.getLong("customers"))).single();}
+            select count(*) orders,
+                   count(*) filter(where order_status not in ('DELIVERED','CANCELLED')) active_orders,
+                   coalesce((select sum(p.amount) from payments p join orders paid_order on paid_order.id=p.order_id
+                              where p.paid_at is not null and p.status in ('PAID','PARTIALLY_REFUNDED','REFUNDED')
+                                and paid_order.data_source='REAL'),0) gross_revenue,
+                   coalesce((select sum(r.amount) from refunds r join orders refunded_order on refunded_order.id=r.order_id
+                              where r.status='COMPLETED' and r.refunded_at is not null
+                                and refunded_order.data_source='REAL'),0) completed_refunds,
+                   count(distinct user_ref) customers
+              from orders where data_source='REAL'
+            """).query((rs,row)->{
+                BigDecimal gross=rs.getBigDecimal("gross_revenue");
+                BigDecimal realized=gross.subtract(rs.getBigDecimal("completed_refunds"));
+                long orders=rs.getLong("orders"),activeOrders=rs.getLong("active_orders");
+                return map("orders",orders,"activeOrders",activeOrders,"revenue",gross,"customers",rs.getLong("customers"),
+                        "grossRevenue",gross,"realizedRevenue",realized,"totalOrders",orders,"pendingOrders",activeOrders,"lowStockCount",0);
+            }).single();}
     public Map<String,Object> orderReport(){return map("items",jdbc.sql("select order_status status,count(*) count from orders group by order_status order by order_status").query().listOfRows());}
-    public Map<String,Object> revenueReport(){return map("items",jdbc.sql("select cast(placed_at as date) date,coalesce(sum(total_amount) filter(where payment_status='PAID'),0) revenue from orders group by cast(placed_at as date) order by date").query().listOfRows());}
+    public Map<String,Object> revenueReport(String granularity,LocalDate dateFrom,LocalDate dateTo){
+        if(dateFrom!=null&&dateTo!=null&&dateFrom.isAfter(dateTo))throw new IllegalArgumentException("dateFrom must not be after dateTo");
+        String unit=switch(granularity){case "DAY"->"day";case "MONTH"->"month";case "YEAR"->"year";default->throw new IllegalArgumentException("Unsupported revenue granularity: "+granularity);};
+        String labelFormat=switch(granularity){case "DAY"->"DD/MM/YYYY";case "MONTH"->"MM/YYYY";default->"YYYY";};
+        StringBuilder sql=new StringBuilder("""
+                select to_char(date_trunc('%s',p.paid_at at time zone 'Asia/Ho_Chi_Minh'),'YYYY-MM-DD') date,
+                       to_char(date_trunc('%s',p.paid_at at time zone 'Asia/Ho_Chi_Minh'),'%s') label,
+                       coalesce(sum(p.amount),0) revenue,count(distinct p.order_id) orders,
+                       to_char(min((p.paid_at at time zone 'Asia/Ho_Chi_Minh')::date),'YYYY-MM-DD') period_from,
+                       to_char(max((p.paid_at at time zone 'Asia/Ho_Chi_Minh')::date),'YYYY-MM-DD') period_to
+                  from payments p join orders o on o.id=p.order_id
+                 where p.paid_at is not null and p.status in ('PAID','PARTIALLY_REFUNDED','REFUNDED')
+                   and o.data_source='REAL'
+                """.formatted(unit,unit,labelFormat));
+        if(dateFrom!=null)sql.append(" and (p.paid_at at time zone 'Asia/Ho_Chi_Minh')::date>=:dateFrom");
+        if(dateTo!=null)sql.append(" and (p.paid_at at time zone 'Asia/Ho_Chi_Minh')::date<=:dateTo");
+        sql.append(" group by date_trunc('").append(unit).append("',p.paid_at at time zone 'Asia/Ho_Chi_Minh') order by 1");
+        JdbcClient.StatementSpec statement=jdbc.sql(sql.toString());
+        if(dateFrom!=null)statement=statement.param("dateFrom",dateFrom);
+        if(dateTo!=null)statement=statement.param("dateTo",dateTo);
+        List<Map<String,Object>> points=statement.query().listOfRows();
+        String first=dateFrom==null?(points.isEmpty()?"":String.valueOf(points.getFirst().get("period_from"))):dateFrom.toString();
+        String last=dateTo==null?(points.isEmpty()?"":String.valueOf(points.getLast().get("period_to"))):dateTo.toString();
+        points.forEach(point->{point.remove("period_from");point.remove("period_to");});
+        return map("granularity",granularity,"dateFrom",first,"dateTo",last,"points",points);
+    }
     public Map<String,Object> productReport(int limit){return map("bestSelling",jdbc.sql("""
-            select product_ref product_id,max(product_name_snapshot) product_name,sum(quantity) total_quantity_sold
-              from order_items group by product_ref order by total_quantity_sold desc limit :limit
-            """).param("limit",limit).query((rs,row)->map("productId",uuid(rs,"product_id"),"productName",rs.getString("product_name"),"totalQuantitySold",rs.getLong("total_quantity_sold"))).list());}
+            select i.product_ref product_id,max(i.product_name_snapshot) product_name,sum(i.quantity) total_quantity_sold,
+                   sum(i.net_line_amount) total_revenue
+              from order_items i join orders o on o.id=i.order_id
+             where o.order_status='DELIVERED' and o.data_source='REAL'
+             group by i.product_ref order by total_quantity_sold desc limit :limit
+            """).param("limit",limit).query((rs,row)->map("productId",uuid(rs,"product_id"),"productName",rs.getString("product_name"),"totalQuantitySold",rs.getLong("total_quantity_sold"),"totalRevenue",rs.getBigDecimal("total_revenue"))).list());}
     public Map<String,Object> customerReport(){return map("items",jdbc.sql("select user_ref,count(*) order_count,sum(total_amount) total_spent from orders group by user_ref order by total_spent desc").query().listOfRows());}
     public Map<String,Object> inventoryReport(){return map("message","Inventory report is owned by catalog-service","items",List.of());}
     public long returnCount(){return jdbc.sql("select count(*) from returns").query(Long.class).single();}

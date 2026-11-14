@@ -1,6 +1,7 @@
 package com.dunghaiquyen.sales.api;
 
 import com.dunghaiquyen.sales.persistence.SalesAdminRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminSalesApi {
     private final SalesAdminRepository repository;
     public AdminSalesApi(SalesAdminRepository repository){this.repository=repository;}
+    public enum RevenueGranularity {DAY,MONTH,YEAR}
     public record StatusBody(String status,String reason){} public record SettingBody(Object value,String type,String description,Boolean isPublic){} public record OrderIds(List<UUID> orderIds){}
     @GetMapping("/orders") ApiResponse<List<Map<String,Object>>> orders(@RequestParam(defaultValue="1")int page,@RequestParam(defaultValue="20")int limit){int p=Math.max(1,page),l=Math.max(1,Math.min(limit,100));long total=repository.orderCount();return ApiResponse.ok(repository.orders(l,(p-1)*l),meta(p,l,total));}
     @GetMapping("/orders/{id}") ApiResponse<Map<String,Object>> order(@PathVariable UUID id){return ApiResponse.ok(repository.order(id));}
@@ -19,7 +21,12 @@ public class AdminSalesApi {
     @GetMapping("/orders/{id}/refunds") ApiResponse<List<Map<String,Object>>> refunds(@PathVariable UUID id){return ApiResponse.ok(repository.refunds(id));}
     @GetMapping("/reports/overview") ApiResponse<Map<String,Object>> overview(){return ApiResponse.ok(repository.overview());}
     @GetMapping("/reports/orders") ApiResponse<Map<String,Object>> orderReport(){return ApiResponse.ok(repository.orderReport());}
-    @GetMapping("/reports/revenue") ApiResponse<Map<String,Object>> revenue(){return ApiResponse.ok(repository.revenueReport());}
+    @GetMapping("/reports/revenue") ApiResponse<Map<String,Object>> revenue(
+            @RequestParam(defaultValue="MONTH") RevenueGranularity granularity,
+            @RequestParam(required=false) LocalDate dateFrom,
+            @RequestParam(required=false) LocalDate dateTo){
+        return ApiResponse.ok(repository.revenueReport(granularity.name(),dateFrom,dateTo));
+    }
     @GetMapping("/reports/products") ApiResponse<Map<String,Object>> products(@RequestParam(defaultValue="10")int limit){return ApiResponse.ok(repository.productReport(Math.max(1,Math.min(limit,100))));}
     @GetMapping("/reports/customers") ApiResponse<Map<String,Object>> customers(){return ApiResponse.ok(repository.customerReport());}
     @GetMapping("/reports/inventory") ApiResponse<Map<String,Object>> inventory(){return ApiResponse.ok(repository.inventoryReport());}
