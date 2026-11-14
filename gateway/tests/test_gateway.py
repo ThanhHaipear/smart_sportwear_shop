@@ -16,11 +16,12 @@ TRACE = "00-0123456789abcdef0123456789abcdef-0123456789abcdef-01"
 JWT_SECRET = "test-access-secret-that-is-at-least-32-bytes-long"
 
 
-def access_token(user_id="00000000-0000-0000-0000-000000000123", role="CUSTOMER"):
+def access_token(user_id="00000000-0000-0000-0000-000000000123", role="CUSTOMER", algorithm="HS512"):
     encode = lambda value: base64.urlsafe_b64encode(json.dumps(value, separators=(",", ":")).encode()).rstrip(b"=").decode()
-    header = encode({"alg": "HS256", "typ": "JWT"})
+    digests = {"HS256": hashlib.sha256, "HS384": hashlib.sha384, "HS512": hashlib.sha512}
+    header = encode({"alg": algorithm, "typ": "JWT"})
     payload = encode({"sub": user_id, "role": role, "type": "access", "exp": int(time.time()) + 300})
-    signature = base64.urlsafe_b64encode(hmac.new(JWT_SECRET.encode(), f"{header}.{payload}".encode(), hashlib.sha256).digest()).rstrip(b"=").decode()
+    signature = base64.urlsafe_b64encode(hmac.new(JWT_SECRET.encode(), f"{header}.{payload}".encode(), digests[algorithm]).digest()).rstrip(b"=").decode()
     return f"{header}.{payload}.{signature}"
 
 
@@ -61,6 +62,7 @@ def test_browser_preflight_allows_storefront_auth_requests_without_hitting_upstr
     )
     assert response.status_code == 200
     assert response.headers["access-control-allow-origin"] == "http://localhost:3000"
+    assert response.headers["access-control-allow-credentials"] == "true"
     assert "POST" in response.headers["access-control-allow-methods"]
     assert upstream_calls == []
 
@@ -190,6 +192,15 @@ def test_sales_customer_routes_require_verified_access_token():
     assert client.get("/api/v1/orders/me", headers={"Authorization": "Bearer invalid"}).status_code == 401
     assert client.get("/api/v1/me").status_code == 401
     assert client.get("/api/v1/me/addresses").status_code == 401
+
+
+def test_accepts_all_hmac_algorithms_identity_service_can_issue():
+    observed = []
+    client = gateway(lambda request: observed.append(request) or httpx.Response(200), gateway_rate_limit_per_minute=20)
+    for algorithm in ("HS256", "HS384", "HS512"):
+        response = client.get("/api/v1/me", headers={"Authorization": "Bearer " + access_token(algorithm=algorithm)})
+        assert response.status_code == 200
+        assert observed[-1].headers["x-user-id"] == "00000000-0000-0000-0000-000000000123"
 
 
 def test_notification_sse_accepts_eventsource_token_without_forwarding_it():

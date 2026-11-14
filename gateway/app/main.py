@@ -142,11 +142,17 @@ def _access_claims(authorization: str, settings: Settings) -> dict | None:
         signature = base64.urlsafe_b64decode(parts[2] + "=" * (-len(parts[2]) % 4))
     except (ValueError, json.JSONDecodeError):
         return None
-    if header.get("alg") != "HS256" or claims.get("type") != "access" or claims.get("exp", 0) <= time.time():
+    algorithms = {
+        "HS256": hashlib.sha256,
+        "HS384": hashlib.sha384,
+        "HS512": hashlib.sha512,
+    }
+    digest = algorithms.get(header.get("alg"))
+    if digest is None or claims.get("type") != "access" or claims.get("exp", 0) <= time.time():
         return None
     signed = f"{parts[0]}.{parts[1]}".encode()
     secrets_to_try = (settings.jwt_access_secret, settings.jwt_previous_access_secret)
-    if not any(secret and hmac.compare_digest(signature, hmac.new(secret.encode(), signed, hashlib.sha256).digest())
+    if not any(secret and hmac.compare_digest(signature, hmac.new(secret.encode(), signed, digest).digest())
                for secret in secrets_to_try):
         return None
     subject, role = str(claims.get("sub", "")), str(claims.get("role", ""))
@@ -197,6 +203,10 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
     app.add_middleware(
         CORSMiddleware,
         allow_origins=allowed_origins,
+        # Storefront requests intentionally use credentials="include" so the
+        # browser requires this header even while auth is token-based. Without
+        # it, the preflight succeeds but the browser blocks the real POST.
+        allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allow_headers=["Authorization", "Content-Type", "X-Correlation-ID", "traceparent"],
         expose_headers=["X-Correlation-ID", "traceparent"],
