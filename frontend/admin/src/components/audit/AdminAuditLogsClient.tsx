@@ -79,6 +79,7 @@ export function AdminAuditLogsClient({ initialLogs }: { initialLogs: AuditLogRes
         )}
       </div>
 
+      <div className="table-scroll">
       <table className="data-table">
         <thead>
           <tr>
@@ -161,6 +162,7 @@ export function AdminAuditLogsClient({ initialLogs }: { initialLogs: AuditLogRes
           ))}
         </tbody>
       </table>
+      </div>
     </section>
   );
 }

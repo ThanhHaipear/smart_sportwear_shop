@@ -140,6 +140,7 @@ export function AdminBrandsClient({ initialItems }: { initialItems: BrandRespons
         {items.length === 0 ? (
           <div className="empty-state">Hiện chưa có thương hiệu nào. Hãy tạo thương hiệu đầu tiên để bắt đầu.</div>
         ) : (
+          <div className="table-scroll">
           <table className="data-table">
             <thead>
               <tr>
@@ -161,6 +162,7 @@ export function AdminBrandsClient({ initialItems }: { initialItems: BrandRespons
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </section>
 
@@ -192,8 +194,8 @@ export function AdminBrandsClient({ initialItems }: { initialItems: BrandRespons
             }}
           />
           <select className="select" value={form.status} onChange={(event) => setForm((current) => ({ ...current, status: event.target.value }))}>
-            <option value="ACTIVE">ACTIVE</option>
-            <option value="INACTIVE">INACTIVE</option>
+            <option value="ACTIVE">Hoạt động</option>
+            <option value="INACTIVE">Ẩn</option>
           </select>
           <div className="admin-form-full">
             <textarea

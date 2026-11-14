@@ -9,6 +9,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "DHQ Admin",
   description: "Bảng quản trị vận hành DHQ",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export const viewport: Viewport = {

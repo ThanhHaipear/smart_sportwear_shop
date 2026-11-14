@@ -8,9 +8,9 @@ type ProductsSearchParams = Promise<{ q?: string | string[] }>;
 export default async function ProductsPage({ searchParams }: { searchParams: ProductsSearchParams }) {
   const params = await searchParams;
   const initialSearchTerm = typeof params.q === "string" ? params.q : "";
-  const productsPromise = listAdminProducts().catch(() => []);
-  const categoriesPromise = listAdminCategories().catch(() => []);
-  const brandsPromise = listAdminBrands().catch(() => []);
+  const productsPromise = listAdminProducts();
+  const categoriesPromise = listAdminCategories();
+  const brandsPromise = listAdminBrands();
 
   return (
     <main className="workspace">

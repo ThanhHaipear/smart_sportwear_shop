@@ -334,6 +334,7 @@ export function AdminInventoryClient({
             onChange={(event) => setSearch(event.target.value)}
           />
         </div>
+        <div className="table-scroll">
         <table className="data-table" aria-busy={itemsLoading}>
           <thead>
             <tr>
@@ -367,6 +368,7 @@ export function AdminInventoryClient({
             ))}
           </tbody>
         </table>
+        </div>
         <div className="admin-pager">
           <span className="admin-pager-info">
             {itemsLoading ? "Đang tải..." : itemsMeta.total === 0 ? "Không có SKU" : `Hiển thị ${(itemsMeta.page - 1) * itemsMeta.limit + 1}–${Math.min(itemsMeta.page * itemsMeta.limit, itemsMeta.total)} trên ${itemsMeta.total} SKU`}
@@ -383,6 +385,7 @@ export function AdminInventoryClient({
         <div className="panel-header">
           <h2>Giao dịch kho gần đây</h2>
         </div>
+        <div className="table-scroll">
         <table className="data-table" aria-busy={transactionsLoading}>
           <thead>
             <tr>
@@ -414,6 +417,7 @@ export function AdminInventoryClient({
             ))}
           </tbody>
         </table>
+        </div>
         <div className="admin-pager">
           <span className="admin-pager-info">
             {transactionsLoading ? "Đang tải..." : transactionsMeta.total === 0 ? "Chưa có giao dịch" : `Hiển thị ${(transactionsMeta.page - 1) * transactionsMeta.limit + 1}–${Math.min(transactionsMeta.page * transactionsMeta.limit, transactionsMeta.total)} trên ${transactionsMeta.total} giao dịch`}

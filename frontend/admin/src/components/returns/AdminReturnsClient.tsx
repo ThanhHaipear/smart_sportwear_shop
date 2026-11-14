@@ -159,14 +159,14 @@ export function AdminReturnsClient({ initialReturns, initialMeta, initialRefunds
             </div>
           </div>
           {target === "RECEIVED" && item.status === "APPROVED" ? <p className="table-subtle">Kiểm định đầy đủ từng mặt hàng trước khi xác nhận đã nhận hàng.</p> : null}
-          <table className="data-table"><thead><tr><th>Sản phẩm</th><th>SKU / SL</th><th>Tình trạng</th><th>Hướng xử lý</th><th>Số tiền hoàn</th></tr></thead><tbody>
+          <div className="table-scroll"><table className="data-table"><thead><tr><th>Sản phẩm</th><th>SKU / SL</th><th>Tình trạng</th><th>Hướng xử lý</th><th>Số tiền hoàn</th></tr></thead><tbody>
             {item.items.map((line) => { const draft = resolutionDrafts[line.id]; const editing = target === "RECEIVED" && item.status === "APPROVED"; return <tr key={line.id}>
               <td>{line.productName}</td><td>{line.sku} · x{line.quantity}</td>
               <td>{editing ? <select className="select" value={draft?.conditionStatus ?? "LIKE_NEW"} onChange={(event) => setResolutionDrafts((current) => ({ ...current, [line.id]: { ...(current[line.id] ?? { resolution: "REFUND", refundAmount: "" }), conditionStatus: event.target.value as ReturnItemResolutionDraft["conditionStatus"] } }))}>{conditionStatuses.map((value) => <option key={value}>{value}</option>)}</select> : line.conditionStatus ?? "-"}</td>
               <td>{editing ? <select className="select" value={draft?.resolution ?? "REFUND"} onChange={(event) => setResolutionDrafts((current) => ({ ...current, [line.id]: { ...(current[line.id] ?? { conditionStatus: "LIKE_NEW", refundAmount: "" }), resolution: event.target.value as ReturnItemResolutionDraft["resolution"] } }))}>{resolutions.map((value) => <option key={value}>{value}</option>)}</select> : line.resolution ?? "-"}</td>
               <td>{editing && draft?.resolution === "REFUND" ? <input className="admin-input" type="number" min="1" step="1000" placeholder="Số tiền" value={draft.refundAmount} onChange={(event) => setResolutionDrafts((current) => ({ ...current, [line.id]: { ...current[line.id], refundAmount: event.target.value } }))} /> : line.refundAmount != null ? `${Math.round(line.refundAmount).toLocaleString("vi-VN")}₫` : "-"}</td>
             </tr>; })}
-          </tbody></table>
+          </tbody></table></div>
           <div className="admin-stack">{refunds.length ? refunds.map((refund) => (
             <div className="admin-inline-form wrap" key={refund.id}>
               <strong>{refund.refundCode}</strong>

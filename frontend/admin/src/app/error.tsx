@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { clearAuthSession } from "@/modules/auth/session";
 
 export default function GlobalError({
   error,
@@ -9,14 +11,28 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const router = useRouter();
+
   useEffect(() => {
     console.error(error);
   }, [error]);
 
+  const normalizedMessage = error.message?.toLowerCase() ?? "";
+  const isAuthError = normalizedMessage.includes("unauthorized") || normalizedMessage.includes("401");
   const isNetworkError =
-    error.message?.toLowerCase().includes("fetch failed") ||
-    error.message?.toLowerCase().includes("econnrefused") ||
-    error.message?.toLowerCase().includes("network");
+    normalizedMessage.includes("fetch failed") ||
+    normalizedMessage.includes("econnrefused") ||
+    normalizedMessage.includes("network");
+
+  function handleRecovery() {
+    if (isAuthError) {
+      clearAuthSession();
+      router.replace("/login");
+      router.refresh();
+      return;
+    }
+    reset();
+  }
 
   return (
     <div
@@ -33,20 +49,22 @@ export default function GlobalError({
     >
       <div style={{ fontSize: 48 }}>⚠️</div>
       <h2 style={{ fontSize: "1.25rem", fontWeight: 700, margin: 0 }}>
-        {isNetworkError ? "Không kết nối được backend" : "Trang bị lỗi"}
+        {isAuthError ? "Phiên đăng nhập không còn hợp lệ" : isNetworkError ? "Không kết nối được backend" : "Trang bị lỗi"}
       </h2>
       <p style={{ color: "var(--text-muted)", margin: 0, maxWidth: 420 }}>
-        {isNetworkError
-          ? "Backend tại localhost:8080 chưa chạy hoặc Redis chưa khởi động. Chạy docker compose up redis -d rồi khởi động lại backend."
-          : error.message ?? "Đã xảy ra lỗi không mong muốn."}
+        {isAuthError
+          ? "Vui lòng đăng nhập lại để tiếp tục sử dụng trang quản trị."
+          : isNetworkError
+            ? "Không thể kết nối tới API gateway tại localhost:8085. Vui lòng kiểm tra các dịch vụ backend rồi thử lại."
+            : error.message ?? "Đã xảy ra lỗi không mong muốn."}
       </p>
       <button
         className="admin-btn"
         type="button"
-        onClick={reset}
+        onClick={handleRecovery}
         style={{ marginTop: 8 }}
       >
-        Thử lại
+        {isAuthError ? "Đăng nhập lại" : "Thử lại"}
       </button>
     </div>
   );

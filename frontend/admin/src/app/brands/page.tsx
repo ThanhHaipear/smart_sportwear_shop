@@ -2,7 +2,7 @@
 import { listAdminBrands } from "@/modules/catalog-admin/api";
 
 export default async function BrandsPage() {
-  const brands = await listAdminBrands().catch(() => []);
+  const brands = await listAdminBrands();
 
   return (
     <main className="workspace">

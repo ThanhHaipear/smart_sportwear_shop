@@ -386,6 +386,7 @@ export function AdminOrdersClient({
       {!loadError && orders.length === 0 ? (
         <div className="empty-state">Không có đơn hàng nào khớp bộ lọc hiện tại.</div>
       ) : orders.length > 0 ? (
+        <div className="table-scroll">
         <table className="data-table orders-table">
           <thead>
             <tr>
@@ -416,6 +417,7 @@ export function AdminOrdersClient({
             ))}
           </tbody>
         </table>
+        </div>
       ) : null}
       {pageMeta.totalPages > 0 ? (
         <div className="admin-pager">

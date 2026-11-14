@@ -171,6 +171,7 @@ export function AdminCategoriesClient({ initialItems }: { initialItems: Category
         {items.length === 0 ? (
           <div className="empty-state">Hiện chưa có danh mục nào. Hãy tạo danh mục đầu tiên để bắt đầu.</div>
         ) : (
+          <div className="table-scroll">
           <table className="data-table">
             <thead>
               <tr>
@@ -196,6 +197,7 @@ export function AdminCategoriesClient({ initialItems }: { initialItems: Category
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </section>
 
@@ -235,12 +237,12 @@ export function AdminCategoriesClient({ initialItems }: { initialItems: Category
             }}
           />
           <select className="select" value={form.status} onChange={(event) => setForm((current) => ({ ...current, status: event.target.value }))}>
-            <option value="ACTIVE">ACTIVE</option>
-            <option value="INACTIVE">INACTIVE</option>
+            <option value="ACTIVE">Hoạt động</option>
+            <option value="INACTIVE">Ẩn</option>
           </select>
           <select className="select" value={form.nodeType} onChange={(event) => setForm((current) => ({ ...current, nodeType: event.target.value as "GROUP" | "LEAF" }))}>
-            <option value="LEAF">LEAF</option>
-            <option value="GROUP">GROUP</option>
+            <option value="LEAF">Danh mục lá</option>
+            <option value="GROUP">Nhóm danh mục</option>
           </select>
           <select className="select" value={form.parentId} onChange={(event) => setForm((current) => ({ ...current, parentId: event.target.value }))}>
             <option value="">Không có danh mục cha</option>

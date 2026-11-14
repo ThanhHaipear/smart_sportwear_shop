@@ -141,6 +141,7 @@ export function AdminUsersClient({
 
       {message ? <p className="action-message">{message}</p> : null}
 
+      <div className="table-scroll">
       <table className="data-table">
         <thead>
           <tr>
@@ -225,6 +226,7 @@ export function AdminUsersClient({
           ))}
         </tbody>
       </table>
+      </div>
 
       {selectedUser ? (
         <div className="admin-subcard admin-subcard-tight">

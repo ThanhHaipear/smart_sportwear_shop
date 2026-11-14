@@ -19,7 +19,7 @@ import { X } from "@phosphor-icons/react/X";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { adminLogout } from "@/modules/auth/api";
 import { clearAuthSession, getBrowserRefreshToken, getBrowserUserRole } from "@/modules/auth/session";
 
@@ -88,10 +88,16 @@ function getPageMeta(pathname: string) {
 export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const [role, setRole] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setRole(getBrowserUserRole());
   }, []);
+
+  useEffect(() => {
+    const activeLink = navRef.current?.querySelector<HTMLAnchorElement>("a.active");
+    activeLink?.scrollIntoView({ block: "nearest" });
+  }, [pathname, role]);
 
   return (
     <aside className={`sidebar${open ? " is-open" : ""}`}>
@@ -113,7 +119,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
         <p>Điều phối đơn hàng, kho, catalog và cấu hình vận hành trong một nơi.</p>
       </div>
 
-      <nav className="side-nav" aria-label="Admin">
+      <nav ref={navRef} className="side-nav" aria-label="Admin">
         {navGroups.map((group) => (
           <div key={group.title} className="side-nav-group">
             <p className="side-nav-title">{group.title}</p>
@@ -187,21 +193,19 @@ export function AdminTopbar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
   }
 
   return (
-    <header className="admin-topbar">
+    <header className="admin-topbar" aria-label={`${pageMeta.title} - Admin Console`}>
       <button className="sidebar-open" type="button" aria-label="Mở menu" onClick={onOpenSidebar}>
         <List size={22} />
       </button>
       <div className="admin-topbar-main">
         <div className="admin-page-intro">
           <span className="admin-page-kicker">Admin Console</span>
-          <strong>{pageMeta.title}</strong>
-          <p>{pageMeta.subtitle}</p>
         </div>
         <form className="admin-search" role="search" onSubmit={handleSearch}>
           <MagnifyingGlass size={20} />
           <input
             aria-label="Tìm kiếm sản phẩm"
-            placeholder="Tìm theo tên, SKU, danh mục hoặc thương hiệu..."
+            placeholder="Tìm sản phẩm toàn cục theo tên, SKU, danh mục hoặc thương hiệu..."
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
           />

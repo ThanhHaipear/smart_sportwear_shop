@@ -117,6 +117,7 @@ async function DashboardCharts() {
         <div className="panel-header">
           <h2>Cảnh báo tồn kho thấp</h2>
         </div>
+        <div className="table-scroll">
         <table className="data-table">
           <thead>
             <tr>
@@ -146,6 +147,7 @@ async function DashboardCharts() {
             ))}
           </tbody>
         </table>
+        </div>
       </section>
     </>
   );

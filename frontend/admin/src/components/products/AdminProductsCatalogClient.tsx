@@ -1112,6 +1112,7 @@ export function AdminProductsCatalogClient({
           <div className="empty-state">Không có sản phẩm nào khớp bộ lọc hiện tại.</div>
         ) : (
           <>
+            <div className="table-scroll">
             <table className="data-table">
               <thead>
                 <tr>
@@ -1161,6 +1162,7 @@ export function AdminProductsCatalogClient({
                 ))}
               </tbody>
             </table>
+            </div>
 
             <div className="admin-pager">
               <span className="admin-pager-info">

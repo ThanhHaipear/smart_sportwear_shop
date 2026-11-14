@@ -2,7 +2,7 @@
 import { listAdminUsers } from "@/modules/users/api";
 
 export default async function UsersRolesPage() {
-  const users = await listAdminUsers().catch(() => []);
+  const users = await listAdminUsers();
 
   return (
     <main className="workspace">

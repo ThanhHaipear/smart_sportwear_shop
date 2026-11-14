@@ -2,7 +2,7 @@
 import { listAdminCategories } from "@/modules/catalog-admin/api";
 
 export default async function CategoriesPage() {
-  const categories = await listAdminCategories().catch(() => []);
+  const categories = await listAdminCategories();
 
   return (
     <main className="workspace">

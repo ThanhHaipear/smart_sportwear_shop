@@ -2,7 +2,7 @@
 import { listAdminSettings } from "@/modules/settings/api";
 
 export default async function SystemConfigPage() {
-  const settings = await listAdminSettings().catch(() => []);
+  const settings = await listAdminSettings();
 
   return (
     <main className="workspace">
