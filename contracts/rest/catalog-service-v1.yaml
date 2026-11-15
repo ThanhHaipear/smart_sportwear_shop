@@ -10,7 +10,13 @@ paths:
     get:
       security: [{serviceToken: []}]
       parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}]
-      responses: {'200': {description: Search indexing document}}
+      responses:
+        '200':
+          description: Versioned Search indexing document
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CatalogIndexDocument'}
+        '404': {description: Product not found}
   /internal/v1/inventory/reservations:
     post:
       security: [{serviceToken: []}]
@@ -28,3 +34,48 @@ paths:
 components:
   securitySchemes:
     serviceToken: {type: apiKey, in: header, name: X-Internal-Service-Token}
+  schemas:
+    CatalogIndexDocument:
+      type: object
+      additionalProperties: false
+      required: [productId, sourceVersion, status, name, description, sportCodes, attributes, variants, images]
+      properties:
+        productId: {type: string, format: uuid}
+        sourceVersion: {type: integer, format: int64, minimum: 0}
+        status: {type: string, enum: [DRAFT, ACTIVE, INACTIVE]}
+        name: {type: string}
+        description: {type: string}
+        categoryId: {type: string, format: uuid, nullable: true}
+        category: {type: string, nullable: true}
+        categorySlug: {type: string, nullable: true}
+        brandId: {type: string, format: uuid, nullable: true}
+        brand: {type: string, nullable: true}
+        brandSlug: {type: string, nullable: true}
+        productType: {type: string, nullable: true}
+        gender: {type: string, nullable: true}
+        sportCodes: {type: array, items: {type: string}}
+        attributes: {type: object, additionalProperties: true}
+        variants: {type: array, items: {$ref: '#/components/schemas/CatalogIndexVariant'}}
+        images: {type: array, items: {$ref: '#/components/schemas/CatalogIndexImage'}}
+    CatalogIndexVariant:
+      type: object
+      additionalProperties: false
+      required: [id, sku, price, availableQuantity, status]
+      properties:
+        id: {type: string, format: uuid}
+        sku: {type: string}
+        size: {type: string, nullable: true}
+        color: {type: string, nullable: true}
+        colorFamily: {type: string, nullable: true}
+        price: {type: number, minimum: 0}
+        availableQuantity: {type: integer}
+        status: {type: string}
+    CatalogIndexImage:
+      type: object
+      additionalProperties: false
+      required: [id, url, sortOrder]
+      properties:
+        id: {type: string, format: uuid}
+        url: {type: string}
+        publicId: {type: string, nullable: true}
+        sortOrder: {type: integer, minimum: 0}

@@ -1,0 +1,41 @@
+{
+  "productId": "10000000-0000-0000-0000-000000000001",
+  "sourceVersion": 2,
+  "status": "ACTIVE",
+  "name": "Giày bóng đá Demo",
+  "description": "Giày sân cỏ nhân tạo",
+  "categoryId": "30000000-0000-0000-0000-000000000001",
+  "category": "Giày bóng đá",
+  "categorySlug": "giay-bong-da",
+  "brandId": "40000000-0000-0000-0000-000000000001",
+  "brand": "Demo",
+  "brandSlug": "demo",
+  "productType": "SPORTS_SHOES",
+  "gender": "UNISEX",
+  "sportCodes": ["FOOTBALL"],
+  "attributes": {
+    "gender": "UNISEX",
+    "productType": "SPORTS_SHOES",
+    "sportType": "FOOTBALL"
+  },
+  "variants": [
+    {
+      "id": "20000000-0000-0000-0000-000000000001",
+      "sku": "DEMO-42-BLACK",
+      "size": "42",
+      "color": "Black",
+      "colorFamily": null,
+      "price": 1299000,
+      "availableQuantity": 7,
+      "status": "ACTIVE"
+    }
+  ],
+  "images": [
+    {
+      "id": "50000000-0000-0000-0000-000000000001",
+      "url": "https://res.cloudinary.com/demo/image/upload/v1/shoe.jpg",
+      "publicId": null,
+      "sortOrder": 0
+    }
+  ]
+}

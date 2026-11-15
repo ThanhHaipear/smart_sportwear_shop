@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-15T10:39:13.7915986+07:00",
+  "baseCommit": "646b48586b313f2034ba1f28bf1f13e982fbf9c2",
+  "taskIds": ["HAI-11.2", "HAI-11.3", "HAI-11.4"],
+  "catalogContract": {
+    "fixture": "contracts/examples/catalog-index-document-v1.json",
+    "catalogIntegrationTestsPassed": 5,
+    "catalogIntegrationTestsFailed": 0,
+    "searchTestsPassed": 14,
+    "searchTestsFailed": 0
+  },
+  "dryRun": {
+    "discovery": "GET /api/v1/products?page=1&limit=100",
+    "snapshotEndpoint": "GET /internal/v1/products/{id}/index-document",
+    "requestedProducts": 36,
+    "foundProducts": 36,
+    "missingProducts": 0,
+    "variants": 178,
+    "images": 81,
+    "statuses": {"ACTIVE": 36},
+    "errors": [],
+    "passed": true,
+    "executeFlagUsed": false,
+    "dryRunDatabaseWrites": false
+  },
+  "operationalIncident": {
+    "occurred": true,
+    "summary": "The first Catalog launcher inherited CATALOG_EVENTS_ENABLED=true while RabbitMQ was unavailable, so the outbox relay incremented attempts before the process was stopped.",
+    "mitigation": "Stopped the unsafe Catalog process, reran verification on port 18092 with CATALOG_EVENTS_ENABLED=false, and made no repair or deletion to outbox rows.",
+    "readOnlyObservationAfterward": {
+      "pendingEvents": 38,
+      "pendingEventsWithAttempts": 38,
+      "totalAttempts": 137593,
+      "maxAttempts": 3756,
+      "attribution": "No pre-incident baseline exists, so these totals must not be attributed entirely to this run."
+    }
+  },
+  "nextStep": "HAI-11.5 requires separate approval because controlled backfill writes ai_search."
+}
