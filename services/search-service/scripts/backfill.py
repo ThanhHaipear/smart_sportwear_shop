@@ -67,17 +67,17 @@ async def active_product_ids(settings: Settings, client: httpx.AsyncClient | Non
             await client.aclose()
 
 
-async def run(ids: list[UUID], execute: bool) -> None:
+async def run(ids: list[UUID], execute: bool, force: bool = False) -> None:
     settings = get_settings()
     if not execute:
         report = await inspect(ids, CatalogClient(settings))
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return
-    print(json.dumps({"mode": "execute", "products": len(ids)}))
+    print(json.dumps({"mode": "execute", "products": len(ids), "force": force}))
     indexer = CatalogIndexer(settings)
     counts: dict[str, int] = {}
     for product_id in ids:
-        outcome = await indexer.index(product_id, 0)
+        outcome = await indexer.index(product_id, 0, force=force)
         counts[outcome] = counts.get(outcome, 0) + 1
     print(json.dumps({"processed": len(ids), "outcomes": counts}, ensure_ascii=False))
 
@@ -92,7 +92,14 @@ def main() -> None:
         help="Discover active product IDs through the public Catalog API",
     )
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Recompute and write every selected document; requires --execute",
+    )
     args = parser.parse_args()
+    if args.force and not args.execute:
+        parser.error("--force requires --execute")
 
     async def run_from_args() -> None:
         if args.all_active:
@@ -100,7 +107,7 @@ def main() -> None:
         else:
             ids = [UUID(line.strip()) for line in args.ids.read_text(encoding="utf-8").splitlines()
                    if line.strip() and not line.lstrip().startswith("#")]
-        await run(ids, args.execute)
+        await run(ids, args.execute, args.force)
 
     asyncio.run(run_from_args())
 

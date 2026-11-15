@@ -360,7 +360,7 @@ phải bằng chứng worker hiện tại có thể rebuild index. `processed_ev
 | [x] | HAI-11.2 | Sửa `GET /internal/v1/products/{id}/index-document` | Trả đúng contract version hóa gồm product, source version, variants, images và metadata |
 | [x] | HAI-11.3 | Thêm contract test Catalog ↔ Search | JSON thật từ Catalog được `CatalogIndexDocument` validate thành công |
 | [x] | HAI-11.4 | Chạy backfill dry-run qua Catalog API | Report đủ 36 product, 178 facet, 81 ảnh; không ghi DB |
-| [ ] | HAI-11.5 | Chạy backfill có kiểm soát và lặp lại | 81/81 READY; lần hai hash-skip/idempotent |
+| [x] | HAI-11.5 | Chạy backfill có kiểm soát và lặp lại | 81/81 READY; lần hai hash-skip/idempotent |
 | [ ] | HAI-11.6 | Phát và consume event Catalog thật | `processed_events` tăng đúng, không duplicate và retry/DLQ sạch |
 | [ ] | HAI-11.7 | E2E internal image search trên `ai_search` | Query thật trả candidate không trùng product, model/revision đúng |
 
@@ -483,6 +483,7 @@ Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-r
 | 03/11/2026 | Freeze và chạy final TEST v2 đúng một lần | Dũng sign-off; 120/120 request; Recall@5 73,75%, category 79%, unknown 75%, request failure 0%, p95 1.381,07 ms; acceptance FAILED | `datasets/image-search/test-v2/`; `evidence/image-search-v2/test-v2-final/` | Recall và category dưới gate; TEST v2 không được retune hoặc chạy lại | Giữ public tắt; phân tích offline và chỉ cải tiến trên DEV v3 trước khi tạo TEST v3 độc lập |
 | 15/11/2026 | Re-audit sau cutover microservice | Catalog có 36 product, 178 variant, 81 ảnh; `ai_search` có 36 documents, 178 facets, 81 image vectors READY; Search test 11/11 pass | Live read-only audit; `services/search-service`; file kế hoạch này | Catalog snapshot contract chưa khớp Search client, worker chưa có processed event/job, HNSW mâu thuẫn exact pilot, public vẫn tắt | Thực hiện HAI-11 đến HAI-13 trước khi tạo DEV v3 |
 | 15/11/2026 | Hoàn thành contract và dry-run HAI-11.2–11.4 | Catalog trả snapshot đầy đủ; contract dùng chung được cả Java/Python kiểm tra; dry-run qua Catalog API đạt 36/36 product, 178 variant, 81 ảnh, 0 lỗi | `contracts/examples/catalog-index-document-v1.json`; `evidence/image-search-v2/cutover-ai-search/hai-11-catalog-dry-run-2026-11-15.json` | Launcher ban đầu bật event relay khi RabbitMQ không chạy và làm tăng `attempts` của outbox; đã dừng, không tự ý sửa outbox; lượt xác minh sau ép relay tắt | Xin phê duyệt riêng trước HAI-11.5 vì bước đó ghi `ai_search` |
+| 15/11/2026 | Hoàn thành backfill và idempotency HAI-11.5 | Lượt force tái tạo `36 UPDATED`; coverage sau chạy là 36 documents, 178 facets, 81/81 image vectors READY; lượt hai xác minh nội dung ảnh rồi trả `36 SKIPPED`, checksum và `updated_at` không đổi | `evidence/image-search-v2/cutover-ai-search/hai-11-live-backfill-2026-11-15.json`; restore point ngoài Git `backups/hai-11/ai-search-pre-backfill-20261115-110540.dump` | Cần cấu hình `CLOUDINARY_CLOUD_NAME=dfpgvlovs` trong runtime; Catalog relay đã tắt và outbox không tăng thêm | Thực hiện HAI-11.6 với RabbitMQ và event test có kiểm soát |
 
 ## 9. Definition of Done hiện hành
 
@@ -497,7 +498,7 @@ Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-r
 ### Điều kiện còn thiếu trước public rollout
 
 - [x] Catalog index-document contract khớp Search client và có integration test.
-- [ ] Worker/backfill hiện tại tái tạo idempotent 36 documents, 178 facets và 81 image vectors.
+- [x] Worker/backfill hiện tại tái tạo idempotent 36 documents, 178 facets và 81 image vectors.
 - [ ] Metadata ảnh/Cloudinary hiện tại được persist hoặc có chính sách thay thế rõ ràng.
 - [ ] Exact cosine được chứng minh bằng query plan; không dùng ANN trong pilot.
 - [ ] Internal API, Catalog/Gateway và Storefront E2E pass trên `ai_search`.

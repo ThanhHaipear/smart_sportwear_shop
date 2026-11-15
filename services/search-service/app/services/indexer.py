@@ -16,7 +16,13 @@ class CatalogIndexer:
         self.repository = SearchRepository(settings)
         self.text_embedder = TextEmbedder(settings)
 
-    async def index(self, product_id: UUID, source_version: int, event_id: UUID | None = None) -> str:
+    async def index(
+        self,
+        product_id: UUID,
+        source_version: int,
+        event_id: UUID | None = None,
+        force: bool = False,
+    ) -> str:
         if event_id and await self.repository.is_processed("catalog-index-v1", event_id):
             return "DUPLICATE"
         document = await self.catalog.index_document(product_id)
@@ -25,13 +31,26 @@ class CatalogIndexer:
             return "DELETED"
         if document.source_version < source_version:
             raise RuntimeError("Catalog snapshot is older than the event version")
+        normalized_images: list[tuple] = []
+        if self.settings.visual_search_enabled:
+            pipeline = ImagePipeline(self.settings)
+            for image in document.images:
+                normalized = await pipeline.download_and_normalize(image.url, image.public_id)
+                normalized_images.append((image, normalized))
+        image_sources = [
+            (image.id, image.url, normalized.sha256)
+            for image, normalized in normalized_images
+        ]
+        if not force and await self.repository.is_current(document, image_sources):
+            if event_id is not None:
+                await self.repository.mark_processed("catalog-index-v1", event_id, document.source_version)
+            return "SKIPPED"
+
         text_vector = await self.text_embedder.embed(canonical_text(document))
         image_vectors: list[tuple] = []
         if self.settings.visual_search_enabled:
             provider = build_provider(self.settings)
-            pipeline = ImagePipeline(self.settings)
-            for image in document.images:
-                normalized = await pipeline.download_and_normalize(image.url, image.public_id)
+            for image, normalized in normalized_images:
                 result = (await provider.embed_document(normalized.content)).validate_dimensions(
                     self.settings.visual_embedding_dims
                 )

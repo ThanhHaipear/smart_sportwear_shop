@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-15T11:12:45.4881103+07:00",
+  "baseCommit": "a0dd248300179ea77ad0b344a48eb45c320a8501",
+  "taskId": "HAI-11.5",
+  "model": {
+    "provider": "hugging_face_local",
+    "name": "google/siglip2-base-patch16-224",
+    "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+    "dimensions": 768,
+    "device": "cpu",
+    "offlineModelCache": true
+  },
+  "restorePoint": {
+    "location": "backups/hai-11/ai-search-pre-backfill-20261115-110540.dump",
+    "committedToGit": false,
+    "bytes": 347673,
+    "sha256": "CE23AB1908DF2710C2B4A50A7CBFC44868A4917408BE3CA3E53F71CD888B6D83",
+    "tocValidated": true
+  },
+  "baseline": {
+    "documents": 36,
+    "variants": 178,
+    "readyImages": 81,
+    "documentChecksum": "7238a83cad2df902b1bbdd6dec268f84",
+    "variantChecksum": "fd2a695afde329edb9fa161370e97368",
+    "imageMetadataChecksum": "a4767b1efb6fafc92f327b909344a13c",
+    "imageVectorChecksum": "b35aa8a9671a1f6151fd1ca3c2d1175d",
+    "maxNormError": 1.91525804105197e-8
+  },
+  "runs": [
+    {
+      "mode": "execute-force",
+      "processed": 36,
+      "outcomes": {"UPDATED": 36},
+      "note": "An earlier attempt failed on the first product before any database transaction because CLOUDINARY_CLOUD_NAME was empty. The successful run explicitly used dfpgvlovs."
+    },
+    {
+      "mode": "execute-idempotency-check",
+      "processed": 36,
+      "outcomes": {"SKIPPED": 36},
+      "imageContentSha256VerifiedBeforeSkip": true
+    }
+  ],
+  "finalState": {
+    "documents": 36,
+    "activeDocuments": 36,
+    "variants": 178,
+    "images": 81,
+    "readyImages": 81,
+    "distinctImageProducts": 36,
+    "documentChecksum": "2f7932b50897f826e4bc4c0405a74cb0",
+    "variantChecksum": "cc7c2836d5cccb74aa22ceff27e25b92",
+    "imageMetadataChecksum": "30b017afcc86fa094e517cbe2b591c73",
+    "imageVectorChecksum": "f20b90a7731d620a8fd6a1dc4e70b529",
+    "maxNormError": 3.00554583443358e-8,
+    "oldestImageUpdate": "2026-11-15T04:08:17.226940Z",
+    "newestImageUpdate": "2026-11-15T04:10:19.176052Z",
+    "secondRunPreservedChecksumsAndUpdateTimes": true
+  },
+  "catalogSafety": {
+    "eventRelayEnabled": false,
+    "pendingOutboxEventsBeforeAndAfter": 38,
+    "totalOutboxAttemptsBeforeAndAfter": 137593,
+    "maxOutboxAttemptsBeforeAndAfter": 3756,
+    "outboxChangedDuringBackfill": false
+  },
+  "tests": {
+    "searchTestsPassed": 17,
+    "searchTestsFailed": 0
+  },
+  "passed": true,
+  "rollbackRequired": false,
+  "nextStep": "HAI-11.6: publish and consume a controlled Catalog event with RabbitMQ available."
+}

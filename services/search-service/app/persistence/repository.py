@@ -49,6 +49,108 @@ class SearchRepository:
             )
             return await cursor.fetchone() is not None
 
+    async def mark_processed(
+        self,
+        consumer: str,
+        event_id: UUID,
+        aggregate_version: int,
+    ) -> None:
+        async with self.connection() as connection, connection.cursor() as cursor:
+            await cursor.execute(
+                """insert into ai_search.processed_events(consumer_name,event_id,aggregate_version)
+                   values(%s,%s,%s) on conflict do nothing""",
+                (consumer, event_id, aggregate_version),
+            )
+            await connection.commit()
+
+    async def is_current(
+        self,
+        document: CatalogIndexDocument,
+        image_sources: list[tuple[UUID, str, str]],
+    ) -> bool:
+        digest = content_hash(canonical_text(document))
+        async with self.connection() as connection, connection.cursor() as cursor:
+            await cursor.execute(
+                """select source_version,status,name,document_hash,
+                          category_id,category,category_slug,brand_id,brand,brand_slug,
+                          product_type,gender,sport_codes,attributes
+                     from ai_search.search_documents where product_id=%s""",
+                (document.product_id,),
+            )
+            current_document = await cursor.fetchone()
+            if current_document is None or (
+                current_document["source_version"],
+                current_document["status"],
+                current_document["name"],
+                current_document["document_hash"],
+                current_document["category_id"],
+                current_document["category"],
+                current_document["category_slug"],
+                current_document["brand_id"],
+                current_document["brand"],
+                current_document["brand_slug"],
+                current_document["product_type"],
+                current_document["gender"],
+                list(current_document["sport_codes"] or []),
+                stable_json(current_document["attributes"] or {}),
+            ) != (
+                document.source_version,
+                document.status,
+                document.name,
+                digest,
+                document.category_id,
+                document.category,
+                document.category_slug,
+                document.brand_id,
+                document.brand,
+                document.brand_slug,
+                document.product_type,
+                document.gender,
+                document.sport_codes,
+                stable_json(document.attributes),
+            ):
+                return False
+
+            await cursor.execute(
+                """select variant_id,sku,size_code,color_code,color_family,price,
+                          available_quantity,status,source_version
+                     from ai_search.variant_facets where product_id=%s order by variant_id""",
+                (document.product_id,),
+            )
+            current_variants = [
+                (
+                    row["variant_id"], row["sku"], row["size_code"], row["color_code"],
+                    row["color_family"], float(row["price"]), row["available_quantity"],
+                    row["status"], row["source_version"],
+                )
+                for row in await cursor.fetchall()
+            ]
+            expected_variants = sorted(
+                (
+                    variant.id, variant.sku, variant.size, variant.color, variant.color_family,
+                    float(variant.price), variant.available_quantity, variant.status,
+                    document.source_version,
+                )
+                for variant in document.variants
+            )
+            if current_variants != expected_variants:
+                return False
+
+            await cursor.execute(
+                """select image_id,image_url,image_hash,model,status
+                     from ai_search.image_embeddings where product_id=%s order by image_id""",
+                (document.product_id,),
+            )
+            current_images = [
+                (row["image_id"], row["image_url"], row["image_hash"], row["model"], row["status"])
+                for row in await cursor.fetchall()
+            ]
+            expected_images = sorted(
+                (image_id, image_url, image_hash, self.settings.visual_embedding_model, "READY")
+                for image_id, image_url, image_hash in image_sources
+            )
+            return current_images == expected_images
+
     async def upsert_document(
         self, document: CatalogIndexDocument, text_vector: list[float] | None,
         image_vectors: list[tuple[UUID, str, str, list[float]]], event_id: UUID | None = None,
