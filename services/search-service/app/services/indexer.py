@@ -4,7 +4,7 @@ from app.catalog.client import CatalogClient
 from app.config import Settings
 from app.persistence.repository import SearchRepository
 from app.providers.factory import build_provider
-from app.services.documents import canonical_text
+from app.services.documents import canonical_text, enrich_search_classification
 from app.services.image_pipeline import ImagePipeline
 from app.services.text_embeddings import TextEmbedder
 
@@ -29,6 +29,7 @@ class CatalogIndexer:
         if document is None:
             await self.repository.mark_deleted(product_id, source_version, event_id)
             return "DELETED"
+        document = enrich_search_classification(document)
         if document.source_version < source_version:
             raise RuntimeError("Catalog snapshot is older than the event version")
         normalized_images: list[tuple] = []

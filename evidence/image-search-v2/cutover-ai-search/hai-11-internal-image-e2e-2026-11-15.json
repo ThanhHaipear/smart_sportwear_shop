@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-15T16:40:00+07:00",
+  "baseCommit": "aca02b1",
+  "taskId": "HAI-11.7",
+  "model": {
+    "provider": "hugging_face_local",
+    "name": "google/siglip2-base-patch16-224",
+    "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+    "dimensions": 768,
+    "device": "cpu",
+    "offlineModelCache": true
+  },
+  "diagnosis": {
+    "initialHttpStatus": 200,
+    "initialCandidates": 0,
+    "cause": "Legacy Catalog attributes omit productType, leaving ai_search.search_documents.product_type null. Category reranking therefore reduced every score to 40 percent of raw cosine and the locked threshold rejected all candidates.",
+    "exactCatalogImageScoreBeforeFix": 0.4,
+    "databaseVectorSimilarityToRuntimeSiglip2": 1.0,
+    "databaseVectorSimilarityToFakeDocumentProvider": 0.00447847002488022,
+    "vectorMismatchRuledOut": true
+  },
+  "repair": {
+    "classificationFallback": "Search derives product_type from the Catalog category slug only when explicit Catalog classification is absent.",
+    "ssrfProtection": "DNS-to-peer equality and public-address checks remain enabled. A read-only Cloudinary diagnostic confirmed the connected peer matched the resolved public addresses.",
+    "forceBackfill": {"processed": 36, "outcomes": {"UPDATED": 36}},
+    "idempotencyBackfill": {"processed": 36, "outcomes": {"SKIPPED": 36}}
+  },
+  "finalState": {
+    "documents": 36,
+    "activeDocuments": 36,
+    "documentsMissingProductType": 0,
+    "variants": 178,
+    "readyImages": 81,
+    "distinctImageProducts": 36,
+    "imageVectorChecksum": "6480a433097bedc41649fac5137342cf"
+  },
+  "internalQuery": {
+    "dataset": "image-search-dev-v2",
+    "queryId": "dev2-001",
+    "httpStatus": 200,
+    "elapsedSeconds": 1.963689,
+    "candidateCount": 10,
+    "uniqueProductCount": 10,
+    "expectedProductsPresent": 3,
+    "expectedTop": true,
+    "topProductId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+    "topImageId": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+    "topSimilarity": 0.831216,
+    "topCategory": "tops"
+  },
+  "tests": {
+    "searchTestsPassed": 26,
+    "searchTestsFailed": 0,
+    "catalogTestsPassed": 6,
+    "catalogTestsFailed": 0
+  },
+  "cleanup": {
+    "catalogPort18092Listening": false,
+    "searchPort18097Listening": false,
+    "rabbitPort5672Listening": false,
+    "publicVisualSearchEnabled": false,
+    "catalogEventRelayEnabled": false
+  },
+  "passed": true,
+  "nextStep": "HAI-12: audit and normalize current Catalog image metadata; public rollout remains disabled."
+}

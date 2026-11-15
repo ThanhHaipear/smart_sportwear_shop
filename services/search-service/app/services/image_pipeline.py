@@ -154,10 +154,12 @@ class ImagePipeline:
         if stream is None:  # MockTransport and other in-memory transports.
             return
         peer = stream.get_extra_info("server_addr") or stream.get_extra_info("peername")
-        if peer and peer[0] not in resolved:
-            raise ImagePipelineError("Image connection peer did not match validated DNS")
         if peer and not ip_address(peer[0]).is_global:
             raise ImagePipelineError("Image connection reached a non-public address")
+        if peer and peer[0] not in resolved:
+            raise ImagePipelineError(
+                f"Image connection peer {peer[0]} did not match validated DNS {sorted(resolved)}"
+            )
 
     def normalize(self, content: bytes, declared_content_type: str | None = None) -> NormalizedImage:
         if not content or len(content) > self.settings.max_upload_bytes:

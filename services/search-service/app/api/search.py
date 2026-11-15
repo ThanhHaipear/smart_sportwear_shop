@@ -1,4 +1,5 @@
 import hmac
+import logging
 import time
 from uuid import UUID
 
@@ -115,6 +116,7 @@ async def search_image(
         rows = await SearchRepository(settings).image_search(result.vector, limit, category_scores)
         rows = [row for row in rows if float(row["similarity"]) >= settings.visual_min_similarity]
     except Exception as error:
+        logging.getLogger(__name__).exception("Image search pipeline failed")
         raise HTTPException(status_code=503, detail="Image search is temporarily unavailable") from error
     return {"candidates": [{
         "product_id": str(row["product_id"]), "image_id": str(row["image_id"]),

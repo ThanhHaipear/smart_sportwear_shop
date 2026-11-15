@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,14 +46,8 @@ public class CatalogOutboxRelay {
 
     private void publish(Event event) {
         try {
-            JsonNode payload = mapper.readTree(event.payload());
             CorrelationData correlation = new CorrelationData(event.id().toString());
-            rabbit.convertAndSend(exchange, event.eventType(), payload, message -> {
-                message.getMessageProperties().setMessageId(event.id().toString());
-                message.getMessageProperties().setContentType("application/json");
-                message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
-                return message;
-            }, correlation);
+            rabbit.send(exchange, event.eventType(), jsonMessage(event), correlation);
             var confirm = correlation.getFuture().get(Duration.ofSeconds(5).toMillis(), java.util.concurrent.TimeUnit.MILLISECONDS);
             if (!confirm.isAck() || correlation.getReturned() != null) throw new IllegalStateException("RabbitMQ did not confirm event");
             jdbc.sql("update integration_outbox set status='PUBLISHED',published_at=now() where id=:id")
@@ -60,5 +56,15 @@ public class CatalogOutboxRelay {
             jdbc.sql("update integration_outbox set attempts=attempts+1,next_attempt_at=now()+interval '30 seconds' where id=:id")
                     .param("id",event.id()).update();
         }
+    }
+
+    Message jsonMessage(Event event) throws Exception {
+        JsonNode payload = mapper.readTree(event.payload());
+        MessageProperties properties = new MessageProperties();
+        properties.setMessageId(event.id().toString());
+        properties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
+        properties.setContentEncoding("UTF-8");
+        properties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+        return new Message(mapper.writeValueAsBytes(payload), properties);
     }
 }

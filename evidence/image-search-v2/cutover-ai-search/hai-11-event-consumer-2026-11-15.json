@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-15T16:12:12.4458220+07:00",
+  "baseCommit": "aca02b1e7dd22a8a8b899eaa3386b66cf596f59c",
+  "taskId": "HAI-11.6",
+  "restorePoint": {
+    "location": "backups/hai-11/catalog-pre-event-v5-20261115-155747.dump",
+    "committedToGit": false,
+    "bytes": 91915,
+    "sha256": "E62C68988DC67EA9ACAB01C897B2CCFEA8E893D5758F393BE883EA2DFF383E81",
+    "tocValidated": true
+  },
+  "migration": {
+    "file": "catalog-service/src/main/resources/db/migration/V5__align_catalog_search_events.sql",
+    "dryRunRolledBack": true,
+    "applied": true,
+    "producerFunctions": ["emit_inventory_changed", "emit_product_changed"],
+    "routingKey": "product.reindex.requested",
+    "eventType": "PRODUCT_REINDEX_REQUESTED",
+    "legacyPendingBefore": {
+      "catalog.inventory.changed.v1": 2,
+      "catalog.product.changed.v1": 36
+    },
+    "legacyEventsSuperseded": 38,
+    "legacyEventsDeleted": 0
+  },
+  "relayRepair": {
+    "firstControlledEventId": "42745fa0-7a5a-4fc7-8dc9-63aa508f314a",
+    "observedFailure": "RabbitTemplate Java-serialized JsonNode while declaring application/json",
+    "repair": "Publish ObjectMapper UTF-8 JSON bytes in an AMQP Message",
+    "failedControlledRetryMessageRemoved": true
+  },
+  "successfulEvent": {
+    "eventId": "63ac66c9-f9bc-476c-90b5-ec386e1d139e",
+    "productId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+    "sourceVersion": 1,
+    "outboxStatus": "PUBLISHED",
+    "outboxAttempts": 0,
+    "processedEventsBefore": 0,
+    "processedEventsAfter": 1,
+    "matchingProcessedEventRows": 1
+  },
+  "duplicateCheck": {
+    "eventId": "63ac66c9-f9bc-476c-90b5-ec386e1d139e",
+    "republished": true,
+    "processedEventsAfterDuplicate": 1,
+    "matchingRowsAfterDuplicate": 1,
+    "passed": true
+  },
+  "retryAndDlq": {
+    "unitRetryRoutePassed": true,
+    "unitExhaustedDlqRoutePassed": true,
+    "controlledInvalidEventId": "63ac66c9-f9bc-476c-90b5-ec386e1d1400",
+    "controlledInvalidEventVersion": 2,
+    "dlqObservedMessages": 1,
+    "controlledDlqMessageRemoved": true,
+    "finalSearchQueueMessages": 0,
+    "finalRetryQueueMessages": 0,
+    "finalDlqMessages": 0
+  },
+  "finalIndexState": {
+    "documents": 36,
+    "variants": 178,
+    "readyImages": 81,
+    "imageVectorChecksum": "f20b90a7731d620a8fd6a1dc4e70b529"
+  },
+  "isolationAndCleanup": {
+    "temporaryExchange": "catalog.search.hai11",
+    "onlySearchQueueBound": true,
+    "temporaryExchangeDeleted": true,
+    "catalogProcessStopped": true,
+    "searchWorkerStopped": true,
+    "rabbitmqReturnedToStoppedState": true,
+    "catalogEventsEnabledInLocalDefaults": false,
+    "publicVisualSearchEnabled": false
+  },
+  "tests": {
+    "searchTestsPassed": 22,
+    "searchTestsFailed": 0,
+    "catalogTestsPassed": 6,
+    "catalogTestsFailed": 0
+  },
+  "passed": true,
+  "nextStep": "HAI-11.7: run internal image-search E2E against ai_search with public routing disabled."
+}

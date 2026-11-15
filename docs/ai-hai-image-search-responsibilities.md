@@ -54,7 +54,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-08 | Phân tích lỗi và baseline | `DONE` | P1 | HAI-07 |
 | HAI-09 | Hardening và rollback drill lịch sử | `HISTORICAL_DONE`; rollout public `BLOCKED` | P1 | HAI-03, HAI-04 |
 | HAI-10 | Báo cáo tổng kết | `UPDATE REQUIRED` | P1 | HAI-07, HAI-08 |
-| HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `IN PROGRESS` | P0 | HAI-01, HAI-02 |
+| HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `DONE` | P0 | HAI-01, HAI-02 |
 | HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `VERIFY` | P0 | HAI-11 |
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `TODO` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `TODO` | P0 | HAI-11, HAI-12, HAI-13 |
@@ -67,9 +67,9 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 |---|---|---|---|
 | Catalog pilot và World Cup | `DONE` | 36 sản phẩm, 178 variant, 81 ảnh; manifest/checksum lịch sử đã khóa | Đối chiếu lại với schema `catalog` hiện tại |
 | Metadata Cloudinary lịch sử | `HISTORICAL_DONE / VERIFY` | Evidence cũ có `public_id`, asset version, URL, checksum và provenance | Catalog hiện chỉ lưu `secure_url`; phải khôi phục metadata hoặc ghi rõ chính sách URL/hash thay thế |
-| Image embeddings hiện hành | `VERIFY` | Live audit 15/11/2026 có `81/81 READY` trong `ai_search.image_embeddings` | Chứng minh worker/backfill hiện tại có thể tái tạo đủ 81 vector |
+| Image embeddings hiện hành | `DONE` | HAI-11 backfill tái tạo `81/81 READY`; query thật xác nhận vector khớp SigLIP2 runtime | Giữ model/revision và checksum trong các lần backfill sau |
 | SigLIP2 local | `DONE` | `google/siglip2-base-patch16-224`, revision cố định, 768 chiều, L2-normalize | Giữ đúng revision/preprocessing cho cả document và query |
-| Worker/indexing cũ | `HISTORICAL_DONE` | Có retry, stale detection, checksum và idempotency evidence | Sửa Catalog snapshot contract và chạy event/backfill thật trên service mới |
+| Worker/indexing hiện hành | `DONE` | HAI-11 xác nhận contract, event, retry/DLQ, duplicate, backfill và idempotency trên service mới | Theo dõi production-like soak trước rollout |
 | Exact cosine cũ | `HISTORICAL_DONE` | Hàm exact search trong `ai_retrieval` | `ai_search` đang có HNSW; phải loại mâu thuẫn và lưu `EXPLAIN ANALYZE` |
 | Storefront visual search | `DONE` về UI | Có upload/camera/crop/loading/error/result dialog | Public API đang trả 503; chỉ bật sau TEST v3 |
 | DEV v2.2 / TEST v2 | `DONE / NO-GO` | DEV đạt gate; TEST v2 Recall@5 `73,75%`, category `79%` | Không retune TEST v2; chỉ cải tiến bằng DEV v3 |
@@ -346,13 +346,16 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 ### HAI-11 Cutover sang Search microservice hiện tại
 
-**Trạng thái:** `IN PROGRESS`
+**Trạng thái:** `DONE`
 
 Audit read-only ngày 15/11/2026 xác nhận Catalog có 36 sản phẩm ACTIVE, 178
 variant ACTIVE và 81 ảnh; `ai_search` có 36 documents, 178 facets và 81 image
-embeddings `READY`. Tuy nhiên đây là dữ liệu được copy từ read model cũ; chưa
-phải bằng chứng worker hiện tại có thể rebuild index. `processed_events=0` và
-`indexing_jobs=0`.
+embeddings `READY`. HAI-11.5 đã rebuild toàn bộ index và xác minh lần hai
+`36 SKIPPED`; HAI-11.6 đã publish/consume một Catalog event thật, đưa
+`processed_events` từ 0 lên 1 và giữ queue/retry/DLQ sạch. HAI-11.7 đã sửa
+fallback phân loại cho dữ liệu Catalog legacy, backfill lại `36 UPDATED`, xác nhận
+lượt hai `36 SKIPPED`, rồi chạy internal image query thật với 10/10 product duy nhất,
+top-1 đúng nhãn và model/revision SigLIP2 đã khóa.
 
 | Xong | ID | Việc cần làm | Điều kiện đạt |
 |---:|---|---|---|
@@ -361,8 +364,8 @@ phải bằng chứng worker hiện tại có thể rebuild index. `processed_ev
 | [x] | HAI-11.3 | Thêm contract test Catalog ↔ Search | JSON thật từ Catalog được `CatalogIndexDocument` validate thành công |
 | [x] | HAI-11.4 | Chạy backfill dry-run qua Catalog API | Report đủ 36 product, 178 facet, 81 ảnh; không ghi DB |
 | [x] | HAI-11.5 | Chạy backfill có kiểm soát và lặp lại | 81/81 READY; lần hai hash-skip/idempotent |
-| [ ] | HAI-11.6 | Phát và consume event Catalog thật | `processed_events` tăng đúng, không duplicate và retry/DLQ sạch |
-| [ ] | HAI-11.7 | E2E internal image search trên `ai_search` | Query thật trả candidate không trùng product, model/revision đúng |
+| [x] | HAI-11.6 | Phát và consume event Catalog thật | `processed_events` tăng đúng, không duplicate và retry/DLQ sạch |
+| [x] | HAI-11.7 | E2E internal image search trên `ai_search` | Query thật trả candidate không trùng product, model/revision đúng |
 
 Không bật public feature trong HAI-11. Mọi thao tác ghi Supabase phải có dry-run,
 backup/rollback và phê duyệt riêng.
@@ -371,8 +374,9 @@ backup/rollback và phê duyệt riêng.
 
 **Trạng thái:** `VERIFY`
 
-Catalog hiện chỉ persist `secure_url`, `alt_text`, thứ tự và primary flag;
-`publicId` từ upload không được lưu và index document chưa trả danh sách ảnh.
+Catalog hiện persist `secure_url`, `alt_text`, thứ tự và primary flag; index document
+đã trả image ID/URL nhưng `publicId`, asset version, dimensions, checksum và provenance
+vẫn chưa được persist đầy đủ trong schema hiện hành.
 
 | Xong | ID | Việc cần làm | Điều kiện đạt |
 |---:|---|---|---|
@@ -484,6 +488,8 @@ Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-r
 | 15/11/2026 | Re-audit sau cutover microservice | Catalog có 36 product, 178 variant, 81 ảnh; `ai_search` có 36 documents, 178 facets, 81 image vectors READY; Search test 11/11 pass | Live read-only audit; `services/search-service`; file kế hoạch này | Catalog snapshot contract chưa khớp Search client, worker chưa có processed event/job, HNSW mâu thuẫn exact pilot, public vẫn tắt | Thực hiện HAI-11 đến HAI-13 trước khi tạo DEV v3 |
 | 15/11/2026 | Hoàn thành contract và dry-run HAI-11.2–11.4 | Catalog trả snapshot đầy đủ; contract dùng chung được cả Java/Python kiểm tra; dry-run qua Catalog API đạt 36/36 product, 178 variant, 81 ảnh, 0 lỗi | `contracts/examples/catalog-index-document-v1.json`; `evidence/image-search-v2/cutover-ai-search/hai-11-catalog-dry-run-2026-11-15.json` | Launcher ban đầu bật event relay khi RabbitMQ không chạy và làm tăng `attempts` của outbox; đã dừng, không tự ý sửa outbox; lượt xác minh sau ép relay tắt | Xin phê duyệt riêng trước HAI-11.5 vì bước đó ghi `ai_search` |
 | 15/11/2026 | Hoàn thành backfill và idempotency HAI-11.5 | Lượt force tái tạo `36 UPDATED`; coverage sau chạy là 36 documents, 178 facets, 81/81 image vectors READY; lượt hai xác minh nội dung ảnh rồi trả `36 SKIPPED`, checksum và `updated_at` không đổi | `evidence/image-search-v2/cutover-ai-search/hai-11-live-backfill-2026-11-15.json`; restore point ngoài Git `backups/hai-11/ai-search-pre-backfill-20261115-110540.dump` | Cần cấu hình `CLOUDINARY_CLOUD_NAME=dfpgvlovs` trong runtime; Catalog relay đã tắt và outbox không tăng thêm | Thực hiện HAI-11.6 với RabbitMQ và event test có kiểm soát |
+| 15/11/2026 | Hoàn thành Catalog event HAI-11.6 | Chuẩn hóa `catalog-event-v1`; 38 legacy outbox được giữ và chuyển `SUPERSEDED`; event thật `PUBLISHED` với attempts 0; `processed_events` 0→1; duplicate không tạo hàng mới; retry/DLQ test đạt và mọi Search queue kết thúc ở 0 | `evidence/image-search-v2/cutover-ai-search/hai-11-event-consumer-2026-11-15.json`; Catalog backup ngoài Git `backups/hai-11/catalog-pre-event-v5-20261115-155747.dump` | Đã sửa relay gửi JSON UTF-8 thay vì Java serialization; exchange test cô lập và process tạm đã được dọn | Thực hiện HAI-11.7 internal image-search E2E |
+| 15/11/2026 | Hoàn thành internal image-search E2E HAI-11.7 | Phát hiện `product_type` null làm rerank hạ score xuống 40%; bổ sung fallback Search-owned, backfill `36 UPDATED`, lần hai `36 SKIPPED`; query DEV v2 trả HTTP 200, 10 candidate/10 product duy nhất, top-1 đúng, similarity 0,831216 | `evidence/image-search-v2/cutover-ai-search/hai-11-internal-image-e2e-2026-11-15.json` | Vector DB khớp SigLIP2 runtime cosine 1,0; không phải fake vector; public flag và relay vẫn tắt, toàn bộ process tạm đã dọn | Bắt đầu HAI-12 audit metadata ảnh hiện tại |
 
 ## 9. Definition of Done hiện hành
 

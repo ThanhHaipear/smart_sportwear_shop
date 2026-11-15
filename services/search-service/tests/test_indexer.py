@@ -14,6 +14,7 @@ def document() -> CatalogIndexDocument:
         "sourceVersion": 2,
         "status": "ACTIVE",
         "name": "Demo",
+        "categorySlug": "ao-the-thao",
         "variants": [],
         "images": [{
             "id": "50000000-0000-0000-0000-000000000001",
@@ -51,6 +52,7 @@ def test_unchanged_snapshot_is_skipped_before_embedding(pipeline_type):
 
     assert outcome == "SKIPPED"
     instance.repository.is_current.assert_awaited_once()
+    assert instance.repository.is_current.await_args.args[0].product_type == "SPORTS_TOP"
     instance.text_embedder.embed.assert_not_awaited()
     instance.repository.upsert_document.assert_not_awaited()
 

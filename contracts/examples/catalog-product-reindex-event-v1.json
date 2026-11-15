@@ -1,0 +1,9 @@
+{
+  "eventId": "90000000-0000-0000-0000-000000000001",
+  "eventType": "PRODUCT_REINDEX_REQUESTED",
+  "eventVersion": 1,
+  "productId": "10000000-0000-0000-0000-000000000001",
+  "sourceVersion": 2,
+  "occurredAt": "2026-11-15T04:30:00Z",
+  "traceId": "hai-11-controlled-event"
+}
