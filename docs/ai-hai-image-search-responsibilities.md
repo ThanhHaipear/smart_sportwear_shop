@@ -1,17 +1,24 @@
-# Bảng tiến độ AI của Lê Thanh Hải
+# Kế hoạch và tiến độ AI của Lê Thanh Hải
+
+> Cập nhật trạng thái hiện hành ngày 15/11/2026. HAI-01 đến HAI-10 bên dưới
+> lưu bằng chứng của pipeline SigLIP2 V2 trước khi hệ thống chuyển sang kiến
+> trúc microservice hợp nhất. Các mục đó không tự động chứng minh pipeline
+> `services/search-service` hiện tại đã được cutover hoặc đủ điều kiện rollout.
 
 ## 1. Mục tiêu cuối cùng
 
 Hải phụ trách nhánh **dữ liệu hình ảnh và tìm kiếm sản phẩm bằng hình ảnh**:
 
 ```text
-Ảnh catalog có nguồn và checksum
-→ Cloudinary versioned original
+Ảnh catalog có nguồn, quyền sử dụng và checksum
+→ Cloudinary versioned original cho asset Cloudinary
+→ Catalog giữ URL nguồn, `public_id`/asset version khi có và provenance có thể tái lập
 → SigLIP2 image embedding 768 chiều
-→ pgvector trong schema ai_retrieval
-→ exact cosine search
+→ pgvector trong `ai_search.image_embeddings`
+→ exact cosine search trong pilot, chưa dùng ANN
 → gom kết quả theo sản phẩm
-→ Spring Boot lọc và bổ sung dữ liệu Commerce
+→ Search API nội bộ trả candidate
+→ Catalog/Gateway lọc và bổ sung dữ liệu Commerce hiện thời
 → Storefront hiển thị kết quả
 → đánh giá trên DEV/TEST bằng Precision@K và Recall@K
 ```
@@ -23,60 +30,71 @@ Sau mỗi lần hoàn thành một mục, đổi `[ ]` thành `[x]`, cập nhậ
 | Trạng thái | Ý nghĩa |
 |---|---|
 | `DONE` | Đã có code/dữ liệu và có bằng chứng kiểm tra |
+| `HISTORICAL_DONE` | Đã hoàn thành trên kiến trúc cũ; phải verify lại sau cutover |
 | `VERIFY` | Đã có nhưng cần chạy lại trên commit và môi trường hiện tại |
 | `IN PROGRESS` | Đang thực hiện |
 | `TODO` | Chưa bắt đầu |
 | `BLOCKED` | Chưa thể tiếp tục vì thiếu đầu vào hoặc quyết định |
+| `NO-GO` | Đã có kết quả nhưng chưa đạt quality gate để rollout |
 
-Phần trăm trong bảng chỉ là ước lượng quản lý công việc, không phải điểm đánh giá học thuật.
+Không dùng phần trăm hoàn thành để thay cho acceptance gate. Một task có thể đã
+hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng thái `NO-GO`.
 
 ## 3. Tổng quan tiến độ
 
-| Mã | Hạng mục | Trạng thái | Tiến độ | Ưu tiên | Phụ thuộc |
-|---|---|---:|---:|---:|---|
-| HAI-01 | Kiểm kê và khóa catalog ảnh V2 | `DONE` | 100% | P0 | Không |
-| HAI-02 | Xác nhận image embedding V2 | `DONE` | 100% | P0 | HAI-01 |
-| HAI-03 | Chuyển API tìm ảnh sang SigLIP2 V2 | `DONE` | 100% | P0 | HAI-02 |
-| HAI-04 | Kiểm thử API và repository V2 | `DONE` | 100% | P0 | HAI-03 |
-| HAI-05 | Xây dựng tập ảnh DEV | `DONE` | 100% | P0 | HAI-01 |
-| HAI-06 | Xây dựng tập ảnh TEST độc lập | `DONE` | 100% | P0 | HAI-01, HAI-05 |
-| HAI-07 | Viết runner và chạy đánh giá | `DONE` | 100% | P0 | HAI-03, HAI-05, HAI-06 |
-| HAI-08 | Phân tích lỗi và so sánh baseline | `DONE` | 100% | P1 | HAI-07 |
-| HAI-09 | Hardening, rollout và rollback | `DONE` | 100% | P1 | HAI-03, HAI-04 |
-| HAI-10 | Hoàn thiện nội dung báo cáo | `DONE` | 100% | P1 | HAI-07, HAI-08 |
+| Mã | Hạng mục | Trạng thái hiện hành | Ưu tiên | Phụ thuộc |
+|---|---|---|---:|---|
+| HAI-01 | Kiểm kê và khóa catalog ảnh V2 | `DONE` | P0 | Không |
+| HAI-02 | Xác nhận image embedding V2 trên pipeline cũ | `HISTORICAL_DONE / VERIFY` | P0 | HAI-01 |
+| HAI-03 | API SigLIP2 V2 trên pipeline cũ | `HISTORICAL_DONE / VERIFY` | P0 | HAI-02 |
+| HAI-04 | Test API/repository trên pipeline cũ | `HISTORICAL_DONE / VERIFY` | P0 | HAI-03 |
+| HAI-05 | Xây dựng và khóa DEV v1, DEV v2.2 | `DONE` | P0 | HAI-01 |
+| HAI-06 | Xây dựng và khóa TEST v1, TEST v2 | `DONE` | P0 | HAI-01, HAI-05 |
+| HAI-07 | Runner và benchmark TEST v2 | `DONE / NO-GO` | P0 | HAI-03, HAI-05, HAI-06 |
+| HAI-08 | Phân tích lỗi và baseline | `DONE` | P1 | HAI-07 |
+| HAI-09 | Hardening và rollback drill lịch sử | `HISTORICAL_DONE`; rollout public `BLOCKED` | P1 | HAI-03, HAI-04 |
+| HAI-10 | Báo cáo tổng kết | `UPDATE REQUIRED` | P1 | HAI-07, HAI-08 |
+| HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `IN PROGRESS` | P0 | HAI-01, HAI-02 |
+| HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `VERIFY` | P0 | HAI-11 |
+| HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `TODO` | P0 | HAI-11 |
+| HAI-14 | Xây DEV v3 và khóa cấu hình mới | `TODO` | P0 | HAI-11, HAI-12, HAI-13 |
+| HAI-15 | Tạo và chạy TEST v3 độc lập | `BLOCKED` | P0 | HAI-14 |
+| HAI-16 | Rollout public có kiểm soát | `BLOCKED / NO-GO` | P0 | HAI-15 |
 
-## 4. Những phần đã có, không làm lại
+## 4. Tài sản đã có và điều kiện tái sử dụng
 
-| Thành phần | Trạng thái | Bằng chứng hiện tại | Việc Hải còn phải làm |
+| Thành phần | Trạng thái | Bằng chứng hiện tại | Việc còn phải làm trên kiến trúc hiện tại |
 |---|---|---|---|
-| Catalog pilot | `DONE` | 30 sản phẩm, 148 variant, 60 ảnh; dataset `smart-sportswear-pilot:1.1.0` đã `FROZEN` | Chạy lại validation và lưu report |
-| Catalog World Cup | `DONE` | 6 sản phẩm, 30 variant, 21 ảnh; dataset `world-cup-2026-official-store-reference:1.0.0` đã `FROZEN` | Chạy lại validation và lưu report |
-| Cloudinary metadata | `DONE` | 81 ảnh có `public_id`, asset version, URL, checksum và provenance | Đối chiếu DB với manifest |
-| Schema vector ảnh | `DONE` | `ai_retrieval.product_image_embeddings`, vector 768 chiều trong V6 | Không tạo bảng vector mới |
-| Model registry | `DONE` | V7 seed `google/siglip2-base-patch16-224` với revision cố định | Model mới phải tạo version mới |
-| SigLIP2 local | `DONE` | `Siglip2ImageEmbedder` đã có và L2-normalize vector | Dùng đúng revision cho query embedding |
-| Worker backfill | `DONE` | Có retry, stale detection, checksum verification và idempotent skip | Chạy lại và lưu bằng chứng |
-| Exact cosine SQL | `DONE` | Có `ai_retrieval.search_product_images_exact(...)` | Tích hợp vào API V2 |
-| Embedding coverage | `DONE` | Đã xác minh `81/81 READY`; job `2472dc24-92cd-4a77-a95c-439267f38b2b` chạy lặp và skip đủ 81 | Theo dõi khi catalog đổi |
-| Storefront visual search | `DONE` về UI | Có upload/camera/crop/loading/error/result dialog | Kiểm tra lại với API V2 |
-| Visual search Voyage | `REFERENCE` | Là pipeline/schema legacy | Không dùng làm nguồn chuẩn V2 |
+| Catalog pilot và World Cup | `DONE` | 36 sản phẩm, 178 variant, 81 ảnh; manifest/checksum lịch sử đã khóa | Đối chiếu lại với schema `catalog` hiện tại |
+| Metadata Cloudinary lịch sử | `HISTORICAL_DONE / VERIFY` | Evidence cũ có `public_id`, asset version, URL, checksum và provenance | Catalog hiện chỉ lưu `secure_url`; phải khôi phục metadata hoặc ghi rõ chính sách URL/hash thay thế |
+| Image embeddings hiện hành | `VERIFY` | Live audit 15/11/2026 có `81/81 READY` trong `ai_search.image_embeddings` | Chứng minh worker/backfill hiện tại có thể tái tạo đủ 81 vector |
+| SigLIP2 local | `DONE` | `google/siglip2-base-patch16-224`, revision cố định, 768 chiều, L2-normalize | Giữ đúng revision/preprocessing cho cả document và query |
+| Worker/indexing cũ | `HISTORICAL_DONE` | Có retry, stale detection, checksum và idempotency evidence | Sửa Catalog snapshot contract và chạy event/backfill thật trên service mới |
+| Exact cosine cũ | `HISTORICAL_DONE` | Hàm exact search trong `ai_retrieval` | `ai_search` đang có HNSW; phải loại mâu thuẫn và lưu `EXPLAIN ANALYZE` |
+| Storefront visual search | `DONE` về UI | Có upload/camera/crop/loading/error/result dialog | Public API đang trả 503; chỉ bật sau TEST v3 |
+| DEV v2.2 / TEST v2 | `DONE / NO-GO` | DEV đạt gate; TEST v2 Recall@5 `73,75%`, category `79%` | Không retune TEST v2; chỉ cải tiến bằng DEV v3 |
+| Voyage | `REFERENCE` | Pipeline lịch sử | Không dùng làm model chuẩn của Hải |
 
-## 5. Thứ tự thực hiện
+## 5. Thứ tự thực hiện từ trạng thái hiện tại
 
 | Bước | Công việc | Kết quả phải có |
 |---:|---|---|
-| 1 | HAI-01 kiểm kê catalog ảnh | Validation report và catalog snapshot checksum |
-| 2 | HAI-02 chạy lại embedding verification | `81/81 READY` và idempotency report |
-| 3 | HAI-03 chuyển API sang V2 | Image search chạy bằng SigLIP2/`ai_retrieval` |
-| 4 | HAI-04 bổ sung test | Unit/integration/frontend QA đạt |
-| 5 | HAI-05 tạo DEV | DEV manifest, labels và checksum |
-| 6 | Tune trên DEV | Chốt threshold, candidate limit và grouping |
-| 7 | HAI-06 thu thập và khóa TEST | TEST độc lập, không leakage |
-| 8 | HAI-07 chạy benchmark cuối | Metrics và ranked output |
-| 9 | HAI-08 phân tích failure case | Báo cáo lỗi và baseline comparison |
-| 10 | HAI-09 và HAI-10 | Runbook, rollback và nội dung báo cáo |
+| 1 | HAI-11 sửa Catalog index-document contract | Snapshot có product, version, variants, images và metadata cần thiết |
+| 2 | HAI-11 chạy worker/backfill trên kiến trúc mới | `36/36` documents, `178/178` facets, `81/81` image vectors được tái tạo idempotent |
+| 3 | HAI-12 quyết định metadata ảnh | Catalog lưu đủ metadata hoặc có chính sách URL/hash/provenance thay thế được kiểm chứng |
+| 4 | HAI-13 xác minh exact cosine | Không dùng ANN trong pilot; có query plan và benchmark latency |
+| 5 | Chạy contract/integration/E2E hiện hành | Search, Catalog, Gateway và Storefront cùng pass; public flag vẫn tắt |
+| 6 | HAI-14 xây và tune trên DEV v3 | Khóa model revision, preprocessing, reranking, threshold và candidate limit |
+| 7 | Review/freeze TEST v3 độc lập | Đủ provenance/license, không leakage, có sign-off trước benchmark |
+| 8 | HAI-15 chạy TEST v3 đúng một lần | Recall@5 `>=80%`, category `>=90%`, failure `0%`, p95 `<=3s` |
+| 9 | Cập nhật HAI-10 | Báo cáo phản ánh `ai_search`, TEST v2 và kết quả TEST v3 |
+| 10 | HAI-16 staged rollout | Internal/shadow trước; public chỉ bật khi mọi gate đạt |
 
 ## 6. Bảng tiến độ chi tiết
+
+Các mục HAI-01 đến HAI-10 trong phần này là hồ sơ thực hiện lịch sử. Trạng thái
+hiện hành phải đọc theo bảng tổng quan và HAI-11 đến HAI-16; không dùng một dòng
+`DONE` lịch sử để bỏ qua cutover hoặc quality gate mới.
 
 ### HAI-01 Kiểm kê và khóa catalog ảnh V2
 
@@ -97,7 +115,7 @@ Phần trăm trong bảng chỉ là ước lượng quản lý công việc, kh�
 
 ### HAI-02 Xác nhận image embedding V2
 
-**Trạng thái:** `DONE`
+**Trạng thái:** `HISTORICAL_DONE / VERIFY CURRENT ARCHITECTURE`
 
 ### Lệnh chạy
 
@@ -124,7 +142,7 @@ Lần chạy cuối chứng minh idempotency và phải skip các vector còn h�
 
 ### HAI-03 Chuyển API tìm ảnh sang SigLIP2 V2
 
-**Trạng thái:** `DONE`
+**Trạng thái:** `HISTORICAL_DONE / VERIFY CURRENT ARCHITECTURE`
 
 ### Quyết định cho pilot
 
@@ -154,7 +172,7 @@ Lần chạy cuối chứng minh idempotency và phải skip các vector còn h�
 
 ### HAI-04 Kiểm thử pipeline V2
 
-**Trạng thái:** `DONE`
+**Trạng thái:** `HISTORICAL_DONE / VERIFY CURRENT ARCHITECTURE`
 
 | Xong | ID | Nhóm test | Ca bắt buộc | Điều kiện đạt |
 |---:|---|---|---|---|
@@ -268,9 +286,9 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 **Bằng chứng đóng task (25/10/2026):** `evidence/image-search-v2/test-v1-final/failure-analysis.json` và `failure-cases.md`, sinh offline bằng `visual-search-service/scripts/analyze_test_failures.py` từ ranked output đã khóa, không gọi lại TEST. Raw top-1 relevant `59%`, raw hit@5 `79%`, raw hit@10 `84%`, raw top-1 category `67%`; 96/100 positive top-1 không vượt threshold DEV, 33/100 nhầm category và 21/100 không có relevant product trong raw top 5. Báo cáo có confusion matrix, phân tích theo nhóm, case đại diện, review ảnh/nền/crop/phụ kiện, so sánh Voyage lịch sử và DEV synthetic, cùng kế hoạch DEV/TEST v2. Hai phép đo không có dữ liệu được ghi N/A rõ ràng; TEST v1 không bị retune hoặc chạy lại.
 
-### HAI-09 Hardening, rollout và rollback
+### HAI-09 Hardening và rollback drill
 
-**Trạng thái:** `DONE`
+**Trạng thái:** `HISTORICAL_DONE`; public rollout `BLOCKED / NO-GO`
 
 | Xong | ID | Việc cần làm | Điều kiện đạt |
 |---:|---|---|---|
@@ -289,7 +307,7 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 
 ### HAI-10 Hoàn thiện nội dung báo cáo
 
-**Trạng thái:** `DONE`
+**Trạng thái:** `UPDATE REQUIRED` — báo cáo hiện dừng ở TEST v1 và kiến trúc `ai_retrieval`
 
 | Xong | ID | Nội dung | Bằng chứng cần dùng |
 |---:|---|---|---|
@@ -307,7 +325,7 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 | [x] | HAI-10.12 | Hạn chế và hướng mở rộng | Synthetic/reference/real photo |
 | [x] | HAI-10.13 | Vận hành và rollback | Runbook đã thử |
 
-**Bằng chứng báo cáo (25/10/2026, xác nhận đóng review 02/11/2026):** `docs/ai-hai-image-search-final-report.md` đã tổng hợp đầy đủ mục tiêu/phạm vi, provenance/license, chuẩn hóa, kiến trúc, model, exact cosine, versioning/idempotency, protocol chống leakage, công thức metric, kết quả tổng thể/theo nhóm, failure analysis, hạn chế, hướng mở rộng và rollback. Báo cáo giữ nguyên kết luận TEST v1 FAILED (Recall@5 `1,67%`, category accuracy `4%`), yêu cầu public flag tiếp tục tắt và liên kết toàn bộ evidence có thể tái lập. Dũng đã review/khóa dataset trước benchmark; Hải xác nhận ngày 02/11/2026 rằng vòng review tổng kết đã được chốt, vì vậy HAI-10 chuyển sang `DONE`.
+**Bằng chứng báo cáo lịch sử (25/10/2026, xác nhận đóng review 02/11/2026):** `docs/ai-hai-image-search-final-report.md` đã tổng hợp đầy đủ pipeline `ai_retrieval` và kết quả TEST v1 tại thời điểm đó. Bản lịch sử giữ nguyên kết luận TEST v1 FAILED (Recall@5 `1,67%`, category accuracy `4%`) và yêu cầu public flag tiếp tục tắt. HAI-10 chỉ được chuyển lại `DONE` sau khi báo cáo được cập nhật với kiến trúc `ai_search`, kết quả TEST v2 và trạng thái TEST v3 mới nhất.
 
 ### Cải tiến sau HAI-10: DEV v2 và ranking
 
@@ -326,21 +344,101 @@ Mỗi failure case phải có query ID, expected products, top results, similari
 - Phân tích offline cho thấy raw hit@5 `86%`, raw hit@10 `89%`, raw top-1 category `83%`; accessories và tops là hai nhóm category yếu nhất. Không retune threshold/ranking và không chạy lại TEST v2. Public flag tiếp tục tắt.
 - Evidence: `evidence/image-search-v2/supabase-live-audit-2026-11-03.json`, `evidence/image-search-v2/dev-v2.2-locked-2026-11-03/`, `datasets/image-search/test-v2/` và `evidence/image-search-v2/test-v2-final/`.
 
+### HAI-11 Cutover sang Search microservice hiện tại
+
+**Trạng thái:** `IN PROGRESS`
+
+Audit read-only ngày 15/11/2026 xác nhận Catalog có 36 sản phẩm ACTIVE, 178
+variant ACTIVE và 81 ảnh; `ai_search` có 36 documents, 178 facets và 81 image
+embeddings `READY`. Tuy nhiên đây là dữ liệu được copy từ read model cũ; chưa
+phải bằng chứng worker hiện tại có thể rebuild index. `processed_events=0` và
+`indexing_jobs=0`.
+
+| Xong | ID | Việc cần làm | Điều kiện đạt |
+|---:|---|---|---|
+| [x] | HAI-11.1 | Audit count Catalog và `ai_search` ở chế độ read-only | Count hiện tại được ghi rõ, không lộ secret |
+| [ ] | HAI-11.2 | Sửa `GET /internal/v1/products/{id}/index-document` | Trả đúng contract version hóa gồm product, source version, variants, images và metadata |
+| [ ] | HAI-11.3 | Thêm contract test Catalog ↔ Search | JSON thật từ Catalog được `CatalogIndexDocument` validate thành công |
+| [ ] | HAI-11.4 | Chạy backfill dry-run qua Catalog API | Report đủ 36 product, 178 facet, 81 ảnh; không ghi DB |
+| [ ] | HAI-11.5 | Chạy backfill có kiểm soát và lặp lại | 81/81 READY; lần hai hash-skip/idempotent |
+| [ ] | HAI-11.6 | Phát và consume event Catalog thật | `processed_events` tăng đúng, không duplicate và retry/DLQ sạch |
+| [ ] | HAI-11.7 | E2E internal image search trên `ai_search` | Query thật trả candidate không trùng product, model/revision đúng |
+
+Không bật public feature trong HAI-11. Mọi thao tác ghi Supabase phải có dry-run,
+backup/rollback và phê duyệt riêng.
+
+### HAI-12 Chuẩn hóa metadata ảnh hiện tại
+
+**Trạng thái:** `VERIFY`
+
+Catalog hiện chỉ persist `secure_url`, `alt_text`, thứ tự và primary flag;
+`publicId` từ upload không được lưu và index document chưa trả danh sách ảnh.
+
+| Xong | ID | Việc cần làm | Điều kiện đạt |
+|---:|---|---|---|
+| [ ] | HAI-12.1 | Audit host/source của 81 ảnh và đối chiếu manifest | Phân biệt Cloudinary, local và nguồn khác; URL hợp lệ |
+| [ ] | HAI-12.2 | Chốt schema metadata | Lưu `public_id`, asset version, dimensions, checksum, provenance khi áp dụng |
+| [ ] | HAI-12.3 | Backfill metadata idempotent | Không thay ảnh hiển thị; report missing/mismatch rõ ràng |
+| [ ] | HAI-12.4 | Bổ sung metadata vào Catalog snapshot | Worker có đủ dữ liệu để tải và xác minh đúng asset |
+
+### HAI-13 Xác minh exact cosine trong pilot
+
+**Trạng thái:** `TODO`
+
+`ai_search.image_embeddings` hiện có HNSW index dù kế hoạch gốc yêu cầu exact
+cosine và chưa cần ANN. Không được chỉ dựa vào toán tử `<=>` để kết luận query
+là exact.
+
+| Xong | ID | Việc cần làm | Điều kiện đạt |
+|---:|---|---|---|
+| [ ] | HAI-13.1 | Lưu `EXPLAIN (ANALYZE, BUFFERS)` trên dữ liệu hiện tại | Xác định rõ sequential exact hay HNSW ANN |
+| [ ] | HAI-13.2 | Thiết kế migration tương thích để không dùng HNSW cho pilot | Có rollback; không xóa vector |
+| [ ] | HAI-13.3 | Benchmark exact cosine | Ranking deterministic, p95 `<=3s`, Recall không bị sai số ANN |
+| [ ] | HAI-13.4 | Khóa tie-break và grouping theo product | Cùng input/config cho cùng thứ tự |
+
+### HAI-14 DEV v3
+
+**Trạng thái:** `TODO`
+
+- Không dùng TEST v2 để chọn model, threshold, prompt hoặc reranking.
+- Dùng ảnh DEV mới có provenance, tập trung `accessories`, `tops`, unknown và
+  các failure slice của TEST v2.
+- Giữ SigLIP2 pretrained local làm baseline bắt buộc; chưa fine-tune trong pilot.
+- Chỉ thử preprocessing, crop/region, category consensus và catalog coverage trên DEV.
+- Khóa model revision, preprocessing, candidate limit, threshold và ranking trước TEST v3.
+
+### HAI-15 TEST v3 độc lập
+
+**Trạng thái:** `BLOCKED` bởi HAI-14
+
+- Thu thập TEST mới độc lập với catalog, DEV và TEST v1/v2.
+- Kiểm tra license, provenance, SHA-256, near duplicate và source-group leakage.
+- Có reviewer/sign-off trước khi chạy benchmark.
+- Chạy final đúng một lần với config DEV v3 đã khóa.
+- Gate: Recall@5 `>=80%`, category accuracy `>=90%`, leakage `0`, request
+  failure `0%`, p95 `<=3s`; unknown rejection phải được báo cáo và không thấp
+  hơn ngưỡng đã khóa trên DEV.
+
+### HAI-16 Rollout public
+
+**Trạng thái:** `BLOCKED / NO-GO`
+
+Chỉ bắt đầu khi HAI-11 đến HAI-15 hoàn tất. Thứ tự rollout là internal smoke,
+shadow, cohort nhỏ, theo dõi quality/latency/error/queue/DLQ, rồi mới mở rộng.
+Rollback bằng feature flag/routing; không xóa vector, dataset hoặc evidence khi
+xảy ra sự cố.
+
 ## 7. Artifact phải bàn giao
 
 ```text
 datasets/
 └── image-search/
     ├── dev-v1/
-    │   ├── manifest.json
-    │   ├── labels.json
-    │   ├── assets.sha256
-    │   └── README.md
-    └── test-v1/
-        ├── manifest.json
-        ├── labels.json
-        ├── assets.sha256
-        └── README.md
+    ├── test-v1/
+    ├── dev-v2/
+    ├── test-v2/
+    ├── dev-v3/              # tạo khi bắt đầu HAI-14
+    └── test-v3/             # chỉ tạo sau khi DEV v3 đã khóa
 
 evidence/
 └── image-search-v2/
@@ -349,16 +447,16 @@ evidence/
     ├── coverage-before.json
     ├── coverage-after.json
     ├── embedding-rerun-report.json
-    ├── benchmark-config.json
-    ├── benchmark-results.json
-    ├── ranked-results.json
-    ├── failure-cases.md
-    └── final-report.md
+    ├── test-v1-final/
+    ├── dev-v2.2-locked-2026-11-03/
+    ├── test-v2-final/
+    ├── cutover-ai-search/    # HAI-11 đến HAI-13
+    └── test-v3-final/        # chỉ sinh sau sign-off
 ```
 
 Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest, checksum, nguồn, license và hướng dẫn tái tạo hoặc tải lại hợp lệ.
 
-Báo cáo tổng kết HAI-10 được bàn giao tại `docs/ai-hai-image-search-final-report.md`; báo cáo TEST v1 cấp benchmark vẫn được giữ riêng tại `evidence/image-search-v2/test-v1-final/final-report.md`.
+Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-report.md` và đang ở trạng thái cần cập nhật. Báo cáo TEST v1 cấp benchmark vẫn được giữ riêng tại `evidence/image-search-v2/test-v1-final/final-report.md`; TEST v2 ở `evidence/image-search-v2/test-v2-final/` là bằng chứng chất lượng mới nhất đã khóa.
 
 ## 8. Nhật ký thực hiện
 
@@ -383,21 +481,30 @@ Báo cáo tổng kết HAI-10 được bàn giao tại `docs/ai-hai-image-search
 | 03/11/2026 | Review query-focus và nâng DEV lên v2.1 | Loại ảnh sai/incidental/near-duplicate; relevance theo subtype; subtype prompts đạt Recall@5 63,50%, category 76%, top-5 78%, unknown 90%, p95 926,27 ms | `datasets/image-search/dev-v2/`; `dev-v2.1-subtype-prompts-2026-11-03/` | Vẫn dưới gate tổng 80%/90%; bottoms Recall@5 55%, category 60% | Giữ TEST v2 bị khóa; nghiên cứu region-aware classification hoặc catalog/category coverage trên DEV |
 | 03/11/2026 | Khóa DEV v2.2 và tạo TEST v2 candidate | DEV đạt Recall@5 84,83%, category 94%, unknown 100%, p95 802,07 ms; 127 tests đạt. TEST v2 đủ 120 case, validator PASS, đối chiếu 316 ảnh tham chiếu | `dev-v2.2-locked-2026-11-03/`; `datasets/image-search/test-v2/` | TEST v2 đang `REVIEW_REQUIRED`, sign-off độc lập `PENDING`; chưa chạy final benchmark | Thành viên khác review/sign-off, freeze checksum rồi chạy TEST v2 đúng một lần |
 | 03/11/2026 | Freeze và chạy final TEST v2 đúng một lần | Dũng sign-off; 120/120 request; Recall@5 73,75%, category 79%, unknown 75%, request failure 0%, p95 1.381,07 ms; acceptance FAILED | `datasets/image-search/test-v2/`; `evidence/image-search-v2/test-v2-final/` | Recall và category dưới gate; TEST v2 không được retune hoặc chạy lại | Giữ public tắt; phân tích offline và chỉ cải tiến trên DEV v3 trước khi tạo TEST v3 độc lập |
-|  |  |  |  |  |  |
-|  |  |  |  |  |  |
+| 15/11/2026 | Re-audit sau cutover microservice | Catalog có 36 product, 178 variant, 81 ảnh; `ai_search` có 36 documents, 178 facets, 81 image vectors READY; Search test 11/11 pass | Live read-only audit; `services/search-service`; file kế hoạch này | Catalog snapshot contract chưa khớp Search client, worker chưa có processed event/job, HNSW mâu thuẫn exact pilot, public vẫn tắt | Thực hiện HAI-11 đến HAI-13 trước khi tạo DEV v3 |
 
-## 9. Definition of Done tổng
+## 9. Definition of Done hiện hành
 
-- [x] HAI-01 hoàn thành và catalog snapshot đã khóa.
-- [x] HAI-02 hoàn thành với coverage 100% và idempotency report.
-- [x] HAI-03 hoàn thành; API dùng SigLIP2 + `ai_retrieval` end-to-end.
-- [x] HAI-04 hoàn thành; test và QA liên quan đều đạt.
-- [x] HAI-05 DEV v1 đã `FROZEN`.
-- [x] HAI-06 TEST v1 độc lập đã `FROZEN` và không leakage.
-- [x] HAI-07 benchmark cuối có ranked output và metric tái lập được; acceptance hiện `FAILED`.
-- [x] HAI-08 có failure-case analysis và baseline comparison.
-- [x] HAI-09 có rollout/rollback đã thử nghiệm.
-- [x] HAI-10 có nội dung báo cáo hoàn chỉnh.
-- [x] Review độc lập đã được chốt; Dũng là reviewer dataset trước benchmark và Hải xác nhận vòng review tổng kết đã hoàn tất ngày 02/11/2026.
+### Bằng chứng lịch sử đã hoàn thành
 
-Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN ANALYZE` và benchmark chứng minh exact cosine không đáp ứng latency ở quy mô dữ liệu thực tế.
+- [x] Catalog snapshot lịch sử đã khóa và 81/81 ảnh có vector SigLIP2 READY.
+- [x] DEV v1, TEST v1, DEV v2.2 và TEST v2 có manifest/labels/checksum.
+- [x] Runner, ranked output, metric và failure analysis có thể tái lập.
+- [x] TEST v2 đã chạy đúng một final run và kết luận `FAILED / NO-GO` được giữ nguyên.
+- [x] Feature/model rollback lịch sử đã được drill.
+
+### Điều kiện còn thiếu trước public rollout
+
+- [ ] Catalog index-document contract khớp Search client và có integration test.
+- [ ] Worker/backfill hiện tại tái tạo idempotent 36 documents, 178 facets và 81 image vectors.
+- [ ] Metadata ảnh/Cloudinary hiện tại được persist hoặc có chính sách thay thế rõ ràng.
+- [ ] Exact cosine được chứng minh bằng query plan; không dùng ANN trong pilot.
+- [ ] Internal API, Catalog/Gateway và Storefront E2E pass trên `ai_search`.
+- [ ] DEV v3 được khóa mà không dùng nhãn TEST v2 để tune.
+- [ ] TEST v3 độc lập đạt Recall@5, category, leakage, failure và latency gate.
+- [ ] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả mới nhất.
+- [ ] Staged rollout và rollback smoke đạt trên môi trường acceptance.
+
+Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN
+ANALYZE` và benchmark chứng minh exact cosine không đáp ứng latency ở quy mô dữ
+liệu thực tế; khi đó phải version hóa cấu hình và đánh giá lại quality delta.
