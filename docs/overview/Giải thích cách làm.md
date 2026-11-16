@@ -1012,3 +1012,78 @@ Không có sự kiện `REAL` nào trong cùng khoảng thời gian; console tr�
 
 - Lần thử tạo một giỏ hàng khách vãng lai trong schema `sales` (1 sản phẩm size M) và 8 sự kiện `DEMO` trong `recommendation.user_interactions`. Bảng này chỉ cho thêm (trigger chặn sửa/xóa), nên 8 sự kiện được giữ lại; khi đánh giá thì lọc `data_source='REAL'` hoặc `'SYNTHETIC'`.
 - Playwright để lại thư mục log `E:\.playwright-mcp` (ngoài dự án), có thể xóa.
+
+---
+
+## [2026-11-16] Giai đoạn 2 (hai mục cuối): Quyết định thời điểm tính PURCHASE và rate limit riêng
+
+### 1. Thời điểm tính `PURCHASE`
+
+**Vấn đề:** "Khách đã mua" nên tính lúc đặt đơn hay lúc giao xong? Tính lúc giao thì sạch hơn (loại được đơn hủy), nhưng phải có dữ liệu giao hàng.
+
+**Kiểm tra code thực tế:**
+- Sales chỉ phát 4 sự kiện: `order.created`, `order.cancelled`, `payment.completed`, `refund.completed`. **Không có sự kiện giao hàng.**
+- `rabbitmq/definitions.json` chỉ nối `order.created` tới `recommendation.events`. `order.cancelled` không tới recommendation.
+- Khi khách tự hủy (`SalesWorkflowRepository.cancelOrder`), payload chỉ gồm `orderId` + `reason`, thiếu `eventId`, `eventType`, `eventVersion`, `traceId`. Kể cả có nối queue thì worker cũng từ chối và đẩy vào DLQ.
+
+**Quyết định:** tính `PURCHASE` **lúc đặt đơn**. Đây là lựa chọn duy nhất khả thi mà không phải sửa service của nhóm khác.
+
+**Hạn chế cần nói khi bảo vệ:** đơn bị hủy vẫn được tính là đã mua, nên độ phổ biến có thể lệch nhẹ. Cách khắc phục (cần phối hợp): Sales phát `order.cancelled` đúng envelope, nối vào `recommendation.events`, và recommendation xóa giỏ tương ứng. Đánh giá offline dùng dữ liệu synthetic nên không bị ảnh hưởng.
+
+### 2. Rate limit riêng cho API ghi hành vi
+
+**Vì sao cần:** API này công khai. Gateway đã giới hạn 150 request/phút cho mỗi IP, nhưng mức đó dùng chung cho mọi API, và một kẻ spam có thể đổi `anonymousId` liên tục để bơm sự kiện giả, làm sai lệch độ phổ biến và CTR.
+
+**Cách làm** (`app/interactions.py`):
+- **Sliding window** 60 giây: mỗi khóa giữ hàng đợi thời điểm các lần gọi; trước khi thêm, bỏ các mốc cũ hơn 60 giây; đủ hạn mức thì trả **429** kèm `Retry-After: 60`.
+- Hai lớp giới hạn:
+  - theo **danh tính** (`userRef` nếu đăng nhập, ngược lại `anonymousId`): 60/phút;
+  - theo **IP**: 300/phút, để chặn kiểu đổi `anonymousId` liên tục. IP lấy từ `X-Forwarded-For`, header mà Gateway luôn ghi đè bằng địa chỉ thật nên client không giả được.
+- Kiểm tra giới hạn **sau** bước làm sạch, nên yêu cầu sai (422) không tiêu hao hạn mức của người dùng thật.
+- Hạn mức đủ rộng cho khách thật: một trang sản phẩm chỉ sinh khoảng 1 VIEW + 4 impression + vài click.
+
+**Giới hạn của cách này:** bộ đếm nằm trong bộ nhớ của tiến trình. Chạy nhiều instance thì mỗi instance đếm riêng; khi đó cần chuyển sang Redis (dự án đã có Redis).
+
+### 3. Kết quả
+
+- `recommendation-service`: **36 passed** (thêm 4 test: giới hạn theo người, theo IP, yêu cầu bị từ chối không tốn hạn mức, cửa sổ trượt giải phóng sau 60 giây).
+- Khởi động lại service: API gợi ý vẫn trả 8 sản phẩm; yêu cầu sai vẫn bị 422 qua Gateway.
+
+---
+
+## [2026-11-16] Gửi hành vi theo lô (batch)
+
+### 1. Nhiệm vụ này để làm gì?
+
+Khi khối "Thường mua cùng nhau" hiện ra, 4 sản phẩm cùng được nhìn thấy **một lúc**, có **cùng `requestId`**. Trước đây storefront gửi **4 request riêng** để báo 4 impression. Mỗi request đi trọn một vòng: Gateway (kiểm JWT, rate limit) → recommendation-service (làm sạch, rate limit) → mở kết nối DB → INSERT. Gộp 4 báo cáo vào 1 request giúp giảm số chuyến mạng và số lần ghi DB từ 4 xuống 1.
+
+Cần phân biệt: **lấy** danh sách gợi ý vốn đã chỉ có 1 request. Phần được tối ưu là chiều **báo cáo ngược lên** "khách đã nhìn thấy".
+
+### 2. Cách làm
+
+**recommendation-service:**
+- API mới `POST /api/v1/recommendations/interactions/batch`, body `{"events": [...]}`.
+- `sanitize_browser_batch` (`app/interactions.py`):
+  - lô có 1–10 sự kiện;
+  - `eventId` không trùng nhau trong lô;
+  - mọi sự kiện cùng một `anonymousId` (một trình duyệt);
+  - từng sự kiện vẫn qua đủ các quy tắc của API đơn lẻ.
+  
+  **Sai một sự kiện thì từ chối cả lô** (all-or-nothing): lô sai thường là lỗi code frontend, nên báo lỗi rõ ràng tốt hơn là ghi một nửa.
+- `save_interactions` (`app/repository.py`): ghi cả lô trong **một kết nối và một transaction**. Mỗi sự kiện vẫn chống trùng riêng theo `eventId`; gửi lại cả lô thì trả `accepted=0, duplicates=n`.
+- Trong DB vẫn là **mỗi sự kiện một dòng**, để tính CTR riêng cho từng sản phẩm và từng vị trí.
+
+**Rate limit đếm theo sự kiện, không theo request:**
+- Nếu đếm theo request, một lô 10 sự kiện chỉ tốn 1 lượt, và kẻ spam gửi được 60 × 10 = 600 sự kiện/phút. Vì vậy lô 4 sự kiện tốn 4 lượt.
+- `SlidingWindowLimiter.allow(key, cost)` kiểm tra "còn đủ chỗ cho cả lô" trước khi trừ: lô không vừa thì không trừ gì.
+- `InteractionRateLimiter.check` kiểm tra **cả lớp IP và lớp người trước**, rồi mới trừ cả hai. Phiên bản trước trừ lớp IP rồi mới xét lớp người, nên khi lớp người từ chối thì lớp IP vẫn bị trừ oan. Lỗi nhỏ này đã được sửa luôn.
+
+**Gateway:** thêm `interactions/batch` vào route của recommendation. Đường dẫn lạ như `/interactions/other` vẫn bị 404.
+
+**Storefront:** hàm `trackInteractions` gửi theo lô và tự chia lô nếu quá 10 sự kiện. `RecommendationSection` dùng hàm này cho impression; click, view, thêm giỏ vẫn gửi đơn lẻ vì chúng xảy ra riêng lẻ.
+
+### 3. Kết quả
+
+- `recommendation-service`: **43 passed** (thêm 7 test: lưu đủ, gửi lại không trùng, all-or-nothing, từ chối lô trộn trình duyệt/trùng `eventId`/quá 10/rỗng, rate limit đếm theo sự kiện, một lớp từ chối thì không trừ lớp kia, `cost` all-or-nothing).
+- Gateway: **15 passed**. Storefront: typecheck và lint đạt. OpenAPI hợp lệ (5 đường dẫn).
+- Thử trình duyệt (`DEMO`): mở trang và cuộn tới gợi ý còn **2 request** (1 VIEW + 1 batch), trước đây là 5. Phản hồi `accepted: 4`; DB có 4 dòng, cùng `requestId`, vị trí 0–3, cùng thời điểm ghi.

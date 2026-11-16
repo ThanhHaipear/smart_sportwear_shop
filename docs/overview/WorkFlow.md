@@ -159,7 +159,7 @@ Chạy toàn bộ ở local: `.\scripts\run\start-all-local.cmd` (chi tiết tro
 
 <sub>Mã nguồn sơ đồ: [`workflow/11-recommendation.mmd`](workflow/11-recommendation.mmd) · Bản vector: [`11-recommendation.svg`](workflow/11-recommendation.svg)</sub>
 
-- Các API public qua Gateway: `GET /api/v1/recommendations/products/{id}`, `GET /api/v1/products/{id}/frequently-bought-together` (storefront đang dùng), `POST /api/v1/recommendations/cart`, `POST /api/v1/recommendations/interactions` (storefront gửi VIEW, ADD_TO_CART, WISHLIST, RECOMMENDATION_IMPRESSION/CLICK; `userRef` lấy từ JWT qua Gateway, không tin client).
+- Các API public qua Gateway: `GET /api/v1/recommendations/products/{id}`, `GET /api/v1/products/{id}/frequently-bought-together` (storefront đang dùng), `POST /api/v1/recommendations/cart`, `POST /api/v1/recommendations/interactions` (storefront gửi VIEW, ADD_TO_CART, WISHLIST, RECOMMENDATION_CLICK; `userRef` lấy từ JWT qua Gateway, không tin client) và `POST /api/v1/recommendations/interactions/batch` (tối đa 10 sự kiện mỗi request; storefront gửi cả 4 impression của khối gợi ý trong một lô). Rate limit: 60 sự kiện/phút/người, 300/phút/IP, đếm theo sự kiện.
 - API nội bộ: `POST /internal/v1/events`, `POST /internal/v1/models/rebuild`, `POST /internal/v1/evaluations`.
 - Service chỉ phục vụ khi `RECOMMENDATION_ENABLED=true`; tắt cờ thì mọi API trả 503. Đây là cách rollback. Storefront bắt mọi lỗi và chỉ ẩn khối gợi ý, trang sản phẩm vẫn hiển thị bình thường.- Các việc còn lại của phần recommendation nằm trong [Mission.md](Mission.md).
 
