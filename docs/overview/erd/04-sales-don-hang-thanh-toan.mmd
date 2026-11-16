@@ -1,0 +1,137 @@
+erDiagram
+    carts {
+        uuid id PK
+        uuid user_ref
+        varchar session_id
+    }
+    cart_items {
+        uuid id PK
+        uuid cart_id FK
+        uuid variant_ref
+        int quantity
+    }
+    orders {
+        uuid id PK
+        varchar order_code UK
+        uuid user_ref
+        uuid reservation_ref
+        jsonb address_snapshot_json
+        numeric subtotal_amount
+        numeric shipping_fee
+        numeric discount_amount
+        numeric total_amount
+        varchar payment_method
+        varchar order_status
+        varchar payment_status
+        varchar data_source
+        timestamptz placed_at
+        timestamptz delivered_at
+        timestamptz return_eligible_until
+        varchar invoice_number UK
+    }
+    order_items {
+        uuid id PK
+        uuid order_id FK
+        uuid product_ref
+        uuid variant_ref
+        varchar product_name_snapshot
+        varchar sku_snapshot
+        numeric unit_price_snapshot
+        int quantity
+        numeric net_line_amount
+        int return_pending_quantity
+        int returned_quantity
+    }
+    order_status_history {
+        uuid id PK
+        uuid order_id FK
+        varchar from_status
+        varchar to_status
+        text reason
+        uuid actor_ref
+    }
+    payments {
+        uuid id PK
+        uuid order_id FK
+        varchar provider
+        varchar transaction_ref
+        numeric amount
+        varchar status
+        timestamptz expires_at
+        timestamptz paid_at
+    }
+    payment_events {
+        uuid id PK
+        uuid payment_id FK
+        char provider_event_key
+        varchar event_type
+        boolean verified
+    }
+    bank_transactions {
+        uuid id PK
+        varchar source
+        varchar external_transaction_id
+        varchar account_number
+        numeric amount
+        text description
+        uuid payment_id FK
+        uuid refund_id FK
+        varchar match_status
+        varchar match_reason
+    }
+    returns {
+        uuid id PK
+        uuid order_id FK
+        uuid user_ref
+        varchar return_code UK
+        varchar status
+        varchar reason
+        uuid handled_by_ref
+    }
+    return_items {
+        uuid id PK
+        uuid return_id FK
+        uuid order_item_id FK
+        int quantity
+        varchar condition_status
+        varchar resolution
+        numeric refund_amount
+    }
+    refunds {
+        uuid id PK
+        uuid order_id FK
+        uuid payment_id FK
+        uuid return_id
+        varchar refund_code UK
+        numeric amount
+        varchar provider
+        varchar status
+        varchar refund_account_number
+        varchar manual_reference
+    }
+    shipments {
+        uuid id PK
+        uuid order_id FK
+        uuid shipping_method_id FK
+        varchar tracking_number
+        varchar status
+    }
+    shipping_methods {
+        uuid id PK
+        varchar code UK
+        numeric base_fee
+    }
+    carts ||--o{ cart_items : "dòng giỏ"
+    orders ||--|{ order_items : "dòng hàng"
+    orders ||--o{ order_status_history : "lịch sử"
+    orders ||--o{ payments : "thanh toán"
+    payments ||--o{ payment_events : "sự kiện"
+    payments |o--o{ bank_transactions : "đối soát SePay"
+    refunds |o--o{ bank_transactions : "đối soát chiều ra"
+    orders ||--o{ returns : "trả hàng"
+    returns ||--|{ return_items : ""
+    order_items ||--o{ return_items : ""
+    orders ||--o{ refunds : "hoàn tiền"
+    payments |o--o{ refunds : ""
+    orders ||--o{ shipments : "vận chuyển"
+    shipping_methods |o--o{ shipments : ""

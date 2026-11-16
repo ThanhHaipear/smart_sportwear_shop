@@ -1,0 +1,94 @@
+erDiagram
+    catalog_products {
+        uuid product_id PK
+        bigint source_version
+        varchar status
+        int available_quantity
+        bigint purchase_count
+        jsonb snapshot
+    }
+    order_baskets {
+        uuid order_id PK
+        varchar user_ref
+        uuid_array product_ids
+        timestamptz occurred_at
+    }
+    user_interactions {
+        uuid event_id PK
+        timestamptz occurred_at
+        varchar user_ref
+        varchar anonymous_id
+        varchar event_type
+        uuid product_id
+        uuid variant_id
+        uuid request_id
+        varchar source
+        varchar data_source
+        jsonb metadata
+    }
+    recommendation_models {
+        uuid id PK
+        varchar algorithm
+        varchar version
+        jsonb config
+        timestamptz training_cutoff_at
+        char training_event_checksum
+        varchar status
+    }
+    association_rules {
+        bigint id PK
+        uuid antecedent_product_id
+        uuid consequent_product_id
+        float support
+        float confidence
+        float lift
+        bigint pair_count
+        varchar model_version
+        varchar status
+    }
+    recommendation_requests {
+        uuid id PK
+        varchar model_version
+        varchar user_ref
+        varchar context_type
+        uuid_array source_product_ids
+        timestamptz served_at
+        int latency_ms
+    }
+    recommendation_items {
+        uuid request_id PK
+        int rank PK
+        uuid product_id
+        float score
+        varchar reason_code
+    }
+    recommendation_logs {
+        uuid event_id PK
+        uuid request_id
+        varchar event_type
+        uuid recommended_product_id
+        int position_index
+        varchar algorithm
+    }
+    evaluation_runs {
+        uuid id PK
+        varchar model_version
+        varchar dataset_version
+        int k
+        float precision_at_k
+        float recall_at_k
+        timestamptz evaluated_at
+    }
+    processed_events {
+        varchar consumer_name PK
+        uuid event_id PK
+        bigint source_version
+    }
+    recommendation_requests ||--o{ recommendation_items : "top-K đã trả"
+    recommendation_models ||..o{ association_rules : "theo version"
+    recommendation_models ||..o{ recommendation_requests : "model_version"
+    order_baskets }o..o{ association_rules : "khai phá luật"
+    catalog_products ||..o{ recommendation_items : "lọc ACTIVE, còn hàng"
+    recommendation_requests ||..o{ user_interactions : "request_id"
+    recommendation_requests ||..o{ recommendation_logs : "request_id"
+    recommendation_models ||..o{ evaluation_runs : "model_version"

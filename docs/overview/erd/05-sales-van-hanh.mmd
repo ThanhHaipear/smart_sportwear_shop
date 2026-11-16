@@ -1,0 +1,71 @@
+erDiagram
+    orders {
+        uuid id PK
+    }
+    refunds {
+        uuid id PK
+    }
+    notifications {
+        uuid id PK
+        uuid user_ref
+        uuid order_id FK
+        varchar type
+        varchar channel
+        varchar recipient
+        varchar subject
+        varchar status
+        timestamptz sent_at
+        timestamptz read_at
+        uuid resend_of_id FK
+        int resend_count
+    }
+    notification_templates {
+        uuid id PK
+        varchar type UK
+        varchar channel
+        varchar subject
+        text body
+    }
+    bank_reconciliation_runs {
+        uuid id PK
+        varchar source
+        varchar status
+        timestamptz from_time
+        timestamptz to_time
+        int records_fetched
+        int records_matched
+        varchar error_code
+    }
+    site_settings {
+        uuid id PK
+        varchar setting_key UK
+        text setting_value
+        varchar value_type
+        boolean is_public
+        uuid updated_by_ref
+    }
+    audit_logs {
+        uuid id PK
+        uuid actor_ref
+        varchar action
+        varchar entity_type
+        varchar entity_id
+        jsonb before_json
+        jsonb after_json
+        varchar ip_address
+    }
+    integration_outbox {
+        uuid id PK
+        varchar event_type
+        varchar aggregate_type
+        uuid aggregate_id
+        jsonb payload
+        varchar status
+        int attempts
+        timestamptz next_attempt_at
+    }
+    orders ||--o{ notifications : "thông báo đơn"
+    notifications |o--o{ notifications : "gửi lại"
+    notification_templates ||..o{ notifications : "theo type"
+    orders ||..o{ integration_outbox : "order.created / cancelled"
+    refunds ||..o{ integration_outbox : "refund.completed"

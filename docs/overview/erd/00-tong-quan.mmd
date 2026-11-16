@@ -1,0 +1,62 @@
+flowchart LR
+    subgraph ID["schema identity (identity-service)"]
+        id_users["users"]
+        id_misc["user_identities · addresses<br/>refresh_tokens · password_reset_tokens"]
+        id_outbox["integration_outbox"]
+    end
+
+    subgraph CAT["schema catalog (catalog-service)"]
+        c_tax["categories · brands · product_types<br/>size_systems · sizes · colors · sports<br/>use_cases · materials · technologies"]
+        c_products["products"]
+        c_variants["product_variants"]
+        c_images["product_images"]
+        c_inv["inventory_reservations (+items)<br/>inventory_transactions"]
+        c_more["wishlists · product_reviews<br/>promotions · catalog_datasets"]
+        c_outbox["integration_outbox"]
+    end
+
+    subgraph SAL["schema sales (sales-service)"]
+        s_carts["carts · cart_items"]
+        s_orders["orders · order_items<br/>order_status_history"]
+        s_pay["payments · payment_events<br/>bank_transactions"]
+        s_ret["returns · return_items · refunds"]
+        s_ops["notifications · shipments<br/>site_settings · audit_logs"]
+        s_outbox["integration_outbox"]
+    end
+
+    subgraph SRCH["schema ai_search (search-service)"]
+        a_docs["search_documents · variant_facets"]
+        a_emb["text_embeddings · image_embeddings"]
+    end
+
+    subgraph REC["schema recommendation (recommendation-service)"]
+        r_read["catalog_products · order_baskets"]
+        r_beh["user_interactions · recommendation_logs"]
+        r_model["recommendation_models · association_rules"]
+        r_req["recommendation_requests · items<br/>evaluation_runs"]
+    end
+
+    subgraph CHAT["schema chatbot (chatbot-service)"]
+        ch["chat_sessions · chat_messages<br/>retrieval_logs"]
+    end
+
+    id_users --> id_misc
+    c_tax --> c_products --> c_variants
+    c_products --> c_images
+    c_variants --> c_inv
+    c_products --> c_more
+    s_carts ~~~ s_orders
+    s_orders --> s_pay
+    s_orders --> s_ret
+    s_orders --> s_ops
+
+    id_users -. "user_ref" .-> s_carts & s_orders & c_more
+    c_variants -. "variant_ref (snapshot qua API)" .-> s_carts & s_orders
+    s_orders -. "reservation_ref" .-> c_inv
+
+    c_outbox == "RabbitMQ catalog.events" ==> a_docs & r_read
+    s_outbox == "RabbitMQ business.events" ==> r_read
+    a_docs --> a_emb
+    r_read --> r_model --> r_req
+    r_beh -.- r_req
+    ch -. "gọi API Search / Catalog" .-> a_docs

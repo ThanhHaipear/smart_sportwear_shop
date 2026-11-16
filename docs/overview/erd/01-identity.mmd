@@ -1,0 +1,63 @@
+erDiagram
+    users {
+        uuid id PK
+        varchar email UK
+        varchar password_hash
+        varchar full_name
+        varchar phone
+        varchar role_code
+        varchar status
+        timestamptz last_login_at
+        timestamptz anonymized_at
+        bigint version
+    }
+    user_identities {
+        uuid id PK
+        uuid user_id FK
+        varchar provider
+        varchar provider_subject
+        varchar provider_email
+        timestamptz last_login_at
+    }
+    addresses {
+        uuid id PK
+        uuid user_id FK
+        varchar receiver_name
+        varchar phone
+        varchar province_name
+        varchar district_name
+        varchar ward_name
+        varchar address_line
+        boolean is_default
+    }
+    refresh_tokens {
+        uuid id PK
+        uuid user_id FK
+        char token_hash UK
+        timestamptz expires_at
+        timestamptz revoked_at
+        varchar revocation_reason
+    }
+    password_reset_tokens {
+        uuid id PK
+        uuid user_id FK
+        char token_hash UK
+        timestamptz expires_at
+        timestamptz used_at
+    }
+    integration_outbox {
+        uuid id PK
+        varchar event_type
+        uuid aggregate_id
+        bigint aggregate_version
+        jsonb payload
+        varchar status
+        int attempts
+        timestamptz next_attempt_at
+        timestamptz published_at
+    }
+    users ||--o{ user_identities : "liên kết Google"
+    users ||--o{ addresses : "sổ địa chỉ"
+    users ||--o{ refresh_tokens : "phiên đăng nhập"
+    users ||--o{ password_reset_tokens : "quên mật khẩu"
+    users ||..o{ integration_outbox : "trigger ghi user.created/updated"

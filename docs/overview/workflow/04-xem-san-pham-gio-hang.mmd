@@ -1,0 +1,28 @@
+sequenceDiagram
+    autonumber
+    participant SF as Storefront
+    participant GW as Gateway
+    participant CA as Catalog :8092
+    participant SA as Sales :8094
+    participant RE as Recommendation :8091
+
+    SF->>GW: GET /api/v1/products?q=&categorySlug=&page=&limit=
+    GW->>CA: chuyển tiếp
+    CA-->>SF: danh sách sản phẩm ACTIVE (lọc tên/mô tả bằng LIKE)
+    SF->>GW: GET /api/v1/products/{slug}
+    GW->>CA: chuyển tiếp
+    CA-->>SF: chi tiết + variants (size_label, color_label, price, tồn khả dụng) + ảnh
+    SF->>GW: GET /api/v1/products/{id}/frequently-bought-together
+    GW->>RE: chuyển tiếp
+    RE-->>SF: gợi ý "thường mua cùng" (luật kết hợp, thiếu thì bù sản phẩm phổ biến)
+
+    SF->>GW: POST /api/v1/cart/items (variantId, quantity)
+    GW->>SA: chuyển tiếp (kèm X-User-Id nếu đã đăng nhập)
+    alt Khách chưa đăng nhập
+        SA->>SA: Đọc cookie session_id, chưa có thì tạo mới (HttpOnly, 30 ngày)
+    end
+    SA->>CA: GET /internal/v1/variants/{id}/sale-snapshot
+    CA-->>SA: tên, SKU, size, màu, giá, trạng thái, available = stock − reserved
+    SA->>SA: Kiểm tra ACTIVE và (số đã có trong giỏ + quantity) ≤ available
+    SA->>SA: UPSERT cart_items (mỗi SKU một dòng), không lưu giá
+    SA-->>SF: giỏ hàng, giá tính lại từ snapshot mới nhất

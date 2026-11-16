@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    participant FE as Storefront / Admin
+    participant GW as Gateway :8085
+    participant SV as Service đích
+
+    FE->>GW: HTTP request + Authorization: Bearer access_token
+    GW->>GW: Gắn/kiểm tra X-Correlation-ID và traceparent
+    GW->>GW: Tìm route trong bảng ROUTES (không khớp → 404, chặn /internal/** và /actuator)
+    alt Đường dẫn cần đăng nhập (/orders, /payments, /checkout, /wishlist, /me, /admin)
+        GW->>GW: Tự kiểm tra chữ ký JWT (HS256), type=access, exp
+        GW-->>FE: 401 nếu token sai hoặc hết hạn
+        GW-->>FE: 403 nếu gọi /admin mà role khác ADMIN
+    end
+    GW->>GW: Rate limit theo IP (mặc định 120 + 30 request/phút) → 429
+    GW->>SV: Chuyển tiếp, xóa header X-User-* do client gửi, gắn X-User-Id và X-User-Role lấy từ JWT
+    SV->>SV: Đọc X-User-Id để biết user, chỉ đọc/ghi schema của mình
+    SV-->>GW: Response
+    GW-->>FE: Response + X-Correlation-ID (lỗi mạng/timeout 10s → 503)
+    Note over FE: api.ts: timeout 20s (đọc) / 60s (ghi).<br/>Gặp 401 thì refresh token một lần duy nhất rồi gửi lại request.

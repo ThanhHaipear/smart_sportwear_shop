@@ -1,0 +1,32 @@
+sequenceDiagram
+    autonumber
+    participant SF as Storefront
+    participant GW as Gateway
+    participant RE as Recommendation :8091
+    participant DB as schema recommendation
+    participant OP as Người vận hành
+
+    Note over OP,DB: Huấn luyện (offline)
+    OP->>RE: scripts/rebuild_model.py association-v1<br/>hoặc POST /internal/v1/models/rebuild
+    RE->>DB: Đọc toàn bộ order_baskets
+    RE->>RE: Đếm cặp sản phẩm, tính support, confidence, lift<br/>giữ luật đạt ngưỡng (0,01 / 0,10 / 1,0)
+    RE->>DB: Luật cũ → ARCHIVED, INSERT association_rules mới (ACTIVE)
+    RE->>DB: UPSERT recommendation_models (ASSOCIATION_RULE, version, ACTIVE)
+
+    Note over SF,DB: Phục vụ (online)
+    SF->>GW: GET /api/v1/products/{id}/frequently-bought-together
+    GW->>RE: chuyển tiếp
+    RE->>DB: association_rules ACTIVE có antecedent = sản phẩm nguồn
+    RE->>RE: rank_rules: mỗi sản phẩm đích giữ luật tốt nhất,<br/>xếp theo confidence → lift → support
+    RE->>DB: catalog_products: chỉ giữ sản phẩm ACTIVE, available_quantity > 0
+    alt Chưa đủ K sản phẩm
+        RE->>DB: Bù bằng sản phẩm phổ biến (purchase_count giảm dần)
+    end
+    RE->>DB: INSERT recommendation_requests + recommendation_items
+    RE-->>SF: requestId, modelVersion, items[product, score, algorithm, reason]
+
+    Note over SF,RE: Ghi hành vi
+    SF->>GW: POST /api/v1/recommendations/interactions<br/>VIEW, ADD_TO_CART, WISHLIST, RECOMMENDATION_IMPRESSION/CLICK (+ requestId)
+    GW->>RE: chuyển tiếp + X-User-Id nếu JWT hợp lệ
+    RE->>RE: Kiểm tra loại sự kiện, dataSource, requestId<br/>userRef lấy từ X-User-Id, occurredAt = giờ server
+    RE->>DB: INSERT user_interactions (chống trùng theo eventId)

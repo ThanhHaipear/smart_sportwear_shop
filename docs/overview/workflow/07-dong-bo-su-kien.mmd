@@ -1,0 +1,33 @@
+sequenceDiagram
+    autonumber
+    participant AD as Admin
+    participant CA as Catalog :8092
+    participant MQ as RabbitMQ
+    participant SW as Search Worker
+    participant RW as Recommendation Worker
+    participant SA as Sales :8094
+
+    AD->>CA: Sửa sản phẩm / variant / tồn kho
+    rect rgb(235,245,255)
+    Note over CA: MỘT transaction
+    CA->>CA: UPDATE products / product_variants
+    CA->>CA: Trigger ghi integration_outbox<br/>(product.reindex.requested, productId, sourceVersion)
+    end
+    loop CatalogOutboxRelay mỗi 1 giây (25 sự kiện, FOR UPDATE SKIP LOCKED)
+        CA->>MQ: publish exchange catalog.events, chờ publisher confirm 5s
+        CA->>CA: PUBLISHED, hoặc attempts+1 và thử lại sau 30s
+    end
+    MQ->>SW: queue search.indexing (routing product.#)
+    SW->>SW: processed_events: đã xử lý thì bỏ qua
+    SW->>CA: GET /internal/v1/products/{id}/index-document
+    SW->>SW: Dựng document_text, embedding văn bản (OpenAI 1536 chiều nếu bật) và ảnh (SigLIP2 768 chiều nếu bật)
+    SW->>SW: UPSERT search_documents, variant_facets, text/image_embeddings
+    MQ->>RW: queue recommendation.events (routing product.#)
+    RW->>CA: GET index-document + GET /api/v1/products/{id} (lấy slug)
+    RW->>RW: Dựng snapshot (giá min/max, tồn của SKU ACTIVE, ảnh đầu), UPSERT catalog_products theo source_version
+
+    SA->>MQ: business.events: order.created, order.cancelled, payment.completed, refund.completed
+    MQ->>RW: order.created (items = variant ID) → recommendation.events
+    RW->>CA: GET /internal/v1/variants/{id}/sale-snapshot → productId
+    RW->>RW: INSERT order_baskets (product ID), purchase_count += 1 nếu đơn mới
+    Note over SW,RW: Xử lý lỗi: retry 30s → 5m → 1h, rồi chuyển vào DLQ

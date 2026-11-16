@@ -1,0 +1,22 @@
+stateDiagram-v2
+    [*] --> PENDING_CONFIRMATION: Khách đặt hàng
+    PENDING_CONFIRMATION --> CONFIRMED: Admin xác nhận
+    CONFIRMED --> PACKING: Đóng gói
+    PACKING --> SHIPPING: Giao cho vận chuyển
+    SHIPPING --> DELIVERED: Giao thành công
+    PENDING_CONFIRMATION --> CANCELLED: Khách / admin hủy, hoặc lỗi giữ hàng
+    CONFIRMED --> CANCELLED: Khách / admin hủy
+    PACKING --> CANCELLED: Khách / admin hủy
+    SHIPPING --> CANCELLED: Khách / admin hủy
+    DELIVERED --> [*]
+    CANCELLED --> [*]
+
+    note right of CANCELLED
+        Đơn đã PAID bị hủy thì tạo refunds
+        (MANUAL, PENDING, ORDER_CANCELLED)
+        và ghi outbox sales.order.cancelled.v1
+    end note
+    note right of DELIVERED
+        Chỉ đơn DELIVERED mới được
+        tạo yêu cầu trả hàng
+    end note

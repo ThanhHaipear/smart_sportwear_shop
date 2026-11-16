@@ -1,0 +1,49 @@
+sequenceDiagram
+    autonumber
+    participant SF as Storefront
+    participant GW as Gateway
+    participant SA as Sales :8094
+    participant ID as Identity
+    participant CA as Catalog
+    participant BK as Ngân hàng + SePay
+
+    SF->>GW: POST /api/v1/checkout/preview
+    GW->>SA: chuyển tiếp
+    SA->>CA: sale-snapshot từng variant
+    SA-->>SF: tạm tính, canCheckout
+
+    SF->>GW: POST /api/v1/orders (addressId, cartItemIds, paymentMethod COD | VIETQR)
+    GW->>SA: chuyển tiếp + X-User-Id
+    SA->>ID: GET /internal/v1/users/{id}/addresses/{addressId}
+    SA->>CA: sale-snapshot từng variant (ACTIVE, đủ hàng?)
+    SA->>CA: POST /internal/v1/inventory/reservations (orderId, idempotencyKey)
+    Note over CA: Khóa variant theo thứ tự UUID (FOR UPDATE),<br/>kiểm tra stock − reserved, reserved += qty
+    rect rgb(235,245,255)
+    Note over SA: MỘT transaction trong schema sales
+    SA->>SA: INSERT orders, order_items (snapshot), payments, order_status_history
+    SA->>SA: INSERT integration_outbox (sales.order.created.v1)
+    end
+    SA->>CA: POST /internal/v1/inventory/reservations/{id}/confirm
+    Note over CA: stock −= qty, reserved −= qty
+    alt Lỗi sau khi đã giữ hàng
+        SA->>CA: DELETE reservation (nhả hàng), đơn chuyển CANCELLED
+    end
+    SA-->>SF: order (PENDING_CONFIRMATION)
+
+    alt COD
+        SF->>SF: Trang cảm ơn (payment UNPAID)
+    else VIETQR
+        SF->>GW: GET /api/v1/payments/vietqr/{paymentId}
+        SA-->>SF: mã QR, số tài khoản, nội dung "DH" + 10 ký tự, hạn thanh toán
+        SF->>BK: Khách chuyển khoản
+        BK->>GW: POST /api/v1/webhooks/sepay (HMAC-SHA256 + timestamp)
+        GW->>SA: chuyển tiếp
+        SA->>SA: Xác minh chữ ký, chống trùng theo (source, external_transaction_id)
+        SA->>SA: INSERT bank_transactions, tìm payment theo mã DH...
+        alt Đúng tài khoản, đúng số tiền, còn hạn
+            SA->>SA: payment PAID, order.payment_status PAID, outbox sales.payment.completed.v1
+        else Sai số tiền / quá hạn / không thấy mã
+            SA->>SA: Giữ giao dịch để đối soát tay (AMOUNT_MISMATCH, LATE_PAYMENT, UNMATCHED...)
+        end
+        SF->>GW: GET /api/v1/payments/{orderId} (poll trạng thái)
+    end

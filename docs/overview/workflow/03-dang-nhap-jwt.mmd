@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    participant SF as Storefront
+    participant GW as Gateway
+    participant ID as Identity :8093
+    participant DB as schema identity
+    participant MQ as RabbitMQ
+
+    SF->>GW: POST /api/v1/auth/login (email, mật khẩu) hoặc /auth/google (ID token)
+    GW->>ID: chuyển tiếp (route công khai)
+    ID->>DB: Tìm users theo email / user_identities theo (GOOGLE, sub)
+    ID->>ID: So khớp BCrypt hoặc xác minh Google ID token
+    ID->>DB: INSERT refresh_tokens (chỉ lưu SHA-256), cập nhật last_login_at
+    ID-->>SF: accessToken (JWT ngắn hạn, có sub + role) + refreshToken
+    SF->>SF: Lưu sss_access_token, sss_refresh_token vào localStorage
+
+    Note over SF,ID: Khi access token hết hạn
+    SF->>GW: POST /api/v1/auth/refresh (refreshToken)
+    GW->>ID: chuyển tiếp
+    ID->>DB: Thu hồi token cũ (ROTATED), tạo token mới
+    Note over ID: Token đã thu hồi mà bị dùng lại → thu hồi mọi phiên của user (REUSE_DETECTED)
+    ID-->>SF: cặp token mới
+
+    Note over DB,MQ: Trigger trên users ghi identity.user.created/updated vào integration_outbox,<br/>IdentityOutboxRelay đẩy lên exchange identity.events

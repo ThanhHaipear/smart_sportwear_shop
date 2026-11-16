@@ -1,0 +1,23 @@
+flowchart TB
+    U["Storefront ChatWidget"] -- "POST /chat/stream (SSE) qua Gateway" --> START
+
+    subgraph LG["LangGraph trong chatbot-service :8002"]
+        START((START)) --> G["input_guard<br/>chặn nội dung không hợp lệ"]
+        G --> C["load_context<br/>lịch sử hội thoại (Redis)"]
+        C --> N["normalize"]
+        N --> I["intent_router"]
+        I --> M["select_mode"]
+        M --> TS["tool_selector<br/>(luật)"]
+        M --> TL["tool_selector_llm<br/>(LLM chọn tool)"]
+        TS & TL --> P["policy_guard<br/>tool cần đăng nhập / cần xác nhận"]
+        P --> X["tool_executor"]
+        X --> A["generate_answer (LLM)"]
+        A --> V["validate_answer"]
+        V --> S["save_result<br/>schema chatbot"]
+        S --> E((END))
+    end
+
+    X -.-> T1["search_products → Search :8090"]
+    X -.-> T2["get_product_detail, lookup_product_by_sku,<br/>recommend_products → Catalog :8092"]
+    X -.-> T3["add_to_cart, get_order_status, cancel_order<br/>→ Gateway :8085 (token của khách)"]
+    X -.-> T4["answer_knowledge, size_advisor<br/>→ thư mục knowledge/ (6 file .md)"]

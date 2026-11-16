@@ -1,0 +1,53 @@
+flowchart TB
+    SF["Storefront<br/>Next.js :3000"]
+    AD["Admin<br/>Next.js :3001"]
+    GW["API Gateway<br/>FastAPI :8085<br/>JWT · CORS · rate limit · correlation ID"]
+
+    subgraph BIZ["Service nghiệp vụ (Spring Boot, Java 21)"]
+        IDS["Identity :8093"]
+        CAS["Catalog :8092"]
+        SAS["Sales :8094"]
+    end
+
+    subgraph AI["Service AI (Python FastAPI)"]
+        CHS["Chatbot :8002<br/>LangGraph + LLM"]
+        SES["Search :8090<br/>+ Search Worker"]
+        RES["Recommendation :8091<br/>+ Recommendation Worker"]
+    end
+
+    subgraph DB["Supabase PostgreSQL — mỗi service một schema"]
+        D1[("identity")]
+        D2[("catalog")]
+        D3[("sales")]
+        D4[("ai_search<br/>pgvector")]
+        D5[("recommendation")]
+        D6[("chatbot")]
+    end
+
+    MQ{{"RabbitMQ :5672<br/>catalog.events · business.events"}}
+    RD[("Redis :6379<br/>phiên chatbot")]
+    SEPAY["SePay webhook<br/>(chuyển khoản VietQR)"]
+
+    SF & AD --> GW
+    SEPAY --> GW
+    GW --> IDS & CAS & SAS & CHS & RES
+
+    IDS --> D1
+    CAS --> D2
+    SAS --> D3
+    SES --> D4
+    RES --> D5
+    CHS --> D6
+    CHS --> RD
+
+    SAS -- "internal API: snapshot giá, giữ/xác nhận tồn" --> CAS
+    SAS -- "internal API: địa chỉ, thông tin user" --> IDS
+    SES -- "internal API: index-document" --> CAS
+    CHS -- "POST /internal/v1/search" --> SES
+    CHS -- "chi tiết sản phẩm" --> CAS
+    CHS -- "giỏ, đơn (qua Gateway, token của khách)" --> GW
+
+    CAS -. "outbox → product.reindex.requested" .-> MQ
+    SAS -. "outbox → order.created, payment.completed..." .-> MQ
+    MQ -. "search.indexing" .-> SES
+    MQ -. "recommendation.events" .-> RES
