@@ -4,7 +4,8 @@ from uuid import uuid4
 from fastapi.testclient import TestClient
 
 from app.config import Settings, get_settings
-from app.dependencies import repository
+from app.dependencies import catalog_client, repository
+from tests.fakes import FakeCatalog
 from app.main import create_app
 from app.repository import MemoryRepository
 from app.schemas import ProductSnapshot
@@ -19,6 +20,7 @@ def client(repo=None):
     app = create_app()
     app.dependency_overrides[get_settings] = settings
     app.dependency_overrides[repository] = lambda: repo or MemoryRepository()
+    app.dependency_overrides[catalog_client] = FakeCatalog
     return TestClient(app)
 
 
@@ -57,10 +59,47 @@ def test_legacy_product_route_keeps_storefront_shape():
 
 def test_interaction_validation_and_duplicate_safety():
     repo = MemoryRepository(); http = client(repo)
-    body = envelope("INTERACTION_RECORDED") | {"anonymousId": "session-1", "productId": str(uuid4()),
+    body = envelope("VIEW") | {"anonymousId": "session-1", "productId": str(uuid4()),
         "source": "STOREFRONT", "dataSource": "REAL", "metadata": {}}
     assert http.post("/api/v1/recommendations/interactions", json=body).json()["accepted"] is True
     assert http.post("/api/v1/recommendations/interactions", json=body).json()["accepted"] is False
+
+
+def browser_event(event_type="VIEW", **fields):
+    return envelope(event_type) | {"anonymousId": "anon-123456", "productId": str(uuid4()),
+                                   "source": "PRODUCT_DETAIL", "dataSource": "REAL", "metadata": {}} | fields
+
+
+def test_interaction_user_comes_from_gateway_header_not_body():
+    repo = MemoryRepository(); http = client(repo); user = str(uuid4())
+    body = browser_event(userRef=str(uuid4()))
+    assert http.post("/api/v1/recommendations/interactions", json=body, headers={"X-User-Id": user}).status_code == 202
+    assert repo.interactions[0].user_ref == user
+
+
+def test_anonymous_interaction_ignores_spoofed_user_ref_and_uses_server_time():
+    repo = MemoryRepository(); http = client(repo)
+    body = browser_event(userRef=str(uuid4()), occurredAt="2020-01-01T00:00:00+00:00")
+    assert http.post("/api/v1/recommendations/interactions", json=body).status_code == 202
+    stored = repo.interactions[0]
+    assert stored.user_ref is None
+    assert stored.occurred_at.year >= 2026
+
+
+def test_browser_cannot_send_purchase_or_synthetic_or_oversized_metadata():
+    http = client()
+    url = "/api/v1/recommendations/interactions"
+    assert http.post(url, json=browser_event("PURCHASE")).status_code == 422
+    assert http.post(url, json=browser_event(dataSource="SYNTHETIC")).status_code == 422
+    assert http.post(url, json=browser_event(metadata={"x": "a" * 3000})).status_code == 422
+    assert http.post(url, json=browser_event(productId=None)).status_code == 422
+
+
+def test_recommendation_feedback_requires_request_id():
+    http = client(); url = "/api/v1/recommendations/interactions"
+    assert http.post(url, json=browser_event("RECOMMENDATION_CLICK")).status_code == 422
+    assert http.post(url, json=browser_event("RECOMMENDATION_CLICK", requestId=str(uuid4()),
+                                             metadata={"position": 0})).status_code == 202
 
 
 def test_evaluation_api_reports_precision_and_recall():

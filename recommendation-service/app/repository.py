@@ -8,6 +8,9 @@ import psycopg
 from app.domain import Rule
 from app.schemas import EvaluationResult, IntegrationEvent, InteractionEvent, ProductSnapshot, RecommendationResponse
 
+# `order_baskets.product_ids` must contain product IDs. Sales publishes variant IDs in
+# ORDER_CREATED, so callers resolve them with app.enrichment.EventEnricher before apply_event.
+
 
 class Repository(Protocol):
     def ping(self) -> bool: ...
@@ -21,6 +24,11 @@ class Repository(Protocol):
     def replace_rules(self, model_version: str, rules: list[Rule]) -> None: ...
     def record_response(self, response: RecommendationResponse) -> None: ...
     def save_evaluation(self, result: EvaluationResult) -> None: ...
+    def has_product(self, product_id: UUID) -> bool: ...
+    def upsert_product(self, product: ProductSnapshot, source_version: int) -> None: ...
+    def basket_rows(self) -> list[tuple[UUID, list[UUID]]]: ...
+    def replace_basket(self, order_id: UUID, product_ids: list[UUID]) -> None: ...
+    def recompute_purchase_counts(self) -> int: ...
 
 
 class MemoryRepository:
@@ -28,6 +36,7 @@ class MemoryRepository:
         self.product_by_id: dict[UUID, ProductSnapshot] = {}
         self.rule_list: list[Rule] = []
         self.popularity: dict[UUID, int] = {}
+        self.versions: dict[UUID, int] = {}
         self.order_baskets: dict[UUID, set[UUID]] = {}
         self.processed: set[UUID] = set()
         self.interactions: list[InteractionEvent] = []
@@ -48,15 +57,31 @@ class MemoryRepository:
         if event.event_id in self.processed: return False
         self.processed.add(event.event_id)
         if event.product:
-            self.product_by_id[event.product.id] = event.product
-        if event.order_id and event.items:
+            self.upsert_product(event.product, event.source_version)
+        if event.order_id and event.items and event.order_id not in self.order_baskets:
             self.order_baskets[event.order_id] = set(event.items)
-            for product_id in set(event.items): self.popularity[product_id] = self.popularity.get(product_id, 0) + 1
+            for product_id in set(event.items):
+                if product_id in self.product_by_id:
+                    self.popularity[product_id] = self.popularity.get(product_id, 0) + 1
         return True
     def baskets(self): return list(self.order_baskets.values())
     def replace_rules(self, model_version, rules): self.rule_list = list(rules)
     def record_response(self, response): self.responses.append(response)
     def save_evaluation(self, result): self.evaluations.append(result)
+    def has_product(self, product_id): return product_id in self.product_by_id
+    def upsert_product(self, product, source_version):
+        if self.versions.get(product.id, -1) <= source_version:
+            self.product_by_id[product.id] = product
+            self.versions[product.id] = source_version
+    def basket_rows(self): return [(order_id, list(items)) for order_id, items in self.order_baskets.items()]
+    def replace_basket(self, order_id, product_ids): self.order_baskets[order_id] = set(product_ids)
+    def recompute_purchase_counts(self):
+        self.popularity = {}
+        for items in self.order_baskets.values():
+            for product_id in items:
+                if product_id in self.product_by_id:
+                    self.popularity[product_id] = self.popularity.get(product_id, 0) + 1
+        return len(self.popularity)
 
 
 class PostgresRepository:
@@ -96,12 +121,36 @@ class PostgresRepository:
             inserted = connection.execute("insert into processed_events(consumer_name,event_id,source_version) values('recommendation-events',%s,%s) on conflict do nothing returning event_id", (event.event_id,event.source_version)).fetchone()
             if not inserted: return False
             if event.product:
-                p = event.product
-                connection.execute("insert into catalog_products(product_id,source_version,status,available_quantity,snapshot) values(%s,%s,%s,%s,%s) on conflict(product_id) do update set source_version=excluded.source_version,status=excluded.status,available_quantity=excluded.available_quantity,snapshot=excluded.snapshot,updated_at=now() where catalog_products.source_version<=excluded.source_version", (p.id,event.source_version,p.status,p.availableQuantity,json.dumps(p.model_dump(mode='json'))))
+                self._upsert_product(connection, event.product, event.source_version)
             if event.order_id and event.items:
-                connection.execute("insert into order_baskets(order_id,user_ref,product_ids,occurred_at) values(%s,%s,%s,%s) on conflict(order_id) do nothing", (event.order_id,event.user_ref,list(set(event.items)),event.occurred_at))
-                connection.execute("update catalog_products set purchase_count=purchase_count+1 where product_id=any(%s)", (list(set(event.items)),))
+                stored = connection.execute("insert into order_baskets(order_id,user_ref,product_ids,occurred_at) values(%s,%s,%s,%s) on conflict(order_id) do nothing returning order_id", (event.order_id,event.user_ref,list(set(event.items)),event.occurred_at)).fetchone()
+                # Count each order once even if Sales republishes it under a new event ID.
+                if stored:
+                    connection.execute("update catalog_products set purchase_count=purchase_count+1 where product_id=any(%s)", (list(set(event.items)),))
         return True
+    @staticmethod
+    def _upsert_product(connection, product, source_version):
+        connection.execute("insert into catalog_products(product_id,source_version,status,available_quantity,snapshot) values(%s,%s,%s,%s,%s) on conflict(product_id) do update set source_version=excluded.source_version,status=excluded.status,available_quantity=excluded.available_quantity,snapshot=excluded.snapshot,updated_at=now() where catalog_products.source_version<=excluded.source_version", (product.id,source_version,product.status,product.availableQuantity,json.dumps(product.model_dump(mode='json'))))
+    def has_product(self, product_id):
+        with self.connection() as connection:
+            return connection.execute("select 1 from catalog_products where product_id=%s", (product_id,)).fetchone() is not None
+    def upsert_product(self, product, source_version):
+        with self.connection() as connection: self._upsert_product(connection, product, source_version)
+    def basket_rows(self):
+        with self.connection() as connection:
+            return [(row[0], list(row[1])) for row in connection.execute("select order_id,product_ids from order_baskets order by occurred_at,order_id").fetchall()]
+    def replace_basket(self, order_id, product_ids):
+        with self.connection() as connection:
+            connection.execute("update order_baskets set product_ids=%s where order_id=%s", (list(product_ids),order_id))
+    def recompute_purchase_counts(self):
+        """Rebuild popularity from stored baskets; used after baskets are repaired."""
+        with self.connection() as connection:
+            return connection.execute("""
+                update catalog_products c set purchase_count=coalesce(x.orders,0)
+                  from (select p.product_id, (select count(*) from order_baskets b where p.product_id=any(b.product_ids)) orders
+                          from catalog_products p) x
+                 where x.product_id=c.product_id and c.purchase_count is distinct from coalesce(x.orders,0)
+            """).rowcount
     def baskets(self):
         with self.connection() as connection: rows = connection.execute("select product_ids from order_baskets").fetchall()
         return [set(row[0]) for row in rows]

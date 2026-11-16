@@ -10,6 +10,9 @@ class ProductSnapshot(BaseModel):
     name: str
     slug: str
     thumbnailUrl: str | None = None
+    # Storefront ProductListItem reads `thumbnail`; keep both names for compatibility.
+    thumbnail: str | None = None
+    productType: str | None = None
     minPrice: float | None = None
     maxPrice: float | None = None
     availableQuantity: int = 0

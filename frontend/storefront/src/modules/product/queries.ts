@@ -56,20 +56,35 @@ export async function fetchProductDetail(slug: string): Promise<ProductDetail | 
 }
 
 type RecommendationResponse = {
+  requestId?: string;
+  modelVersion?: string;
   type: string;
-  items: Array<{ product: ProductListItem }>;
+  items: Array<{ product: ProductListItem; algorithm?: string }>;
 };
 
-// "Frequently bought together" (association-rules engine). Returns the recommended
-// products for a given product; empty on any error so the section just hides.
-export async function fetchFrequentlyBoughtTogether(productId: string): Promise<ProductListItem[]> {
+export interface RecommendationResult {
+  // Identifies this served list; impression/click events must carry it to measure CTR per model.
+  requestId: string | null;
+  modelVersion: string | null;
+  items: Array<{ product: ProductListItem; algorithm: string | null }>;
+}
+
+// "Frequently bought together" (association rules + popularity fallback). Empty on any
+// error so the section just hides.
+export async function fetchFrequentlyBoughtTogether(productId: string): Promise<RecommendationResult> {
   try {
     const result = await apiFetch<RecommendationResponse>(endpoints.frequentlyBoughtTogether(productId), {
       cache: "no-store"
     });
-    return (result.data?.items ?? []).map((item) => item.product).filter(Boolean);
+    return {
+      requestId: result.data?.requestId ?? null,
+      modelVersion: result.data?.modelVersion ?? null,
+      items: (result.data?.items ?? [])
+        .filter((item) => item?.product)
+        .map((item) => ({ product: item.product, algorithm: item.algorithm ?? null })),
+    };
   } catch {
-    return [];
+    return { requestId: null, modelVersion: null, items: [] };
   }
 }
 

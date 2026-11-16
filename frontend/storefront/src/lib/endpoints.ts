@@ -3,6 +3,7 @@ export const endpoints = {
   hybridProducts: "/api/v1/products/hybrid-search",
   product: (slugOrId: string) => `/api/v1/products/${slugOrId}`,
   frequentlyBoughtTogether: (productId: string) => `/api/v1/products/${productId}/frequently-bought-together`,
+  recommendationInteractions: "/api/v1/recommendations/interactions",
   productSuggestions: "/api/v1/products/search-suggestions",
   visualSearch: "/api/v1/products/search-by-image",
   visualSearchStatus: "/api/v1/visual-search/status",

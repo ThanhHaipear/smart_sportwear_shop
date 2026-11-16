@@ -1,10 +1,12 @@
+from datetime import datetime, timezone
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query, Response, status
+from fastapi import APIRouter, Depends, Header, Query, Response, status
 
 from app.config import Settings, get_settings
-from app.dependencies import internal_auth, repository, service
+from app.dependencies import enricher, internal_auth, repository, service
 from app.domain import precision_recall_at_k
+from app.interactions import sanitize_browser_interaction
 from app.schemas import (CartRecommendationRequest, EvaluationRequest, EvaluationResult,
                          IntegrationEvent, InteractionEvent, RecommendationResponse)
 
@@ -27,13 +29,16 @@ def cart_recommendations(body: CartRecommendationRequest, engine=Depends(service
 
 
 @router.post("/api/v1/recommendations/interactions", status_code=202, tags=["interactions"])
-def record_interaction(body: InteractionEvent, repo=Depends(repository)):
-    return {"accepted": repo.save_interaction(body), "eventId": str(body.event_id)}
+def record_interaction(body: InteractionEvent, repo=Depends(repository),
+                       x_user_id: str | None = Header(default=None, alias="X-User-Id")):
+    """Public browser endpoint. Identity comes only from the Gateway-verified JWT header."""
+    event = sanitize_browser_interaction(body, x_user_id, datetime.now(timezone.utc))
+    return {"accepted": repo.save_interaction(event), "eventId": str(event.event_id)}
 
 
 @router.post("/internal/v1/events", dependencies=[Depends(internal_auth)], tags=["internal"])
-def consume_event(body: IntegrationEvent, repo=Depends(repository)):
-    return {"processed": repo.apply_event(body), "eventId": str(body.event_id)}
+def consume_event(body: IntegrationEvent, repo=Depends(repository), events=Depends(enricher)):
+    return {"processed": repo.apply_event(events.enrich(body)), "eventId": str(body.event_id)}
 
 
 @router.post("/internal/v1/models/rebuild", dependencies=[Depends(internal_auth)], tags=["internal"])

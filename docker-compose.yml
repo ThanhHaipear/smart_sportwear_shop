@@ -98,6 +98,8 @@ services:
       RECOMMENDATION_ENABLED: ${RECOMMENDATION_ENABLED:-false}
       RECOMMENDATION_DATABASE_URL: ${RECOMMENDATION_DATABASE_URL:-}
       RECOMMENDATION_INTERNAL_TOKEN: ${RECOMMENDATION_INTERNAL_TOKEN:-}
+      CATALOG_API_URL: http://catalog-service:8092
+      CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
       RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-visual_search}:${RABBITMQ_DEFAULT_PASS:-change-me}@rabbitmq:5672/
     depends_on:
       rabbitmq:
@@ -112,6 +114,8 @@ services:
     environment:
       RECOMMENDATION_ENABLED: ${RECOMMENDATION_ENABLED:-false}
       RECOMMENDATION_DATABASE_URL: ${RECOMMENDATION_DATABASE_URL:-}
+      CATALOG_API_URL: http://catalog-service:8092
+      CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
       RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER:-visual_search}:${RABBITMQ_DEFAULT_PASS:-change-me}@rabbitmq:5672/
     depends_on:
       rabbitmq:

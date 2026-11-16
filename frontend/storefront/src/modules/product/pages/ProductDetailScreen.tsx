@@ -6,6 +6,8 @@ import { ProductDetailInteractive } from "@/modules/product/components/ProductDe
 import { mapProductDetail, mapProductListItem } from "@/modules/product/mappers";
 import { fetchFrequentlyBoughtTogether, fetchProductDetail } from "@/modules/product/queries";
 import type { ProductDetail } from "@/modules/product/types";
+import { ProductViewTracker } from "@/modules/recommendation/ProductViewTracker";
+import { RecommendationSection } from "@/modules/recommendation/RecommendationSection";
 
 export async function ProductDetailScreen({
   params,
@@ -17,10 +19,14 @@ export async function ProductDetailScreen({
   if (!rawProduct) notFound();
 
   const product = mapProductDetail(rawProduct);
-  const boughtTogether = (await fetchFrequentlyBoughtTogether(rawProduct.id)).map(mapProductListItem);
+  const recommendation = await fetchFrequentlyBoughtTogether(rawProduct.id);
+  const boughtTogether = recommendation.items
+    .slice(0, 4)
+    .map((item) => ({ product: mapProductListItem(item.product), algorithm: item.algorithm }));
 
   return (
     <main className="site-main page-below-header flex-1 border-b border-ivy-hairline">
+      <ProductViewTracker productId={product.id} />
       <Breadcrumb items={[{ label: "Trang chủ", href: "/" }, { label: product.name }]} />
       <div className="mx-auto max-w-[1368px] px-4 pb-16 md:px-0">
         <ProductDetailInteractive
@@ -40,18 +46,13 @@ export async function ProductDetailScreen({
             <ProductDescriptionTabs description={product.description} attributes={rawProduct.attributes} />
           </div>
         )}
-        {boughtTogether.length > 0 && (
-          <section className="mt-16">
-            <h2 className="mb-8 text-center text-[20px] font-semibold uppercase tracking-[3px] text-ivy-dark md:text-[42px]">
-              Thường mua cùng nhau
-            </h2>
-            <div className="grid grid-cols-2 gap-7 sm:grid-cols-3 lg:grid-cols-4">
-              {boughtTogether.slice(0, 4).map((item) => (
-                <ProductCard key={item.id} product={item} />
-              ))}
-            </div>
-          </section>
-        )}
+        <RecommendationSection
+          title="Thường mua cùng nhau"
+          sourceProductId={product.id}
+          requestId={recommendation.requestId}
+          modelVersion={recommendation.modelVersion}
+          items={boughtTogether}
+        />
         {product.relatedProducts.length > 0 && (
           <section className="mt-16">
             <h2 className="mb-8 text-center text-[20px] font-semibold uppercase tracking-[3px] text-ivy-dark md:text-[42px]">
