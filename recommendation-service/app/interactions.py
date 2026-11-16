@@ -7,6 +7,9 @@ from __future__ import annotations
 
 import json
 import re
+import threading
+import time
+from collections import defaultdict, deque
 from datetime import datetime
 
 from fastapi import HTTPException, status
@@ -55,3 +58,86 @@ def sanitize_browser_interaction(event: InteractionEvent, verified_user_id: str 
     # Never trust a browser-supplied userRef; use server time so temporal splits are not
     # affected by client clocks.
     return event.model_copy(update={"user_ref": user_ref, "occurred_at": received_at})
+
+
+MAX_BATCH_EVENTS = 10
+
+
+def sanitize_browser_batch(events: list[InteractionEvent], verified_user_id: str | None,
+                           received_at: datetime) -> list[InteractionEvent]:
+    """Validate a batch all-or-nothing: one invalid event rejects the whole batch.
+
+    A batch must come from a single browser (same anonymousId) so it is charged to one identity
+    in the rate limiter and cannot mix behaviour of several visitors.
+    """
+    if not 1 <= len(events) <= MAX_BATCH_EVENTS:
+        raise _reject(f"a batch must contain 1 to {MAX_BATCH_EVENTS} events")
+    if len({event.event_id for event in events}) != len(events):
+        raise _reject("eventId must be unique within a batch")
+    if len({event.anonymous_id for event in events}) != 1:
+        raise _reject("all events in a batch must share the same anonymousId")
+    return [sanitize_browser_interaction(event, verified_user_id, received_at) for event in events]
+
+
+class SlidingWindowLimiter:
+    """Allow at most `limit` hits per key in the last `window` seconds.
+
+    State is in memory per API process. That is enough for the single local instance; a
+    multi-instance deployment would need a shared store (e.g. Redis).
+    """
+
+    def __init__(self, limit: int, window_seconds: float = 60.0, clock=time.monotonic):
+        self.limit = limit
+        self.window = window_seconds
+        self.clock = clock
+        self.hits: dict[str, deque[float]] = defaultdict(deque)
+        self.lock = threading.Lock()
+
+    # The two methods below assume the caller holds `self.lock`.
+    def _has_room(self, key: str, cost: int, now: float) -> bool:
+        bucket = self.hits[key]
+        while bucket and bucket[0] <= now - self.window:
+            bucket.popleft()
+        return len(bucket) + cost <= self.limit
+
+    def _consume(self, key: str, cost: int, now: float) -> None:
+        self.hits[key].extend([now] * cost)
+        if len(self.hits) > 50_000:  # drop idle keys so memory stays bounded
+            for idle in [k for k, v in self.hits.items() if not v or v[-1] <= now - self.window]:
+                del self.hits[idle]
+
+    def allow(self, key: str, cost: int = 1) -> bool:
+        """Consume `cost` hits if they fit in the window; otherwise consume nothing."""
+        now = self.clock()
+        with self.lock:
+            if not self._has_room(key, cost, now):
+                return False
+            self._consume(key, cost, now)
+            return True
+
+
+class InteractionRateLimiter:
+    """Separate limits per behaviour identity and per client IP (set by the Gateway).
+
+    Limits count EVENTS, not HTTP requests: a batch of 4 impressions costs 4. Counting
+    requests would let one client send `limit x batch size` events per minute.
+    """
+
+    def __init__(self, per_identity: int, per_ip: int, clock=time.monotonic):
+        self.identity = SlidingWindowLimiter(per_identity, clock=clock)
+        self.ip = SlidingWindowLimiter(per_ip, clock=clock)
+        self.clock = clock
+        self.lock = threading.Lock()
+
+    def check(self, events: InteractionEvent | list[InteractionEvent], client_ip: str | None) -> None:
+        batch = events if isinstance(events, list) else [events]
+        first = batch[0]  # a batch is validated to belong to one browser/user
+        identity = f"user:{first.user_ref}" if first.user_ref else f"anon:{first.anonymous_id}"
+        ip_key, cost, now = f"ip:{client_ip or 'unknown'}", len(batch), self.clock()
+        # Check both limits before consuming either, so a rejection never charges the other one.
+        with self.lock, self.ip.lock, self.identity.lock:
+            if not (self.ip._has_room(ip_key, cost, now) and self.identity._has_room(identity, cost, now)):
+                raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                                    detail="Too many interaction events", headers={"Retry-After": "60"})
+            self.ip._consume(ip_key, cost, now)
+            self.identity._consume(identity, cost, now)

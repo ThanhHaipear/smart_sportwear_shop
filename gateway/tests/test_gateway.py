@@ -99,6 +99,10 @@ def test_catalog_reads_cut_over_without_capturing_recommendation_route():
     assert hosts[-1] == "catalog-service"
     assert client.get("/api/v1/products/00000000-0000-0000-0000-000000000000/frequently-bought-together").status_code == 200
     assert hosts[-1] == "recommendation-service"
+    for path in ("/api/v1/recommendations/interactions", "/api/v1/recommendations/interactions/batch"):
+        assert client.post(path, json={}).status_code == 200
+        assert hosts[-1] == "recommendation-service"
+    assert client.post("/api/v1/recommendations/interactions/other", json={}).status_code == 404
 
 
 def test_gateway_strips_spoofed_identity_and_injects_verified_claims():

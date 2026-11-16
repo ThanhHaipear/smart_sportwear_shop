@@ -69,6 +69,13 @@ class InteractionEvent(BaseModel):
         return self
 
 
+class InteractionBatch(BaseModel):
+    """Several browser events sent in one request (e.g. all impressions of one recommendation list)."""
+    model_config = ConfigDict(extra="forbid")
+    # The upper bound is enforced in app.interactions so the API returns a clear 422 message.
+    events: list[InteractionEvent] = Field(min_length=1, max_length=50)
+
+
 class IntegrationEvent(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
     event_id: UUID = Field(alias="eventId")

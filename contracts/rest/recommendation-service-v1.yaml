@@ -48,6 +48,42 @@ paths:
             schema: { type: object, additionalProperties: true }
       responses:
         '202': { description: Accepted or already processed }
+        '422': { description: Event type, data source or identity not accepted from browsers }
+        '429': { description: Rate limit exceeded (counted per event, per identity and per IP) }
+  /api/v1/recommendations/interactions/batch:
+    post:
+      summary: Record up to 10 interaction events from one browser in a single request
+      description: >
+        All-or-nothing validation; every event must share the same anonymousId and have a unique
+        eventId. Events are stored idempotently in one transaction. The rate limit is charged per event.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [events]
+              additionalProperties: false
+              properties:
+                events:
+                  type: array
+                  minItems: 1
+                  maxItems: 10
+                  items: { type: object, additionalProperties: true }
+      responses:
+        '202':
+          description: Batch stored; duplicates are counted but not stored again
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [accepted, duplicates, eventIds]
+                properties:
+                  accepted: { type: integer, minimum: 0 }
+                  duplicates: { type: integer, minimum: 0 }
+                  eventIds: { type: array, items: { type: string, format: uuid } }
+        '422': { description: Invalid batch (any invalid event rejects the whole batch) }
+        '429': { description: Rate limit exceeded }
   /internal/v1/events:
     post:
       summary: Apply a versioned integration event idempotently

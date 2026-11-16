@@ -65,7 +65,7 @@ ROUTES = (
     Route(frozenset({"POST"}), re.compile(r"^/chat(?:/stream)?$"), "chatbot_upstream"),
     Route(frozenset({"GET"}), re.compile(r"^/api/v1/recommendations/products/[0-9a-fA-F-]+$"), "recommendation_upstream"),
     Route(frozenset({"GET"}), re.compile(r"^/api/v1/products/[0-9a-fA-F-]+/frequently-bought-together$"), "recommendation_upstream"),
-    Route(frozenset({"POST"}), re.compile(r"^/api/v1/recommendations/(cart|interactions)$"), "recommendation_upstream"),
+    Route(frozenset({"POST"}), re.compile(r"^/api/v1/recommendations/(cart|interactions|interactions/batch)$"), "recommendation_upstream"),
     Route(frozenset({"GET"}), re.compile(r"^/api/v1/(categories(?:/.*)?|brands|promotions/active)$"), "catalog_upstream"),
     Route(frozenset({"GET", "POST"}), re.compile(r"^/api/v1/products/[^/]+/reviews$"), "catalog_upstream"),
     Route(frozenset({"GET"}), re.compile(r"^/api/v1/products(?:/.*)?$"), "catalog_upstream"),

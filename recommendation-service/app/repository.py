@@ -19,6 +19,7 @@ class Repository(Protocol):
     def popular(self, excluded: set[UUID], limit: int) -> list[ProductSnapshot]: ...
     def products(self, product_ids: list[UUID]) -> list[ProductSnapshot]: ...
     def save_interaction(self, event: InteractionEvent) -> bool: ...
+    def save_interactions(self, events: list[InteractionEvent]) -> int: ...
     def apply_event(self, event: IntegrationEvent) -> bool: ...
     def baskets(self) -> list[set[UUID]]: ...
     def replace_rules(self, model_version: str, rules: list[Rule]) -> None: ...
@@ -53,6 +54,7 @@ class MemoryRepository:
     def save_interaction(self, event):
         if event.event_id in self.processed: return False
         self.processed.add(event.event_id); self.interactions.append(event); return True
+    def save_interactions(self, events): return sum(1 for event in events if self.save_interaction(event))
     def apply_event(self, event):
         if event.event_id in self.processed: return False
         self.processed.add(event.event_id)
@@ -111,11 +113,17 @@ class PostgresRepository:
             rows = connection.execute("select antecedent_product_id,consequent_product_id,support,confidence,lift,pair_count,model_version from association_rules where status='ACTIVE' and antecedent_product_id=any(%s) order by confidence desc,lift desc", (list(sources),)).fetchall()
         return [Rule(*row) for row in rows]
     def save_interaction(self, event):
+        return self.save_interactions([event]) == 1
+    def save_interactions(self, events):
+        """Store a batch in ONE connection/transaction; returns how many were new (not duplicates)."""
+        accepted = 0
         with self.connection() as connection:
-            inserted = connection.execute("insert into processed_events(consumer_name,event_id) values('interaction-api',%s) on conflict do nothing returning event_id", (event.event_id,)).fetchone()
-            if not inserted: return False
-            connection.execute("insert into user_interactions(event_id,occurred_at,user_ref,anonymous_id,event_type,product_id,variant_id,request_id,source,data_source,metadata) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (event.event_id,event.occurred_at,event.user_ref,event.anonymous_id,event.event_type,event.product_id,event.variant_id,event.request_id,event.source,event.data_source,json.dumps(event.metadata)))
-        return True
+            for event in events:
+                inserted = connection.execute("insert into processed_events(consumer_name,event_id) values('interaction-api',%s) on conflict do nothing returning event_id", (event.event_id,)).fetchone()
+                if not inserted: continue
+                connection.execute("insert into user_interactions(event_id,occurred_at,user_ref,anonymous_id,event_type,product_id,variant_id,request_id,source,data_source,metadata) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (event.event_id,event.occurred_at,event.user_ref,event.anonymous_id,event.event_type,event.product_id,event.variant_id,event.request_id,event.source,event.data_source,json.dumps(event.metadata)))
+                accepted += 1
+        return accepted
     def apply_event(self, event):
         with self.connection() as connection:
             inserted = connection.execute("insert into processed_events(consumer_name,event_id,source_version) values('recommendation-events',%s,%s) on conflict do nothing returning event_id", (event.event_id,event.source_version)).fetchone()

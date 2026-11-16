@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     recommendation_fallback_mode: Literal["POPULAR", "EMPTY"] = "POPULAR"
     recommendation_default_limit: int = Field(default=8, ge=1, le=20)
     recommendation_max_limit: int = Field(default=20, ge=1, le=100)
+    # Public interaction endpoint limits (sliding 60 s window, per API process).
+    interaction_rate_limit_per_identity: int = Field(default=60, ge=1)
+    interaction_rate_limit_per_ip: int = Field(default=300, ge=1)
     catalog_api_url: str = "http://127.0.0.1:8092"
     catalog_service_token: str = ""
     catalog_request_timeout_seconds: float = Field(default=5, gt=0, le=30)

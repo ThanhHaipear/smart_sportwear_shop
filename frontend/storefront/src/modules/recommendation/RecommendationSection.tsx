@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { ProductCard } from "@/modules/product/components/ProductCard";
 import type { Product } from "@/modules/product/types";
-import { trackInteraction } from "@/modules/recommendation/tracking";
+import { trackInteraction, trackInteractions } from "@/modules/recommendation/tracking";
 
 export interface RecommendedProduct {
   product: Product;
@@ -30,14 +30,15 @@ export function RecommendationSection({ title, sourceProductId, requestId, model
     const report = () => {
       if (reported.current) return;
       reported.current = true;
-      items.forEach((item, position) =>
-        trackInteraction({
-          eventType: "RECOMMENDATION_IMPRESSION",
+      // All cards become visible together: send their impressions in ONE batch request.
+      trackInteractions(
+        items.map((item, position) => ({
+          eventType: "RECOMMENDATION_IMPRESSION" as const,
           productId: item.product.id,
           requestId,
-          source: "PRODUCT_DETAIL_FBT",
+          source: "PRODUCT_DETAIL_FBT" as const,
           metadata: { position, algorithm: item.algorithm, modelVersion, sourceProductId },
-        }),
+        })),
       );
     };
     if (typeof IntersectionObserver === "undefined") {

@@ -61,16 +61,15 @@ export function getAnonymousId(): string {
   return created;
 }
 
-export function trackInteraction(input: InteractionInput): void {
-  if (!TRACKING_ENABLED || typeof window === "undefined") return;
+function buildEvent(input: InteractionInput, anonymousId: string) {
   const eventId = newId();
-  const body = {
+  return {
     eventId,
     eventType: input.eventType,
     eventVersion: 1,
     occurredAt: new Date().toISOString(),
     traceId: eventId,
-    anonymousId: getAnonymousId(),
+    anonymousId,
     productId: input.productId,
     variantId: input.variantId ?? null,
     requestId: input.requestId ?? null,
@@ -78,13 +77,39 @@ export function trackInteraction(input: InteractionInput): void {
     dataSource: DATA_SOURCE,
     metadata: input.metadata ?? {},
   };
+}
+
+function send(path: string, body: unknown): void {
   // keepalive lets a click event finish even when the browser navigates away immediately.
-  void apiFetch(endpoints.recommendationInteractions, {
+  void apiFetch(path, {
     method: "POST",
     body: JSON.stringify(body),
     keepalive: true,
     cache: "no-store",
   }).catch(() => undefined);
+}
+
+export function trackInteraction(input: InteractionInput): void {
+  if (!TRACKING_ENABLED || typeof window === "undefined") return;
+  send(endpoints.recommendationInteractions, buildEvent(input, getAnonymousId()));
+}
+
+// Server limit per batch (recommendation-service MAX_BATCH_EVENTS).
+const MAX_BATCH_EVENTS = 10;
+
+// Sends several events that happen together (e.g. all impressions of one recommendation list)
+// in one request instead of one request per event. Each event is still stored as its own row.
+export function trackInteractions(inputs: InteractionInput[]): void {
+  if (!TRACKING_ENABLED || typeof window === "undefined" || inputs.length === 0) return;
+  if (inputs.length === 1) {
+    trackInteraction(inputs[0]);
+    return;
+  }
+  const anonymousId = getAnonymousId();
+  for (let start = 0; start < inputs.length; start += MAX_BATCH_EVENTS) {
+    const events = inputs.slice(start, start + MAX_BATCH_EVENTS).map((input) => buildEvent(input, anonymousId));
+    send(endpoints.recommendationInteractionsBatch, { events });
+  }
 }
 
 // VIEW is recorded at most once per product per browser every 10 minutes to avoid refresh spam.
