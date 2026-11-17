@@ -1,7 +1,9 @@
+import time
+from datetime import datetime, timezone
 from uuid import UUID
 
 from app.content import MODES, build_items, item_scores, price_thresholds
-from app.domain import mine_association_rules, rank_rules
+from app.domain import ModelMetadata, mine_association_rules, rank_rules, training_checksum
 from app.repository import Repository
 from app.schemas import ProductSnapshot, RecommendationItem, RecommendationResponse
 
@@ -12,6 +14,11 @@ def content_row(product: ProductSnapshot) -> dict:
             "category": str(product.categoryId) if product.categoryId else None,
             "brand": str(product.brandId) if product.brandId else None, "gender": product.gender,
             "sportCodes": product.sportCodes, "colorFamilies": product.colorFamilies, "minPrice": product.minPrice}
+
+
+# Thresholds chosen on DEV in phase 6 (evidence/recommendation/synthetic-v1-dev-phase6-20261117.json).
+DEFAULT_MIN_SUPPORT = 0.005
+DEFAULT_MIN_CONFIDENCE = 0.05
 
 
 class RecommendationService:
@@ -28,7 +35,9 @@ class RecommendationService:
         self.fallback_mode = fallback_mode
         self.content_mode = content_mode
 
-    def recommend(self, sources: set[UUID], limit: int, kind: str) -> RecommendationResponse:
+    def recommend(self, sources: set[UUID], limit: int, kind: str,
+                  user_ref: str | None = None) -> RecommendationResponse:
+        started = time.perf_counter()
         rules = rank_rules(self.repository.rules_for(sources), sources, limit)
         products = {product.id: product for product in self.repository.products([rule.consequent for rule in rules])}
         items = [RecommendationItem(product=products[rule.consequent], score=rule.confidence * rule.lift,
@@ -45,7 +54,9 @@ class RecommendationService:
         response = RecommendationResponse(sourceProductId=next(iter(sources)) if len(sources)==1 else None,
             sourceProductIds=sorted(sources, key=str), type=kind,
             modelVersion=next(iter(versions)) if len(versions)==1 else "popularity-v1", items=items[:limit])
-        self.repository.record_response(response)
+        # Latency covers ranking only (rules, content, popularity), not the logging write itself.
+        latency_ms = round((time.perf_counter() - started) * 1000)
+        self.repository.record_response(response, latency_ms, user_ref)
         return response
 
     def _content(self, sources: set[UUID], excluded: set[UUID], limit: int) -> list[RecommendationItem]:
@@ -61,7 +72,17 @@ class RecommendationService:
         return [RecommendationItem(product=by_id[pid], score=scores[pid], algorithm="SIMILAR_CONTENT",
                                    reason="Matches the sport and style of the product") for pid in ranked]
 
-    def rebuild(self, model_version: str, min_support=.01, min_confidence=.1, min_lift=1.0) -> int:
-        rules = mine_association_rules(self.repository.baskets(), model_version, min_support, min_confidence, min_lift)
-        self.repository.replace_rules(model_version, rules)
+    def rebuild(self, model_version: str, min_support: float = DEFAULT_MIN_SUPPORT,
+                min_confidence: float = DEFAULT_MIN_CONFIDENCE, min_lift: float = 1.0,
+                cutoff: datetime | None = None) -> int:
+        """Mine rules from baskets strictly before `cutoff` (default: now) and record how the model was built."""
+        cutoff = cutoff or datetime.now(timezone.utc)
+        rows = self.repository.baskets_before(cutoff)
+        rules = mine_association_rules([set(row.product_ids) for row in rows], model_version, min_support,
+                                       min_confidence, min_lift)
+        metadata = ModelMetadata("ASSOCIATION_RULE", {
+            "minSupport": min_support, "minConfidence": min_confidence, "minLift": min_lift,
+            "baskets": len(rows), "rules": len(rules), "pairs": "1->1, every pair in a basket",
+            "defaultsChosenOn": "synthetic-v1 DEV, phase 6"}, cutoff, training_checksum(rows))
+        self.repository.replace_rules(model_version, rules, metadata)
         return len(rules)

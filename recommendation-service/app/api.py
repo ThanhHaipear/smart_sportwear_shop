@@ -9,6 +9,7 @@ from app.domain import precision_recall_at_k
 from app.interactions import sanitize_browser_batch, sanitize_browser_interaction
 from app.schemas import (CartRecommendationRequest, EvaluationRequest, EvaluationResult,
                          IntegrationEvent, InteractionBatch, InteractionEvent, RecommendationResponse)
+from app.service import DEFAULT_MIN_CONFIDENCE, DEFAULT_MIN_SUPPORT
 
 router = APIRouter()
 
@@ -19,13 +20,24 @@ def resolved_limit(value: int | None, settings: Settings) -> int:
 
 @router.get("/api/v1/recommendations/products/{product_id}", response_model=RecommendationResponse, tags=["recommendations"])
 @router.get("/api/v1/products/{product_id}/frequently-bought-together", response_model=RecommendationResponse, tags=["compatibility"])
-def product_recommendations(product_id: UUID, limit: int | None = Query(default=None, ge=1), engine=Depends(service), settings: Settings = Depends(get_settings)):
-    return engine.recommend({product_id}, resolved_limit(limit, settings), "FREQUENTLY_BOUGHT_TOGETHER")
+def product_recommendations(product_id: UUID, limit: int | None = Query(default=None, ge=1), engine=Depends(service),
+                            settings: Settings = Depends(get_settings),
+                            x_user_id: str | None = Header(default=None, alias="X-User-Id")):
+    # X-User-Id is set by the Gateway after JWT verification; it is only logged, never echoed back.
+    return engine.recommend({product_id}, resolved_limit(limit, settings), "FREQUENTLY_BOUGHT_TOGETHER",
+                            user_ref(x_user_id))
 
 
 @router.post("/api/v1/recommendations/cart", response_model=RecommendationResponse, tags=["recommendations"])
-def cart_recommendations(body: CartRecommendationRequest, engine=Depends(service), settings: Settings = Depends(get_settings)):
-    return engine.recommend(set(body.sourceProductIds), resolved_limit(body.limit, settings), "CART_RECOMMENDATION")
+def cart_recommendations(body: CartRecommendationRequest, engine=Depends(service), settings: Settings = Depends(get_settings),
+                         x_user_id: str | None = Header(default=None, alias="X-User-Id")):
+    return engine.recommend(set(body.sourceProductIds), resolved_limit(body.limit, settings), "CART_RECOMMENDATION",
+                            user_ref(x_user_id))
+
+
+def user_ref(x_user_id: str | None) -> str | None:
+    value = (x_user_id or "").strip()
+    return value[:100] if value else None
 
 
 @router.post("/api/v1/recommendations/interactions", status_code=202, tags=["interactions"])
@@ -65,8 +77,9 @@ def consume_event(body: IntegrationEvent, repo=Depends(repository), events=Depen
 
 
 @router.post("/internal/v1/models/rebuild", dependencies=[Depends(internal_auth)], tags=["internal"])
-def rebuild_model(modelVersion: str, minSupport: float = Query(.01, ge=0, le=1),
-                  minConfidence: float = Query(.1, ge=0, le=1), minLift: float = Query(1, ge=0),
+def rebuild_model(modelVersion: str = Query(min_length=1, max_length=50),
+                  minSupport: float = Query(DEFAULT_MIN_SUPPORT, ge=0, le=1),
+                  minConfidence: float = Query(DEFAULT_MIN_CONFIDENCE, ge=0, le=1), minLift: float = Query(1, ge=0),
                   engine=Depends(service)):
     return {"modelVersion": modelVersion, "ruleCount": engine.rebuild(modelVersion, minSupport, minConfidence, minLift)}
 

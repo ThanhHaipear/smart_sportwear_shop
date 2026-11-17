@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from uuid import UUID, uuid4
 
 import httpx
@@ -114,7 +114,8 @@ def test_rules_mined_from_resolved_baskets_serve_product_recommendations():
         repo.apply_event(enricher.enrich(event("ORDER_CREATED", orderId=str(uuid4()),
                                                items=[str(shoes_v), str(socks_v)])))
     engine = RecommendationService(repo)
-    engine.rebuild("association-test", min_lift=0)
+    # Rules use baskets strictly before the cutoff; leave a margin over the coarse Windows clock.
+    engine.rebuild("association-test", min_lift=0, cutoff=datetime.now(timezone.utc) + timedelta(seconds=1))
     response = engine.recommend({shoes}, 4, "FREQUENTLY_BOUGHT_TOGETHER")
     assert [item.product.id for item in response.items] == [socks]
     assert response.items[0].algorithm == "ASSOCIATION_RULE"

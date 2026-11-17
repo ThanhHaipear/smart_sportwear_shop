@@ -1,11 +1,13 @@
 import json
 from contextlib import contextmanager
+from datetime import datetime, timezone
 from typing import Protocol
 from uuid import UUID
 
 import psycopg
+from psycopg.types.json import Jsonb
 
-from app.domain import Rule
+from app.domain import BasketRow, ModelMetadata, Rule
 from app.schemas import EvaluationResult, IntegrationEvent, InteractionEvent, ProductSnapshot, RecommendationResponse
 
 # `order_baskets.product_ids` must contain product IDs. Sales publishes variant IDs in
@@ -24,8 +26,10 @@ class Repository(Protocol):
     def save_interactions(self, events: list[InteractionEvent]) -> int: ...
     def apply_event(self, event: IntegrationEvent) -> bool: ...
     def baskets(self) -> list[set[UUID]]: ...
-    def replace_rules(self, model_version: str, rules: list[Rule]) -> None: ...
-    def record_response(self, response: RecommendationResponse) -> None: ...
+    def baskets_before(self, cutoff: datetime) -> list[BasketRow]: ...
+    def replace_rules(self, model_version: str, rules: list[Rule], metadata: ModelMetadata) -> None: ...
+    def record_response(self, response: RecommendationResponse, latency_ms: int | None = None,
+                        user_ref: str | None = None) -> None: ...
     def save_evaluation(self, result: EvaluationResult) -> None: ...
     def has_product(self, product_id: UUID) -> bool: ...
     def upsert_product(self, product: ProductSnapshot, source_version: int) -> None: ...
@@ -41,6 +45,9 @@ class MemoryRepository:
         self.popularity: dict[UUID, int] = {}
         self.versions: dict[UUID, int] = {}
         self.order_baskets: dict[UUID, set[UUID]] = {}
+        self.basket_times: dict[UUID, datetime] = {}
+        self.models: dict[tuple[str, str], dict] = {}
+        self.request_log: list[dict] = []
         self.processed: set[UUID] = set()
         self.interactions: list[InteractionEvent] = []
         self.responses: list[RecommendationResponse] = []
@@ -66,13 +73,25 @@ class MemoryRepository:
             self.upsert_product(event.product, event.source_version)
         if event.order_id and event.items and event.order_id not in self.order_baskets:
             self.order_baskets[event.order_id] = set(event.items)
+            self.basket_times[event.order_id] = event.occurred_at
             for product_id in set(event.items):
                 if product_id in self.product_by_id:
                     self.popularity[product_id] = self.popularity.get(product_id, 0) + 1
         return True
     def baskets(self): return list(self.order_baskets.values())
-    def replace_rules(self, model_version, rules): self.rule_list = list(rules)
-    def record_response(self, response): self.responses.append(response)
+    def baskets_before(self, cutoff):
+        epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+        rows = [BasketRow(order_id, tuple(sorted(items, key=str)), self.basket_times.get(order_id, epoch))
+                for order_id, items in self.order_baskets.items()]
+        return [row for row in rows if row.occurred_at < cutoff]
+    def replace_rules(self, model_version, rules, metadata):
+        self.rule_list = list(rules)
+        for key, model in self.models.items():
+            if key[0] == metadata.algorithm: model["status"] = "ARCHIVED"
+        self.models[(metadata.algorithm, model_version)] = {"status": "ACTIVE", "metadata": metadata}
+    def record_response(self, response, latency_ms=None, user_ref=None):
+        self.responses.append(response)
+        self.request_log.append({"requestId": response.requestId, "latencyMs": latency_ms, "userRef": user_ref})
     def save_evaluation(self, result): self.evaluations.append(result)
     def has_product(self, product_id): return product_id in self.product_by_id
     def upsert_product(self, product, source_version):
@@ -174,15 +193,21 @@ class PostgresRepository:
     def baskets(self):
         with self.connection() as connection: rows = connection.execute("select product_ids from order_baskets").fetchall()
         return [set(row[0]) for row in rows]
-    def replace_rules(self, model_version, rules):
+    def baskets_before(self, cutoff):
+        with self.connection() as connection:
+            rows = connection.execute("select order_id,product_ids,occurred_at from order_baskets where occurred_at < %s", (cutoff,)).fetchall()
+        return [BasketRow(row[0], tuple(sorted(row[1], key=str)), row[2]) for row in rows]
+    def replace_rules(self, model_version, rules, metadata):
+        # One transaction: archive the previous rules and model rows, then store the new ones.
         with self.connection() as connection:
             connection.execute("update association_rules set status='ARCHIVED' where status='ACTIVE'")
+            connection.execute("update recommendation_models set status='ARCHIVED' where algorithm=%s and status='ACTIVE' and version<>%s", (metadata.algorithm, model_version))
             for rule in rules:
                 connection.execute("insert into association_rules(antecedent_product_id,consequent_product_id,support,confidence,lift,pair_count,model_version,status) values(%s,%s,%s,%s,%s,%s,%s,'ACTIVE')", (rule.antecedent,rule.consequent,rule.support,rule.confidence,rule.lift,rule.pair_count,model_version))
-            connection.execute("insert into recommendation_models(algorithm,version,status,trained_at) values('ASSOCIATION_RULE',%s,'ACTIVE',now()) on conflict(algorithm,version) do update set status='ACTIVE',trained_at=excluded.trained_at", (model_version,))
-    def record_response(self, response):
+            connection.execute("insert into recommendation_models(algorithm,version,config,training_cutoff_at,training_event_checksum,status,trained_at) values(%s,%s,%s,%s,%s,'ACTIVE',now()) on conflict(algorithm,version) do update set config=excluded.config,training_cutoff_at=excluded.training_cutoff_at,training_event_checksum=excluded.training_event_checksum,status='ACTIVE',trained_at=excluded.trained_at", (metadata.algorithm, model_version, Jsonb(metadata.config), metadata.training_cutoff_at, metadata.training_event_checksum))
+    def record_response(self, response, latency_ms=None, user_ref=None):
         with self.connection() as connection:
-            connection.execute("insert into recommendation_requests(id,model_version,context_type,source_product_ids) values(%s,%s,%s,%s)", (response.requestId,response.modelVersion,response.type,response.sourceProductIds))
+            connection.execute("insert into recommendation_requests(id,model_version,user_ref,context_type,source_product_ids,latency_ms) values(%s,%s,%s,%s,%s,%s)", (response.requestId,response.modelVersion,user_ref,response.type,response.sourceProductIds,latency_ms))
             for rank, item in enumerate(response.items, 1):
                 connection.execute("insert into recommendation_items(request_id,rank,product_id,score,reason_code) values(%s,%s,%s,%s,%s)", (response.requestId,rank,item.product.id,item.score,item.algorithm))
     def save_evaluation(self, result):

@@ -40,10 +40,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app.content import (  # noqa: E402
     build_items, item_scores, layered, price_thresholds, profile_scores, user_profile)
 from app.domain import (  # noqa: E402
-    ALTERNATIVE_EVENT_WEIGHTS, EVENT_WEIGHTS, WeightedEvent, mine_association_rules, popularity_scores,
+    ALTERNATIVE_EVENT_WEIGHTS, BasketRow, training_checksum, EVENT_WEIGHTS, WeightedEvent, mine_association_rules, popularity_scores,
     rank_by_score, rank_rules)
 from app.metrics import METRICS, bootstrap_ci, case_metrics, coverage_at_k, grouped_mean, mean  # noqa: E402
-from app.offline_split import before, parse  # noqa: E402
+from app.offline_split import before, checksum, parse  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 K_VALUES = (5, 10)
@@ -290,6 +290,14 @@ def phase7(data: TrainingData, cutoff: datetime, split: dict, snapshot: dict, ph
     return results, selection
 
 
+def training_fingerprint(dataset: Path, cutoff: datetime) -> dict:
+    interactions = before(read_jsonl(dataset / "interactions.jsonl"), cutoff)
+    baskets = before(read_jsonl(dataset / "order_baskets.jsonl"), cutoff)
+    rows = [BasketRow(b["orderId"], tuple(b["productIds"]), parse(b["occurredAt"])) for b in baskets]
+    return {"cutoff": cutoff.strftime("%Y-%m-%dT%H:%M:%SZ"), "basketChecksum": training_checksum(rows),
+            "interactionChecksum": checksum(sorted(interactions, key=lambda row: row["eventId"]))}
+
+
 def latest_report(dataset: str, split: str, stage: str) -> Path:
     reports = sorted((REPO_ROOT / "evidence/recommendation").glob(f"{dataset}-{split}-{stage}-*.json"))
     if not reports:
@@ -362,6 +370,8 @@ def main() -> int:
                    "candidates": {"count": split["candidates"]["count"], "sha256": split["candidates"]["sha256"]},
                    "outputs": {name: output["sha256"] for name, output in generator_manifest["outputs"].items()}},
         "trainingRows": {"events": len(data.events), "baskets": len(data.baskets)},
+        # Same basket checksum as recommendation_models.training_event_checksum in the service (design 7.8).
+        "training": training_fingerprint(dataset, cutoff),
         "protocol": {"kValues": list(K_VALUES), "seed": SEED, "bootstrap": {"resamples": 1000, "level": 0.95,
                      "unit": {"fbt": "orderId", "home": "userRef"}}, "dcg": "linear gain, log2(i + 1) discount"},
         "selection": selection,

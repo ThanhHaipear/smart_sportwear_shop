@@ -1,8 +1,10 @@
+import hashlib
+import json
 import math
 from collections import Counter, defaultdict
 from collections.abc import Hashable
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from itertools import combinations
 from uuid import UUID
 
@@ -16,6 +18,32 @@ class Rule:
     lift: float
     pair_count: int
     model_version: str
+
+
+@dataclass(frozen=True)
+class BasketRow:
+    order_id: Hashable
+    product_ids: tuple
+    occurred_at: datetime
+
+
+@dataclass(frozen=True)
+class ModelMetadata:
+    """What `recommendation_models` stores so a model can be traced back to its exact training data."""
+    algorithm: str
+    config: dict
+    training_cutoff_at: datetime
+    training_event_checksum: str
+
+
+def training_checksum(rows: list[BasketRow]) -> str:
+    """SHA-256 of the training baskets in a canonical form (sorted orders, sorted products, UTC seconds)."""
+    canonical = sorted(
+        ({"orderId": str(row.order_id), "productIds": sorted(str(p) for p in row.product_ids),
+          "occurredAt": row.occurred_at.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
+         for row in rows), key=lambda item: item["orderId"])
+    payload = json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def mine_association_rules(
