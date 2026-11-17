@@ -103,6 +103,7 @@ class RecommendedProductItem(BaseModel):
 class RecommendationResult(BaseModel):
     items: list[RecommendedProductItem]
     basedOnProductId: str | None = None
+    requestId: str | None = None        # recommendation-service request, for tracing
     mode: str                           # "related" | "need_based"
     error: str | None = None
 
