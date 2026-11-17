@@ -1187,3 +1187,38 @@ Trước khi làm content-based, cần biết **mốc phải vượt**: random (
 - Bộ trọng số thay thế cho cùng thứ hạng với bộ mặc định.
 - Ngưỡng tốt nhất của luật kết hợp nằm ở biên thấp nhất của lưới. Không mở rộng lưới sau khi xem kết quả, theo đúng protocol.
 - `recommendation-service`: **72 passed**. Báo cáo: `evidence/recommendation/synthetic-v1-dev-phase6-20261117.json` (commit code `bc59db03`), chạy hết 7 giây.
+
+---
+
+## [2026-11-17] Giai đoạn 7: Content-based và hybrid theo tầng
+
+### 1. Nhiệm vụ này để làm gì?
+
+Luật kết hợp không giúp được sản phẩm mới, vì chưa ai mua nên chưa có luật. Content-based gợi ý theo **thuộc tính** sản phẩm nên chạy được ngay với sản phẩm mới. Sau đó ghép ba thuật toán thành hybrid theo tầng, và đưa vào service thật.
+
+### 2. Cách làm
+
+- `app/content.py` (hàm thuần, dùng chung offline và service):
+  - Mỗi sản phẩm là tập đặc trưng theo nhóm: môn, giới tính, loại, danh mục, thương hiệu, khoảng giá (tứ phân vị giá ứng viên), màu.
+  - Độ tương đồng = trung bình có trọng số của Jaccard từng nhóm (môn 3, giới tính 2, loại/danh mục/thương hiệu/giá 1, màu 0,5).
+  - `SIMILAR` dùng mọi nhóm. `COMPLEMENT` bỏ nhóm loại và danh mục, chỉ giữ sản phẩm **khác loại** với nguồn.
+  - Hồ sơ user: cộng trọng số sự kiện (có suy giảm 14 ngày) vào từng đặc trưng của sản phẩm user tương tác, chuẩn hóa tổng bằng 1.
+  - `layered`: ghép nhiều danh sách, tầng sau chỉ lấp chỗ trống.
+- `RecommendationService`: luật kết hợp → content → popularity, mỗi sản phẩm ghi `algorithm` theo tầng (`ASSOCIATION_RULE`, `SIMILAR_CONTENT`, `POPULARITY`). Bật/tắt bằng `RECOMMENDATION_CONTENT_MODE` (`OFF`, `SIMILAR`, `COMPLEMENT`).
+- Snapshot sản phẩm giữ thêm `gender`, `sportCodes`, `colorFamilies` từ Catalog.
+- `scripts/evaluate_offline.py --stage phase7`: đọc lựa chọn của Giai đoạn 6 từ báo cáo DEV, không chọn lại.
+
+### 3. Kiến thức liên quan (dùng khi bảo vệ)
+
+- **Jaccard:** `|A ∩ B| / |A ∪ B|`. Hai sản phẩm cùng môn chạy bộ thì Jaccard nhóm môn = 1.
+- **Vì sao COMPLEMENT thắng SIMILAR?** Khách mua giày chạy bộ sẽ mua kèm tất, quần chạy bộ, không mua thêm một đôi giày. Gợi ý "giống" phù hợp với khối "sản phẩm tương tự", không phù hợp với "thường mua cùng".
+- **Vì sao bỏ sản phẩm có điểm 0?** Catalog thật đang thiếu thuộc tính. Nếu giữ điểm 0, content sẽ đưa lên sản phẩm bất kỳ (xếp theo id) và chen trước popularity.
+- **Vì sao không làm hybrid trộn α?** Thiết kế chỉ cho làm khi hybrid theo tầng không vượt được thuật toán đơn lẻ tốt nhất. Trên DEV hybrid đạt 0,471, luật kết hợp thuần 0,453, nên điều kiện không xảy ra.
+
+### 4. Kết quả
+
+- DEV, FBT NDCG@5: popularity 0,329; content similar 0,266; content complement 0,365; luật thuần 0,453; luật → popularity 0,479; hybrid 0,471.
+- DEV, HOME NDCG@5: popularity 0,290; hybrid hồ sơ → popularity 0,320 (user warm 0,337 so với 0,303). Coverage tăng từ 0,375 lên 1,0.
+- Nhận xét trung thực: trên DEV, content lấp chỗ trống kém popularity một chút. Lợi ích chính của content là ca cold, chỉ có trong TEST.
+- **Khi chạy thật hiện tại**, Catalog chưa có giới tính/môn/màu nên content chỉ so được danh mục, thương hiệu, khoảng giá. Có test bảo đảm nếu không có đặc trưng chung thì vị trí đó rơi xuống popularity.
+- `recommendation-service`: **85 passed** (thêm 10 test content, 2 test service, 1 test snapshot).

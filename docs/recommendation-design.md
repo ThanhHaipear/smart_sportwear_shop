@@ -137,7 +137,7 @@ FBT/CART: association rules → content-complement → popularity
 HOME:     user-profile content (nếu user warm) → popularity
 ```
 
-Tầng sau chỉ lấp các vị trí còn trống. Mỗi item ghi `reason_code` theo tầng đã sinh ra nó: `ASSOCIATION_RULE`, `SIMILAR_CONTENT`, `POPULARITY`. Đây là mở rộng trực tiếp của `RecommendationService.recommend` hiện tại (đang là luật → popularity).
+Tầng sau chỉ lấp các vị trí còn trống. Tầng content chỉ trả sản phẩm có độ tương đồng > 0: điểm 0 không phải bằng chứng, nên vị trí đó để cho popularity. Mỗi item ghi `reason_code` theo tầng đã sinh ra nó: `ASSOCIATION_RULE`, `SIMILAR_CONTENT`, `POPULARITY`. Đây là mở rộng trực tiếp của `RecommendationService.recommend` hiện tại (đang là luật → popularity).
 
 Hybrid trộn điểm (`α · content + (1 − α) · popularity`, α ∈ {0,25; 0,5; 0,75} chọn trên DEV) là phần **tùy chọn**. Chỉ làm nếu hybrid theo tầng không vượt được thuật toán đơn lẻ tốt nhất.
 
@@ -323,3 +323,4 @@ Không chờ Dũng và Hải review. Các điểm dưới đây được chốt 
 | 17/11/2026 | 1.0 | Chốt, bỏ vòng review; mục 11 chuyển từ câu hỏi thành quyết định |
 | 17/11/2026 | 1.1 | Thêm giới hạn 8–9 sau khi sinh `synthetic-v1` (không đổi protocol) |
 | 17/11/2026 | 1.2 | Mục 7.7: chọn cấu hình trên DEV không có ca cold (ghi trước khi chạy mô hình) |
+| 17/11/2026 | 1.3 | Mục 5.5: content bỏ sản phẩm có độ tương đồng 0 (trên DEV không làm đổi kết quả nào) |

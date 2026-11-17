@@ -167,13 +167,30 @@
 
 ### Giai đoạn 7 — Content-based
 
-- [ ] **(phối hợp với Dũng/Hải)** Chọn cách lấy độ tương đồng nội dung mà không vi phạm ranh giới service:
-  - Cách A: Search service mở API nội bộ "sản phẩm tương tự" (cosine trên `ai_search.text_embeddings`). Recommendation gọi API này.
-  - Cách B: Recommendation tự tính đặc trưng từ snapshot (danh mục, thương hiệu, `sport_codes`, giới tính, loại) bằng Jaccard/one-hot, không cần embedding.
-  - Cách C: Recommendation tự sinh embedding vào schema của mình (tốn chi phí, trùng việc với Search).
-- [ ] Item–item cho `FREQUENTLY_BOUGHT_TOGETHER` khi không có luật; user-profile cho `HOME`.
-- [ ] Cold-start: user mới → popularity; sản phẩm mới → content-based.
-- [ ] (Tùy chọn) Hybrid `α·content + (1−α)·popularity`, chọn α trên DEV.
+- [x] Chọn **cách B** (đã chốt ở thiết kế mục 11): đặc trưng thuộc tính từ snapshot, Jaccard có trọng số theo nhóm (`app/content.py`). Snapshot giữ thêm `gender`, `sportCodes`, `colorFamilies`, nhưng Catalog đang trả rỗng nên khi chạy thật hiện chỉ so được danh mục, thương hiệu, khoảng giá.
+- [x] Item–item cho `FREQUENTLY_BOUGHT_TOGETHER`: hai biến thể `SIMILAR` / `COMPLEMENT`, chọn **COMPLEMENT** trên DEV. User-profile cho `HOME`.
+- [x] Cold-start: hybrid theo tầng luật → content → popularity (`RecommendationService`, `RECOMMENDATION_CONTENT_MODE=COMPLEMENT`); HOME hồ sơ → popularity. Content chỉ trả sản phẩm có độ tương đồng > 0.
+- [x] (Tùy chọn) Hybrid trộn điểm α: **không làm**, vì hybrid theo tầng đã ≥ thuật toán đơn lẻ tốt nhất trên DEV (điều kiện ở thiết kế mục 5.5).
+
+**Kết quả DEV** (`evidence/recommendation/synthetic-v1-dev-phase7-20261117.json`):
+
+| FBT (125 ca warm) | P@5 | R@5 | HR@5 | NDCG@5 (CI 95%) |
+|---|---|---|---|---|
+| Popularity | 0,179 | 0,415 | 0,608 | 0,329 (0,24–0,42) |
+| Content similar | 0,136 | 0,407 | 0,584 | 0,266 (0,21–0,34) |
+| Content complement (**chọn**) | 0,187 | 0,510 | 0,704 | 0,365 (0,29–0,45) |
+| Luật kết hợp thuần | 0,203 | 0,568 | 0,728 | 0,453 (0,37–0,54) |
+| Luật → popularity | 0,226 | 0,617 | 0,792 | 0,479 (0,40–0,56) |
+| Hybrid luật → content → popularity | 0,216 | 0,606 | 0,768 | 0,471 (0,39–0,55) |
+
+| HOME (102 user) | NDCG@5 tất cả | warm (88) | cold (14) | Coverage@5 |
+|---|---|---|---|---|
+| Popularity | 0,290 | 0,303 | 0,211 | 0,375 |
+| Hồ sơ nội dung | 0,291 | 0,337 | 0 | 1,00 |
+| Hybrid hồ sơ → popularity | 0,320 | 0,337 | 0,211 | 1,00 |
+
+- Content complement vượt popularity, similar thì không: "thường mua cùng" cần đồ **khác loại** cùng môn.
+- Trên DEV (toàn ca warm), content lấp chỗ trống kém popularity một chút (0,471 so với 0,479, khoảng tin cậy chồng nhau). Lợi ích của content dự kiến nằm ở ca cold, chỉ đo được trên TEST.
 
 ### Giai đoạn 8 — Ghi lại model và kết quả
 
@@ -261,7 +278,7 @@ Gợi ý sản phẩm **giống về nội dung** với sản phẩm khách thí
 | Ưu điểm | Nhược điểm |
 |---|---|
 | Xử lý cold-start item, giải thích được, hợp với catalog nhỏ | Chỉ gợi ý đồ giống nhau, không học được "mua kèm" |
-
+    
 ### C.6. Các phương pháp khác (để trả lời "tại sao không dùng?")
 
 - **Collaborative filtering** (Matrix Factorization, ALS): cần nhiều dữ liệu hành vi; catalog nhỏ, dữ liệu thưa thì dễ overfit. `plan.md` 8.3: *"Không triển khai collaborative filtering phức tạp khi dữ liệu hành vi chưa đủ."*
