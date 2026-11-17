@@ -295,6 +295,8 @@ Hàm thuật toán là **hàm thuần** (nhận dữ liệu, trả danh sách), 
 5. Đơn bị hủy vẫn được tính là đã mua (mục 4).
 6. Bản sao catalog trong Recommendation có độ trễ (eventual consistency). Sales vẫn kiểm tra tồn kho thật khi đặt hàng.
 7. Content-based dùng thuộc tính, không dùng mô tả văn bản hay ảnh (cách B, mục 5.4).
+8. Catalog hiện không lưu `productType`, `gender`, `sportCodes`, `colorFamily`. Dữ liệu offline lấy các trường này từ manifest import catalog. Content-based chỉ chạy được trên website sau khi Catalog sửa dữ liệu.
+9. Để có sản phẩm cold trong TEST, `synthetic-v1` cho 12/36 sản phẩm ra mắt đầu tuần 8. Catalog lúc train chỉ có 24 sản phẩm, và 6 sản phẩm mới ngoài áo đấu đều là unisex.
 
 ---
 
@@ -318,3 +320,4 @@ Không chờ Dũng và Hải review. Các điểm dưới đây được chốt 
 |---|---|---|
 | 17/11/2026 | 0.1 | Bản nháp đầu tiên |
 | 17/11/2026 | 1.0 | Chốt, bỏ vòng review; mục 11 chuyển từ câu hỏi thành quyết định |
+| 17/11/2026 | 1.1 | Thêm giới hạn 8–9 sau khi sinh `synthetic-v1` (không đổi protocol) |

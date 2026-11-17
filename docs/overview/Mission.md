@@ -119,14 +119,15 @@
 
 ### Giai đoạn 4 — Dữ liệu hành vi synthetic
 
-- [ ] Script `recommendation-service/scripts/generate_synthetic_interactions.py`:
-  - [ ] Seed cố định; 200–500 user giả có persona (môn, giới tính, loại sản phẩm, khoảng giá) + 20–30% nhiễu.
-  - [ ] Phễu `VIEW → ADD_TO_CART → PURCHASE`, khoảng 8 tuần, có timestamp.
-  - [ ] Sinh cả **giỏ đơn hàng** (nhiều sản phẩm/đơn) để luật kết hợp có dữ liệu.
-  - [ ] Chỉ dùng sản phẩm có trong catalog thật (lấy danh sách qua API Catalog).
-- [ ] Xuất manifest + SHA-256 vào `evidence/recommendation/`, ghi `data_source = SYNTHETIC`.
-- [ ] **Không** ghi dữ liệu synthetic vào Supabase dùng chung nếu nhóm chưa đồng ý; ưu tiên chạy đánh giá trên file.
-- [ ] Chốt tham số bộ sinh trước khi xem kết quả mô hình.
+- [x] Script `recommendation-service/scripts/generate_synthetic_interactions.py` (17/11):
+  - [x] Seed cố định `20261117`; 500 user giả có persona (môn, giới tính, ngân sách, 40% trung thành thương hiệu); nhiễu 25% lượt chọn (thực tế 21,5%).
+  - [x] Phễu `VIEW → ADD_TO_CART → PURCHASE`, 8 tuần từ `2026-09-01`, có timestamp.
+  - [x] Sinh cả **giỏ đơn hàng**: 623 đơn, 324 đơn có ≥ 2 sản phẩm (cơ chế mua kèm theo bảng `complements`).
+  - [x] Chỉ dùng sản phẩm có trong catalog thật: `scripts/export_catalog_snapshot.py` xuất 36 sản phẩm qua API Catalog thành `evidence/recommendation/catalog-snapshot-20261117.json`. **Catalog trả `productType`, `gender`, `sportCodes`, `colorFamily` rỗng**, nên các trường này được bổ sung từ `catalog/*/manifest.json` theo slug, có ghi nguồn từng sản phẩm.
+- [x] Manifest + SHA-256: `evidence/recommendation/synthetic-v1-manifest.json`, `dataSource = SYNTHETIC`. Dữ liệu ở `datasets/recommendation/synthetic-v1/` (`.gitattributes` chặn đổi xuống dòng để checksum không lệch).
+- [x] **Không** ghi dữ liệu synthetic vào Supabase; đánh giá chạy trên file.
+- [x] Chốt tham số bộ sinh trước khi xem kết quả mô hình (`config.json`, commit `ce11b991`). Phương án S1: 12 sản phẩm ra mắt ngày 49 (6 áo World Cup + 6 sản phẩm pilot unisex mỗi loại một món) để tuần TEST có 39 ca nguồn cold (S0 chỉ 6 áo thì có 8 ca, dưới ngưỡng 30).
+- [ ] **(phối hợp, ngoài phạm vi)** Catalog lưu lại `productType`, `gender`, `sportCodes`, `colorFamily` vào DB. Cần cho content-based khi chạy thật và cho bộ lọc của Search.
 
 ### Giai đoạn 5 — Chia dữ liệu theo thời gian
 

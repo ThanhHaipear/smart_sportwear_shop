@@ -1087,3 +1087,33 @@ Cần phân biệt: **lấy** danh sách gợi ý vốn đã chỉ có 1 request
 - `recommendation-service`: **43 passed** (thêm 7 test: lưu đủ, gửi lại không trùng, all-or-nothing, từ chối lô trộn trình duyệt/trùng `eventId`/quá 10/rỗng, rate limit đếm theo sự kiện, một lớp từ chối thì không trừ lớp kia, `cost` all-or-nothing).
 - Gateway: **15 passed**. Storefront: typecheck và lint đạt. OpenAPI hợp lệ (5 đường dẫn).
 - Thử trình duyệt (`DEMO`): mở trang và cuộn tới gợi ý còn **2 request** (1 VIEW + 1 batch), trước đây là 5. Phản hồi `accepted: 4`; DB có 4 dòng, cùng `requestId`, vị trí 0–3, cùng thời điểm ghi.
+
+---
+
+## [2026-11-17] Giai đoạn 3–4: Chốt thiết kế và sinh dữ liệu hành vi synthetic
+
+### 1. Nhiệm vụ này để làm gì?
+
+Muốn so sánh popularity, luật kết hợp và content-based thì cần dữ liệu hành vi đủ nhiều và có thời gian. Dữ liệu thật hiện gần như bằng 0. Theo `docs/recommendation-design.md` (chốt v1.0, không qua review), dữ liệu đánh giá là **synthetic**, sinh từ catalog thật, và **tham số phải chốt trước khi chạy bất kỳ mô hình nào**.
+
+### 2. Cách làm
+
+1. **Đóng băng catalog** (`scripts/export_catalog_snapshot.py`): gọi API Catalog lấy 36 sản phẩm `ACTIVE`, ghi ra `evidence/recommendation/catalog-snapshot-20261117.json` kèm SHA-256. Bộ sinh và bộ đánh giá chỉ đọc file này, nên catalog thật có đổi thì kết quả cũ vẫn tái lập được.
+2. **Phát hiện Catalog thiếu thuộc tính:** cả 36 sản phẩm có `productType`, `gender`, `sportCodes`, `colorFamily` rỗng, dù manifest import (`catalog/pilot-v1`, `catalog/world-cup-2026-store-staging-v1`) có đủ. Script bổ sung các trường rỗng từ manifest theo slug và ghi `attributeSource` cho từng sản phẩm. Thử bỏ phần bổ sung thì bộ sinh từ chối chạy ngay ở sản phẩm đầu tiên. Việc sửa dữ liệu Catalog thuộc service khác, chưa làm.
+3. **Bộ sinh** (`scripts/generate_synthetic_interactions.py`, tham số ở `datasets/recommendation/synthetic-v1/config.json`): 500 user có persona, mô phỏng phiên xem → thêm giỏ → đặt đơn trong 8 tuần, trộn bốn cơ chế (persona, mua kèm, độ phổ biến ẩn, nhiễu) để không thuật toán nào thắng sẵn. Không ghi vào DB.
+4. **Sửa trước khi chốt:** bản đầu dồn khách mới vào 2 tuần cuối với số phiên đầy đủ, nên tuần TEST có lượng sự kiện gấp đôi. Đã sửa để số phiên tỷ lệ với thời gian hoạt động.
+5. **Chọn phương án sản phẩm mới:** chỉ có 6 áo World Cup ra mắt đầu tuần 8 thì tuần TEST có 8 ca nguồn cold, dưới ngưỡng 30. Đã thử offline hai phương án và chọn **S1**: thêm 6 sản phẩm pilot unisex (mỗi loại một món, giá vừa). Kết quả là 39 ca cold và 106 ca warm.
+
+### 3. Kiến thức liên quan (dùng khi bảo vệ)
+
+- **Vì sao đóng băng catalog?** Kết quả đánh giá phải gắn với đúng tập sản phẩm lúc chạy; checksum chứng minh hai lần chạy dùng cùng dữ liệu.
+- **Vì sao trộn bốn cơ chế?** Nếu khách ảo chỉ mua theo thuộc tính thì content-based thắng sẵn; nếu chỉ mua theo cặp cố định thì luật kết hợp thắng sẵn. Nhiễu mô phỏng hành vi không giải thích được.
+- **Vì sao cho sản phẩm ra mắt muộn?** Để có sản phẩm **cold-start** thật sự (không có giỏ nào trong train) mà vẫn chia dữ liệu đúng theo thời gian.
+- **Tất định:** dùng `random.Random(seed)` cho mọi lựa chọn, kể cả UUID, và sắp xếp đầu ra, nên cùng config ra file giống từng byte.
+
+### 4. Kết quả
+
+- `synthetic-v1`: 9.481 sự kiện (7.061 VIEW, 2.095 ADD_TO_CART, 325 WISHLIST), 623 đơn, 324 đơn có ≥ 2 sản phẩm. Tỷ lệ lượt chọn: persona 69,9%, nhiễu 21,5%, mua kèm 8,6%.
+- Manifest `evidence/recommendation/synthetic-v1-manifest.json` ghi checksum config, snapshot, hai file dữ liệu và commit bộ sinh `ce11b991`.
+- `recommendation-service`: **52 passed** (thêm 9 test cho bộ sinh: tất định, chỉ dùng sản phẩm trong catalog, thứ tự phễu, sản phẩm mới không xuất hiện trước ngày ra mắt, tỷ lệ nhiễu, từ chối sản phẩm thiếu thuộc tính).
+- Supabase không bị thay đổi.

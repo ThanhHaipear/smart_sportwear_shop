@@ -1,0 +1,151 @@
+{
+  "dataset": "synthetic-v1",
+  "dataSource": "SYNTHETIC",
+  "generator": "recommendation-service/scripts/generate_synthetic_interactions.py",
+  "gitCommit": "ce11b99170282597613578f85234c9c715a5e3b7",
+  "generatedAt": "2026-11-17T07:23:11+00:00",
+  "seed": 20261117,
+  "config": {
+    "path": "datasets/recommendation/synthetic-v1/config.json",
+    "sha256": "5b42c5570181504c0f5f0f86c068def5ad816e8f3bf48f30ab1eee38f10f2cf4"
+  },
+  "catalog": {
+    "path": "evidence/recommendation/catalog-snapshot-20261117.json",
+    "productsSha256": "3651c353f8e75706ce020a1687751c42e4552e99a8833b75db2fa806602316f4",
+    "products": 36
+  },
+  "window": {
+    "t0": "2026-09-01T00:00:00Z",
+    "weeks": 8
+  },
+  "outputs": {
+    "interactions.jsonl": {
+      "sha256": "1eb84c754519d2df8f7496a641619cdf8e2cec4041526b5671b4a3fb6551f4fd",
+      "rows": 9481
+    },
+    "order_baskets.jsonl": {
+      "sha256": "6b288e1a2289ae9f023c61aaf81792973fd119145e012e5f8cd182edde241604",
+      "rows": 623
+    }
+  },
+  "summary": {
+    "users": 500,
+    "activeUsers": 500,
+    "eventsByType": {
+      "ADD_TO_CART": 2095,
+      "VIEW": 7061,
+      "WISHLIST": 325
+    },
+    "orders": 623,
+    "basketSizeDistribution": {
+      "1": 299,
+      "2": 204,
+      "3": 69,
+      "4": 41,
+      "5": 7,
+      "6": 2,
+      "7": 1
+    },
+    "byWeek": [
+      {
+        "week": 1,
+        "events": {
+          "ADD_TO_CART": 227,
+          "VIEW": 724,
+          "WISHLIST": 35
+        },
+        "orders": 76,
+        "multiItemOrders": 35
+      },
+      {
+        "week": 2,
+        "events": {
+          "ADD_TO_CART": 277,
+          "VIEW": 916,
+          "WISHLIST": 42
+        },
+        "orders": 67,
+        "multiItemOrders": 35
+      },
+      {
+        "week": 3,
+        "events": {
+          "ADD_TO_CART": 287,
+          "VIEW": 887,
+          "WISHLIST": 41
+        },
+        "orders": 83,
+        "multiItemOrders": 39
+      },
+      {
+        "week": 4,
+        "events": {
+          "ADD_TO_CART": 231,
+          "VIEW": 856,
+          "WISHLIST": 37
+        },
+        "orders": 70,
+        "multiItemOrders": 40
+      },
+      {
+        "week": 5,
+        "events": {
+          "ADD_TO_CART": 234,
+          "VIEW": 852,
+          "WISHLIST": 46
+        },
+        "orders": 60,
+        "multiItemOrders": 30
+      },
+      {
+        "week": 6,
+        "events": {
+          "ADD_TO_CART": 247,
+          "VIEW": 883,
+          "WISHLIST": 30
+        },
+        "orders": 74,
+        "multiItemOrders": 42
+      },
+      {
+        "week": 7,
+        "events": {
+          "ADD_TO_CART": 256,
+          "VIEW": 836,
+          "WISHLIST": 43
+        },
+        "orders": 80,
+        "multiItemOrders": 47
+      },
+      {
+        "week": 8,
+        "events": {
+          "ADD_TO_CART": 336,
+          "VIEW": 1107,
+          "WISHLIST": 51
+        },
+        "orders": 113,
+        "multiItemOrders": 56
+      }
+    ],
+    "pickShares": {
+      "complement": 0.0858,
+      "noise": 0.215,
+      "persona": 0.6992
+    },
+    "personas": {
+      "FOOTBALL/MEN/HIGH": 32,
+      "FOOTBALL/MEN/LOW": 30,
+      "FOOTBALL/MEN/MID": 65,
+      "FOOTBALL/WOMEN/HIGH": 21,
+      "FOOTBALL/WOMEN/LOW": 46,
+      "FOOTBALL/WOMEN/MID": 62,
+      "RUNNING/MEN/HIGH": 19,
+      "RUNNING/MEN/LOW": 37,
+      "RUNNING/MEN/MID": 70,
+      "RUNNING/WOMEN/HIGH": 21,
+      "RUNNING/WOMEN/LOW": 46,
+      "RUNNING/WOMEN/MID": 51
+    }
+  }
+}
