@@ -108,14 +108,14 @@
 
 > `plan.md` quy tắc 14: *"protocol đánh giá phải có trước implementation; không tạo ground truth hồi cứu chỉ để khớp code"*.
 
-- [ ] Tạo `docs/recommendation-design.md` gồm:
-  - [ ] Ngữ cảnh: `FREQUENTLY_BOUGHT_TOGETHER` (trang chi tiết), `CART_RECOMMENDATION` (giỏ hàng), `HOME` (nếu làm).
-  - [ ] Thuật toán: popularity (baseline), association rules (đã có), content-based, hybrid (tùy chọn).
-  - [ ] Trọng số sự kiện, ví dụ `VIEW=1`, `RECOMMENDATION_CLICK=1`, `WISHLIST=2`, `ADD_TO_CART=3`, `PURCHASE=5`.
-  - [ ] Bộ lọc nghiệp vụ: ACTIVE, còn hàng, bỏ sản phẩm nguồn, (tùy chọn) bỏ sản phẩm đã mua.
-  - [ ] Protocol: mốc chia thời gian, định nghĩa sản phẩm liên quan, tập ứng viên, K ∈ {5, 10}, metric, cách xử lý user lạnh.
-  - [ ] Giới hạn: dữ liệu synthetic, catalog nhỏ, đánh giá offline.
-- [ ] Cho Dũng/Hải review.
+- [x] Tạo `docs/recommendation-design.md` (v1.0, chốt 17/11) gồm:
+  - [x] Ngữ cảnh: `FREQUENTLY_BOUGHT_TOGETHER` (trang chi tiết), `CART_RECOMMENDATION` (giỏ hàng), `HOME` (nếu làm).
+  - [x] Thuật toán: popularity (baseline), association rules (đã có), content-based, hybrid (tùy chọn).
+  - [x] Trọng số sự kiện, ví dụ `VIEW=1`, `RECOMMENDATION_CLICK=1`, `WISHLIST=2`, `ADD_TO_CART=3`, `PURCHASE=5`.
+  - [x] Bộ lọc nghiệp vụ: ACTIVE, còn hàng, bỏ sản phẩm nguồn, (tùy chọn) bỏ sản phẩm đã mua.
+  - [x] Protocol: mốc chia thời gian, định nghĩa sản phẩm liên quan, tập ứng viên, K ∈ {5, 10}, metric, cách xử lý user lạnh.
+  - [x] Giới hạn: dữ liệu synthetic, catalog nhỏ, đánh giá offline.
+- [x] ~~Cho Dũng/Hải review.~~ Bỏ vòng review (17/11); các điểm phối hợp được tự quyết ở mục 11 của tài liệu thiết kế.
 
 ### Giai đoạn 4 — Dữ liệu hành vi synthetic
 
@@ -132,7 +132,7 @@
 
 - [ ] Train = tuần 1–6, DEV = tuần 7, TEST = tuần 8.
 - [ ] Đóng băng tập ứng viên (sản phẩm hợp lệ tại thời điểm test) kèm checksum.
-- [ ] Sản phẩm liên quan = `ADD_TO_CART` hoặc `PURCHASE` trong cửa sổ test; NDCG dùng nhãn nhiều mức (`PURCHASE=3`, `ADD_TO_CART=2`, `VIEW=1`).
+- [ ] Sản phẩm liên quan theo `docs/recommendation-design.md` mục 7.4: FBT dùng leave-one-in trên giỏ test; HOME dùng `ADD_TO_CART`/`PURCHASE` trong cửa sổ test, NDCG nhãn `PURCHASE=2`, `ADD_TO_CART=1` (VIEW không tính là liên quan, để P/R/NDCG dùng cùng tập R).
 - [ ] Bỏ user không có sản phẩm liên quan; báo cáo riêng warm/cold.
 - [ ] Lưu `train_until`, `test_from`, `test_until`, checksum, chính sách loại trừ vào file manifest (không còn schema `evaluation`).
 
