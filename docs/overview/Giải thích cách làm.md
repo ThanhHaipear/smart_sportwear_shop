@@ -1281,3 +1281,29 @@ TEST là "bài thi thật". Nếu xem kết quả TEST rồi chỉnh cấu hình
 - HOME NDCG@5: random 0,084; popularity 0,157; hồ sơ 0,176; **hybrid 0,206**.
 - C1, C2, C5–C9 "tốt hơn"; C3, C4 chưa có ý nghĩa. Chi tiết ở `Mission.md` Giai đoạn 9.
 - `recommendation-service`: **94 passed**.
+
+---
+
+## [2026-11-17] Giai đoạn 10: Giao diện, chatbot, bảng kết quả và demo
+
+### 1. Nhiệm vụ này để làm gì?
+
+Đưa kết quả ra chỗ người dùng và hội đồng nhìn thấy: gợi ý ở trang giỏ hàng, chatbot dùng được gợi ý thật, bảng số liệu cho luận văn, sơ đồ luồng mới và kịch bản demo.
+
+### 2. Cách làm
+
+- **Trang giỏ hàng** (`frontend/storefront`): component `CartRecommendations` gọi `POST /api/v1/recommendations/cart` với các sản phẩm trong giỏ, chỉ gọi lại khi **tập sản phẩm** đổi (đổi số lượng không gọi lại). Dùng lại `RecommendationSection`, nay nhận `sourceProductIds` (nhiều sản phẩm) và `source`; trang chi tiết vẫn ghi `sourceProductId` như cũ để số liệu cũ so sánh được.
+- **Chatbot** (`chatbot-service`): client mới `recommendation_api_client.py`; `recommend_related` gọi recommendation-service, đổi `algorithm` thành lý do tiếng Việt, ghi `requestId`. Lỗi hoặc rỗng thì quay về Catalog như trước; cả hai cùng lỗi thì trả câu báo lỗi thân thiện thay vì ném lỗi.
+- **Bảng kết quả**: `scripts/render_results_table.py` sinh `docs/recommendation-results.md` thẳng từ báo cáo TEST (kèm SHA-256 của báo cáo), không chép số bằng tay. Khi đối chiếu đã phát hiện `Mission.md` làm tròn tay sai một số (C2: 0,022 → đúng là 0,021) và sửa lại.
+- **Sơ đồ**: vẽ lại `workflow/11-recommendation.mmd` và sửa `10-chatbot.mmd`, xuất PNG/SVG bằng `mmdc`. Lưu ý Mermaid coi dấu `;` là hết câu lệnh, không được dùng trong nội dung mũi tên.
+- **Demo**: `docs/recommendation-demo.md` gồm các bước trên giao diện, câu SQL xem request/item/hành vi/CTR theo tầng/model, và lệnh tái lập offline.
+
+### 3. Kiến thức liên quan (dùng khi bảo vệ)
+
+- **Vì sao chatbot có đường lùi?** Recommendation là phần "thêm giá trị", không được làm hỏng luồng chat. Giống storefront: lỗi thì ẩn khối, không làm hỏng trang.
+- **Vì sao sinh bảng bằng script?** Mọi con số trong luận văn truy ngược được tới một file báo cáo có checksum; chép tay dễ sai (đã gặp một lỗi làm tròn).
+
+### 4. Kết quả
+
+- `recommendation-service` 94 passed; `chatbot-service` 208 passed (5 test mới); storefront typecheck và lint đạt.
+- Chưa thử trang giỏ hàng và chatbot bằng trình duyệt thật: cần chạy cả hệ thống và sẽ ghi dữ liệu DEMO vào Supabase; các bước thử nằm trong kịch bản demo.

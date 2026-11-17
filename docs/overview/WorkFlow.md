@@ -1,6 +1,6 @@
 # WorkFlow — Luồng hoạt động của hệ thống microservice
 
-> **Cập nhật 16/11/2026, theo code nhánh `main`.** Backend monolith `:8082` đã bị gỡ bỏ; mọi request từ frontend đi qua **API Gateway `:8085`** rồi tới một trong sáu service.
+> **Cập nhật 16/11/2026, theo code nhánh `main`; mục 10–11 cập nhật 17/11/2026 theo nhánh `quyen`.** Backend monolith `:8082` đã bị gỡ bỏ; mọi request từ frontend đi qua **API Gateway `:8085`** rồi tới một trong sáu service.
 >
 > Các sơ đồ là ảnh PNG xuất từ mã nguồn **Mermaid** trong `docs/overview/workflow/*.mmd` (kèm SVG). Muốn sửa: sửa file `.mmd` rồi chạy `mmdc -i <file>.mmd -o <file>.png -b white -s 2`.
 
@@ -149,7 +149,7 @@ Chạy toàn bộ ở local: `.\scripts\run\start-all-local.cmd` (chi tiết tro
 - Storefront gọi `POST /chat/stream` **qua Gateway** (`NEXT_PUBLIC_CHATBOT_API_BASE_URL`, mặc định `:8085`).
 - LLM mặc định `MODEL_PROVIDER=anthropic`, có thể chuyển sang OpenAI.
 - Tool thao tác giỏ/đơn gọi lại Gateway bằng token của chính khách, nên vẫn qua đủ kiểm tra quyền như khi khách tự thao tác. Tool hủy đơn cần khách xác nhận (`policy_guard`).
-- Tool `recommend_products` chế độ "related" đọc `relatedProducts` từ Catalog; Catalog hiện trả danh sách rỗng, nên chế độ này chưa có kết quả. Chế độ "need_based" dùng Search.
+- Tool `recommend_products` chế độ "related" gọi thẳng recommendation-service (`GET :8091/api/v1/recommendations/products/{id}`), mỗi sản phẩm kèm lý do theo tầng ("Thường được mua cùng", "Hợp với sản phẩm bạn đang xem", "Đang được nhiều người mua"). Nếu service lỗi hoặc trả rỗng thì quay về `relatedProducts` của Catalog. Chế độ "need_based" dùng Search.
 
 ---
 
@@ -161,7 +161,11 @@ Chạy toàn bộ ở local: `.\scripts\run\start-all-local.cmd` (chi tiết tro
 
 - Các API public qua Gateway: `GET /api/v1/recommendations/products/{id}`, `GET /api/v1/products/{id}/frequently-bought-together` (storefront đang dùng), `POST /api/v1/recommendations/cart`, `POST /api/v1/recommendations/interactions` (storefront gửi VIEW, ADD_TO_CART, WISHLIST, RECOMMENDATION_CLICK; `userRef` lấy từ JWT qua Gateway, không tin client) và `POST /api/v1/recommendations/interactions/batch` (tối đa 10 sự kiện mỗi request; storefront gửi cả 4 impression của khối gợi ý trong một lô). Rate limit: 60 sự kiện/phút/người, 300/phút/IP, đếm theo sự kiện.
 - API nội bộ: `POST /internal/v1/events`, `POST /internal/v1/models/rebuild`, `POST /internal/v1/evaluations`.
-- Service chỉ phục vụ khi `RECOMMENDATION_ENABLED=true`; tắt cờ thì mọi API trả 503. Đây là cách rollback. Storefront bắt mọi lỗi và chỉ ẩn khối gợi ý, trang sản phẩm vẫn hiển thị bình thường.- Các việc còn lại của phần recommendation nằm trong [Mission.md](Mission.md).
+- **Hybrid theo tầng** (`RecommendationService`): luật kết hợp → content `COMPLEMENT` (Jaccard theo môn, giới tính, thương hiệu, khoảng giá, màu; chỉ sản phẩm khác loại, điểm > 0) → popularity. Mỗi sản phẩm mang `algorithm`/`reason_code` của tầng sinh ra nó. Bật/tắt tầng content bằng `RECOMMENDATION_CONTENT_MODE` (`OFF`, `SIMILAR`, `COMPLEMENT`).
+- Storefront hiển thị hai khối: "Thường mua cùng nhau" ở trang chi tiết và "Có thể bạn cũng cần" ở trang giỏ hàng (`POST /api/v1/recommendations/cart`, `source = CART_RECOMMENDATION`). Cả hai ghi impression/click kèm `requestId`.
+- Rebuild luật chỉ dùng giỏ trước mốc cắt, ghi `config`, `training_cutoff_at`, `training_event_checksum` vào `recommendation_models`; mỗi lần gợi ý ghi `user_ref`, `latency_ms`.
+- Service chỉ phục vụ khi `RECOMMENDATION_ENABLED=true`; tắt cờ thì mọi API trả 503. Đây là cách rollback. Storefront bắt mọi lỗi và chỉ ẩn khối gợi ý, trang sản phẩm vẫn hiển thị bình thường.
+- Đánh giá offline và kết quả: [`docs/recommendation-design.md`](../recommendation-design.md), [`docs/recommendation-results.md`](../recommendation-results.md). Các việc còn lại nằm trong [Mission.md](Mission.md).
 
 ---
 

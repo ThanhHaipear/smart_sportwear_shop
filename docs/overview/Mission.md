@@ -236,7 +236,7 @@
 | Mã | Câu hỏi | So sánh | Hiệu (CI 95%) | Kết luận |
 |---|---|---|---|---|
 | C1 | RQ1 | Luật thuần − popularity, FBT warm | +0,097 (0,013–0,182) | Luật tốt hơn |
-| C2 | RQ1 | Luật → popularity − popularity, FBT tất cả | +0,079 (0,022–0,138) | Tốt hơn |
+| C2 | RQ1 | Luật → popularity − popularity, FBT tất cả | +0,079 (0,021–0,138) | Tốt hơn |
 | C3 | RQ2 | Content complement − popularity, FBT cold | +0,143 (−0,003–0,267) | **Chưa có ý nghĩa** |
 | C4 | RQ2 | Hybrid − luật → popularity, FBT cold | +0,143 (−0,003–0,267) | **Chưa có ý nghĩa** |
 | C5 | RQ3 | Hybrid − luật thuần, FBT tất cả | +0,079 (0,051–0,112) | Hybrid tốt hơn |
@@ -252,12 +252,12 @@
 
 ### Giai đoạn 10 — Giao diện, chatbot và báo cáo
 
-- [ ] (Tùy chọn) Khối gợi ý ở trang giỏ hàng dùng `POST /api/v1/recommendations/cart`.
-- [ ] **(phối hợp với Dũng)** Tool `recommend_products` chế độ "related" gọi recommendation-service thay cho `relatedProducts` rỗng.
-- [ ] Bảng so sánh Random / Popularity / Association / Content / Hybrid × {P, R, HR, NDCG}@{5, 10}, tách warm/cold.
-- [ ] Sơ đồ luồng: `WorkFlow.md` mục 11.
-- [ ] Demo: xem sản phẩm → thấy gợi ý → bấm → xem `recommendation_requests`, `user_interactions`.
-- [ ] Luyện các câu hỏi ở PHẦN D.
+- [x] Khối **"Có thể bạn cũng cần"** ở trang giỏ hàng (`CartRecommendations`, `POST /api/v1/recommendations/cart`, `source = CART_RECOMMENDATION`), ghi impression/click như khối trang chi tiết. Typecheck và lint đạt; **chưa thử bằng trình duyệt** (cần chạy cả hệ thống, sẽ ghi dữ liệu DEMO).
+- [x] Tool `recommend_products` chế độ "related" gọi recommendation-service (`:8091`), lý do theo tầng; lỗi hoặc rỗng thì quay về `relatedProducts` của Catalog (`chatbot-service`, 5 test mới, 208 passed). Không qua vòng phối hợp với Dũng (quyết định 17/11).
+- [x] Bảng so sánh tự sinh từ báo cáo TEST: `docs/recommendation-results.md` (`scripts/render_results_table.py`), đủ P/R/HR/NDCG @5, @10, Coverage, tách warm/cold, kèm C1–C9.
+- [x] Sơ đồ luồng: `WorkFlow.md` mục 11 vẽ lại (rebuild có mốc cắt/checksum, 3 tầng, giỏ hàng, chatbot, đánh giá offline); sơ đồ 10 cập nhật tool `recommend_products`.
+- [x] Kịch bản demo và câu SQL kiểm tra: `docs/recommendation-demo.md`.
+- [ ] Luyện các câu hỏi ở PHẦN D (đã bổ sung câu hỏi có số liệu TEST).
 
 ---
 
@@ -404,6 +404,17 @@ Mỗi lần chạy lưu: checksum dữ liệu, `recommendation_models` (algorith
 | Cold-start xử lý thế nào? | User mới: popularity. Sản phẩm mới: content-based. |
 | Dữ liệu synthetic có tin được không? | Seed cố định, tham số chốt trước, có nhiễu; kết quả chứng minh pipeline và phương pháp đánh giá đúng, chưa chứng minh hiệu quả kinh doanh. |
 | Làm sao tái lập kết quả? | Lưu model version, config, cutoff, checksum dữ liệu, seed, git commit (C.10). |
+| **Kết quả chính là gì?** | TEST, "thường mua cùng": hybrid NDCG@5 **0,350**, popularity 0,230, random 0,130; Hit Rate@5 0,621 (cứ 10 lần gợi ý thì hơn 6 lần có ít nhất một món khách thực sự mua kèm). HOME: hybrid 0,206 so với popularity 0,157. Bảng đầy đủ: `docs/recommendation-results.md`. |
+| Vì sao hybrid tốt hơn từng thuật toán? | Mỗi tầng cứu một trường hợp tầng trước bó tay: luật kết hợp mạnh với sản phẩm đã có lịch sử (warm 0,370) nhưng bằng 0 với sản phẩm mới; content lấp chỗ đó (cold 0,257); popularity bảo đảm luôn có gợi ý. Paired bootstrap: hybrid hơn luật thuần +0,079, hơn content +0,077, hơn popularity +0,119, cả ba khoảng tin cậy đều trên 0 (C5–C7). |
+| Content-based có giúp sản phẩm mới không? | Có xu hướng: 0,257 so với 0,114 của popularity (hiệu +0,14). Nhưng khoảng tin cậy −0,003 đến 0,267 chạm 0 vì chỉ có 39 ca từ 30 đơn, nên theo quy tắc đã đăng ký trước thì **chưa kết luận được** (C3). Muốn khẳng định cần thêm dữ liệu sản phẩm mới. |
+| Vì sao content dùng biến thể "complement" chứ không phải "giống nhau"? | Khách xem giày chạy bộ cần mua kèm tất, quần chạy bộ, không mua thêm đôi giày khác. Trên DEV: complement 0,365, similar 0,266, popularity 0,329. Complement bỏ nhóm "loại" và "danh mục", chỉ giữ sản phẩm khác loại cùng môn, giới tính. |
+| Làm sao chắc không "chỉnh theo đề thi"? | Mọi tham số chọn trên DEV (tuần 7). Kế hoạch TEST (cấu hình, 9 so sánh, quy tắc kết luận) được commit trước (`b4f44506`); báo cáo TEST ghi đúng commit đó. Script chặn chạy TEST lần hai nếu không ghi lý do. |
+| Paired bootstrap là gì, sao không so hai khoảng tin cậy? | Hai thuật toán làm cùng một đề nên so hiệu từng ca. Lấy mẫu lại cả đơn hàng (các ca trong một đơn liên quan nhau) 1.000 lần, lấy khoảng 95% của hiệu. Cách này nhạy hơn: hai khoảng riêng có thể chồng nhau mà khoảng của hiệu vẫn không chứa 0. |
+| Có hiệu chỉnh đa so sánh không? | Không. 9 so sánh ít và đã đăng ký trước, nhưng đây là giới hạn: với Bonferroni, C9 (cận dưới 0,0002) sẽ không còn ý nghĩa. |
+| Vì sao Precision@5 chỉ 0,16? | Mỗi ca trung bình chỉ có khoảng 2 đáp án, nên P@5 tối đa khoảng 0,4. So với random (0,072) thì hybrid gấp hơn 2 lần. |
+| Dữ liệu synthetic sinh thế nào, có thiên vị không? | 500 user có persona, 8 tuần, trộn 4 cơ chế: sở thích persona (70%), mua kèm bổ trợ (9%), độ phổ biến ẩn, nhiễu (22%), để không thuật toán nào thắng sẵn. Tham số chốt trước khi chạy mô hình, seed cố định, có checksum. Giới hạn: bộ sinh và content cùng dựa trên thuộc tính sản phẩm. |
+| Trên website thật content có chạy không? | Có tầng content, nhưng Catalog hiện không lưu giới tính, môn, màu (trả rỗng), nên chỉ so được danh mục, thương hiệu, khoảng giá. Nếu không có đặc trưng chung, vị trí đó rơi xuống popularity. Đây là việc cần Catalog sửa dữ liệu. |
+| Gợi ý mất bao lâu? | Khoảng 290 ms trên Supabase (đo khi kiểm tra, ghi ở `latency_ms`), do service gọi DB nhiều lần. Đủ cho demo; tối ưu được bằng cache ứng viên hoặc gộp truy vấn. |
 
 ---
 

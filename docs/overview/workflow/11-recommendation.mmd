@@ -1,32 +1,43 @@
 sequenceDiagram
     autonumber
     participant SF as Storefront
+    participant CB as Chatbot :8002
     participant GW as Gateway
     participant RE as Recommendation :8091
     participant DB as schema recommendation
     participant OP as Người vận hành
 
-    Note over OP,DB: Huấn luyện (offline)
-    OP->>RE: scripts/rebuild_model.py association-v1<br/>hoặc POST /internal/v1/models/rebuild
-    RE->>DB: Đọc toàn bộ order_baskets
-    RE->>RE: Đếm cặp sản phẩm, tính support, confidence, lift<br/>giữ luật đạt ngưỡng (0,01 / 0,10 / 1,0)
-    RE->>DB: Luật cũ → ARCHIVED, INSERT association_rules mới (ACTIVE)
-    RE->>DB: UPSERT recommendation_models (ASSOCIATION_RULE, version, ACTIVE)
+    Note over OP,DB: Huấn luyện luật kết hợp
+    OP->>RE: scripts/rebuild_model.py association-v2<br/>hoặc POST /internal/v1/models/rebuild
+    RE->>DB: Đọc order_baskets có occurred_at < mốc cắt (mặc định: lúc chạy)
+    RE->>RE: Đếm cặp sản phẩm, tính support, confidence, lift<br/>giữ luật đạt ngưỡng 0,005 / 0,05 / 1,0 (chọn trên DEV)
+    RE->>DB: 1 transaction: luật + model cũ → ARCHIVED,<br/>INSERT association_rules, recommendation_models<br/>(config, training_cutoff_at, training_event_checksum)
 
-    Note over SF,DB: Phục vụ (online)
-    SF->>GW: GET /api/v1/products/{id}/frequently-bought-together
-    GW->>RE: chuyển tiếp
-    RE->>DB: association_rules ACTIVE có antecedent = sản phẩm nguồn
-    RE->>RE: rank_rules: mỗi sản phẩm đích giữ luật tốt nhất,<br/>xếp theo confidence → lift → support
-    RE->>DB: catalog_products: chỉ giữ sản phẩm ACTIVE, available_quantity > 0
-    alt Chưa đủ K sản phẩm
-        RE->>DB: Bù bằng sản phẩm phổ biến (purchase_count giảm dần)
+    Note over SF,DB: Phục vụ: hybrid theo tầng
+    alt Trang chi tiết
+        SF->>GW: GET /api/v1/products/{id}/frequently-bought-together
+    else Trang giỏ hàng
+        SF->>GW: POST /api/v1/recommendations/cart {sourceProductIds}
     end
-    RE->>DB: INSERT recommendation_requests + recommendation_items
-    RE-->>SF: requestId, modelVersion, items[product, score, algorithm, reason]
+    GW->>RE: chuyển tiếp + X-User-Id nếu JWT hợp lệ
+    CB->>RE: GET /api/v1/recommendations/products/{id}<br/>(tool recommend_products, chế độ related, gọi thẳng :8091)
+    RE->>DB: Tầng 1 · association_rules ACTIVE của sản phẩm nguồn
+    RE->>DB: Chỉ giữ catalog_products ACTIVE, available_quantity > 0
+    alt Còn thiếu K sản phẩm
+        RE->>RE: Tầng 2 · content COMPLEMENT — Jaccard theo môn, giới tính,<br/>thương hiệu, khoảng giá, màu — chỉ sản phẩm khác loại, điểm > 0
+    end
+    alt Vẫn còn thiếu
+        RE->>DB: Tầng 3 · popularity (purchase_count giảm dần)
+    end
+    RE->>DB: INSERT recommendation_requests (user_ref, latency_ms)<br/>+ recommendation_items (reason_code theo tầng)
+    RE-->>SF: requestId, modelVersion, items[product, score, algorithm]
+    RE-->>CB: items → lý do "Thường được mua cùng" / "Hợp với sản phẩm bạn đang xem" /<br/>"Đang được nhiều người mua" (lỗi → relatedProducts của Catalog)
 
     Note over SF,RE: Ghi hành vi
-    SF->>GW: POST /api/v1/recommendations/interactions<br/>VIEW, ADD_TO_CART, WISHLIST, RECOMMENDATION_IMPRESSION/CLICK (+ requestId)
+    SF->>GW: POST /api/v1/recommendations/interactions(/batch)<br/>VIEW, ADD_TO_CART, WISHLIST, RECOMMENDATION_IMPRESSION/CLICK (+ requestId)
     GW->>RE: chuyển tiếp + X-User-Id nếu JWT hợp lệ
-    RE->>RE: Kiểm tra loại sự kiện, dataSource, requestId<br/>userRef lấy từ X-User-Id, occurredAt = giờ server
+    RE->>RE: Kiểm tra loại sự kiện, dataSource, requestId, rate limit<br/>userRef lấy từ X-User-Id, occurredAt = giờ server
     RE->>DB: INSERT user_interactions (chống trùng theo eventId)
+
+    Note over OP,RE: Đánh giá offline (chỉ trên file, không ghi DB)
+    OP->>OP: export_catalog_snapshot → generate_synthetic_interactions<br/>→ build_evaluation_split → evaluate_offline (DEV chọn cấu hình, TEST chạy 1 lần)
