@@ -19,6 +19,10 @@ class ProductSnapshot(BaseModel):
     status: str = "ACTIVE"
     categoryId: UUID | None = None
     brandId: UUID | None = None
+    # Content-based features (docs/recommendation-design.md 5.4). Catalog currently returns them empty.
+    gender: str | None = None
+    sportCodes: list[str] = Field(default_factory=list)
+    colorFamilies: list[str] = Field(default_factory=list)
 
 
 class RecommendationItem(BaseModel):

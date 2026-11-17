@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     recommendation_database_url: str = ""
     recommendation_internal_token: str = ""
     recommendation_fallback_mode: Literal["POPULAR", "EMPTY"] = "POPULAR"
+    # Content layer between association rules and popularity; COMPLEMENT was chosen on DEV (phase 7).
+    recommendation_content_mode: Literal["OFF", "SIMILAR", "COMPLEMENT"] = "COMPLEMENT"
     recommendation_default_limit: int = Field(default=8, ge=1, le=20)
     recommendation_max_limit: int = Field(default=20, ge=1, le=100)
     # Public interaction endpoint limits (sliding 60 s window, per API process).

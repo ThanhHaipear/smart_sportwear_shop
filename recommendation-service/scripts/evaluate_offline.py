@@ -11,6 +11,11 @@ Phase 6 (`--stage phase6`) runs on DEV:
 5. association rules filled with the picked popularity (the current serving behaviour).
 Selection metric: mean NDCG@5 of FREQUENTLY_BOUGHT_TOGETHER cases; ties go to the simpler configuration.
 
+Phase 7 (`--stage phase7`) runs on DEV with the phase 6 choices read from the phase 6 DEV report:
+1. content-based item-item, SIMILAR vs COMPLEMENT -> pick (FBT NDCG@5, ties to SIMILAR);
+2. layered hybrid for FBT: association rules -> picked content -> popularity;
+3. HOME: user-profile content alone, and layered profile -> popularity, against popularity.
+
 The TEST split may only be evaluated once with final configurations, so it needs `--final`.
 
 Usage:
@@ -32,6 +37,8 @@ from typing import Callable
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from app.content import (  # noqa: E402
+    build_items, item_scores, layered, price_thresholds, profile_scores, user_profile)
 from app.domain import (  # noqa: E402
     ALTERNATIVE_EVENT_WEIGHTS, EVENT_WEIGHTS, WeightedEvent, mine_association_rules, popularity_scores,
     rank_by_score, rank_rules)
@@ -52,6 +59,7 @@ class TrainingData:
     events: list[WeightedEvent]
     baskets: list[set[str]]
     bought_by_user: dict[str, set[str]]
+    events_by_user: dict[str, list[WeightedEvent]]
 
 
 @dataclass(frozen=True)
@@ -59,8 +67,8 @@ class Config:
     name: str
     algorithm: str
     params: dict
-    fbt: Callable[[str, list[str], str], list[str]]           # (source, candidates, case key) -> ranking
-    home: Callable[[str, list[str]], list[str]] | None = None  # (user, candidates) -> ranking
+    fbt: Callable[[str, list[str], str], list[str]] | None = None  # (source, candidates, case key) -> ranking
+    home: Callable[[str, list[str]], list[str]] | None = None       # (user, candidates) -> ranking
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -80,7 +88,11 @@ def training_data(interactions: list[dict], baskets: list[dict], cutoff: datetim
         moment = parse(basket["occurredAt"])
         events.extend(WeightedEvent(pid, "PURCHASE", moment, basket["userRef"]) for pid in basket["productIds"])
         bought.setdefault(basket["userRef"], set()).update(basket["productIds"])
-    return TrainingData(events, [set(b["productIds"]) for b in train_baskets], bought)
+    by_user: dict[str, list[WeightedEvent]] = {}
+    for event in events:
+        if event.actor is not None:
+            by_user.setdefault(event.actor, []).append(event)
+    return TrainingData(events, [set(b["productIds"]) for b in train_baskets], bought, by_user)
 
 
 def random_config(data: TrainingData) -> Config:
@@ -123,9 +135,11 @@ def association_config(data: TrainingData, min_support: float, min_confidence: f
 def evaluate(config: Config, split: dict) -> dict:
     candidates = split["candidates"]["productIds"]
     result = {"name": config.name, "algorithm": config.algorithm, "params": config.params, "tasks": {}}
-    tasks = [("fbt", split["fbt"]["cases"], lambda case: config.fbt(case["sourceProductId"], candidates,
-                                                                      case["caseId"]),
-              lambda case: {pid: 1 for pid in case["relevant"]}, "orderId")]
+    tasks = []
+    if config.fbt is not None:
+        tasks.append(("fbt", split["fbt"]["cases"], lambda case: config.fbt(case["sourceProductId"], candidates,
+                                                                              case["caseId"]),
+                      lambda case: {pid: 1 for pid in case["relevant"]}, "orderId"))
     if config.home is not None:
         tasks.append(("home", split["home"]["cases"], lambda case: config.home(case["userRef"], candidates),
                       lambda case: case["relevant"], "userRef"))
@@ -152,6 +166,51 @@ def evaluate(config: Config, split: dict) -> dict:
             task_result[segment] = rows
         result["tasks"][task] = task_result
     return result
+
+
+def ranked(scores: dict[str, float], exclude: set[str], limit: int = MAX_K) -> list[str]:
+    """Only scored items (content never pads with unrelated products), best first, ties by id."""
+    return sorted((i for i in scores if i not in exclude), key=lambda i: (-scores[i], i))[:limit]
+
+
+def content_items(snapshot: dict, candidates: list[str]) -> dict:
+    """Content features of every catalog product; price bands come from the candidate set (design 5.4)."""
+    rows = [{**row, "id": row["productId"]} for row in snapshot["products"]]
+    allowed = set(candidates)
+    return build_items(rows, price_thresholds(row["minPrice"] for row in rows if row["id"] in allowed))
+
+
+def content_config(items: dict, mode: str) -> Config:
+    def fbt(source: str, candidates: list[str], key: str) -> list[str]:
+        return ranked(item_scores([source], items, candidates, mode), {source})
+    return Config(f"content-{mode.lower()}", "SIMILAR_CONTENT", {"mode": mode, "features": "attribute Jaccard"},
+                  fbt=fbt)
+
+
+def hybrid_fbt_config(rules: Config, content: Config, popularity: Config) -> Config:
+    def fbt(source: str, candidates: list[str], key: str) -> list[str]:
+        layers = [rules.fbt(source, candidates, key), content.fbt(source, candidates, key),
+                  popularity.fbt(source, candidates, key)]
+        return [item for item, _ in layered(layers, MAX_K)]
+    return Config(f"hybrid-{rules.name}>{content.name}>{popularity.name}", "HYBRID_LAYERED",
+                  {"layers": [rules.name, content.name, popularity.name]}, fbt=fbt)
+
+
+def profile_configs(data: TrainingData, items: dict, cutoff: datetime, half_life: float | None,
+                    popularity: Config) -> list[Config]:
+    def profile_ranking(user: str, candidates: list[str]) -> list[str]:
+        profile = user_profile(data.events_by_user.get(user, []), items, cutoff, half_life)
+        if not profile:
+            return []
+        return ranked(profile_scores(profile, items, candidates), data.bought_by_user.get(user, set()))
+
+    def hybrid(user: str, candidates: list[str]) -> list[str]:
+        return [item for item, _ in layered([profile_ranking(user, candidates), popularity.home(user, candidates)],
+                                            MAX_K)]
+    params = {"halfLifeDays": half_life, "profile": "normalised weighted feature counts"}
+    return [Config("content-profile", "SIMILAR_CONTENT", params, home=profile_ranking),
+            Config(f"hybrid-content-profile>{popularity.name}", "HYBRID_LAYERED",
+                   {**params, "layers": ["content-profile", popularity.name]}, home=hybrid)]
 
 
 def score(result: dict) -> float:
@@ -195,6 +254,49 @@ def phase6(data: TrainingData, cutoff: datetime, split: dict) -> tuple[list[dict
     return results, selection
 
 
+def phase7(data: TrainingData, cutoff: datetime, split: dict, snapshot: dict, phase6_report: dict
+           ) -> tuple[list[dict], dict]:
+    chosen = phase6_report["selection"]
+    by_name = {r["name"]: r for r in phase6_report["results"]}
+    pop_params = by_name[chosen["popularity"]]["params"]
+    rule_params = by_name[chosen["association"]]["params"]
+    popularity = popularity_config(data, cutoff, pop_params["halfLifeDays"], EVENT_WEIGHTS, "default")
+    rules = association_config(data, rule_params["minSupport"], rule_params["minConfidence"])
+    items = content_items(snapshot, split["candidates"]["productIds"])
+
+    results = [evaluate(popularity, split),
+               evaluate(association_config(data, rule_params["minSupport"], rule_params["minConfidence"],
+                                           popularity), split)]
+    for result in results:
+        result["reference"] = "phase 6 choice"
+    contents = {mode: content_config(items, mode) for mode in ("SIMILAR", "COMPLEMENT")}
+    content_results = [evaluate(config, split) for config in contents.values()]
+    results.extend(content_results)
+    best_content = pick(content_results)
+    hybrid = evaluate(hybrid_fbt_config(rules, contents[best_content["params"]["mode"]], popularity), split)
+    results.append(hybrid)
+    results.extend(evaluate(config, split)
+                   for config in profile_configs(data, items, cutoff, pop_params["halfLifeDays"], popularity))
+
+    singles = [r for r in results if "fbt" in r["tasks"] and r["algorithm"] in ("POPULARITY", "SIMILAR_CONTENT")]
+    singles.append(evaluate(rules, split))
+    single_best = max(singles, key=score)
+    selection = {"metric": "fbt.all.ndcg@5.mean", "phase6Report": phase6_report["_path"],
+                 "popularity": popularity.name, "association": rules.name, "content": best_content["name"],
+                 "hybridFbt": hybrid["name"],
+                 "rq3HybridAtLeastBestSingle": {"hybrid": score(hybrid), "bestSingle": single_best["name"],
+                                                "bestSingleScore": score(single_best),
+                                                "holds": score(hybrid) >= score(single_best)}}
+    return results, selection
+
+
+def latest_report(dataset: str, split: str, stage: str) -> Path:
+    reports = sorted((REPO_ROOT / "evidence/recommendation").glob(f"{dataset}-{split}-{stage}-*.json"))
+    if not reports:
+        raise SystemExit(f"no {stage} report for {dataset}/{split}; run that stage first")
+    return reports[-1]
+
+
 def git_commit() -> str | None:
     try:
         return subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True,
@@ -207,6 +309,8 @@ def print_table(results: list[dict]) -> None:
     header = f"{'config':<52}{'P@5':>7}{'R@5':>7}{'HR@5':>7}{'NDCG@5':>8}{'NDCG@10':>9}{'Cov@5':>7}{'short':>7}"
     print(header)
     for result in results:
+        if "fbt" not in result["tasks"]:
+            continue
         rows = result["tasks"]["fbt"]["all"]
         print(f"{result['name']:<52}{rows['precision@5']['mean']:>7.3f}{rows['recall@5']['mean']:>7.3f}"
               f"{rows['hit_rate@5']['mean']:>7.3f}{rows['ndcg@5']['mean']:>8.3f}{rows['ndcg@10']['mean']:>9.3f}"
@@ -217,7 +321,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--split", required=True, choices=("dev", "test"))
-    parser.add_argument("--stage", required=True, choices=("phase6",))
+    parser.add_argument("--stage", required=True, choices=("phase6", "phase7"))
     parser.add_argument("--final", action="store_true", help="required to evaluate the TEST split")
     args = parser.parse_args()
     if args.split == "test" and not args.final:
@@ -239,7 +343,15 @@ def main() -> int:
     started = time.perf_counter()
     data = training_data(read_jsonl(dataset / "interactions.jsonl"), read_jsonl(dataset / "order_baskets.jsonl"),
                          cutoff)
-    results, selection = phase6(data, cutoff, split)
+    if args.stage == "phase6":
+        results, selection = phase6(data, cutoff, split)
+    else:
+        config = json.loads((dataset / "config.json").read_text(encoding="utf-8"))
+        snapshot = json.loads((REPO_ROOT / config["catalogSnapshot"]).read_text(encoding="utf-8"))
+        report_path = latest_report(dataset.name, args.split, "phase6")
+        phase6_report = json.loads(report_path.read_text(encoding="utf-8"))
+        phase6_report["_path"] = report_path.relative_to(REPO_ROOT).as_posix()
+        results, selection = phase7(data, cutoff, split, snapshot, phase6_report)
 
     run_at = datetime.now(timezone.utc)
     report = {

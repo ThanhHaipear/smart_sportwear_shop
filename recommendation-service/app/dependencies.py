@@ -17,7 +17,7 @@ def repository(settings: Settings = Depends(get_settings)):
 
 
 def service(repo=Depends(repository), settings: Settings = Depends(get_settings)):
-    return RecommendationService(repo, settings.recommendation_fallback_mode)
+    return RecommendationService(repo, settings.recommendation_fallback_mode, settings.recommendation_content_mode)
 
 
 _interaction_limiters: dict[tuple[int, int], InteractionRateLimiter] = {}

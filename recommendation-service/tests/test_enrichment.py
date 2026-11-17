@@ -167,3 +167,15 @@ def test_sale_snapshot_product_id_is_parsed():
     client = http_client(lambda request: httpx.Response(200, json={"variantId": str(uuid4()), "productId": str(product)}))
     assert client.variant_product_id(uuid4()) == product
     assert isinstance(client.variant_product_id(uuid4()), UUID)
+
+
+def test_snapshot_keeps_content_attributes_for_the_content_layer():
+    from app.catalog import CatalogDocument, build_snapshot
+    document = CatalogDocument({"productId": str(uuid4()), "status": "ACTIVE", "name": "Shoe", "gender": "MEN",
+                                "productType": "SPORTS_SHOES", "sportCodes": ["RUNNING", "RUNNING"],
+                                "variants": [{"status": "ACTIVE", "price": 10, "availableQuantity": 2,
+                                              "colorFamily": "BLUE"},
+                                             {"status": "INACTIVE", "price": 5, "availableQuantity": 9,
+                                              "colorFamily": "RED"}]})
+    snapshot = build_snapshot(document, "shoe")
+    assert (snapshot.gender, snapshot.sportCodes, snapshot.colorFamilies) == ("MEN", ["RUNNING"], ["BLUE"])

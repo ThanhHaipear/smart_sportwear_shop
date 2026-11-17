@@ -93,4 +93,7 @@ def build_snapshot(document: CatalogDocument, slug: str | None) -> ProductSnapsh
         status=document.status,
         categoryId=raw.get("categoryId"),
         brandId=raw.get("brandId"),
+        gender=raw.get("gender"),
+        sportCodes=sorted(set(raw.get("sportCodes") or [])),
+        colorFamilies=sorted({str(v["colorFamily"]) for v in variants if v.get("colorFamily")}),
     )

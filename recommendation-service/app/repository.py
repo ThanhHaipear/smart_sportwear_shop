@@ -18,6 +18,8 @@ class Repository(Protocol):
     def rules_for(self, sources: set[UUID]) -> list[Rule]: ...
     def popular(self, excluded: set[UUID], limit: int) -> list[ProductSnapshot]: ...
     def products(self, product_ids: list[UUID]) -> list[ProductSnapshot]: ...
+    def candidates(self) -> list[ProductSnapshot]: ...
+    def snapshots(self, product_ids: list[UUID]) -> list[ProductSnapshot]: ...
     def save_interaction(self, event: InteractionEvent) -> bool: ...
     def save_interactions(self, events: list[InteractionEvent]) -> int: ...
     def apply_event(self, event: IntegrationEvent) -> bool: ...
@@ -48,6 +50,8 @@ class MemoryRepository:
     def product(self, product_id): return self.product_by_id.get(product_id)
     def rules_for(self, sources): return [rule for rule in self.rule_list if rule.antecedent in sources]
     def products(self, product_ids): return [self.product_by_id[value] for value in product_ids if value in self.product_by_id and self.product_by_id[value].status == "ACTIVE" and self.product_by_id[value].availableQuantity > 0]
+    def candidates(self): return sorted(self.products(list(self.product_by_id)), key=lambda p: str(p.id))
+    def snapshots(self, product_ids): return [self.product_by_id[v] for v in product_ids if v in self.product_by_id]
     def popular(self, excluded, limit):
         values = [p for p in self.product_by_id.values() if p.id not in excluded and p.status == "ACTIVE" and p.availableQuantity > 0]
         return sorted(values, key=lambda p: (-self.popularity.get(p.id, 0), str(p.id)))[:limit]
@@ -103,6 +107,14 @@ class PostgresRepository:
         if not product_ids: return []
         with self.connection() as connection:
             rows = connection.execute("select snapshot from catalog_products where product_id = any(%s) and status='ACTIVE' and available_quantity>0", (product_ids,)).fetchall()
+        return [ProductSnapshot.model_validate(row[0]) for row in rows]
+    def candidates(self):
+        with self.connection() as connection:
+            rows = connection.execute("select snapshot from catalog_products where status='ACTIVE' and available_quantity>0 order by product_id").fetchall()
+        return [ProductSnapshot.model_validate(row[0]) for row in rows]
+    def snapshots(self, product_ids):
+        with self.connection() as connection:
+            rows = connection.execute("select snapshot from catalog_products where product_id = any(%s)", (list(product_ids),)).fetchall()
         return [ProductSnapshot.model_validate(row[0]) for row in rows]
     def popular(self, excluded, limit):
         with self.connection() as connection:
