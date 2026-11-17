@@ -88,6 +88,27 @@ export async function fetchFrequentlyBoughtTogether(productId: string): Promise<
   }
 }
 
+// Recommendations for the whole cart (association rules -> content -> popularity). Empty on any error.
+export async function fetchCartRecommendations(productIds: string[], limit = 4): Promise<RecommendationResult> {
+  if (productIds.length === 0) return { requestId: null, modelVersion: null, items: [] };
+  try {
+    const result = await apiFetch<RecommendationResponse>(endpoints.cartRecommendations, {
+      method: "POST",
+      body: JSON.stringify({ sourceProductIds: productIds, limit }),
+      cache: "no-store"
+    });
+    return {
+      requestId: result.data?.requestId ?? null,
+      modelVersion: result.data?.modelVersion ?? null,
+      items: (result.data?.items ?? [])
+        .filter((item) => item?.product)
+        .map((item) => ({ product: item.product, algorithm: item.algorithm ?? null })),
+    };
+  } catch {
+    return { requestId: null, modelVersion: null, items: [] };
+  }
+}
+
 export async function fetchHomeBannerSlides(): Promise<BannerSlide[]> {
   try {
     const result = await apiFetch<Banner[]>(endpoints.banners, {

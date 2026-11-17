@@ -13,7 +13,7 @@ export type InteractionType =
   | "RECOMMENDATION_IMPRESSION"
   | "RECOMMENDATION_CLICK";
 
-export type InteractionSource = "PRODUCT_DETAIL" | "PRODUCT_DETAIL_FBT";
+export type InteractionSource = "PRODUCT_DETAIL" | "PRODUCT_DETAIL_FBT" | "CART_RECOMMENDATION";
 
 export interface InteractionInput {
   eventType: InteractionType;

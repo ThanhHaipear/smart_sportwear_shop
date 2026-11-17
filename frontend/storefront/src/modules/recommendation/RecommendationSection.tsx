@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { ProductCard } from "@/modules/product/components/ProductCard";
 import type { Product } from "@/modules/product/types";
-import { trackInteraction, trackInteractions } from "@/modules/recommendation/tracking";
+import { trackInteraction, trackInteractions, type InteractionSource } from "@/modules/recommendation/tracking";
 
 export interface RecommendedProduct {
   product: Product;
@@ -12,7 +12,9 @@ export interface RecommendedProduct {
 
 interface RecommendationSectionProps {
   title: string;
-  sourceProductId: string;
+  // One product on the detail page, every product in the cart.
+  sourceProductIds: string[];
+  source?: InteractionSource;
   requestId: string | null;
   modelVersion: string | null;
   items: RecommendedProduct[];
@@ -20,9 +22,12 @@ interface RecommendationSectionProps {
 
 // Product grid that reports RECOMMENDATION_IMPRESSION once the block is actually visible and
 // RECOMMENDATION_CLICK when a card is opened. Both carry the requestId of the served list.
-export function RecommendationSection({ title, sourceProductId, requestId, modelVersion, items }: RecommendationSectionProps) {
+export function RecommendationSection({
+  title, sourceProductIds, source = "PRODUCT_DETAIL_FBT", requestId, modelVersion, items,
+}: RecommendationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const reported = useRef(false);
+  const sourceKey = sourceProductIds.join(",");
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -36,8 +41,8 @@ export function RecommendationSection({ title, sourceProductId, requestId, model
           eventType: "RECOMMENDATION_IMPRESSION" as const,
           productId: item.product.id,
           requestId,
-          source: "PRODUCT_DETAIL_FBT" as const,
-          metadata: { position, algorithm: item.algorithm, modelVersion, sourceProductId },
+          source,
+          metadata: { position, algorithm: item.algorithm, modelVersion, ...sourceMetadata(sourceKey) },
         })),
       );
     };
@@ -56,7 +61,7 @@ export function RecommendationSection({ title, sourceProductId, requestId, model
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, [items, modelVersion, requestId, sourceProductId]);
+  }, [items, modelVersion, requestId, sourceKey, source]);
 
   if (items.length === 0) return null;
 
@@ -76,8 +81,8 @@ export function RecommendationSection({ title, sourceProductId, requestId, model
                 eventType: "RECOMMENDATION_CLICK",
                 productId: item.product.id,
                 requestId,
-                source: "PRODUCT_DETAIL_FBT",
-                metadata: { position, algorithm: item.algorithm, modelVersion, sourceProductId },
+                source,
+                metadata: { position, algorithm: item.algorithm, modelVersion, ...sourceMetadata(sourceKey) },
               });
             }}
           >
@@ -87,4 +92,10 @@ export function RecommendationSection({ title, sourceProductId, requestId, model
       </div>
     </section>
   );
+}
+
+// The detail page keeps the original single-id key so earlier events stay comparable.
+function sourceMetadata(sourceKey: string): Record<string, string | string[]> {
+  const ids = sourceKey ? sourceKey.split(",") : [];
+  return ids.length === 1 ? { sourceProductId: ids[0] } : { sourceProductIds: ids };
 }
