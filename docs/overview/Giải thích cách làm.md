@@ -1251,3 +1251,33 @@ Khi báo cáo "model X đạt NDCG 0,45", phải chỉ ra được model X học
 - `recommendation-service`: **90 passed** (thêm 5 test: metadata đủ và đúng mốc cắt, model cũ bị archive, checksum không phụ thuộc thứ tự, log có latency và user, API không trả lại `user_ref`). Sửa một test cũ phụ thuộc đồng hồ Windows (độ phân giải ~15 ms).
 - Kiểm tra trên Supabase (rollback): model ghi đủ `config`/mốc/checksum, request có `user_ref` và `latency_ms` ≈ 290 ms, `reason_code` đúng tầng; số dòng 4 bảng không đổi.
 - Chạy lại DEV Giai đoạn 6–7 để báo cáo có checksum train: **metric không đổi**.
+
+---
+
+## [2026-11-17] Giai đoạn 9: Đăng ký trước và chạy TEST một lần
+
+### 1. Nhiệm vụ này để làm gì?
+
+TEST là "bài thi thật". Nếu xem kết quả TEST rồi chỉnh cấu hình, con số không còn đo khả năng dự đoán nữa mà đo khả năng "học thuộc đề". Vì vậy mọi thứ được chốt và commit **trước**, rồi TEST chỉ chạy một lần.
+
+### 2. Cách làm
+
+1. **Đăng ký trước** (`docs/recommendation-design.md` mục 7.9, commit `b4f44506`): 8 cấu hình cuối chọn trên DEV, 9 so sánh C1–C9, quy tắc kết luận. Một test kiểm tra mọi so sánh trong code đều có trong tài liệu.
+2. **Paired bootstrap** (`app/metrics.py`): với mỗi cặp, tính hiệu NDCG@5 trên **cùng một ca**, lấy mẫu lại theo đơn (FBT) hoặc user (HOME) 1.000 lần, lấy khoảng 95%.
+3. **Khóa TEST** (`scripts/evaluate_offline.py`): từ chối nếu thiếu `--final`, nếu không phải stage `final`, hoặc nếu đã có báo cáo TEST mà không ghi `--rerun-reason`. Báo cáo cuối đặt tên theo giây nên không bị ghi đè.
+4. **Chạy thử trên DEV** để kiểm tra quy trình, rồi mới chạy TEST.
+5. **Migration V3** cho `evaluation_runs` và script `record_evaluation_runs.py`: viết sẵn, chưa áp dụng lên Supabase theo quyết định ngày 17/11.
+
+### 3. Kiến thức liên quan (dùng khi bảo vệ)
+
+- **Paired bootstrap:** hai thuật toán làm cùng một đề, nên so từng câu một (hiệu trên từng ca) thì nhạy hơn nhiều so với so hai điểm trung bình độc lập. Ví dụ C5: hai khoảng tin cậy riêng chồng nhau, nhưng khoảng của hiệu (0,051–0,112) không chứa 0.
+- **Vì sao C3 "chưa có ý nghĩa" dù hiệu +0,14?** Chỉ có 39 ca cold từ 30 đơn, nên độ dao động lớn; cận dưới −0,003. Theo quy tắc đã đăng ký, không được nói "tốt hơn". Nói đúng là: "có xu hướng tốt hơn nhưng chưa đủ dữ liệu để khẳng định".
+- **Vì sao không hiệu chỉnh đa so sánh?** Số so sánh ít (9) và đã đăng ký trước. Nếu dùng Bonferroni (khoảng 99,4%) thì C9 và có thể C1, C8 sẽ không còn ý nghĩa; cần nói rõ điều này khi bảo vệ.
+- **Đăng ký trước (pre-registration):** git log chứng minh kế hoạch (`b4f44506`) có trước kết quả (báo cáo ghi `gitCommit` = `b4f44506`).
+
+### 4. Kết quả
+
+- FBT NDCG@5: random 0,130; popularity 0,230; luật thuần 0,270; luật → popularity 0,309; content complement 0,272; **hybrid 0,350**. Với ca cold: luật = 0, popularity 0,114, content/hybrid 0,257.
+- HOME NDCG@5: random 0,084; popularity 0,157; hồ sơ 0,176; **hybrid 0,206**.
+- C1, C2, C5–C9 "tốt hơn"; C3, C4 chưa có ý nghĩa. Chi tiết ở `Mission.md` Giai đoạn 9.
+- `recommendation-service`: **94 passed**.

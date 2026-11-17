@@ -209,7 +209,45 @@
 - [x] Migration `migrations/V3__extend_evaluation_runs.sql`: thêm `task`, `segment`, `case_count`, `hit_rate_at_k`, `ndcg_at_k`, `coverage_at_k`, `report_sha256` (cho phép null). API `/internal/v1/evaluations` trả thêm HR, NDCG. `scripts/record_evaluation_runs.py` chép báo cáo vào bảng (mặc định chạy thử). **Chưa áp dụng V3 lên Supabase** (cần role quản trị).
 - [x] Đăng ký trước cấu hình cuối, 9 so sánh C1–C9 và quy tắc kết luận: `docs/recommendation-design.md` mục 7.9, commit trước khi chạy TEST.
 - [x] Chạy thử stage `final` trên DEV: số liệu khớp Giai đoạn 7; script chặn TEST khi thiếu `--final`, khi không phải stage `final`, và khi đã chạy TEST mà không có `--rerun-reason`.
-- [ ] Chạy TEST **một lần** (`--split test --stage final --final`), lưu `evidence/recommendation/synthetic-v1-test-final-<thời điểm>.json`.
+- [x] Chạy TEST **một lần** (17/11, từ commit `b4f44506`): `evidence/recommendation/synthetic-v1-test-final-20261117T082418Z.json`. Kết quả ở dưới; chưa ghi vào `evaluation_runs` vì V3 chưa áp dụng (quyết định 17/11: chỉ lưu file).
+
+**Kết quả TEST, FBT** (145 ca: 106 warm, 39 cold; 36 ứng viên):
+
+| Cấu hình | HR@5 | NDCG@5 tất cả (CI 95%) | NDCG@5 warm | NDCG@5 cold | Coverage@5 |
+|---|---|---|---|---|---|
+| Random | 0,338 | 0,130 (0,09–0,16) | 0,133 | 0,119 | 1,00 |
+| Popularity | 0,379 | 0,230 (0,15–0,32) | 0,273 | 0,114 | 0,17 |
+| Luật kết hợp thuần | 0,428 | 0,270 (0,19–0,36) | 0,370 | 0 | 0,64 |
+| Luật → popularity | 0,497 | 0,309 (0,23–0,40) | 0,381 | 0,114 | 0,64 |
+| Content complement | 0,572 | 0,272 (0,21–0,33) | 0,278 | 0,257 | 1,00 |
+| **Hybrid luật → content → popularity** | **0,621** | **0,350** (0,28–0,43) | **0,384** | **0,257** | 0,97 |
+
+**Kết quả TEST, HOME** (156 user: 117 warm, 39 cold):
+
+| Cấu hình | HR@5 | NDCG@5 tất cả (CI 95%) | warm | cold |
+|---|---|---|---|---|
+| Random | 0,244 | 0,084 (0,06–0,11) | 0,097 | 0,045 |
+| Popularity | 0,301 | 0,157 (0,11–0,20) | 0,168 | 0,122 |
+| Hồ sơ nội dung | 0,365 | 0,176 (0,13–0,22) | 0,235 | 0 |
+| **Hybrid hồ sơ → popularity** | **0,429** | **0,206** (0,17–0,25) | **0,235** | 0,122 |
+
+**So sánh đăng ký trước** (NDCG@5, paired bootstrap):
+
+| Mã | Câu hỏi | So sánh | Hiệu (CI 95%) | Kết luận |
+|---|---|---|---|---|
+| C1 | RQ1 | Luật thuần − popularity, FBT warm | +0,097 (0,013–0,182) | Luật tốt hơn |
+| C2 | RQ1 | Luật → popularity − popularity, FBT tất cả | +0,079 (0,022–0,138) | Tốt hơn |
+| C3 | RQ2 | Content complement − popularity, FBT cold | +0,143 (−0,003–0,267) | **Chưa có ý nghĩa** |
+| C4 | RQ2 | Hybrid − luật → popularity, FBT cold | +0,143 (−0,003–0,267) | **Chưa có ý nghĩa** |
+| C5 | RQ3 | Hybrid − luật thuần, FBT tất cả | +0,079 (0,051–0,112) | Hybrid tốt hơn |
+| C6 | RQ3 | Hybrid − content complement, FBT tất cả | +0,077 (0,015–0,146) | Hybrid tốt hơn |
+| C7 | RQ3 | Hybrid − popularity, FBT tất cả | +0,119 (0,041–0,196) | Hybrid tốt hơn |
+| C8 | RQ4 | Hồ sơ nội dung − popularity, HOME warm | +0,067 (0,007–0,130) | Hồ sơ tốt hơn |
+| C9 | RQ4 | Hybrid hồ sơ − popularity, HOME tất cả | +0,050 (0,000–0,097) | Tốt hơn (sát biên) |
+
+- **RQ1, RQ3, RQ4 được ủng hộ.** RQ2 có chiều thuận (content trên ca cold 0,257 so với 0,114), nhưng khoảng tin cậy chạm 0 (39 ca từ 30 đơn), nên theo quy tắc đăng ký trước thì **chưa kết luận được**.
+- 9 so sánh không hiệu chỉnh đa so sánh; C9 có cận dưới 0,0002, rất sát ngưỡng.
+- Số liệu TEST thấp hơn DEV vì có 36 ứng viên (DEV 24) và 12 sản phẩm mới.
 - [x] Unit test hàm metric bằng ví dụ tính tay ở mục C.9.
 
 ### Giai đoạn 10 — Giao diện, chatbot và báo cáo
