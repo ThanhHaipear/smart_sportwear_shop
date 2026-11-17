@@ -1307,3 +1307,27 @@ TEST là "bài thi thật". Nếu xem kết quả TEST rồi chỉnh cấu hình
 
 - `recommendation-service` 94 passed; `chatbot-service` 208 passed (5 test mới); storefront typecheck và lint đạt.
 - Chưa thử trang giỏ hàng và chatbot bằng trình duyệt thật: cần chạy cả hệ thống và sẽ ghi dữ liệu DEMO vào Supabase; các bước thử nằm trong kịch bản demo.
+
+---
+
+## [2026-11-17] Giai đoạn 10: Chạy demo bằng trình duyệt (chế độ DEMO)
+
+### 1. Cách làm
+
+- Bật `NEXT_PUBLIC_INTERACTION_DATA_SOURCE=DEMO` trong `frontend/storefront/.env.local`, chạy `start-all-local.cmd`, thao tác bằng Playwright, rồi đọc lại DB (chỉ đọc).
+- Hai lỗi môi trường phải xử lý trước: Docker Desktop đang tắt (Redis, RabbitMQ không lên); và launcher sập vì file PID cũ của recommendation-service trỏ vào một PID đã bị Windows cấp lại cho tiến trình `postgres` không đọc được giờ khởi động. Đã sửa `scripts/run/common-local.ps1`: không đọc được `StartTime` thì coi là không phải tiến trình của mình.
+
+### 2. Kết quả
+
+- Trang chi tiết: 1 VIEW, 1 request lô 4 impression, click, VIEW trang mới, ADD_TO_CART. Trang giỏ hàng: khối "Có thể bạn cũng cần" hiện, 4 impression `CART_RECOMMENDATION`. Mọi sự kiện là `DEMO`, không có sự kiện `REAL` nào. Console không lỗi.
+- Chatbot: `recommend_related` gọi recommendation-service thật, có `requestId` và lý do theo tầng. Không thử được trọn luồng trong khung chat vì tìm kiếm sản phẩm trả rỗng (Search service trả 200 nhưng không có kết quả; ngoài phạm vi recommendation).
+
+### 3. Lỗi phát hiện
+
+| Vấn đề | Nguyên nhân | Xử lý |
+|---|---|---|
+| Click mang `requestId` khác 4 impression | `app/layout.tsx` có `InventoryRealtimeRefresh` (30 giây) và `DataRealtimeRefresh` gọi `router.refresh()`; trang render lại và nhận danh sách mới | **Đã sửa** `RecommendationSection`: giữ danh sách và `requestId` đầu tiên đến khi sản phẩm nguồn đổi. Thử lại: sau một lần refresh, click vẫn cùng `requestId` với impression |
+| `recommendation_requests` phồng lên | Cùng nguyên nhân: mỗi lần refresh tạo thêm request không ai thấy | Chưa sửa (cơ chế refresh dùng chung của storefront). CTR vẫn đúng vì mẫu số là impression |
+| Gợi ý không hợp lý (giày chạy bộ → áo đấu bóng đá) | Catalog trả `productType`, `gender`, `sportCodes` rỗng; content chỉ so thương hiệu và khoảng giá | Chưa sửa; cần Catalog lưu thuộc tính, hoặc `RECOMMENDATION_CONTENT_MODE=OFF` khi demo |
+| Mỗi lần gợi ý mất 1,2–2 giây | Tầng content đọc thêm toàn bộ ứng viên và snapshot nguồn qua mạng tới Supabase | Chưa tối ưu; ghi nhận |
+| Giỏ hàng gọi API gợi ý 2 lần | React StrictMode chạy effect 2 lần ở chế độ dev | Không cần sửa; bản production gọi 1 lần |

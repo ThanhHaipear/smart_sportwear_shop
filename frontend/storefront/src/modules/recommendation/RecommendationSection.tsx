@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/modules/product/components/ProductCard";
 import type { Product } from "@/modules/product/types";
 import { trackInteraction, trackInteractions, type InteractionSource } from "@/modules/recommendation/tracking";
@@ -20,29 +20,49 @@ interface RecommendationSectionProps {
   items: RecommendedProduct[];
 }
 
+interface PinnedList {
+  sourceKey: string;
+  requestId: string | null;
+  modelVersion: string | null;
+  items: RecommendedProduct[];
+}
+
 // Product grid that reports RECOMMENDATION_IMPRESSION once the block is actually visible and
 // RECOMMENDATION_CLICK when a card is opened. Both carry the requestId of the served list.
+//
+// The root layout calls router.refresh() periodically, which re-renders the page and serves a NEW
+// list with a new requestId. The first list is pinned until the source products change, so the
+// customer does not see the block reshuffle and impressions and clicks share one requestId.
 export function RecommendationSection({
   title, sourceProductIds, source = "PRODUCT_DETAIL_FBT", requestId, modelVersion, items,
 }: RecommendationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const reported = useRef(false);
+  const reportedFor = useRef<string | null>(null);
   const sourceKey = sourceProductIds.join(",");
+  const [pinned, setPinned] = useState<PinnedList>({ sourceKey, requestId, modelVersion, items });
+  // Derived state (adjusting state while rendering): take a new list only for new sources, or when the
+  // first render had no list yet.
+  if (pinned.sourceKey !== sourceKey || (!pinned.requestId && requestId)) {
+    setPinned({ sourceKey, requestId, modelVersion, items });
+  }
+  const shown = pinned.items;
+  const shownRequestId = pinned.requestId;
 
   useEffect(() => {
     const node = sectionRef.current;
-    if (!node || !requestId || items.length === 0 || reported.current) return;
+    if (!node || !shownRequestId || shown.length === 0 || reportedFor.current === shownRequestId) return;
     const report = () => {
-      if (reported.current) return;
-      reported.current = true;
+      if (reportedFor.current === shownRequestId) return;
+      reportedFor.current = shownRequestId;
       // All cards become visible together: send their impressions in ONE batch request.
       trackInteractions(
-        items.map((item, position) => ({
+        shown.map((item, position) => ({
           eventType: "RECOMMENDATION_IMPRESSION" as const,
           productId: item.product.id,
-          requestId,
+          requestId: shownRequestId,
           source,
-          metadata: { position, algorithm: item.algorithm, modelVersion, ...sourceMetadata(sourceKey) },
+          metadata: { position, algorithm: item.algorithm, modelVersion: pinned.modelVersion,
+                      ...sourceMetadata(pinned.sourceKey) },
         })),
       );
     };
@@ -61,9 +81,9 @@ export function RecommendationSection({
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, [items, modelVersion, requestId, sourceKey, source]);
+  }, [shown, shownRequestId, pinned.modelVersion, pinned.sourceKey, source]);
 
-  if (items.length === 0) return null;
+  if (shown.length === 0) return null;
 
   return (
     <section ref={sectionRef} className="mt-16">
@@ -71,18 +91,19 @@ export function RecommendationSection({
         {title}
       </h2>
       <div className="grid grid-cols-2 gap-7 sm:grid-cols-3 lg:grid-cols-4">
-        {items.map((item, position) => (
+        {shown.map((item, position) => (
           <div
             key={item.product.id}
             // Capture phase: runs before the card's link navigates away.
             onClickCapture={(event) => {
-              if (!requestId || !(event.target as HTMLElement).closest("a")) return;
+              if (!shownRequestId || !(event.target as HTMLElement).closest("a")) return;
               trackInteraction({
                 eventType: "RECOMMENDATION_CLICK",
                 productId: item.product.id,
-                requestId,
+                requestId: shownRequestId,
                 source,
-                metadata: { position, algorithm: item.algorithm, modelVersion, ...sourceMetadata(sourceKey) },
+                metadata: { position, algorithm: item.algorithm, modelVersion: pinned.modelVersion,
+                            ...sourceMetadata(pinned.sourceKey) },
               });
             }}
           >

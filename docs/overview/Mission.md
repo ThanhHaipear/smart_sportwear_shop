@@ -252,12 +252,14 @@
 
 ### Giai đoạn 10 — Giao diện, chatbot và báo cáo
 
-- [x] Khối **"Có thể bạn cũng cần"** ở trang giỏ hàng (`CartRecommendations`, `POST /api/v1/recommendations/cart`, `source = CART_RECOMMENDATION`), ghi impression/click như khối trang chi tiết. Typecheck và lint đạt; **chưa thử bằng trình duyệt** (cần chạy cả hệ thống, sẽ ghi dữ liệu DEMO).
+- [x] Khối **"Có thể bạn cũng cần"** ở trang giỏ hàng (`CartRecommendations`, `POST /api/v1/recommendations/cart`, `source = CART_RECOMMENDATION`), ghi impression/click như khối trang chi tiết. Typecheck và lint đạt; **đã thử bằng trình duyệt** (17/11, `DEMO`, xem nhật ký).
 - [x] Tool `recommend_products` chế độ "related" gọi recommendation-service (`:8091`), lý do theo tầng; lỗi hoặc rỗng thì quay về `relatedProducts` của Catalog (`chatbot-service`, 5 test mới, 208 passed). Không qua vòng phối hợp với Dũng (quyết định 17/11).
 - [x] Bảng so sánh tự sinh từ báo cáo TEST: `docs/recommendation-results.md` (`scripts/render_results_table.py`), đủ P/R/HR/NDCG @5, @10, Coverage, tách warm/cold, kèm C1–C9.
 - [x] Sơ đồ luồng: `WorkFlow.md` mục 11 vẽ lại (rebuild có mốc cắt/checksum, 3 tầng, giỏ hàng, chatbot, đánh giá offline); sơ đồ 10 cập nhật tool `recommend_products`.
 - [x] Kịch bản demo và câu SQL kiểm tra: `docs/recommendation-demo.md`.
 - [ ] Luyện các câu hỏi ở PHẦN D (đã bổ sung câu hỏi có số liệu TEST).
+- [x] Chạy demo bằng trình duyệt (17/11, `DEMO`): luồng VIEW → IMPRESSION → CLICK → VIEW → ADD_TO_CART → impression ở giỏ hàng ghi đúng; chatbot chế độ related gọi được recommendation-service. Phát hiện và sửa: click mang `requestId` khác impression do layout tự `router.refresh()` (xem nhật ký).
+- [ ] **Chất lượng gợi ý trên website thật kém** khi Catalog thiếu thuộc tính: giày chạy bộ được gợi ý kèm áo đấu bóng đá (chỉ còn so được thương hiệu + khoảng giá). Cần Catalog lưu `productType`, `gender`, `sportCodes`, `colorFamily`, hoặc tắt tầng content khi demo.
 
 ---
 
