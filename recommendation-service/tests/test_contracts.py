@@ -113,6 +113,9 @@ def test_evaluation_api_reports_precision_and_recall():
                              headers={"X-Internal-Service-Token": "test-token"})
     assert response.json()["precisionAtK"] == .5
     assert response.json()["recallAtK"] == .5
+    assert response.json()["hitRateAtK"] == 1.0
+    assert abs(response.json()["ndcgAtK"] - (1 / 1.585) / (1 + 1 / 1.585)) < 1e-3  # hit at rank 2 of 2 relevant
+    assert response.json()["caseCount"] == 1
 
 
 def test_interactions_are_rate_limited_per_identity():

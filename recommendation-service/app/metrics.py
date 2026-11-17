@@ -85,3 +85,19 @@ def bootstrap_ci(values: Sequence[float], groups: Sequence[Hashable], seed: int,
     low = estimates[int((1 - level) / 2 * resamples)]
     high = estimates[min(resamples - 1, int((1 + level) / 2 * resamples))]
     return low, high
+
+
+def paired_bootstrap(left: Sequence[float], right: Sequence[float], groups: Sequence[Hashable], seed: int,
+                     resamples: int = 1000, level: float = 0.95) -> dict:
+    """Mean of (left - right) over the same cases, with a percentile CI from resampling whole groups.
+
+    Both algorithms are scored on identical cases, so the difference is paired: resampling an order (or user)
+    takes that unit's cases for both sides at once. `better` is decided only when the CI excludes 0.
+    """
+    if len(left) != len(right) or len(left) != len(groups):
+        raise ValueError("paired values and groups must have the same length")
+    differences = [a - b for a, b in zip(left, right)]
+    low, high = bootstrap_ci(differences, groups, seed, resamples, level)
+    verdict = "left better" if low > 0 else "right better" if high < 0 else "no significant difference"
+    return {"meanDifference": round(mean(differences), 4), "ci95": [round(low, 4), round(high, 4)],
+            "n": len(differences), "verdict": verdict}

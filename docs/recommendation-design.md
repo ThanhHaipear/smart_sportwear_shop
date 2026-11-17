@@ -262,6 +262,51 @@ Mỗi cấu hình ứng với một dòng `recommendation_models` (Giai đoạn 
 
 ---
 
+### 7.9. Kế hoạch chạy TEST (đăng ký trước khi chạy)
+
+Mục này được viết và commit **trước** khi chạy TEST. Sau khi đã xem kết quả TEST thì không sửa mục này.
+
+**Cấu hình cuối**, chọn trên DEV ở Giai đoạn 6–7 và không đổi nữa. Tên ngắn (≤ 50 ký tự) dùng chung cho báo cáo và `evaluation_runs`:
+
+| Tên | Tác vụ | Nội dung |
+|---|---|---|
+| `random` | FBT, HOME | Xáo ngẫu nhiên, seed `20261117` |
+| `popularity` | FBT, HOME | Trọng số mặc định (mục 4), half-life 14 ngày |
+| `association` | FBT | Luật kết hợp thuần, support 0,005, confidence 0,05, lift ≥ 1 |
+| `association+popularity` | FBT | Luật kết hợp, thiếu thì bù popularity (hành vi cũ của service) |
+| `content-complement` | FBT | Content item–item, biến thể COMPLEMENT |
+| `hybrid-fbt` | FBT | Luật kết hợp → content-complement → popularity (hành vi mới của service) |
+| `content-profile` | HOME | Hồ sơ nội dung của user, half-life 14 ngày |
+| `hybrid-home` | HOME | Hồ sơ nội dung → popularity |
+
+**So sánh đăng ký trước** (NDCG@5, hiệu = trái − phải):
+
+| Mã | RQ | Tác vụ | Nhóm | Trái | Phải |
+|---|---|---|---|---|---|
+| C1 | RQ1 | FBT | warm | `association` | `popularity` |
+| C2 | RQ1 | FBT | tất cả | `association+popularity` | `popularity` |
+| C3 | RQ2 | FBT | cold | `content-complement` | `popularity` |
+| C4 | RQ2 | FBT | cold | `hybrid-fbt` | `association+popularity` |
+| C5 | RQ3 | FBT | tất cả | `hybrid-fbt` | `association` |
+| C6 | RQ3 | FBT | tất cả | `hybrid-fbt` | `content-complement` |
+| C7 | RQ3 | FBT | tất cả | `hybrid-fbt` | `popularity` |
+| C8 | RQ4 | HOME | warm | `content-profile` | `popularity` |
+| C9 | RQ4 | HOME | tất cả | `hybrid-home` | `popularity` |
+
+**Quy tắc kết luận:**
+- Paired bootstrap 1.000 lần, lấy mẫu lại theo đơn hàng (FBT) hoặc user (HOME), seed `20261117`.
+- "Trái tốt hơn" khi khoảng 95% của hiệu nằm hoàn toàn trên 0; "phải tốt hơn" khi nằm hoàn toàn dưới 0; còn lại là "không có khác biệt có ý nghĩa".
+- Nhóm có ít hơn 30 ca thì ghi "không đủ ca", không kết luận.
+- 9 so sánh **không hiệu chỉnh đa so sánh**. Đây là giới hạn được nêu trong báo cáo.
+- Các metric khác (P, R, HR @5 và @10, Coverage) được báo cáo kèm khoảng tin cậy, nhưng chỉ để mô tả.
+
+**Chạy một lần:**
+- `evaluate_offline.py --split test --stage final --final`.
+- Script từ chối chạy TEST lần hai, trừ khi có `--rerun-reason`. Lý do chỉ được là lỗi dữ liệu hoặc lỗi code, không được là tinh chỉnh. Mọi báo cáo được giữ lại, kèm lý do.
+- Kết quả TEST không được dùng để đổi cấu hình hay protocol.
+
+---
+
 ## 8. Đo lường online (mô tả, không dùng để kết luận)
 
 Khi đã có dữ liệu thật hoặc dữ liệu demo:
@@ -324,3 +369,4 @@ Không chờ Dũng và Hải review. Các điểm dưới đây được chốt 
 | 17/11/2026 | 1.1 | Thêm giới hạn 8–9 sau khi sinh `synthetic-v1` (không đổi protocol) |
 | 17/11/2026 | 1.2 | Mục 7.7: chọn cấu hình trên DEV không có ca cold (ghi trước khi chạy mô hình) |
 | 17/11/2026 | 1.3 | Mục 5.5: content bỏ sản phẩm có độ tương đồng 0 (trên DEV không làm đổi kết quả nào) |
+| 17/11/2026 | 1.4 | Mục 7.9: đăng ký trước cấu hình cuối, 9 so sánh và quy tắc chạy TEST một lần |

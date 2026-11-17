@@ -204,11 +204,12 @@
 
 ### Giai đoạn 9 — Đánh giá offline
 
-- [ ] Script `recommendation-service/scripts/evaluate_offline.py`: với mỗi user trong TEST, chạy thuật toán chỉ với dữ liệu train, lấy top-K, so với sản phẩm liên quan.
-- [x] Hit Rate@K, NDCG@K, Coverage@K, bootstrap CI: `app/metrics.py` (làm sớm ở Giai đoạn 6).
-- [ ] Thêm cột tương ứng vào `evaluation_runs` (migration `V3__...` trong `recommendation-service/migrations/`).
-- [ ] Chạy DEV để chọn cấu hình, chốt rồi chạy TEST **một lần**.
-- [ ] Lưu `evidence/recommendation/benchmark-<ngày>.json`: checksum dữ liệu, git commit, model version, config, seed, metric.
+- [x] Script `recommendation-service/scripts/evaluate_offline.py`, stage `final`: chạy các cấu hình đã chọn trên DEV (tên ngắn ≤ 50 ký tự), chỉ với dữ liệu train, so với đáp án đóng băng.
+- [x] Hit Rate@K, NDCG@K, Coverage@K, bootstrap CI: `app/metrics.py` (làm sớm ở Giai đoạn 6). Thêm **paired bootstrap** để so sánh từng cặp.
+- [x] Migration `migrations/V3__extend_evaluation_runs.sql`: thêm `task`, `segment`, `case_count`, `hit_rate_at_k`, `ndcg_at_k`, `coverage_at_k`, `report_sha256` (cho phép null). API `/internal/v1/evaluations` trả thêm HR, NDCG. `scripts/record_evaluation_runs.py` chép báo cáo vào bảng (mặc định chạy thử). **Chưa áp dụng V3 lên Supabase** (cần role quản trị).
+- [x] Đăng ký trước cấu hình cuối, 9 so sánh C1–C9 và quy tắc kết luận: `docs/recommendation-design.md` mục 7.9, commit trước khi chạy TEST.
+- [x] Chạy thử stage `final` trên DEV: số liệu khớp Giai đoạn 7; script chặn TEST khi thiếu `--final`, khi không phải stage `final`, và khi đã chạy TEST mà không có `--rerun-reason`.
+- [ ] Chạy TEST **một lần** (`--split test --stage final --final`), lưu `evidence/recommendation/synthetic-v1-test-final-<thời điểm>.json`.
 - [x] Unit test hàm metric bằng ví dụ tính tay ở mục C.9.
 
 ### Giai đoạn 10 — Giao diện, chatbot và báo cáo

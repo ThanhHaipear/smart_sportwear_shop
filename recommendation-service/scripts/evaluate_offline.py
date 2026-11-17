@@ -16,6 +16,10 @@ Phase 7 (`--stage phase7`) runs on DEV with the phase 6 choices read from the ph
 2. layered hybrid for FBT: association rules -> picked content -> popularity;
 3. HOME: user-profile content alone, and layered profile -> popularity, against popularity.
 
+Final stage (`--stage final`, design 7.9) evaluates the configurations chosen on DEV, under short fixed names,
+and the pre-registered paired comparisons. It may run on DEV as a dry run. On TEST it needs `--final`, and a
+second TEST run is refused unless `--rerun-reason` explains why (both reports are kept).
+
 The TEST split may only be evaluated once with final configurations, so it needs `--final`.
 
 Usage:
@@ -30,7 +34,7 @@ import random
 import subprocess
 import sys
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
@@ -42,7 +46,8 @@ from app.content import (  # noqa: E402
 from app.domain import (  # noqa: E402
     ALTERNATIVE_EVENT_WEIGHTS, BasketRow, training_checksum, EVENT_WEIGHTS, WeightedEvent, mine_association_rules, popularity_scores,
     rank_by_score, rank_rules)
-from app.metrics import METRICS, bootstrap_ci, case_metrics, coverage_at_k, grouped_mean, mean  # noqa: E402
+from app.metrics import (  # noqa: E402
+    METRICS, bootstrap_ci, case_metrics, coverage_at_k, grouped_mean, mean, paired_bootstrap)
 from app.offline_split import before, checksum, parse  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -143,8 +148,12 @@ def evaluate(config: Config, split: dict) -> dict:
     if config.home is not None:
         tasks.append(("home", split["home"]["cases"], lambda case: config.home(case["userRef"], candidates),
                       lambda case: case["relevant"], "userRef"))
+    result["_perCase"] = {}
     for task, cases, rank, relevant_of, group_key in tasks:
         lists = [rank(case) for case in cases]
+        result["_perCase"][task] = {
+            "groups": [case[group_key] for case in cases], "segments": [case["segment"] for case in cases],
+            "ndcg@5": [case_metrics(lists[i], relevant_of(case), 5)["ndcg"] for i, case in enumerate(cases)]}
         segments = {"all": list(range(len(cases)))}
         for segment in ("warm", "cold"):
             segments[segment] = [i for i, case in enumerate(cases) if case["segment"] == segment]
@@ -298,6 +307,72 @@ def training_fingerprint(dataset: Path, cutoff: datetime) -> dict:
             "interactionChecksum": checksum(sorted(interactions, key=lambda row: row["eventId"]))}
 
 
+# Pre-registered in docs/recommendation-design.md 7.9 before TEST was run. (id, research question, task,
+# segment, left, right): "left better" needs the 95% CI of mean(left - right) NDCG@5 to exclude 0.
+COMPARISONS = (
+    ("C1", "RQ1", "fbt", "warm", "association", "popularity"),
+    ("C2", "RQ1", "fbt", "all", "association+popularity", "popularity"),
+    ("C3", "RQ2", "fbt", "cold", "content-complement", "popularity"),
+    ("C4", "RQ2", "fbt", "cold", "hybrid-fbt", "association+popularity"),
+    ("C5", "RQ3", "fbt", "all", "hybrid-fbt", "association"),
+    ("C6", "RQ3", "fbt", "all", "hybrid-fbt", "content-complement"),
+    ("C7", "RQ3", "fbt", "all", "hybrid-fbt", "popularity"),
+    ("C8", "RQ4", "home", "warm", "content-profile", "popularity"),
+    ("C9", "RQ4", "home", "all", "hybrid-home", "popularity"),
+)
+
+
+def final_configs(data: TrainingData, cutoff: datetime, split: dict, snapshot: dict, phase6_report: dict,
+                  phase7_report: dict) -> list[Config]:
+    """The DEV-chosen configurations under short names (recommendation_models.version is varchar(50))."""
+    by_name = {r["name"]: r for r in phase6_report["results"]}
+    pop = by_name[phase6_report["selection"]["popularity"]]["params"]
+    rule = by_name[phase6_report["selection"]["association"]]["params"]
+    mode = {r["name"]: r for r in phase7_report["results"]}[phase7_report["selection"]["content"]]["params"]["mode"]
+    popularity = popularity_config(data, cutoff, pop["halfLifeDays"], EVENT_WEIGHTS, "default")
+    rules = association_config(data, rule["minSupport"], rule["minConfidence"])
+    items = content_items(snapshot, split["candidates"]["productIds"])
+    content = content_config(items, mode)
+    profile, hybrid_home = profile_configs(data, items, cutoff, pop["halfLifeDays"], popularity)
+    named = [
+        ("random", random_config(data)),
+        ("popularity", popularity),
+        ("association", rules),
+        ("association+popularity", association_config(data, rule["minSupport"], rule["minConfidence"], popularity)),
+        (f"content-{mode.lower()}", content),
+        ("hybrid-fbt", hybrid_fbt_config(rules, content, popularity)),
+        ("content-profile", profile),
+        ("hybrid-home", hybrid_home),
+    ]
+    return [replace(config, name=name, params={**config.params, "devName": config.name}) for name, config in named]
+
+
+def compare(results: list[dict]) -> list[dict]:
+    by_name = {r["name"]: r for r in results}
+    rows = []
+    for cid, rq, task, segment, left, right in COMPARISONS:
+        a, b = by_name[left]["_perCase"][task], by_name[right]["_perCase"][task]
+        keep = [i for i, seg in enumerate(a["segments"]) if segment == "all" or seg == segment]
+        row = {"id": cid, "researchQuestion": rq, "task": task, "segment": segment, "left": left, "right": right,
+               "metric": "ndcg@5"}
+        if len(keep) < 30:
+            row.update({"n": len(keep), "verdict": "not enough cases (< 30)"})
+        else:
+            row.update(paired_bootstrap([a["ndcg@5"][i] for i in keep], [b["ndcg@5"][i] for i in keep],
+                                        [a["groups"][i] for i in keep], SEED))
+        rows.append(row)
+    return rows
+
+
+def final(data: TrainingData, cutoff: datetime, split: dict, snapshot: dict, phase6_report: dict,
+          phase7_report: dict) -> tuple[list[dict], dict]:
+    results = [evaluate(config, split)
+               for config in final_configs(data, cutoff, split, snapshot, phase6_report, phase7_report)]
+    selection = {"chosenOnDev": {"phase6Report": phase6_report["_path"], "phase7Report": phase7_report["_path"]},
+                 "comparisons": compare(results)}
+    return results, selection
+
+
 def latest_report(dataset: str, split: str, stage: str) -> Path:
     reports = sorted((REPO_ROOT / "evidence/recommendation").glob(f"{dataset}-{split}-{stage}-*.json"))
     if not reports:
@@ -325,15 +400,34 @@ def print_table(results: list[dict]) -> None:
               f"{rows['coverage@5']:>7.3f}{rows['shortLists']:>7}")
 
 
+def guard_test_split(split: str, stage: str, final_flag: bool, previous_runs: list[str], rerun_reason: str | None
+               ) -> str | None:
+    """Why this run must not happen, or None. TEST is touched once, only by the final stage."""
+    if split != "test":
+        return None
+    if not final_flag:
+        return "TEST is evaluated once with final configurations; pass --final deliberately"
+    if stage != "final":
+        return "only the final stage may run on TEST; choose configurations on DEV"
+    if previous_runs and not (rerun_reason or "").strip():
+        return (f"TEST was already evaluated ({previous_runs[-1]}); "
+                "pass --rerun-reason only for a documented, non-tuning reason")
+    return None
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--split", required=True, choices=("dev", "test"))
-    parser.add_argument("--stage", required=True, choices=("phase6", "phase7"))
+    parser.add_argument("--stage", required=True, choices=("phase6", "phase7", "final"))
     parser.add_argument("--final", action="store_true", help="required to evaluate the TEST split")
+    parser.add_argument("--rerun-reason", help="required to evaluate TEST again; recorded in the report")
     args = parser.parse_args()
-    if args.split == "test" and not args.final:
-        parser.error("TEST is evaluated once with final configurations; pass --final deliberately")
+    previous_test_runs = sorted((REPO_ROOT / "evidence/recommendation").glob(
+        f"{args.dataset.resolve().name}-test-final-*.json"))
+    problem = guard_test_split(args.split, args.stage, args.final, [p.name for p in previous_test_runs], args.rerun_reason)
+    if problem:
+        parser.error(problem)
 
     dataset = args.dataset.resolve()
     split_manifest = json.loads((REPO_ROOT / f"evidence/recommendation/{dataset.name}-splits-manifest.json")
@@ -351,15 +445,23 @@ def main() -> int:
     started = time.perf_counter()
     data = training_data(read_jsonl(dataset / "interactions.jsonl"), read_jsonl(dataset / "order_baskets.jsonl"),
                          cutoff)
+    def dev_report(stage: str) -> dict:
+        path = latest_report(dataset.name, "dev", stage)  # configurations are always chosen on DEV
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+        loaded["_path"] = path.relative_to(REPO_ROOT).as_posix()
+        return loaded
+
     if args.stage == "phase6":
         results, selection = phase6(data, cutoff, split)
     else:
         config = json.loads((dataset / "config.json").read_text(encoding="utf-8"))
         snapshot = json.loads((REPO_ROOT / config["catalogSnapshot"]).read_text(encoding="utf-8"))
-        report_path = latest_report(dataset.name, args.split, "phase6")
-        phase6_report = json.loads(report_path.read_text(encoding="utf-8"))
-        phase6_report["_path"] = report_path.relative_to(REPO_ROOT).as_posix()
-        results, selection = phase7(data, cutoff, split, snapshot, phase6_report)
+        if args.stage == "phase7":
+            results, selection = phase7(data, cutoff, split, snapshot, dev_report("phase6"))
+        else:
+            results, selection = final(data, cutoff, split, snapshot, dev_report("phase6"), dev_report("phase7"))
+    for result in results:
+        result.pop("_perCase", None)
 
     run_at = datetime.now(timezone.utc)
     report = {
@@ -375,10 +477,13 @@ def main() -> int:
         "protocol": {"kValues": list(K_VALUES), "seed": SEED, "bootstrap": {"resamples": 1000, "level": 0.95,
                      "unit": {"fbt": "orderId", "home": "userRef"}}, "dcg": "linear gain, log2(i + 1) discount"},
         "selection": selection,
+        "rerunReason": args.rerun_reason,
+        "previousTestRuns": [path.name for path in previous_test_runs] if args.split == "test" else [],
         "results": results,
         "elapsedSeconds": round(time.perf_counter() - started, 2),
     }
-    out = REPO_ROOT / f"evidence/recommendation/{dataset.name}-{args.split}-{args.stage}-{run_at:%Y%m%d}.json"
+    stamp = f"{run_at:%Y%m%dT%H%M%SZ}" if args.stage == "final" else f"{run_at:%Y%m%d}"  # never overwrite a final run
+    out = REPO_ROOT / f"evidence/recommendation/{dataset.name}-{args.split}-{args.stage}-{stamp}.json"
     out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print_table(results)
     print(json.dumps(selection, indent=2))

@@ -212,4 +212,5 @@ class PostgresRepository:
                 connection.execute("insert into recommendation_items(request_id,rank,product_id,score,reason_code) values(%s,%s,%s,%s,%s)", (response.requestId,rank,item.product.id,item.score,item.algorithm))
     def save_evaluation(self, result):
         with self.connection() as connection:
-            connection.execute("insert into evaluation_runs(model_version,dataset_version,k,precision_at_k,recall_at_k,evaluated_at) values(%s,%s,%s,%s,%s,%s)", (result.modelVersion,result.datasetVersion,result.k,result.precisionAtK,result.recallAtK,result.evaluatedAt))
+            # Columns after recall_at_k come from migration V3: apply V3 before deploying this version.
+            connection.execute("insert into evaluation_runs(model_version,dataset_version,k,precision_at_k,recall_at_k,hit_rate_at_k,ndcg_at_k,coverage_at_k,task,segment,case_count,report_sha256,evaluated_at) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (result.modelVersion,result.datasetVersion,result.k,result.precisionAtK,result.recallAtK,result.hitRateAtK,result.ndcgAtK,result.coverageAtK,result.task,result.segment,result.caseCount,result.reportSha256,result.evaluatedAt))

@@ -108,4 +108,12 @@ class EvaluationResult(BaseModel):
     k: int
     precisionAtK: float
     recallAtK: float
+    # Added in migration V3 (phase 9); None for results computed before.
+    hitRateAtK: float | None = None
+    ndcgAtK: float | None = None
+    coverageAtK: float | None = None
+    task: str | None = None
+    segment: str | None = None
+    caseCount: int | None = None
+    reportSha256: str | None = None
     evaluatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

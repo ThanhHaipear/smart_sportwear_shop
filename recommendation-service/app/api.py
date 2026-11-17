@@ -7,6 +7,7 @@ from app.config import Settings, get_settings
 from app.dependencies import enricher, interaction_limiter, internal_auth, repository, service
 from app.domain import precision_recall_at_k
 from app.interactions import sanitize_browser_batch, sanitize_browser_interaction
+from app.metrics import case_metrics, mean
 from app.schemas import (CartRecommendationRequest, EvaluationRequest, EvaluationResult,
                          IntegrationEvent, InteractionBatch, InteractionEvent, RecommendationResponse)
 from app.service import DEFAULT_MIN_CONFIDENCE, DEFAULT_MIN_SUPPORT
@@ -88,8 +89,11 @@ def rebuild_model(modelVersion: str = Query(min_length=1, max_length=50),
 def evaluate(body: EvaluationRequest, repo=Depends(repository)):
     cases = [(list(case["predicted"]), set(case["relevant"])) for case in body.cases]
     precision, recall = precision_recall_at_k(cases, body.k)
+    per_case = [case_metrics(predicted, dict.fromkeys(relevant, 1), body.k) for predicted, relevant in cases]
     result = EvaluationResult(modelVersion=body.modelVersion, datasetVersion=body.datasetVersion,
-                              k=body.k, precisionAtK=precision, recallAtK=recall)
+                              k=body.k, precisionAtK=precision, recallAtK=recall,
+                              hitRateAtK=mean([row["hit_rate"] for row in per_case]),
+                              ndcgAtK=mean([row["ndcg"] for row in per_case]), caseCount=len(cases))
     repo.save_evaluation(result)
     return result
 
