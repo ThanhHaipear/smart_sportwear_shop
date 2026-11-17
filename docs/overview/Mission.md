@@ -131,11 +131,18 @@
 
 ### Giai đoạn 5 — Chia dữ liệu theo thời gian
 
-- [ ] Train = tuần 1–6, DEV = tuần 7, TEST = tuần 8.
-- [ ] Đóng băng tập ứng viên (sản phẩm hợp lệ tại thời điểm test) kèm checksum.
-- [ ] Sản phẩm liên quan theo `docs/recommendation-design.md` mục 7.4: FBT dùng leave-one-in trên giỏ test; HOME dùng `ADD_TO_CART`/`PURCHASE` trong cửa sổ test, NDCG nhãn `PURCHASE=2`, `ADD_TO_CART=1` (VIEW không tính là liên quan, để P/R/NDCG dùng cùng tập R).
-- [ ] Bỏ user không có sản phẩm liên quan; báo cáo riêng warm/cold.
-- [ ] Lưu `train_until`, `test_from`, `test_until`, checksum, chính sách loại trừ vào file manifest (không còn schema `evaluation`).
+- [x] Train = tuần 1–6, DEV = tuần 7, TEST = tuần 8 (`app/offline_split.py`). TEST huấn luyện lại trên tuần 1–7. Mốc train là **nửa mở** (`occurredAt < trainUntil`); mỗi đơn thuộc cửa sổ của chính thời điểm đặt.
+- [x] Đóng băng tập ứng viên kèm checksum: DEV 24 sản phẩm (12 sản phẩm mới chưa ra mắt), TEST 36 sản phẩm.
+- [x] Sản phẩm liên quan theo `docs/recommendation-design.md` mục 7.4: FBT leave-one-in trên giỏ ≥ 2 sản phẩm; HOME `ADD_TO_CART=1`/`PURCHASE=2`, bỏ sản phẩm user đã mua trong train.
+- [x] Bỏ user không có sản phẩm liên quan (DEV 89, TEST 119 user chỉ xem); báo cáo riêng warm/cold.
+- [x] Lưu mốc thời gian, checksum, chính sách loại trừ: `scripts/build_evaluation_split.py` → `datasets/recommendation/synthetic-v1/splits/{dev,test}.json` + `evidence/recommendation/synthetic-v1-splits-manifest.json`.
+
+| Split | Ứng viên | FBT: tất cả / warm / cold | HOME: tất cả / warm / cold |
+|---|---|---|---|
+| DEV (tuần 7) | 24 | 125 / 125 / **0** | 102 / 88 / 14 |
+| TEST (tuần 8) | 36 | 145 / 106 / 39 | 156 / 117 / 39 |
+
+> DEV không có ca FBT cold vì sản phẩm mới ra mắt ở tuần 8. Cấu hình content-based được chọn trên ca warm của DEV (`docs/recommendation-design.md` 7.7).
 
 ### Giai đoạn 6 — Baseline và luật kết hợp trên cùng protocol
 

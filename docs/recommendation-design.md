@@ -241,6 +241,7 @@ K ∈ {5, 10}. Với C khoảng 36 sản phẩm, K = 10 đã là khoảng 28% ca
 
 - **Metric chọn cấu hình trên DEV:** NDCG@5 của tác vụ A. Hòa thì chọn cấu hình đơn giản hơn.
 - Các lưới tham số được chốt ở mục 5. Không thêm cấu hình mới sau khi đã xem kết quả DEV. Nếu buộc phải thêm thì ghi vào mục 12 kèm lý do.
+- DEV của `synthetic-v1` không có ca FBT cold, vì sản phẩm mới ra mắt ở tuần 8. Mọi cấu hình, kể cả content-based, được chọn trên toàn bộ DEV (toàn ca warm). Nhóm cold chỉ được đo một lần trên TEST. Nhóm HOME cold ở DEV có 14 ca (< 30), chỉ dùng để tham khảo.
 - **Khoảng tin cậy:** bootstrap 1.000 lần theo đơn vị đánh giá (đơn hàng hoặc user), seed cố định, báo cáo khoảng 95%.
 - **So sánh hai thuật toán:** paired bootstrap trên hiệu số NDCG@5 theo từng đơn vị. Chỉ nói "A tốt hơn B" khi khoảng 95% của hiệu số không chứa 0.
 
@@ -321,3 +322,4 @@ Không chờ Dũng và Hải review. Các điểm dưới đây được chốt 
 | 17/11/2026 | 0.1 | Bản nháp đầu tiên |
 | 17/11/2026 | 1.0 | Chốt, bỏ vòng review; mục 11 chuyển từ câu hỏi thành quyết định |
 | 17/11/2026 | 1.1 | Thêm giới hạn 8–9 sau khi sinh `synthetic-v1` (không đổi protocol) |
+| 17/11/2026 | 1.2 | Mục 7.7: chọn cấu hình trên DEV không có ca cold (ghi trước khi chạy mô hình) |

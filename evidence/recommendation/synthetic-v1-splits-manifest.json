@@ -1,0 +1,116 @@
+{
+  "dataset": "synthetic-v1",
+  "builtAt": "2026-11-17T07:26:29+00:00",
+  "builder": "recommendation-service/scripts/build_evaluation_split.py",
+  "generatorManifest": "evidence/recommendation/synthetic-v1-manifest.json",
+  "policy": {
+    "trainRows": "occurredAt < trainUntil (strict)",
+    "evalRows": "evalFrom <= occurredAt < evalUntil; a basket belongs to the window of its own timestamp",
+    "candidates": "ACTIVE, availableQuantity > 0 in the frozen snapshot, and launched by evalFrom",
+    "fbtRelevant": "other products of the same basket that are candidates",
+    "fbtWarm": "source product appears in at least one training basket",
+    "homeRelevant": "ADD_TO_CART=1 / PURCHASE=2 in the window, minus products the user bought in training",
+    "homeWarm": "user has a VIEW/CLICK/WISHLIST/ADD_TO_CART event or an order before trainUntil",
+    "minimumSegmentSize": 30
+  },
+  "files": {
+    "splits/dev.json": "1edbc8c0932a9dc6c22a9cee2289579de2e50eebe0ce8f6fbd43732220c77551",
+    "splits/test.json": "6499bf260250e0d6dacb51b7e39ff7090f62edc1a31911683b8ad1d698fdded5"
+  },
+  "splits": {
+    "dev": {
+      "window": {
+        "name": "dev",
+        "trainUntil": "2026-10-13T00:00:00Z",
+        "evalFrom": "2026-10-13T00:00:00Z",
+        "evalUntil": "2026-10-20T00:00:00Z"
+      },
+      "trainRows": {
+        "interactions": 6852,
+        "baskets": 430
+      },
+      "evalRows": {
+        "interactions": 1135,
+        "baskets": 80
+      },
+      "candidates": {
+        "count": 24,
+        "sha256": "3eeb754fce14b969ba032987b827994de906513206f0aac3c8f46810205afeea"
+      },
+      "fbt": {
+        "counts": {
+          "all": 125,
+          "warm": 125,
+          "cold": 0
+        },
+        "orders": 47,
+        "excluded": {
+          "droppedRelevantNotInCandidates": 0,
+          "skippedSourcesNotInCandidates": 0
+        },
+        "sha256": "a7844a3ce90960361a56536b9a432e29fd72b522a45d1408936481422ab1a1b3"
+      },
+      "home": {
+        "counts": {
+          "all": 102,
+          "warm": 88,
+          "cold": 14
+        },
+        "excluded": {
+          "activeUsersInWindow": 191,
+          "usersWithoutRelevant": 89,
+          "removedRepurchases": 43,
+          "removedNotInCandidates": 0
+        },
+        "sha256": "5e782e5c0c63182f48bd8aa7975d986855e5ae73442ad39970f63152f1a82a9f"
+      }
+    },
+    "test": {
+      "window": {
+        "name": "test",
+        "trainUntil": "2026-10-20T00:00:00Z",
+        "evalFrom": "2026-10-20T00:00:00Z",
+        "evalUntil": "2026-10-27T00:00:00Z"
+      },
+      "trainRows": {
+        "interactions": 7987,
+        "baskets": 510
+      },
+      "evalRows": {
+        "interactions": 1494,
+        "baskets": 113
+      },
+      "candidates": {
+        "count": 36,
+        "sha256": "0c6314e0de830c9f496f255e8c4fcaa110ffd6fb78ea54cc9214605bee31ca78"
+      },
+      "fbt": {
+        "counts": {
+          "all": 145,
+          "warm": 106,
+          "cold": 39
+        },
+        "orders": 56,
+        "excluded": {
+          "droppedRelevantNotInCandidates": 0,
+          "skippedSourcesNotInCandidates": 0
+        },
+        "sha256": "00a8a1b6600259c16c1ae4255e9207230a7a81e1c55f25bdfb5368d12173f4a8"
+      },
+      "home": {
+        "counts": {
+          "all": 156,
+          "warm": 117,
+          "cold": 39
+        },
+        "excluded": {
+          "activeUsersInWindow": 275,
+          "usersWithoutRelevant": 119,
+          "removedRepurchases": 37,
+          "removedNotInCandidates": 0
+        },
+        "sha256": "84253b011d9f479fbb486ec5a4a2c7b83ab3d316331052862ef130fa18014013"
+      }
+    }
+  }
+}

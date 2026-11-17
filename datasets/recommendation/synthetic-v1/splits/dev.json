@@ -1,0 +1,2149 @@
+{
+ "candidates": {
+  "count": 24,
+  "productIds": [
+   "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+   "16c5fb26-3d97-425b-ada3-570940ff5296",
+   "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+   "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+   "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+   "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+   "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+   "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+   "6a3f7f37-3340-4432-94e9-fd46990a3878",
+   "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+   "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+   "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+   "90df2223-3c14-49cf-822f-207603429950",
+   "a1192013-eeb9-4302-80d2-28f5f609857d",
+   "a32aa095-ad50-496a-88a6-bbbf4705a443",
+   "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+   "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+   "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+   "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+   "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+   "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+   "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+   "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+   "e8f35b34-3eae-4533-923d-616342ba34ac"
+  ],
+  "sha256": "3eeb754fce14b969ba032987b827994de906513206f0aac3c8f46810205afeea"
+ },
+ "dataset": "synthetic-v1",
+ "evalRows": {
+  "baskets": 80,
+  "interactions": 1135
+ },
+ "fbt": {
+  "cases": [
+   {
+    "caseId": "08f0f11d-6529-4993-94f6-c6178a1560ad:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "08f0f11d-6529-4993-94f6-c6178a1560ad",
+    "relevant": [
+     "90df2223-3c14-49cf-822f-207603429950",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "08f0f11d-6529-4993-94f6-c6178a1560ad:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "08f0f11d-6529-4993-94f6-c6178a1560ad",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "08f0f11d-6529-4993-94f6-c6178a1560ad:e8f35b34-3eae-4533-923d-616342ba34ac",
+    "orderId": "08f0f11d-6529-4993-94f6-c6178a1560ad",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e8f35b34-3eae-4533-923d-616342ba34ac"
+   },
+   {
+    "caseId": "f23d3af7-79a9-465d-8c18-c957d108c593:192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+    "orderId": "f23d3af7-79a9-465d-8c18-c957d108c593",
+    "relevant": [
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+    ],
+    "segment": "warm",
+    "sourceProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+   },
+   {
+    "caseId": "f23d3af7-79a9-465d-8c18-c957d108c593:b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+    "orderId": "f23d3af7-79a9-465d-8c18-c957d108c593",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+   },
+   {
+    "caseId": "a2135f5a-7fbf-4840-b20a-b26dc4dd15a0:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "a2135f5a-7fbf-4840-b20a-b26dc4dd15a0",
+    "relevant": [
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "a2135f5a-7fbf-4840-b20a-b26dc4dd15a0:c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+    "orderId": "a2135f5a-7fbf-4840-b20a-b26dc4dd15a0",
+    "relevant": [
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+    ],
+    "segment": "warm",
+    "sourceProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+   },
+   {
+    "caseId": "0abc9315-f289-436a-887d-788805d5d7ea:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "0abc9315-f289-436a-887d-788805d5d7ea",
+    "relevant": [
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "0abc9315-f289-436a-887d-788805d5d7ea:e8f35b34-3eae-4533-923d-616342ba34ac",
+    "orderId": "0abc9315-f289-436a-887d-788805d5d7ea",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e8f35b34-3eae-4533-923d-616342ba34ac"
+   },
+   {
+    "caseId": "70159245-35f5-4b4e-b419-22fe16373780:7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+    "orderId": "70159245-35f5-4b4e-b419-22fe16373780",
+    "relevant": [
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a"
+   },
+   {
+    "caseId": "70159245-35f5-4b4e-b419-22fe16373780:cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+    "orderId": "70159245-35f5-4b4e-b419-22fe16373780",
+    "relevant": [
+     "7d5358ac-bc24-4c8e-b3a0-52523f3d390a"
+    ],
+    "segment": "warm",
+    "sourceProductId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+   },
+   {
+    "caseId": "4f9d03fc-c8c7-4b0c-9ec3-88c7bf4d15ee:6a3f7f37-3340-4432-94e9-fd46990a3878",
+    "orderId": "4f9d03fc-c8c7-4b0c-9ec3-88c7bf4d15ee",
+    "relevant": [
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "6a3f7f37-3340-4432-94e9-fd46990a3878"
+   },
+   {
+    "caseId": "4f9d03fc-c8c7-4b0c-9ec3-88c7bf4d15ee:7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+    "orderId": "4f9d03fc-c8c7-4b0c-9ec3-88c7bf4d15ee",
+    "relevant": [
+     "6a3f7f37-3340-4432-94e9-fd46990a3878",
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+   },
+   {
+    "caseId": "4f9d03fc-c8c7-4b0c-9ec3-88c7bf4d15ee:c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+    "orderId": "4f9d03fc-c8c7-4b0c-9ec3-88c7bf4d15ee",
+    "relevant": [
+     "6a3f7f37-3340-4432-94e9-fd46990a3878",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+   },
+   {
+    "caseId": "4f9d03fc-c8c7-4b0c-9ec3-88c7bf4d15ee:e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+    "orderId": "4f9d03fc-c8c7-4b0c-9ec3-88c7bf4d15ee",
+    "relevant": [
+     "6a3f7f37-3340-4432-94e9-fd46990a3878",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+   },
+   {
+    "caseId": "095e0e35-118c-44da-9433-d393353f4575:192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+    "orderId": "095e0e35-118c-44da-9433-d393353f4575",
+    "relevant": [
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+    ],
+    "segment": "warm",
+    "sourceProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+   },
+   {
+    "caseId": "095e0e35-118c-44da-9433-d393353f4575:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "095e0e35-118c-44da-9433-d393353f4575",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "095e0e35-118c-44da-9433-d393353f4575:b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+    "orderId": "095e0e35-118c-44da-9433-d393353f4575",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+   },
+   {
+    "caseId": "56c591c8-29b1-40aa-a0ad-31bb75754677:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "56c591c8-29b1-40aa-a0ad-31bb75754677",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "56c591c8-29b1-40aa-a0ad-31bb75754677:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "56c591c8-29b1-40aa-a0ad-31bb75754677",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "cc2ef296-3001-4f83-af62-12a24170209c:36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+    "orderId": "cc2ef296-3001-4f83-af62-12a24170209c",
+    "relevant": [
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+   },
+   {
+    "caseId": "cc2ef296-3001-4f83-af62-12a24170209c:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "cc2ef296-3001-4f83-af62-12a24170209c",
+    "relevant": [
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "cc2ef296-3001-4f83-af62-12a24170209c:7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+    "orderId": "cc2ef296-3001-4f83-af62-12a24170209c",
+    "relevant": [
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+   },
+   {
+    "caseId": "04faafed-831a-4924-aaa9-4f1246ef7676:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "04faafed-831a-4924-aaa9-4f1246ef7676",
+    "relevant": [
+     "90df2223-3c14-49cf-822f-207603429950",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "04faafed-831a-4924-aaa9-4f1246ef7676:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "04faafed-831a-4924-aaa9-4f1246ef7676",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "04faafed-831a-4924-aaa9-4f1246ef7676:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "04faafed-831a-4924-aaa9-4f1246ef7676",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "e0907d03-04b8-49e2-8f8e-51e499b5859d:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "e0907d03-04b8-49e2-8f8e-51e499b5859d",
+    "relevant": [
+     "a1192013-eeb9-4302-80d2-28f5f609857d",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "e0907d03-04b8-49e2-8f8e-51e499b5859d:a1192013-eeb9-4302-80d2-28f5f609857d",
+    "orderId": "e0907d03-04b8-49e2-8f8e-51e499b5859d",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a1192013-eeb9-4302-80d2-28f5f609857d"
+   },
+   {
+    "caseId": "e0907d03-04b8-49e2-8f8e-51e499b5859d:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "e0907d03-04b8-49e2-8f8e-51e499b5859d",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "a1192013-eeb9-4302-80d2-28f5f609857d"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "81a2ee55-6650-4226-8d1e-7bb4bc9fc7d5:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "81a2ee55-6650-4226-8d1e-7bb4bc9fc7d5",
+    "relevant": [
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "81a2ee55-6650-4226-8d1e-7bb4bc9fc7d5:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "81a2ee55-6650-4226-8d1e-7bb4bc9fc7d5",
+    "relevant": [
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "ec9daec8-4fd0-4b54-96a7-e380f6309a38:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "ec9daec8-4fd0-4b54-96a7-e380f6309a38",
+    "relevant": [
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "ec9daec8-4fd0-4b54-96a7-e380f6309a38:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "ec9daec8-4fd0-4b54-96a7-e380f6309a38",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "d097e954-4aed-4da9-82e6-d5699777e0f5:192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+    "orderId": "d097e954-4aed-4da9-82e6-d5699777e0f5",
+    "relevant": [
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+    ],
+    "segment": "warm",
+    "sourceProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+   },
+   {
+    "caseId": "d097e954-4aed-4da9-82e6-d5699777e0f5:b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+    "orderId": "d097e954-4aed-4da9-82e6-d5699777e0f5",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+   },
+   {
+    "caseId": "ac45a1b4-5348-4ddc-9069-3f37a9d977e1:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "ac45a1b4-5348-4ddc-9069-3f37a9d977e1",
+    "relevant": [
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "ac45a1b4-5348-4ddc-9069-3f37a9d977e1:7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+    "orderId": "ac45a1b4-5348-4ddc-9069-3f37a9d977e1",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+   },
+   {
+    "caseId": "ac45a1b4-5348-4ddc-9069-3f37a9d977e1:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "ac45a1b4-5348-4ddc-9069-3f37a9d977e1",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "ac45a1b4-5348-4ddc-9069-3f37a9d977e1:aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+    "orderId": "ac45a1b4-5348-4ddc-9069-3f37a9d977e1",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+   },
+   {
+    "caseId": "abee606f-a862-4fa3-b5d6-269afc2b12ca:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "abee606f-a862-4fa3-b5d6-269afc2b12ca",
+    "relevant": [
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "abee606f-a862-4fa3-b5d6-269afc2b12ca:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "abee606f-a862-4fa3-b5d6-269afc2b12ca",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "843e3048-ad92-463f-be75-9ee352de440d:16c5fb26-3d97-425b-ada3-570940ff5296",
+    "orderId": "843e3048-ad92-463f-be75-9ee352de440d",
+    "relevant": [
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "16c5fb26-3d97-425b-ada3-570940ff5296"
+   },
+   {
+    "caseId": "843e3048-ad92-463f-be75-9ee352de440d:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "843e3048-ad92-463f-be75-9ee352de440d",
+    "relevant": [
+     "16c5fb26-3d97-425b-ada3-570940ff5296",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "843e3048-ad92-463f-be75-9ee352de440d:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "843e3048-ad92-463f-be75-9ee352de440d",
+    "relevant": [
+     "16c5fb26-3d97-425b-ada3-570940ff5296",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "843e3048-ad92-463f-be75-9ee352de440d:b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+    "orderId": "843e3048-ad92-463f-be75-9ee352de440d",
+    "relevant": [
+     "16c5fb26-3d97-425b-ada3-570940ff5296",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+   },
+   {
+    "caseId": "843e3048-ad92-463f-be75-9ee352de440d:cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+    "orderId": "843e3048-ad92-463f-be75-9ee352de440d",
+    "relevant": [
+     "16c5fb26-3d97-425b-ada3-570940ff5296",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+   },
+   {
+    "caseId": "843e3048-ad92-463f-be75-9ee352de440d:e8f35b34-3eae-4533-923d-616342ba34ac",
+    "orderId": "843e3048-ad92-463f-be75-9ee352de440d",
+    "relevant": [
+     "16c5fb26-3d97-425b-ada3-570940ff5296",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e8f35b34-3eae-4533-923d-616342ba34ac"
+   },
+   {
+    "caseId": "f5612a96-59d1-49af-9e0a-00d421abf3c4:1624d2e1-047a-4e36-aa9b-d2266a468ade",
+    "orderId": "f5612a96-59d1-49af-9e0a-00d421abf3c4",
+    "relevant": [
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+    ],
+    "segment": "warm",
+    "sourceProductId": "1624d2e1-047a-4e36-aa9b-d2266a468ade"
+   },
+   {
+    "caseId": "f5612a96-59d1-49af-9e0a-00d421abf3c4:cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+    "orderId": "f5612a96-59d1-49af-9e0a-00d421abf3c4",
+    "relevant": [
+     "1624d2e1-047a-4e36-aa9b-d2266a468ade"
+    ],
+    "segment": "warm",
+    "sourceProductId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+   },
+   {
+    "caseId": "33a2b766-6bed-4fb0-823b-197041f5151b:a32aa095-ad50-496a-88a6-bbbf4705a443",
+    "orderId": "33a2b766-6bed-4fb0-823b-197041f5151b",
+    "relevant": [
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a32aa095-ad50-496a-88a6-bbbf4705a443"
+   },
+   {
+    "caseId": "33a2b766-6bed-4fb0-823b-197041f5151b:c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+    "orderId": "33a2b766-6bed-4fb0-823b-197041f5151b",
+    "relevant": [
+     "a32aa095-ad50-496a-88a6-bbbf4705a443"
+    ],
+    "segment": "warm",
+    "sourceProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+   },
+   {
+    "caseId": "bd87c84b-d169-4265-8a15-18213f133b12:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "bd87c84b-d169-4265-8a15-18213f133b12",
+    "relevant": [
+     "6107cf10-7312-43fd-92b0-f41eaec1dfed"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "bd87c84b-d169-4265-8a15-18213f133b12:6107cf10-7312-43fd-92b0-f41eaec1dfed",
+    "orderId": "bd87c84b-d169-4265-8a15-18213f133b12",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "6107cf10-7312-43fd-92b0-f41eaec1dfed"
+   },
+   {
+    "caseId": "1bf98128-2ea2-48e8-9a80-748792fe0f54:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "1bf98128-2ea2-48e8-9a80-748792fe0f54",
+    "relevant": [
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "1bf98128-2ea2-48e8-9a80-748792fe0f54:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "1bf98128-2ea2-48e8-9a80-748792fe0f54",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "547cb25c-610d-44ba-a9a6-9c1dc27f54c7:192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+    "orderId": "547cb25c-610d-44ba-a9a6-9c1dc27f54c7",
+    "relevant": [
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+    ],
+    "segment": "warm",
+    "sourceProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+   },
+   {
+    "caseId": "547cb25c-610d-44ba-a9a6-9c1dc27f54c7:36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+    "orderId": "547cb25c-610d-44ba-a9a6-9c1dc27f54c7",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+    ],
+    "segment": "warm",
+    "sourceProductId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+   },
+   {
+    "caseId": "c1f6c290-ee90-43f3-8008-e67410b71954:36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+    "orderId": "c1f6c290-ee90-43f3-8008-e67410b71954",
+    "relevant": [
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+   },
+   {
+    "caseId": "c1f6c290-ee90-43f3-8008-e67410b71954:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "c1f6c290-ee90-43f3-8008-e67410b71954",
+    "relevant": [
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "53be3ee9-d823-424b-b774-45e10452fa17:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "53be3ee9-d823-424b-b774-45e10452fa17",
+    "relevant": [
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "53be3ee9-d823-424b-b774-45e10452fa17:e8f35b34-3eae-4533-923d-616342ba34ac",
+    "orderId": "53be3ee9-d823-424b-b774-45e10452fa17",
+    "relevant": [
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e8f35b34-3eae-4533-923d-616342ba34ac"
+   },
+   {
+    "caseId": "b1050b35-30e8-4677-bfeb-20ad4294d022:36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+    "orderId": "b1050b35-30e8-4677-bfeb-20ad4294d022",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+   },
+   {
+    "caseId": "b1050b35-30e8-4677-bfeb-20ad4294d022:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "b1050b35-30e8-4677-bfeb-20ad4294d022",
+    "relevant": [
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+     "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "b1050b35-30e8-4677-bfeb-20ad4294d022:5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+    "orderId": "b1050b35-30e8-4677-bfeb-20ad4294d022",
+    "relevant": [
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+   },
+   {
+    "caseId": "b1050b35-30e8-4677-bfeb-20ad4294d022:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "b1050b35-30e8-4677-bfeb-20ad4294d022",
+    "relevant": [
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "b20285ae-efa0-47ad-9bde-c85d38201309:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "b20285ae-efa0-47ad-9bde-c85d38201309",
+    "relevant": [
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "b20285ae-efa0-47ad-9bde-c85d38201309:aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+    "orderId": "b20285ae-efa0-47ad-9bde-c85d38201309",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+   },
+   {
+    "caseId": "b20285ae-efa0-47ad-9bde-c85d38201309:c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+    "orderId": "b20285ae-efa0-47ad-9bde-c85d38201309",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+    ],
+    "segment": "warm",
+    "sourceProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+   },
+   {
+    "caseId": "98a613aa-367d-4238-936b-d2ce56e50a68:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "98a613aa-367d-4238-936b-d2ce56e50a68",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "98a613aa-367d-4238-936b-d2ce56e50a68:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "98a613aa-367d-4238-936b-d2ce56e50a68",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "98a613aa-367d-4238-936b-d2ce56e50a68:7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+    "orderId": "98a613aa-367d-4238-936b-d2ce56e50a68",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+   },
+   {
+    "caseId": "98a613aa-367d-4238-936b-d2ce56e50a68:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "98a613aa-367d-4238-936b-d2ce56e50a68",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "98a613aa-367d-4238-936b-d2ce56e50a68:e8f35b34-3eae-4533-923d-616342ba34ac",
+    "orderId": "98a613aa-367d-4238-936b-d2ce56e50a68",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e8f35b34-3eae-4533-923d-616342ba34ac"
+   },
+   {
+    "caseId": "a2e386de-82fe-4ed9-a671-565c2947f2df:5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+    "orderId": "a2e386de-82fe-4ed9-a671-565c2947f2df",
+    "relevant": [
+     "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+   },
+   {
+    "caseId": "a2e386de-82fe-4ed9-a671-565c2947f2df:e78e2909-2728-4ba1-b5c1-3311e5229c42",
+    "orderId": "a2e386de-82fe-4ed9-a671-565c2947f2df",
+    "relevant": [
+     "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+   },
+   {
+    "caseId": "fdf34e7a-26ab-4250-b973-d847a23957b7:192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+    "orderId": "fdf34e7a-26ab-4250-b973-d847a23957b7",
+    "relevant": [
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+   },
+   {
+    "caseId": "fdf34e7a-26ab-4250-b973-d847a23957b7:c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+    "orderId": "fdf34e7a-26ab-4250-b973-d847a23957b7",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+    ],
+    "segment": "warm",
+    "sourceProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+   },
+   {
+    "caseId": "b3bf7388-382c-456b-89e7-b6be254568d5:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "b3bf7388-382c-456b-89e7-b6be254568d5",
+    "relevant": [
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "b3bf7388-382c-456b-89e7-b6be254568d5:b5da50aa-e125-4d69-9993-78c3bf3b9774",
+    "orderId": "b3bf7388-382c-456b-89e7-b6be254568d5",
+    "relevant": [
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b5da50aa-e125-4d69-9993-78c3bf3b9774"
+   },
+   {
+    "caseId": "b3bf7388-382c-456b-89e7-b6be254568d5:e8f35b34-3eae-4533-923d-616342ba34ac",
+    "orderId": "b3bf7388-382c-456b-89e7-b6be254568d5",
+    "relevant": [
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e8f35b34-3eae-4533-923d-616342ba34ac"
+   },
+   {
+    "caseId": "11df7896-13ac-43cb-a30e-1b07a40f276d:16c5fb26-3d97-425b-ada3-570940ff5296",
+    "orderId": "11df7896-13ac-43cb-a30e-1b07a40f276d",
+    "relevant": [
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "16c5fb26-3d97-425b-ada3-570940ff5296"
+   },
+   {
+    "caseId": "11df7896-13ac-43cb-a30e-1b07a40f276d:c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+    "orderId": "11df7896-13ac-43cb-a30e-1b07a40f276d",
+    "relevant": [
+     "16c5fb26-3d97-425b-ada3-570940ff5296"
+    ],
+    "segment": "warm",
+    "sourceProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+   },
+   {
+    "caseId": "3a545f6c-2fc9-46f4-8d20-545a71d22f01:1624d2e1-047a-4e36-aa9b-d2266a468ade",
+    "orderId": "3a545f6c-2fc9-46f4-8d20-545a71d22f01",
+    "relevant": [
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+    ],
+    "segment": "warm",
+    "sourceProductId": "1624d2e1-047a-4e36-aa9b-d2266a468ade"
+   },
+   {
+    "caseId": "3a545f6c-2fc9-46f4-8d20-545a71d22f01:cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+    "orderId": "3a545f6c-2fc9-46f4-8d20-545a71d22f01",
+    "relevant": [
+     "1624d2e1-047a-4e36-aa9b-d2266a468ade"
+    ],
+    "segment": "warm",
+    "sourceProductId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+   },
+   {
+    "caseId": "785584fd-eb9c-44fa-a0b8-1df465d36d3f:6107cf10-7312-43fd-92b0-f41eaec1dfed",
+    "orderId": "785584fd-eb9c-44fa-a0b8-1df465d36d3f",
+    "relevant": [
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "6107cf10-7312-43fd-92b0-f41eaec1dfed"
+   },
+   {
+    "caseId": "785584fd-eb9c-44fa-a0b8-1df465d36d3f:e8f35b34-3eae-4533-923d-616342ba34ac",
+    "orderId": "785584fd-eb9c-44fa-a0b8-1df465d36d3f",
+    "relevant": [
+     "6107cf10-7312-43fd-92b0-f41eaec1dfed"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e8f35b34-3eae-4533-923d-616342ba34ac"
+   },
+   {
+    "caseId": "c5924e87-85a1-46d4-a310-a49e29f5b519:7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+    "orderId": "c5924e87-85a1-46d4-a310-a49e29f5b519",
+    "relevant": [
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+   },
+   {
+    "caseId": "c5924e87-85a1-46d4-a310-a49e29f5b519:cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+    "orderId": "c5924e87-85a1-46d4-a310-a49e29f5b519",
+    "relevant": [
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7"
+   },
+   {
+    "caseId": "138d9fd0-bd11-4d4f-9cc9-e875b7442d3e:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "138d9fd0-bd11-4d4f-9cc9-e875b7442d3e",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "138d9fd0-bd11-4d4f-9cc9-e875b7442d3e:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "138d9fd0-bd11-4d4f-9cc9-e875b7442d3e",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "138d9fd0-bd11-4d4f-9cc9-e875b7442d3e:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "138d9fd0-bd11-4d4f-9cc9-e875b7442d3e",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "138d9fd0-bd11-4d4f-9cc9-e875b7442d3e:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "138d9fd0-bd11-4d4f-9cc9-e875b7442d3e",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "0ad5a365-1194-40d0-9481-eb27ac01ca18:7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+    "orderId": "0ad5a365-1194-40d0-9481-eb27ac01ca18",
+    "relevant": [
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+   },
+   {
+    "caseId": "0ad5a365-1194-40d0-9481-eb27ac01ca18:e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+    "orderId": "0ad5a365-1194-40d0-9481-eb27ac01ca18",
+    "relevant": [
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+   },
+   {
+    "caseId": "556b31c5-23b0-4062-ad41-20a3498cab77:7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+    "orderId": "556b31c5-23b0-4062-ad41-20a3498cab77",
+    "relevant": [
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc"
+   },
+   {
+    "caseId": "556b31c5-23b0-4062-ad41-20a3498cab77:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "556b31c5-23b0-4062-ad41-20a3498cab77",
+    "relevant": [
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "556b31c5-23b0-4062-ad41-20a3498cab77:e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+    "orderId": "556b31c5-23b0-4062-ad41-20a3498cab77",
+    "relevant": [
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+   },
+   {
+    "caseId": "7a147861-7596-4f35-ad2b-8332d2ab87b3:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "7a147861-7596-4f35-ad2b-8332d2ab87b3",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "7a147861-7596-4f35-ad2b-8332d2ab87b3:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "7a147861-7596-4f35-ad2b-8332d2ab87b3",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "90df2223-3c14-49cf-822f-207603429950",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "7a147861-7596-4f35-ad2b-8332d2ab87b3:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "7a147861-7596-4f35-ad2b-8332d2ab87b3",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "7a147861-7596-4f35-ad2b-8332d2ab87b3:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "7a147861-7596-4f35-ad2b-8332d2ab87b3",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "67d1706a-2f5e-4a71-bffb-8536e95c1f55:57d9cced-fa73-46d7-b3f8-771b4818f78d",
+    "orderId": "67d1706a-2f5e-4a71-bffb-8536e95c1f55",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+   },
+   {
+    "caseId": "67d1706a-2f5e-4a71-bffb-8536e95c1f55:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "67d1706a-2f5e-4a71-bffb-8536e95c1f55",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "67d1706a-2f5e-4a71-bffb-8536e95c1f55:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "67d1706a-2f5e-4a71-bffb-8536e95c1f55",
+    "relevant": [
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "2b60f37a-0faa-4106-859e-825a89dc0d73:7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+    "orderId": "2b60f37a-0faa-4106-859e-825a89dc0d73",
+    "relevant": [
+     "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+    ],
+    "segment": "warm",
+    "sourceProductId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a"
+   },
+   {
+    "caseId": "2b60f37a-0faa-4106-859e-825a89dc0d73:e78e2909-2728-4ba1-b5c1-3311e5229c42",
+    "orderId": "2b60f37a-0faa-4106-859e-825a89dc0d73",
+    "relevant": [
+     "7d5358ac-bc24-4c8e-b3a0-52523f3d390a"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+   },
+   {
+    "caseId": "a8079bdd-da88-4a05-977e-2f6bfe4c432b:192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+    "orderId": "a8079bdd-da88-4a05-977e-2f6bfe4c432b",
+    "relevant": [
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+    ],
+    "segment": "warm",
+    "sourceProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+   },
+   {
+    "caseId": "a8079bdd-da88-4a05-977e-2f6bfe4c432b:b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+    "orderId": "a8079bdd-da88-4a05-977e-2f6bfe4c432b",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+   },
+   {
+    "caseId": "e67f5e1e-adf8-45fd-83cc-0931859c14c2:5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+    "orderId": "e67f5e1e-adf8-45fd-83cc-0931859c14c2",
+    "relevant": [
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+   },
+   {
+    "caseId": "e67f5e1e-adf8-45fd-83cc-0931859c14c2:b5da50aa-e125-4d69-9993-78c3bf3b9774",
+    "orderId": "e67f5e1e-adf8-45fd-83cc-0931859c14c2",
+    "relevant": [
+     "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b5da50aa-e125-4d69-9993-78c3bf3b9774"
+   },
+   {
+    "caseId": "9da074e5-c6fa-4c11-aaca-360c5027028c:16c5fb26-3d97-425b-ada3-570940ff5296",
+    "orderId": "9da074e5-c6fa-4c11-aaca-360c5027028c",
+    "relevant": [
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "16c5fb26-3d97-425b-ada3-570940ff5296"
+   },
+   {
+    "caseId": "9da074e5-c6fa-4c11-aaca-360c5027028c:b5da50aa-e125-4d69-9993-78c3bf3b9774",
+    "orderId": "9da074e5-c6fa-4c11-aaca-360c5027028c",
+    "relevant": [
+     "16c5fb26-3d97-425b-ada3-570940ff5296",
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b5da50aa-e125-4d69-9993-78c3bf3b9774"
+   },
+   {
+    "caseId": "9da074e5-c6fa-4c11-aaca-360c5027028c:c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+    "orderId": "9da074e5-c6fa-4c11-aaca-360c5027028c",
+    "relevant": [
+     "16c5fb26-3d97-425b-ada3-570940ff5296",
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774"
+    ],
+    "segment": "warm",
+    "sourceProductId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+   },
+   {
+    "caseId": "31107fe3-b2d6-423c-9f90-b22afa1b5fd2:90df2223-3c14-49cf-822f-207603429950",
+    "orderId": "31107fe3-b2d6-423c-9f90-b22afa1b5fd2",
+    "relevant": [
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "90df2223-3c14-49cf-822f-207603429950"
+   },
+   {
+    "caseId": "31107fe3-b2d6-423c-9f90-b22afa1b5fd2:a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+    "orderId": "31107fe3-b2d6-423c-9f90-b22afa1b5fd2",
+    "relevant": [
+     "90df2223-3c14-49cf-822f-207603429950",
+     "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+   },
+   {
+    "caseId": "31107fe3-b2d6-423c-9f90-b22afa1b5fd2:e8f35b34-3eae-4533-923d-616342ba34ac",
+    "orderId": "31107fe3-b2d6-423c-9f90-b22afa1b5fd2",
+    "relevant": [
+     "90df2223-3c14-49cf-822f-207603429950",
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e8f35b34-3eae-4533-923d-616342ba34ac"
+   },
+   {
+    "caseId": "33dc49a2-4480-48d9-b1eb-69e10e7e31b0:5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+    "orderId": "33dc49a2-4480-48d9-b1eb-69e10e7e31b0",
+    "relevant": [
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+    ],
+    "segment": "warm",
+    "sourceProductId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+   },
+   {
+    "caseId": "33dc49a2-4480-48d9-b1eb-69e10e7e31b0:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "33dc49a2-4480-48d9-b1eb-69e10e7e31b0",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "33dc49a2-4480-48d9-b1eb-69e10e7e31b0:b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+    "orderId": "33dc49a2-4480-48d9-b1eb-69e10e7e31b0",
+    "relevant": [
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+    ],
+    "segment": "warm",
+    "sourceProductId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6"
+   },
+   {
+    "caseId": "3c3020fd-3348-4185-a6e3-21e76c2f83d9:192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+    "orderId": "3c3020fd-3348-4185-a6e3-21e76c2f83d9",
+    "relevant": [
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "a1192013-eeb9-4302-80d2-28f5f609857d",
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+   },
+   {
+    "caseId": "3c3020fd-3348-4185-a6e3-21e76c2f83d9:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "3c3020fd-3348-4185-a6e3-21e76c2f83d9",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+     "a1192013-eeb9-4302-80d2-28f5f609857d",
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "3c3020fd-3348-4185-a6e3-21e76c2f83d9:a1192013-eeb9-4302-80d2-28f5f609857d",
+    "orderId": "3c3020fd-3348-4185-a6e3-21e76c2f83d9",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+    ],
+    "segment": "warm",
+    "sourceProductId": "a1192013-eeb9-4302-80d2-28f5f609857d"
+   },
+   {
+    "caseId": "3c3020fd-3348-4185-a6e3-21e76c2f83d9:e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+    "orderId": "3c3020fd-3348-4185-a6e3-21e76c2f83d9",
+    "relevant": [
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+     "a1192013-eeb9-4302-80d2-28f5f609857d"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc"
+   },
+   {
+    "caseId": "1c57fc21-b335-41a2-872f-e24ec8e9a29c:73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+    "orderId": "1c57fc21-b335-41a2-872f-e24ec8e9a29c",
+    "relevant": [
+     "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+    ],
+    "segment": "warm",
+    "sourceProductId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+   },
+   {
+    "caseId": "1c57fc21-b335-41a2-872f-e24ec8e9a29c:e78e2909-2728-4ba1-b5c1-3311e5229c42",
+    "orderId": "1c57fc21-b335-41a2-872f-e24ec8e9a29c",
+    "relevant": [
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+    ],
+    "segment": "warm",
+    "sourceProductId": "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+   }
+  ],
+  "counts": {
+   "all": 125,
+   "cold": 0,
+   "warm": 125
+  },
+  "excluded": {
+   "droppedRelevantNotInCandidates": 0,
+   "skippedSourcesNotInCandidates": 0
+  },
+  "orders": 47,
+  "sha256": "a7844a3ce90960361a56536b9a432e29fd72b522a45d1408936481422ab1a1b3",
+  "unit": "source product of an evaluation basket with >= 2 products (leave-one-in)"
+ },
+ "home": {
+  "cases": [
+   {
+    "relevant": {
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0007"
+   },
+   {
+    "relevant": {
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0010"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2,
+     "90df2223-3c14-49cf-822f-207603429950": 2,
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0015"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0020"
+   },
+   {
+    "relevant": {
+     "6a3f7f37-3340-4432-94e9-fd46990a3878": 1,
+     "7d5358ac-bc24-4c8e-b3a0-52523f3d390a": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0023"
+   },
+   {
+    "relevant": {
+     "a1192013-eeb9-4302-80d2-28f5f609857d": 1,
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0024"
+   },
+   {
+    "relevant": {
+     "e78e2909-2728-4ba1-b5c1-3311e5229c42": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0035"
+   },
+   {
+    "relevant": {
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0037"
+   },
+   {
+    "relevant": {
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2,
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0044"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 2,
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2,
+     "90df2223-3c14-49cf-822f-207603429950": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0048"
+   },
+   {
+    "relevant": {
+     "6a3f7f37-3340-4432-94e9-fd46990a3878": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0053"
+   },
+   {
+    "relevant": {
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0057"
+   },
+   {
+    "relevant": {
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0058"
+   },
+   {
+    "relevant": {
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6": 2,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0062"
+   },
+   {
+    "relevant": {
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0068"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1,
+     "90df2223-3c14-49cf-822f-207603429950": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0071"
+   },
+   {
+    "relevant": {
+     "6a3f7f37-3340-4432-94e9-fd46990a3878": 1
+    },
+    "segment": "cold",
+    "userRef": "syn-u0073"
+   },
+   {
+    "relevant": {
+     "6a3f7f37-3340-4432-94e9-fd46990a3878": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0077"
+   },
+   {
+    "relevant": {
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443": 2,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2,
+     "a1192013-eeb9-4302-80d2-28f5f609857d": 2,
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0086"
+   },
+   {
+    "relevant": {
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0091"
+   },
+   {
+    "relevant": {
+     "a32aa095-ad50-496a-88a6-bbbf4705a443": 2,
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0093"
+   },
+   {
+    "relevant": {
+     "90df2223-3c14-49cf-822f-207603429950": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0097"
+   },
+   {
+    "relevant": {
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0098"
+   },
+   {
+    "relevant": {
+     "1624d2e1-047a-4e36-aa9b-d2266a468ade": 1,
+     "6a3f7f37-3340-4432-94e9-fd46990a3878": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0107"
+   },
+   {
+    "relevant": {
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0113"
+   },
+   {
+    "relevant": {
+     "1624d2e1-047a-4e36-aa9b-d2266a468ade": 1,
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1,
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 1
+    },
+    "segment": "cold",
+    "userRef": "syn-u0116"
+   },
+   {
+    "relevant": {
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0135"
+   },
+   {
+    "relevant": {
+     "1624d2e1-047a-4e36-aa9b-d2266a468ade": 2,
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0142"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1,
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 1,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0149"
+   },
+   {
+    "relevant": {
+     "1624d2e1-047a-4e36-aa9b-d2266a468ade": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0161"
+   },
+   {
+    "relevant": {
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0162"
+   },
+   {
+    "relevant": {
+     "7d5358ac-bc24-4c8e-b3a0-52523f3d390a": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0169"
+   },
+   {
+    "relevant": {
+     "6a3f7f37-3340-4432-94e9-fd46990a3878": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0172"
+   },
+   {
+    "relevant": {
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c": 1,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0175"
+   },
+   {
+    "relevant": {
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0185"
+   },
+   {
+    "relevant": {
+     "1624d2e1-047a-4e36-aa9b-d2266a468ade": 1,
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5": 1,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 1,
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0186"
+   },
+   {
+    "relevant": {
+     "16c5fb26-3d97-425b-ada3-570940ff5296": 2,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0192"
+   },
+   {
+    "relevant": {
+     "16c5fb26-3d97-425b-ada3-570940ff5296": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0198"
+   },
+   {
+    "relevant": {
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 1,
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c": 1,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0201"
+   },
+   {
+    "relevant": {
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0215"
+   },
+   {
+    "relevant": {
+     "90df2223-3c14-49cf-822f-207603429950": 2,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 2,
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0217"
+   },
+   {
+    "relevant": {
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0218"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 2,
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 1,
+     "90df2223-3c14-49cf-822f-207603429950": 2,
+     "a32aa095-ad50-496a-88a6-bbbf4705a443": 1,
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c": 1,
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 1,
+     "e78e2909-2728-4ba1-b5c1-3311e5229c42": 1,
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0225"
+   },
+   {
+    "relevant": {
+     "a32aa095-ad50-496a-88a6-bbbf4705a443": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0229"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 2,
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0241"
+   },
+   {
+    "relevant": {
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 1,
+     "90df2223-3c14-49cf-822f-207603429950": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0244"
+   },
+   {
+    "relevant": {
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0249"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "90df2223-3c14-49cf-822f-207603429950": 2,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0250"
+   },
+   {
+    "relevant": {
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0262"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 1,
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c": 1,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0264"
+   },
+   {
+    "relevant": {
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0284"
+   },
+   {
+    "relevant": {
+     "5ea045bb-cdea-48b9-a72e-b72a2aa8324c": 2,
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0288"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 2,
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0299"
+   },
+   {
+    "relevant": {
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 1
+    },
+    "segment": "cold",
+    "userRef": "syn-u0303"
+   },
+   {
+    "relevant": {
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5": 2,
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 2,
+     "5ea045bb-cdea-48b9-a72e-b72a2aa8324c": 2,
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0309"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "a1192013-eeb9-4302-80d2-28f5f609857d": 2,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0311"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1,
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 1,
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0312"
+   },
+   {
+    "relevant": {
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0316"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 1,
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0325"
+   },
+   {
+    "relevant": {
+     "5ea045bb-cdea-48b9-a72e-b72a2aa8324c": 1,
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0332"
+   },
+   {
+    "relevant": {
+     "7d5358ac-bc24-4c8e-b3a0-52523f3d390a": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0341"
+   },
+   {
+    "relevant": {
+     "6a3f7f37-3340-4432-94e9-fd46990a3878": 2,
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2,
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0344"
+   },
+   {
+    "relevant": {
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0345"
+   },
+   {
+    "relevant": {
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0348"
+   },
+   {
+    "relevant": {
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443": 2,
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0349"
+   },
+   {
+    "relevant": {
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0357"
+   },
+   {
+    "relevant": {
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 1,
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0358"
+   },
+   {
+    "relevant": {
+     "1624d2e1-047a-4e36-aa9b-d2266a468ade": 1,
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0364"
+   },
+   {
+    "relevant": {
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0365"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0371"
+   },
+   {
+    "relevant": {
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0374"
+   },
+   {
+    "relevant": {
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774": 2,
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0375"
+   },
+   {
+    "relevant": {
+     "7d5358ac-bc24-4c8e-b3a0-52523f3d390a": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0377"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 2,
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0380"
+   },
+   {
+    "relevant": {
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443": 2,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 2,
+     "e78e2909-2728-4ba1-b5c1-3311e5229c42": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0381"
+   },
+   {
+    "relevant": {
+     "6107cf10-7312-43fd-92b0-f41eaec1dfed": 2,
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0382"
+   },
+   {
+    "relevant": {
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0398"
+   },
+   {
+    "relevant": {
+     "16c5fb26-3d97-425b-ada3-570940ff5296": 2,
+     "b5da50aa-e125-4d69-9993-78c3bf3b9774": 2,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0414"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0421"
+   },
+   {
+    "relevant": {
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0425"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "6107cf10-7312-43fd-92b0-f41eaec1dfed": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0426"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 2,
+     "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c": 2,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0428"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2,
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0431"
+   },
+   {
+    "relevant": {
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0433"
+   },
+   {
+    "relevant": {
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 2,
+     "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0439"
+   },
+   {
+    "relevant": {
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 2,
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0441"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0444"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0447"
+   },
+   {
+    "relevant": {
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443": 1,
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 1,
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0449"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "90df2223-3c14-49cf-822f-207603429950": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0453"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2,
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0454"
+   },
+   {
+    "relevant": {
+     "a32aa095-ad50-496a-88a6-bbbf4705a443": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0465"
+   },
+   {
+    "relevant": {
+     "5f2e358b-ce0f-4400-ab0b-76aa4a575728": 2,
+     "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc": 2,
+     "90df2223-3c14-49cf-822f-207603429950": 2,
+     "a40c8829-74a7-4fbd-beab-63efcdf6efe1": 2,
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0468"
+   },
+   {
+    "relevant": {
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443": 1,
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5": 1,
+     "57d9cced-fa73-46d7-b3f8-771b4818f78d": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0472"
+   },
+   {
+    "relevant": {
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5": 2,
+     "7d5358ac-bc24-4c8e-b3a0-52523f3d390a": 2,
+     "90df2223-3c14-49cf-822f-207603429950": 2,
+     "e78e2909-2728-4ba1-b5c1-3311e5229c42": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0474"
+   },
+   {
+    "relevant": {
+     "a32aa095-ad50-496a-88a6-bbbf4705a443": 2,
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0476"
+   },
+   {
+    "relevant": {
+     "192ae5aa-1f59-49ed-a7c4-eecf49c51443": 2,
+     "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5": 2
+    },
+    "segment": "cold",
+    "userRef": "syn-u0480"
+   },
+   {
+    "relevant": {
+     "6a3f7f37-3340-4432-94e9-fd46990a3878": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0484"
+   },
+   {
+    "relevant": {
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0485"
+   },
+   {
+    "relevant": {
+     "c440bf6a-164d-4471-9df2-ed9e96bf1a16": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0486"
+   },
+   {
+    "relevant": {
+     "16c5fb26-3d97-425b-ada3-570940ff5296": 2,
+     "73c01f88-cb97-48bb-83c4-ffdc20ad36db": 2,
+     "90df2223-3c14-49cf-822f-207603429950": 2,
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6": 2,
+     "cab1d97c-88c8-4f4e-8de7-2b7d575197b7": 2,
+     "e8f35b34-3eae-4533-923d-616342ba34ac": 2
+    },
+    "segment": "warm",
+    "userRef": "syn-u0493"
+   },
+   {
+    "relevant": {
+     "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6": 1
+    },
+    "segment": "warm",
+    "userRef": "syn-u0495"
+   }
+  ],
+  "counts": {
+   "all": 102,
+   "cold": 14,
+   "warm": 88
+  },
+  "excluded": {
+   "activeUsersInWindow": 191,
+   "removedNotInCandidates": 0,
+   "removedRepurchases": 43,
+   "usersWithoutRelevant": 89
+  },
+  "grades": {
+   "ADD_TO_CART": 1,
+   "PURCHASE": 2
+  },
+  "sha256": "5e782e5c0c63182f48bd8aa7975d986855e5ae73442ad39970f63152f1a82a9f",
+  "unit": "user with ADD_TO_CART or PURCHASE in the window"
+ },
+ "trainRows": {
+  "baskets": 430,
+  "interactions": 6852
+ },
+ "window": {
+  "evalFrom": "2026-10-13T00:00:00Z",
+  "evalUntil": "2026-10-20T00:00:00Z",
+  "name": "dev",
+  "trainUntil": "2026-10-13T00:00:00Z"
+ }
+}

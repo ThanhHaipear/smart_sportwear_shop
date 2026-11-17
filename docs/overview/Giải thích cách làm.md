@@ -1117,3 +1117,37 @@ Muốn so sánh popularity, luật kết hợp và content-based thì cần dữ
 - Manifest `evidence/recommendation/synthetic-v1-manifest.json` ghi checksum config, snapshot, hai file dữ liệu và commit bộ sinh `ce11b991`.
 - `recommendation-service`: **52 passed** (thêm 9 test cho bộ sinh: tất định, chỉ dùng sản phẩm trong catalog, thứ tự phễu, sản phẩm mới không xuất hiện trước ngày ra mắt, tỷ lệ nhiễu, từ chối sản phẩm thiếu thuộc tính).
 - Supabase không bị thay đổi.
+
+---
+
+## [2026-11-17] Giai đoạn 5: Chia dữ liệu theo thời gian và đóng băng ca đánh giá
+
+### 1. Nhiệm vụ này để làm gì?
+
+Mọi thuật toán phải được đo trên **cùng một tập ca**, với **cùng mốc cắt dữ liệu**. Nếu mỗi lần chạy tự chia lại, kết quả các thuật toán không so sánh được và có thể vô tình dùng dữ liệu tương lai. Vì vậy tập ca được tạo một lần, ghi ra file, có checksum.
+
+### 2. Cách làm
+
+- `app/offline_split.py` (hàm thuần, Giai đoạn 9 dùng lại):
+  - `windows`: DEV huấn luyện trước 13/10, đánh giá 13–20/10. TEST huấn luyện trước 20/10, đánh giá 20–27/10.
+  - `before`/`within`: lọc theo mốc nửa mở. Sự kiện đúng lúc 00:00:00 ngày 20/10 thuộc TEST, không thuộc train.
+  - `candidate_set`: sản phẩm `ACTIVE`, còn hàng, đã ra mắt tại thời điểm bắt đầu đánh giá.
+  - `fbt_cases`: mỗi sản phẩm trong giỏ đánh giá (≥ 2 sản phẩm) làm nguồn một lần, phần còn lại của giỏ là đáp án. Warm/cold xét theo giỏ **trước** mốc cắt.
+  - `home_cases`: đáp án là sản phẩm user thêm giỏ (1) hoặc mua (2) trong tuần đánh giá. Bỏ sản phẩm đã mua trong train, khớp với bộ lọc khi phục vụ thật.
+- `scripts/build_evaluation_split.py`: kiểm checksum dataset với manifest của bộ sinh, rồi ghi `splits/dev.json`, `splits/test.json` và manifest split. Dữ liệu train không chép ra file riêng; bộ đánh giá lọc theo `trainUntil`.
+
+### 3. Kiến thức liên quan (dùng khi bảo vệ)
+
+- **Leave-one-in cho "thường mua cùng":** khách mua {giày, tất, quần}. Hỏi mô hình "đang xem giày thì gợi ý gì", đáp án đúng là tất và quần; lặp lại với tất và quần làm nguồn.
+- **Vì sao bỏ sản phẩm đã mua khỏi đáp án HOME?** Khi phục vụ thật, hệ thống không gợi ý lại đồ đã mua. Để đáp án chứa những món đó thì không thuật toán nào đạt được, metric bị kéo xuống không công bằng.
+- **Vì sao DEV không có ca cold?** Sản phẩm mới ra mắt đầu tuần 8. Không thể chọn cấu hình riêng cho nhóm cold, nên nhóm cold chỉ được đo một lần trên TEST, và điều này được ghi vào tài liệu thiết kế trước khi chạy mô hình.
+
+### 4. Kết quả
+
+| Split | Train (sự kiện / đơn) | Ứng viên | FBT tất cả / warm / cold | HOME tất cả / warm / cold |
+|---|---|---|---|---|
+| DEV | 6.852 / 430 | 24 | 125 / 125 / 0 | 102 / 88 / 14 |
+| TEST | 7.987 / 510 | 36 | 145 / 106 / 39 | 156 / 117 / 39 |
+
+- Không ca nào bị loại vì sản phẩm ngoài tập ứng viên. HOME loại 43 (DEV) và 37 (TEST) sản phẩm mua lại.
+- `recommendation-service`: **61 passed** (thêm 9 test: mốc nửa mở, cửa sổ không chồng nhau, lọc ứng viên theo trạng thái/tồn/ngày ra mắt, leave-one-in, warm/cold không dùng dữ liệu tương lai, nhãn HOME, tái lập checksum của file đã commit).
