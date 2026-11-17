@@ -1222,3 +1222,32 @@ Luật kết hợp không giúp được sản phẩm mới, vì chưa ai mua n�
 - Nhận xét trung thực: trên DEV, content lấp chỗ trống kém popularity một chút. Lợi ích chính của content là ca cold, chỉ có trong TEST.
 - **Khi chạy thật hiện tại**, Catalog chưa có giới tính/môn/màu nên content chỉ so được danh mục, thương hiệu, khoảng giá. Có test bảo đảm nếu không có đặc trưng chung thì vị trí đó rơi xuống popularity.
 - `recommendation-service`: **85 passed** (thêm 10 test content, 2 test service, 1 test snapshot).
+
+---
+
+## [2026-11-17] Giai đoạn 8: Ghi lại model và kết quả gợi ý
+
+### 1. Nhiệm vụ này để làm gì?
+
+Khi báo cáo "model X đạt NDCG 0,45", phải chỉ ra được model X học từ **dữ liệu nào**, **tham số nào**, tại **thời điểm nào**. Khi xem lại một lần gợi ý cũ, phải biết model nào trả ra, cho ai, mất bao lâu. Trước đây `recommendation_models` chỉ có tên và giờ train; `recommendation_requests` thiếu `latency_ms` và `user_ref`.
+
+### 2. Cách làm
+
+- `RecommendationService.rebuild(model_version, ..., cutoff)`: lấy giỏ có `occurred_at < cutoff` (mặc định là thời điểm chạy), khai phá luật, rồi ghi `ModelMetadata`: thuật toán, `config`, mốc cắt, checksum giỏ train.
+- `training_checksum` (`app/domain.py`): sắp xếp đơn và sản phẩm, đổi giờ về UTC, rồi băm SHA-256. Cùng dữ liệu thì cùng checksum dù đọc theo thứ tự nào. Báo cáo offline dùng đúng hàm này.
+- `PostgresRepository.replace_rules`: trong **một transaction**, lưu trữ luật cũ và model cũ (`ARCHIVED`), ghi luật mới và dòng model mới.
+- `recommend(..., user_ref)`: đo thời gian xếp hạng, ghi `latency_ms` và `user_ref` vào `recommendation_requests`. API lấy `user_ref` từ header `X-User-Id` mà Gateway gắn sau khi kiểm JWT, không tin giá trị client tự gửi trong body, và không trả lại trong response.
+- Ngưỡng mặc định khi rebuild đổi thành lựa chọn của DEV (0,005 / 0,05) để model chạy thật đúng là cấu hình đã đánh giá.
+- `scripts/verify_model_tracking.py`: chạy toàn bộ đường SQL mới trên Supabase trong một transaction rồi rollback.
+
+### 3. Kiến thức liên quan (dùng khi bảo vệ)
+
+- **Tái lập (reproducibility):** cùng code (git commit) + cùng dữ liệu (checksum) + cùng tham số (`config`) thì phải ra cùng model. Thiếu một trong ba thì không chứng minh được kết quả.
+- **Vì sao mốc cắt cả khi chạy thật?** Rebuild lúc 10:00 mà một đơn đến lúc 10:00:01 trong khi đang đọc thì không rõ đơn đó có được tính không. Có mốc cắt thì checksum luôn khớp với tập giỏ đã dùng.
+- **Vì sao archive trong cùng transaction?** Nếu lỗi giữa chừng thì không có lúc nào hai bộ luật cùng `ACTIVE` hoặc không có bộ nào.
+
+### 4. Kết quả
+
+- `recommendation-service`: **90 passed** (thêm 5 test: metadata đủ và đúng mốc cắt, model cũ bị archive, checksum không phụ thuộc thứ tự, log có latency và user, API không trả lại `user_ref`). Sửa một test cũ phụ thuộc đồng hồ Windows (độ phân giải ~15 ms).
+- Kiểm tra trên Supabase (rollback): model ghi đủ `config`/mốc/checksum, request có `user_ref` và `latency_ms` ≈ 290 ms, `reason_code` đúng tầng; số dòng 4 bảng không đổi.
+- Chạy lại DEV Giai đoạn 6–7 để báo cáo có checksum train: **metric không đổi**.

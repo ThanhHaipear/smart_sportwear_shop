@@ -194,9 +194,13 @@
 
 ### Giai đoạn 8 — Ghi lại model và kết quả
 
-- [ ] Mỗi cấu hình = một dòng `recommendation_models` có `config`, `training_cutoff_at`, `training_event_checksum` (sửa `replace_rules`).
-- [ ] `record_response` ghi thêm `latency_ms`, `user_ref`.
-- [ ] `reason_code` phân biệt rõ: `ASSOCIATION_RULE`, `POPULARITY`, `SIMILAR_CONTENT`.
+- [x] Mỗi lần rebuild luật kết hợp = một dòng `recommendation_models` có `config` (ngưỡng, số giỏ, số luật), `training_cutoff_at`, `training_event_checksum` (SHA-256 của giỏ train ở dạng chuẩn hóa). Chỉ khai phá giỏ **trước** mốc cắt; model cũ chuyển `ARCHIVED` trong cùng transaction. Ngưỡng mặc định theo lựa chọn DEV: support 0,005, confidence 0,05.
+- [x] `record_response` ghi thêm `latency_ms` (thời gian xếp hạng) và `user_ref` (lấy từ header `X-User-Id` do Gateway gắn, không trả lại trong response).
+- [x] `reason_code` phân biệt rõ `ASSOCIATION_RULE`, `SIMILAR_CONTENT`, `POPULARITY` (làm ở Giai đoạn 7).
+- [x] Báo cáo offline ghi cùng checksum giỏ train (`training.basketChecksum`) và checksum sự kiện train.
+- [x] Kiểm tra SQL trên schema thật trong một transaction rồi rollback (`scripts/verify_model_tracking.py`): đủ cột, số dòng không đổi sau khi chạy.
+
+> Đo thử trên Supabase: một lần gợi ý mất khoảng **290 ms** vì service gọi DB nhiều lần (luật, sản phẩm, ứng viên, snapshot nguồn, popularity). Chưa tối ưu; ghi nhận để báo cáo.
 
 ### Giai đoạn 9 — Đánh giá offline
 

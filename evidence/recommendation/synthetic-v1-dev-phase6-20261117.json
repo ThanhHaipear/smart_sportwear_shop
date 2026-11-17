@@ -8,8 +8,8 @@
     "name": "dev",
     "trainUntil": "2026-10-13T00:00:00Z"
   },
-  "runAt": "2026-11-17T07:39:22+00:00",
-  "gitCommit": "bc59db03e036b6eb8985d1e87a857ab4478948df",
+  "runAt": "2026-11-17T08:12:05+00:00",
+  "gitCommit": "b9a77e5700527926f17bea577abfda9bf5945537",
   "inputs": {
     "split": {
       "path": "splits/dev.json",
@@ -27,6 +27,11 @@
   "trainingRows": {
     "events": 7624,
     "baskets": 430
+  },
+  "training": {
+    "cutoff": "2026-10-13T00:00:00Z",
+    "basketChecksum": "12d8959c614c31f68640a2d00540da6fc57e7177b053d2fb47a73e204b6286c8",
+    "interactionChecksum": "00c552b1d99bff58f82cfcc024ea1808e8330a436df6bbbf5bb04f92a7615167"
   },
   "protocol": {
     "kValues": [
@@ -4388,5 +4393,5 @@
       }
     }
   ],
-  "elapsedSeconds": 7.03
+  "elapsedSeconds": 38.01
 }
