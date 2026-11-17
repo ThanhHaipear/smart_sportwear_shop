@@ -1151,3 +1151,39 @@ Mọi thuật toán phải được đo trên **cùng một tập ca**, với **
 
 - Không ca nào bị loại vì sản phẩm ngoài tập ứng viên. HOME loại 43 (DEV) và 37 (TEST) sản phẩm mua lại.
 - `recommendation-service`: **61 passed** (thêm 9 test: mốc nửa mở, cửa sổ không chồng nhau, lọc ứng viên theo trạng thái/tồn/ngày ra mắt, leave-one-in, warm/cold không dùng dữ liệu tương lai, nhãn HOME, tái lập checksum của file đã commit).
+
+---
+
+## [2026-11-17] Giai đoạn 6: Baseline và luật kết hợp trên DEV
+
+### 1. Nhiệm vụ này để làm gì?
+
+Trước khi làm content-based, cần biết **mốc phải vượt**: random (đoán bừa) và popularity (gợi ý đồ bán chạy). Đồng thời chọn ngưỡng cho luật kết hợp, thuật toán đang chạy thật. Mọi lựa chọn làm trên **DEV**. TEST chưa được đụng tới.
+
+### 2. Cách làm
+
+- `app/metrics.py`: Precision, Recall, Hit Rate, NDCG (gain tuyến tính, chia `log2(i + 1)`), Coverage, trung bình theo đơn, bootstrap theo nhóm (lấy mẫu lại **cả đơn hàng**, vì các ca trong cùng một đơn không độc lập).
+- `app/domain.py`: `popularity_scores` cộng trọng số sự kiện có suy giảm theo thời gian, chỉ dùng sự kiện **trước** mốc cắt. Hàm này dùng được cả khi phục vụ thật.
+- `scripts/evaluate_offline.py`: dựng dữ liệu train từ dataset theo mốc cắt, chạy 15 cấu hình, chọn theo NDCG@5 của FBT, ghi báo cáo có checksum đầu vào và git commit. Chạy TEST phải có cờ `--final`.
+- Quy trình chọn (chốt trong code trước khi chạy): popularity chọn half-life → thử bộ trọng số thay thế ở half-life đó (chỉ báo cáo) → luật kết hợp chọn trong lưới 3 × 3 → ghép luật tốt nhất với popularity tốt nhất. Hòa thì lấy cấu hình đơn giản hơn.
+
+### 3. Kiến thức liên quan (dùng khi bảo vệ)
+
+- **Vì sao random chỉ đạt Hit Rate 0,39?** 24 ứng viên, mỗi ca trung bình khoảng 2 đáp án. Chọn bừa 5 món thì xác suất trúng ít nhất một món khoảng 40%. Đây là mức sàn.
+- **Vì sao popularity Coverage chỉ 0,25?** Mọi khách đều nhận gần như cùng 5–6 sản phẩm bán chạy. Đây là **popularity bias**.
+- **Vì sao đánh giá luật kết hợp "thuần"?** Để biết luật tự đóng góp bao nhiêu. Luật thuần trả trung bình ít hơn 10 sản phẩm (cột `short` = 125/125 ca). Bản bù popularity cho thấy lợi ích của việc ghép tầng.
+- **Bootstrap theo đơn:** một đơn {giày, tất, quần} sinh ra 3 ca có liên quan nhau. Nếu lấy mẫu lại từng ca riêng lẻ, khoảng tin cậy sẽ hẹp giả tạo.
+
+### 4. Kết quả
+
+| Cấu hình | P@5 | R@5 | HR@5 | NDCG@5 (CI 95%) | Coverage@5 |
+|---|---|---|---|---|---|
+| Random | 0,094 | 0,237 | 0,392 | 0,161 (0,12–0,21) | 1,00 |
+| Popularity, half-life 14 ngày | 0,179 | 0,415 | 0,608 | 0,329 (0,24–0,42) | 0,25 |
+| Luật kết hợp s = 0,005, c = 0,05 | 0,203 | 0,568 | 0,728 | 0,453 (0,37–0,54) | 1,00 |
+| Luật kết hợp + bù popularity | 0,226 | 0,617 | 0,792 | 0,479 (0,40–0,56) | 1,00 |
+
+- HOME (102 user): popularity NDCG@5 0,290, random 0,171. Nhóm cold chỉ có 14 user, không đủ để kết luận.
+- Bộ trọng số thay thế cho cùng thứ hạng với bộ mặc định.
+- Ngưỡng tốt nhất của luật kết hợp nằm ở biên thấp nhất của lưới. Không mở rộng lưới sau khi xem kết quả, theo đúng protocol.
+- `recommendation-service`: **72 passed**. Báo cáo: `evidence/recommendation/synthetic-v1-dev-phase6-20261117.json` (commit code `bc59db03`), chạy hết 7 giây.

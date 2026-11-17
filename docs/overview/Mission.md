@@ -146,10 +146,24 @@
 
 ### Giai đoạn 6 — Baseline và luật kết hợp trên cùng protocol
 
-- [ ] Random baseline (seed cố định).
-- [ ] Popularity tính **chỉ từ dữ liệu train** (có thể thêm suy giảm theo thời gian, mục C.3). Lưu ý `purchase_count` trong DB là đếm toàn thời gian, **không dùng trực tiếp** cho đánh giá offline vì sẽ rò rỉ dữ liệu tương lai.
-- [ ] Association rules: khai phá từ giỏ trong train, chọn ngưỡng support/confidence/lift trên DEV.
-- [ ] Unit test: không dùng sự kiện sau mốc cutoff; không trả sản phẩm hết hàng.
+- [x] Random baseline (seed `20261117`, mỗi ca một seed con theo `caseId`).
+- [x] Popularity tính **chỉ từ dữ liệu train** (`popularity_scores` trong `app/domain.py`): trọng số sự kiện mục 4 của thiết kế, suy giảm theo half-life ∈ {không, 14, 7} ngày, bỏ sự kiện ≥ mốc cắt, VIEW ngay sau CLICK chỉ tính một lần. Không dùng `purchase_count` của DB.
+- [x] Association rules: khai phá từ giỏ train, lưới 3 × 3 support/confidence, chọn trên DEV. Đánh giá **thuần** (thiếu thì trả ít hơn K) và bản **bù popularity** riêng.
+- [x] Unit test: không dùng sự kiện sau mốc cutoff; chỉ trả sản phẩm trong tập ứng viên; không trả sản phẩm nguồn; metric khớp ví dụ tính tay C.9 (`tests/test_offline_evaluation.py`, 11 test).
+- [x] Chạy DEV (`scripts/evaluate_offline.py --split dev --stage phase6`), kết quả `evidence/recommendation/synthetic-v1-dev-phase6-20261117.json`. TEST bị chặn nếu không có `--final`.
+
+**Kết quả DEV (FBT, 125 ca, tất cả warm):**
+
+| Cấu hình | P@5 | R@5 | HR@5 | NDCG@5 (CI 95%) | Coverage@5 |
+|---|---|---|---|---|---|
+| Random | 0,094 | 0,237 | 0,392 | 0,161 (0,12–0,21) | 1,00 |
+| Popularity, half-life 14 ngày (**chọn**) | 0,179 | 0,415 | 0,608 | 0,329 (0,24–0,42) | 0,25 |
+| Luật kết hợp s = 0,005, c = 0,05 (**chọn**) | 0,203 | 0,568 | 0,728 | 0,453 (0,37–0,54) | 1,00 |
+| Luật kết hợp + bù popularity | 0,226 | 0,617 | 0,792 | 0,479 (0,40–0,56) | 1,00 |
+
+- Bộ trọng số thay thế (`VIEW=1, ADD_TO_CART=2, PURCHASE=3`) cho **cùng thứ hạng** với bộ mặc định: popularity không nhạy với trọng số trên dữ liệu này.
+- Ngưỡng tốt nhất của luật kết hợp nằm ở **biên thấp nhất** của lưới (support 0,005 ≈ 3 giỏ). Theo protocol không thêm cấu hình sau khi xem DEV; ghi nhận như một giới hạn.
+- Khoảng tin cậy còn chồng nhau; kết luận "hơn/kém" để Giai đoạn 9 kiểm bằng paired bootstrap trên TEST.
 
 ### Giai đoạn 7 — Content-based
 
@@ -170,10 +184,11 @@
 ### Giai đoạn 9 — Đánh giá offline
 
 - [ ] Script `recommendation-service/scripts/evaluate_offline.py`: với mỗi user trong TEST, chạy thuật toán chỉ với dữ liệu train, lấy top-K, so với sản phẩm liên quan.
-- [ ] Bổ sung **Hit Rate@K** và **NDCG@K** vào `domain.py`, thêm cột tương ứng vào `evaluation_runs` (migration `V3__...` trong `recommendation-service/migrations/`), thêm Coverage.
+- [x] Hit Rate@K, NDCG@K, Coverage@K, bootstrap CI: `app/metrics.py` (làm sớm ở Giai đoạn 6).
+- [ ] Thêm cột tương ứng vào `evaluation_runs` (migration `V3__...` trong `recommendation-service/migrations/`).
 - [ ] Chạy DEV để chọn cấu hình, chốt rồi chạy TEST **một lần**.
 - [ ] Lưu `evidence/recommendation/benchmark-<ngày>.json`: checksum dữ liệu, git commit, model version, config, seed, metric.
-- [ ] Unit test hàm metric bằng ví dụ tính tay ở mục C.8.
+- [x] Unit test hàm metric bằng ví dụ tính tay ở mục C.9.
 
 ### Giai đoạn 10 — Giao diện, chatbot và báo cáo
 
