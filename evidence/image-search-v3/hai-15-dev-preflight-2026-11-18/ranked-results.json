@@ -1,0 +1,1998 @@
+[
+  {
+    "queryId": "dev3c-001",
+    "group": "tops",
+    "status": 200,
+    "error": null,
+    "latencyMs": 249.45189999925788,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+      "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+      "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+    ],
+    "candidates": [
+      {
+        "product_id": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image_id": "9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "matched_image_url": "snapshot://image/9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "similarity": 0.7786155329838893,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image_id": "f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "matched_image_url": "snapshot://image/f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "similarity": 0.7530571798779476,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "16c5fb26-3d97-425b-ada3-570940ff5296",
+        "image_id": "20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "matched_image_url": "snapshot://image/20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "similarity": 0.6997543987654644,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+        "image_id": "a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "matched_image_url": "snapshot://image/a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "similarity": 0.6853902084507055,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+        "image_id": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "matched_image_url": "snapshot://image/b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "similarity": 0.6748613450906676,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+        "image_id": "f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "matched_image_url": "snapshot://image/f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "similarity": 0.6729936558537066,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "matched_image_url": "snapshot://image/eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "similarity": 0.6719826581455968,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+        "image_id": "6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "matched_image_url": "snapshot://image/6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "similarity": 0.6674584416233922,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.654501995814449,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6452720039106733,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+        "image_id": "f3d46837-6d57-4509-bff3-887d0abad933",
+        "matched_image_url": "snapshot://image/f3d46837-6d57-4509-bff3-887d0abad933",
+        "similarity": 0.6360954321253206,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+        "image_id": "8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "matched_image_url": "snapshot://image/8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "similarity": 0.63568501895132,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "e8f35b34-3eae-4533-923d-616342ba34ac",
+        "image_id": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "matched_image_url": "snapshot://image/33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "similarity": 0.6329087490967391,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6280498895424437,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+        "image_id": "0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "matched_image_url": "snapshot://image/0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "similarity": 0.6211833095935736,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+        "image_id": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "matched_image_url": "snapshot://image/97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "similarity": 0.619301954128429,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+        "image_id": "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "matched_image_url": "snapshot://image/ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "similarity": 0.605632935408839,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "770314ec-4470-4d79-a42c-d779c2ce616c",
+        "image_id": "97b4ce89-2688-485d-a55e-27dedba8d322",
+        "matched_image_url": "snapshot://image/97b4ce89-2688-485d-a55e-27dedba8d322",
+        "similarity": 0.6033548820350798,
+        "category_group": "accessories"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-002",
+    "group": "tops",
+    "status": 200,
+    "error": null,
+    "latencyMs": 262.96000000002095,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+      "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+      "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+    ],
+    "candidates": [
+      {
+        "product_id": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image_id": "f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "matched_image_url": "snapshot://image/f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "similarity": 0.7282408241925542,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image_id": "9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "matched_image_url": "snapshot://image/9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "similarity": 0.7036237332408755,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+        "image_id": "8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "matched_image_url": "snapshot://image/8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "similarity": 0.7026933824426495,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "matched_image_url": "snapshot://image/eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "similarity": 0.700569272460634,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+        "image_id": "977b9a22-d282-4fca-a89c-53c844c7562b",
+        "matched_image_url": "snapshot://image/977b9a22-d282-4fca-a89c-53c844c7562b",
+        "similarity": 0.6923993166702375,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "16c5fb26-3d97-425b-ada3-570940ff5296",
+        "image_id": "20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "matched_image_url": "snapshot://image/20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "similarity": 0.6850005756941653,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+        "image_id": "b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "matched_image_url": "snapshot://image/b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "similarity": 0.683868230987819,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+        "image_id": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "matched_image_url": "snapshot://image/b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "similarity": 0.6813349170160321,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+        "image_id": "419d4e64-0002-42ee-bceb-0c013c465512",
+        "matched_image_url": "snapshot://image/419d4e64-0002-42ee-bceb-0c013c465512",
+        "similarity": 0.6782300869845361,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+        "image_id": "a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "matched_image_url": "snapshot://image/a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "similarity": 0.6706433705967612,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "773289df-121a-4124-beba-bee575eb3b24",
+        "image_id": "7569134b-49a3-48ed-9e46-91bb0ded3b69",
+        "matched_image_url": "snapshot://image/7569134b-49a3-48ed-9e46-91bb0ded3b69",
+        "similarity": 0.662316191048419,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+        "image_id": "38346a1b-9e5f-43ef-a33d-0b32c8407793",
+        "matched_image_url": "snapshot://image/38346a1b-9e5f-43ef-a33d-0b32c8407793",
+        "similarity": 0.6519557247147321,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+        "image_id": "a1931a1e-ebd0-4a38-92ad-b65a5d1a5cf6",
+        "matched_image_url": "snapshot://image/a1931a1e-ebd0-4a38-92ad-b65a5d1a5cf6",
+        "similarity": 0.6501703222270981,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+        "image_id": "8af7d760-3e1c-4235-a243-46374859c37a",
+        "matched_image_url": "snapshot://image/8af7d760-3e1c-4235-a243-46374859c37a",
+        "similarity": 0.6443287729116611,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6430105567562947,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6245034828797887,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.6177637836440514,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+        "image_id": "06578bd0-de93-4d77-bf88-a157399382d1",
+        "matched_image_url": "snapshot://image/06578bd0-de93-4d77-bf88-a157399382d1",
+        "similarity": 0.6090302299671008,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+        "image_id": "7e2299c8-d55b-45ea-9f3a-ba0bcce3079c",
+        "matched_image_url": "snapshot://image/7e2299c8-d55b-45ea-9f3a-ba0bcce3079c",
+        "similarity": 0.6078789656868131,
+        "category_group": "tops"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-003",
+    "group": "tops",
+    "status": 200,
+    "error": null,
+    "latencyMs": 275.3971999991336,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+      "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+      "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+      "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+    ],
+    "candidates": [
+      {
+        "product_id": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image_id": "9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "matched_image_url": "snapshot://image/9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "similarity": 0.725683368791886,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+        "image_id": "8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "matched_image_url": "snapshot://image/8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "similarity": 0.7165210734403572,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.7028979501084907,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.7012320905734247,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image_id": "f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "matched_image_url": "snapshot://image/f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "similarity": 0.6972406852712607,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "773289df-121a-4124-beba-bee575eb3b24",
+        "image_id": "7569134b-49a3-48ed-9e46-91bb0ded3b69",
+        "matched_image_url": "snapshot://image/7569134b-49a3-48ed-9e46-91bb0ded3b69",
+        "similarity": 0.6915341607430204,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+        "image_id": "69318dda-2ba2-4012-b935-dac079281531",
+        "matched_image_url": "snapshot://image/69318dda-2ba2-4012-b935-dac079281531",
+        "similarity": 0.6897098215599603,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+        "image_id": "a7beb9fa-a922-420f-a7df-0df7092f744b",
+        "matched_image_url": "snapshot://image/a7beb9fa-a922-420f-a7df-0df7092f744b",
+        "similarity": 0.6879314892960342,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "16c5fb26-3d97-425b-ada3-570940ff5296",
+        "image_id": "8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "matched_image_url": "snapshot://image/8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "similarity": 0.6830540602920043,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+        "image_id": "a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "matched_image_url": "snapshot://image/a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "similarity": 0.6746085494281895,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6737156731393567,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+        "image_id": "419d4e64-0002-42ee-bceb-0c013c465512",
+        "matched_image_url": "snapshot://image/419d4e64-0002-42ee-bceb-0c013c465512",
+        "similarity": 0.6704013237953643,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "matched_image_url": "snapshot://image/eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "similarity": 0.6613107325506402,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+        "image_id": "f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "matched_image_url": "snapshot://image/f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "similarity": 0.6528185894590629,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+        "image_id": "8af7d760-3e1c-4235-a243-46374859c37a",
+        "matched_image_url": "snapshot://image/8af7d760-3e1c-4235-a243-46374859c37a",
+        "similarity": 0.6499618054732456,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+        "image_id": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "matched_image_url": "snapshot://image/b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "similarity": 0.6486972156495017,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+        "image_id": "7e2299c8-d55b-45ea-9f3a-ba0bcce3079c",
+        "matched_image_url": "snapshot://image/7e2299c8-d55b-45ea-9f3a-ba0bcce3079c",
+        "similarity": 0.6471272929328452,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+        "image_id": "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "matched_image_url": "snapshot://image/ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "similarity": 0.6439762512076344,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+        "image_id": "b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "matched_image_url": "snapshot://image/b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "similarity": 0.641575661095163,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+        "image_id": "7a749aad-3d5b-4c49-8e06-3930370f1dd9",
+        "matched_image_url": "snapshot://image/7a749aad-3d5b-4c49-8e06-3930370f1dd9",
+        "similarity": 0.6302038952988195,
+        "category_group": "tops"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-004",
+    "group": "tops",
+    "status": 200,
+    "error": null,
+    "latencyMs": 275.1516000007541,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+      "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+      "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+    ],
+    "candidates": [
+      {
+        "product_id": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image_id": "bfdbd140-2bcd-47ad-addc-8efdb71a5b9d",
+        "matched_image_url": "snapshot://image/bfdbd140-2bcd-47ad-addc-8efdb71a5b9d",
+        "similarity": 0.8274110243278296,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image_id": "207cf7db-9c88-48eb-a763-089530c717b6",
+        "matched_image_url": "snapshot://image/207cf7db-9c88-48eb-a763-089530c717b6",
+        "similarity": 0.7859235064845047,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.6975487146679382,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6599542268521887,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6572424549863327,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+        "image_id": "a504cc85-da27-47ad-8ccf-e8f14a218cdf",
+        "matched_image_url": "snapshot://image/a504cc85-da27-47ad-8ccf-e8f14a218cdf",
+        "similarity": 0.6249231779103238,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a1192013-eeb9-4302-80d2-28f5f609857d",
+        "image_id": "bf58597c-294f-4542-87fd-6fdd13f43557",
+        "matched_image_url": "snapshot://image/bf58597c-294f-4542-87fd-6fdd13f43557",
+        "similarity": 0.6210346085179449,
+        "category_group": "tops"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-005",
+    "group": "tops",
+    "status": 200,
+    "error": null,
+    "latencyMs": 258.07370000075025,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+      "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+      "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+    ],
+    "candidates": [
+      {
+        "product_id": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image_id": "f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "matched_image_url": "snapshot://image/f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "similarity": 0.780485681159163,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image_id": "9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "matched_image_url": "snapshot://image/9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "similarity": 0.7362697192523149,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+        "image_id": "57bd0c25-8304-4690-9423-b426f3305799",
+        "matched_image_url": "snapshot://image/57bd0c25-8304-4690-9423-b426f3305799",
+        "similarity": 0.690254219256289,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+        "image_id": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "matched_image_url": "snapshot://image/97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "similarity": 0.6757925058173595,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+        "image_id": "0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "matched_image_url": "snapshot://image/0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "similarity": 0.6745848952951423,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6606903469997939,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "e8f35b34-3eae-4533-923d-616342ba34ac",
+        "image_id": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "matched_image_url": "snapshot://image/33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "similarity": 0.6552649546247972,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6515272527882469,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+        "image_id": "f3d46837-6d57-4509-bff3-887d0abad933",
+        "matched_image_url": "snapshot://image/f3d46837-6d57-4509-bff3-887d0abad933",
+        "similarity": 0.648214789995704,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+        "image_id": "6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "matched_image_url": "snapshot://image/6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "similarity": 0.643925108575718,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+        "image_id": "7a749aad-3d5b-4c49-8e06-3930370f1dd9",
+        "matched_image_url": "snapshot://image/7a749aad-3d5b-4c49-8e06-3930370f1dd9",
+        "similarity": 0.643811878744478,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+        "image_id": "f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "matched_image_url": "snapshot://image/f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "similarity": 0.6434670286379773,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+        "image_id": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "matched_image_url": "snapshot://image/b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "similarity": 0.643311674226214,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "b0435cbb-8f40-445e-9e42-c25fe1dd157e",
+        "matched_image_url": "snapshot://image/b0435cbb-8f40-445e-9e42-c25fe1dd157e",
+        "similarity": 0.6413332982213205,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.640757193567067,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+        "image_id": "261f811c-5170-4534-99cb-fff93c505314",
+        "matched_image_url": "snapshot://image/261f811c-5170-4534-99cb-fff93c505314",
+        "similarity": 0.6407557217487815,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+        "image_id": "b2e63ad0-c995-451a-b8f8-c3e0bb684c3b",
+        "matched_image_url": "snapshot://image/b2e63ad0-c995-451a-b8f8-c3e0bb684c3b",
+        "similarity": 0.6404295768728318,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+        "image_id": "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "matched_image_url": "snapshot://image/ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "similarity": 0.6377452951687981,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+        "image_id": "7e2299c8-d55b-45ea-9f3a-ba0bcce3079c",
+        "matched_image_url": "snapshot://image/7e2299c8-d55b-45ea-9f3a-ba0bcce3079c",
+        "similarity": 0.6323734040537096,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+        "image_id": "8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "matched_image_url": "snapshot://image/8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "similarity": 0.6306022504773068,
+        "category_group": "tops"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-006",
+    "group": "tops",
+    "status": 200,
+    "error": null,
+    "latencyMs": 380.8301000008214,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+      "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+      "540290b7-2904-4567-89d1-51e0f49d7e8e"
+    ],
+    "candidates": [
+      {
+        "product_id": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image_id": "207cf7db-9c88-48eb-a763-089530c717b6",
+        "matched_image_url": "snapshot://image/207cf7db-9c88-48eb-a763-089530c717b6",
+        "similarity": 0.8639375004975366,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image_id": "bfdbd140-2bcd-47ad-addc-8efdb71a5b9d",
+        "matched_image_url": "snapshot://image/bfdbd140-2bcd-47ad-addc-8efdb71a5b9d",
+        "similarity": 0.8141079356791922,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.7238242650666262,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.7043185943175523,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+        "image_id": "a504cc85-da27-47ad-8ccf-e8f14a218cdf",
+        "matched_image_url": "snapshot://image/a504cc85-da27-47ad-8ccf-e8f14a218cdf",
+        "similarity": 0.7027543489824993,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+        "image_id": "7a749aad-3d5b-4c49-8e06-3930370f1dd9",
+        "matched_image_url": "snapshot://image/7a749aad-3d5b-4c49-8e06-3930370f1dd9",
+        "similarity": 0.6977743584495651,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.6955389002007762,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+        "image_id": "0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "matched_image_url": "snapshot://image/0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "similarity": 0.6417946804537163,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "a1192013-eeb9-4302-80d2-28f5f609857d",
+        "image_id": "bf58597c-294f-4542-87fd-6fdd13f43557",
+        "matched_image_url": "snapshot://image/bf58597c-294f-4542-87fd-6fdd13f43557",
+        "similarity": 0.6372001223284,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+        "image_id": "57bd0c25-8304-4690-9423-b426f3305799",
+        "matched_image_url": "snapshot://image/57bd0c25-8304-4690-9423-b426f3305799",
+        "similarity": 0.6240448145385967,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+        "image_id": "f3d46837-6d57-4509-bff3-887d0abad933",
+        "matched_image_url": "snapshot://image/f3d46837-6d57-4509-bff3-887d0abad933",
+        "similarity": 0.6202854390629087,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e8f35b34-3eae-4533-923d-616342ba34ac",
+        "image_id": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "matched_image_url": "snapshot://image/33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "similarity": 0.6179143854001474,
+        "category_group": "bottoms"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-007",
+    "group": "tops",
+    "status": 200,
+    "error": null,
+    "latencyMs": 261.72869999936665,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+      "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+      "a1192013-eeb9-4302-80d2-28f5f609857d",
+      "6097e7d9-4f3f-4378-9cae-da3626da0b47"
+    ],
+    "candidates": [
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.7484428130555449,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.7300465234971292,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.7219319825167267,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a1192013-eeb9-4302-80d2-28f5f609857d",
+        "image_id": "bf58597c-294f-4542-87fd-6fdd13f43557",
+        "matched_image_url": "snapshot://image/bf58597c-294f-4542-87fd-6fdd13f43557",
+        "similarity": 0.6500782950333636,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+        "image_id": "4108ac9f-7a32-42b2-8513-620960014ea8",
+        "matched_image_url": "snapshot://image/4108ac9f-7a32-42b2-8513-620960014ea8",
+        "similarity": 0.6392424590014434,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+        "image_id": "8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "matched_image_url": "snapshot://image/8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "similarity": 0.6387878103121929,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+        "image_id": "8af7d760-3e1c-4235-a243-46374859c37a",
+        "matched_image_url": "snapshot://image/8af7d760-3e1c-4235-a243-46374859c37a",
+        "similarity": 0.6382016475489767,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "773289df-121a-4124-beba-bee575eb3b24",
+        "image_id": "09dca9b4-4920-4c8b-a53f-878393bbdb5d",
+        "matched_image_url": "snapshot://image/09dca9b4-4920-4c8b-a53f-878393bbdb5d",
+        "similarity": 0.6344195344058241,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+        "image_id": "a504cc85-da27-47ad-8ccf-e8f14a218cdf",
+        "matched_image_url": "snapshot://image/a504cc85-da27-47ad-8ccf-e8f14a218cdf",
+        "similarity": 0.6302552179801556,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+        "image_id": "419d4e64-0002-42ee-bceb-0c013c465512",
+        "matched_image_url": "snapshot://image/419d4e64-0002-42ee-bceb-0c013c465512",
+        "similarity": 0.6222246862884251,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+        "image_id": "a7beb9fa-a922-420f-a7df-0df7092f744b",
+        "matched_image_url": "snapshot://image/a7beb9fa-a922-420f-a7df-0df7092f744b",
+        "similarity": 0.6183477777203203,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+        "image_id": "7a749aad-3d5b-4c49-8e06-3930370f1dd9",
+        "matched_image_url": "snapshot://image/7a749aad-3d5b-4c49-8e06-3930370f1dd9",
+        "similarity": 0.6167246625079862,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image_id": "207cf7db-9c88-48eb-a763-089530c717b6",
+        "matched_image_url": "snapshot://image/207cf7db-9c88-48eb-a763-089530c717b6",
+        "similarity": 0.6037715891623352,
+        "category_group": "tops"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-008",
+    "group": "accessories",
+    "status": 200,
+    "error": null,
+    "latencyMs": 228.6024000004545,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "770314ec-4470-4d79-a42c-d779c2ce616c",
+      "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+      "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+      "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4"
+    ],
+    "candidates": [
+      {
+        "product_id": "770314ec-4470-4d79-a42c-d779c2ce616c",
+        "image_id": "d42f6160-23f1-48ac-8cc6-bff11b5960eb",
+        "matched_image_url": "snapshot://image/d42f6160-23f1-48ac-8cc6-bff11b5960eb",
+        "similarity": 0.7666557823318307,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+        "image_id": "d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "matched_image_url": "snapshot://image/d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "similarity": 0.7019428217255754,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "0f192014-452e-44d8-93bb-aacfa55399ab",
+        "image_id": "5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "matched_image_url": "snapshot://image/5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "similarity": 0.6891024905275283,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+        "image_id": "0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "matched_image_url": "snapshot://image/0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "similarity": 0.6823600013321541,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+        "image_id": "57bd0c25-8304-4690-9423-b426f3305799",
+        "matched_image_url": "snapshot://image/57bd0c25-8304-4690-9423-b426f3305799",
+        "similarity": 0.6806963115010394,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+        "image_id": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "matched_image_url": "snapshot://image/97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "similarity": 0.6784181205720945,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+        "image_id": "094139d3-877f-48a6-84e1-bdb96380c8ce",
+        "matched_image_url": "snapshot://image/094139d3-877f-48a6-84e1-bdb96380c8ce",
+        "similarity": 0.6774788465057527,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+        "image_id": "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "matched_image_url": "snapshot://image/ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "similarity": 0.6743318910418177,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+        "image_id": "f3d46837-6d57-4509-bff3-887d0abad933",
+        "matched_image_url": "snapshot://image/f3d46837-6d57-4509-bff3-887d0abad933",
+        "similarity": 0.6719173535110801,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e8f35b34-3eae-4533-923d-616342ba34ac",
+        "image_id": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "matched_image_url": "snapshot://image/33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "similarity": 0.6686768134370906,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+        "image_id": "f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "matched_image_url": "snapshot://image/f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "similarity": 0.6401371216779623,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+        "image_id": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "matched_image_url": "snapshot://image/b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "similarity": 0.63677499269807,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "b0435cbb-8f40-445e-9e42-c25fe1dd157e",
+        "matched_image_url": "snapshot://image/b0435cbb-8f40-445e-9e42-c25fe1dd157e",
+        "similarity": 0.6328175820878392,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+        "image_id": "6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "matched_image_url": "snapshot://image/6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "similarity": 0.6265729247492171,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+        "image_id": "8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "matched_image_url": "snapshot://image/8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "similarity": 0.6263428582054518,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+        "image_id": "78cfe835-9516-4fef-aa55-b8a2386042d2",
+        "matched_image_url": "snapshot://image/78cfe835-9516-4fef-aa55-b8a2386042d2",
+        "similarity": 0.622936676724297,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "16c5fb26-3d97-425b-ada3-570940ff5296",
+        "image_id": "8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "matched_image_url": "snapshot://image/8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "similarity": 0.6174356113571905,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+        "image_id": "f7c40c2d-7440-4e8d-adca-57337a984d95",
+        "matched_image_url": "snapshot://image/f7c40c2d-7440-4e8d-adca-57337a984d95",
+        "similarity": 0.6058824527849205,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6049405048696972,
+        "category_group": "tops"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-009",
+    "group": "accessories",
+    "status": 200,
+    "error": null,
+    "latencyMs": 225.2037999987806,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+      "770314ec-4470-4d79-a42c-d779c2ce616c",
+      "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+      "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "candidates": [
+      {
+        "product_id": "0f192014-452e-44d8-93bb-aacfa55399ab",
+        "image_id": "5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "matched_image_url": "snapshot://image/5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "similarity": 0.7259592059961075,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+        "image_id": "d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "matched_image_url": "snapshot://image/d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "similarity": 0.6890478753848022,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "770314ec-4470-4d79-a42c-d779c2ce616c",
+        "image_id": "97b4ce89-2688-485d-a55e-27dedba8d322",
+        "matched_image_url": "snapshot://image/97b4ce89-2688-485d-a55e-27dedba8d322",
+        "similarity": 0.6888866982748578,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+        "image_id": "789b35bc-0b40-4143-8731-8120a0c25be6",
+        "matched_image_url": "snapshot://image/789b35bc-0b40-4143-8731-8120a0c25be6",
+        "similarity": 0.675394554879188,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "e8f35b34-3eae-4533-923d-616342ba34ac",
+        "image_id": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "matched_image_url": "snapshot://image/33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "similarity": 0.6427214658436213,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6384528542202106,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+        "image_id": "f3d46837-6d57-4509-bff3-887d0abad933",
+        "matched_image_url": "snapshot://image/f3d46837-6d57-4509-bff3-887d0abad933",
+        "similarity": 0.6381593265644789,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+        "image_id": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "matched_image_url": "snapshot://image/97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "similarity": 0.6358645111255266,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+        "image_id": "57bd0c25-8304-4690-9423-b426f3305799",
+        "matched_image_url": "snapshot://image/57bd0c25-8304-4690-9423-b426f3305799",
+        "similarity": 0.6302517846000322,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+        "image_id": "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "matched_image_url": "snapshot://image/ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "similarity": 0.6165069892705064,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+        "image_id": "0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "matched_image_url": "snapshot://image/0c4a98ad-f765-447b-8eeb-7ad4183014cc",
+        "similarity": 0.6154872426528355,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.6125243249922432,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6066163955678121,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a1192013-eeb9-4302-80d2-28f5f609857d",
+        "image_id": "bf58597c-294f-4542-87fd-6fdd13f43557",
+        "matched_image_url": "snapshot://image/bf58597c-294f-4542-87fd-6fdd13f43557",
+        "similarity": 0.6035196227720615,
+        "category_group": "tops"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-010",
+    "group": "bottoms",
+    "status": 200,
+    "error": null,
+    "latencyMs": 235.56809999899997,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 0.5,
+    "rejected": false,
+    "top5ProductIds": [
+      "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+      "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+      "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+      "e8f35b34-3eae-4533-923d-616342ba34ac"
+    ],
+    "candidates": [
+      {
+        "product_id": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+        "image_id": "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "matched_image_url": "snapshot://image/ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "similarity": 0.727448166067303,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+        "image_id": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "matched_image_url": "snapshot://image/97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "similarity": 0.7122292066662488,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+        "image_id": "f3d46837-6d57-4509-bff3-887d0abad933",
+        "matched_image_url": "snapshot://image/f3d46837-6d57-4509-bff3-887d0abad933",
+        "similarity": 0.7110009123111527,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.7094241749958006,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "e8f35b34-3eae-4533-923d-616342ba34ac",
+        "image_id": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "matched_image_url": "snapshot://image/33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "similarity": 0.7005629669563556,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+        "image_id": "57bd0c25-8304-4690-9423-b426f3305799",
+        "matched_image_url": "snapshot://image/57bd0c25-8304-4690-9423-b426f3305799",
+        "similarity": 0.6937995069932688,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.68714499861185,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6865063582178277,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+        "image_id": "305fe6a2-2f71-4337-a1ce-62916787b487",
+        "matched_image_url": "snapshot://image/305fe6a2-2f71-4337-a1ce-62916787b487",
+        "similarity": 0.6857422052147994,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image_id": "9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "matched_image_url": "snapshot://image/9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "similarity": 0.6642487587854164,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "770314ec-4470-4d79-a42c-d779c2ce616c",
+        "image_id": "97b4ce89-2688-485d-a55e-27dedba8d322",
+        "matched_image_url": "snapshot://image/97b4ce89-2688-485d-a55e-27dedba8d322",
+        "similarity": 0.6564082065173642,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "a1192013-eeb9-4302-80d2-28f5f609857d",
+        "image_id": "bf58597c-294f-4542-87fd-6fdd13f43557",
+        "matched_image_url": "snapshot://image/bf58597c-294f-4542-87fd-6fdd13f43557",
+        "similarity": 0.6454773246816442,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "0f192014-452e-44d8-93bb-aacfa55399ab",
+        "image_id": "5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "matched_image_url": "snapshot://image/5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "similarity": 0.6394035176621572,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+        "image_id": "789b35bc-0b40-4143-8731-8120a0c25be6",
+        "matched_image_url": "snapshot://image/789b35bc-0b40-4143-8731-8120a0c25be6",
+        "similarity": 0.632707843702786,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image_id": "f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "matched_image_url": "snapshot://image/f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "similarity": 0.6275368339181495,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "16c5fb26-3d97-425b-ada3-570940ff5296",
+        "image_id": "8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "matched_image_url": "snapshot://image/8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "similarity": 0.626135489127688,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+        "image_id": "a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "matched_image_url": "snapshot://image/a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "similarity": 0.6238270422606715,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+        "image_id": "d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "matched_image_url": "snapshot://image/d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "similarity": 0.6215616537829174,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "matched_image_url": "snapshot://image/eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "similarity": 0.6070921841060063,
+        "category_group": "uniforms"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-011",
+    "group": "bottoms",
+    "status": 200,
+    "error": null,
+    "latencyMs": 267.75180000004184,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+      "e8f35b34-3eae-4533-923d-616342ba34ac",
+      "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+      "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+    ],
+    "candidates": [
+      {
+        "product_id": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+        "image_id": "f3d46837-6d57-4509-bff3-887d0abad933",
+        "matched_image_url": "snapshot://image/f3d46837-6d57-4509-bff3-887d0abad933",
+        "similarity": 0.7468402763778315,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e8f35b34-3eae-4533-923d-616342ba34ac",
+        "image_id": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "matched_image_url": "snapshot://image/33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "similarity": 0.7465088448398206,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+        "image_id": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "matched_image_url": "snapshot://image/97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "similarity": 0.7389864383941703,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+        "image_id": "57bd0c25-8304-4690-9423-b426f3305799",
+        "matched_image_url": "snapshot://image/57bd0c25-8304-4690-9423-b426f3305799",
+        "similarity": 0.7227632481225101,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+        "image_id": "ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "matched_image_url": "snapshot://image/ac9b1f8d-a4a6-4cff-a015-ba51f9a6608f",
+        "similarity": 0.7063510523641985,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+        "image_id": "305fe6a2-2f71-4337-a1ce-62916787b487",
+        "matched_image_url": "snapshot://image/305fe6a2-2f71-4337-a1ce-62916787b487",
+        "similarity": 0.7024708468175733,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "matched_image_url": "snapshot://image/eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "similarity": 0.6987419147382181,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+        "image_id": "6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "matched_image_url": "snapshot://image/6102b96a-0e2d-47d7-b087-be0cc7c27679",
+        "similarity": 0.6861383858633885,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "770314ec-4470-4d79-a42c-d779c2ce616c",
+        "image_id": "97b4ce89-2688-485d-a55e-27dedba8d322",
+        "matched_image_url": "snapshot://image/97b4ce89-2688-485d-a55e-27dedba8d322",
+        "similarity": 0.68360947364758,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+        "image_id": "f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "matched_image_url": "snapshot://image/f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "similarity": 0.6825820221838973,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+        "image_id": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "matched_image_url": "snapshot://image/b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "similarity": 0.681146436168244,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "16c5fb26-3d97-425b-ada3-570940ff5296",
+        "image_id": "8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "matched_image_url": "snapshot://image/8ba51a04-5cc4-4bbe-a46e-f0bda5a41caa",
+        "similarity": 0.6772747888525805,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+        "image_id": "a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "matched_image_url": "snapshot://image/a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "similarity": 0.6717231470287608,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6523370449178554,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "0f192014-452e-44d8-93bb-aacfa55399ab",
+        "image_id": "5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "matched_image_url": "snapshot://image/5ef669c5-26cd-4218-9d3b-4e983e9459a7",
+        "similarity": 0.6439669441382087,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+        "image_id": "d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "matched_image_url": "snapshot://image/d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "similarity": 0.640660314962264,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6314338391748406,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.6271711309655156,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a1192013-eeb9-4302-80d2-28f5f609857d",
+        "image_id": "bf58597c-294f-4542-87fd-6fdd13f43557",
+        "matched_image_url": "snapshot://image/bf58597c-294f-4542-87fd-6fdd13f43557",
+        "similarity": 0.6162990081060657,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+        "image_id": "789b35bc-0b40-4143-8731-8120a0c25be6",
+        "matched_image_url": "snapshot://image/789b35bc-0b40-4143-8731-8120a0c25be6",
+        "similarity": 0.613265649115295,
+        "category_group": "accessories"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-012",
+    "group": "uniforms",
+    "status": 200,
+    "error": null,
+    "latencyMs": 262.8418000003876,
+    "recall": 0.6666666666666666,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+      "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+      "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+    ],
+    "candidates": [
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "matched_image_url": "snapshot://image/eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "similarity": 0.7515434681970088,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+        "image_id": "a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "matched_image_url": "snapshot://image/a024aed2-af4e-40aa-815a-79a371a47a9b",
+        "similarity": 0.7443040645294552,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "16c5fb26-3d97-425b-ada3-570940ff5296",
+        "image_id": "20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "matched_image_url": "snapshot://image/20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "similarity": 0.7435552138358683,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+        "image_id": "419d4e64-0002-42ee-bceb-0c013c465512",
+        "matched_image_url": "snapshot://image/419d4e64-0002-42ee-bceb-0c013c465512",
+        "similarity": 0.730192245310713,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+        "image_id": "f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "matched_image_url": "snapshot://image/f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "similarity": 0.7274524936563325,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+        "image_id": "a7beb9fa-a922-420f-a7df-0df7092f744b",
+        "matched_image_url": "snapshot://image/a7beb9fa-a922-420f-a7df-0df7092f744b",
+        "similarity": 0.7246491527450849,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+        "image_id": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "matched_image_url": "snapshot://image/b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "similarity": 0.7243986726661906,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+        "image_id": "b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "matched_image_url": "snapshot://image/b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "similarity": 0.721565644621856,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+        "image_id": "8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "matched_image_url": "snapshot://image/8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "similarity": 0.7135586558372546,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+        "image_id": "38346a1b-9e5f-43ef-a33d-0b32c8407793",
+        "matched_image_url": "snapshot://image/38346a1b-9e5f-43ef-a33d-0b32c8407793",
+        "similarity": 0.7115905799752801,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "773289df-121a-4124-beba-bee575eb3b24",
+        "image_id": "7569134b-49a3-48ed-9e46-91bb0ded3b69",
+        "matched_image_url": "snapshot://image/7569134b-49a3-48ed-9e46-91bb0ded3b69",
+        "similarity": 0.7055574021195354,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+        "image_id": "8af7d760-3e1c-4235-a243-46374859c37a",
+        "matched_image_url": "snapshot://image/8af7d760-3e1c-4235-a243-46374859c37a",
+        "similarity": 0.7016425661278198,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6775116007891587,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.6568231982762006,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6318574212532079,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "a1192013-eeb9-4302-80d2-28f5f609857d",
+        "image_id": "bf58597c-294f-4542-87fd-6fdd13f43557",
+        "matched_image_url": "snapshot://image/bf58597c-294f-4542-87fd-6fdd13f43557",
+        "similarity": 0.611535731675743,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image_id": "9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "matched_image_url": "snapshot://image/9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "similarity": 0.6101742596618549,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+        "image_id": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "matched_image_url": "snapshot://image/97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "similarity": 0.6087104175597443,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "e8f35b34-3eae-4533-923d-616342ba34ac",
+        "image_id": "33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "matched_image_url": "snapshot://image/33480ceb-c507-4e76-8e73-77788e65eaa6",
+        "similarity": 0.6020229929422082,
+        "category_group": "bottoms"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-013",
+    "group": "uniforms",
+    "status": 200,
+    "error": null,
+    "latencyMs": 271.083899999212,
+    "recall": 0.8333333333333334,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+      "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+      "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "6a3f7f37-3340-4432-94e9-fd46990a3878"
+    ],
+    "candidates": [
+      {
+        "product_id": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+        "image_id": "f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "matched_image_url": "snapshot://image/f331aefd-e6e2-467b-a42f-6f52b0c1e992",
+        "similarity": 0.7455790646716263,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+        "image_id": "eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "matched_image_url": "snapshot://image/eafa9fd2-f5bc-47d8-9161-285c5d429ad0",
+        "similarity": 0.744736111316163,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+        "image_id": "b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "matched_image_url": "snapshot://image/b5d8237a-bc2d-4bc8-8d0b-bc88508563c1",
+        "similarity": 0.7355494782693288,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "16c5fb26-3d97-425b-ada3-570940ff5296",
+        "image_id": "20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "matched_image_url": "snapshot://image/20bdcdc6-5167-4bcc-a40f-1ae9a1b98fff",
+        "similarity": 0.7231057317772989,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+        "image_id": "b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "matched_image_url": "snapshot://image/b5fe10c4-718f-4838-ae5c-c44528a54983",
+        "similarity": 0.7228698268165055,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+        "image_id": "78cfe835-9516-4fef-aa55-b8a2386042d2",
+        "matched_image_url": "snapshot://image/78cfe835-9516-4fef-aa55-b8a2386042d2",
+        "similarity": 0.7070263053471162,
+        "category_group": "uniforms"
+      },
+      {
+        "product_id": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+        "image_id": "8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "matched_image_url": "snapshot://image/8338d24b-c07a-4ccb-9654-98c3390c071e",
+        "similarity": 0.655395717002295,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+        "image_id": "5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "matched_image_url": "snapshot://image/5a7e4aa5-194e-432f-87b5-f6b970bca3e3",
+        "similarity": 0.6496458333769646,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+        "image_id": "f14bbc23-4c39-4eb9-bab4-3d65af52e68c",
+        "matched_image_url": "snapshot://image/f14bbc23-4c39-4eb9-bab4-3d65af52e68c",
+        "similarity": 0.6477052445099778,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+        "image_id": "8af7d760-3e1c-4235-a243-46374859c37a",
+        "matched_image_url": "snapshot://image/8af7d760-3e1c-4235-a243-46374859c37a",
+        "similarity": 0.6419818650257881,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+        "image_id": "419d4e64-0002-42ee-bceb-0c013c465512",
+        "matched_image_url": "snapshot://image/419d4e64-0002-42ee-bceb-0c013c465512",
+        "similarity": 0.6338995736324502,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "773289df-121a-4124-beba-bee575eb3b24",
+        "image_id": "7569134b-49a3-48ed-9e46-91bb0ded3b69",
+        "matched_image_url": "snapshot://image/7569134b-49a3-48ed-9e46-91bb0ded3b69",
+        "similarity": 0.6322102060691901,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+        "image_id": "427c873f-774c-4e02-9cb8-c190521c98bf",
+        "matched_image_url": "snapshot://image/427c873f-774c-4e02-9cb8-c190521c98bf",
+        "similarity": 0.6305917809529384,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+        "image_id": "38346a1b-9e5f-43ef-a33d-0b32c8407793",
+        "matched_image_url": "snapshot://image/38346a1b-9e5f-43ef-a33d-0b32c8407793",
+        "similarity": 0.6274754779068052,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+        "image_id": "97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "matched_image_url": "snapshot://image/97cb46e9-6739-4a26-8d78-7e0e4fb450e4",
+        "similarity": 0.6252090261067063,
+        "category_group": "bottoms"
+      },
+      {
+        "product_id": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+        "image_id": "17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "matched_image_url": "snapshot://image/17aa8023-05af-4bf5-8822-fb2dbad256e8",
+        "similarity": 0.6202114231627502,
+        "category_group": "tops"
+      },
+      {
+        "product_id": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+        "image_id": "d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "matched_image_url": "snapshot://image/d12820ab-352d-4f14-9e6e-5cb10831e053",
+        "similarity": 0.611908892011596,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+        "image_id": "81c2749c-b9fc-428b-a581-9abdeb18c8a0",
+        "matched_image_url": "snapshot://image/81c2749c-b9fc-428b-a581-9abdeb18c8a0",
+        "similarity": 0.6118204827070608,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "770314ec-4470-4d79-a42c-d779c2ce616c",
+        "image_id": "97b4ce89-2688-485d-a55e-27dedba8d322",
+        "matched_image_url": "snapshot://image/97b4ce89-2688-485d-a55e-27dedba8d322",
+        "similarity": 0.6112330688858638,
+        "category_group": "accessories"
+      },
+      {
+        "product_id": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+        "image_id": "aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "matched_image_url": "snapshot://image/aa02032c-4c69-4fcd-bfca-4a300c8a31fa",
+        "similarity": 0.6078969908145286,
+        "category_group": "tops"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-014",
+    "group": "shoes",
+    "status": 200,
+    "error": null,
+    "latencyMs": 419.3728000009287,
+    "recall": 0.6666666666666666,
+    "categoryCorrect": true,
+    "reciprocalRank": 0.25,
+    "rejected": false,
+    "top5ProductIds": [
+      "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+      "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+      "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+      "90df2223-3c14-49cf-822f-207603429950",
+      "6107cf10-7312-43fd-92b0-f41eaec1dfed"
+    ],
+    "candidates": [
+      {
+        "product_id": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+        "image_id": "ef1deb5d-d57c-4f5c-a7fa-4729d3cad0a4",
+        "matched_image_url": "snapshot://image/ef1deb5d-d57c-4f5c-a7fa-4729d3cad0a4",
+        "similarity": 0.7569762500997036,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+        "image_id": "1050f8f2-2c5a-4285-a6eb-595c3777a369",
+        "matched_image_url": "snapshot://image/1050f8f2-2c5a-4285-a6eb-595c3777a369",
+        "similarity": 0.7229114142022803,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+        "image_id": "81c2749c-b9fc-428b-a581-9abdeb18c8a0",
+        "matched_image_url": "snapshot://image/81c2749c-b9fc-428b-a581-9abdeb18c8a0",
+        "similarity": 0.700218479435828,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "90df2223-3c14-49cf-822f-207603429950",
+        "image_id": "7a3ed951-1bfc-43b8-86a4-21139cb91869",
+        "matched_image_url": "snapshot://image/7a3ed951-1bfc-43b8-86a4-21139cb91869",
+        "similarity": 0.6833050205769413,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+        "image_id": "a2d2caef-1f88-4c4f-acb3-26459b123ccd",
+        "matched_image_url": "snapshot://image/a2d2caef-1f88-4c4f-acb3-26459b123ccd",
+        "similarity": 0.6791921039773967,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+        "image_id": "c3521f7f-0322-4193-bc32-bcfa0ff39bc1",
+        "matched_image_url": "snapshot://image/c3521f7f-0322-4193-bc32-bcfa0ff39bc1",
+        "similarity": 0.6692698326526421,
+        "category_group": "shoes"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-015",
+    "group": "shoes",
+    "status": 200,
+    "error": null,
+    "latencyMs": 278.8550999994186,
+    "recall": 1.0,
+    "categoryCorrect": true,
+    "reciprocalRank": 1.0,
+    "rejected": false,
+    "top5ProductIds": [
+      "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+      "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+      "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+      "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+      "90df2223-3c14-49cf-822f-207603429950"
+    ],
+    "candidates": [
+      {
+        "product_id": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+        "image_id": "a2d2caef-1f88-4c4f-acb3-26459b123ccd",
+        "matched_image_url": "snapshot://image/a2d2caef-1f88-4c4f-acb3-26459b123ccd",
+        "similarity": 0.7075759753035961,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+        "image_id": "c3521f7f-0322-4193-bc32-bcfa0ff39bc1",
+        "matched_image_url": "snapshot://image/c3521f7f-0322-4193-bc32-bcfa0ff39bc1",
+        "similarity": 0.7007489955208532,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+        "image_id": "1050f8f2-2c5a-4285-a6eb-595c3777a369",
+        "matched_image_url": "snapshot://image/1050f8f2-2c5a-4285-a6eb-595c3777a369",
+        "similarity": 0.6970707986070606,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+        "image_id": "81c2749c-b9fc-428b-a581-9abdeb18c8a0",
+        "matched_image_url": "snapshot://image/81c2749c-b9fc-428b-a581-9abdeb18c8a0",
+        "similarity": 0.6884681187970687,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "90df2223-3c14-49cf-822f-207603429950",
+        "image_id": "7a3ed951-1bfc-43b8-86a4-21139cb91869",
+        "matched_image_url": "snapshot://image/7a3ed951-1bfc-43b8-86a4-21139cb91869",
+        "similarity": 0.6877737093427677,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+        "image_id": "ef1deb5d-d57c-4f5c-a7fa-4729d3cad0a4",
+        "matched_image_url": "snapshot://image/ef1deb5d-d57c-4f5c-a7fa-4729d3cad0a4",
+        "similarity": 0.6797982008813336,
+        "category_group": "shoes"
+      },
+      {
+        "product_id": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+        "image_id": "789b35bc-0b40-4143-8731-8120a0c25be6",
+        "matched_image_url": "snapshot://image/789b35bc-0b40-4143-8731-8120a0c25be6",
+        "similarity": 0.6228565022219699,
+        "category_group": "accessories"
+      }
+    ]
+  },
+  {
+    "queryId": "dev3c-016",
+    "group": "unknown",
+    "status": 200,
+    "error": null,
+    "latencyMs": 268.36329999969166,
+    "recall": null,
+    "categoryCorrect": false,
+    "reciprocalRank": 0.0,
+    "rejected": true,
+    "top5ProductIds": [],
+    "candidates": []
+  },
+  {
+    "queryId": "dev3c-017",
+    "group": "unknown",
+    "status": 200,
+    "error": null,
+    "latencyMs": 276.8350000005739,
+    "recall": null,
+    "categoryCorrect": false,
+    "reciprocalRank": 0.0,
+    "rejected": true,
+    "top5ProductIds": [],
+    "candidates": []
+  },
+  {
+    "queryId": "dev3c-018",
+    "group": "unknown",
+    "status": 200,
+    "error": null,
+    "latencyMs": 273.98099999845726,
+    "recall": null,
+    "categoryCorrect": false,
+    "reciprocalRank": 0.0,
+    "rejected": true,
+    "top5ProductIds": [],
+    "candidates": []
+  },
+  {
+    "queryId": "dev3c-019",
+    "group": "unknown",
+    "status": 200,
+    "error": null,
+    "latencyMs": 247.44680000003427,
+    "recall": null,
+    "categoryCorrect": false,
+    "reciprocalRank": 0.0,
+    "rejected": true,
+    "top5ProductIds": [],
+    "candidates": []
+  },
+  {
+    "queryId": "dev3c-020",
+    "group": "unknown",
+    "status": 200,
+    "error": null,
+    "latencyMs": 388.8471999998728,
+    "recall": null,
+    "categoryCorrect": false,
+    "reciprocalRank": 0.0,
+    "rejected": true,
+    "top5ProductIds": [],
+    "candidates": []
+  }
+]

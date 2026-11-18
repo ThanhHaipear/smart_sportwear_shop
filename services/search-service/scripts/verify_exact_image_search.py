@@ -117,9 +117,10 @@ def verify_sql(dsn: str) -> dict:
 
 
 @contextmanager
-def internal_api(settings: Settings):
+def internal_api(settings: Settings, *, overrides=None):
     app = create_app()
     app.dependency_overrides[get_settings] = lambda: settings
+    app.dependency_overrides.update(overrides or {})
     original_connection = SearchRepository.connection
 
     @asynccontextmanager

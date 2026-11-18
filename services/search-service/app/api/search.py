@@ -41,6 +41,21 @@ class SearchFilters(BaseModel):
     inStockOnly: bool = True
 
 
+async def indexed_image_candidates(content: bytes, limit: int, settings: Settings) -> list[dict]:
+    provider = build_provider(settings)
+    result = (await provider.embed_query(content)).validate_dimensions(settings.visual_embedding_dims)
+    category_scores = (
+        await provider.category_scores(result.vector)
+        if hasattr(provider, "category_scores") else None
+    )
+    rows = await SearchRepository(settings).image_search(result.vector, limit, category_scores)
+    return [row for row in rows if float(row["similarity"]) >= settings.visual_min_similarity]
+
+
+def get_image_candidate_search():
+    return indexed_image_candidates
+
+
 class TextSearchRequest(BaseModel):
     query: str = Field(min_length=1, max_length=300)
     page: int = Field(default=1, ge=1)
@@ -98,6 +113,7 @@ async def search_text(request: TextSearchRequest, settings: Settings = Depends(g
 async def search_image(
     image: UploadFile = File(...), limit: int = Query(default=20, ge=1, le=50),
     settings: Settings = Depends(get_settings),
+    find_candidates=Depends(get_image_candidate_search),
 ) -> dict:
     if not settings.search_enabled or not settings.visual_search_enabled:
         raise HTTPException(status_code=503, detail="Image search is disabled")
@@ -107,14 +123,7 @@ async def search_image(
     except ImagePipelineError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     try:
-        provider = build_provider(settings)
-        result = (await provider.embed_query(normalized.content)).validate_dimensions(settings.visual_embedding_dims)
-        category_scores = (
-            await provider.category_scores(result.vector)
-            if hasattr(provider, "category_scores") else None
-        )
-        rows = await SearchRepository(settings).image_search(result.vector, limit, category_scores)
-        rows = [row for row in rows if float(row["similarity"]) >= settings.visual_min_similarity]
+        rows = await find_candidates(normalized.content, limit, settings)
     except Exception as error:
         logging.getLogger(__name__).exception("Image search pipeline failed")
         raise HTTPException(status_code=503, detail="Image search is temporarily unavailable") from error

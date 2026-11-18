@@ -1,0 +1,56 @@
+# Image Search TEST v3
+
+Phiên bản `image-search-test-v3:3.0.0` đang ở trạng thái `REVIEW_REQUIRED`.
+Hồ sơ gồm 90 ảnh Wikimedia Commons được chọn theo nội dung hình ảnh và
+giấy phép trước khi chạy model trên TEST.
+
+| Áo | Quần | Đồng phục | Giày | Phụ kiện | Unknown |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 13 | 15 | 13 | 17 | 10 | 22 |
+
+`manifest.json` mô tả ảnh và vùng cắt. `labels.json` ghi nhóm kỳ vọng và
+sản phẩm catalog có kiểu dáng tương thích. Phụ kiện chủ yếu là ảnh cắt từ
+bối cảnh sử dụng. Nhóm unknown có cả vật dụng ngoài catalog trông gần với
+đồ thể thao, chẳng hạn ba lô. Phân bố hiện tại cần được người duyệt chấp nhận.
+
+`source-inventory.json` lưu nguồn và giấy phép từng ảnh. Kiểm tra tự động
+đối chiếu SHA-256, trang nguồn, chuỗi nguồn và dHash với 549 ảnh catalog,
+DEV và TEST trước đây. Các ảnh được đối chiếu với nhau ngay trong bộ mới.
+Người duyệt kiểm tra thêm các loạt ảnh có liên hệ dù tên tệp khác nhau.
+
+## Review độc lập
+
+Từ thư mục gốc, dùng Python có Pillow để kiểm tra bộ ảnh và tạo ảnh xem trước
+trong `assets/_review`. Có thể thêm `--download-missing` để khôi phục các ảnh
+đã chốt trong hồ sơ nguồn vì Git bỏ qua các tệp ảnh.
+
+```powershell
+python datasets/image-search/dev-v3/build_dataset.py --test-v3 --contact-sheets
+```
+
+Đối chiếu ảnh với nhãn, nguồn, giấy phép, phân bố nhóm và báo cáo trùng lặp.
+Khi thành viên độc lập chấp thuận, ghi xác nhận thực tế vào `review-approval.json`.
+Tệp cần có `status` là `APPROVED`, `independent` là `true`, `reviewer` là tên
+người duyệt, `reviewedAt` là thời điểm duyệt theo ISO 8601 và `bindings` sao
+chép nguyên từ `review-packet.json`. Các checksum của tệp văn bản trong
+`bindings` dùng UTF-8 với xuống dòng LF.
+
+## Khóa bộ ảnh và chạy benchmark
+
+Sau khi có xác nhận, dùng builder khóa bộ ảnh. Chạy benchmark từ thư mục
+gốc bằng môi trường Python chứa model SigLIP2 đã cache và đúng phiên bản
+Torch/Transformers trong profile HAI-14.
+
+```powershell
+python datasets/image-search/dev-v3/build_dataset.py --test-v3 --freeze
+$env:PYTHONPATH = (Resolve-Path 'services/search-service').Path
+$env:OMP_NUM_THREADS = '4'
+$env:MKL_NUM_THREADS = '4'
+python -m scripts.benchmark_test_v3 --final
+```
+
+Runner gửi ảnh qua HTTP loopback vào endpoint Search nội bộ và tính hạng
+từ snapshot 85 vector đã khóa. URL ảnh kết quả mang định danh snapshot.
+Độ trễ đo được thuộc lần chạy loopback trên máy benchmark. Runner dùng DEV
+để warm up, ghi `run-started.json` ngay trước request TEST đầu tiên, và giữ
+bằng chứng tại `evidence/image-search-v3/test-v3-final`.

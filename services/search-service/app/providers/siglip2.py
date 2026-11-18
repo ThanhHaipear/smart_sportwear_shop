@@ -99,8 +99,9 @@ def category_probabilities(
 class Siglip2EmbeddingProvider:
     """Pinned local SigLIP2 query embedder for the V2 image index."""
 
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, *, category_prompts: dict[str, tuple[str, ...]] | None = None) -> None:
         self.settings = settings
+        self._category_prompts = category_prompts
         self._torch: Any | None = None
         self._processor: Any | None = None
         self._model: Any | None = None
@@ -184,7 +185,8 @@ class Siglip2EmbeddingProvider:
     def _category_scores(self, image_vector: Sequence[float]) -> dict[str, float]:
         self._load()
         if self._category_prototypes is None:
-            prompts = [prompt for group in CATEGORY_PROMPTS.values() for prompt in group]
+            bank = self._category_prompts if self._category_prompts is not None else CATEGORY_PROMPTS
+            prompts = [prompt for group in bank.values() for prompt in group]
             inputs = self._processor(
                 text=prompts,
                 padding="max_length",
@@ -198,7 +200,7 @@ class Siglip2EmbeddingProvider:
             normalized = [l2_normalize(row, SIGLIP2_DIMENSIONS) for row in features]
             prototypes: dict[str, tuple[float, ...]] = {}
             offset = 0
-            for category, category_prompts in CATEGORY_PROMPTS.items():
+            for category, category_prompts in bank.items():
                 rows = normalized[offset:offset + len(category_prompts)]
                 offset += len(category_prompts)
                 mean = [sum(row[index] for row in rows) / len(rows) for index in range(SIGLIP2_DIMENSIONS)]

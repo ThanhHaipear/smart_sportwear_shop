@@ -58,7 +58,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `DONE` | P0 | HAI-11 |
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
-| HAI-15 | Tạo và chạy TEST v3 độc lập | `TODO` | P0 | HAI-14 |
+| HAI-15 | Tạo và chạy TEST v3 độc lập | `REVIEW REQUIRED` | P0 | HAI-14 |
 | HAI-16 | Rollout public có kiểm soát | `BLOCKED / NO-GO` | P0 | HAI-15 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
@@ -496,7 +496,7 @@ Chưa triển khai snapshot lên Supabase hoặc runtime thường trực.
 
 ### HAI-15 TEST v3 độc lập
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `REVIEW REQUIRED`
 
 - Thu thập TEST mới độc lập với catalog, DEV và TEST v1/v2.
 - Kiểm tra license, provenance, SHA-256, near duplicate và source-group leakage.
@@ -505,6 +505,18 @@ Chưa triển khai snapshot lên Supabase hoặc runtime thường trực.
 - Gate: Recall@5 `>=80%`, category accuracy `>=90%`, leakage `0`, request
   failure `0%`, p95 `<=3s`; unknown rejection phải được báo cáo và không thấp
   hơn ngưỡng đã khóa trên DEV.
+
+Ngày 18/11/2026, bộ ứng viên gồm 90 ảnh Wikimedia Commons thuộc đủ sáu nhóm,
+có nhãn và hồ sơ nguồn/giấy phép. Kiểm tra SHA-256, trang nguồn, chuỗi nguồn
+và dHash đã qua với 549 ảnh tham chiếu. Phụ kiện có 10 ảnh, là nhóm ít nhất.
+Hồ sơ tại [TEST v3](../datasets/image-search/test-v3/README.md) đang chờ thành viên
+dự án độc lập duyệt phân bố, nhãn và nguồn cho đúng bộ checksum. Benchmark
+TEST chính thức chưa chạy.
+
+API Search nội bộ qua HTTP loopback đã trả đúng thứ tự top-5 cho 20/20 ảnh
+DEV, với 0 request lỗi và p95 388,847 ms trên snapshot cục bộ 85 vector.
+Kết quả này xác nhận đường chạy benchmark và cấu hình HAI-14 trên DEV.
+[Bằng chứng preflight](../evidence/image-search-v3/hai-15-dev-preflight-2026-11-18/metrics.json)
 
 ### HAI-16 Rollout public
 
