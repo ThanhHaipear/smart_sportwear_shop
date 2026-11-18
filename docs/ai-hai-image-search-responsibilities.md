@@ -56,7 +56,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-10 | Báo cáo tổng kết | `UPDATE REQUIRED` | P1 | HAI-07, HAI-08 |
 | HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `DONE` | P0 | HAI-01, HAI-02 |
 | HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `DONE` | P0 | HAI-11 |
-| HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `TODO` | P0 | HAI-11 |
+| HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `TODO` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `BLOCKED` | P0 | HAI-14 |
 | HAI-16 | Rollout public có kiểm soát | `BLOCKED / NO-GO` | P0 | HAI-15 |
@@ -70,7 +70,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | Image embeddings hiện hành | `DONE` | HAI-11 backfill tái tạo `81/81 READY`; query thật xác nhận vector khớp SigLIP2 runtime | Giữ model/revision và checksum trong các lần backfill sau |
 | SigLIP2 local | `DONE` | `google/siglip2-base-patch16-224`, revision cố định, 768 chiều, L2-normalize | Giữ đúng revision/preprocessing cho cả document và query |
 | Worker/indexing hiện hành | `DONE` | HAI-11 xác nhận contract, event, retry/DLQ, duplicate, backfill và idempotency trên service mới | Theo dõi production-like soak trước rollout |
-| Exact cosine cũ | `HISTORICAL_DONE` | Hàm exact search trong `ai_retrieval` | `ai_search` đang có HNSW; phải loại mâu thuẫn và lưu `EXPLAIN ANALYZE` |
+| Exact cosine hiện hành | `DONE` | Query plan quét toàn bộ vector READY của sản phẩm ACTIVE. Search V3 đã bỏ HNSW ảnh | Đo lại khi model, cấu hình hoặc quy mô catalog thay đổi |
 | Storefront visual search | `DONE` về UI | Có upload/camera/crop/loading/error/result dialog | Public API đang trả 503; chỉ bật sau TEST v3 |
 | DEV v2.2 / TEST v2 | `DONE / NO-GO` | DEV đạt gate; TEST v2 Recall@5 `73,75%`, category `79%` | Không retune TEST v2; chỉ cải tiến bằng DEV v3 |
 | Voyage | `REFERENCE` | Pipeline lịch sử | Không dùng làm model chuẩn của Hải |
@@ -401,18 +401,21 @@ nullable của V6. Public visual search tiếp tục tắt trong HAI-12.
 
 ### HAI-13 Xác minh exact cosine trong pilot
 
-**Trạng thái:** `TODO`
-
-`ai_search.image_embeddings` hiện có HNSW index dù kế hoạch gốc yêu cầu exact
-cosine và chưa cần ANN. Không được chỉ dựa vào toán tử `<=>` để kết luận query
-là exact.
+**Trạng thái:** `DONE`
 
 | Xong | ID | Việc cần làm | Điều kiện đạt |
 |---:|---|---|---|
-| [ ] | HAI-13.1 | Lưu `EXPLAIN (ANALYZE, BUFFERS)` trên dữ liệu hiện tại | Xác định rõ sequential exact hay HNSW ANN |
-| [ ] | HAI-13.2 | Thiết kế migration tương thích để không dùng HNSW cho pilot | Có rollback; không xóa vector |
-| [ ] | HAI-13.3 | Benchmark exact cosine | Ranking deterministic, p95 `<=3s`, Recall không bị sai số ANN |
-| [ ] | HAI-13.4 | Khóa tie-break và grouping theo product | Cùng input/config cho cùng thứ tự |
+| [x] | HAI-13.1 | Lưu `EXPLAIN (ANALYZE, BUFFERS)` trên dữ liệu hiện tại | Quét 81 vector READY, dùng `Seq Scan` ở toàn bộ 36 probe |
+| [x] | HAI-13.2 | Thiết kế migration tương thích để không dùng HNSW cho pilot | Search V3 chỉ bỏ HNSW ảnh. Backup có 81 vector và định nghĩa index. README Search có câu lệnh khôi phục |
+| [x] | HAI-13.3 | Benchmark exact cosine | Xếp hạng khớp phép tính vét cạn độc lập ở 36/36 probe. p95 API nội bộ là 822 ms, đạt gate `<=3s` |
+| [x] | HAI-13.4 | Khóa tie-break và grouping theo product | Chọn một ảnh gần nhất mỗi product và phá hòa theo ID. 30/30 truy vấn DEV chạy lặp giữ nguyên thứ tự |
+
+Search V3 được áp dụng trên Supabase ngày 18/11/2026. Checksum và số lượng của
+81 vector ảnh READY giữ nguyên. HNSW của text search vẫn hiện diện. Benchmark
+gọi API Search nội bộ qua HTTP loopback với SigLIP2 CPU và 30 ảnh của DEV v2.2,
+mỗi ảnh hai lần sau một request warmup. Public visual search tiếp tục tắt.
+Xem `evidence/image-search-v2/cutover-ai-search/hai-13-exact-image-search-2026-11-18.json`
+để biết query plan, cấu hình và kết quả latency.
 
 ### HAI-14 DEV v3
 
@@ -520,7 +523,7 @@ Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-r
 - [x] Catalog index-document contract khớp Search client và có integration test.
 - [x] Worker/backfill hiện tại tái tạo idempotent 36 documents, 178 facets và 81 image vectors.
 - [x] Metadata ảnh/Cloudinary của 81 ảnh pilot và World Cup đã được persist và đối chiếu checksum.
-- [ ] Exact cosine được chứng minh bằng query plan; không dùng ANN trong pilot.
+- [x] Exact cosine được chứng minh bằng query plan và phép tính đối chiếu. HNSW ảnh đã được bỏ khỏi pilot.
 - [ ] Internal API, Catalog/Gateway và Storefront E2E pass trên `ai_search`.
 - [ ] DEV v3 được khóa mà không dùng nhãn TEST v2 để tune.
 - [ ] TEST v3 độc lập đạt Recall@5, category, leakage, failure và latency gate.

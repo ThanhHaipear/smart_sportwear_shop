@@ -16,6 +16,26 @@ from app.services.visual_ranking import rerank_visual_candidates
 logger = logging.getLogger(__name__)
 
 
+# Score every eligible image before applying any ordering or candidate cutoff.
+EXACT_IMAGE_SEARCH_SQL = """
+    with scored as materialized (
+        select e.product_id,e.image_id,e.image_url,d.product_type,
+               e.embedding OPERATOR(extensions.<=>) %s::extensions.vector as distance
+        from ai_search.image_embeddings e
+        join ai_search.search_documents d using(product_id)
+        where e.status='READY' and d.status='ACTIVE'
+    ), best_images as (
+        select distinct on (product_id) product_id,image_id,image_url,product_type,distance
+        from scored
+        order by product_id,distance,image_id
+    )
+    select product_id,image_id,image_url,1-distance as similarity,product_type
+    from best_images
+    order by similarity desc,product_id,image_id
+    limit %s
+"""
+
+
 def vector_literal(values: list[float]) -> str:
     return "[" + ",".join(f"{value:.9g}" for value in values) + "]"
 
@@ -269,22 +289,8 @@ class SearchRepository:
     ) -> list[dict]:
         async with self.connection() as connection, connection.cursor() as cursor:
             await cursor.execute(
-                """with ranked as (
-                       select e.product_id,e.image_id,e.image_url,
-                              1-(e.embedding <=> %s::extensions.vector) similarity,
-                              d.product_type,
-                              row_number() over (
-                                  partition by e.product_id
-                                  order by e.embedding <=> %s::extensions.vector,e.image_id
-                              ) product_rank
-                       from ai_search.image_embeddings e
-                       join ai_search.search_documents d using(product_id)
-                       where e.status='READY' and d.status='ACTIVE'
-                   )
-                   select product_id,image_id,image_url,similarity,product_type
-                   from ranked where product_rank=1
-                   order by similarity desc,product_id,image_id limit %s""",
-                (vector_literal(vector), vector_literal(vector), min(max(limit * 10, 50), 100)),
+                EXACT_IMAGE_SEARCH_SQL,
+                (vector_literal(vector), min(max(limit * 10, 50), 100)),
             )
             rows = list(await cursor.fetchall())
         return rerank_visual_candidates(
