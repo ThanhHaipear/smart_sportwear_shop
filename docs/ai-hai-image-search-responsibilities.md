@@ -57,7 +57,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `DONE` | P0 | HAI-01, HAI-02 |
 | HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `DONE` | P0 | HAI-11 |
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
-| HAI-14 | Xây DEV v3 và khóa cấu hình mới | `TODO` | P0 | HAI-11, HAI-12, HAI-13 |
+| HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DEV FROZEN / CONFIG NOT READY` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `BLOCKED` | P0 | HAI-14 |
 | HAI-16 | Rollout public có kiểm soát | `BLOCKED / NO-GO` | P0 | HAI-15 |
 
@@ -419,14 +419,35 @@ Xem `evidence/image-search-v2/cutover-ai-search/hai-13-exact-image-search-2026-1
 
 ### HAI-14 DEV v3
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `DEV FROZEN / CONFIG NOT READY`
 
 - Không dùng TEST v2 để chọn model, threshold, prompt hoặc reranking.
-- Dùng ảnh DEV mới có provenance, tập trung `accessories`, `tops`, unknown và
-  các failure slice của TEST v2.
+- DEV v3 đã khóa 60 ảnh thật có nguồn và giấy phép. Bộ ảnh có 20 áo,
+  8 phụ kiện, 14 ảnh ngoài catalog, 4 quần, 7 đồng phục và 7 giày.
+- Bộ dữ liệu có 40 ảnh calibration và 20 ảnh DEV-check. Validator đã đối chiếu
+  436 ảnh tham chiếu. Không có trùng SHA-256, Commons page ID hoặc source group.
 - Giữ SigLIP2 pretrained local làm baseline bắt buộc; chưa fine-tune trong pilot.
 - Chỉ thử preprocessing, crop/region, category consensus và catalog coverage trên DEV.
 - Khóa model revision, preprocessing, candidate limit, threshold và ranking trước TEST v3.
+
+Manifest, nhãn và provenance nằm trong `datasets/image-search/dev-v3/`.
+Công cụ `scripts.evaluate_dev_v3` của Search so sánh cấu hình trên cùng snapshot
+81 vector exact cosine. Các cấu hình thử được chọn trên phần calibration.
+
+Cấu hình ứng viên dùng SigLIP2 trên toàn ảnh, candidate limit 20, category
+weight `0.60`, similarity threshold `0.755936` và quy tắc loại ảnh khi xác suất
+`unknown` bằng hoặc lớn hơn xác suất cao nhất của các nhóm có trong catalog.
+Trên calibration, ứng viên đạt Recall@5 **80,65%**, category accuracy **93,55%**
+và unknown rejection **100%**. Trên DEV-check, Recall@5 **78,89%** và category
+accuracy **86,67%** dưới các mốc 80% và 90%. Unknown rejection tăng từ **20%**
+lên **100%** trên năm ảnh unknown của DEV-check.
+
+Giữ cấu hình ở trạng thái ứng viên. Hai lỗi phân nhóm cần xử lý trên DEV là
+áo tập bị xếp vào đồng phục và ốp bảo vệ ống đồng bị xếp dưới giày. Phụ kiện
+hiện thiên về bình nước, với 5/8 ảnh, nên độ bao phủ phụ kiện cần được mở rộng.
+Chưa áp dụng cấu hình mới vào runtime. HAI-15 tiếp tục chờ cấu hình DEV đạt.
+Bằng chứng nằm tại
+`evidence/image-search-v2/cutover-ai-search/hai-14-dev-v3-evaluation-2026-11-18.json`.
 
 ### HAI-15 TEST v3 độc lập
 
