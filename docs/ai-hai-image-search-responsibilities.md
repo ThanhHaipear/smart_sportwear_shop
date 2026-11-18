@@ -1,6 +1,6 @@
 # Kế hoạch và tiến độ AI của Lê Thanh Hải
 
-> Cập nhật trạng thái hiện hành ngày 15/11/2026. HAI-01 đến HAI-10 bên dưới
+> Cập nhật trạng thái hiện hành ngày 18/11/2026. HAI-01 đến HAI-10 bên dưới
 > lưu bằng chứng của pipeline SigLIP2 V2 trước khi hệ thống chuyển sang kiến
 > trúc microservice hợp nhất. Các mục đó không tự động chứng minh pipeline
 > `services/search-service` hiện tại đã được cutover hoặc đủ điều kiện rollout.
@@ -55,7 +55,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-09 | Hardening và rollback drill lịch sử | `HISTORICAL_DONE`; rollout public `BLOCKED` | P1 | HAI-03, HAI-04 |
 | HAI-10 | Báo cáo tổng kết | `UPDATE REQUIRED` | P1 | HAI-07, HAI-08 |
 | HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `DONE` | P0 | HAI-01, HAI-02 |
-| HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `VERIFY` | P0 | HAI-11 |
+| HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `DONE` | P0 | HAI-11 |
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `TODO` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `TODO` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `BLOCKED` | P0 | HAI-14 |
@@ -66,7 +66,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | Thành phần | Trạng thái | Bằng chứng hiện tại | Việc còn phải làm trên kiến trúc hiện tại |
 |---|---|---|---|
 | Catalog pilot và World Cup | `DONE` | 36 sản phẩm, 178 variant, 81 ảnh; manifest/checksum lịch sử đã khóa | Đối chiếu lại với schema `catalog` hiện tại |
-| Metadata Cloudinary lịch sử | `HISTORICAL_DONE / VERIFY` | Evidence cũ có `public_id`, asset version, URL, checksum và provenance | Catalog hiện chỉ lưu `secure_url`; phải khôi phục metadata hoặc ghi rõ chính sách URL/hash thay thế |
+| Metadata Cloudinary | `DONE` | Catalog V6 có metadata gốc cho 81/81 ảnh; checksum khớp Cloudinary và hồ sơ import | Lưu metadata khi có nguồn xác minh được |
 | Image embeddings hiện hành | `DONE` | HAI-11 backfill tái tạo `81/81 READY`; query thật xác nhận vector khớp SigLIP2 runtime | Giữ model/revision và checksum trong các lần backfill sau |
 | SigLIP2 local | `DONE` | `google/siglip2-base-patch16-224`, revision cố định, 768 chiều, L2-normalize | Giữ đúng revision/preprocessing cho cả document và query |
 | Worker/indexing hiện hành | `DONE` | HAI-11 xác nhận contract, event, retry/DLQ, duplicate, backfill và idempotency trên service mới | Theo dõi production-like soak trước rollout |
@@ -372,18 +372,32 @@ backup/rollback và phê duyệt riêng.
 
 ### HAI-12 Chuẩn hóa metadata ảnh hiện tại
 
-**Trạng thái:** `VERIFY`
-
-Catalog hiện persist `secure_url`, `alt_text`, thứ tự và primary flag; index document
-đã trả image ID/URL nhưng `publicId`, asset version, dimensions, checksum và provenance
-vẫn chưa được persist đầy đủ trong schema hiện hành.
+**Trạng thái:** `DONE`
 
 | Xong | ID | Việc cần làm | Điều kiện đạt |
 |---:|---|---|---|
-| [ ] | HAI-12.1 | Audit host/source của 81 ảnh và đối chiếu manifest | Phân biệt Cloudinary, local và nguồn khác; URL hợp lệ |
-| [ ] | HAI-12.2 | Chốt schema metadata | Lưu `public_id`, asset version, dimensions, checksum, provenance khi áp dụng |
-| [ ] | HAI-12.3 | Backfill metadata idempotent | Không thay ảnh hiển thị; report missing/mismatch rõ ràng |
-| [ ] | HAI-12.4 | Bổ sung metadata vào Catalog snapshot | Worker có đủ dữ liệu để tải và xác minh đúng asset |
+| [x] | HAI-12.1 | Audit host/source của 81 ảnh và đối chiếu manifest | 81 URL Cloudinary có version, 81/81 SHA-256 ảnh gốc khớp hồ sơ import |
+| [x] | HAI-12.2 | Chốt schema metadata | Migration Catalog V6 thêm metadata nullable, hỗ trợ ảnh cũ và ảnh chỉ có URL |
+| [x] | HAI-12.3 | Backfill metadata idempotent | PostgreSQL local và Supabase cập nhật 81 rồi 0; 81 ảnh vẫn giữ URL và cờ ảnh chính |
+| [x] | HAI-12.4 | Bổ sung metadata vào Catalog snapshot | Contract v1 bổ sung trường tùy chọn, Search kiểm tra checksum ảnh gốc trước khi chuẩn hóa |
+
+Catalog lưu SHA-256 của ảnh gốc. Search lưu SHA-256 của ảnh sau chuẩn hóa để
+kiểm tra idempotency. Bật lại indexing ảnh cần chạy đối chiếu trước khi phục vụ
+truy vấn. Khi visual search tắt, reindex text/facet giữ nguyên các vector ảnh
+hiện có. Khi indexing ảnh bật, snapshot có danh sách ảnh rỗng vẫn dọn vector cũ.
+
+Ngày 18/11/2026, V6 và backfill được áp dụng trên Supabase trong cùng transaction.
+Kiểm tra sau commit xác nhận 81/81 ảnh đủ metadata. Checksum của 81 vector READY
+trong `ai_search` giữ nguyên. Bằng chứng và thông tin backup nằm tại
+`evidence/image-search-v2/cutover-ai-search/hai-12-catalog-image-metadata-2026-11-18.json`.
+
+Chạy `python scripts/maintenance/backfill-catalog-image-metadata.py` với
+`DATABASE_URL` trỏ đến Catalog PostgreSQL. Dry-run chỉ đọc và kiểm tra ID ảnh,
+ID sản phẩm, URL và các metadata đã lưu. Sau khi có backup và phê duyệt ghi,
+áp dụng Catalog V6 rồi chạy script với `--execute`. Kiểm tra lượt lặp báo
+`updated: 0` và `alreadyComplete: 81`. Nếu phát hiện metadata khác hồ sơ import,
+script dừng trước khi ghi. Khi quay lại bản Catalog cũ, có thể giữ các cột
+nullable của V6. Public visual search tiếp tục tắt trong HAI-12.
 
 ### HAI-13 Xác minh exact cosine trong pilot
 
@@ -505,7 +519,7 @@ Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-r
 
 - [x] Catalog index-document contract khớp Search client và có integration test.
 - [x] Worker/backfill hiện tại tái tạo idempotent 36 documents, 178 facets và 81 image vectors.
-- [ ] Metadata ảnh/Cloudinary hiện tại được persist hoặc có chính sách thay thế rõ ràng.
+- [x] Metadata ảnh/Cloudinary của 81 ảnh pilot và World Cup đã được persist và đối chiếu checksum.
 - [ ] Exact cosine được chứng minh bằng query plan; không dùng ANN trong pilot.
 - [ ] Internal API, Catalog/Gateway và Storefront E2E pass trên `ai_search`.
 - [ ] DEV v3 được khóa mà không dùng nhãn TEST v2 để tune.

@@ -66,7 +66,7 @@ class SearchRepository:
     async def is_current(
         self,
         document: CatalogIndexDocument,
-        image_sources: list[tuple[UUID, str, str]],
+        image_sources: list[tuple[UUID, str, str]] | None,
     ) -> bool:
         digest = content_hash(canonical_text(document))
         async with self.connection() as connection, connection.cursor() as cursor:
@@ -135,6 +135,8 @@ class SearchRepository:
             )
             if current_variants != expected_variants:
                 return False
+            if image_sources is None:
+                return True
 
             await cursor.execute(
                 """select image_id,image_url,image_hash,model,status
@@ -153,7 +155,7 @@ class SearchRepository:
 
     async def upsert_document(
         self, document: CatalogIndexDocument, text_vector: list[float] | None,
-        image_vectors: list[tuple[UUID, str, str, list[float]]], event_id: UUID | None = None,
+        image_vectors: list[tuple[UUID, str, str, list[float]]] | None, event_id: UUID | None = None,
         consumer: str = "catalog-index-v1",
     ) -> str:
         text = canonical_text(document)
@@ -206,7 +208,7 @@ class SearchRepository:
                     (document.product_id, digest, self.settings.text_embedding_model, vector_literal(text_vector)),
                 )
             active_images: list[UUID] = []
-            for image_id, url, image_hash, vector in image_vectors:
+            for image_id, url, image_hash, vector in image_vectors or ():
                 active_images.append(image_id)
                 await cursor.execute(
                     """insert into ai_search.image_embeddings(
@@ -218,10 +220,11 @@ class SearchRepository:
                     (image_id, document.product_id, url, image_hash,
                      self.settings.visual_embedding_model, vector_literal(vector)),
                 )
-            await cursor.execute(
-                "delete from ai_search.image_embeddings where product_id=%s and not (image_id=any(%s::uuid[]))",
-                (document.product_id, active_images),
-            )
+            if image_vectors is not None:
+                await cursor.execute(
+                    "delete from ai_search.image_embeddings where product_id=%s and not (image_id=any(%s::uuid[]))",
+                    (document.product_id, active_images),
+                )
             if event_id is not None:
                 await cursor.execute(
                     """insert into ai_search.processed_events(consumer_name,event_id,aggregate_version)

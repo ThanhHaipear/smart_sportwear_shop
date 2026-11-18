@@ -36,13 +36,17 @@ class CatalogIndexer:
         if self.settings.visual_search_enabled:
             pipeline = ImagePipeline(self.settings)
             for image in document.images:
-                normalized = await pipeline.download_and_normalize(image.url, image.public_id)
+                normalized = await pipeline.download_and_normalize(
+                    image.url, image.public_id, asset_version=image.asset_version, checksum=image.checksum,
+                )
                 normalized_images.append((image, normalized))
         image_sources = [
             (image.id, image.url, normalized.sha256)
             for image, normalized in normalized_images
         ]
-        if not force and await self.repository.is_current(document, image_sources):
+        if not force and await self.repository.is_current(
+            document, image_sources if self.settings.visual_search_enabled else None,
+        ):
             if event_id is not None:
                 await self.repository.mark_processed("catalog-index-v1", event_id, document.source_version)
             return "SKIPPED"
@@ -56,4 +60,6 @@ class CatalogIndexer:
                     self.settings.visual_embedding_dims
                 )
                 image_vectors.append((image.id, image.url, normalized.sha256, result.vector))
-        return await self.repository.upsert_document(document, text_vector, image_vectors, event_id)
+        return await self.repository.upsert_document(
+            document, text_vector, image_vectors if self.settings.visual_search_enabled else None, event_id,
+        )

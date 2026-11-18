@@ -100,3 +100,17 @@ def test_force_recomputes_and_updates_snapshot(pipeline_type, build_provider):
     instance.repository.is_current.assert_not_awaited()
     build_provider.return_value.embed_document.assert_awaited_once_with(b"normalized")
     instance.repository.upsert_document.assert_awaited_once()
+
+
+@patch("app.services.indexer.ImagePipeline")
+def test_reindex_with_visual_search_disabled_leaves_image_vectors_untouched(pipeline_type):
+    instance = indexer()
+    instance.settings.visual_search_enabled = False
+    instance.repository.is_current.return_value = False
+
+    outcome = asyncio.run(instance.index(document().product_id, 0))
+
+    assert outcome == "UPDATED"
+    assert instance.repository.is_current.await_args.args[1] is None
+    assert instance.repository.upsert_document.await_args.args[2] is None
+    pipeline_type.assert_not_called()

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from ipaddress import ip_address
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 from app.config import Settings
 
@@ -17,9 +17,21 @@ class ImageSourceResolver:
     def __init__(self, settings: Settings):
         self.settings = settings
 
-    def resolve(self, image_url: str, public_id: str | None = None) -> CatalogImageSource:
+    def resolve(
+        self, image_url: str, public_id: str | None = None, asset_version: str | None = None,
+    ) -> CatalogImageSource:
         parsed = self._validated_url(image_url)
         if parsed.hostname == "res.cloudinary.com":
+            if asset_version:
+                cloud = self.settings.cloudinary_cloud_name.strip()
+                prefix = f"/{cloud}/image/upload/v{asset_version}/"
+                path = unquote(parsed.path)
+                asset_path = path.removeprefix(prefix)
+                if asset_path == path or not asset_path or parsed.query or parsed.fragment:
+                    raise ImagePipelineError("Cloudinary image URL does not match its original asset version")
+                if public_id and asset_path.rsplit(".", 1)[0] != public_id:
+                    raise ImagePipelineError("Cloudinary image URL does not match its public_id")
+                return CatalogImageSource("cloudinary", image_url)
             return CatalogImageSource("cloudinary", self._cloudinary_url(image_url, public_id))
         if parsed.hostname == "cdn.shopify.com":
             return CatalogImageSource("shopify", image_url)
