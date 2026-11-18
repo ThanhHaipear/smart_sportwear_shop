@@ -57,8 +57,8 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `DONE` | P0 | HAI-01, HAI-02 |
 | HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `DONE` | P0 | HAI-11 |
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
-| HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DEV FROZEN / CONFIG NOT READY` | P0 | HAI-11, HAI-12, HAI-13 |
-| HAI-15 | Tạo và chạy TEST v3 độc lập | `BLOCKED` | P0 | HAI-14 |
+| HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
+| HAI-15 | Tạo và chạy TEST v3 độc lập | `TODO` | P0 | HAI-14 |
 | HAI-16 | Rollout public có kiểm soát | `BLOCKED / NO-GO` | P0 | HAI-15 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
@@ -419,7 +419,7 @@ Xem `evidence/image-search-v2/cutover-ai-search/hai-13-exact-image-search-2026-1
 
 ### HAI-14 DEV v3
 
-**Trạng thái:** `DEV FROZEN / CONFIG NOT READY`
+**Trạng thái:** `DONE / FROZEN`
 
 - Không dùng TEST v2 để chọn model, threshold, prompt hoặc reranking.
 - DEV v3 đã khóa 60 ảnh thật có nguồn và giấy phép. Bộ ảnh có 20 áo,
@@ -445,7 +445,7 @@ lên **100%** trên năm ảnh unknown của DEV-check.
 Giữ cấu hình ở trạng thái ứng viên. Hai lỗi phân nhóm cần xử lý trên DEV là
 áo tập bị xếp vào đồng phục và ốp bảo vệ ống đồng bị xếp dưới giày. Phụ kiện
 hiện thiên về bình nước, với 5/8 ảnh, nên độ bao phủ phụ kiện cần được mở rộng.
-Chưa áp dụng cấu hình mới vào runtime. HAI-15 tiếp tục chờ cấu hình DEV đạt.
+Ở vòng này, cấu hình chưa được chốt cho HAI-15.
 Bằng chứng nằm tại
 `evidence/image-search-v2/cutover-ai-search/hai-14-dev-v3-evaluation-2026-11-18.json`.
 
@@ -469,15 +469,34 @@ Vòng chẩn đoán theo subtype áo trong catalog và các mô tả đồ vật
 rejection lên 100% nhưng category accuracy giảm còn 71,43%. Hai vòng chẩn đoán
 dùng lại tập kiểm tra DEV v3.1 sau khi đã xem kết quả vòng đầu.
 
-Các ứng viên vẫn dưới ngưỡng khóa. Cần cải thiện khả năng khớp ảnh áo tập có
-người mặc với hai mẫu áo khoác trong catalog. HAI-15 tiếp tục chờ cấu hình
-đạt ngưỡng. Xem
+Các ứng viên của v3.1 ở dưới ngưỡng khóa. Kết quả xác định điểm cần cải thiện
+là khả năng khớp ảnh áo tập có người mặc với hai mẫu áo khoác trong catalog. Xem
 `evidence/image-search-v2/cutover-ai-search/hai-14-dev-v3-followup-2026-11-18.json`
 để đối chiếu cấu hình và từng ca.
 
+#### DEV v3.2 mở rộng góc nhìn catalog
+
+Đã tạo bốn ảnh tham chiếu ImageGen cho hai thiết kế pilot Violet Air và Orange
+Pace. Mỗi mẫu có góc chính diện và góc nghiêng cận thân áo. Ảnh tổng hợp chỉ
+được đưa vào snapshot catalog thử nghiệm. Bộ kiểm tra có 20 ảnh Commons độc
+lập với catalog, gồm sáu ảnh áo khoác, chín ảnh đối chứng có sản phẩm tương ứng
+và năm ảnh ngoài catalog. Validator đối chiếu 529 ảnh tham chiếu.
+
+So sánh 81 với 85 vector bằng cùng SigLIP2 revision và cấu hình đã chọn trong
+DEV v3.1. Recall@5 toàn bộ tăng **87,78% → 94,44%**. Recall@5 riêng nhóm áo
+khoác tăng **83,33% → 100%**. Độ chính xác nhóm và unknown rejection đều đạt
+**100%** trên bộ kiểm tra này. Các chỉ số nhóm đối chứng giữ nguyên.
+
+Cấu hình HAI-14 đã khóa tại
+`datasets/image-search/dev-v3-catalog-coverage/locked-profile.json`.
+Snapshot 85 vector được lưu cục bộ. Bằng chứng A/B nằm tại
+`evidence/image-search-v2/cutover-ai-search/hai-14-catalog-coverage-2026-11-18.json`.
+HAI-15 sẽ dùng đúng snapshot và cấu hình đã khóa để đánh giá TEST độc lập.
+Chưa triển khai snapshot lên Supabase hoặc runtime thường trực.
+
 ### HAI-15 TEST v3 độc lập
 
-**Trạng thái:** `BLOCKED` bởi HAI-14
+**Trạng thái:** `TODO`
 
 - Thu thập TEST mới độc lập với catalog, DEV và TEST v1/v2.
 - Kiểm tra license, provenance, SHA-256, near duplicate và source-group leakage.
@@ -572,7 +591,7 @@ Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-r
 - [x] Metadata ảnh/Cloudinary của 81 ảnh pilot và World Cup đã được persist và đối chiếu checksum.
 - [x] Exact cosine được chứng minh bằng query plan và phép tính đối chiếu. HNSW ảnh đã được bỏ khỏi pilot.
 - [ ] Internal API, Catalog/Gateway và Storefront E2E pass trên `ai_search`.
-- [ ] DEV v3 được khóa mà không dùng nhãn TEST v2 để tune.
+- [x] DEV v3 và cấu hình catalog 85 vector đã khóa trước TEST v3.
 - [ ] TEST v3 độc lập đạt Recall@5, category, leakage, failure và latency gate.
 - [ ] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả mới nhất.
 - [ ] Staged rollout và rollback smoke đạt trên môi trường acceptance.

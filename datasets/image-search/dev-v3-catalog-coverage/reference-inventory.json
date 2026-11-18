@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "images": [
+    {
+      "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "productSlug": "ao-khoac-chay-bo-nu-violet-air",
+      "productType": "SPORTS_TOP",
+      "image": "assets/reference/violet-front.png",
+      "view": "worn-front",
+      "sourceReference": "catalog/pilot-v1/assets/PILOT-TOP-007-01.png",
+      "sourceReferenceSha256": "8238db5b0b6f7576fb8a9e49517dd0b40a3f0aac52f6d926858395fc57450695",
+      "sha256": "668cc2224a0bc6bbd04633e94aa64fe1074085256c3b25a80f90976c661b84aa",
+      "width": 1064,
+      "height": 1479,
+      "sourceKind": "SYNTHETIC",
+      "generator": "OpenAI ImageGen built-in",
+      "useScope": "Project-local image search benchmark for the fictional pilot design",
+      "promptKey": "violet-front.png"
+    },
+    {
+      "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "productSlug": "ao-khoac-chay-bo-nu-violet-air",
+      "productType": "SPORTS_TOP",
+      "image": "assets/reference/violet-side.png",
+      "view": "worn-three-quarter-close",
+      "sourceReference": "catalog/pilot-v1/assets/PILOT-TOP-007-01.png",
+      "sourceReferenceSha256": "8238db5b0b6f7576fb8a9e49517dd0b40a3f0aac52f6d926858395fc57450695",
+      "sha256": "57e14a0fe74dd152aaa04f3949de30f55efdb616220698c01b2c6d2eada7c223",
+      "width": 1024,
+      "height": 1536,
+      "sourceKind": "SYNTHETIC",
+      "generator": "OpenAI ImageGen built-in",
+      "useScope": "Project-local image search benchmark for the fictional pilot design",
+      "promptKey": "violet-side.png"
+    },
+    {
+      "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+      "productSlug": "ao-gio-chay-bo-nam-orange-pace",
+      "productType": "SPORTS_TOP",
+      "image": "assets/reference/orange-front.png",
+      "view": "worn-front",
+      "sourceReference": "catalog/pilot-v1/assets/PILOT-TOP-008-01.png",
+      "sourceReferenceSha256": "4908989ff900cab5d43c2d296f6527a54f725f75547cacd31015e5c53b33939f",
+      "sha256": "885e3c10829f3f5465dec7873ec3348add2b974fedb29b1a9aefc8f57f0b29e9",
+      "width": 1086,
+      "height": 1448,
+      "sourceKind": "SYNTHETIC",
+      "generator": "OpenAI ImageGen built-in",
+      "useScope": "Project-local image search benchmark for the fictional pilot design",
+      "promptKey": "orange-front.png"
+    },
+    {
+      "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+      "productSlug": "ao-gio-chay-bo-nam-orange-pace",
+      "productType": "SPORTS_TOP",
+      "image": "assets/reference/orange-side.png",
+      "view": "worn-three-quarter-close",
+      "sourceReference": "catalog/pilot-v1/assets/PILOT-TOP-008-01.png",
+      "sourceReferenceSha256": "4908989ff900cab5d43c2d296f6527a54f725f75547cacd31015e5c53b33939f",
+      "sha256": "3b7dc8a72ef5f44f0ce32fb3445fc1116fb67492c0b388e11b62fd06eee894f7",
+      "width": 1024,
+      "height": 1536,
+      "sourceKind": "SYNTHETIC",
+      "generator": "OpenAI ImageGen built-in",
+      "useScope": "Project-local image search benchmark for the fictional pilot design",
+      "promptKey": "orange-side.png"
+    }
+  ]
+}

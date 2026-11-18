@@ -81,10 +81,21 @@ def references(base, prior_splits=PRIOR_SPLITS):
 def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, str]:
     base = load_base()
     inventory = load_json(directory / "source-inventory.json")
-    supplemental = directory.resolve() != HERE
-    dataset_name = "image-search-dev-v3-supplement" if supplemental else "image-search-dev-v3"
-    prior_splits = (*PRIOR_SPLITS, "dev-v3") if supplemental else PRIOR_SPLITS
+    dataset_name = f"image-search-{directory.name}"
+    references_by_split = {
+        "dev-v3": PRIOR_SPLITS,
+        "dev-v3-supplement": (*PRIOR_SPLITS, "dev-v3"),
+        "dev-v3-catalog-coverage": (*PRIOR_SPLITS, "dev-v3", "dev-v3-supplement"),
+    }
+    prior_splits = references_by_split[directory.name]
+    check_only = directory.name == "dev-v3-catalog-coverage"
     images, groups, pages = references(base, prior_splits)
+    if check_only:
+        for row in load_json(directory / "reference-inventory.json")["images"]:
+            reference = directory / row["image"]
+            if digest(reference) != row["sha256"]:
+                raise ValueError(f"Experimental reference checksum mismatch: {reference}")
+            images[reference.relative_to(ROOT).as_posix()] = (row["sha256"], dhash(reference))
     reference_count = len(images)
     hashes = {sha for sha, _ in images.values()}
     products = {group: {row["productSlug"]: row for row in rows}
@@ -95,6 +106,8 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
         query_id, group, source = item["queryId"], item["group"], item["source"]
         if query_id in ids or group not in GROUPS or item["partition"] not in {"calibration", "DEV-check"}:
             raise ValueError(f"Invalid dataset query: {query_id}")
+        if check_only and item["partition"] != "DEV-check":
+            raise ValueError(f"Catalog coverage queries belong to the frozen check: {query_id}")
         ids.add(query_id)
         series = base.source_series_code(source["title"])
         if series in groups or source["pageId"] in pages:
@@ -159,7 +172,7 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
         })
     for partition in ("calibration", "DEV-check"):
         groups_in_partition = {sample["group"] for sample in samples if sample["partition"] == partition}
-        if (partition == "DEV-check" or not supplemental) and groups_in_partition != GROUPS:
+        if (partition == "DEV-check" or directory.name == "dev-v3") and groups_in_partition != GROUPS:
             raise ValueError(f"{partition} must cover all six groups")
     payloads = {
         "manifest.json": {
@@ -191,9 +204,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write", action="store_true", help="Regenerate the checked-in manifests")
     parser.add_argument("--download-missing", action="store_true")
-    parser.add_argument("--supplement", action="store_true", help="Validate the separate DEV v3 supplement")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--supplement", action="store_true", help="Validate the separate DEV v3 supplement")
+    mode.add_argument("--coverage", action="store_true", help="Validate the frozen catalog coverage check")
     args = parser.parse_args()
-    directory = SPLITS / "dev-v3-supplement" if args.supplement else HERE
+    directory = HERE
+    if args.supplement:
+        directory = SPLITS / "dev-v3-supplement"
+    if args.coverage:
+        directory = SPLITS / "dev-v3-catalog-coverage"
     artifacts = build(args.download_missing, directory)
     for name, expected in artifacts.items():
         path = directory / name
