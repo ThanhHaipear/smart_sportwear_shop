@@ -449,6 +449,32 @@ Chưa áp dụng cấu hình mới vào runtime. HAI-15 tiếp tục chờ cấu
 Bằng chứng nằm tại
 `evidence/image-search-v2/cutover-ai-search/hai-14-dev-v3-evaluation-2026-11-18.json`.
 
+#### DEV v3.1 bổ sung
+
+Đã khóa thêm 29 ảnh có nguồn và giấy phép trong
+`datasets/image-search/dev-v3-supplement/`. Có 10 ảnh bổ sung cho calibration và
+19 ảnh kiểm tra mới, gồm 14 ảnh có sản phẩm tương ứng và 5 ảnh ngoài catalog.
+Validator đối chiếu với 496 ảnh tham chiếu, trong đó có toàn bộ DEV v3.0.
+Khoảng cách dHash nhỏ nhất là 13. Manifest và nhãn DEV v3.0 giữ nguyên.
+
+Ứng viên dùng đồng thuận cosine giữa toàn ảnh và các crop sửa cả bốn lỗi phân
+nhóm đã biết của DEV v3.0. Trên 19 ảnh kiểm tra mới, ứng viên đạt Recall@5
+**67,86%**, category accuracy **85,71%** và unknown rejection **40%**. Phụ kiện
+đạt 5/5 về phân nhóm và có sản phẩm đúng trong top 5 ở cả năm ca. Hai điểm yếu
+còn lại là retrieval đúng kiểu áo tập và từ chối ba ảnh ngoài catalog.
+
+Vòng chẩn đoán theo subtype áo trong catalog và các mô tả đồ vật ngoài catalog
+đạt Recall@5 **78,57%**, category accuracy **85,71%** và unknown rejection
+**80%** trên cùng tập kiểm tra. Kết hợp thêm tín hiệu từ crop nâng unknown
+rejection lên 100% nhưng category accuracy giảm còn 71,43%. Hai vòng chẩn đoán
+dùng lại tập kiểm tra DEV v3.1 sau khi đã xem kết quả vòng đầu.
+
+Các ứng viên vẫn dưới ngưỡng khóa. Cần cải thiện khả năng khớp ảnh áo tập có
+người mặc với hai mẫu áo khoác trong catalog. HAI-15 tiếp tục chờ cấu hình
+đạt ngưỡng. Xem
+`evidence/image-search-v2/cutover-ai-search/hai-14-dev-v3-followup-2026-11-18.json`
+để đối chiếu cấu hình và từng ca.
+
 ### HAI-15 TEST v3 độc lập
 
 **Trạng thái:** `BLOCKED` bởi HAI-14

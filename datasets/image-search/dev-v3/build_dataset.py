@@ -6,6 +6,7 @@ import argparse
 from collections import Counter
 import hashlib
 import importlib.util
+from io import BytesIO
 import json
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -50,10 +51,20 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def references(base):
+def crop_asset(content: bytes, box: list[int]) -> bytes:
+    with Image.open(BytesIO(content)) as image:
+        left, top, right, bottom = box
+        if not (0 <= left < right <= image.width and 0 <= top < bottom <= image.height):
+            raise ValueError("Asset crop lies outside the canonical image")
+        output = BytesIO()
+        image.crop(tuple(box)).save(output, "JPEG", quality=92, optimize=True)
+        return output.getvalue()
+
+
+def references(base, prior_splits=PRIOR_SPLITS):
     images = {name: (digest(path), fingerprint) for name, path, fingerprint in base.reference_images(ROOT)}
     groups, pages = set(), set()
-    for split in PRIOR_SPLITS:
+    for split in prior_splits:
         for sample in load_json(SPLITS / split / "manifest.json")["samples"]:
             path = SPLITS / split / sample["image"]
             if digest(path) != sample["sha256"]:
@@ -62,14 +73,18 @@ def references(base):
             if sample.get("sourceGroupCode"):
                 groups.add(sample["sourceGroupCode"])
         if split != "dev-v1":
-            pages.update(item["pageId"] for item in load_json(SPLITS / split / "source-inventory.json")["items"])
+            inventory = load_json(SPLITS / split / "source-inventory.json")
+            pages.update(item.get("source", item)["pageId"] for item in inventory["items"])
     return images, groups, pages
 
 
-def build(download_missing: bool = False) -> dict[str, str]:
+def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, str]:
     base = load_base()
-    inventory = load_json(HERE / "source-inventory.json")
-    images, groups, pages = references(base)
+    inventory = load_json(directory / "source-inventory.json")
+    supplemental = directory.resolve() != HERE
+    dataset_name = "image-search-dev-v3-supplement" if supplemental else "image-search-dev-v3"
+    prior_splits = (*PRIOR_SPLITS, "dev-v3") if supplemental else PRIOR_SPLITS
+    images, groups, pages = references(base, prior_splits)
     reference_count = len(images)
     hashes = {sha for sha, _ in images.values()}
     products = {group: {row["productSlug"]: row for row in rows}
@@ -97,12 +112,14 @@ def build(download_missing: bool = False) -> dict[str, str]:
             or download_url.hostname not in {"upload.wikimedia.org", "thumb.wikimedia.org"}
         ):
             raise ValueError(f"Missing or invalid source/license: {query_id}")
-        path = HERE / "assets" / f"{query_id}.jpg"
+        path = directory / "assets" / f"{query_id}.jpg"
         if not path.is_file() and download_missing:
             raw = base.download(source["downloadUri"])
             if base.sha256_bytes(raw) != source["downloadedSha256"]:
                 raise ValueError(f"Downloaded source bytes changed: {query_id}")
             content, _, _, _ = base.canonical_image(raw)
+            if item.get("cropBox"):
+                content = crop_asset(content, item["cropBox"])
             if base.sha256_bytes(content) != item["sha256"]:
                 raise ValueError(f"Canonicalized asset checksum mismatch: {query_id}")
             path.parent.mkdir(exist_ok=True)
@@ -126,10 +143,11 @@ def build(download_missing: bool = False) -> dict[str, str]:
             for slug in slugs
         ]
         samples.append({
-            "id": query_id, "image": path.relative_to(HERE).as_posix(), "sha256": sha,
+            "id": query_id, "image": path.relative_to(directory).as_posix(), "sha256": sha,
             "bytes": path.stat().st_size, "width": width, "height": height, "group": group,
             "sourceGroupCode": series, "subtype": item["subtype"], "partition": item["partition"],
             "source": source,
+            **({"cropBox": item["cropBox"]} if item.get("cropBox") else {}),
         })
         labels.append({
             "queryId": query_id, "judgmentStatus": "COMPLETE",
@@ -140,13 +158,14 @@ def build(download_missing: bool = False) -> dict[str, str]:
             "nearestHammingDistance": distance, "dHash64": f"{fingerprint:016x}",
         })
     for partition in ("calibration", "DEV-check"):
-        if {sample["group"] for sample in samples if sample["partition"] == partition} != GROUPS:
+        groups_in_partition = {sample["group"] for sample in samples if sample["partition"] == partition}
+        if (partition == "DEV-check" or not supplemental) and groups_in_partition != GROUPS:
             raise ValueError(f"{partition} must cover all six groups")
     payloads = {
         "manifest.json": {
             "schemaVersion": 1,
             "dataset": {
-                "name": "image-search-dev-v3", "version": inventory["version"], "split": "DEV",
+                "name": dataset_name, "version": inventory["version"], "split": "DEV",
                 "status": "FROZEN", "frozenAt": inventory["frozenAt"],
                 "catalogSnapshot": {"version": base.CATALOG_SNAPSHOT_VERSION, "sha256": base.CATALOG_SNAPSHOT_SHA256},
             },
@@ -154,7 +173,7 @@ def build(download_missing: bool = False) -> dict[str, str]:
             "samples": samples,
         },
         "labels.json": {
-            "schemaVersion": 1, "dataset": "image-search-dev-v3",
+            "schemaVersion": 1, "dataset": dataset_name,
             "relevanceScale": {"minimum": 0, "maximum": 3, "relevantAtOrAbove": 2}, "cases": labels,
         },
         "duplicate-report.json": {
@@ -172,10 +191,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write", action="store_true", help="Regenerate the checked-in manifests")
     parser.add_argument("--download-missing", action="store_true")
+    parser.add_argument("--supplement", action="store_true", help="Validate the separate DEV v3 supplement")
     args = parser.parse_args()
-    artifacts = build(args.download_missing)
+    directory = SPLITS / "dev-v3-supplement" if args.supplement else HERE
+    artifacts = build(args.download_missing, directory)
     for name, expected in artifacts.items():
-        path = HERE / name
+        path = directory / name
         if args.write:
             path.write_text(expected, encoding="utf-8")
         elif path.read_text(encoding="utf-8") != expected:
