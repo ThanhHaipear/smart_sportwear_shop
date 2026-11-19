@@ -91,12 +91,14 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
         "dev-v3-supplement": (*PRIOR_SPLITS, "dev-v3"),
         "dev-v3-catalog-coverage": (*PRIOR_SPLITS, "dev-v3", "dev-v3-supplement"),
         "test-v3": (*PRIOR_SPLITS, "dev-v3", "dev-v3-supplement", "dev-v3-catalog-coverage"),
+        "dev-v4-focus": (*PRIOR_SPLITS, "dev-v3", "dev-v3-supplement", "dev-v3-catalog-coverage", "test-v3"),
     }
     prior_splits = references_by_split[directory.name]
     check_only = directory.name == "dev-v3-catalog-coverage"
     final_test = directory.name == "test-v3"
+    focused_check = directory.name == "dev-v4-focus"
     images, groups, pages = references(base, prior_splits)
-    if check_only or final_test:
+    if check_only or final_test or focused_check:
         coverage_dir = SPLITS / "dev-v3-catalog-coverage"
         for row in load_json(coverage_dir / "reference-inventory.json")["images"]:
             reference = coverage_dir / row["image"]
@@ -109,9 +111,12 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
                 for group, rows in base.catalog_products(ROOT).items()}
     samples, labels, checks = [], [], []
     ids = set()
+    partitions = {
+        "test-v3": ("TEST",),
+        "dev-v4-focus": ("DEV-check",),
+    }.get(directory.name, ("calibration", "DEV-check"))
     for item in inventory["items"]:
         query_id, group, source = item["queryId"], item["group"], item["source"]
-        partitions = {"TEST"} if final_test else {"calibration", "DEV-check"}
         if query_id in ids or group not in GROUPS or item["partition"] not in partitions:
             raise ValueError(f"Invalid dataset query: {query_id}")
         if check_only and item["partition"] != "DEV-check":
@@ -178,10 +183,11 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
             "queryId": query_id, "decision": "ACCEPT", "nearestAsset": nearest,
             "nearestHammingDistance": distance, "dHash64": f"{fingerprint:016x}",
         })
-    for partition in (("TEST",) if final_test else ("calibration", "DEV-check")):
+    expected_groups = {"uniforms", "unknown"} if focused_check else GROUPS
+    for partition in partitions:
         groups_in_partition = {sample["group"] for sample in samples if sample["partition"] == partition}
-        if (partition in {"TEST", "DEV-check"} or directory.name == "dev-v3") and groups_in_partition != GROUPS:
-            raise ValueError(f"{partition} must cover all six groups")
+        if (partition in {"TEST", "DEV-check"} or directory.name == "dev-v3") and groups_in_partition != expected_groups:
+            raise ValueError(f"{partition} must cover {', '.join(sorted(expected_groups))}")
     payloads = {
         "manifest.json": {
             "schemaVersion": 1,
@@ -191,7 +197,7 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
                 **({"preparedAt": inventory["preparedAt"]} if final_test else {"frozenAt": inventory["frozenAt"]}),
                 "catalogSnapshot": {"version": base.CATALOG_SNAPSHOT_VERSION, "sha256": base.CATALOG_SNAPSHOT_SHA256},
             },
-            "policy": {"mayTuneOnThisSplit": not final_test, "mayReportAsFinalTest": False,
+            "policy": {"mayTuneOnThisSplit": not (final_test or focused_check), "mayReportAsFinalTest": False,
                        "mayReuseInTestV3": False},
             "samples": samples,
         },
@@ -241,6 +247,7 @@ def main() -> None:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--supplement", action="store_true", help="Validate the separate DEV v3 supplement")
     mode.add_argument("--coverage", action="store_true", help="Validate the frozen catalog coverage check")
+    mode.add_argument("--dev-v4-focus", action="store_true", help="Validate the DEV v4 uniform and unknown check")
     mode.add_argument("--test-v3", action="store_true", help="Build or validate the TEST v3 review candidate")
     parser.add_argument("--freeze", action="store_true", help="Seal TEST v3 after documented independent approval")
     args = parser.parse_args()
@@ -251,6 +258,8 @@ def main() -> None:
         directory = SPLITS / "dev-v3-supplement"
     if args.coverage:
         directory = SPLITS / "dev-v3-catalog-coverage"
+    if args.dev_v4_focus:
+        directory = SPLITS / "dev-v4-focus"
     if args.test_v3:
         directory = SPLITS / "test-v3"
         if args.freeze and not (directory / "review-approval.json").is_file():

@@ -530,6 +530,17 @@ shadow, cohort nhỏ, theo dõi quality/latency/error/queue/DLQ, rồi mới m�
 Rollback bằng feature flag/routing; không xóa vector, dataset hoặc evidence khi
 xảy ra sự cố.
 
+#### DEV v4 sau TEST v3
+
+Đã đo 16 cấu hình trên 50 ảnh calibration và đối chiếu trên 59 ảnh DEV-check
+có sẵn. Đã bổ sung 20 ảnh DEV mới gồm tám bộ bóng đá và mười hai ảnh ngoài
+catalog. Trên ảnh mới, bổ sung cả hai bộ mô tả tăng phân nhóm đúng đồng phục
+từ **5/8 lên 7/8** và tăng từ chối ảnh ngoài catalog từ **7/12 lên 12/12**.
+Trên DEV-check đủ nhóm, cấu hình kết hợp đạt **88,64%** độ chính xác phân nhóm,
+dưới mốc **90%**. Cấu hình DEV v4 đang ở giai đoạn thử nghiệm. Vòng tiếp theo
+cần đối chứng thêm với áo và phụ kiện trên dữ liệu DEV mới.
+[Báo cáo DEV v4](../evidence/image-search-v4/dev-report-2026-11-19.md)
+
 ## 7. Artifact phải bàn giao
 
 ```text
