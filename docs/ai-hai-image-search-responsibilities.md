@@ -1,9 +1,8 @@
 # Kế hoạch và tiến độ AI của Lê Thanh Hải
 
-> Cập nhật trạng thái hiện hành ngày 18/11/2026. HAI-01 đến HAI-10 bên dưới
-> lưu bằng chứng của pipeline SigLIP2 V2 trước khi hệ thống chuyển sang kiến
-> trúc microservice hợp nhất. Các mục đó không tự động chứng minh pipeline
-> `services/search-service` hiện tại đã được cutover hoặc đủ điều kiện rollout.
+> Cập nhật ngày 19/11/2026. Phần chi tiết HAI-01 đến HAI-10 lưu hồ sơ
+> SigLIP2 V2 trước khi chuyển sang microservice. Bảng tổng quan và HAI-11
+> đến HAI-16 ghi trạng thái của kiến trúc hiện hành.
 
 ## 1. Mục tiêu cuối cùng
 
@@ -53,12 +52,12 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-07 | Runner và benchmark TEST v2 | `DONE / NO-GO` | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và baseline | `DONE` | P1 | HAI-07 |
 | HAI-09 | Hardening và rollback drill lịch sử | `HISTORICAL_DONE`; rollout public `BLOCKED` | P1 | HAI-03, HAI-04 |
-| HAI-10 | Báo cáo tổng kết | `UPDATE REQUIRED` | P1 | HAI-07, HAI-08 |
+| HAI-10 | Báo cáo tổng kết | `UPDATED` với kết quả TEST v3 | P1 | HAI-07, HAI-08 |
 | HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `DONE` | P0 | HAI-01, HAI-02 |
 | HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `DONE` | P0 | HAI-11 |
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
-| HAI-15 | Tạo và chạy TEST v3 độc lập | `REVIEW REQUIRED` | P0 | HAI-14 |
+| HAI-15 | Tạo và chạy TEST v3 độc lập | `DONE / NO-GO` | P0 | HAI-14 |
 | HAI-16 | Rollout public có kiểm soát | `BLOCKED / NO-GO` | P0 | HAI-15 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
@@ -86,7 +85,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | 5 | Chạy contract/integration/E2E hiện hành | Search, Catalog, Gateway và Storefront cùng pass; public flag vẫn tắt |
 | 6 | HAI-14 xây và tune trên DEV v3 | Khóa model revision, preprocessing, reranking, threshold và candidate limit |
 | 7 | Review/freeze TEST v3 độc lập | Đủ provenance/license, không leakage, có sign-off trước benchmark |
-| 8 | HAI-15 chạy TEST v3 đúng một lần | Recall@5 `>=80%`, category `>=90%`, failure `0%`, p95 `<=3s` |
+| 8 | HAI-15 chạy TEST v3 đúng một lần | Recall@5 `>=80%`, category `>=90%`, unknown rejection `>=80%`, leakage `0`, failure `0%`, p95 `<=3s` |
 | 9 | Cập nhật HAI-10 | Báo cáo phản ánh `ai_search`, TEST v2 và kết quả TEST v3 |
 | 10 | HAI-16 staged rollout | Internal/shadow trước; public chỉ bật khi mọi gate đạt |
 
@@ -496,7 +495,7 @@ Chưa triển khai snapshot lên Supabase hoặc runtime thường trực.
 
 ### HAI-15 TEST v3 độc lập
 
-**Trạng thái:** `REVIEW REQUIRED`
+**Trạng thái:** `DONE / NO-GO`
 
 - Thu thập TEST mới độc lập với catalog, DEV và TEST v1/v2.
 - Kiểm tra license, provenance, SHA-256, near duplicate và source-group leakage.
@@ -509,9 +508,12 @@ Chưa triển khai snapshot lên Supabase hoặc runtime thường trực.
 Ngày 18/11/2026, bộ ứng viên gồm 90 ảnh Wikimedia Commons thuộc đủ sáu nhóm,
 có nhãn và hồ sơ nguồn/giấy phép. Kiểm tra SHA-256, trang nguồn, chuỗi nguồn
 và dHash đã qua với 549 ảnh tham chiếu. Phụ kiện có 10 ảnh, là nhóm ít nhất.
-Hồ sơ tại [TEST v3](../datasets/image-search/test-v3/README.md) đang chờ thành viên
-dự án độc lập duyệt phân bố, nhãn và nguồn cho đúng bộ checksum. Benchmark
-TEST chính thức chưa chạy.
+Ngày 19/11/2026, người dùng chuyển xác nhận duyệt của Quyền (QuyenNDD). Bộ 90
+ảnh được khóa theo đúng checksum trong [hồ sơ duyệt](../datasets/image-search/test-v3/review-approval.json).
+Lần chạy chính thức qua API nội bộ với snapshot cục bộ 85 vector đạt Recall@5
+**83,82%**, 0 lỗi request, 0 ca rò rỉ chưa xử lý và p95 **290,794 ms**. Phân loại
+đúng nhóm **88,24%** và từ chối ảnh ngoài catalog **72,73%** dưới ngưỡng
+**90%** và **80%**. [Báo cáo TEST v3](../evidence/image-search-v3/test-v3-final/final-report.md)
 
 API Search nội bộ qua HTTP loopback đã trả đúng thứ tự top-5 cho 20/20 ảnh
 DEV, với 0 request lỗi và p95 388,847 ms trên snapshot cục bộ 85 vector.
@@ -522,7 +524,8 @@ Kết quả này xác nhận đường chạy benchmark và cấu hình HAI-14 t
 
 **Trạng thái:** `BLOCKED / NO-GO`
 
-Chỉ bắt đầu khi HAI-11 đến HAI-15 hoàn tất. Thứ tự rollout là internal smoke,
+Chỉ bắt đầu rollout khi benchmark độc lập đạt tất cả các ngưỡng nghiệm thu.
+TEST v3 còn dưới ngưỡng phân nhóm và từ chối ảnh ngoài catalog. Thứ tự rollout là internal smoke,
 shadow, cohort nhỏ, theo dõi quality/latency/error/queue/DLQ, rồi mới mở rộng.
 Rollback bằng feature flag/routing; không xóa vector, dataset hoặc evidence khi
 xảy ra sự cố.
@@ -540,6 +543,8 @@ datasets/
     └── test-v3/             # chỉ tạo sau khi DEV v3 đã khóa
 
 evidence/
+├── image-search-v3/
+│   └── test-v3-final/        # xác nhận, kết quả và báo cáo TEST v3
 └── image-search-v2/
     ├── catalog-pilot-validation.json
     ├── catalog-world-cup-validation.json
@@ -549,13 +554,13 @@ evidence/
     ├── test-v1-final/
     ├── dev-v2.2-locked-2026-11-03/
     ├── test-v2-final/
-    ├── cutover-ai-search/    # HAI-11 đến HAI-13
-    └── test-v3-final/        # chỉ sinh sau sign-off
+    └── cutover-ai-search/    # HAI-11 đến HAI-14
 ```
 
 Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest, checksum, nguồn, license và hướng dẫn tái tạo hoặc tải lại hợp lệ.
 
-Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-report.md` và đang ở trạng thái cần cập nhật. Báo cáo TEST v1 cấp benchmark vẫn được giữ riêng tại `evidence/image-search-v2/test-v1-final/final-report.md`; TEST v2 ở `evidence/image-search-v2/test-v2-final/` là bằng chứng chất lượng mới nhất đã khóa.
+Báo cáo HAI-10 đã bổ sung kết quả theo kiến trúc hiện hành và liên kết lần chạy
+TEST v3. Kết quả TEST v1 và TEST v2 nằm trong các thư mục evidence tương ứng.
 
 ## 8. Nhật ký thực hiện
 
@@ -605,7 +610,7 @@ Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-r
 - [ ] Internal API, Catalog/Gateway và Storefront E2E pass trên `ai_search`.
 - [x] DEV v3 và cấu hình catalog 85 vector đã khóa trước TEST v3.
 - [ ] TEST v3 độc lập đạt Recall@5, category, leakage, failure và latency gate.
-- [ ] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả mới nhất.
+- [x] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả TEST v3.
 - [ ] Staged rollout và rollback smoke đạt trên môi trường acceptance.
 
 Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN

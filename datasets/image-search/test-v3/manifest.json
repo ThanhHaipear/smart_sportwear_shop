@@ -4,17 +4,18 @@
     "name": "image-search-test-v3",
     "version": "3.0.0",
     "split": "TEST",
-    "status": "REVIEW_REQUIRED",
+    "status": "FROZEN",
     "preparedAt": "2026-11-18T15:22:31.309595+00:00",
     "catalogSnapshot": {
       "vectors": 85,
       "sha256": "0d7ba8972df1e2d3562bdfb963034f0edd939873f5ae8be10d24e4476bfc2e87",
       "checksum": "71c413098c88688a4248680a291bef5e"
-    }
+    },
+    "frozenAt": "2026-11-19T22:03:40+07:00"
   },
   "policy": {
     "mayTuneOnThisSplit": false,
-    "mayReportAsFinalTest": false,
+    "mayReportAsFinalTest": true,
     "mayReuseInTestV3": false
   },
   "samples": [

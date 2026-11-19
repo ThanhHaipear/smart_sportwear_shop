@@ -1,4 +1,23 @@
-# Báo cáo tổng kết image search V2 (HAI-10)
+# Báo cáo tổng kết tìm kiếm sản phẩm bằng ảnh (HAI-10)
+
+## Cập nhật ngày 19/11/2026
+
+Pipeline hiện hành nằm trong `services/search-service`. Catalog và Search
+trao đổi snapshot sản phẩm và sự kiện để cập nhật dữ liệu dẫn xuất trong
+`ai_search`. Pilot có 36 sản phẩm, 178 biến thể và 81 ảnh đầy đủ metadata.
+Search dùng SigLIP2 768 chiều và exact cosine, gom theo sản phẩm rồi trả ứng viên
+qua API nội bộ. [Tiến độ HAI-11 đến HAI-14](ai-hai-image-search-responsibilities.md)
+
+TEST v2 trên pipeline trước đó đạt Recall@5 **73,75%** và phân loại đúng nhóm
+**79%**. TEST v3 đánh giá một bộ ảnh độc lập khác, qua API nội bộ với snapshot
+cục bộ 85 vector và cấu hình DEV v3 đã khóa. Sau xác nhận của Quyền, lần chạy
+chính thức đạt Recall@5 **83,82%**, phân loại đúng nhóm **88,24%**, từ chối
+ảnh ngoài catalog **72,73%**, 0 lỗi request và p95 **290,794 ms**. Vì còn hai
+chỉ số dưới ngưỡng, quyết định vẫn là **NO-GO**. Nhóm đồng phục và các ca ảnh
+ngoài catalog trả nhầm kết quả là trọng tâm cho vòng DEV tiếp theo.
+[Báo cáo TEST v2](../evidence/image-search-v2/test-v2-final/final-report.md) · [Báo cáo TEST v3](../evidence/image-search-v3/test-v3-final/final-report.md)
+
+## Hồ sơ V2 và TEST v1 ngày 25/10/2026
 
 **Ngày chốt nội dung:** 25/10/2026  
 **Catalog snapshot:** `image-catalog-v2-2026-10-23`  
