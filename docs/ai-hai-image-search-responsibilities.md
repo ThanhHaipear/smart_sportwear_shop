@@ -541,6 +541,15 @@ dưới mốc **90%**. Cấu hình DEV v4 đang ở giai đoạn thử nghiệm.
 cần đối chứng thêm với áo và phụ kiện trên dữ liệu DEV mới.
 [Báo cáo DEV v4](../evidence/image-search-v4/dev-report-2026-11-19.md)
 
+DEV v4.1 đã bổ sung 42 ảnh phủ sáu nhóm, chia 18 ảnh calibration và 24 ảnh
+kiểm tra. Runner chọn tham số trên 68 ảnh calibration, gồm dữ liệu DEV đã có.
+Cấu hình dùng đầy đủ hai bộ mô tả đạt Recall@5 **84,58%**, phân nhóm
+**85,00%** và từ chối ảnh ngoài catalog **4/4** trên bộ kiểm tra mới.
+Cấu hình được chọn từ calibration đạt lần lượt **75,83%**, **70,00%** và
+**3/4**. Chưa khóa cấu hình. Ba lỗi phân nhóm còn lại khi dùng đầy đủ mô tả
+liên quan đến áo tập và quần đùi bóng đá bị nhầm với nhóm trang phục khác.
+[Báo cáo DEV v4.1](../evidence/image-search-v4/dev-balanced-report-2026-11-19.md)
+
 ## 7. Artifact phải bàn giao
 
 ```text

@@ -92,13 +92,17 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
         "dev-v3-catalog-coverage": (*PRIOR_SPLITS, "dev-v3", "dev-v3-supplement"),
         "test-v3": (*PRIOR_SPLITS, "dev-v3", "dev-v3-supplement", "dev-v3-catalog-coverage"),
         "dev-v4-focus": (*PRIOR_SPLITS, "dev-v3", "dev-v3-supplement", "dev-v3-catalog-coverage", "test-v3"),
+        "dev-v4-balanced": (
+            *PRIOR_SPLITS, "dev-v3", "dev-v3-supplement", "dev-v3-catalog-coverage", "test-v3", "dev-v4-focus",
+        ),
     }
     prior_splits = references_by_split[directory.name]
     check_only = directory.name == "dev-v3-catalog-coverage"
     final_test = directory.name == "test-v3"
     focused_check = directory.name == "dev-v4-focus"
+    balanced = directory.name == "dev-v4-balanced"
     images, groups, pages = references(base, prior_splits)
-    if check_only or final_test or focused_check:
+    if check_only or final_test or focused_check or balanced:
         coverage_dir = SPLITS / "dev-v3-catalog-coverage"
         for row in load_json(coverage_dir / "reference-inventory.json")["images"]:
             reference = coverage_dir / row["image"]
@@ -186,7 +190,8 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
     expected_groups = {"uniforms", "unknown"} if focused_check else GROUPS
     for partition in partitions:
         groups_in_partition = {sample["group"] for sample in samples if sample["partition"] == partition}
-        if (partition in {"TEST", "DEV-check"} or directory.name == "dev-v3") and groups_in_partition != expected_groups:
+        needs_coverage = partition in {"TEST", "DEV-check"} or directory.name == "dev-v3" or balanced
+        if needs_coverage and groups_in_partition != expected_groups:
             raise ValueError(f"{partition} must cover {', '.join(sorted(expected_groups))}")
     payloads = {
         "manifest.json": {
@@ -248,6 +253,7 @@ def main() -> None:
     mode.add_argument("--supplement", action="store_true", help="Validate the separate DEV v3 supplement")
     mode.add_argument("--coverage", action="store_true", help="Validate the frozen catalog coverage check")
     mode.add_argument("--dev-v4-focus", action="store_true", help="Validate the DEV v4 uniform and unknown check")
+    mode.add_argument("--dev-v4-balanced", action="store_true", help="Validate the balanced DEV v4 follow-up")
     mode.add_argument("--test-v3", action="store_true", help="Build or validate the TEST v3 review candidate")
     parser.add_argument("--freeze", action="store_true", help="Seal TEST v3 after documented independent approval")
     args = parser.parse_args()
@@ -260,6 +266,8 @@ def main() -> None:
         directory = SPLITS / "dev-v3-catalog-coverage"
     if args.dev_v4_focus:
         directory = SPLITS / "dev-v4-focus"
+    if args.dev_v4_balanced:
+        directory = SPLITS / "dev-v4-balanced"
     if args.test_v3:
         directory = SPLITS / "test-v3"
         if args.freeze and not (directory / "review-approval.json").is_file():
