@@ -38,6 +38,12 @@ def build_provider(settings: Settings) -> MultimodalEmbeddingProvider:
         return VoyageEmbeddingProvider(settings, client=_shared_http_client(settings))
     if settings.visual_embedding_provider == "hugging_face_local":
         if _local_provider is None:
-            _local_provider = Siglip2EmbeddingProvider(settings)
+            prompts = None
+            if settings.visual_search_pilot_v4_enabled:
+                from app.services.visual_pilot import PROMPTS, validate_runtime
+
+                validate_runtime(settings)
+                prompts = PROMPTS
+            _local_provider = Siglip2EmbeddingProvider(settings, category_prompts=prompts)
         return _local_provider
     raise RuntimeError("Unsupported visual embedding provider")

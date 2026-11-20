@@ -14,20 +14,12 @@ const browser = await chromium.launch({
 try {
   const page = await browser.newPage();
   await page.goto(storefrontUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await page.waitForTimeout(1_000);
-
-  const cameraButtons = page.locator("button:has(svg.lucide-camera)");
-  let trigger;
-  for (let index = 0; index < await cameraButtons.count(); index += 1) {
-    const candidate = cameraButtons.nth(index);
-    if (await candidate.isVisible()) {
-      trigger = candidate;
-      break;
-    }
-  }
-  if (!trigger) throw new Error("No visible visual-search trigger was found");
-  await trigger.click();
-  const dialog = page.locator('[role="dialog"]');
+  const trigger = page.getByRole("button", { name: "Tìm sản phẩm bằng hình ảnh", exact: true })
+    .or(page.getByRole("button", { name: "Thử ngay", exact: true }))
+    .filter({ visible: true })
+    .first();
+  await trigger.click({ timeout: 30_000 });
+  const dialog = page.getByRole("dialog", { name: "Tìm kiếm bằng hình ảnh" });
   await dialog.waitFor();
   await dialog
     .locator('input[accept="image/jpeg,image/png,image/webp"]')
@@ -37,7 +29,7 @@ try {
     (response) => response.url().includes("/api/v1/products/search-by-image"),
     { timeout: 60_000 },
   );
-  await dialog.locator("button.bg-ivy-dark").click();
+  await dialog.getByRole("button", { name: "Tìm sản phẩm tương tự", exact: true }).click();
   const response = await responsePromise;
   if (!response.ok()) throw new Error(`Visual-search API returned HTTP ${response.status()}`);
 

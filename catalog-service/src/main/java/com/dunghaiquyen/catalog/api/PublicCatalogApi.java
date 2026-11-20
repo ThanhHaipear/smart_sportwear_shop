@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -88,11 +86,6 @@ public class PublicCatalogApi {
             @RequestParam(defaultValue="1")int page,@RequestParam(defaultValue="20")int limit){
         return products(q,null,categorySlug,brandSlug,page,limit);
     }
-
-    @GetMapping("/visual-search/status")
-    public ApiResponse<Map<String,Object>> visualStatus(){return ApiResponse.ok(Map.of("enabled",false,"status","DISABLED"));}
-    @PostMapping("/products/search-by-image")
-    public void visualSearch(){throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,"Visual search is disabled");}
 
     @GetMapping("/collections") public ApiResponse<List<Object>> collections(){return ApiResponse.ok(List.of());}
     @GetMapping("/collections/{slug}") public void collection(@PathVariable String slug){throw new NotFoundException("Collection not found");}

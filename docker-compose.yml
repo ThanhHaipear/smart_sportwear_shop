@@ -34,12 +34,17 @@ services:
 
   search-service:
     profiles: ["search", "chatbot"]
-    build: ./services/search-service
+    build:
+      context: ./services/search-service
+      args:
+        INSTALL_LOCAL_EMBEDDINGS: ${SEARCH_INSTALL_LOCAL_EMBEDDINGS:-false}
     expose: ["8090"]
     env_file: ./services/search-service/.env.example
     environment:
       SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
       VISUAL_SEARCH_ENABLED: ${VISUAL_SEARCH_ENABLED:-false}
+      VISUAL_SEARCH_PILOT_V4_ENABLED: ${VISUAL_SEARCH_PILOT_V4_ENABLED:-false}
+      VISUAL_EMBEDDING_DEVICE: ${VISUAL_EMBEDDING_DEVICE:-auto}
       DATABASE_URL: ${SEARCH_DATABASE_URL:-}
       INTERNAL_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
       CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
@@ -53,12 +58,16 @@ services:
 
   search-worker:
     profiles: ["search", "chatbot"]
-    build: ./services/search-service
+    build:
+      context: ./services/search-service
+      args:
+        INSTALL_LOCAL_EMBEDDINGS: ${SEARCH_INSTALL_LOCAL_EMBEDDINGS:-false}
     command: ["python", "-m", "app.worker"]
     env_file: ./services/search-service/.env.example
     environment:
       SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
       VISUAL_SEARCH_ENABLED: ${VISUAL_SEARCH_ENABLED:-false}
+      VISUAL_EMBEDDING_DEVICE: ${VISUAL_EMBEDDING_DEVICE:-auto}
       DATABASE_URL: ${SEARCH_DATABASE_URL:-}
       INTERNAL_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
       CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
@@ -133,6 +142,9 @@ services:
       CATALOG_INTERNAL_TOKEN: ${CATALOG_INTERNAL_TOKEN:-change-me}
       SALES_API_BASE_URL: http://sales-service:8094
       SALES_INTERNAL_TOKEN: ${SALES_INTERNAL_TOKEN:-change-me}
+      VISUAL_SEARCH_PUBLIC_ENABLED: ${VISUAL_SEARCH_PUBLIC_ENABLED:-false}
+      SEARCH_API_BASE_URL: http://search-service:8090
+      SEARCH_SERVICE_INTERNAL_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
       CATALOG_IMAGE_STORAGE_DIRECTORY: /var/lib/catalog/images
       CATALOG_EVENTS_ENABLED: ${CATALOG_EVENTS_ENABLED:-false}
       CATALOG_FLYWAY_ENABLED: ${CATALOG_FLYWAY_ENABLED:-false}

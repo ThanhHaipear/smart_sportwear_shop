@@ -5,8 +5,11 @@
 TEST v4 đã đạt toàn bộ ngưỡng nghiệm thu trên 100 ảnh độc lập sau xác nhận
 duyệt của Dũng. Cấu hình DEV v4.2 và snapshot cục bộ 85 vector đạt Recall@5
 **87,92%**, phân nhóm **93,75%**, từ chối ảnh ngoài catalog **95%**, 0 lỗi
-request và p95 **241,561 ms** qua API nội bộ. HAI-16 chuyển sang bước tích hợp
-và kiểm tra luồng phục vụ thực tế trước khi mở thử nghiệm. [Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
+request và p95 **241,561 ms** qua API nội bộ. [Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
+
+HAI-16 đã tích hợp cấu hình v4 vào luồng Storefront → Gateway → Catalog → Search
+và xác minh trên loopback với DB chỉ đọc. Shadow là bước tiếp theo của rollout.
+[Bằng chứng tích hợp](../evidence/image-search-v4/visual-pilot-integration-2026-11-20.json)
 
 ## Cập nhật ngày 19/11/2026
 

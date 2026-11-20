@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from typing import Iterable
 
 import httpx
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -35,6 +35,24 @@ class Settings(BaseSettings):
     jwt_access_secret: str = "dev-only-access-secret-change-me-please-32-bytes-min"
     jwt_previous_access_secret: str = ""
     otel_exporter_otlp_endpoint: str = ""
+
+
+VISUAL_SEARCH_PATH = "/api/v1/products/search-by-image"
+VISUAL_SEARCH_MAX_BODY = 5_242_880 + 65_536
+
+
+async def _request_body(request: Request) -> bytes:
+    if request.url.path != VISUAL_SEARCH_PATH:
+        return await request.body()
+    content_length = request.headers.get("content-length", "")
+    if content_length.isdecimal() and int(content_length) > VISUAL_SEARCH_MAX_BODY:
+        raise HTTPException(413, "Image upload exceeds the request limit")
+    content = bytearray()
+    async for chunk in request.stream():
+        if len(content) + len(chunk) > VISUAL_SEARCH_MAX_BODY:
+            raise HTTPException(413, "Image upload exceeds the request limit")
+        content.extend(chunk)
+    return bytes(content)
 
 
 @dataclass(frozen=True)
@@ -255,7 +273,7 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
                 if query:
                     target += "?" + str(httpx.QueryParams(query))
             try:
-                upstream = await client.send(client.build_request(request.method, target, headers=_request_headers(request, correlation_id, traceparent, config), content=await request.body()), stream=True)
+                upstream = await client.send(client.build_request(request.method, target, headers=_request_headers(request, correlation_id, traceparent, config), content=await _request_body(request)), stream=True)
                 status_code = upstream.status_code
                 response_headers = {key: value for key, value in upstream.headers.items() if key.lower() not in HOP_BY_HOP}
                 if upstream.is_stream_consumed:
@@ -268,6 +286,9 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
                         finally:
                             await upstream.aclose()
                     response = StreamingResponse(body(), status_code=status_code, headers=response_headers, media_type=upstream.headers.get("content-type"))
+            except HTTPException as error:
+                status_code = error.status_code
+                response = JSONResponse({"status": status_code, "message": error.detail, "correlationId": correlation_id}, status_code=status_code)
             except (httpx.TimeoutException, httpx.NetworkError):
                 metrics.upstream_failures[upstream_setting] += 1
                 status_code = 503

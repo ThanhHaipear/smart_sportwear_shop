@@ -11,7 +11,7 @@ codebase contains no SQL against catalog-owned tables.
 python -m venv .venv
 .\.venv\Scripts\pip install -r requirements-test.txt
 Copy-Item .env.example .env
-.\.venv\Scripts\python -m uvicorn app.main:app --port 8090
+.\.venv\Scripts\python run.py
 .\.venv\Scripts\python -m app.worker
 ```
 
@@ -23,14 +23,36 @@ backend and this service.
 
 - `POST /internal/v1/search`: canonical JSON text/hybrid search API.
 - `POST /internal/v1/search/image`: canonical multipart image search API.
+- `GET /internal/v1/search/image/status`: availability of the evaluated v4 pilot.
 - `GET /health/live`, `GET /health/ready`, `GET /metrics`.
 
 All search endpoints require `X-Internal-Service-Token`. Query images are never
 persisted.
 
-Image results use the locked DEV v2.2 category-consensus weight and similarity
+The default image profile uses the locked DEV v2.2 category-consensus weight and similarity
 threshold. Changing either value requires a new DEV/independent TEST cycle; do
 not retune against TEST v2.
+
+## TEST v4 pilot
+
+Set `SEARCH_ENABLED=true`, `VISUAL_SEARCH_ENABLED=true`,
+`VISUAL_SEARCH_PILOT_V4_ENABLED=true` and `VISUAL_EMBEDDING_DEVICE=cpu` in the
+isolated pilot deployment. Install `requirements-embeddings.txt` and make the
+pinned SigLIP2 revision available in the model cache. For Compose, build Search
+with `SEARCH_INSTALL_LOCAL_EMBEDDINGS=true`.
+
+The Search API validates the active image index against the evaluated 81 base
+vectors and adds four pinned references from the experiment. The references
+participate in ranking and matched images come from the indexed catalog.
+A catalog mismatch makes the pilot unavailable.
+
+Set `VISUAL_SEARCH_PUBLIC_ENABLED=true` on Catalog in the isolated environment
+to test through Storefront. Catalog uses `SEARCH_API_BASE_URL` and the same
+`SEARCH_SERVICE_INTERNAL_TOKEN` as Search. It resolves the returned image and
+product IDs against the current catalog before serving the cards. With the
+Catalog flag off, its public POST returns 503.
+
+[TEST v4 acceptance](../../evidence/image-search-v4/test-v4-final/final-report.md)
 
 ## Exact image search pilot
 

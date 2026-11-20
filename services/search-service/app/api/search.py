@@ -12,6 +12,7 @@ from app.providers.factory import build_provider
 from app.services.errors import ImagePipelineError
 from app.services.image_pipeline import ImagePipeline
 from app.services.text_embeddings import TextEmbedder
+from app.services.visual_pilot import pilot_image_rows, rank_pilot
 
 router = APIRouter(prefix="/internal/v1", tags=["search"])
 
@@ -42,18 +43,34 @@ class SearchFilters(BaseModel):
 
 
 async def indexed_image_candidates(content: bytes, limit: int, settings: Settings) -> list[dict]:
+    repository = SearchRepository(settings)
+    pilot_rows = pilot_image_rows(await repository.visual_pilot_catalog()) if settings.visual_search_pilot_v4_enabled else None
     provider = build_provider(settings)
     result = (await provider.embed_query(content)).validate_dimensions(settings.visual_embedding_dims)
     category_scores = (
         await provider.category_scores(result.vector)
         if hasattr(provider, "category_scores") else None
     )
-    rows = await SearchRepository(settings).image_search(result.vector, limit, category_scores)
+    if pilot_rows is not None:
+        return rank_pilot(pilot_rows, result.vector, category_scores, limit)
+    rows = await repository.image_search(result.vector, limit, category_scores)
     return [row for row in rows if float(row["similarity"]) >= settings.visual_min_similarity]
 
 
 def get_image_candidate_search():
     return indexed_image_candidates
+
+
+@router.get("/search/image/status", dependencies=[Depends(require_token)])
+async def visual_search_status(settings: Settings = Depends(get_settings)) -> dict:
+    if not (settings.search_enabled and settings.visual_search_enabled and settings.visual_search_pilot_v4_enabled):
+        return {"available": False}
+    try:
+        pilot_image_rows(await SearchRepository(settings).visual_pilot_catalog())
+    except Exception:
+        logging.getLogger(__name__).exception("Visual pilot catalog readiness check failed")
+        return {"available": False}
+    return {"available": True}
 
 
 class TextSearchRequest(BaseModel):
@@ -112,10 +129,11 @@ async def search_text(request: TextSearchRequest, settings: Settings = Depends(g
 @router.post("/search/image", dependencies=[Depends(require_token)])
 async def search_image(
     image: UploadFile = File(...), limit: int = Query(default=20, ge=1, le=50),
+    pilot_v4: bool = False,
     settings: Settings = Depends(get_settings),
     find_candidates=Depends(get_image_candidate_search),
 ) -> dict:
-    if not settings.search_enabled or not settings.visual_search_enabled:
+    if not settings.search_enabled or not settings.visual_search_enabled or (pilot_v4 and not settings.visual_search_pilot_v4_enabled):
         raise HTTPException(status_code=503, detail="Image search is disabled")
     try:
         content = await image.read(settings.max_upload_bytes + 1)

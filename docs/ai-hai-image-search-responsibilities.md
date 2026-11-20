@@ -58,7 +58,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `DONE / NO-GO` | P0 | HAI-14 |
-| HAI-16 | Rollout public có kiểm soát | TEST v4 `PASS`; chờ tích hợp và xác minh luồng thực tế | P0 | HAI-15, TEST v4 |
+| HAI-16 | Rollout public có kiểm soát | Đã tích hợp và kiểm tra loopback; chờ shadow | P0 | HAI-15, TEST v4 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
 
@@ -522,13 +522,19 @@ Kết quả này xác nhận đường chạy benchmark và cấu hình HAI-14 t
 
 ### HAI-16 Rollout public
 
-**Trạng thái:** TEST v4 `PASS`; chờ tích hợp và xác minh luồng thực tế trước rollout.
+**Trạng thái:** TEST v4 `PASS`. Đã xác minh luồng Storefront → Gateway → Catalog → Search trên loopback.
 
 Chỉ bắt đầu rollout khi benchmark độc lập đạt tất cả các ngưỡng nghiệm thu.
 TEST v4 đã đạt các ngưỡng trên snapshot cục bộ 85 vector. Thứ tự rollout là internal smoke,
 shadow, cohort nhỏ, theo dõi quality/latency/error/queue/DLQ, rồi mới mở rộng.
 Rollback bằng feature flag/routing; không xóa vector, dataset hoặc evidence khi
 xảy ra sự cố.
+
+Search kiểm tra 81 vector index theo checksum đã nghiệm thu, ghép 4 vector
+tham chiếu và trả ảnh hiện hành của sản phẩm. Catalog ưu tiên sản phẩm có tồn
+kho, giữ thứ tự Search trong từng nhóm. Kiểm tra trên DB chỉ đọc cho top 5
+khớp **24/24 ảnh DEV**, p95 **748,407 ms**. Kiểm thử trình duyệt trả HTTP 200
+và hiển thị đúng 4 thẻ kết quả. Cờ công khai mặc định tắt. [Bằng chứng tích hợp](../evidence/image-search-v4/visual-pilot-integration-2026-11-20.json)
 
 #### DEV v4 sau TEST v3
 
@@ -556,8 +562,8 @@ Cấu hình được chọn trên 171 ảnh DEV cũ đạt Recall@5 **86,25%**, 
 Cấu hình đã khóa cho TEST v4 độc lập. Sau xác nhận duyệt của Dũng, lần chạy
 chính thức trên 100 ảnh đạt Recall@5 **87,92%**, phân nhóm **93,75%**,
 từ chối ảnh ngoài catalog **95%**, 0 lỗi request và p95 **241,561 ms**.
-HAI-16 đã qua ngưỡng benchmark. Việc tiếp theo là xác minh cấu hình và dữ liệu
-index trên luồng Storefront → Gateway → Catalog → Search trước rollout.
+HAI-16 đã qua ngưỡng benchmark và kiểm tra tích hợp trên loopback. Bước tiếp
+theo là shadow trong môi trường triển khai trước khi mở thử nghiệm.
 [Báo cáo DEV v4.2](../evidence/image-search-v4/dev-garment-report-2026-11-20.md) ·
 [Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
 

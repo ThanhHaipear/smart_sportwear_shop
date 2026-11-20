@@ -298,3 +298,15 @@ class SearchRepository:
             category_weight=self.settings.visual_category_consensus_weight,
             query_category_scores=query_category_scores,
         )[:limit]
+
+    async def visual_pilot_catalog(self) -> list[dict]:
+        async with self.connection() as connection, connection.cursor() as cursor:
+            await cursor.execute("""
+                select e.product_id::text,e.image_id::text,e.image_url,e.embedding::text as vector,
+                       d.product_type,e.model
+                from ai_search.image_embeddings e join ai_search.search_documents d using(product_id)
+                where e.status='READY' and d.status='ACTIVE'
+                order by e.image_id
+                limit 82
+            """)
+            return list(await cursor.fetchall())
