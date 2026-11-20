@@ -1,13 +1,15 @@
 # Quy trình nghiệm thu TEST v4
 
-**Trạng thái ngày 20/11/2026:** DEV v4.2 đã khóa cấu hình. Danh sách nguồn sơ bộ có 47 ảnh đã sàng lọc, gồm 6 áo, 9 quần, 6 đồng phục, 4 giày, 2 phụ kiện và 20 ảnh ngoài catalog. Các nhóm sản phẩm cần bổ sung 53 ảnh để đạt tối thiểu 100 ảnh. Wikimedia Commons trả HTTP 429 trong đợt thu thập bổ sung, tập trung ở truy vấn về giày, phụ kiện và đồng phục. Hồ sơ duyệt độc lập sẽ được tạo khi bộ ảnh đủ số lượng. [Danh sách nguồn sơ bộ](source-inventory.json)
+**Trạng thái ngày 20/11/2026:** Đã chuẩn bị 100 ảnh ứng viên, gồm 16 ảnh mỗi nhóm áo, quần, đồng phục, giày, phụ kiện và 20 ảnh ngoài catalog. Hồ sơ đang ở trạng thái `REVIEW_REQUIRED`. [Hồ sơ duyệt](review-packet.json) · [Nhãn](labels.json) · [Nguồn và giấy phép](source-inventory.json) · [Báo cáo trùng lặp](duplicate-report.json)
+
+Ảnh xem trước trên workspace phục vụ người duyệt đối chiếu nhãn và vùng cắt theo mã ảnh. [Áo](assets/_review/tops.jpg) · [Quần](assets/_review/bottoms.jpg) · [Đồng phục](assets/_review/uniforms.jpg) · [Giày](assets/_review/shoes.jpg) · [Phụ kiện](assets/_review/accessories.jpg) · [Ngoài catalog](assets/_review/unknown.jpg)
 
 Chọn ít nhất 100 ảnh truy vấn độc lập, bao phủ áo, quần, đồng phục, giày, phụ kiện và ảnh ngoài catalog. Trong nhóm quần và đồng phục, lấy cả ảnh cắt sát một món và ảnh thấy đủ áo quần. Nhóm phụ kiện cần bao phủ nhiều loại trong catalog. Nhóm ngoài catalog cần có cả cảnh và vật dụng dễ bị nhầm. Chọn ảnh, vùng cắt và nhãn sản phẩm tương đồng trước khi xem kết quả mô hình. Trình dữ liệu kiểm tra ảnh, trang nguồn và chuỗi nguồn với catalog cùng toàn bộ các bộ DEV/TEST trước.
 
-Ghi ảnh và hồ sơ nguồn vào `assets/` và `source-inventory.json`, dùng cấu trúc của TEST v3 với phiên bản `4.0.0` và `partition` là `TEST` cho từng ảnh. Từ thư mục gốc, tạo hồ sơ duyệt và ảnh xem trước.
+Từ thư mục gốc, xác minh hồ sơ hiện có và tạo ảnh xem trước. Thêm `--download-missing` khi cần phục hồi ảnh theo nguồn và checksum đã ghi. Trình kiểm tra cần các ảnh tham chiếu của catalog và các bộ trước để đối chiếu trùng lặp.
 
 ```powershell
-python datasets/image-search/dev-v3/build_dataset.py --test-v4 --write --contact-sheets
+python datasets/image-search/dev-v3/build_dataset.py --test-v4 --contact-sheets
 ```
 
 Thành viên dự án độc lập kiểm tra nhãn, nguồn, phân bố và các loạt ảnh có liên hệ. Sau khi có xác nhận thực tế, ghi `review-approval.json` gồm `status: APPROVED`, `independent: true`, `reviewer`, `reviewedAt` và `bindings` từ `review-packet.json`. Khóa bộ dữ liệu bằng lệnh sau.
