@@ -96,13 +96,13 @@ class LockedImageSearch:
         return rank(features, self.profile)[:limit]
 
 
-def load_inputs(manifest_path: Path, split: str):
+def load_inputs(manifest_path: Path, split: str, *, test_name: str = "image-search-test-v3"):
     manifest = load(manifest_path)
     identity = manifest["dataset"]
     if identity["split"] != split or identity["status"] != "FROZEN":
         raise ValueError(f"Expected a frozen {split} manifest")
-    if split == "TEST" and identity["name"] != "image-search-test-v3":
-        raise ValueError("Final evaluation only accepts TEST v3")
+    if split == "TEST" and identity["name"] != test_name:
+        raise ValueError(f"Final evaluation only accepts {test_name}")
     labels_path = manifest_path.with_name("labels.json")
     labels = {}
     for item in load(labels_path)["cases"]:
@@ -126,7 +126,7 @@ def load_inputs(manifest_path: Path, split: str):
     return manifest, payloads
 
 
-def approval_bindings(manifest_path: Path, manifest: dict) -> dict:
+def approval_bindings(manifest_path: Path, manifest: dict, lock_path: Path = LOCK) -> dict:
     def text_sha(path: Path) -> str:
         return sha256(path.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
 
@@ -135,20 +135,20 @@ def approval_bindings(manifest_path: Path, manifest: dict) -> dict:
         "labelsSha256": text_sha(manifest_path.with_name("labels.json")),
         "assetListSha256": text_sha(manifest_path.with_name("assets.sha256")),
         "duplicateReportSha256": text_sha(manifest_path.with_name("duplicate-report.json")),
-        "lockedProfileSha256": text_sha(LOCK),
+        "lockedProfileSha256": text_sha(lock_path),
     }
 
 
-def validate_approval(manifest_path: Path, manifest: dict) -> dict:
+def validate_approval(manifest_path: Path, manifest: dict, lock_path: Path = LOCK) -> dict:
     approval_path = manifest_path.with_name("review-approval.json")
     if not approval_path.is_file():
-        raise ValueError("TEST v3 independent review approval is required")
+        raise ValueError("Independent TEST review approval is required")
     approval = load(approval_path)
     reviewer = approval.get("reviewer", "").strip()
     if (
         approval.get("status") != "APPROVED" or not reviewer
         or reviewer.casefold() in {"hải", "hai", "lê thanh hải", "codex"}
-        or not approval.get("reviewedAt") or approval.get("bindings") != approval_bindings(manifest_path, manifest)
+        or not approval.get("reviewedAt") or approval.get("bindings") != approval_bindings(manifest_path, manifest, lock_path)
         or approval.get("independent") is not True
     ):
         raise ValueError("Independent approval does not match the frozen dataset")
@@ -158,7 +158,7 @@ def validate_approval(manifest_path: Path, manifest: dict) -> dict:
         or duplicate_report["sourceSeriesOverlap"] or duplicate_report["sourcePageOverlap"]
         or {item["queryId"] for item in duplicate_report["accepted"]} != {row["id"] for row in manifest["samples"]}
     ):
-        raise ValueError("TEST v3 leakage audit must cover every sample")
+        raise ValueError("TEST leakage audit must cover every sample")
     return approval
 
 

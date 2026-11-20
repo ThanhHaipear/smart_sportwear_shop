@@ -95,14 +95,24 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
         "dev-v4-balanced": (
             *PRIOR_SPLITS, "dev-v3", "dev-v3-supplement", "dev-v3-catalog-coverage", "test-v3", "dev-v4-focus",
         ),
+        "dev-v4-garment": (
+            *PRIOR_SPLITS, "dev-v3", "dev-v3-supplement", "dev-v3-catalog-coverage", "test-v3",
+            "dev-v4-focus", "dev-v4-balanced",
+        ),
+        "test-v4": (
+            *PRIOR_SPLITS, "dev-v3", "dev-v3-supplement", "dev-v3-catalog-coverage", "test-v3",
+            "dev-v4-focus", "dev-v4-balanced", "dev-v4-garment",
+        ),
     }
     prior_splits = references_by_split[directory.name]
     check_only = directory.name == "dev-v3-catalog-coverage"
-    final_test = directory.name == "test-v3"
+    test_v4 = directory.name == "test-v4"
+    final_test = directory.name in {"test-v3", "test-v4"}
     focused_check = directory.name == "dev-v4-focus"
     balanced = directory.name == "dev-v4-balanced"
+    garment_check = directory.name == "dev-v4-garment"
     images, groups, pages = references(base, prior_splits)
-    if check_only or final_test or focused_check or balanced:
+    if check_only or final_test or focused_check or balanced or garment_check:
         coverage_dir = SPLITS / "dev-v3-catalog-coverage"
         for row in load_json(coverage_dir / "reference-inventory.json")["images"]:
             reference = coverage_dir / row["image"]
@@ -117,7 +127,9 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
     ids = set()
     partitions = {
         "test-v3": ("TEST",),
+        "test-v4": ("TEST",),
         "dev-v4-focus": ("DEV-check",),
+        "dev-v4-garment": ("DEV-check",),
     }.get(directory.name, ("calibration", "DEV-check"))
     for item in inventory["items"]:
         query_id, group, source = item["queryId"], item["group"], item["source"]
@@ -187,6 +199,8 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
             "queryId": query_id, "decision": "ACCEPT", "nearestAsset": nearest,
             "nearestHammingDistance": distance, "dHash64": f"{fingerprint:016x}",
         })
+    if test_v4 and len(samples) < 100:
+        raise ValueError("TEST v4 requires at least 100 independent images")
     expected_groups = {"uniforms", "unknown"} if focused_check else GROUPS
     for partition in partitions:
         groups_in_partition = {sample["group"] for sample in samples if sample["partition"] == partition}
@@ -202,7 +216,7 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
                 **({"preparedAt": inventory["preparedAt"]} if final_test else {"frozenAt": inventory["frozenAt"]}),
                 "catalogSnapshot": {"version": base.CATALOG_SNAPSHOT_VERSION, "sha256": base.CATALOG_SNAPSHOT_SHA256},
             },
-            "policy": {"mayTuneOnThisSplit": not (final_test or focused_check), "mayReportAsFinalTest": False,
+            "policy": {"mayTuneOnThisSplit": not (final_test or focused_check or garment_check), "mayReportAsFinalTest": False,
                        "mayReuseInTestV3": False},
             "samples": samples,
         },
@@ -217,13 +231,17 @@ def build(download_missing: bool = False, directory: Path = HERE) -> dict[str, s
         },
     }
     if final_test:
-        profile_path = SPLITS / "dev-v3-catalog-coverage/locked-profile.json"
+        profile_path = SPLITS / ("dev-v4-garment" if test_v4 else "dev-v3-catalog-coverage") / "locked-profile.json"
         lock = load_json(profile_path)
-        payloads["manifest.json"]["dataset"]["catalogSnapshot"] = {
-            "vectors": lock["catalog"]["snapshotVectorCount"],
-            "sha256": lock["catalog"]["snapshotFileSha256"],
-            "checksum": lock["catalog"]["snapshotChecksum"],
-        }
+        if test_v4:
+            snapshot = lock["catalogSnapshot"]
+        else:
+            snapshot = {
+                "vectors": lock["catalog"]["snapshotVectorCount"],
+                "sha256": lock["catalog"]["snapshotFileSha256"],
+                "checksum": lock["catalog"]["snapshotChecksum"],
+            }
+        payloads["manifest.json"]["dataset"]["catalogSnapshot"] = snapshot
     artifacts = {name: json.dumps(payload, indent=2, ensure_ascii=False) + "\n" for name, payload in payloads.items()}
     artifacts["assets.sha256"] = "".join(f"{sample['sha256']}  {sample['image']}\n" for sample in samples)
     if final_test:
@@ -254,11 +272,14 @@ def main() -> None:
     mode.add_argument("--coverage", action="store_true", help="Validate the frozen catalog coverage check")
     mode.add_argument("--dev-v4-focus", action="store_true", help="Validate the DEV v4 uniform and unknown check")
     mode.add_argument("--dev-v4-balanced", action="store_true", help="Validate the balanced DEV v4 follow-up")
+    mode.add_argument("--dev-v4-garment", action="store_true", help="Validate the DEV v4.2 garment check")
     mode.add_argument("--test-v3", action="store_true", help="Build or validate the TEST v3 review candidate")
-    parser.add_argument("--freeze", action="store_true", help="Seal TEST v3 after documented independent approval")
+    mode.add_argument("--test-v4", action="store_true", help="Build or validate the TEST v4 review candidate")
+    parser.add_argument("--freeze", action="store_true", help="Seal the TEST dataset after independent approval")
     args = parser.parse_args()
-    if args.freeze and (not args.test_v3 or args.write):
-        parser.error("--freeze requires --test-v3 and cannot be combined with --write")
+    test_split = args.test_v3 or args.test_v4
+    if args.freeze and (not test_split or args.write):
+        parser.error("--freeze requires a TEST split and cannot be combined with --write")
     directory = HERE
     if args.supplement:
         directory = SPLITS / "dev-v3-supplement"
@@ -268,12 +289,16 @@ def main() -> None:
         directory = SPLITS / "dev-v4-focus"
     if args.dev_v4_balanced:
         directory = SPLITS / "dev-v4-balanced"
-    if args.test_v3:
-        directory = SPLITS / "test-v3"
+    if args.dev_v4_garment:
+        directory = SPLITS / "dev-v4-garment"
+    if test_split:
+        directory = SPLITS / ("test-v4" if args.test_v4 else "test-v3")
         if args.freeze and not (directory / "review-approval.json").is_file():
-            parser.error("Independent TEST v3 approval is required before freezing")
+            parser.error("Independent TEST approval is required before freezing")
+        if not (directory / "source-inventory.json").is_file():
+            parser.error(f"Source inventory missing for {directory.name}")
     artifacts = build(args.download_missing, directory)
-    if args.test_v3:
+    if test_split:
         manifest_path = directory / "manifest.json"
         already_frozen = manifest_path.is_file() and load_json(manifest_path)["dataset"]["status"] == "FROZEN"
         if already_frozen and args.write:
@@ -287,7 +312,7 @@ def main() -> None:
                 or not reviewer or reviewer.casefold() in {"hải", "hai", "lê thanh hải", "codex"}
                 or not approval.get("reviewedAt") or approval.get("bindings") != packet["bindings"]
             ):
-                raise ValueError("Independent approval does not match the TEST v3 review packet")
+                raise ValueError("Independent approval does not match the TEST review packet")
             for name in ("labels.json", "assets.sha256", "duplicate-report.json", "review-packet.json"):
                 if (directory / name).read_text(encoding="utf-8") != artifacts[name]:
                     raise ValueError(f"Reviewed artifact differs: {name}")

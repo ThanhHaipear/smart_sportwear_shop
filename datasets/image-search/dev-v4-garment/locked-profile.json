@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "status": "FROZEN_FOR_TEST_V4",
+  "frozenAt": "2026-11-20T19:45:49+07:00",
+  "baseProfileSha256": "0a1aa1c90d370767802bfb9cf8047901f63be57d354bf48b7888151743720b5c",
+  "profile": {
+    "view": "full",
+    "categorySource": "catalog-subtypes",
+    "categoryWeight": 0.35,
+    "minSimilarity": 0.6,
+    "unknownRatio": 1.0,
+    "pairMode": "off",
+    "pairBoost": 0.0,
+    "subtypeWeight": 0.25,
+    "uniformBlend": 1.0,
+    "unknownBlend": 0.5,
+    "isolationWeight": 1.0,
+    "accessoryBlend": 0.5
+  },
+  "promptBankCanonicalSha256": "5ef5273ea3351997200207c8786bc030d05f1543e39ea2902d12a66d168e9c20",
+  "rankingSourceSha256": {
+    "services/search-service/scripts/evaluate_dev_v4_garment.py": "c6029d3f2cf0ef2f1c04c6181c6bd585c3d22e2bf2c3cfb81c92abcff0ce293c",
+    "services/search-service/scripts/evaluate_dev_v3.py": "14450234e05c5044c14a67ed5d324f04320ffc1709ae58d2badc4e43dbcf35e9",
+    "services/search-service/scripts/evaluate_dev_v3_followup.py": "104b007c7da417478721050d6d28d7940540a7a9ae43fa57edc9be226ce2cf55",
+    "services/search-service/app/services/visual_ranking.py": "710cdcad0cfeffa221578b6bac5aa87caae87a92fd025dbc20c1abdef1427880",
+    "services/search-service/app/services/image_pipeline.py": "d91b82f6b92928e48a57daf3d58c3f9b209917aa58470fe2ddef4d2577a66cbf"
+  },
+  "catalogSnapshot": {
+    "vectors": 85,
+    "sha256": "0d7ba8972df1e2d3562bdfb963034f0edd939873f5ae8be10d24e4476bfc2e87",
+    "checksum": "71c413098c88688a4248680a291bef5e"
+  },
+  "devCheck": {
+    "evidence": "evidence/image-search-v4/dev-garment-evaluation-2026-11-20.json",
+    "evidenceSha256": "ada1ea4aa9f2467301d33114576a8404422107d9cd2c8a0ad83b355b3192213f",
+    "manifestSha256": "b75b87d62f7307f144a3f14b13d48c740cebb56cecb96aaf8fadb2f8d231975f",
+    "labelsSha256": "e1224c89921a14ea86a9927f9ace004f62753735fe7937e75d3dc2dfe2321fd9"
+  }
+}

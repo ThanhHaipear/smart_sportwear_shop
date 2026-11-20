@@ -1,0 +1,1170 @@
+{
+  "schemaVersion": 1,
+  "version": "4.0.0",
+  "provider": "Wikimedia Commons",
+  "preparedAt": "2026-11-20",
+  "items": [
+    {
+      "queryId": "test4-001",
+      "group": "tops",
+      "subtype": "jersey",
+      "partition": "TEST",
+      "sha256": "a6d91d788973816e7752cda8accb82d80e9ed477aba087efde2131ad32e8739a",
+      "relevantProductSlugs": [
+        "ao-dau-argentina-2026-home-jm8396",
+        "ao-dau-bi-2026-home-jm8381",
+        "ao-dau-duc-nu-2026-home-jz4559",
+        "ao-dau-brazil-2026-home-if7054-724",
+        "ao-dau-phap-2026-home-ib5300-480",
+        "ao-dau-anh-2026-home-ib5290-100"
+      ],
+      "source": {
+        "pageId": 80869868,
+        "title": "File:AMD50Markham.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:AMD50Markham.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/64/AMD50Markham.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/AMD50Markham.jpg/1280px-AMD50Markham.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Raysonho @ Open Grid Scheduler / Grid Engine",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "1ae475fd980773e6dd52b6e1c681961d09afe26202660396ee6e5b7e1e41675a"
+      },
+      "cropBox": [
+        307,
+        271,
+        717,
+        678
+      ]
+    },
+    {
+      "queryId": "test4-002",
+      "group": "tops",
+      "subtype": "jacket",
+      "partition": "TEST",
+      "sha256": "9d5cd3605b707378805b0f43140b638a1d799e741c9cd7bf1c59503f09a82a32",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "source": {
+        "pageId": 10821794,
+        "title": "File:Blue Nike US N98 Men's Soccer Track Jacket front.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:Blue_Nike_US_N98_Men%27s_Soccer_Track_Jacket_front.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/06/Blue_Nike_US_N98_Men%27s_Soccer_Track_Jacket_front.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Blue_Nike_US_N98_Men%27s_Soccer_Track_Jacket_front.JPG/1280px-Blue_Nike_US_N98_Men%27s_Soccer_Track_Jacket_front.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "BrokenSphere",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "3868ce6c4a3f5c1167903896c3ea79d6050becd117c41d548b300d655a836d3e"
+      }
+    },
+    {
+      "queryId": "test4-003",
+      "group": "tops",
+      "subtype": "tank",
+      "partition": "TEST",
+      "sha256": "54cb636cf22449e7d10911b4649a66c13fa27242b9dade7ef70825edac3d3a1a",
+      "relevantProductSlugs": [
+        "ao-tank-chay-bo-nu-coral-flow"
+      ],
+      "source": {
+        "pageId": 156408027,
+        "title": "File:Paris 2024 Jereem Richards.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:Paris_2024_Jereem_Richards.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Paris_2024_Jereem_Richards.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Paris_2024_Jereem_Richards.png/1280px-Paris_2024_Jereem_Richards.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "SportsMax TV",
+        "licenseCode": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "attribution": "SportsMax TV",
+        "downloadedSha256": "1a7ae4653222503034afb4cba752ecfc848d0e96d7a57b9a6f8eb3c1e5dcdd5c"
+      },
+      "cropBox": [
+        307,
+        291,
+        963,
+        582
+      ]
+    },
+    {
+      "queryId": "test4-004",
+      "group": "tops",
+      "subtype": "tee",
+      "partition": "TEST",
+      "sha256": "5de6634d3e7cbadff285491fa84ca31c0bb89cb304c2862d3750640956a14fd8",
+      "relevantProductSlugs": [
+        "ao-chay-bo-nam-aero-navy",
+        "ao-tap-bong-da-nam-blaze-red",
+        "ao-tap-bong-da-nu-royal-motion"
+      ],
+      "source": {
+        "pageId": 106526739,
+        "title": "File:Austin Gomber, P, 22 years old Roger Dean Practice Fields.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Austin_Gomber,_P,_22_years_old_Roger_Dean_Practice_Fields.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Austin_Gomber%2C_P%2C_22_years_old_Roger_Dean_Practice_Fields.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Austin_Gomber%2C_P%2C_22_years_old_Roger_Dean_Practice_Fields.jpg/1280px-Austin_Gomber%2C_P%2C_22_years_old_Roger_Dean_Practice_Fields.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Corn Farmer on Flickr (Original version) 佾珜 (Crop)",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "https://www.flickr.com/photos/cornfarmer/25031582292/",
+        "downloadedSha256": "09e466c7b4e86cc646d8e85706f7dc06d846b935eb15e6dc98800eeba5c03a27"
+      },
+      "cropBox": [
+        205,
+        230,
+        942,
+        576
+      ]
+    },
+    {
+      "queryId": "test4-005",
+      "group": "tops",
+      "subtype": "tee",
+      "partition": "TEST",
+      "sha256": "162f39d9398e5ec6ec84ed3b1e74d645e79529cb7cfde98fb07a0ffa2e8aaee4",
+      "relevantProductSlugs": [
+        "ao-chay-bo-nam-aero-navy",
+        "ao-tap-bong-da-nam-blaze-red",
+        "ao-tap-bong-da-nu-royal-motion"
+      ],
+      "source": {
+        "pageId": 22632701,
+        "title": "File:Running lady.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:Running_lady.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/47/Running_lady.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Running_lady.JPG/500px-Running_lady.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Peter van der Sluijs",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "4e2cd3b5e8370cad75c1f076ae4fa652b2e0d9eb20edc4ca34e2cb2a20835f07"
+      },
+      "cropBox": [
+        160,
+        104,
+        280,
+        301
+      ]
+    },
+    {
+      "queryId": "test4-006",
+      "group": "tops",
+      "subtype": "jersey",
+      "partition": "TEST",
+      "sha256": "9a27d716b500568165fd211efc0a9d879bad74641020b897b64c26d129207c1e",
+      "relevantProductSlugs": [
+        "ao-dau-argentina-2026-home-jm8396",
+        "ao-dau-bi-2026-home-jm8381",
+        "ao-dau-duc-nu-2026-home-jz4559",
+        "ao-dau-brazil-2026-home-if7054-724",
+        "ao-dau-phap-2026-home-ib5300-480",
+        "ao-dau-anh-2026-home-ib5290-100"
+      ],
+      "source": {
+        "pageId": 128214989,
+        "title": "File:Dolphins NRL training jersey 2023.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Dolphins_NRL_training_jersey_2023.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Dolphins_NRL_training_jersey_2023.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Dolphins_NRL_training_jersey_2023.jpg/500px-Dolphins_NRL_training_jersey_2023.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Sampajanna",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "7dfee33a1fce976b6a376f50714e2bcb3e61acf86378aab9fa1e9d17fb8b3616"
+      },
+      "cropBox": [
+        60,
+        89,
+        455,
+        677
+      ]
+    },
+    {
+      "queryId": "test4-007",
+      "group": "bottoms",
+      "subtype": "leggings",
+      "partition": "TEST",
+      "sha256": "db924eaffc95e526f44fddb8e88f4a411ce5cd68925f3d6bf7e740e0edf98193",
+      "relevantProductSlugs": [
+        "quan-legging-chay-bo-nu-navy-flex"
+      ],
+      "source": {
+        "pageId": 13275753,
+        "title": "File:Holy toned tummy.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Holy_toned_tummy.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Holy_toned_tummy.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Holy_toned_tummy.jpg/1280px-Holy_toned_tummy.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "lululemon athletica",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "https://www.flickr.com/photos/30011527@N05/",
+        "downloadedSha256": "1bae69c2c18e1af1080f2ba3967c77e77eea68af8179572d9c0f745aa47c29b7"
+      },
+      "cropBox": [
+        159,
+        666,
+        554,
+        1024
+      ]
+    },
+    {
+      "queryId": "test4-008",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "TEST",
+      "sha256": "1273ec592fb7a30f0305217a9ae34bbdc7d15cf97f7a2af6dac1c612d23089a5",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 151886051,
+        "title": "File:Paris Olympics - Athletics (53914615929).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Paris_Olympics_-_Athletics_(53914615929).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Paris_Olympics_-_Athletics_%2853914615929%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Paris_Olympics_-_Athletics_%2853914615929%29.jpg/1280px-Paris_Olympics_-_Athletics_%2853914615929%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Indigo Nolan",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "DSC_0574",
+        "downloadedSha256": "c1a1a0d17b43213785df36805746d98aa4775df5dc90ebb2549b0a1f5cd34e02"
+      },
+      "cropBox": [
+        430,
+        326,
+        635,
+        490
+      ]
+    },
+    {
+      "queryId": "test4-009",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "TEST",
+      "sha256": "f5e57fcb19319eaaa6528444b14a45fc8539a9faa44e4e9359bf7619a4cc509c",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 68678350,
+        "title": "File:Reid Ouse & Anthony Tucker.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Reid_Ouse_%26_Anthony_Tucker.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Reid_Ouse_%26_Anthony_Tucker.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Reid_Ouse_%26_Anthony_Tucker.jpg/1280px-Reid_Ouse_%26_Anthony_Tucker.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Reidouse5",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "b07ff117f09d5bfedaef74a87b077bbeef61fbcc95fd9497d28d20a499e69903"
+      },
+      "cropBox": [
+        758,
+        368,
+        983,
+        559
+      ]
+    },
+    {
+      "queryId": "test4-010",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "TEST",
+      "sha256": "2680c906b5c5d96ae0dfff8ae182f713a757a660872add8f398d5eb390c7b7b3",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 1425776,
+        "title": "File:Turnhosen wiki.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Turnhosen_wiki.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/26/Turnhosen_wiki.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Turnhosen_wiki.jpg/500px-Turnhosen_wiki.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "shortszene",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "attribution": "Own work",
+        "downloadedSha256": "3110f87dfc7aba106fe59e79ff6c7bc7ce91005b943cce9fdbd3b089cbfc222d"
+      }
+    },
+    {
+      "queryId": "test4-011",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "TEST",
+      "sha256": "e7dc084065879008bb65aa04fa84fce298ceb8247cade16fcf8b290f9c55615a",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 8406204,
+        "title": "File:Old Puma shorts.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Old_Puma_shorts.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Old_Puma_shorts.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Old_Puma_shorts.jpg/500px-Old_Puma_shorts.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Shortszene at German Wikipedia",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "Transferred from de.wikipedia to Commons by Sa-se using CommonsHelper .",
+        "downloadedSha256": "48c0a4fb6dd4e1be17c51719f7659f767df8916409058029eb1bb788c3bf7065"
+      }
+    },
+    {
+      "queryId": "test4-012",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "TEST",
+      "sha256": "e6e8c91a0eca69f1101c9da709b2f1adf6d1e0a1c9feef0c456d12a035c7ed3b",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 87088528,
+        "title": "File:Givaudan Ashford 10K 2018 FUNK8292 (44270203275).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Givaudan_Ashford_10K_2018_FUNK8292_(44270203275).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Givaudan_Ashford_10K_2018_FUNK8292_%2844270203275%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Givaudan_Ashford_10K_2018_FUNK8292_%2844270203275%29.jpg/500px-Givaudan_Ashford_10K_2018_FUNK8292_%2844270203275%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Funk Dooby from Kent, UK",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "FUNK8292",
+        "downloadedSha256": "5681897b5b3400ca8c00dad8b7f6d6f6e2230370d858260a46d00bcd6acef5ef"
+      },
+      "cropBox": [
+        170,
+        351,
+        335,
+        517
+      ]
+    },
+    {
+      "queryId": "test4-013",
+      "group": "bottoms",
+      "subtype": "pants",
+      "partition": "TEST",
+      "sha256": "10cd65cbb88f1515583e4667223295527e99db2ca0ab8aa3ac48177997d4aee0",
+      "relevantProductSlugs": [
+        "quan-jogger-the-thao-uni-motion",
+        "quan-track-chay-bo-uni-forest"
+      ],
+      "source": {
+        "pageId": 83512513,
+        "title": "File:Tracksuit pants (AM 2017.66.26-4).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Tracksuit_pants_(AM_2017.66.26-4).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Tracksuit_pants_%28AM_2017.66.26-4%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Tracksuit_pants_%28AM_2017.66.26-4%29.jpg/500px-Tracksuit_pants_%28AM_2017.66.26-4%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Adidas",
+        "licenseCode": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "attribution": "Auckland Museum",
+        "downloadedSha256": "ea1faf7411c26d21f5902af2845f9eb3669952685c29f888a26d6bd22e562d4f"
+      }
+    },
+    {
+      "queryId": "test4-014",
+      "group": "bottoms",
+      "subtype": "pants",
+      "partition": "TEST",
+      "sha256": "c3c89a8f5570e0ca8f289ecf6a6b19773032453cba69f29117cc4bfa4af9b276",
+      "relevantProductSlugs": [
+        "quan-jogger-the-thao-uni-motion",
+        "quan-track-chay-bo-uni-forest"
+      ],
+      "source": {
+        "pageId": 4298872,
+        "title": "File:Sweatpants.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Sweatpants.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Sweatpants.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Sweatpants.jpg/500px-Sweatpants.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Punkt 8 at English Wikipedia",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "Transferred from en.wikipedia to Commons by Admrboltz using CommonsHelper .",
+        "downloadedSha256": "db664a1918028ad5968aa3f91a04c489d164dad903698b9b1978bc8fbb0413ac"
+      },
+      "cropBox": [
+        90,
+        339,
+        190,
+        585
+      ]
+    },
+    {
+      "queryId": "test4-015",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "TEST",
+      "sha256": "37fa1dce37330c7c1b44c92714568b7e058a7acafab4f3251873f9fde0037a57",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 14288,
+        "title": "File:Shiny-sport-shorts-2.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Shiny-sport-shorts-2.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/96/Shiny-sport-shorts-2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Shiny-sport-shorts-2.jpg/500px-Shiny-sport-shorts-2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "ShinyFan",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "attribution": "Own work",
+        "downloadedSha256": "b3ca0db17d75a40e8b1e4327b27810d84101ad1931ba19dc9bb9d9ff2200c2fc"
+      },
+      "cropBox": [
+        20,
+        305,
+        240,
+        498
+      ]
+    },
+    {
+      "queryId": "test4-016",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "TEST",
+      "sha256": "d1312614d1e7bcaa4c853e99acefb5f75e041c27cff7d55ce14d1625605f2a79",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 184342358,
+        "title": "File:\"Wee Willie\" McLean.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:%22Wee_Willie%22_McLean.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/8b/%22Wee_Willie%22_McLean.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://upload.wikimedia.org/wikipedia/commons/8/8b/%22Wee_Willie%22_McLean.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "author": "Wee Willie McLean in 1928, playing for the Chicago Bricklayers.",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "Obtained by family members of the decreased.",
+        "downloadedSha256": "4e9275fdbdb5fb523877d58ec6fd5670a1dd3b5b1f765464af020742a9320ea7"
+      }
+    },
+    {
+      "queryId": "test4-017",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "TEST",
+      "sha256": "e0da59fce74f70973c64b1b632e10a99c4d9646662d4201a8b1e1d60ad2b088d",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 122760643,
+        "title": "File:18 Equip del Lawn Hockey Club Calassanç, c. Font Vella, Fira Modernista de Terrassa 2022.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:18_Equip_del_Lawn_Hockey_Club_Calassan%C3%A7,_c._Font_Vella,_Fira_Modernista_de_Terrassa_2022.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a2/18_Equip_del_Lawn_Hockey_Club_Calassan%C3%A7%2C_c._Font_Vella%2C_Fira_Modernista_de_Terrassa_2022.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/18_Equip_del_Lawn_Hockey_Club_Calassan%C3%A7%2C_c._Font_Vella%2C_Fira_Modernista_de_Terrassa_2022.jpg/1280px-18_Equip_del_Lawn_Hockey_Club_Calassan%C3%A7%2C_c._Font_Vella%2C_Fira_Modernista_de_Terrassa_2022.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Enric",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "01220baa2408b54b98249c5ae421f767118bf14ccd8c907cb5b3fd1bb727bab4"
+      },
+      "cropBox": [
+        358,
+        192,
+        983,
+        753
+      ]
+    },
+    {
+      "queryId": "test4-018",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "TEST",
+      "sha256": "d2d6a6f7bb888d0ff96371ec8e4ef615cc22c373d7c708634fba2267876f4fe9",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 97876660,
+        "title": "File:Akram Damir.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Akram_Damir.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Akram_Damir.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Akram_Damir.jpg/1280px-Akram_Damir.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Akramdamir",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "fb560ed2634d2536ccde8d5c6412a1b93e96ebdfb5fd887496d6118d51379127"
+      },
+      "cropBox": [
+        461,
+        314,
+        727,
+        603
+      ]
+    },
+    {
+      "queryId": "test4-019",
+      "group": "uniforms",
+      "subtype": "women-kit",
+      "partition": "TEST",
+      "sha256": "9e067093c1cbc0cc49665db31916dfe298be5e72d13db656c92cdbac17fb3a46",
+      "relevantProductSlugs": [
+        "bo-bong-da-nu-royal-wave",
+        "bo-bong-da-nu-violet-star",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 90496546,
+        "title": "File:Argentina vs Korea Republic, 2019 Cup of Nations, 2019-02-28 Son Hwa-yeon Jeon Ga-Eul Luana Muñoz (48781319296).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Argentina_vs_Korea_Republic,_2019_Cup_of_Nations,_2019-02-28_Son_Hwa-yeon_Jeon_Ga-Eul_Luana_Mu%C3%B1oz_(48781319296).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/44/Argentina_vs_Korea_Republic%2C_2019_Cup_of_Nations%2C_2019-02-28_Son_Hwa-yeon_Jeon_Ga-Eul_Luana_Mu%C3%B1oz_%2848781319296%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Argentina_vs_Korea_Republic%2C_2019_Cup_of_Nations%2C_2019-02-28_Son_Hwa-yeon_Jeon_Ga-Eul_Luana_Mu%C3%B1oz_%2848781319296%29.jpg/500px-Argentina_vs_Korea_Republic%2C_2019_Cup_of_Nations%2C_2019-02-28_Son_Hwa-yeon_Jeon_Ga-Eul_Luana_Mu%C3%B1oz_%2848781319296%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "LittleBlinky",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "KorArg - SonHwa-yeonJeonGa-EulLuana Muñoz",
+        "downloadedSha256": "1ff256445a20fa27a5b98f102bb2f80a90c87e83086461b3b261154fb5fa9bfa"
+      },
+      "cropBox": [
+        50,
+        33,
+        220,
+        310
+      ]
+    },
+    {
+      "queryId": "test4-020",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "TEST",
+      "sha256": "76f80be0a2ed27375ae7729bb2ae976035dd65e08fc172d92948140bfa9d7761",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 126794324,
+        "title": "File:Argentina vs mexico mexico lineup.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Argentina_vs_mexico_mexico_lineup.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Argentina_vs_mexico_mexico_lineup.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Argentina_vs_mexico_mexico_lineup.jpg/500px-Argentina_vs_mexico_mexico_lineup.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Hossein Zohrevand",
+        "licenseCode": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "attribution": "Tasnim News Agency",
+        "downloadedSha256": "6b3031f080072dc414c2b2daa503c3daabcf7c4ef7557ce53037e097f437a6cf"
+      }
+    },
+    {
+      "queryId": "test4-021",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "TEST",
+      "sha256": "7ac4bafe4672a5f37a92523b0d11d7f4bf4193031d79369e067bfde3bb8ca116",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 133320677,
+        "title": "File:2022 FIFA World Cup Germany 1–2 Japan - Germany lineup.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2022_FIFA_World_Cup_Germany_1%E2%80%932_Japan_-_Germany_lineup.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/7a/2022_FIFA_World_Cup_Germany_1%E2%80%932_Japan_-_Germany_lineup.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/2022_FIFA_World_Cup_Germany_1%E2%80%932_Japan_-_Germany_lineup.jpg/500px-2022_FIFA_World_Cup_Germany_1%E2%80%932_Japan_-_Germany_lineup.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "حسین ظهروند",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "https://www.tasnimnews.ir/fa/media/1401/09/02/2809034/%D8%AF%DB%8C%D8%AF%D8%A7%D8%B1-%D8%AA%DB%8C%D9%85%D9%87%D8%A7%DB%8C-%DA%98%D8%A7%D9%BE%D9%86-%D9%88-%D8%A2%D9%84%D9%85%D8%A7%D9%86-%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C-2022-%D9%82%D8%B7%D8%B1",
+        "downloadedSha256": "283fd57cc719de27e47d57a37f66a3faec66935f6acd4bf6d332c50e81174c39"
+      }
+    },
+    {
+      "queryId": "test4-022",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "TEST",
+      "sha256": "7b0a6dae6f588297ca5654ef0a66f20d593e60ae3fc292f058094900a5ab9b9b",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 49969132,
+        "title": "File:Skateboard Nike Shoes Daytime July 2016.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Skateboard_Nike_Shoes_Daytime_July_2016.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/24/Skateboard_Nike_Shoes_Daytime_July_2016.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Skateboard_Nike_Shoes_Daytime_July_2016.jpg/1280px-Skateboard_Nike_Shoes_Daytime_July_2016.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Nicolas Völcker",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "fa41dfb938d1642c25d74c627b57a105cb12925c3517f5101ff5a13f37f7cba7"
+      }
+    },
+    {
+      "queryId": "test4-023",
+      "group": "shoes",
+      "subtype": "boots",
+      "partition": "TEST",
+      "sha256": "19039987db7cb894ef98f7d28fde86883acc5a47ed6eb49089475407a0182f7a",
+      "relevantProductSlugs": [
+        "giay-da-bong-nam-turf-shadow",
+        "giay-da-bong-nu-turf-spark"
+      ],
+      "source": {
+        "pageId": 44722632,
+        "title": "File:Espirito Santo boots at Museu Cosme Damião.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:Espirito_Santo_boots_at_Museu_Cosme_Dami%C3%A3o.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Espirito_Santo_boots_at_Museu_Cosme_Dami%C3%A3o.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/Espirito_Santo_boots_at_Museu_Cosme_Dami%C3%A3o.JPG/1280px-Espirito_Santo_boots_at_Museu_Cosme_Dami%C3%A3o.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Threeohsix",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "5092bcb62a4b470eef286def56f7991d9727390c122a0cb52ea5c231f88359d3"
+      },
+      "cropBox": [
+        307,
+        223,
+        829,
+        445
+      ]
+    },
+    {
+      "queryId": "test4-024",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "TEST",
+      "sha256": "4f40bd847a0f586cb2ebff9ea0c4067621ad8a90d87cc9834b8ffe45dbe1c5c7",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 45970554,
+        "title": "File:Moving legs.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:Moving_legs.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/66/Moving_legs.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/66/Moving_legs.JPG/1280px-Moving_legs.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Micael 106",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "2b9e83487084c473810a11e199227f44ac049415dad7f17a5d1657245619fa13"
+      },
+      "cropBox": [
+        328,
+        12,
+        737,
+        334
+      ]
+    },
+    {
+      "queryId": "test4-025",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "TEST",
+      "sha256": "ee13fb6817b26b4b90c289ddbbd2c184e82a19d9a18feeafc70447a18d8de9e4",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 62056419,
+        "title": "File:Sprinting in Vienna (Unsplash).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Sprinting_in_Vienna_(Unsplash).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/23/Sprinting_in_Vienna_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Sprinting_in_Vienna_%28Unsplash%29.jpg/1280px-Sprinting_in_Vienna_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Alexander Redl alexanderredl",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "https://unsplash.com/photos/d3bYmnZ0ank Image at the Wayback Machine Gallery at the Wayback Machine",
+        "downloadedSha256": "c5057c051f423b32b7afef950b8f5638434565db53eac254beb768e52d887229"
+      },
+      "cropBox": [
+        502,
+        461,
+        870,
+        640
+      ]
+    },
+    {
+      "queryId": "test4-026",
+      "group": "accessories",
+      "subtype": "bottle",
+      "partition": "TEST",
+      "sha256": "07be24c45602e3f85648aa1b01fdec6cfc94983283d5e88c9fb071d960418867",
+      "relevantProductSlugs": [
+        "binh-nuoc-the-thao-black-flow-750ml"
+      ],
+      "source": {
+        "pageId": 79854983,
+        "title": "File:CAT700 2019 Bikepacking en bicicleta de gravel.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:CAT700_2019_Bikepacking_en_bicicleta_de_gravel.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/b5/CAT700_2019_Bikepacking_en_bicicleta_de_gravel.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/CAT700_2019_Bikepacking_en_bicicleta_de_gravel.jpg/1280px-CAT700_2019_Bikepacking_en_bicicleta_de_gravel.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Pacopac",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "dbcf53ec61b34eb2d339f373ac137a069f97b8c69484c6ba148d999a0d48c74c"
+      },
+      "cropBox": [
+        430,
+        307,
+        686,
+        476
+      ]
+    },
+    {
+      "queryId": "test4-027",
+      "group": "accessories",
+      "subtype": "guard",
+      "partition": "TEST",
+      "sha256": "e0d4ef93e03cdf1b5cded1dd461d928073f8c9f407abe7e379ddf1dd23faf637",
+      "relevantProductSlugs": [
+        "op-bao-ve-ong-dong-red-guard"
+      ],
+      "source": {
+        "pageId": 66609696,
+        "title": "File:Cleveland Indians vs. New York Yankees (14625417595).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Cleveland_Indians_vs._New_York_Yankees_(14625417595).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Cleveland_Indians_vs._New_York_Yankees_%2814625417595%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Cleveland_Indians_vs._New_York_Yankees_%2814625417595%29.jpg/1280px-Cleveland_Indians_vs._New_York_Yankees_%2814625417595%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Erik Drost",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Cleveland Indians vs. New York Yankees",
+        "downloadedSha256": "43b9136942855538ba59a9b2b9cc7c16c541a50cac90e390b7694df61f64f6d1"
+      },
+      "cropBox": [
+        170,
+        676,
+        365,
+        850
+      ]
+    },
+    {
+      "queryId": "test4-028",
+      "group": "unknown",
+      "subtype": "interior",
+      "partition": "TEST",
+      "sha256": "621737c18ed8a6063b96646ac2aa28893e8044a5683c00442df365b8656b11a2",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 148215616,
+        "title": "File:137C Calea Plevnei, Bucharest (55).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:137C_Calea_Plevnei,_Bucharest_(55).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/f3/137C_Calea_Plevnei%2C_Bucharest_%2855%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/137C_Calea_Plevnei%2C_Bucharest_%2855%29.jpg/1280px-137C_Calea_Plevnei%2C_Bucharest_%2855%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Neoclassicism Enthusiast",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "e0e1dd471041377003d8b793c9d9bbfabd1dfb7087d1495a75442101773dbd12"
+      }
+    },
+    {
+      "queryId": "test4-029",
+      "group": "unknown",
+      "subtype": "chair",
+      "partition": "TEST",
+      "sha256": "cc4a04ff8c48d4479f1faad59c4b7d9210895c8dc67ce9450436cc145deb2824",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 160662232,
+        "title": "File:2000 LADY BERNKOP 1.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2000_LADY_BERNKOP_1.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/38/2000_LADY_BERNKOP_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/2000_LADY_BERNKOP_1.jpg/1280px-2000_LADY_BERNKOP_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Madblock",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "e0d9d8d334aa1f06617923546f23958fa86ee8602071b6eaf5a23589ddb5293a"
+      }
+    },
+    {
+      "queryId": "test4-030",
+      "group": "unknown",
+      "subtype": "landscape",
+      "partition": "TEST",
+      "sha256": "6d3aa673706bef03eedc317a243a0f96c6d7ad0cd6936a8f7b1a1bf4c82f7b4e",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 113256395,
+        "title": "File:Hadi1361.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Hadi1361.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Hadi1361.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Hadi1361.jpg/1280px-Hadi1361.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Xfatih",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "b1c5576fe42fd9078fc2d296079521eb8271289d9fb8c502d95e71bf1f5196fb"
+      }
+    },
+    {
+      "queryId": "test4-031",
+      "group": "unknown",
+      "subtype": "park",
+      "partition": "TEST",
+      "sha256": "852e27e4662e7feeacb0321a5df8b3e1603945b3fffd320335230179480d9ad6",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 135331019,
+        "title": "File:2 34 p.m. all day (49921708453).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2_34_p.m._all_day_(49921708453).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/7a/2_34_p.m._all_day_%2849921708453%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/2_34_p.m._all_day_%2849921708453%29.jpg/1280px-2_34_p.m._all_day_%2849921708453%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "madras91",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "2:34 p.m. all day",
+        "downloadedSha256": "e766bbef55066ee0fe2d9b10a392dee5336028bcf900e29fa768ca92b34e8f8f"
+      }
+    },
+    {
+      "queryId": "test4-032",
+      "group": "unknown",
+      "subtype": "library",
+      "partition": "TEST",
+      "sha256": "24f799da14237ba35362e98ed0bee8664f63e0b22d2cec6b2ea91334dca013ae",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 19273284,
+        "title": "File:2008 BatesHall BostonPublicLibrary USA 2613862004.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2008_BatesHall_BostonPublicLibrary_USA_2613862004.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/22/2008_BatesHall_BostonPublicLibrary_USA_2613862004.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/2008_BatesHall_BostonPublicLibrary_USA_2613862004.jpg/1280px-2008_BatesHall_BostonPublicLibrary_USA_2613862004.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Andrew Watson from Silver Spring, MD, USA",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "BPL Reading Room",
+        "downloadedSha256": "0403303c92499725788ebde2efa3ae453f80f5ce028e6dd12da3cf0176f351d2"
+      }
+    },
+    {
+      "queryId": "test4-033",
+      "group": "unknown",
+      "subtype": "bridge",
+      "partition": "TEST",
+      "sha256": "1756adaa6da588df01b964a5ab4a82729c9ba4b7d254e23b0a677b2b58d6ac78",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 139557756,
+        "title": "File:Jembatan Gantung Situ Gunung saat kabut.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Jembatan_Gantung_Situ_Gunung_saat_kabut.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Jembatan_Gantung_Situ_Gunung_saat_kabut.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Jembatan_Gantung_Situ_Gunung_saat_kabut.jpg/1280px-Jembatan_Gantung_Situ_Gunung_saat_kabut.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Lany pirna",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "e412c7ca6a37d5be93ec8c2e834ef74d95f1c084e3e052619603bd16ef5f49d0"
+      }
+    },
+    {
+      "queryId": "test4-034",
+      "group": "unknown",
+      "subtype": "canal",
+      "partition": "TEST",
+      "sha256": "59b5ea8d76fbc6b831d17ce3b3d90b4e0a2db29332166ee995329bdd80542c28",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 201814107,
+        "title": "File:Kanpain Zubia.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Kanpain_Zubia.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Kanpain_Zubia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Kanpain_Zubia.jpg/1280px-Kanpain_Zubia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Txapisotegi",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "81010b2ded1dae9cd38ca05c6999562b13f1d2dfff64666280b49e97d3d8c028"
+      }
+    },
+    {
+      "queryId": "test4-035",
+      "group": "unknown",
+      "subtype": "interior",
+      "partition": "TEST",
+      "sha256": "2d623c1d8426c532cbadd3226b93d0b3a00544d4fd7fd7f92302f6c5efa12afb",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 30588573,
+        "title": "File:Abakan 002.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Abakan_002.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/84/Abakan_002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/Abakan_002.jpg/1280px-Abakan_002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Michael E",
+        "licenseCode": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "attribution": "https://picasaweb.google.com/lh/photo/GDdhSdUNMxAPyP1wXGGA6NMTjNZETYmyPJy0liipFm0",
+        "downloadedSha256": "f973a040410890ab44f4b18394265f47f91787b1084ed9e27c0ed930624c77de"
+      }
+    },
+    {
+      "queryId": "test4-036",
+      "group": "unknown",
+      "subtype": "street",
+      "partition": "TEST",
+      "sha256": "c0842e37af43d96baf617fbfde436fdccd2d0d8196eb2227ec703d7950d95205",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 16035930,
+        "title": "File:2011-07-30-Dom-Libori.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2011-07-30-Dom-Libori.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/d8/2011-07-30-Dom-Libori.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d8/2011-07-30-Dom-Libori.jpg/1280px-2011-07-30-Dom-Libori.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "R-E-AL ( talk | contribs | Gallery ) (German Wikipedia)",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work This photograph was taken with an iPhone 4",
+        "downloadedSha256": "5b14abd418a3e7827ef3fc191f3478dd0acc9c30f5339b12ec46acef285ea837"
+      }
+    },
+    {
+      "queryId": "test4-037",
+      "group": "unknown",
+      "subtype": "garden",
+      "partition": "TEST",
+      "sha256": "e5c87ccb41a6c8ed8c292341e79726ad875ddee03760e8bbb4aef4c74f674aaa",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 38675723,
+        "title": "File:2001 Amsterdam; Spring 2001 18.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2001_Amsterdam;_Spring_2001_18.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/93/2001_Amsterdam%3B_Spring_2001_18.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/2001_Amsterdam%3B_Spring_2001_18.jpg/1280px-2001_Amsterdam%3B_Spring_2001_18.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Mark Ahsmann",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "eae1b516aa5b096d71679201bc77b9eda930b148c8ee24704ad1db1081b28225"
+      }
+    },
+    {
+      "queryId": "test4-038",
+      "group": "unknown",
+      "subtype": "computer",
+      "partition": "TEST",
+      "sha256": "47679a0900215459a504bba64901ea7b6ec56e3dbd950400a9a621ade5b883ad",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 16007442,
+        "title": "File:Electronics workbench.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Electronics_workbench.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Electronics_workbench.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Electronics_workbench.jpg/1280px-Electronics_workbench.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "James Bastow",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Electronics Workbench Uploaded by Adrignola",
+        "downloadedSha256": "3491a9742e8164114a637687a5df456240c500dd3586adcddf44aff5d0b67785"
+      }
+    },
+    {
+      "queryId": "test4-039",
+      "group": "unknown",
+      "subtype": "electronics",
+      "partition": "TEST",
+      "sha256": "7f395d74834dc57ad5404678524eac2686bdfaf729f44f3ef047afeed37fa806",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 36537254,
+        "title": "File:Computer shop display of items for sale.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Computer_shop_display_of_items_for_sale.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/86/Computer_shop_display_of_items_for_sale.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Computer_shop_display_of_items_for_sale.jpg/1280px-Computer_shop_display_of_items_for_sale.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Landryfil",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "2c64581989ba172073f24116776438f8ca74bc5d44f995880f762b9af818d73c"
+      }
+    },
+    {
+      "queryId": "test4-040",
+      "group": "unknown",
+      "subtype": "meal",
+      "partition": "TEST",
+      "sha256": "cbdf014398fb984c5adda819139ab805283cd9ae61b4485331999ded237cc0d4",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 17617386,
+        "title": "File:A hearty breakfast.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:A_hearty_breakfast.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/94/A_hearty_breakfast.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/A_hearty_breakfast.jpg/1280px-A_hearty_breakfast.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Larry & Teddy (nee Schlueter) Page from Everywhere (traveling & living fulltime in an RV), USA",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Saturday Breakfast",
+        "downloadedSha256": "c036167f272ab2e5c767d277e26b8ed5e19fe98ee668a074327ffba65e2ff9f4"
+      }
+    },
+    {
+      "queryId": "test4-041",
+      "group": "unknown",
+      "subtype": "mug",
+      "partition": "TEST",
+      "sha256": "38911ffd29ee998d37d80fef23feb45b4a75024e10fbd1670806fe86c1da7368",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 28171378,
+        "title": "File:ApfelkuchenmitKaffee4736.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:ApfelkuchenmitKaffee4736.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/00/ApfelkuchenmitKaffee4736.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/ApfelkuchenmitKaffee4736.jpg/1280px-ApfelkuchenmitKaffee4736.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Ewald Gabardi",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "3de35189f1142a85e076c0e8d6e78f20dd8daca7a061a962896449fc84457c28"
+      }
+    },
+    {
+      "queryId": "test4-042",
+      "group": "unknown",
+      "subtype": "cafe",
+      "partition": "TEST",
+      "sha256": "472ea7c5b667421c8303010819fd1defa0b3b3b77cfe901c3d0c5207c3a766f8",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 75817069,
+        "title": "File:As Long As U Me So Ii (131740189).jpeg",
+        "uri": "https://commons.wikimedia.org/wiki/File:As_Long_As_U_Me_So_Ii_(131740189).jpeg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/3b/As_Long_As_U_Me_So_Ii_%28131740189%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/As_Long_As_U_Me_So_Ii_%28131740189%29.jpeg/1280px-As_Long_As_U_Me_So_Ii_%28131740189%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Weston Woodbury",
+        "licenseCode": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "attribution": "Imported from 500px ( archived version ) by the Archive Team . ( detail page )",
+        "downloadedSha256": "bb1794d3cf46fb863ccb99db9f8fd0356987ddc17181f2aeb00e7610db1263fd"
+      }
+    },
+    {
+      "queryId": "test4-043",
+      "group": "unknown",
+      "subtype": "street",
+      "partition": "TEST",
+      "sha256": "b38fe04e7b43d1574d43933eed616d4fc7af098707ddb32b1f435dd68d80712f",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 7893019,
+        "title": "File:Limassol street.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:Limassol_street.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Limassol_street.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Limassol_street.JPG/1280px-Limassol_street.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Oh1qt",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "63f54fbd3791192f66047ee714aade4b2c0bb8f898a9429edfd7e373c375317b"
+      }
+    },
+    {
+      "queryId": "test4-044",
+      "group": "unknown",
+      "subtype": "street",
+      "partition": "TEST",
+      "sha256": "2a0e90c5bded3cfc6f13bfeb658a2a99669e9b02a6ee5bb185b9ca36c966237d",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 79102393,
+        "title": "File:BGSU Greek Village.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:BGSU_Greek_Village.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/88/BGSU_Greek_Village.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/BGSU_Greek_Village.jpg/1280px-BGSU_Greek_Village.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Mbrickn",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "d64bab5e0ea5ce1caf6dbbc6fac00e2712c7098d30a69c5f81925d0dfd1a028c"
+      }
+    },
+    {
+      "queryId": "test4-045",
+      "group": "unknown",
+      "subtype": "car",
+      "partition": "TEST",
+      "sha256": "d48fcaa9bf021b267cb79284ef094331a953a8185107969c35f72838340d27f6",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 22348803,
+        "title": "File:\" 12 - ITALY - Alfa Romeo Giulietta Hatchback con donna Padova grey grigia.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:%22_12_-_ITALY_-_Alfa_Romeo_Giulietta_Hatchback_con_donna_Padova_grey_grigia.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/ba/%22_12_-_ITALY_-_Alfa_Romeo_Giulietta_Hatchback_con_donna_Padova_grey_grigia.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/%22_12_-_ITALY_-_Alfa_Romeo_Giulietta_Hatchback_con_donna_Padova_grey_grigia.JPG/1280px-%22_12_-_ITALY_-_Alfa_Romeo_Giulietta_Hatchback_con_donna_Padova_grey_grigia.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Pava",
+        "licenseCode": "CC BY-SA 3.0 it",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/it/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "1e9f832dafbebb155249f9cb36f386cb86680ce52d7df9f56ee43c55d30d385f"
+      }
+    },
+    {
+      "queryId": "test4-046",
+      "group": "unknown",
+      "subtype": "silicone-bracelet",
+      "partition": "TEST",
+      "sha256": "fb71e96ecac40c108f17a8427c487d8a6bc4b49989ef4482c056fc5cf9491a81",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 12708765,
+        "title": "File:BlimE.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:BlimE.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/d2/BlimE.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/BlimE.png/1280px-BlimE.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Kunnskapshode",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "1065c11e44b081814e4f80e9a9a18c01bd56168a7a43b158b0ea0d764c335b0e"
+      }
+    },
+    {
+      "queryId": "test4-047",
+      "group": "unknown",
+      "subtype": "glass-bottle",
+      "partition": "TEST",
+      "sha256": "0d13e8157d5f3bfcf53e93035ff7b183dd618fd364731c1af0047a5923b43720",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 36960902,
+        "title": "File:Aachener Kaiserbrunnen-Flasche-1819.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Aachener_Kaiserbrunnen-Flasche-1819.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/37/Aachener_Kaiserbrunnen-Flasche-1819.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Aachener_Kaiserbrunnen-Flasche-1819.jpg/1280px-Aachener_Kaiserbrunnen-Flasche-1819.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Raimond Spekking",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "© Raimond Spekking / CC BY-SA 4.0 (via Wikimedia Commons)",
+        "downloadedSha256": "41325e00922769af758b7726b3b35dc749bb9f57c2361ba7a85c5958fc98b191"
+      }
+    }
+  ]
+}

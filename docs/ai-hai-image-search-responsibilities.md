@@ -550,6 +550,13 @@ Cấu hình được chọn từ calibration đạt lần lượt **75,83%**, **
 liên quan đến áo tập và quần đùi bóng đá bị nhầm với nhóm trang phục khác.
 [Báo cáo DEV v4.1](../evidence/image-search-v4/dev-balanced-report-2026-11-19.md)
 
+DEV v4.2 ngày 20/11/2026 thử thêm tín hiệu cho áo/quần chụp riêng và các loại phụ kiện.
+Cấu hình được chọn trên 171 ảnh DEV cũ đạt Recall@5 **86,25%**, phân nhóm
+**90%** và từ chối ảnh ngoài catalog **4/4** trên 24 ảnh DEV mới.
+Cấu hình đã khóa cho TEST v4 độc lập. HAI-16 tiếp tục `BLOCKED / NO-GO`.
+[Báo cáo DEV v4.2](../evidence/image-search-v4/dev-garment-report-2026-11-20.md) ·
+[Quy trình TEST v4](../datasets/image-search/test-v4/README.md)
+
 ## 7. Artifact phải bàn giao
 
 ```text

@@ -1,0 +1,687 @@
+{
+  "schemaVersion": 1,
+  "dataset": {
+    "name": "image-search-dev-v4-garment",
+    "version": "4.2.0",
+    "split": "DEV",
+    "status": "FROZEN",
+    "frozenAt": "2026-11-20",
+    "catalogSnapshot": {
+      "version": "image-catalog-v2-2026-10-23",
+      "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+    }
+  },
+  "policy": {
+    "mayTuneOnThisSplit": false,
+    "mayReportAsFinalTest": false,
+    "mayReuseInTestV3": false
+  },
+  "samples": [
+    {
+      "id": "dev4g-001",
+      "image": "assets/dev4g-001.jpg",
+      "sha256": "b48a490c8378e7382e1c609d29ad1f3bae29373ff046b5f6f7adf6f42161456f",
+      "bytes": 116949,
+      "width": 835,
+      "height": 959,
+      "group": "tops",
+      "sourceGroupCode": "commons-series:sports-t-shirt",
+      "subtype": "tee",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 148400350,
+        "title": "File:Sports T-Shirt.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:Sports_T-Shirt.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/09/Sports_T-Shirt.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://upload.wikimedia.org/wikipedia/commons/0/09/Sports_T-Shirt.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "author": "Kuttos2",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "a1122cc2de919c9054454e3a4a0eb2230d9f72d987dcfeaee2920bb8f2486a69"
+      }
+    },
+    {
+      "id": "dev4g-002",
+      "image": "assets/dev4g-002.jpg",
+      "sha256": "fe4e50d089c847e25d76ebedd1e881b45fd8013484aa134d523aa42c33a3c878",
+      "bytes": 74805,
+      "width": 532,
+      "height": 426,
+      "group": "tops",
+      "sourceGroupCode": "commons-series:contiguglia-presents-jersey",
+      "subtype": "jersey",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 6852710,
+        "title": "File:Contiguglia presents jersey.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Contiguglia_presents_jersey.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Contiguglia_presents_jersey.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Contiguglia_presents_jersey.jpg/1280px-Contiguglia_presents_jersey.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "1st Lt. Elizabeth Culbertson",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "http://www.usafe.af.mil/photos/index.asp?page=13",
+        "downloadedSha256": "0b4927dc0fe1c7bc5ff5f6fb9b1e96f8201e5b05d832d6378978d2270942ef8d"
+      },
+      "cropBox": [
+        164,
+        309,
+        696,
+        735
+      ]
+    },
+    {
+      "id": "dev4g-003",
+      "image": "assets/dev4g-003.jpg",
+      "sha256": "658bbdd32287c5a3681096fc0e04b82331e8a2cd3997f731927dc7c9f03bfa28",
+      "bytes": 92927,
+      "width": 451,
+      "height": 717,
+      "group": "tops",
+      "sourceGroupCode": "commons-series:aadhavan-manoj",
+      "subtype": "jersey",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 144347077,
+        "title": "File:Aadhavan manoj 03.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Aadhavan_manoj_03.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/31/Aadhavan_manoj_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Aadhavan_manoj_03.jpg/1280px-Aadhavan_manoj_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "TamilNadu cricket association",
+        "licenseCode": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "attribution": "TNCA",
+        "downloadedSha256": "eec06e159f2bdbf74bed34c36443a2d0e4034c8723c357062db65db5516a5bf1"
+      },
+      "cropBox": [
+        355,
+        307,
+        806,
+        1024
+      ]
+    },
+    {
+      "id": "dev4g-004",
+      "image": "assets/dev4g-004.jpg",
+      "sha256": "7ab3d7f21b5b32a7f089c0bd3d2d7c78a68ffc5a06c31b0b3c82c0ddeaede794",
+      "bytes": 33555,
+      "width": 238,
+      "height": 328,
+      "group": "tops",
+      "sourceGroupCode": "commons-series:atik-hasan-hridoy",
+      "subtype": "tee",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 121983936,
+        "title": "File:Atik Hasan Hridoy.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Atik_Hasan_Hridoy.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Atik_Hasan_Hridoy.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Atik_Hasan_Hridoy.jpg/1280px-Atik_Hasan_Hridoy.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Atik Hasan Hridoy",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "fb2209e28bc9cad75efd0364561129d9aee5014d249281e091c5bd550b50001b"
+      },
+      "cropBox": [
+        269,
+        297,
+        507,
+        625
+      ]
+    },
+    {
+      "id": "dev4g-005",
+      "image": "assets/dev4g-005.jpg",
+      "sha256": "c81dd2a1f8f399040f2c4c9ec15a2583d09c26beabae208c80c5d6b1b8846fd6",
+      "bytes": 6585,
+      "width": 122,
+      "height": 123,
+      "group": "bottoms",
+      "sourceGroupCode": "commons-series:heat-of-the-men-s-steeplechase-paris-olympics",
+      "subtype": "leggings",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 172901213,
+        "title": "File:Heat of the men's steeplechase, Paris 2024 Olympics.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Heat_of_the_men%27s_steeplechase,_Paris_2024_Olympics.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Heat_of_the_men%27s_steeplechase%2C_Paris_2024_Olympics.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Heat_of_the_men%27s_steeplechase%2C_Paris_2024_Olympics.jpg/1280px-Heat_of_the_men%27s_steeplechase%2C_Paris_2024_Olympics.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "LeeMNichols",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "5d6c5c672d1d94823b12607466d07315c71e9a67085f289dfd1c3553f5280986"
+      },
+      "cropBox": [
+        410,
+        307,
+        532,
+        430
+      ]
+    },
+    {
+      "id": "dev4g-006",
+      "image": "assets/dev4g-006.jpg",
+      "sha256": "22b9e47dc34a3008fe05868be171704050b14fb0511a924f047d780dd2c84a02",
+      "bytes": 12982,
+      "width": 194,
+      "height": 194,
+      "group": "bottoms",
+      "sourceGroupCode": "commons-series:iceland-serbia-fifa-women-s-world-cup-qualification-uefa-group",
+      "subtype": "shorts",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 33780328,
+        "title": "File:Iceland - Serbia-2011 FIFA Women's World Cup qualification UEFA Group 1 (3832877485).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Iceland_-_Serbia-2011_FIFA_Women%27s_World_Cup_qualification_UEFA_Group_1_(3832877485).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Iceland_-_Serbia-2011_FIFA_Women%27s_World_Cup_qualification_UEFA_Group_1_%283832877485%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Iceland_-_Serbia-2011_FIFA_Women%27s_World_Cup_qualification_UEFA_Group_1_%283832877485%29.jpg/1280px-Iceland_-_Serbia-2011_FIFA_Women%27s_World_Cup_qualification_UEFA_Group_1_%283832877485%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Helgi Halldórsson from Reykjavík, Iceland",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Iceland - Serbia/2011 FIFA Women's World Cup qualification UEFA Group 1",
+        "downloadedSha256": "7f7472b3c934279786916b72a0ce5c0155a57d290fcfb4f08b7d36b56861c135"
+      },
+      "cropBox": [
+        717,
+        273,
+        911,
+        467
+      ]
+    },
+    {
+      "id": "dev4g-007",
+      "image": "assets/dev4g-007.jpg",
+      "sha256": "43cabc5903637e77a4fc7ddac402518ebd3ce423fa6eb6500e860f10eee5a72b",
+      "bytes": 25353,
+      "width": 254,
+      "height": 235,
+      "group": "bottoms",
+      "sourceGroupCode": "commons-series:brazil-and-croatia-match-at-the-fifa-world-cup-cropped",
+      "subtype": "shorts",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 102040776,
+        "title": "File:Brazil and Croatia match at the FIFA World Cup 2014-06-12 (10) (cropped).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_(10)_(cropped).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2810%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2810%29_%28cropped%29.jpg/1280px-Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2810%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Agência Brasil",
+        "licenseCode": "CC BY 3.0 br",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/br/deed.en",
+        "attribution": "Brasil e Croácia, primeiro jogo da Copa do Mundo de 2014",
+        "downloadedSha256": "b0f6f701e1826a6d0ddf4e0feae115051a7448130ef5309330284fbb96ef360f"
+      },
+      "cropBox": [
+        114,
+        543,
+        368,
+        778
+      ]
+    },
+    {
+      "id": "dev4g-008",
+      "image": "assets/dev4g-008.jpg",
+      "sha256": "a9cbb19bd01144e4f0c7fe1b2b17b9740cbb77cdb2d16a8934f2593489ced78e",
+      "bytes": 23003,
+      "width": 256,
+      "height": 233,
+      "group": "bottoms",
+      "sourceGroupCode": "commons-series:flickr-az-sanya-richards-m",
+      "subtype": "shorts",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 15169035,
+        "title": "File:Flickr - az1172 - Sanya Richards 400m.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Flickr_-_az1172_-_Sanya_Richards_400m.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/84/Flickr_-_az1172_-_Sanya_Richards_400m.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/Flickr_-_az1172_-_Sanya_Richards_400m.jpg/1280px-Flickr_-_az1172_-_Sanya_Richards_400m.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "André Zehetbauer",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Flickr : Sanya Richards 400m",
+        "downloadedSha256": "2cfc05f740c555c31415422361454a38f0be483a7714f724c39bf91d6a1a8db5"
+      },
+      "cropBox": [
+        502,
+        185,
+        758,
+        418
+      ]
+    },
+    {
+      "id": "dev4g-009",
+      "image": "assets/dev4g-009.jpg",
+      "sha256": "69e9075a589da98160561b901c7e03f4e58be44b277c3c1b857e17ffcfb4b213",
+      "bytes": 205353,
+      "width": 1024,
+      "height": 522,
+      "group": "uniforms",
+      "sourceGroupCode": "commons-series:ac-milan-players-stretching",
+      "subtype": "men-kit",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 20746726,
+        "title": "File:AC Milan players stretching.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:AC_Milan_players_stretching.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/91/AC_Milan_players_stretching.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/AC_Milan_players_stretching.jpg/1280px-AC_Milan_players_stretching.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "goatling",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Flickr : [1]",
+        "downloadedSha256": "72621a865a621e6ac4b17215755abb635490f1527bfaf5fe941c7b1341d92228"
+      }
+    },
+    {
+      "id": "dev4g-010",
+      "image": "assets/dev4g-010.jpg",
+      "sha256": "60eada99f257dfbb68a4969883bc5fd82d17b7c623489a0434fb7ad1a8ae3e5e",
+      "bytes": 213798,
+      "width": 1024,
+      "height": 682,
+      "group": "uniforms",
+      "sourceGroupCode": "commons-series:psg-juvisy-free-kick",
+      "subtype": "women-kit",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 23116292,
+        "title": "File:20121209 PSG-Juvisy - free kick 02.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20121209_PSG-Juvisy_-_free_kick_02.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/7d/20121209_PSG-Juvisy_-_free_kick_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/20121209_PSG-Juvisy_-_free_kick_02.jpg/1280px-20121209_PSG-Juvisy_-_free_kick_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Pierre-Yves Beaudouin",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Pierre-Yves Beaudouin / Wikimedia Commons",
+        "downloadedSha256": "3c405f6f4f9ebcbd3f25241303826dcc85ef1491206eb610d4ec5328fb87ad18"
+      }
+    },
+    {
+      "id": "dev4g-011",
+      "image": "assets/dev4g-011.jpg",
+      "sha256": "45038a34bcf6bfc7984ee43b297276b8669cb21b7f6526df2b80c26612dee046",
+      "bytes": 233552,
+      "width": 1024,
+      "height": 682,
+      "group": "uniforms",
+      "sourceGroupCode": "commons-series:psg-twente",
+      "subtype": "women-kit",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 36350736,
+        "title": "File:20141015 - PSG-Twente 085.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20141015_-_PSG-Twente_085.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/1d/20141015_-_PSG-Twente_085.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/20141015_-_PSG-Twente_085.jpg/1280px-20141015_-_PSG-Twente_085.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Pierre-Yves Beaudouin",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Pierre-Yves Beaudouin / Wikimedia Commons",
+        "downloadedSha256": "5feb796477a5042c96f2808e592af37c5018e96281836f7df6fb4050bdceb8ca"
+      }
+    },
+    {
+      "id": "dev4g-012",
+      "image": "assets/dev4g-012.jpg",
+      "sha256": "8d7111268453fd95bfea9f231f0e5f05e56fb753bd2a8aae210060e1e8402680",
+      "bytes": 84059,
+      "width": 375,
+      "height": 675,
+      "group": "uniforms",
+      "sourceGroupCode": "commons-series:abby-wambach-usa-vs-can-sep",
+      "subtype": "women-kit",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 17080832,
+        "title": "File:Abby Wambach USA vs Can Sep17.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Abby_Wambach_USA_vs_Can_Sep17.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/63/Abby_Wambach_USA_vs_Can_Sep17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/63/Abby_Wambach_USA_vs_Can_Sep17.jpg/1280px-Abby_Wambach_USA_vs_Can_Sep17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Ampatent",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "314e29001430b696c431d6b7dd797694a6a371fae5b4cca043fc028e6a701da9"
+      },
+      "cropBox": [
+        224,
+        113,
+        599,
+        788
+      ]
+    },
+    {
+      "id": "dev4g-013",
+      "image": "assets/dev4g-013.jpg",
+      "sha256": "f168f66f9909218ae899803193b312db24047a35f6559f254097949fb8a09b24",
+      "bytes": 260513,
+      "width": 1024,
+      "height": 894,
+      "group": "shoes",
+      "sourceGroupCode": "commons-series:merrell-vapor-glove-shoes",
+      "subtype": "running-shoes",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 63249142,
+        "title": "File:Merrell Vapor Glove 3 shoes.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:Merrell_Vapor_Glove_3_shoes.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Merrell_Vapor_Glove_3_shoes.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Merrell_Vapor_Glove_3_shoes.png/1280px-Merrell_Vapor_Glove_3_shoes.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Tiia Monto",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Tiia Monto",
+        "downloadedSha256": "43040c616c3bf0c282bfcdaf7402e2b3ec9811f70d2c6674f1c57ae09f161111"
+      }
+    },
+    {
+      "id": "dev4g-014",
+      "image": "assets/dev4g-014.jpg",
+      "sha256": "fc8493006f9bc68abbfdb2453a2425ccd7fce1bf1b7e2d009242aadec6b59b04",
+      "bytes": 133773,
+      "width": 666,
+      "height": 457,
+      "group": "shoes",
+      "sourceGroupCode": "commons-series:strong-boston-bombing-site-memorial",
+      "subtype": "running-shoes",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 47411836,
+        "title": "File:4-15 Strong (Boston Bombing Site Memorial) (13940922145).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:4-15_Strong_(Boston_Bombing_Site_Memorial)_(13940922145).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/69/4-15_Strong_%28Boston_Bombing_Site_Memorial%29_%2813940922145%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/4-15_Strong_%28Boston_Bombing_Site_Memorial%29_%2813940922145%29.jpg/1280px-4-15_Strong_%28Boston_Bombing_Site_Memorial%29_%2813940922145%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "John Hoey from Framingham, MA, United States",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "4/15 Strong (Boston Bombing Site Memorial)",
+        "downloadedSha256": "238a57147af74e0b28f9f850f7b21a028fa502900b4e8a1904455598b6820705"
+      },
+      "cropBox": [
+        82,
+        0,
+        748,
+        457
+      ]
+    },
+    {
+      "id": "dev4g-015",
+      "image": "assets/dev4g-015.jpg",
+      "sha256": "575408c7f21ada67bc047ec7cef1b40c2125d451f85dcf738f3603717be82a42",
+      "bytes": 64328,
+      "width": 686,
+      "height": 389,
+      "group": "shoes",
+      "sourceGroupCode": "commons-series:kilo-company-takes-campbell-cup-at-final-event-m-yg",
+      "subtype": "running-shoes",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 41457821,
+        "title": "File:Kilo Company takes Campbell Cup at final event 130427-M-YG378-023.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Kilo_Company_takes_Campbell_Cup_at_final_event_130427-M-YG378-023.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Kilo_Company_takes_Campbell_Cup_at_final_event_130427-M-YG378-023.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Kilo_Company_takes_Campbell_Cup_at_final_event_130427-M-YG378-023.jpg/1280px-Kilo_Company_takes_Campbell_Cup_at_final_event_130427-M-YG378-023.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Cpl. John Robbart III",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "https://www.dvidshub.net/image/918776",
+        "downloadedSha256": "f6d9337606017563bd70c5262be1571c5d411e5b10b0c280befcba6705ff84b2"
+      },
+      "cropBox": [
+        195,
+        293,
+        881,
+        682
+      ]
+    },
+    {
+      "id": "dev4g-016",
+      "image": "assets/dev4g-016.jpg",
+      "sha256": "bcc68542df19c33725af901640ab0b00a5d62dfc54fe3211d90d9de1ca87499c",
+      "bytes": 98880,
+      "width": 440,
+      "height": 599,
+      "group": "shoes",
+      "sourceGroupCode": "commons-series:medaling-is-just-finishing",
+      "subtype": "running-shoes",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 57022266,
+        "title": "File:Medaling is Just Finishing (2098637636).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Medaling_is_Just_Finishing_(2098637636).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Medaling_is_Just_Finishing_%282098637636%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Medaling_is_Just_Finishing_%282098637636%29.jpg/1280px-Medaling_is_Just_Finishing_%282098637636%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "cogdogblog",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "https://www.flickr.com/photos/cogdog/2098637636/",
+        "downloadedSha256": "0f29d351e12a8e98201a555f898cd05fc39496eebd1414448171a137fc11a673"
+      },
+      "cropBox": [
+        0,
+        0,
+        440,
+        599
+      ]
+    },
+    {
+      "id": "dev4g-017",
+      "image": "assets/dev4g-017.jpg",
+      "sha256": "3119d9c6383ab95564975fdffbf3cf17e58bee9d976c175d287cdd8754657bc6",
+      "bytes": 26808,
+      "width": 195,
+      "height": 220,
+      "group": "accessories",
+      "sourceGroupCode": "commons-series:specialized-source-sport-hybrid-bicycle",
+      "subtype": "bottle",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 30479966,
+        "title": "File:Specialized Source Sport-hybrid bicycle.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Specialized_Source_Sport-hybrid_bicycle.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/72/Specialized_Source_Sport-hybrid_bicycle.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Specialized_Source_Sport-hybrid_bicycle.jpg/1280px-Specialized_Source_Sport-hybrid_bicycle.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Cjp24",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "1ff81379fb410422317f64d336e3bbe05b28395c70cec206a02ce6175212bea0"
+      },
+      "cropBox": [
+        440,
+        321,
+        635,
+        541
+      ]
+    },
+    {
+      "id": "dev4g-018",
+      "image": "assets/dev4g-018.jpg",
+      "sha256": "a2fc0965d561f5ad0be2dc56929ac03b72a1a425b7a2734a7aef9b7fe1f751bc",
+      "bytes": 8674,
+      "width": 139,
+      "height": 143,
+      "group": "accessories",
+      "sourceGroupCode": "commons-series:kirk-nieuwenhuis-on-march",
+      "subtype": "guard",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 31566337,
+        "title": "File:Kirk Nieuwenhuis on March 7, 2014.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Kirk_Nieuwenhuis_on_March_7,_2014.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Kirk_Nieuwenhuis_on_March_7%2C_2014.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/Kirk_Nieuwenhuis_on_March_7%2C_2014.jpg/1280px-Kirk_Nieuwenhuis_on_March_7%2C_2014.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "slgckgc on Flickr (Original version) UCinternational (Crop)",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Originally posted to Flickr as \" Kirk Nieuwenhuis \" Cropped by UCinternational",
+        "downloadedSha256": "ccb47dc28f034d3003c5509f6296b618452e300429b2b10fed9e0068e1ff7767"
+      },
+      "cropBox": [
+        57,
+        809,
+        196,
+        952
+      ]
+    },
+    {
+      "id": "dev4g-019",
+      "image": "assets/dev4g-019.jpg",
+      "sha256": "d1378a0e658dc65291085aba9e4c32524cc61c2e5c5b2dfe3d6c37886eb3d820",
+      "bytes": 12714,
+      "width": 168,
+      "height": 174,
+      "group": "accessories",
+      "sourceGroupCode": "commons-series:justin-smoak-on-september",
+      "subtype": "guard",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 43299013,
+        "title": "File:Justin Smoak on September 12, 2015.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Justin_Smoak_on_September_12,_2015.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Justin_Smoak_on_September_12%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Justin_Smoak_on_September_12%2C_2015.jpg/1280px-Justin_Smoak_on_September_12%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Arturo Pardavila III on Flickr (Original version) UCinternational (Crop)",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Originally posted to Flickr as \" Justin Smoak vs. Yankees: 9/12/2015 \" Cropped by UCinternational",
+        "downloadedSha256": "68440835c1fbd903031f298af44ad7831edb595ea7bda5f809da7c37ec813caa"
+      },
+      "cropBox": [
+        142,
+        768,
+        310,
+        942
+      ]
+    },
+    {
+      "id": "dev4g-020",
+      "image": "assets/dev4g-020.jpg",
+      "sha256": "4faff495d54a05e2e932441658ca0cedec4e1caca07cb90f7ea225d6d32ddcff",
+      "bytes": 29786,
+      "width": 348,
+      "height": 225,
+      "group": "accessories",
+      "sourceGroupCode": "commons-series:baseball-player-tom-kovala",
+      "subtype": "socks",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 132200871,
+        "title": "File:Baseball Player - Tomáš Kovala (Arrows U18).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Baseball_Player_-_Tom%C3%A1%C5%A1_Kovala_(Arrows_U18).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Baseball_Player_-_Tom%C3%A1%C5%A1_Kovala_%28Arrows_U18%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Baseball_Player_-_Tom%C3%A1%C5%A1_Kovala_%28Arrows_U18%29.jpg/1280px-Baseball_Player_-_Tom%C3%A1%C5%A1_Kovala_%28Arrows_U18%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Tomáš Kovala",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "4225e9030dfaf10820053dd0d0aaad22db50ede053ebb0942f974d8a85431d17"
+      },
+      "cropBox": [
+        236,
+        382,
+        584,
+        607
+      ]
+    },
+    {
+      "id": "dev4g-021",
+      "image": "assets/dev4g-021.jpg",
+      "sha256": "e8cfa3b4a36f11981fdad82474f80cd784644651044ee3cf0ae8d50c58918f88",
+      "bytes": 92316,
+      "width": 1024,
+      "height": 1024,
+      "group": "unknown",
+      "sourceGroupCode": "commons-series:qwstion-zip-pack-limestone-front",
+      "subtype": "bag",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 117741352,
+        "title": "File:02-QWSTION-ZIP-PACK-LIMESTONE-FRONT.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:02-QWSTION-ZIP-PACK-LIMESTONE-FRONT.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/0e/02-QWSTION-ZIP-PACK-LIMESTONE-FRONT.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/02-QWSTION-ZIP-PACK-LIMESTONE-FRONT.jpg/1280px-02-QWSTION-ZIP-PACK-LIMESTONE-FRONT.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "QWSTION",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "QWSTION",
+        "downloadedSha256": "23dc3b811d83e0fe4dcbd893fdbd80c2bbf878fee5ad131df28965cd4549aee2"
+      }
+    },
+    {
+      "id": "dev4g-022",
+      "image": "assets/dev4g-022.jpg",
+      "sha256": "2d0f2641db0fa8e646e8870cd75e79fdcfe931655984661a02ae42c445d27baf",
+      "bytes": 113912,
+      "width": 1024,
+      "height": 576,
+      "group": "unknown",
+      "sourceGroupCode": "commons-series:addison-tx-usa-panoramio",
+      "subtype": "mug",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 57302940,
+        "title": "File:Addison, TX, USA - panoramio (56).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Addison,_TX,_USA_-_panoramio_(56).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Addison%2C_TX%2C_USA_-_panoramio_%2856%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Addison%2C_TX%2C_USA_-_panoramio_%2856%29.jpg/1280px-Addison%2C_TX%2C_USA_-_panoramio_%2856%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Eric Friedebach",
+        "licenseCode": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "attribution": "Eric Friedebach",
+        "downloadedSha256": "168c46d84e82338b317a164bc84b196cf90ee739cf0f61b7e990ca2ca8af1050"
+      }
+    },
+    {
+      "id": "dev4g-023",
+      "image": "assets/dev4g-023.jpg",
+      "sha256": "e1cfecde73d1f314e6b48402a64ce80d285d8abaecce714c76a806040aedeff4",
+      "bytes": 287519,
+      "width": 752,
+      "height": 1024,
+      "group": "unknown",
+      "sourceGroupCode": "commons-series:calea-doroban-ilor-bucharest",
+      "subtype": "interior",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 129170056,
+        "title": "File:18 Calea Dorobanților, Bucharest (24).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:18_Calea_Doroban%C8%9Bilor,_Bucharest_(24).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/45/18_Calea_Doroban%C8%9Bilor%2C_Bucharest_%2824%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/18_Calea_Doroban%C8%9Bilor%2C_Bucharest_%2824%29.jpg/1280px-18_Calea_Doroban%C8%9Bilor%2C_Bucharest_%2824%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Neoclassicism Enthusiast",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "299a74490c59d32c59ab759b966f7c30a575ed29a3e3322553ad334d39b29eb1"
+      }
+    },
+    {
+      "id": "dev4g-024",
+      "image": "assets/dev4g-024.jpg",
+      "sha256": "6c68642d41a113b38562d85d337526c8bc3c5fd635c81d4da4b281bbf4da26b3",
+      "bytes": 240095,
+      "width": 1024,
+      "height": 681,
+      "group": "unknown",
+      "sourceGroupCode": "commons-series:lisbon",
+      "subtype": "streetscape",
+      "partition": "DEV-check",
+      "source": {
+        "pageId": 32624057,
+        "title": "File:16.4.14 Lisbon 31 (13905970821).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:16.4.14_Lisbon_31_(13905970821).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/df/16.4.14_Lisbon_31_%2813905970821%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/16.4.14_Lisbon_31_%2813905970821%29.jpg/1280px-16.4.14_Lisbon_31_%2813905970821%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Donald Judge from England",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "16.4.14 Lisbon 31",
+        "downloadedSha256": "246c24029cf3c6ba0e79a6b8dab273c1b03112ea3d5a243ab37afc0b098a3204"
+      }
+    }
+  ]
+}

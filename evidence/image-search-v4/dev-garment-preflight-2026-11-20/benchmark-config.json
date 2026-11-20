@@ -1,0 +1,23 @@
+{
+  "scope": "loopback HTTP with frozen local snapshot",
+  "dataset": {
+    "name": "image-search-dev-v4-garment",
+    "version": "4.2.0",
+    "split": "DEV",
+    "status": "FROZEN",
+    "frozenAt": "2026-11-20",
+    "catalogSnapshot": {
+      "version": "image-catalog-v2-2026-10-23",
+      "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+    }
+  },
+  "profileSha256": "50b366f1373ed307242e64397c92e31d6771951a95ebe7bbd63f97c012c1cd80",
+  "manifestSha256": "b75b87d62f7307f144a3f14b13d48c740cebb56cecb96aaf8fadb2f8d231975f",
+  "catalogSnapshot": {
+    "vectors": 85,
+    "sha256": "0d7ba8972df1e2d3562bdfb963034f0edd939873f5ae8be10d24e4476bfc2e87",
+    "checksum": "71c413098c88688a4248680a291bef5e"
+  },
+  "approval": null,
+  "startedAt": "2026-11-20T12:45:50.706645+00:00"
+}
