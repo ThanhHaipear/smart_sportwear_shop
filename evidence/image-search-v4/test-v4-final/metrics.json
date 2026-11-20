@@ -1,0 +1,91 @@
+{
+  "acceptance": {
+    "eligible": true,
+    "passed": true,
+    "thresholds": {
+      "recallAt5": 0.8,
+      "categoryAccuracy": 0.9,
+      "unknownRejection": 0.8,
+      "requestFailureRate": 0,
+      "p95EndToEndMs": 3000,
+      "unresolvedLeakage": 0
+    },
+    "unresolvedLeakage": 0
+  },
+  "positive": {
+    "count": 80,
+    "recall": {
+      "at5": 0.8791666666666668
+    },
+    "categoryAccuracy": {
+      "value": 0.9375
+    },
+    "mrrAt5": 0.8666666666666666
+  },
+  "unknown": {
+    "count": 20,
+    "rejectionRate": {
+      "value": 0.95
+    }
+  },
+  "requests": 100,
+  "requestFailureRate": {
+    "count": 0,
+    "value": 0.0
+  },
+  "latencyMs": {
+    "p95": 241.561
+  },
+  "perGroup": {
+    "accessories": {
+      "knownQueries": 16,
+      "unknownQueries": 0,
+      "recallAt5": 0.8125,
+      "categoryAccuracy": 0.8125,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.75
+    },
+    "bottoms": {
+      "knownQueries": 16,
+      "unknownQueries": 0,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 1.0
+    },
+    "shoes": {
+      "knownQueries": 16,
+      "unknownQueries": 0,
+      "recallAt5": 0.9375,
+      "categoryAccuracy": 0.9375,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.875
+    },
+    "tops": {
+      "knownQueries": 16,
+      "unknownQueries": 0,
+      "recallAt5": 0.8020833333333334,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.8020833333333333
+    },
+    "uniforms": {
+      "knownQueries": 16,
+      "unknownQueries": 0,
+      "recallAt5": 0.84375,
+      "categoryAccuracy": 0.9375,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.90625
+    },
+    "unknown": {
+      "knownQueries": 0,
+      "unknownQueries": 20,
+      "recallAt5": null,
+      "categoryAccuracy": null,
+      "unknownRejection": 0.95,
+      "meanReciprocalRankAt5": null
+    }
+  },
+  "devParityMatches": 24,
+  "preflightPassed": true
+}

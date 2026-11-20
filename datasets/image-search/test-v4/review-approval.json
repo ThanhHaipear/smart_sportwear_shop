@@ -1,0 +1,15 @@
+{
+  "status": "APPROVED",
+  "independent": true,
+  "reviewer": "Dũng",
+  "reviewedAt": "2026-11-20T22:00:44+07:00",
+  "reviewedAtBasis": "Recorded when approval was relayed by the user; exact review time was not provided.",
+  "bindings": {
+    "samplesSha256": "1bdb5e583d0cdfec8e569c64006e796c37ff665ad85f711a42bde12b43733a1b",
+    "labelsSha256": "60f8593067635fb81b2de4c7ca6a8f6e5cafd299c1f1e9acd39664538ea54a17",
+    "assetListSha256": "c41471bafbeb615b115489b2593078360f36a191e9c8992f4ee05781d536a966",
+    "duplicateReportSha256": "54bb1376eb58fe7f6c5a43b5e9daae391c165b19098f154b7e23c9e37d951e8b",
+    "lockedProfileSha256": "50b366f1373ed307242e64397c92e31d6771951a95ebe7bbd63f97c012c1cd80"
+  },
+  "confirmationSource": "User relayed D?ng's approval of the current TEST v4 dataset in the project conversation."
+}

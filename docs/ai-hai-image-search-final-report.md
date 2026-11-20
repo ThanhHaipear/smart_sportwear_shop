@@ -1,5 +1,13 @@
 # Báo cáo tổng kết tìm kiếm sản phẩm bằng ảnh (HAI-10)
 
+## Cập nhật ngày 20/11/2026
+
+TEST v4 đã đạt toàn bộ ngưỡng nghiệm thu trên 100 ảnh độc lập sau xác nhận
+duyệt của Dũng. Cấu hình DEV v4.2 và snapshot cục bộ 85 vector đạt Recall@5
+**87,92%**, phân nhóm **93,75%**, từ chối ảnh ngoài catalog **95%**, 0 lỗi
+request và p95 **241,561 ms** qua API nội bộ. HAI-16 chuyển sang bước tích hợp
+và kiểm tra luồng phục vụ thực tế trước khi mở thử nghiệm. [Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
+
 ## Cập nhật ngày 19/11/2026
 
 Pipeline hiện hành nằm trong `services/search-service`. Catalog và Search

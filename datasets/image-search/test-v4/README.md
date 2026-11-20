@@ -1,6 +1,6 @@
 # Quy trình nghiệm thu TEST v4
 
-**Trạng thái ngày 20/11/2026:** Đã chuẩn bị 100 ảnh ứng viên, gồm 16 ảnh mỗi nhóm áo, quần, đồng phục, giày, phụ kiện và 20 ảnh ngoài catalog. Hồ sơ đang ở trạng thái `REVIEW_REQUIRED`. [Hồ sơ duyệt](review-packet.json) · [Nhãn](labels.json) · [Nguồn và giấy phép](source-inventory.json) · [Báo cáo trùng lặp](duplicate-report.json)
+**Trạng thái ngày 20/11/2026:** Đã khóa 100 ảnh sau xác nhận duyệt của Dũng do người dùng chuyển lại. Bộ TEST v4 đạt toàn bộ ngưỡng nghiệm thu ở lần chạy chính thức. Bộ gồm 16 ảnh mỗi nhóm áo, quần, đồng phục, giày, phụ kiện và 20 ảnh ngoài catalog. [Xác nhận duyệt](review-approval.json) · [Nhãn](labels.json) · [Nguồn và giấy phép](source-inventory.json) · [Báo cáo trùng lặp](duplicate-report.json) · [Kết quả nghiệm thu](../../../evidence/image-search-v4/test-v4-final/final-report.md)
 
 Ảnh xem trước trên workspace phục vụ người duyệt đối chiếu nhãn và vùng cắt theo mã ảnh. [Áo](assets/_review/tops.jpg) · [Quần](assets/_review/bottoms.jpg) · [Đồng phục](assets/_review/uniforms.jpg) · [Giày](assets/_review/shoes.jpg) · [Phụ kiện](assets/_review/accessories.jpg) · [Ngoài catalog](assets/_review/unknown.jpg)
 
@@ -18,7 +18,7 @@ Thành viên dự án độc lập kiểm tra nhãn, nguồn, phân bố và cá
 python datasets/image-search/dev-v3/build_dataset.py --test-v4 --freeze
 ```
 
-Từ `services/search-service`, chạy bằng môi trường chứa model SigLIP2 đã cache và đúng phiên bản Torch/Transformers của HAI-14.
+Lần chạy chính thức đã hoàn tất. Lệnh dưới đây là lệnh dùng trong lần chạy, thực hiện từ `services/search-service` với model SigLIP2 đã cache và đúng phiên bản Torch/Transformers của HAI-14.
 
 ```powershell
 $env:OMP_NUM_THREADS = '4'

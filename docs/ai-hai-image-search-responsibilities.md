@@ -52,13 +52,13 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-07 | Runner và benchmark TEST v2 | `DONE / NO-GO` | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và baseline | `DONE` | P1 | HAI-07 |
 | HAI-09 | Hardening và rollback drill lịch sử | `HISTORICAL_DONE`; rollout public `BLOCKED` | P1 | HAI-03, HAI-04 |
-| HAI-10 | Báo cáo tổng kết | `UPDATED` với kết quả TEST v3 | P1 | HAI-07, HAI-08 |
+| HAI-10 | Báo cáo tổng kết | `UPDATED` với kết quả TEST v4 | P1 | HAI-07, HAI-08 |
 | HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `DONE` | P0 | HAI-01, HAI-02 |
 | HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `DONE` | P0 | HAI-11 |
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `DONE / NO-GO` | P0 | HAI-14 |
-| HAI-16 | Rollout public có kiểm soát | `BLOCKED / NO-GO` | P0 | HAI-15 |
+| HAI-16 | Rollout public có kiểm soát | TEST v4 `PASS`; chờ tích hợp và xác minh luồng thực tế | P0 | HAI-15, TEST v4 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
 
@@ -522,10 +522,10 @@ Kết quả này xác nhận đường chạy benchmark và cấu hình HAI-14 t
 
 ### HAI-16 Rollout public
 
-**Trạng thái:** `BLOCKED / NO-GO`
+**Trạng thái:** TEST v4 `PASS`; chờ tích hợp và xác minh luồng thực tế trước rollout.
 
 Chỉ bắt đầu rollout khi benchmark độc lập đạt tất cả các ngưỡng nghiệm thu.
-TEST v3 còn dưới ngưỡng phân nhóm và từ chối ảnh ngoài catalog. Thứ tự rollout là internal smoke,
+TEST v4 đã đạt các ngưỡng trên snapshot cục bộ 85 vector. Thứ tự rollout là internal smoke,
 shadow, cohort nhỏ, theo dõi quality/latency/error/queue/DLQ, rồi mới mở rộng.
 Rollback bằng feature flag/routing; không xóa vector, dataset hoặc evidence khi
 xảy ra sự cố.
@@ -553,11 +553,13 @@ liên quan đến áo tập và quần đùi bóng đá bị nhầm với nhóm 
 DEV v4.2 ngày 20/11/2026 thử thêm tín hiệu cho áo/quần chụp riêng và các loại phụ kiện.
 Cấu hình được chọn trên 171 ảnh DEV cũ đạt Recall@5 **86,25%**, phân nhóm
 **90%** và từ chối ảnh ngoài catalog **4/4** trên 24 ảnh DEV mới.
-Cấu hình đã khóa cho TEST v4 độc lập. Bộ 100 ảnh TEST v4 đã có nhãn và hồ sơ
-nguồn. Trạng thái là `REVIEW_REQUIRED` trước lần chạy chính thức.
-HAI-16 tiếp tục `BLOCKED / NO-GO`.
+Cấu hình đã khóa cho TEST v4 độc lập. Sau xác nhận duyệt của Dũng, lần chạy
+chính thức trên 100 ảnh đạt Recall@5 **87,92%**, phân nhóm **93,75%**,
+từ chối ảnh ngoài catalog **95%**, 0 lỗi request và p95 **241,561 ms**.
+HAI-16 đã qua ngưỡng benchmark. Việc tiếp theo là xác minh cấu hình và dữ liệu
+index trên luồng Storefront → Gateway → Catalog → Search trước rollout.
 [Báo cáo DEV v4.2](../evidence/image-search-v4/dev-garment-report-2026-11-20.md) ·
-[Quy trình TEST v4](../datasets/image-search/test-v4/README.md)
+[Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
 
 ## 7. Artifact phải bàn giao
 

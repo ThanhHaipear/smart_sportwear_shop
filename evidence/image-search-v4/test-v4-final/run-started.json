@@ -1,0 +1,39 @@
+{
+  "scope": "loopback HTTP with frozen local snapshot",
+  "dataset": {
+    "name": "image-search-test-v4",
+    "version": "4.0.0",
+    "split": "TEST",
+    "status": "FROZEN",
+    "preparedAt": "2026-11-20",
+    "catalogSnapshot": {
+      "vectors": 85,
+      "sha256": "0d7ba8972df1e2d3562bdfb963034f0edd939873f5ae8be10d24e4476bfc2e87",
+      "checksum": "71c413098c88688a4248680a291bef5e"
+    },
+    "frozenAt": "2026-11-20T22:00:44+07:00"
+  },
+  "profileSha256": "50b366f1373ed307242e64397c92e31d6771951a95ebe7bbd63f97c012c1cd80",
+  "manifestSha256": "347e787658214c5a7bf23127fb575459fbe7b6dfa7401360244be898181bc382",
+  "catalogSnapshot": {
+    "vectors": 85,
+    "sha256": "0d7ba8972df1e2d3562bdfb963034f0edd939873f5ae8be10d24e4476bfc2e87",
+    "checksum": "71c413098c88688a4248680a291bef5e"
+  },
+  "approval": {
+    "status": "APPROVED",
+    "independent": true,
+    "reviewer": "D?ng",
+    "reviewedAt": "2026-11-20T22:00:44+07:00",
+    "reviewedAtBasis": "Recorded when approval was relayed by the user; exact review time was not provided.",
+    "bindings": {
+      "samplesSha256": "1bdb5e583d0cdfec8e569c64006e796c37ff665ad85f711a42bde12b43733a1b",
+      "labelsSha256": "60f8593067635fb81b2de4c7ca6a8f6e5cafd299c1f1e9acd39664538ea54a17",
+      "assetListSha256": "c41471bafbeb615b115489b2593078360f36a191e9c8992f4ee05781d536a966",
+      "duplicateReportSha256": "54bb1376eb58fe7f6c5a43b5e9daae391c165b19098f154b7e23c9e37d951e8b",
+      "lockedProfileSha256": "50b366f1373ed307242e64397c92e31d6771951a95ebe7bbd63f97c012c1cd80"
+    },
+    "confirmationSource": "User relayed D?ng's approval of the current TEST v4 dataset in the project conversation."
+  },
+  "startedAt": "2026-11-20T15:00:53.713997+00:00"
+}
