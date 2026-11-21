@@ -58,7 +58,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `DONE / NO-GO` | P0 | HAI-14 |
-| HAI-16 | Rollout public có kiểm soát | Shadow, rollback và RabbitMQ cục bộ đạt, chờ staging của nhóm | P0 | HAI-15, TEST v4 |
+| HAI-16 | Rollout public có kiểm soát | Nghiệm thu FE/BE local đạt, chờ mở thử nghiệm nhóm nhỏ | P0 | HAI-15, TEST v4 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
 
@@ -549,8 +549,17 @@ trên 48 request. Gateway đạt p95 1.063,756 ms trước rollback và 913,834 
 sau phục hồi. Hàng đợi chính có một consumer. Cả năm hàng đợi chính, retry
 và DLQ đều có 0 message ở các điểm đo trước/sau. Fixture riêng xác nhận
 worker đưa lỗi lần đầu vào retry 30 giây và lỗi đã hết lượt thử vào DLQ.
-Staging của nhóm vẫn cần được xác minh trước khi mở cohort.
 [Bằng chứng RabbitMQ](../evidence/image-search-v4/hai-16-staging-broker-2026-11-21.json)
+
+Hải xác định môi trường nghiệm thu hiện tại là FE/BE local với Supabase và
+SePay bên ngoài. Đợt nghiệm thu chạy phiên Storefront, Gateway, Catalog,
+Search và RabbitMQ cô lập với Supabase chỉ đọc. Trước và sau rollback, cả
+hai lượt khớp top-5 cho 24/24 ảnh DEV, mỗi lượt 0 lỗi trên 48 request.
+Gateway đạt p95 853,021 ms và 989,035 ms. Trên trình duyệt, ảnh sản phẩm
+trả 4 thẻ và ảnh ngoài catalog trả 0 kết quả ở cả hai lượt. Khi tắt cờ,
+nút tìm ảnh ẩn, API ảnh trả 503 và trang sản phẩm vẫn trả 200. Cả năm
+hàng đợi trống ở các điểm đo và trình duyệt ghi nhận 0 request thanh toán.
+[Bằng chứng nghiệm thu FE/BE](../evidence/image-search-v4/hai-16-local-e2e-acceptance-2026-11-21.json)
 
 #### DEV v4 sau TEST v3
 
@@ -578,8 +587,8 @@ Cấu hình được chọn trên 171 ảnh DEV cũ đạt Recall@5 **86,25%**, 
 Cấu hình đã khóa cho TEST v4 độc lập. Sau xác nhận duyệt của Dũng, lần chạy
 chính thức trên 100 ảnh đạt Recall@5 **87,92%**, phân nhóm **93,75%**,
 từ chối ảnh ngoài catalog **95%**, 0 lỗi request và p95 **241,561 ms**.
-HAI-16 đã qua benchmark, tích hợp loopback và diễn tập shadow/rollback cục
-bộ. Bước tiếp theo là xác minh trên staging trước khi mở thử nghiệm.
+HAI-16 đã qua benchmark và nghiệm thu FE/BE local, gồm shadow, rollback
+và RabbitMQ. Bước tiếp theo là mở thử nghiệm có kiểm soát cho nhóm nhỏ.
 [Báo cáo DEV v4.2](../evidence/image-search-v4/dev-garment-report-2026-11-20.md) ·
 [Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
 
@@ -665,7 +674,8 @@ TEST v3. Kết quả TEST v1 và TEST v2 nằm trong các thư mục evidence t�
 - [x] TEST v4 độc lập đạt các ngưỡng nghiệm thu sau kết quả NO-GO của TEST v3.
 - [x] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả TEST v4.
 - [x] Shadow, rollback và RabbitMQ/DLQ đạt trên môi trường kiểm tra cục bộ cô lập.
-- [ ] Xác minh shadow, RabbitMQ và rollback trên staging của nhóm trước khi mở cohort.
+- [x] Xác minh shadow, RabbitMQ và rollback qua FE/BE local theo cấu hình Hải xác nhận.
+- [ ] Mở thử nghiệm cho nhóm nhỏ và theo dõi chất lượng, độ trễ, lỗi và DLQ.
 
 Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN
 ANALYZE` và benchmark chứng minh exact cosine không đáp ứng latency ở quy mô dữ

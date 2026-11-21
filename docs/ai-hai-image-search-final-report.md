@@ -11,8 +11,15 @@ Lượt kiểm tra tiếp theo dùng RabbitMQ Docker riêng và Search worker th
 Shadow trước rollback và sau phục hồi đều khớp top-5 cho 24/24 ảnh, với p95
 Gateway lần lượt 1.063,756 ms và 913,834 ms. Hàng đợi không tồn đọng tại các
 điểm đo. Worker chuyển fixture lỗi vào retry và DLQ đúng theo số lần thử.
-Còn bước xác minh trên staging của nhóm trước khi mở cohort.
 [Bằng chứng RabbitMQ](../evidence/image-search-v4/hai-16-staging-broker-2026-11-21.json)
+
+Nghiệm thu FE/BE local theo cấu hình Hải xác nhận đã đạt. Trình duyệt hiển
+thị bốn thẻ cho ảnh sản phẩm và báo không tìm thấy cho ảnh ngoài catalog.
+Rollback ẩn nút tìm ảnh, trả HTTP 503 cho API ảnh và vẫn mở được trang
+sản phẩm. Cả hai lượt DEV khớp 24/24 top-5 với 0 lỗi, p95 qua Gateway
+lần lượt 853,021 ms và 989,035 ms. Đợt kiểm tra dùng Supabase chỉ đọc và
+ghi nhận 0 request thanh toán. Bước tiếp theo là thử cho một nhóm nhỏ.
+[Bằng chứng nghiệm thu FE/BE](../evidence/image-search-v4/hai-16-local-e2e-acceptance-2026-11-21.json)
 
 ## Cập nhật ngày 20/11/2026
 
