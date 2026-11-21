@@ -58,7 +58,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `DONE / NO-GO` | P0 | HAI-14 |
-| HAI-16 | Rollout public có kiểm soát | Shadow và rollback cục bộ đạt, chờ staging | P0 | HAI-15, TEST v4 |
+| HAI-16 | Rollout public có kiểm soát | Shadow, rollback và RabbitMQ cục bộ đạt, chờ staging của nhóm | P0 | HAI-15, TEST v4 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
 
@@ -541,8 +541,16 @@ và Supabase chỉ đọc. Trước khi tắt cờ và sau khi bật lại, cả
 khớp top-5 cho 24/24 ảnh DEV và có 0 lỗi trên 48 request mỗi lượt. Gateway
 đạt p95 lần lượt 871,061 ms và 854,448 ms. Khi tắt cờ Catalog, API ảnh
 qua Gateway trả 503, trang sản phẩm trả 200 và Search nội bộ vẫn sẵn sàng.
-Staging và RabbitMQ/DLQ còn chờ xác minh trước khi mở cohort.
 [Bằng chứng diễn tập](../evidence/image-search-v4/hai-16-local-shadow-rollback-2026-11-21.json) · [Lệnh chạy trên staging](../services/search-service/README.md#shadow-và-rollback-trên-staging)
+
+Cùng ngày, lặp lại shadow và rollback với RabbitMQ Docker riêng, Search worker
+thật và Supabase chỉ đọc. Hai lượt khớp top-5 cho 24/24 ảnh, mỗi lượt 0 lỗi
+trên 48 request. Gateway đạt p95 1.063,756 ms trước rollback và 913,834 ms
+sau phục hồi. Hàng đợi chính có một consumer. Cả năm hàng đợi chính, retry
+và DLQ đều có 0 message ở các điểm đo trước/sau. Fixture riêng xác nhận
+worker đưa lỗi lần đầu vào retry 30 giây và lỗi đã hết lượt thử vào DLQ.
+Staging của nhóm vẫn cần được xác minh trước khi mở cohort.
+[Bằng chứng RabbitMQ](../evidence/image-search-v4/hai-16-staging-broker-2026-11-21.json)
 
 #### DEV v4 sau TEST v3
 
@@ -656,7 +664,8 @@ TEST v3. Kết quả TEST v1 và TEST v2 nằm trong các thư mục evidence t�
 - [x] DEV v3 và cấu hình catalog 85 vector đã khóa trước TEST v3.
 - [x] TEST v4 độc lập đạt các ngưỡng nghiệm thu sau kết quả NO-GO của TEST v3.
 - [x] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả TEST v4.
-- [ ] Shadow, RabbitMQ và rollback đạt trên môi trường staging trước khi mở cohort.
+- [x] Shadow, rollback và RabbitMQ/DLQ đạt trên môi trường kiểm tra cục bộ cô lập.
+- [ ] Xác minh shadow, RabbitMQ và rollback trên staging của nhóm trước khi mở cohort.
 
 Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN
 ANALYZE` và benchmark chứng minh exact cosine không đáp ứng latency ở quy mô dữ

@@ -8,7 +8,7 @@ from hashlib import sha256
 import json
 from os import environ
 from pathlib import Path
-from time import perf_counter
+from time import perf_counter, sleep
 from urllib.parse import quote, urlsplit
 
 import httpx
@@ -26,6 +26,7 @@ STATUS_PATH = "/api/v1/visual-search/status"
 CANARY = "/api/v1/products/ao-chay-bo-nam-aero-navy"
 QUEUES = ("search.indexing", "search.indexing.retry.30s", "search.indexing.retry.5m",
           "search.indexing.retry.1h", "search.indexing.dlq")
+QUEUE_COUNTERS = ("messages", "messages_ready", "messages_unacknowledged", "consumers")
 
 
 def configured_url(name: str, scope: str) -> str:
@@ -48,11 +49,19 @@ def rabbit_snapshot(client: httpx.Client, scope: str) -> dict:
     vhost = quote(environ.get("HAI_SHADOW_RABBIT_VHOST", "/"), safe="")
     queues = {}
     for name in QUEUES:
-        response = client.get(f"{base}/api/queues/{vhost}/{quote(name, safe='')}", auth=auth)
-        if response.status_code != 200:
-            raise ValueError(f"RabbitMQ queue {name}: HTTP {response.status_code}")
-        data = response.json()
-        queues[name] = {key: data[key] for key in ("messages", "messages_ready", "messages_unacknowledged", "consumers")}
+        url = f"{base}/api/queues/{vhost}/{quote(name, safe='')}"
+        deadline = perf_counter() + 15
+        while True:
+            response = client.get(url, auth=auth)
+            if response.status_code != 200:
+                raise ValueError(f"RabbitMQ queue {name}: HTTP {response.status_code}")
+            data = response.json()
+            if all(type(data.get(key)) is int for key in QUEUE_COUNTERS):
+                queues[name] = {key: data[key] for key in QUEUE_COUNTERS}
+                break
+            if perf_counter() >= deadline:
+                raise ValueError(f"RabbitMQ queue {name} did not report depth and consumers")
+            sleep(1)
     return {"observed": True, "queues": queues}
 
 

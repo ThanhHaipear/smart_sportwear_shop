@@ -4,9 +4,15 @@
 
 Shadow và rollback HAI-16 đã đạt trong môi trường loopback cô lập với DB chỉ đọc.
 Hai lượt DEV đều khớp top-5 cho 24/24 ảnh và đạt p95 qua Gateway dưới 1 giây.
-Khi rollback, API ảnh trả 503 và trang sản phẩm trả 200. Còn bước xác minh trên
-staging và theo dõi RabbitMQ/DLQ trước khi mở cohort.
+Khi rollback, API ảnh trả 503 và trang sản phẩm trả 200.
 [Bằng chứng diễn tập](../evidence/image-search-v4/hai-16-local-shadow-rollback-2026-11-21.json)
+
+Lượt kiểm tra tiếp theo dùng RabbitMQ Docker riêng và Search worker thật.
+Shadow trước rollback và sau phục hồi đều khớp top-5 cho 24/24 ảnh, với p95
+Gateway lần lượt 1.063,756 ms và 913,834 ms. Hàng đợi không tồn đọng tại các
+điểm đo. Worker chuyển fixture lỗi vào retry và DLQ đúng theo số lần thử.
+Còn bước xác minh trên staging của nhóm trước khi mở cohort.
+[Bằng chứng RabbitMQ](../evidence/image-search-v4/hai-16-staging-broker-2026-11-21.json)
 
 ## Cập nhật ngày 20/11/2026
 
