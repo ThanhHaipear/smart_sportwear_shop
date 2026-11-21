@@ -1,5 +1,13 @@
 # Báo cáo tổng kết tìm kiếm sản phẩm bằng ảnh (HAI-10)
 
+## Cập nhật ngày 21/11/2026
+
+Shadow và rollback HAI-16 đã đạt trong môi trường loopback cô lập với DB chỉ đọc.
+Hai lượt DEV đều khớp top-5 cho 24/24 ảnh và đạt p95 qua Gateway dưới 1 giây.
+Khi rollback, API ảnh trả 503 và trang sản phẩm trả 200. Còn bước xác minh trên
+staging và theo dõi RabbitMQ/DLQ trước khi mở cohort.
+[Bằng chứng diễn tập](../evidence/image-search-v4/hai-16-local-shadow-rollback-2026-11-21.json)
+
 ## Cập nhật ngày 20/11/2026
 
 TEST v4 đã đạt toàn bộ ngưỡng nghiệm thu trên 100 ảnh độc lập sau xác nhận

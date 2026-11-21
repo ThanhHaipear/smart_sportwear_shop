@@ -58,7 +58,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `DONE / NO-GO` | P0 | HAI-14 |
-| HAI-16 | Rollout public có kiểm soát | Đã tích hợp và kiểm tra loopback; chờ shadow | P0 | HAI-15, TEST v4 |
+| HAI-16 | Rollout public có kiểm soát | Shadow và rollback cục bộ đạt, chờ staging | P0 | HAI-15, TEST v4 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
 
@@ -536,6 +536,14 @@ kho, giữ thứ tự Search trong từng nhóm. Kiểm tra trên DB chỉ đọ
 khớp **24/24 ảnh DEV**, p95 **748,407 ms**. Kiểm thử trình duyệt trả HTTP 200
 và hiển thị đúng 4 thẻ kết quả. Cờ công khai mặc định tắt. [Bằng chứng tích hợp](../evidence/image-search-v4/visual-pilot-integration-2026-11-20.json)
 
+Ngày 21/11/2026, chạy shadow và rollback bằng các service loopback cô lập
+và Supabase chỉ đọc. Trước khi tắt cờ và sau khi bật lại, cả hai lượt đều
+khớp top-5 cho 24/24 ảnh DEV và có 0 lỗi trên 48 request mỗi lượt. Gateway
+đạt p95 lần lượt 871,061 ms và 854,448 ms. Khi tắt cờ Catalog, API ảnh
+qua Gateway trả 503, trang sản phẩm trả 200 và Search nội bộ vẫn sẵn sàng.
+Staging và RabbitMQ/DLQ còn chờ xác minh trước khi mở cohort.
+[Bằng chứng diễn tập](../evidence/image-search-v4/hai-16-local-shadow-rollback-2026-11-21.json) · [Lệnh chạy trên staging](../services/search-service/README.md#shadow-và-rollback-trên-staging)
+
 #### DEV v4 sau TEST v3
 
 Đã đo 16 cấu hình trên 50 ảnh calibration và đối chiếu trên 59 ảnh DEV-check
@@ -562,8 +570,8 @@ Cấu hình được chọn trên 171 ảnh DEV cũ đạt Recall@5 **86,25%**, 
 Cấu hình đã khóa cho TEST v4 độc lập. Sau xác nhận duyệt của Dũng, lần chạy
 chính thức trên 100 ảnh đạt Recall@5 **87,92%**, phân nhóm **93,75%**,
 từ chối ảnh ngoài catalog **95%**, 0 lỗi request và p95 **241,561 ms**.
-HAI-16 đã qua ngưỡng benchmark và kiểm tra tích hợp trên loopback. Bước tiếp
-theo là shadow trong môi trường triển khai trước khi mở thử nghiệm.
+HAI-16 đã qua benchmark, tích hợp loopback và diễn tập shadow/rollback cục
+bộ. Bước tiếp theo là xác minh trên staging trước khi mở thử nghiệm.
 [Báo cáo DEV v4.2](../evidence/image-search-v4/dev-garment-report-2026-11-20.md) ·
 [Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
 
@@ -644,11 +652,11 @@ TEST v3. Kết quả TEST v1 và TEST v2 nằm trong các thư mục evidence t�
 - [x] Worker/backfill hiện tại tái tạo idempotent 36 documents, 178 facets và 81 image vectors.
 - [x] Metadata ảnh/Cloudinary của 81 ảnh pilot và World Cup đã được persist và đối chiếu checksum.
 - [x] Exact cosine được chứng minh bằng query plan và phép tính đối chiếu. HNSW ảnh đã được bỏ khỏi pilot.
-- [ ] Internal API, Catalog/Gateway và Storefront E2E pass trên `ai_search`.
+- [x] Luồng Search, Catalog, Gateway và Storefront đã qua kiểm tra loopback trên `ai_search`.
 - [x] DEV v3 và cấu hình catalog 85 vector đã khóa trước TEST v3.
-- [ ] TEST v3 độc lập đạt Recall@5, category, leakage, failure và latency gate.
-- [x] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả TEST v3.
-- [ ] Staged rollout và rollback smoke đạt trên môi trường acceptance.
+- [x] TEST v4 độc lập đạt các ngưỡng nghiệm thu sau kết quả NO-GO của TEST v3.
+- [x] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả TEST v4.
+- [ ] Shadow, RabbitMQ và rollback đạt trên môi trường staging trước khi mở cohort.
 
 Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN
 ANALYZE` và benchmark chứng minh exact cosine không đáp ứng latency ở quy mô dữ

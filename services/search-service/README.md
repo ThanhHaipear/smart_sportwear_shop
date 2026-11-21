@@ -54,6 +54,35 @@ Catalog flag off, its public POST returns 503.
 
 [TEST v4 acceptance](../../evidence/image-search-v4/test-v4-final/final-report.md)
 
+### Shadow và rollback trên staging
+
+Triển khai Search và Catalog với các cờ pilot ở trên trong môi trường staging
+cô lập. Trỏ `HAI_SHADOW_GATEWAY_URL` và `HAI_SHADOW_SEARCH_URL` đến hai endpoint
+staging. Đặt `HAI_SHADOW_SEARCH_TOKEN` thành token nội bộ của Search. Cấu hình
+`HAI_SHADOW_RABBIT_URL`, `HAI_SHADOW_RABBIT_USER` và
+`HAI_SHADOW_RABBIT_PASSWORD` cho RabbitMQ Management trên mạng nội bộ.
+`HAI_SHADOW_RABBIT_VHOST` mặc định là `/`.
+
+Chạy từ `services/search-service`. Shadow gửi 24 ảnh DEV đã khóa, so thứ tự
+top-5 tại Search, kiểm tra kết quả Catalog qua Gateway và đo p95. Báo cáo ghi
+độ sâu và số consumer của hàng đợi chính, retry và DLQ trước và sau.
+
+```powershell
+python -m scripts.verify_visual_shadow --scope staging --mode shadow --output ../../evidence/image-search-v4/staging-shadow.json
+```
+
+Tắt `VISUAL_SEARCH_PUBLIC_ENABLED` trên Catalog staging rồi triển khai lại
+Catalog. Xác minh Gateway trả 503 khi tải ảnh, trong khi trang sản phẩm và
+Search nội bộ vẫn hoạt động. Bật lại cờ trên staging và chạy shadow lần nữa
+để xác nhận phục hồi. Dùng tên evidence khác cho lần phục hồi.
+
+```powershell
+python -m scripts.verify_visual_shadow --scope staging --mode rollback --output ../../evidence/image-search-v4/staging-rollback.json
+```
+
+`--scope local` dùng cho diễn tập qua loopback. Báo cáo local ghi rõ khi thiếu
+RabbitMQ. Chạy staging và kiểm tra backlog chưa xử lý trước khi mở cohort.
+
 ## Exact image search pilot
 
 The image query scores all READY vectors for ACTIVE products before ranking.
