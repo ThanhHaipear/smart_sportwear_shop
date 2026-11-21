@@ -83,6 +83,40 @@ python -m scripts.verify_visual_shadow --scope staging --mode rollback --output 
 `--scope local` dùng cho diễn tập qua loopback. Báo cáo local ghi rõ khi thiếu
 RabbitMQ. Chạy staging và kiểm tra backlog chưa xử lý trước khi mở cohort.
 
+### Thử nghiệm cho nhóm nhỏ
+
+Đặt `GATEWAY_VISUAL_SEARCH_COHORT_ENABLED=true` và điền UUID các tài khoản
+được duyệt vào `GATEWAY_VISUAL_SEARCH_COHORT_USERS`, phân cách bằng dấu phẩy.
+Đặt cùng một `VISUAL_SEARCH_GATEWAY_TOKEN` ngẫu nhiên tối thiểu 32 ký tự
+cho Gateway và Catalog. Với launcher Windows, dùng tệp cấu hình local
+`.env.phase10.local`. Gateway phải dùng khóa JWT riêng đang được Identity
+dùng để ký token truy cập. Danh sách trống sẽ từ chối mọi tài khoản.
+
+Chỉ mở Storefront và Gateway cho nhóm thử. Để Catalog và Search trong mạng
+nội bộ. Bật các cờ v4 ở phần trên rồi khởi động lại service áp dụng cấu hình.
+Kiểm tra một tài khoản có trong danh sách, một tài khoản ngoài danh sách và
+phiên ẩn danh. Khi cần đóng, tắt `VISUAL_SEARCH_PUBLIC_ENABLED` trên Catalog.
+
+Dùng token đăng nhập của tài khoản được phép trong
+`HAI_SHADOW_GATEWAY_ACCESS_TOKEN` để chạy `verify_visual_shadow` với bộ DEV đã
+khóa. Đo sổ tay phản hồi chất lượng trên ảnh người dùng theo số ca hữu ích và
+số ca nhầm, cùng nhóm sản phẩm kỳ vọng. Replay DEV và phản hồi người dùng
+là hai phép đo khác nhau.
+
+Chạy monitor từ `services/search-service` sau khi kết thúc replay DEV để
+thống kê riêng lượt thật của nhóm. Đặt các biến RabbitMQ Management như
+phần shadow. Ví dụ chạy cửa sổ một giờ, lấy mẫu hàng đợi mỗi 15 giây.
+
+```powershell
+python -m scripts.monitor_visual_cohort --gateway-log ../../logs/local/gateway.log --seconds 3600 --interval 15 --output ../../evidence/image-search-v4/cohort-window.json
+```
+
+Báo cáo có số lượt thành viên, mã HTTP, p95, lượt ngoài danh sách bị chặn,
+consumer và độ sâu DLQ. Giữ cohort ở quy mô hiện tại khi chưa đủ lượt đánh
+giá. Tạm dừng khi có lỗi request, p95 trên 3 giây, DLQ có message hoặc worker
+mất consumer. Kết quả vận hành đạt vẫn cần được đối chiếu với phản hồi chất
+lượng trước khi mở rộng.
+
 ## Exact image search pilot
 
 The image query scores all READY vectors for ACTIVE products before ranking.

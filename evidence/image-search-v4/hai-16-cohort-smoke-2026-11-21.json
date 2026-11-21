@@ -1,0 +1,415 @@
+{
+  "scope": "isolated local pilot with a synthetic cohort account, actual browser and RabbitMQ",
+  "checkedAt": "2026-11-21T19:05:50.032069+07:00",
+  "databaseAccess": "configured Supabase read-only",
+  "realParticipantsEnrolled": 0,
+  "passed": true,
+  "access": {
+    "GET": {
+      "anonymous": 401,
+      "outside": 403,
+      "directCatalog": 403
+    },
+    "POST": {
+      "anonymous": 401,
+      "outside": 403,
+      "directCatalog": 403
+    }
+  },
+  "storefront": {
+    "member": {
+      "status": "READY",
+      "gatewayStatusHttp": 200,
+      "storefrontHttp": 200,
+      "imageSearchTriggerVisible": true,
+      "positiveCards": 4,
+      "topSlug": "ao-tap-bong-da-nam-blaze-red",
+      "unknownCards": 0,
+      "accountSwitchHidSearch": true,
+      "paymentRouteRequests": 0
+    },
+    "outsider": {
+      "status": "BLOCKED",
+      "gatewayStatusHttp": 403,
+      "storefrontHttp": 200,
+      "imageSearchTriggerVisible": false,
+      "productPageHttp": 200,
+      "paymentRouteRequests": 0
+    }
+  },
+  "knownDevReplay": {
+    "requests": 48,
+    "failures": 0,
+    "top5Parity": 24,
+    "catalogCardsValid": 24,
+    "searchP95Ms": 709.184,
+    "gatewayP95Ms": 803.954,
+    "passed": true
+  },
+  "syntheticCohortWindow": {
+    "startedAt": "2026-11-21T12:05:04.809958+00:00",
+    "finishedAt": "2026-11-21T12:05:49.935463+00:00",
+    "memberRequests": 2,
+    "blockedRequests": 1,
+    "httpStatuses": {
+      "200": 2
+    },
+    "memberErrors": 0,
+    "gatewayP95Ms": 828.0,
+    "peakDlqDepth": 0,
+    "minimumConsumers": 1,
+    "queueSamples": [
+      {
+        "at": "2026-11-21T12:05:04.905478+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:09.943355+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:14.971690+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:20.007133+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:25.067390+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:30.141750+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:35.177446+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:40.191837+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:45.256341+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      },
+      {
+        "at": "2026-11-21T12:05:49.934940+00:00",
+        "queues": {
+          "search.indexing": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 1
+          },
+          "search.indexing.retry.30s": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.5m": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.retry.1h": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          },
+          "search.indexing.dlq": {
+            "messages": 0,
+            "messages_ready": 0,
+            "messages_unacknowledged": 0,
+            "consumers": 0
+          }
+        }
+      }
+    ],
+    "decision": "PASS_OPERATIONAL_WINDOW"
+  }
+}

@@ -144,10 +144,13 @@ def run(mode: str, scope: str) -> dict:
     gateway_url = configured_url("HAI_SHADOW_GATEWAY_URL", scope)
     search_url = configured_url("HAI_SHADOW_SEARCH_URL", scope)
     headers = {"X-Internal-Service-Token": environ["HAI_SHADOW_SEARCH_TOKEN"]}
+    access_token = environ.get("HAI_SHADOW_GATEWAY_ACCESS_TOKEN")
+    viewer_headers = {"Authorization": f"Bearer {access_token}"} if access_token else {}
     result = {"mode": mode, "scope": scope, "checkedAt": datetime.now(timezone.utc).isoformat()}
-    with (httpx.Client(base_url=gateway_url, timeout=25, trust_env=False) as gateway,
-          httpx.Client(base_url=search_url, headers=headers, timeout=25, trust_env=False) as search):
-        before = rabbit_snapshot(gateway, scope)
+    with (httpx.Client(base_url=gateway_url, headers=viewer_headers, timeout=25, trust_env=False) as gateway,
+          httpx.Client(base_url=search_url, headers=headers, timeout=25, trust_env=False) as search,
+          httpx.Client(timeout=25, trust_env=False) as broker):
+        before = rabbit_snapshot(broker, scope)
         status_response = gateway.get(STATUS_PATH)
         result["publicStatus"] = status_response.json()["data"] if status_response.status_code == 200 else {}
         result["catalogCanaryHttp"] = gateway.get(CANARY).status_code
@@ -171,7 +174,7 @@ def run(mode: str, scope: str) -> dict:
             blocked, _ = timed_post(gateway, PUBLIC_PATH, payloads[0][2])
             result["rollbackHttp"] = blocked.status_code
             result["passed"] = result["passed"] and blocked.status_code == 503
-        after = rabbit_snapshot(gateway, scope)
+        after = rabbit_snapshot(broker, scope)
         result["rabbitmq"] = {"before": before, "after": after}
         if before["observed"] and after["observed"]:
             stable = all(after["queues"][queue]["messages"] <= before["queues"][queue]["messages"]

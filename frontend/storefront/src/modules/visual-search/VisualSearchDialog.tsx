@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Camera, ImagePlus, LoaderCircle, Search, SwitchCamera, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ApiError } from "@/lib/api";
+import { getAccessTokenSubject, onSessionChange } from "@/lib/session";
 import { mapProductListItem } from "@/modules/product/mappers";
 import { ProductCard } from "@/modules/product/components/ProductCard";
 import type { VisualSearchResult } from "@/modules/product/types";
@@ -81,13 +82,41 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
     requestRef.current?.abort();
   }, [source]);
   useEffect(() => {
-    const controller = new AbortController();
-    void getVisualSearchStatus(controller.signal)
-      .then((status) => setAvailability(status.enabled && status.available ? "available" : "unavailable"))
-      .catch(() => {
-        if (!controller.signal.aborted) setAvailability("unavailable");
-      });
-    return () => controller.abort();
+    let controller: AbortController;
+    let subject = getAccessTokenSubject();
+    const refresh = () => {
+      controller?.abort();
+      const request = new AbortController();
+      controller = request;
+      setAvailability("checking");
+      void getVisualSearchStatus(request.signal)
+        .then((status) => {
+          if (!request.signal.aborted) setAvailability(status.enabled && status.available ? "available" : "unavailable");
+        })
+        .catch(() => {
+          if (!request.signal.aborted) setAvailability("unavailable");
+        });
+    };
+    refresh();
+    const unsubscribe = onSessionChange(() => {
+      const currentSubject = getAccessTokenSubject();
+      if (currentSubject === subject) return;
+      subject = currentSubject;
+      requestRef.current?.abort();
+      requestRef.current = null;
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+      setOpen(false);
+      setSource(undefined);
+      setBusy(false);
+      setCameraOpen(false);
+      setCameraStream(undefined);
+      refresh();
+    });
+    return () => {
+      controller.abort();
+      unsubscribe();
+    };
   }, []);
   useEffect(() => {
     if (videoRef.current && cameraStream) videoRef.current.srcObject = cameraStream;

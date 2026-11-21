@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,6 +27,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
@@ -38,18 +41,22 @@ public class VisualSearchApi {
     private static final int MAX_BYTES = 5_242_880;
     private static final int CANDIDATE_LIMIT = 20;
     private static final String SEARCH_PATH = "/internal/v1/search/image";
+    private static final String GATEWAY_HEADER = "X-Visual-Search-Gateway-Token";
 
     private final PublicCatalogRepository repository;
     private final RestClient search;
     private final boolean enabled;
+    private final String gatewayToken;
 
     public VisualSearchApi(
             PublicCatalogRepository repository, RestClient.Builder builder,
             @Value("${app.visual-search.enabled:false}") boolean enabled,
             @Value("${app.visual-search.search-base-url:http://localhost:8090}") String baseUrl,
-            @Value("${app.visual-search.search-token:}") String token) {
+            @Value("${app.visual-search.search-token:}") String token,
+            @Value("${app.visual-search.gateway-token:}") String gatewayToken) {
         this.repository = repository;
         this.enabled = enabled;
+        this.gatewayToken = gatewayToken;
         if (enabled && token.isBlank()) {
             throw new IllegalArgumentException("SEARCH_SERVICE_INTERNAL_TOKEN is required for public visual search");
         }
@@ -61,7 +68,8 @@ public class VisualSearchApi {
     }
 
     @GetMapping("/visual-search/status")
-    public ApiResponse<Map<String, Object>> status() {
+    public ApiResponse<Map<String, Object>> status(@RequestHeader(name = GATEWAY_HEADER, defaultValue = "") String gateway) {
+        requireGateway(gateway);
         boolean available = false;
         if (enabled) {
             try {
@@ -77,8 +85,10 @@ public class VisualSearchApi {
 
     @PostMapping("/products/search-by-image")
     public ApiResponse<List<VisualResult>> find(
-            @RequestParam(required = false) MultipartFile image, @RequestParam(defaultValue = "4") int limit)
+            @RequestParam(required = false) MultipartFile image, @RequestParam(defaultValue = "4") int limit,
+            @RequestHeader(name = GATEWAY_HEADER, defaultValue = "") String gateway)
             throws IOException {
+        requireGateway(gateway);
         if (!enabled) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Visual search is disabled");
         }
@@ -119,6 +129,13 @@ public class VisualSearchApi {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Visual search is temporarily unavailable");
         }
         return ApiResponse.ok(hydrate(response.candidates(), resultLimit));
+    }
+
+    private void requireGateway(String supplied) {
+        if (!gatewayToken.isEmpty() && !MessageDigest.isEqual(
+                gatewayToken.getBytes(StandardCharsets.UTF_8), supplied.getBytes(StandardCharsets.UTF_8))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Visual search requires the Gateway");
+        }
     }
 
     private List<VisualResult> hydrate(List<Candidate> candidates, int limit) {

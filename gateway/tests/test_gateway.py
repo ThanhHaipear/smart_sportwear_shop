@@ -114,6 +114,34 @@ def test_gateway_strips_spoofed_identity_and_injects_verified_claims():
     assert observed[-1]["x-user-role"] == "CUSTOMER"
 
 
+def test_visual_search_cohort_blocks_nonmembers_and_replaces_client_gateway_header():
+    observed = []
+    token = "cohort-gateway-token-used-only-in-this-test"
+
+    def upstream(request):
+        observed.append(request)
+        return httpx.Response(200, json={"data": []})
+
+    member_id = "00000000-0000-0000-0000-000000000123"
+    client = gateway(upstream, gateway_rate_limit_per_minute=20,
+                     gateway_visual_search_cohort_enabled=True, gateway_visual_search_cohort_users=member_id,
+                     visual_search_gateway_token=token)
+    member = {"Authorization": "Bearer " + access_token(member_id), "X-Visual-Search-Gateway-Token": "spoof"}
+    outsider = {"Authorization": "Bearer " + access_token("00000000-0000-0000-0000-000000000124"),
+                "X-Visual-Search-Gateway-Token": token}
+    for method, path in (("GET", gateway_main.VISUAL_SEARCH_STATUS_PATH), ("POST", gateway_main.VISUAL_SEARCH_PATH)):
+        assert client.request(method, path).status_code == 401
+        assert client.request(method, path, headers=outsider).status_code == 403
+        response = client.request(method, path, headers=member)
+        assert response.status_code == 200
+        assert response.headers["cache-control"] == "private, no-store"
+    assert len(observed) == 2
+    assert all(r.headers["x-visual-search-gateway-token"] == token for r in observed)
+    assert client.get("/api/v1/products", headers=outsider).status_code == 200
+    assert "x-visual-search-gateway-token" not in observed[-1].headers
+    assert 'route="visual_search",status="403"' in client.get("/metrics").text
+
+
 def test_method_allowlist_and_rate_limit():
     hosts = []
     def upstream(request):

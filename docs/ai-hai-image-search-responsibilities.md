@@ -58,7 +58,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
 | HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
 | HAI-15 | Tạo và chạy TEST v3 độc lập | `DONE / NO-GO` | P0 | HAI-14 |
-| HAI-16 | Rollout public có kiểm soát | Nghiệm thu FE/BE local đạt, chờ mở thử nghiệm nhóm nhỏ | P0 | HAI-15, TEST v4 |
+| HAI-16 | Rollout public có kiểm soát | Nghiệm thu local đạt, đã kiểm tra luồng cohort bằng tài khoản mẫu | P0 | HAI-15, TEST v4 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
 
@@ -560,6 +560,21 @@ trả 4 thẻ và ảnh ngoài catalog trả 0 kết quả ở cả hai lượt.
 nút tìm ảnh ẩn, API ảnh trả 503 và trang sản phẩm vẫn trả 200. Cả năm
 hàng đợi trống ở các điểm đo và trình duyệt ghi nhận 0 request thanh toán.
 [Bằng chứng nghiệm thu FE/BE](../evidence/image-search-v4/hai-16-local-e2e-acceptance-2026-11-21.json)
+
+Gateway chỉ chuyển hai route tìm ảnh đến Catalog cho tài khoản nằm trong
+danh sách UUID khi bật chế độ cohort. Catalog kiểm tra token riêng của
+Gateway. Storefront cập nhật khả dụng khi đổi tài khoản. Replay DEV đo chất
+lượng trên mẫu đã biết. Monitor lấy p95 và lỗi từ log Gateway, đồng thời
+lấy mẫu queue/DLQ qua RabbitMQ Management. Việc mở cho người dùng thật cần
+danh sách tài khoản được duyệt.
+[Cấu hình cohort và giám sát](../services/search-service/README.md#thử-nghiệm-cho-nhóm-nhỏ)
+
+Trong phiên thử cô lập với tài khoản mẫu, replay DEV khớp 24/24 top-5,
+không có lỗi trên 48 request và p95 qua Gateway 803,954 ms. Cửa sổ quan
+sát 45 giây có hai lượt tìm ảnh thành công, một lượt ngoài danh sách bị
+chặn, p95 Gateway 828 ms và DLQ 0. Sau khi đổi sang tài khoản ngoài danh
+sách, Storefront ẩn tìm ảnh và trang sản phẩm vẫn truy cập được.
+[Bằng chứng cohort mẫu](../evidence/image-search-v4/hai-16-cohort-smoke-2026-11-21.json)
 
 #### DEV v4 sau TEST v3
 
