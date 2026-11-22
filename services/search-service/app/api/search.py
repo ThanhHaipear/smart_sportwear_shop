@@ -1,3 +1,4 @@
+import asyncio
 import hmac
 import logging
 import time
@@ -13,8 +14,10 @@ from app.services.errors import ImagePipelineError
 from app.services.image_pipeline import ImagePipeline
 from app.services.text_embeddings import TextEmbedder
 from app.services.visual_pilot import pilot_image_rows, rank_pilot
+from app.services.visual_regions import narrow_accessory_ranking, rescue_region_ranking
 
 router = APIRouter(prefix="/internal/v1", tags=["search"])
+_region_inference = asyncio.Lock()
 
 
 def require_token(
@@ -42,7 +45,9 @@ class SearchFilters(BaseModel):
     inStockOnly: bool = True
 
 
-async def indexed_image_candidates(content: bytes, limit: int, settings: Settings) -> list[dict]:
+async def indexed_image_candidates(
+    content: bytes, limit: int, settings: Settings, *, auto_region: bool = False,
+) -> list[dict]:
     repository = SearchRepository(settings)
     pilot_rows = pilot_image_rows(await repository.visual_pilot_catalog()) if settings.visual_search_pilot_v4_enabled else None
     provider = build_provider(settings)
@@ -52,7 +57,24 @@ async def indexed_image_candidates(content: bytes, limit: int, settings: Setting
         if hasattr(provider, "category_scores") else None
     )
     if pilot_rows is not None:
-        return rank_pilot(pilot_rows, result.vector, category_scores, limit)
+        full = rank_pilot(pilot_rows, result.vector, category_scores, limit)
+        if not auto_region:
+            return full
+        if full:
+            return narrow_accessory_ranking(full, category_scores)
+        if _region_inference.locked():
+            return full
+        try:
+            async with _region_inference:
+                vectors = await provider.embed_query_regions(content)
+                regions = []
+                for vector in vectors:
+                    scores = await provider.category_scores(vector)
+                    regions.append(narrow_accessory_ranking(rank_pilot(pilot_rows, vector, scores, limit), scores))
+            return rescue_region_ranking(regions)
+        except (RuntimeError, ValueError):
+            logging.getLogger(__name__).warning("Auto-region inference failed; using the full image")
+            return full
     rows = await repository.image_search(result.vector, limit, category_scores)
     return [row for row in rows if float(row["similarity"]) >= settings.visual_min_similarity]
 
@@ -70,7 +92,7 @@ async def visual_search_status(settings: Settings = Depends(get_settings)) -> di
     except Exception:
         logging.getLogger(__name__).exception("Visual pilot catalog readiness check failed")
         return {"available": False}
-    return {"available": True}
+    return {"available": True, **({"autoRegion": True} if settings.visual_search_auto_region_enabled else {})}
 
 
 class TextSearchRequest(BaseModel):
@@ -130,6 +152,7 @@ async def search_text(request: TextSearchRequest, settings: Settings = Depends(g
 async def search_image(
     image: UploadFile = File(...), limit: int = Query(default=20, ge=1, le=50),
     pilot_v4: bool = False,
+    auto_region: bool = False,
     settings: Settings = Depends(get_settings),
     find_candidates=Depends(get_image_candidate_search),
 ) -> dict:
@@ -141,7 +164,10 @@ async def search_image(
     except ImagePipelineError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     try:
-        rows = await find_candidates(normalized.content, limit, settings)
+        if auto_region and pilot_v4 and settings.visual_search_auto_region_enabled:
+            rows = await find_candidates(normalized.content, limit, settings, auto_region=True)
+        else:
+            rows = await find_candidates(normalized.content, limit, settings)
     except Exception as error:
         logging.getLogger(__name__).exception("Image search pipeline failed")
         raise HTTPException(status_code=503, detail="Image search is temporarily unavailable") from error

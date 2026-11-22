@@ -28,10 +28,14 @@ paths:
         - name: limit
           in: query
           schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
-          - name: pilot_v4
-            in: query
-            description: Require the TEST v4 profile. The pilot returns up to 20 candidates.
-            schema: { type: boolean, default: false }
+        - name: pilot_v4
+          in: query
+          description: Require the TEST v4 profile. The pilot returns up to 20 candidates.
+          schema: { type: boolean, default: false }
+        - name: auto_region
+          in: query
+          description: Use automatic region fallback for a full image when the v4 pilot advertises autoRegion.
+          schema: { type: boolean, default: false }
       requestBody:
         required: true
         content:
@@ -70,6 +74,7 @@ paths:
                 required: [available]
                 properties:
                   available: { type: boolean }
+                  autoRegion: { type: boolean }
         '401': { description: Invalid service token }
 components:
   securitySchemes:

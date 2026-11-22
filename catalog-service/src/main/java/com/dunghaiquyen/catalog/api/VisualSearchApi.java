@@ -71,13 +71,18 @@ public class VisualSearchApi {
     public ApiResponse<Map<String, Object>> status(@RequestHeader(name = GATEWAY_HEADER, defaultValue = "") String gateway) {
         requireGateway(gateway);
         boolean available = false;
+        boolean autoRegion = false;
         if (enabled) {
             try {
                 var readiness = search.get().uri(SEARCH_PATH + "/status").retrieve().body(SearchReadiness.class);
                 available = readiness != null && readiness.available();
+                autoRegion = available && readiness.autoRegion();
             } catch (RestClientException ignored) {
                 // Storefront can still load when Search is temporarily unavailable.
             }
+        }
+        if (autoRegion) {
+            return ApiResponse.ok(Map.of("enabled", true, "available", true, "status", "READY", "autoRegion", true));
         }
         return ApiResponse.ok(Map.of("enabled", enabled, "available", available,
                 "status", available ? "READY" : enabled ? "UNAVAILABLE" : "DISABLED"));
@@ -86,6 +91,7 @@ public class VisualSearchApi {
     @PostMapping("/products/search-by-image")
     public ApiResponse<List<VisualResult>> find(
             @RequestParam(required = false) MultipartFile image, @RequestParam(defaultValue = "4") int limit,
+            @RequestParam(defaultValue = "false") boolean autoRegion,
             @RequestHeader(name = GATEWAY_HEADER, defaultValue = "") String gateway)
             throws IOException {
         requireGateway(gateway);
@@ -113,7 +119,8 @@ public class VisualSearchApi {
         data.add("image", new HttpEntity<>(new ByteArrayResource(image.getBytes()), partHeaders));
         SearchResponse response;
         try {
-            response = search.post().uri(SEARCH_PATH + "?limit={limit}&pilot_v4=true", CANDIDATE_LIMIT)
+            response = search.post().uri(SEARCH_PATH + "?limit={limit}&pilot_v4=true&auto_region={autoRegion}",
+                            CANDIDATE_LIMIT, autoRegion)
                     .contentType(MediaType.MULTIPART_FORM_DATA).body(data).retrieve()
                     .onStatus(code -> code.value() == 422, (request, upstream) -> {
                         throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Unsupported or invalid image");
@@ -159,7 +166,7 @@ public class VisualSearchApi {
     record Candidate(@JsonProperty("product_id") UUID productId, @JsonProperty("image_id") UUID imageId,
                      double similarity) {}
 
-    record SearchReadiness(boolean available) {}
+    record SearchReadiness(boolean available, boolean autoRegion) {}
     record SearchResponse(List<Candidate> candidates) {}
     public record VisualResult(Map<String, Object> product, UUID matchedImageId, String matchedImageUrl,
                                double similarity) {}

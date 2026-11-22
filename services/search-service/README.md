@@ -54,6 +54,25 @@ Catalog flag off, its public POST returns 503.
 
 [TEST v4 acceptance](../../evidence/image-search-v4/test-v4-final/final-report.md)
 
+For an opt-in DEV preview, set `VISUAL_SEARCH_AUTO_REGION_ENABLED=true` on Search.
+Catalog advertises the capability only when the v4 pilot is available. Storefront
+sends the full frame when the user leaves the crop controls at their defaults.
+If the full frame returns no results, Search batches up to five overlapping
+regions through the same SigLIP2 model and accepts a region only above the
+rescue threshold. Manual cropping continues to use the v4 request path.
+In-flight region inference is limited to one batch per Search process.
+When the top accessory matches a specific type and that type scores at least
+1.5 times the next accessory type, automatic search shows only the matching
+type. Ambiguous images keep the original ranking.
+
+The DEV evaluation kept the full-image ranking whenever it was nonempty.
+On two sets of 24 original photos, Recall@5 changed from 57.50% to 62.50%
+on the calibration set and stayed at 56.25% on the comparison set.
+All eight out-of-catalog photos were rejected. CPU p95 was about 1.23 seconds
+before HTTP and database overhead. Replacing nonempty full-image rankings
+with the highest regional score regressed on the comparison set.
+[DEV evidence](../../evidence/image-search-v4/auto-region-dev-2026-11-22.json)
+
 ### Shadow và rollback trên staging
 
 Triển khai Search và Catalog với các cờ pilot ở trên trong môi trường staging

@@ -34,6 +34,7 @@ class Settings(BaseSettings):
 
     visual_search_enabled: bool = True
     visual_search_pilot_v4_enabled: bool = False
+    visual_search_auto_region_enabled: bool = False
     visual_embedding_provider: Literal["fake", "voyage", "hugging_face_local"] = "hugging_face_local"
     visual_embedding_model: str = "google/siglip2-base-patch16-224"
     visual_embedding_revision: str = "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2"
