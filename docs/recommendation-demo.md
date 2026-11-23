@@ -2,20 +2,30 @@
 
 Mục tiêu: cho hội đồng thấy luồng **xem sản phẩm → thấy gợi ý → bấm → hệ thống ghi lại**, và mỗi gợi ý ghi rõ tầng (luật kết hợp, content, popularity) đã sinh ra nó.
 
-> **Lưu ý dữ liệu.** Demo ghi vào Supabase dùng chung. `user_interactions` là bảng **chỉ thêm** (append-only, có trigger chặn sửa/xóa), nên sự kiện demo không xóa được. Vì vậy luôn chạy storefront với `NEXT_PUBLIC_INTERACTION_DATA_SOURCE=DEMO` để tách khỏi dữ liệu thật (`REAL`) và dữ liệu đánh giá (`SYNTHETIC`, vốn chỉ nằm trong file).
+> **Lưu ý dữ liệu.** Demo ghi vào Supabase dùng chung. `user_interactions` là bảng **chỉ thêm** (append-only, có trigger chặn sửa/xóa), nên sự kiện demo không xóa được. Storefront gửi `DEMO` theo mặc định (từ 23/11), tách khỏi dữ liệu thật (`REAL`, hiện bị service từ chối khi `INTERACTION_REAL_ENABLED=false`) và dữ liệu đánh giá (`SYNTHETIC`, vốn chỉ nằm trong file).
+
+## 0. Dữ liệu live và kết quả offline
+
+Khi trình bày, tách rõ hai loại số liệu:
+
+| | Dữ liệu live (website, Supabase) | Kết quả offline (`synthetic-v1`) |
+|---|---|---|
+| Nguồn | Hành vi `DEMO` từ storefront, đơn hàng thật của Sales | 500 user giả, 623 đơn, 8 tuần (file trong `datasets/recommendation/synthetic-v1/`) |
+| Luật kết hợp | **Chưa có** (0 giỏ, 0 luật; xem `docs/recommendation-r5-order-flow.md`) | Có, chọn ngưỡng trên DEV, đo trên TEST |
+| Dùng để chứng minh | Luồng chạy end-to-end: gợi ý, ghi impression/click, request log | Chất lượng thuật toán: P/R/HR/NDCG, so với baseline |
+| Nơi xem | Mục 3 bên dưới (SQL) | `docs/recommendation-results.md` |
+
+Không trình bày số liệu offline như thể đo trên website, và ngược lại.
 
 ## 1. Chuẩn bị (một lần)
 
-1. Đặt trong `frontend/storefront/.env.local`:
-   ```
-   NEXT_PUBLIC_INTERACTION_DATA_SOURCE=DEMO
-   ```
+1. Storefront gửi `DEMO` theo mặc định; không đặt `NEXT_PUBLIC_INTERACTION_DATA_SOURCE=REAL` khi demo.
 2. `RECOMMENDATION_ENABLED=true` và `RECOMMENDATION_CONTENT_MODE=COMPLEMENT` (mặc định) cho recommendation-service.
 3. (Nếu muốn tầng luật kết hợp có dữ liệu) cần có đơn hàng trong `order_baskets`, rồi chạy:
    ```
    python scripts/rebuild_model.py association-demo
    ```
-   Hiện Supabase chưa có đơn nào, nên khi demo trên dữ liệu thật, gợi ý đến từ **content** và **popularity**. Nói rõ điều này khi demo. Phần chứng minh hiệu quả của luật kết hợp nằm ở kết quả offline (`docs/recommendation-results.md`).
+   Hiện `order_baskets` trên Supabase chưa có giỏ nào (đơn của Sales chưa tới được worker, xem `docs/recommendation-r5-order-flow.md`), nên khi demo trên dữ liệu thật, gợi ý đến từ **content** và **popularity**. Nói rõ điều này khi demo. Phần chứng minh hiệu quả của luật kết hợp nằm ở kết quả offline (`docs/recommendation-results.md`).
 4. Chạy toàn hệ thống: `.\scripts\run\start-all-local.cmd`, rồi kiểm tra `http://localhost:8091/health/ready` trả `ready`.
 
 ## 2. Các bước trên giao diện
