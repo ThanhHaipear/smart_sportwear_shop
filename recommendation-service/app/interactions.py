@@ -12,7 +12,10 @@ import time
 from collections import defaultdict, deque
 from datetime import datetime
 
+from typing import Annotated, Literal
+
 from fastapi import HTTPException, status
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, ValidationError, model_validator
 
 from app.schemas import InteractionEvent
 
@@ -37,6 +40,66 @@ def _reject(message: str) -> HTTPException:
     return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=message)
 
 
+# --- Metadata allow-list (review R4, data minimisation per O01) -------------------------------------------
+# Browsers may only send the measurement fields below, per event type, with strict types: no free text, no
+# identifiers other than product UUIDs, no PII. Anything else rejects the event (and so the whole batch).
+_ProductId = Annotated[StrictStr, Field(pattern=UUID_PATTERN.pattern)]
+_Position = Annotated[StrictInt, Field(ge=0, le=99)]
+
+
+class _NoMetadata(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+class _PositionMetadata(_NoMetadata):
+    position: _Position | None = None
+
+
+class _RecommendationFeedbackMetadata(_PositionMetadata):
+    algorithm: Literal["ASSOCIATION_RULE", "SIMILAR_CONTENT", "POPULARITY"] | None = None
+    modelVersion: Annotated[StrictStr, Field(min_length=1, max_length=50)] | None = None
+    # Detail page: the one product being viewed; cart: every product in the cart.
+    sourceProductId: _ProductId | None = None
+    sourceProductIds: Annotated[list[_ProductId], Field(min_length=1, max_length=50)] | None = None
+
+    @model_validator(mode="after")
+    def one_source_shape(self) -> "_RecommendationFeedbackMetadata":
+        if self.sourceProductId is not None and self.sourceProductIds is not None:
+            raise ValueError("send either sourceProductId or sourceProductIds, not both")
+        return self
+
+
+class _AddToCartMetadata(_NoMetadata):
+    quantity: Annotated[StrictInt, Field(ge=1, le=99)] | None = None
+
+
+METADATA_SCHEMAS: dict[str, type[BaseModel]] = {
+    "VIEW": _NoMetadata,
+    "WISHLIST": _NoMetadata,
+    "ADD_TO_CART": _AddToCartMetadata,
+    "SEARCH_IMPRESSION": _PositionMetadata,
+    "SEARCH_CLICK": _PositionMetadata,
+    "RECOMMENDATION_IMPRESSION": _RecommendationFeedbackMetadata,
+    "RECOMMENDATION_CLICK": _RecommendationFeedbackMetadata,
+}
+assert set(METADATA_SCHEMAS) == BROWSER_EVENT_TYPES
+
+
+def allowed_metadata_fields(event_type: str) -> frozenset[str]:
+    return frozenset(METADATA_SCHEMAS[event_type].model_fields)
+
+
+def sanitize_metadata(event_type: str, metadata: dict) -> dict:
+    """Validate browser metadata against the allow-list of its event type; return it without null values."""
+    try:
+        parsed = METADATA_SCHEMAS[event_type].model_validate(metadata)
+    except ValidationError as error:
+        problems = "; ".join(f"{'.'.join(str(p) for p in e['loc']) or 'metadata'}: {e['msg']}"
+                             for e in error.errors(include_url=False))
+        raise _reject(f"invalid metadata for {event_type}: {problems}") from None
+    return parsed.model_dump(exclude_none=True)
+
+
 def sanitize_browser_interaction(event: InteractionEvent, verified_user_id: str | None,
                                  received_at: datetime) -> InteractionEvent:
     if event.event_type not in BROWSER_EVENT_TYPES:
@@ -51,13 +114,14 @@ def sanitize_browser_interaction(event: InteractionEvent, verified_user_id: str 
         raise _reject("anonymousId has an invalid format")
     if len(json.dumps(event.metadata, ensure_ascii=False).encode("utf-8")) > MAX_METADATA_BYTES:
         raise _reject(f"metadata must not exceed {MAX_METADATA_BYTES} bytes")
+    metadata = sanitize_metadata(event.event_type, event.metadata)
 
     user_ref = verified_user_id if verified_user_id and UUID_PATTERN.fullmatch(verified_user_id) else None
     if user_ref is None and not event.anonymous_id:
         raise _reject("anonymousId is required when the request is not authenticated")
     # Never trust a browser-supplied userRef; use server time so temporal splits are not
     # affected by client clocks.
-    return event.model_copy(update={"user_ref": user_ref, "occurred_at": received_at})
+    return event.model_copy(update={"user_ref": user_ref, "occurred_at": received_at, "metadata": metadata})
 
 
 MAX_BATCH_EVENTS = 10
