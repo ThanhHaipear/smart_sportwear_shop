@@ -80,6 +80,9 @@ services:
       SEARCH_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
       CATALOG_API_BASE_URL: http://catalog-service:8092
       CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
+      # Container DNS name; the localhost default in settings.py only works when running on the host.
+      # If the "recommendation" profile is off or the service is disabled (503), Chatbot falls back to Catalog.
+      RECOMMENDATION_API_BASE_URL: http://recommendation-service:8091
       CHATBOT_DATABASE_URL: ${CHATBOT_DATABASE_URL:-}
       REDIS_URL: redis://redis:6379
     depends_on:
