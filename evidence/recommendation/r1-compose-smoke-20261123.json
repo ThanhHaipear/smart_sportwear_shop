@@ -1,0 +1,71 @@
+{
+  "review": "R1",
+  "commit": "eb45585d",
+  "ranAt": "2026-11-23T08:54:00Z",
+  "passed": true,
+  "checks": [
+    {
+      "case": "1 both profiles on, Recommendation enabled",
+      "passed": true,
+      "result": {
+        "RECOMMENDATION_API_BASE_URL": "http://recommendation-service:8091",
+        "requestId": "9dec16e0-51e8-44f3-bb09-1038a75705f4",
+        "items": [
+          [
+            "22222222-2222-4222-8222-222222222222",
+            "Smoke product 2",
+            "Hợp với sản phẩm bạn đang xem"
+          ],
+          [
+            "33333333-3333-4333-8333-333333333333",
+            "Smoke product 3",
+            "Đang được nhiều người mua"
+          ]
+        ],
+        "error": null,
+        "log": []
+      }
+    },
+    {
+      "case": "2a Recommendation running but disabled (503)",
+      "passed": true,
+      "result": {
+        "RECOMMENDATION_API_BASE_URL": "http://recommendation-service:8091",
+        "requestId": null,
+        "items": [
+          [
+            "99999999-9999-4999-8999-999999999999",
+            "Catalog related (fallback)",
+            "Sản phẩm liên quan"
+          ]
+        ],
+        "error": null,
+        "log": [
+          "WARNING app.services.recommendation_service: related recommendations fell back to catalog: recommendation-service is unavailable"
+        ]
+      },
+      "recommendationResponses": [
+        "503 Service Unavailable"
+      ]
+    },
+    {
+      "case": "2b recommendation profile off (no container)",
+      "passed": true,
+      "result": {
+        "RECOMMENDATION_API_BASE_URL": "http://recommendation-service:8091",
+        "requestId": null,
+        "items": [
+          [
+            "99999999-9999-4999-8999-999999999999",
+            "Catalog related (fallback)",
+            "Sản phẩm liên quan"
+          ]
+        ],
+        "error": null,
+        "log": [
+          "WARNING app.services.recommendation_service: related recommendations fell back to catalog: recommendation-service is unavailable"
+        ]
+      }
+    }
+  ]
+}
