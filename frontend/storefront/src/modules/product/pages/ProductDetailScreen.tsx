@@ -49,6 +49,7 @@ export async function ProductDetailScreen({
         <RecommendationSection
           title="Thường mua cùng nhau"
           sourceProductIds={[product.id]}
+          responseSourceKey={recommendation.sourceKey}
           requestId={recommendation.requestId}
           modelVersion={recommendation.modelVersion}
           items={boughtTogether}

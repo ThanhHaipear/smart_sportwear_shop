@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/modules/product/components/ProductCard";
 import type { Product } from "@/modules/product/types";
+import { nextPinned, sourceKeyOf, type ServedList } from "@/modules/recommendation/pinning";
 import { trackInteraction, trackInteractions, type InteractionSource } from "@/modules/recommendation/tracking";
 
 export interface RecommendedProduct {
@@ -15,13 +16,8 @@ interface RecommendationSectionProps {
   // One product on the detail page, every product in the cart.
   sourceProductIds: string[];
   source?: InteractionSource;
-  requestId: string | null;
-  modelVersion: string | null;
-  items: RecommendedProduct[];
-}
-
-interface PinnedList {
-  sourceKey: string;
+  // sourceKeyOf(the product IDs the list below was requested for). A list for other sources is ignored.
+  responseSourceKey: string;
   requestId: string | null;
   modelVersion: string | null;
   items: RecommendedProduct[];
@@ -33,17 +29,21 @@ interface PinnedList {
 // The root layout calls router.refresh() periodically, which re-renders the page and serves a NEW
 // list with a new requestId. The first list is pinned until the source products change, so the
 // customer does not see the block reshuffle and impressions and clicks share one requestId.
+// A list requested for other sources (e.g. the previous cart, still loading the new one) is never
+// shown or tracked; see pinning.ts.
 export function RecommendationSection({
-  title, sourceProductIds, source = "PRODUCT_DETAIL_FBT", requestId, modelVersion, items,
+  title, sourceProductIds, source = "PRODUCT_DETAIL_FBT", responseSourceKey, requestId, modelVersion, items,
 }: RecommendationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const reportedFor = useRef<string | null>(null);
-  const sourceKey = sourceProductIds.join(",");
-  const [pinned, setPinned] = useState<PinnedList>({ sourceKey, requestId, modelVersion, items });
-  // Derived state (adjusting state while rendering): take a new list only for new sources, or when the
-  // first render had no list yet.
-  if (pinned.sourceKey !== sourceKey || (!pinned.requestId && requestId)) {
-    setPinned({ sourceKey, requestId, modelVersion, items });
+  const sourceKey = sourceKeyOf(sourceProductIds);
+  const incoming: ServedList<RecommendedProduct> = { sourceKey: responseSourceKey, requestId, modelVersion, items };
+  const [pinned, setPinned] = useState<ServedList<RecommendedProduct>>(() => nextPinned(
+    { sourceKey: "\u0000", requestId: null, modelVersion: null, items: [] }, sourceKey, incoming));
+  // Derived state (adjusting state while rendering): nextPinned returns the same object when nothing changes.
+  const next = nextPinned(pinned, sourceKey, incoming);
+  if (next !== pinned) {
+    setPinned(next);
   }
   const shown = pinned.items;
   const shownRequestId = pinned.requestId;
