@@ -1,0 +1,512 @@
+{
+  "schemaVersion": 1,
+  "version": "3.2.0",
+  "provider": "Wikimedia Commons",
+  "frozenAt": "2026-11-18T14:58:53.427401+00:00",
+  "items": [
+    {
+      "queryId": "dev3c-001",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "cc4f3bcd1e3c412885e5d1f37ddf2bb8fe7ee396ee27fd1e0800c1e514a9cad3",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "cropBox": [
+        197,
+        174,
+        570,
+        666
+      ],
+      "source": {
+        "pageId": 74804679,
+        "title": "File:SevgiÇınar (40).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Sevgi%C3%87%C4%B1nar_(40).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Sevgi%C3%87%C4%B1nar_%2840%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Sevgi%C3%87%C4%B1nar_%2840%29.jpg/1280px-Sevgi%C3%87%C4%B1nar_%2840%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "CeeGee",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "a17b721a4799f0704a3556db9339f6fdc2eb9af9fe551e06fd07191dd05a17b9"
+      }
+    },
+    {
+      "queryId": "dev3c-002",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "b09ecb9b4ef6fb4745e03b6cec657be6aa5fd8b73e1ede93aece71f47d6fb585",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "cropBox": [
+        198,
+        164,
+        595,
+        666
+      ],
+      "source": {
+        "pageId": 66621208,
+        "title": "File:TetyanaKozyrenko (2).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:TetyanaKozyrenko_(2).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/06/TetyanaKozyrenko_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/TetyanaKozyrenko_%282%29.jpg/1280px-TetyanaKozyrenko_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "CeeGee",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "bdeb687c9f07073c0073440cab2b0a3e9ac9ac27efb87b09f5686ea09f0013d2"
+      }
+    },
+    {
+      "queryId": "dev3c-003",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "1642aba2ef3723666fd0975df090c6351e7ff3051075562d9414b5003ac186f5",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "cropBox": [
+        24,
+        102,
+        778,
+        594
+      ],
+      "source": {
+        "pageId": 23833944,
+        "title": "File:20130113 - PSG-Montpellier 005.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20130113_-_PSG-Montpellier_005.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/68/20130113_-_PSG-Montpellier_005.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/20130113_-_PSG-Montpellier_005.jpg/1280px-20130113_-_PSG-Montpellier_005.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Pierre-Yves Beaudouin",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Pierre-Yves Beaudouin / Wikimedia Commons",
+        "downloadedSha256": "3d02c84ebae704bd131310edba97fbeefb63a214fe910717a6621f7820129e7b"
+      }
+    },
+    {
+      "queryId": "dev3c-004",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "d9acada61c1fcd309f140b537ef7d57cba6005837b00bdbf18daeefd6320405e",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "source": {
+        "pageId": 100054717,
+        "title": "File:Windjack - Windbreaker.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Windjack_-_Windbreaker.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windjack_-_Windbreaker.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Windjack_-_Windbreaker.jpg/1280px-Windjack_-_Windbreaker.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Ridderspoor",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "002b3bbf7aec6aacf4190309bf95274bf81bee7e451b833e612fab38b1af096c"
+      }
+    },
+    {
+      "queryId": "dev3c-005",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "d50b3222e942be9abee0494675935f6f39bfba6bb206b410b75b66b34553b067",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "cropBox": [
+        212,
+        205,
+        546,
+        686
+      ],
+      "source": {
+        "pageId": 37961129,
+        "title": "File:Kyle-cassidy-tracksuit.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Kyle-cassidy-tracksuit.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Kyle-cassidy-tracksuit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Kyle-cassidy-tracksuit.jpg/1280px-Kyle-cassidy-tracksuit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Kyle Cassidy",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Email",
+        "downloadedSha256": "53af2e417ecd1a4d4e79ec287b7206b0db36fd4ff1d3e402d9c2e107bcde65b6"
+      }
+    },
+    {
+      "queryId": "dev3c-006",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "5bc8455ab1db8f7c9f5adaa9d6da7913a6801325fc0c657500fc523214c96e8c",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "source": {
+        "pageId": 178991181,
+        "title": "File:\"Wikipedia\" Windbreaker.webp",
+        "uri": "https://commons.wikimedia.org/wiki/File:%22Wikipedia%22_Windbreaker.webp",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/c/cc/%22Wikipedia%22_Windbreaker.webp?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/%22Wikipedia%22_Windbreaker.webp/1280px-%22Wikipedia%22_Windbreaker.webp?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Potatochip08",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "1e84219d5467cc78c6e8f49d2f862b7df62fe1a2168183cfd7c7d8c01876c22c"
+      }
+    },
+    {
+      "queryId": "dev3c-007",
+      "group": "tops",
+      "subtype": "short-sleeved-tee",
+      "partition": "DEV-check",
+      "sha256": "6fdd7f01dbca9bb700e5882abb07e0ad7dc1950e362933db5d223363b92bd971",
+      "relevantProductSlugs": [
+        "ao-chay-bo-nam-aero-navy",
+        "ao-tap-bong-da-nam-blaze-red",
+        "ao-tap-bong-da-nu-royal-motion"
+      ],
+      "source": {
+        "pageId": 58987899,
+        "title": "File:2008 DNC (2806861692).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2008_DNC_(2806861692).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/d5/2008_DNC_%282806861692%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://upload.wikimedia.org/wikipedia/commons/d/d5/2008_DNC_%282806861692%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "author": "Trevor Stone from Lakewood, CO, USA",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "IMG_7905",
+        "downloadedSha256": "bb414ece2bd788af2f06ce03d8b7be60203e751b71d2fbc8590c032ad080bf87"
+      }
+    },
+    {
+      "queryId": "dev3c-008",
+      "group": "accessories",
+      "subtype": "sports-socks",
+      "partition": "DEV-check",
+      "sha256": "93dc16a69a8acef5435eb794dccc0cb7f19bd9b7f3fe0c385d3eb2e085e49a5b",
+      "relevantProductSlugs": [
+        "tat-bong-da-white-match"
+      ],
+      "cropBox": [
+        215,
+        594,
+        645,
+        1024
+      ],
+      "source": {
+        "pageId": 77570023,
+        "title": "File:There's no crying in baseball! (4549295140) 2.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:There%27s_no_crying_in_baseball!_(4549295140)_2.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/77/There%27s_no_crying_in_baseball%21_%284549295140%29_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/There%27s_no_crying_in_baseball%21_%284549295140%29_2.jpg/1280px-There%27s_no_crying_in_baseball%21_%284549295140%29_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Jax House",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "This image has been extracted from another file",
+        "downloadedSha256": "0be0180e3833af8e1211ae9de31dc1b498a2ad9b5b46bc51e833c6873f032388"
+      }
+    },
+    {
+      "queryId": "dev3c-009",
+      "group": "accessories",
+      "subtype": "sport-bottle",
+      "partition": "DEV-check",
+      "sha256": "eb7146ebf099ee50bd1778adb4daecea027760ec37b50869eff7acbde9b042b8",
+      "relevantProductSlugs": [
+        "binh-nuoc-the-thao-black-flow-750ml"
+      ],
+      "cropBox": [
+        0,
+        260,
+        471,
+        536
+      ],
+      "source": {
+        "pageId": 71396558,
+        "title": "File:GIR40273 bidon collant (41560022165).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:GIR40273_bidon_collant_(41560022165).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/d9/GIR40273_bidon_collant_%2841560022165%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/GIR40273_bidon_collant_%2841560022165%29.jpg/1280px-GIR40273_bidon_collant_%2841560022165%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "filip bossuyt from Kortrijk, Belgium",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "GIR40273 bidon collant",
+        "downloadedSha256": "37f2ab5ff9d068a18c83dd95e6ea9cfc2b25a28e21862fd7914572781d6d8432"
+      }
+    },
+    {
+      "queryId": "dev3c-010",
+      "group": "bottoms",
+      "subtype": "training-shorts",
+      "partition": "DEV-check",
+      "sha256": "4f1b2ac13e3dde8f8404a67840552d72c336a2d57d5402814a8fc610d113d663",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "cropBox": [
+        307,
+        175,
+        717,
+        553
+      ],
+      "source": {
+        "pageId": 60131454,
+        "title": "File:Christopher Newport University Virginia Va. Captains Classic Track and Field meet women's pole vault NCAA college (17056641760).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Christopher_Newport_University_Virginia_Va._Captains_Classic_Track_and_Field_meet_women%27s_pole_vault_NCAA_college_(17056641760).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/44/Christopher_Newport_University_Virginia_Va._Captains_Classic_Track_and_Field_meet_women%27s_pole_vault_NCAA_college_%2817056641760%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Christopher_Newport_University_Virginia_Va._Captains_Classic_Track_and_Field_meet_women%27s_pole_vault_NCAA_college_%2817056641760%29.jpg/1280px-Christopher_Newport_University_Virginia_Va._Captains_Classic_Track_and_Field_meet_women%27s_pole_vault_NCAA_college_%2817056641760%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "c w",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Christopher Newport University Virginia Va. Captains Classic Track and Field meet women's pole vault NCAA college",
+        "downloadedSha256": "0f8ee17aa8714877189324469c8fc2d6b0b09bec738bae00b02a413e8c5815da"
+      }
+    },
+    {
+      "queryId": "dev3c-011",
+      "group": "bottoms",
+      "subtype": "training-shorts",
+      "partition": "DEV-check",
+      "sha256": "1afa32f36d4f22e0eef5100fc80d142d7cdb4df71bc41324023a42ff0412419f",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "cropBox": [
+        190,
+        481,
+        517,
+        758
+      ],
+      "source": {
+        "pageId": 5252715,
+        "title": "File:Nakagawa akino.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Nakagawa_akino.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/67/Nakagawa_akino.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Nakagawa_akino.jpg/1280px-Nakagawa_akino.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "User:STB-1",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "e91fb893aeba951696051cc61af45aebca00379dfae6d621fbd4a0f7fb859ebe"
+      }
+    },
+    {
+      "queryId": "dev3c-012",
+      "group": "uniforms",
+      "subtype": "team-kit",
+      "partition": "DEV-check",
+      "sha256": "2e3cfb6dda42dcd77aabdb9f56eefe00d8ceffa2452b0921341eff04ce2d3b90",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-nu-royal-wave",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nu-violet-star",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 43609436,
+        "title": "File:20150922 1834 W AUT WAL 4016.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20150922_1834_W_AUT_WAL_4016.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/7b/20150922_1834_W_AUT_WAL_4016.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://upload.wikimedia.org/wikipedia/commons/7/7b/20150922_1834_W_AUT_WAL_4016.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "author": "Ailura",
+        "licenseCode": "CC BY-SA 3.0 at",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/at/deed.en",
+        "attribution": "Ailura, CC BY-SA 3.0 AT",
+        "downloadedSha256": "4f232891d8cb023729482713585ed014a41648b1f1f82dc60e115688dc883f03"
+      }
+    },
+    {
+      "queryId": "dev3c-013",
+      "group": "uniforms",
+      "subtype": "team-kit",
+      "partition": "DEV-check",
+      "sha256": "d07bfbf70641d8d871a09e63d497811e5b7bcd9b36a64aecef0cc77f449ed7f4",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-nu-royal-wave",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nu-violet-star",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 155924852,
+        "title": "File:Italia-Serbia 10-11-2024.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Italia-Serbia_10-11-2024.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/de/Italia-Serbia_10-11-2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Italia-Serbia_10-11-2024.jpg/1280px-Italia-Serbia_10-11-2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Bian0696",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "c37ae00462031668602074da1a3459b812044914b7dc21b291da3bd72af39ff1"
+      }
+    },
+    {
+      "queryId": "dev3c-014",
+      "group": "shoes",
+      "subtype": "athletic-shoes",
+      "partition": "DEV-check",
+      "sha256": "5823959f0e11fa49d989db01a03fb55e4b43b6b5cf6b6fd04b0e27da571c5a5d",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 85687653,
+        "title": "File:Koyo Bear Running Shoe.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Koyo_Bear_Running_Shoe.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Koyo_Bear_Running_Shoe.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Koyo_Bear_Running_Shoe.jpg/1280px-Koyo_Bear_Running_Shoe.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Neomicro",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "c6622628dea6d878970553f0b099eff53dead1a5e327a84363bbf5b0eb182327"
+      }
+    },
+    {
+      "queryId": "dev3c-015",
+      "group": "shoes",
+      "subtype": "athletic-shoes",
+      "partition": "DEV-check",
+      "sha256": "6cbcd0e79533e6c837f8bcdba28243be8c469fd4813db7fe7361d49039201b7a",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 63249141,
+        "title": "File:Merrell Vapor Glove 3 rolled.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:Merrell_Vapor_Glove_3_rolled.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/10/Merrell_Vapor_Glove_3_rolled.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Merrell_Vapor_Glove_3_rolled.png/1280px-Merrell_Vapor_Glove_3_rolled.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Tiia Monto",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Tiia Monto",
+        "downloadedSha256": "f87a9404ccf59cea65f0e814a760f8174cfc6d4849cd96a1a470dbbdb9249e25"
+      }
+    },
+    {
+      "queryId": "dev3c-016",
+      "group": "unknown",
+      "subtype": "backpack",
+      "partition": "DEV-check",
+      "sha256": "d221655da404bde220d7c919675e263abb4ee13f2473b1880c1bfd55f48a6ca4",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 2319036,
+        "title": "File:Eastpak1.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Eastpak1.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Eastpak1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Eastpak1.jpg/1280px-Eastpak1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "User:Willem 90",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "attribution": "I, User:Willem 90",
+        "downloadedSha256": "7856362ea8c72cc6dc5ee05916fe928336079152d098bfb84429a01117d5181b"
+      }
+    },
+    {
+      "queryId": "dev3c-017",
+      "group": "unknown",
+      "subtype": "backpack",
+      "partition": "DEV-check",
+      "sha256": "25771b1df38f34ab301369fc7909feaf646945191b6ad9336b76cd0bd4679e53",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 34081894,
+        "title": "File:Backpack-1.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Backpack-1.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/73/Backpack-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Backpack-1.jpg/1280px-Backpack-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Wikisafar",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "7f2d9f73f4efc2fde25ae3a35037110239c18a95cd729d0637e2c518191fc82a"
+      }
+    },
+    {
+      "queryId": "dev3c-018",
+      "group": "unknown",
+      "subtype": "computer-accessory",
+      "partition": "DEV-check",
+      "sha256": "2fa998c8b502c39418f88c073bda1a64b1bd0725a452c952a94582df6b71f60c",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 17677059,
+        "title": "File:HawleyMarkIImice.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:HawleyMarkIImice.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/b3/HawleyMarkIImice.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/HawleyMarkIImice.jpg/1280px-HawleyMarkIImice.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Srainwater at English Wikipedia",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Srainwater at English Wikipedia",
+        "downloadedSha256": "265b523aa29aa80e5505d5c6b1422f5a9bfd83f018aedcbf575254c4bc46096b"
+      }
+    },
+    {
+      "queryId": "dev3c-019",
+      "group": "unknown",
+      "subtype": "umbrella",
+      "partition": "DEV-check",
+      "sha256": "b41fe662ac73586ff9f68139c15af8dcf61324467608bfcd71eaccd359b4be07",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 67420116,
+        "title": "File:2016 366 327 Home and Dry (31072478861).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2016_366_327_Home_and_Dry_(31072478861).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/5/5a/2016_366_327_Home_and_Dry_%2831072478861%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/2016_366_327_Home_and_Dry_%2831072478861%29.jpg/1280px-2016_366_327_Home_and_Dry_%2831072478861%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Edna Winti",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "2016/366/327 Home and Dry",
+        "downloadedSha256": "7486af39c991a702e0ee088296f109bd07abfa4813b5b445846cc14e0fc8739a"
+      }
+    },
+    {
+      "queryId": "dev3c-020",
+      "group": "unknown",
+      "subtype": "domestic-object",
+      "partition": "DEV-check",
+      "sha256": "722ed32b8e99928e74dcd2cfaf62eac8fc01fa451ba5d5c695161600290a60a6",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 35883223,
+        "title": "File:2008-AHS-CH-Zchs= Roesli wooden movement clocks.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2008-AHS-CH-Zchs%3D_Roesli_wooden_movement_clocks.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/7b/2008-AHS-CH-Zchs%3D_Roesli_wooden_movement_clocks.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/2008-AHS-CH-Zchs%3D_Roesli_wooden_movement_clocks.jpg/1280px-2008-AHS-CH-Zchs%3D_Roesli_wooden_movement_clocks.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Fortunat Mueller-Maerki Horology ( talk )",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Horology at English Wikipedia",
+        "downloadedSha256": "c4ecfb3972211ee05f2a87386a148336b0098f7caae7d64d4fbc2ce3d10d797a"
+      }
+    }
+  ]
+}

@@ -13,11 +13,13 @@ from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import Iterable
+from uuid import UUID
 
 import httpx
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response, StreamingResponse
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -35,6 +37,49 @@ class Settings(BaseSettings):
     jwt_access_secret: str = "dev-only-access-secret-change-me-please-32-bytes-min"
     jwt_previous_access_secret: str = ""
     otel_exporter_otlp_endpoint: str = ""
+    gateway_visual_search_cohort_enabled: bool = False
+    gateway_visual_search_cohort_users: str = ""
+    visual_search_gateway_token: str = ""
+
+    @model_validator(mode="after")
+    def validate_visual_search_cohort(self) -> "Settings":
+        if self.gateway_visual_search_cohort_enabled:
+            if not re.fullmatch(r"[A-Za-z0-9_-]{32,}", self.visual_search_gateway_token):
+                raise ValueError("Visual search cohort requires a private Gateway token of at least 32 characters")
+            jwt_secrets = [self.jwt_access_secret]
+            if self.jwt_previous_access_secret:
+                jwt_secrets.append(self.jwt_previous_access_secret)
+            if any(len(secret) < 32 or secret.startswith("dev-only-") for secret in jwt_secrets):
+                raise ValueError("Visual search cohort requires private JWT signing secrets")
+            try:
+                self.visual_search_cohort_users()
+            except ValueError:
+                raise ValueError("Visual search cohort users must be comma-separated UUIDs") from None
+        return self
+
+    def visual_search_cohort_users(self) -> frozenset[str]:
+        return frozenset(str(UUID(value.strip())) for value in self.gateway_visual_search_cohort_users.split(",")
+                         if value.strip())
+
+
+VISUAL_SEARCH_PATH = "/api/v1/products/search-by-image"
+VISUAL_SEARCH_STATUS_PATH = "/api/v1/visual-search/status"
+VISUAL_SEARCH_GATEWAY_HEADER = "x-visual-search-gateway-token"
+VISUAL_SEARCH_MAX_BODY = 5_242_880 + 65_536
+
+
+async def _request_body(request: Request) -> bytes:
+    if request.url.path != VISUAL_SEARCH_PATH:
+        return await request.body()
+    content_length = request.headers.get("content-length", "")
+    if content_length.isdecimal() and int(content_length) > VISUAL_SEARCH_MAX_BODY:
+        raise HTTPException(413, "Image upload exceeds the request limit")
+    content = bytearray()
+    async for chunk in request.stream():
+        if len(content) + len(chunk) > VISUAL_SEARCH_MAX_BODY:
+            raise HTTPException(413, "Image upload exceeds the request limit")
+        content.extend(chunk)
+    return bytes(content)
 
 
 @dataclass(frozen=True)
@@ -147,8 +192,12 @@ def _access_claims(authorization: str, settings: Settings) -> dict | None:
         "HS384": hashlib.sha384,
         "HS512": hashlib.sha512,
     }
-    digest = algorithms.get(header.get("alg"))
-    if digest is None or claims.get("type") != "access" or claims.get("exp", 0) <= time.time():
+    if not isinstance(header, dict) or not isinstance(claims, dict):
+        return None
+    algorithm = header.get("alg")
+    digest = algorithms.get(algorithm) if isinstance(algorithm, str) else None
+    expiry = claims.get("exp")
+    if digest is None or claims.get("type") != "access" or type(expiry) not in (int, float) or not expiry > time.time():
         return None
     signed = f"{parts[0]}.{parts[1]}".encode()
     secrets_to_try = (settings.jwt_access_secret, settings.jwt_previous_access_secret)
@@ -170,7 +219,7 @@ def _request_claims(request: Request, settings: Settings) -> dict | None:
 
 
 def _request_headers(request: Request, correlation_id: str, traceparent: str, settings: Settings) -> dict[str, str]:
-    protected = {"x-internal-service-token", "x-forwarded-for", "x-user-id", "x-user-role"}
+    protected = {"x-internal-service-token", "x-forwarded-for", "x-user-id", "x-user-role", VISUAL_SEARCH_GATEWAY_HEADER}
     headers = {key: value for key, value in request.headers.items() if key.lower() not in HOP_BY_HOP and key.lower() not in protected}
     headers["x-correlation-id"] = correlation_id
     headers["traceparent"] = traceparent
@@ -186,6 +235,7 @@ def _request_headers(request: Request, correlation_id: str, traceparent: str, se
 
 def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTransport | None = None) -> FastAPI:
     config = settings or Settings()
+    cohort_users = config.visual_search_cohort_users() if config.gateway_visual_search_cohort_enabled else frozenset()
     limiter = WindowLimiter(config.gateway_rate_limit_per_minute, config.gateway_rate_limit_burst)
     metrics = Metrics()
     logger = logging.getLogger("gateway.access")
@@ -233,12 +283,20 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         traceparent = raw_trace if TRACEPARENT.fullmatch(raw_trace) else f"00-{secrets.token_hex(16)}-{secrets.token_hex(8)}-01"
         route = _route(request.method, request.url.path)
         upstream_setting = route.upstream_setting if route else "blocked"
-        label = upstream_setting
+        visual_route = request.url.path in {VISUAL_SEARCH_PATH, VISUAL_SEARCH_STATUS_PATH}
+        cohort_route = visual_route and config.gateway_visual_search_cohort_enabled
+        claims = _request_claims(request, config) if cohort_route else None
+        cohort_member = bool(claims and claims["sub"].lower() in cohort_users)
+        label = "visual_search" if request.method == "POST" and request.url.path == VISUAL_SEARCH_PATH else upstream_setting
         status_code = 404
         response: Response
         peer = request.client.host if request.client else "unknown"
         if not route:
             response = JSONResponse({"status": 404, "message": "Route not found", "correlationId": correlation_id}, status_code=404)
+        elif cohort_route and not cohort_member:
+            status_code = 403 if claims else 401
+            message = "Visual search pilot access required" if claims else "Authentication required"
+            response = JSONResponse({"status": status_code, "message": message, "correlationId": correlation_id}, status_code=status_code)
         elif (PROTECTED_PATHS.match(request.url.path) or ADMIN_PATHS.match(request.url.path)) and _request_claims(request, config) is None:
             status_code = 401
             response = JSONResponse({"status": 401, "message": "Authentication required", "correlationId": correlation_id}, status_code=401)
@@ -255,7 +313,10 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
                 if query:
                     target += "?" + str(httpx.QueryParams(query))
             try:
-                upstream = await client.send(client.build_request(request.method, target, headers=_request_headers(request, correlation_id, traceparent, config), content=await request.body()), stream=True)
+                headers = _request_headers(request, correlation_id, traceparent, config)
+                if cohort_route:
+                    headers[VISUAL_SEARCH_GATEWAY_HEADER] = config.visual_search_gateway_token
+                upstream = await client.send(client.build_request(request.method, target, headers=headers, content=await _request_body(request)), stream=True)
                 status_code = upstream.status_code
                 response_headers = {key: value for key, value in upstream.headers.items() if key.lower() not in HOP_BY_HOP}
                 if upstream.is_stream_consumed:
@@ -268,16 +329,21 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
                         finally:
                             await upstream.aclose()
                     response = StreamingResponse(body(), status_code=status_code, headers=response_headers, media_type=upstream.headers.get("content-type"))
+            except HTTPException as error:
+                status_code = error.status_code
+                response = JSONResponse({"status": status_code, "message": error.detail, "correlationId": correlation_id}, status_code=status_code)
             except (httpx.TimeoutException, httpx.NetworkError):
                 metrics.upstream_failures[upstream_setting] += 1
                 status_code = 503
                 response = JSONResponse({"status": 503, "message": "Upstream unavailable", "correlationId": correlation_id}, status_code=503)
         response.headers["X-Correlation-ID"] = correlation_id
         response.headers["traceparent"] = traceparent
+        if visual_route:
+            response.headers["Cache-Control"] = "private, no-store"
         duration = time.monotonic() - started
         metrics.requests[(request.method, label, status_code)] += 1
         metrics.duration_sum[(request.method, label)] += duration
-        logger.info(json.dumps({"event": "gateway_request", "method": request.method, "path": request.url.path, "status": status_code, "durationMs": round(duration * 1000, 3), "correlationId": correlation_id, "traceId": traceparent.split("-")[1], "upstream": label}, separators=(",", ":")))
+        logger.info(json.dumps({"event": "gateway_request", "method": request.method, "path": request.url.path, "status": status_code, "durationMs": round(duration * 1000, 3), "correlationId": correlation_id, "traceId": traceparent.split("-")[1], "upstream": upstream_setting, **({"visualCohortMember": cohort_member} if cohort_route else {})}, separators=(",", ":")))
         if telemetry_client:
             ended_ns = time.time_ns()
             payload = {"resourceSpans": [{"resource": {"attributes": [{"key": "service.name", "value": {"stringValue": "api-gateway"}}]}, "scopeSpans": [{"scope": {"name": "smart-sportswear.gateway"}, "spans": [{"traceId": traceparent.split("-")[1], "spanId": traceparent.split("-")[2], "name": f"{request.method} {label}", "kind": 2, "startTimeUnixNano": str(ended_ns - int(duration * 1_000_000_000)), "endTimeUnixNano": str(ended_ns), "attributes": [{"key": "http.request.method", "value": {"stringValue": request.method}}, {"key": "url.path", "value": {"stringValue": request.url.path}}, {"key": "http.response.status_code", "value": {"intValue": str(status_code)}}, {"key": "correlation.id", "value": {"stringValue": correlation_id}}, {"key": "gateway.upstream", "value": {"stringValue": label}}], "status": {"code": 2 if status_code >= 500 else 1}}]}]}]}

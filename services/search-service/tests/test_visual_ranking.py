@@ -39,3 +39,15 @@ def test_consensus_uses_top_three_average_not_catalog_group_size():
     ]
     ranked = rerank_visual_candidates(rows, category_weight=.10)
     assert ranked[0]["product_id"] == "shoe-a"
+
+
+def test_equal_reranked_scores_use_product_then_image_id():
+    tied = [
+        _row("b", .8, "SPORTS_TOP"),
+        dict(_row("a", .8, "SPORTS_TOP"), image_id="image-z"),
+        _row("a", .8, "SPORTS_TOP"),
+    ]
+    ranked = rerank_visual_candidates(tied, category_weight=.60)
+    assert [(row["product_id"], row["image_id"]) for row in ranked] == [
+        ("a", "image-a"), ("a", "image-z"), ("b", "image-b"),
+    ]

@@ -1,0 +1,20 @@
+{
+  "dataset": {
+    "name": "image-search-dev-v3-catalog-coverage",
+    "version": "3.2.0",
+    "split": "DEV",
+    "status": "FROZEN",
+    "frozenAt": "2026-11-18T14:58:53.427401+00:00",
+    "catalogSnapshot": {
+      "version": "image-catalog-v2-2026-10-23",
+      "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+    }
+  },
+  "profileSha256": "998d4e6f94db20f9a027020aebe309f96998630ffccbd3550d64fc5733410e1b",
+  "manifestSha256": "d550e51988ce5ebe955288fa1cc1e9c990b3af991e2827cbfb3a81df584d7b2b",
+  "snapshotChecksum": "71c413098c88688a4248680a291bef5e",
+  "snapshotVectors": 85,
+  "scope": "loopback HTTP with frozen local snapshot",
+  "approval": null,
+  "startedAt": "2026-11-18T15:10:50.269504+00:00"
+}

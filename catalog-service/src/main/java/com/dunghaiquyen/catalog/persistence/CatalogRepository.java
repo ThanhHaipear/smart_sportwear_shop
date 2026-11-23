@@ -90,12 +90,24 @@ public class CatalogRepository {
 
     private List<Map<String, Object>> indexImages(UUID productId) {
         return jdbc.sql("""
-                select id,secure_url,sort_order from product_images
+                select id,secure_url,sort_order,public_id,asset_version,width,height,asset_format,
+                       asset_bytes,checksum,source_kind,license_code,source_uri,source_group_code
+                  from product_images
                  where product_id=:id order by sort_order,id
                 """).param("id", productId).query((rs, row) -> map(
                         "id", rs.getObject("id", UUID.class),
                         "url", rs.getString("secure_url"),
-                        "publicId", null,
+                        "publicId", rs.getString("public_id"),
+                        "assetVersion", rs.getString("asset_version"),
+                        "width", rs.getObject("width", Integer.class),
+                        "height", rs.getObject("height", Integer.class),
+                        "format", rs.getString("asset_format"),
+                        "bytes", rs.getObject("asset_bytes", Long.class),
+                        "checksum", rs.getString("checksum"),
+                        "sourceKind", rs.getString("source_kind"),
+                        "licenseCode", rs.getString("license_code"),
+                        "sourceUri", rs.getString("source_uri"),
+                        "sourceGroupCode", rs.getString("source_group_code"),
                         "sortOrder", rs.getInt("sort_order"))).list();
     }
 

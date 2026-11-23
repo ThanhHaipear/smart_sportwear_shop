@@ -16,6 +16,26 @@ from app.services.visual_ranking import rerank_visual_candidates
 logger = logging.getLogger(__name__)
 
 
+# Score every eligible image before applying any ordering or candidate cutoff.
+EXACT_IMAGE_SEARCH_SQL = """
+    with scored as materialized (
+        select e.product_id,e.image_id,e.image_url,d.product_type,
+               e.embedding OPERATOR(extensions.<=>) %s::extensions.vector as distance
+        from ai_search.image_embeddings e
+        join ai_search.search_documents d using(product_id)
+        where e.status='READY' and d.status='ACTIVE'
+    ), best_images as (
+        select distinct on (product_id) product_id,image_id,image_url,product_type,distance
+        from scored
+        order by product_id,distance,image_id
+    )
+    select product_id,image_id,image_url,1-distance as similarity,product_type
+    from best_images
+    order by similarity desc,product_id,image_id
+    limit %s
+"""
+
+
 def vector_literal(values: list[float]) -> str:
     return "[" + ",".join(f"{value:.9g}" for value in values) + "]"
 
@@ -66,7 +86,7 @@ class SearchRepository:
     async def is_current(
         self,
         document: CatalogIndexDocument,
-        image_sources: list[tuple[UUID, str, str]],
+        image_sources: list[tuple[UUID, str, str]] | None,
     ) -> bool:
         digest = content_hash(canonical_text(document))
         async with self.connection() as connection, connection.cursor() as cursor:
@@ -135,6 +155,8 @@ class SearchRepository:
             )
             if current_variants != expected_variants:
                 return False
+            if image_sources is None:
+                return True
 
             await cursor.execute(
                 """select image_id,image_url,image_hash,model,status
@@ -153,7 +175,7 @@ class SearchRepository:
 
     async def upsert_document(
         self, document: CatalogIndexDocument, text_vector: list[float] | None,
-        image_vectors: list[tuple[UUID, str, str, list[float]]], event_id: UUID | None = None,
+        image_vectors: list[tuple[UUID, str, str, list[float]]] | None, event_id: UUID | None = None,
         consumer: str = "catalog-index-v1",
     ) -> str:
         text = canonical_text(document)
@@ -206,7 +228,7 @@ class SearchRepository:
                     (document.product_id, digest, self.settings.text_embedding_model, vector_literal(text_vector)),
                 )
             active_images: list[UUID] = []
-            for image_id, url, image_hash, vector in image_vectors:
+            for image_id, url, image_hash, vector in image_vectors or ():
                 active_images.append(image_id)
                 await cursor.execute(
                     """insert into ai_search.image_embeddings(
@@ -218,10 +240,11 @@ class SearchRepository:
                     (image_id, document.product_id, url, image_hash,
                      self.settings.visual_embedding_model, vector_literal(vector)),
                 )
-            await cursor.execute(
-                "delete from ai_search.image_embeddings where product_id=%s and not (image_id=any(%s::uuid[]))",
-                (document.product_id, active_images),
-            )
+            if image_vectors is not None:
+                await cursor.execute(
+                    "delete from ai_search.image_embeddings where product_id=%s and not (image_id=any(%s::uuid[]))",
+                    (document.product_id, active_images),
+                )
             if event_id is not None:
                 await cursor.execute(
                     """insert into ai_search.processed_events(consumer_name,event_id,aggregate_version)
@@ -266,22 +289,8 @@ class SearchRepository:
     ) -> list[dict]:
         async with self.connection() as connection, connection.cursor() as cursor:
             await cursor.execute(
-                """with ranked as (
-                       select e.product_id,e.image_id,e.image_url,
-                              1-(e.embedding <=> %s::extensions.vector) similarity,
-                              d.product_type,
-                              row_number() over (
-                                  partition by e.product_id
-                                  order by e.embedding <=> %s::extensions.vector,e.image_id
-                              ) product_rank
-                       from ai_search.image_embeddings e
-                       join ai_search.search_documents d using(product_id)
-                       where e.status='READY' and d.status='ACTIVE'
-                   )
-                   select product_id,image_id,image_url,similarity,product_type
-                   from ranked where product_rank=1
-                   order by similarity desc,product_id,image_id limit %s""",
-                (vector_literal(vector), vector_literal(vector), min(max(limit * 10, 50), 100)),
+                EXACT_IMAGE_SEARCH_SQL,
+                (vector_literal(vector), min(max(limit * 10, 50), 100)),
             )
             rows = list(await cursor.fetchall())
         return rerank_visual_candidates(
@@ -289,3 +298,15 @@ class SearchRepository:
             category_weight=self.settings.visual_category_consensus_weight,
             query_category_scores=query_category_scores,
         )[:limit]
+
+    async def visual_pilot_catalog(self) -> list[dict]:
+        async with self.connection() as connection, connection.cursor() as cursor:
+            await cursor.execute("""
+                select e.product_id::text,e.image_id::text,e.image_url,e.embedding::text as vector,
+                       d.product_type,e.model
+                from ai_search.image_embeddings e join ai_search.search_documents d using(product_id)
+                where e.status='READY' and d.status='ACTIVE'
+                order by e.image_id
+                limit 82
+            """)
+            return list(await cursor.fetchall())

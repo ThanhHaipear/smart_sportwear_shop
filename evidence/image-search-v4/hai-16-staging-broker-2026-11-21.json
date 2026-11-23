@@ -1,0 +1,940 @@
+{
+  "scope": "isolated local acceptance deployment with actual RabbitMQ and Search worker",
+  "checkedAt": "2026-11-21T16:42:27.350295+07:00",
+  "databaseAccess": "configured Supabase read-only",
+  "rabbitmqImage": "rabbitmq:3.13-management-alpine",
+  "passed": true,
+  "remoteStagingVerified": false,
+  "checks": {
+    "enabled": {
+      "mode": "shadow",
+      "scope": "staging",
+      "checkedAt": "2026-11-21T09:40:36.549611+00:00",
+      "publicStatus": {
+        "enabled": true,
+        "available": true,
+        "status": "READY"
+      },
+      "catalogCanaryHttp": 200,
+      "searchDatabaseReady": true,
+      "internalPilotReady": true,
+      "internalRouteGatewayHttp": 404,
+      "passed": true,
+      "warmupHttp": 200,
+      "replay": {
+        "cases": [
+          {
+            "id": "dev4g-001",
+            "group": "tops",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 829.328,
+            "gatewayMs": 940.012,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 20
+          },
+          {
+            "id": "dev4g-002",
+            "group": "tops",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 680.086,
+            "gatewayMs": 821.144,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 9
+          },
+          {
+            "id": "dev4g-003",
+            "group": "tops",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 847.775,
+            "gatewayMs": 931.015,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 13
+          },
+          {
+            "id": "dev4g-004",
+            "group": "tops",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 730.842,
+            "gatewayMs": 806.855,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 18
+          },
+          {
+            "id": "dev4g-005",
+            "group": "bottoms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 660.984,
+            "gatewayMs": 802.256,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 20
+          },
+          {
+            "id": "dev4g-006",
+            "group": "bottoms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 720.716,
+            "gatewayMs": 746.389,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 11
+          },
+          {
+            "id": "dev4g-007",
+            "group": "bottoms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 720.427,
+            "gatewayMs": 855.123,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 14
+          },
+          {
+            "id": "dev4g-008",
+            "group": "bottoms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 675.887,
+            "gatewayMs": 827.518,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 10
+          },
+          {
+            "id": "dev4g-009",
+            "group": "uniforms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 748.465,
+            "gatewayMs": 840.128,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 13
+          },
+          {
+            "id": "dev4g-010",
+            "group": "uniforms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 750.977,
+            "gatewayMs": 1292.725,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 10
+          },
+          {
+            "id": "dev4g-011",
+            "group": "uniforms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 1139.53,
+            "gatewayMs": 1063.756,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 19
+          },
+          {
+            "id": "dev4g-012",
+            "group": "uniforms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 684.883,
+            "gatewayMs": 839.045,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 16
+          },
+          {
+            "id": "dev4g-013",
+            "group": "shoes",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 689.399,
+            "gatewayMs": 865.264,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 7
+          },
+          {
+            "id": "dev4g-014",
+            "group": "shoes",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 693.728,
+            "gatewayMs": 767.705,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 6
+          },
+          {
+            "id": "dev4g-015",
+            "group": "shoes",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 674.998,
+            "gatewayMs": 894.912,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 20
+          },
+          {
+            "id": "dev4g-016",
+            "group": "shoes",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 735.737,
+            "gatewayMs": 807.834,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 8
+          },
+          {
+            "id": "dev4g-017",
+            "group": "accessories",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 712.814,
+            "gatewayMs": 854.9,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 4
+          },
+          {
+            "id": "dev4g-018",
+            "group": "accessories",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 659.938,
+            "gatewayMs": 850.308,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 4
+          },
+          {
+            "id": "dev4g-019",
+            "group": "accessories",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 722.333,
+            "gatewayMs": 812.861,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 4
+          },
+          {
+            "id": "dev4g-020",
+            "group": "accessories",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 709.047,
+            "gatewayMs": 756.509,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 11
+          },
+          {
+            "id": "dev4g-021",
+            "group": "unknown",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 670.941,
+            "gatewayMs": 724.861,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 0
+          },
+          {
+            "id": "dev4g-022",
+            "group": "unknown",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 675.343,
+            "gatewayMs": 641.317,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 0
+          },
+          {
+            "id": "dev4g-023",
+            "group": "unknown",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 704.515,
+            "gatewayMs": 668.023,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 0
+          },
+          {
+            "id": "dev4g-024",
+            "group": "unknown",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 649.624,
+            "gatewayMs": 807.458,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 0
+          }
+        ],
+        "requests": 48,
+        "failures": 0,
+        "top5Parity": 24,
+        "catalogCardsValid": 24,
+        "searchP95Ms": 847.775,
+        "gatewayP95Ms": 1063.756,
+        "passed": true
+      },
+      "rabbitmq": {
+        "before": {
+          "observed": true,
+          "queues": {
+            "search.indexing": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 1
+            },
+            "search.indexing.retry.30s": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.5m": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.1h": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.dlq": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            }
+          }
+        },
+        "after": {
+          "observed": true,
+          "queues": {
+            "search.indexing": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 1
+            },
+            "search.indexing.retry.30s": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.5m": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.1h": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.dlq": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            }
+          }
+        },
+        "noBacklogGrowth": true
+      }
+    },
+    "disabled": {
+      "mode": "rollback",
+      "scope": "staging",
+      "checkedAt": "2026-11-21T09:41:31.661288+00:00",
+      "publicStatus": {
+        "enabled": false,
+        "available": false,
+        "status": "DISABLED"
+      },
+      "catalogCanaryHttp": 200,
+      "searchDatabaseReady": true,
+      "internalPilotReady": true,
+      "internalRouteGatewayHttp": 404,
+      "passed": true,
+      "rollbackHttp": 503,
+      "rabbitmq": {
+        "before": {
+          "observed": true,
+          "queues": {
+            "search.indexing": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 1
+            },
+            "search.indexing.retry.30s": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.5m": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.1h": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.dlq": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            }
+          }
+        },
+        "after": {
+          "observed": true,
+          "queues": {
+            "search.indexing": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 1
+            },
+            "search.indexing.retry.30s": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.5m": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.1h": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.dlq": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            }
+          }
+        },
+        "noBacklogGrowth": true
+      }
+    },
+    "restored": {
+      "mode": "shadow",
+      "scope": "staging",
+      "checkedAt": "2026-11-21T09:41:40.432827+00:00",
+      "publicStatus": {
+        "available": true,
+        "status": "READY",
+        "enabled": true
+      },
+      "catalogCanaryHttp": 200,
+      "searchDatabaseReady": true,
+      "internalPilotReady": true,
+      "internalRouteGatewayHttp": 404,
+      "passed": true,
+      "warmupHttp": 200,
+      "replay": {
+        "cases": [
+          {
+            "id": "dev4g-001",
+            "group": "tops",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 736.175,
+            "gatewayMs": 919.939,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 20
+          },
+          {
+            "id": "dev4g-002",
+            "group": "tops",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 754.519,
+            "gatewayMs": 814.909,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 9
+          },
+          {
+            "id": "dev4g-003",
+            "group": "tops",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 736.089,
+            "gatewayMs": 801.625,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 13
+          },
+          {
+            "id": "dev4g-004",
+            "group": "tops",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 745.722,
+            "gatewayMs": 913.834,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 18
+          },
+          {
+            "id": "dev4g-005",
+            "group": "bottoms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 712.349,
+            "gatewayMs": 864.484,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 20
+          },
+          {
+            "id": "dev4g-006",
+            "group": "bottoms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 670.591,
+            "gatewayMs": 838.33,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 11
+          },
+          {
+            "id": "dev4g-007",
+            "group": "bottoms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 631.471,
+            "gatewayMs": 861.075,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 14
+          },
+          {
+            "id": "dev4g-008",
+            "group": "bottoms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 681.62,
+            "gatewayMs": 748.483,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 10
+          },
+          {
+            "id": "dev4g-009",
+            "group": "uniforms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 754.595,
+            "gatewayMs": 843.544,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 13
+          },
+          {
+            "id": "dev4g-010",
+            "group": "uniforms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 772.959,
+            "gatewayMs": 828.295,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 10
+          },
+          {
+            "id": "dev4g-011",
+            "group": "uniforms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 740.768,
+            "gatewayMs": 825.575,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 19
+          },
+          {
+            "id": "dev4g-012",
+            "group": "uniforms",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 697.841,
+            "gatewayMs": 795.805,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 16
+          },
+          {
+            "id": "dev4g-013",
+            "group": "shoes",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 674.071,
+            "gatewayMs": 838.765,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 7
+          },
+          {
+            "id": "dev4g-014",
+            "group": "shoes",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 669.486,
+            "gatewayMs": 784.998,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 6
+          },
+          {
+            "id": "dev4g-015",
+            "group": "shoes",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 683.354,
+            "gatewayMs": 819.266,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 20
+          },
+          {
+            "id": "dev4g-016",
+            "group": "shoes",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 697.786,
+            "gatewayMs": 800.301,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 8
+          },
+          {
+            "id": "dev4g-017",
+            "group": "accessories",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 675.684,
+            "gatewayMs": 852.15,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 4
+          },
+          {
+            "id": "dev4g-018",
+            "group": "accessories",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 714.07,
+            "gatewayMs": 780.112,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 4
+          },
+          {
+            "id": "dev4g-019",
+            "group": "accessories",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 648.409,
+            "gatewayMs": 823.658,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 4
+          },
+          {
+            "id": "dev4g-020",
+            "group": "accessories",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 694.596,
+            "gatewayMs": 824.798,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 11
+          },
+          {
+            "id": "dev4g-021",
+            "group": "unknown",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 746.928,
+            "gatewayMs": 649.453,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 0
+          },
+          {
+            "id": "dev4g-022",
+            "group": "unknown",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 715.648,
+            "gatewayMs": 772.076,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 0
+          },
+          {
+            "id": "dev4g-023",
+            "group": "unknown",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 694.598,
+            "gatewayMs": 754.615,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 0
+          },
+          {
+            "id": "dev4g-024",
+            "group": "unknown",
+            "searchHttp": 200,
+            "gatewayHttp": 200,
+            "searchMs": 707.478,
+            "gatewayMs": 673.357,
+            "searchError": null,
+            "gatewayError": null,
+            "top5Parity": true,
+            "catalogCardsValid": true,
+            "cards": 0
+          }
+        ],
+        "requests": 48,
+        "failures": 0,
+        "top5Parity": 24,
+        "catalogCardsValid": 24,
+        "searchP95Ms": 754.595,
+        "gatewayP95Ms": 913.834,
+        "passed": true
+      },
+      "rabbitmq": {
+        "before": {
+          "observed": true,
+          "queues": {
+            "search.indexing": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 1
+            },
+            "search.indexing.retry.30s": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.5m": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.1h": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.dlq": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            }
+          }
+        },
+        "after": {
+          "observed": true,
+          "queues": {
+            "search.indexing": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 1
+            },
+            "search.indexing.retry.30s": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.5m": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.retry.1h": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            },
+            "search.indexing.dlq": {
+              "messages": 0,
+              "messages_ready": 0,
+              "messages_unacknowledged": 0,
+              "consumers": 0
+            }
+          }
+        },
+        "noBacklogGrowth": true
+      }
+    }
+  },
+  "queueDrill": {
+    "fixture": "schema-invalid isolated message, no catalog data",
+    "firstAttempt": {
+      "queue": "search.indexing.retry.30s",
+      "messages": 1,
+      "messages_ready": 1,
+      "messages_unacknowledged": 0,
+      "consumers": 0
+    },
+    "retryLimitReached": {
+      "queue": "search.indexing.dlq",
+      "messages": 1,
+      "messages_ready": 1,
+      "messages_unacknowledged": 0,
+      "consumers": 0
+    }
+  }
+}

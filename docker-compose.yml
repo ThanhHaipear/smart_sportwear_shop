@@ -34,12 +34,18 @@ services:
 
   search-service:
     profiles: ["search", "chatbot"]
-    build: ./services/search-service
+    build:
+      context: ./services/search-service
+      args:
+        INSTALL_LOCAL_EMBEDDINGS: ${SEARCH_INSTALL_LOCAL_EMBEDDINGS:-false}
     expose: ["8090"]
     env_file: ./services/search-service/.env.example
     environment:
       SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
       VISUAL_SEARCH_ENABLED: ${VISUAL_SEARCH_ENABLED:-false}
+      VISUAL_SEARCH_PILOT_V4_ENABLED: ${VISUAL_SEARCH_PILOT_V4_ENABLED:-false}
+      VISUAL_SEARCH_AUTO_REGION_ENABLED: ${VISUAL_SEARCH_AUTO_REGION_ENABLED:-false}
+      VISUAL_EMBEDDING_DEVICE: ${VISUAL_EMBEDDING_DEVICE:-auto}
       DATABASE_URL: ${SEARCH_DATABASE_URL:-}
       INTERNAL_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
       CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
@@ -53,12 +59,16 @@ services:
 
   search-worker:
     profiles: ["search", "chatbot"]
-    build: ./services/search-service
+    build:
+      context: ./services/search-service
+      args:
+        INSTALL_LOCAL_EMBEDDINGS: ${SEARCH_INSTALL_LOCAL_EMBEDDINGS:-false}
     command: ["python", "-m", "app.worker"]
     env_file: ./services/search-service/.env.example
     environment:
       SEARCH_ENABLED: ${SEARCH_ENABLED:-false}
       VISUAL_SEARCH_ENABLED: ${VISUAL_SEARCH_ENABLED:-false}
+      VISUAL_EMBEDDING_DEVICE: ${VISUAL_EMBEDDING_DEVICE:-auto}
       DATABASE_URL: ${SEARCH_DATABASE_URL:-}
       INTERNAL_SERVICE_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
       CATALOG_SERVICE_TOKEN: ${CATALOG_INTERNAL_TOKEN:-}
@@ -140,6 +150,10 @@ services:
       CATALOG_INTERNAL_TOKEN: ${CATALOG_INTERNAL_TOKEN:-change-me}
       SALES_API_BASE_URL: http://sales-service:8094
       SALES_INTERNAL_TOKEN: ${SALES_INTERNAL_TOKEN:-change-me}
+      VISUAL_SEARCH_PUBLIC_ENABLED: ${VISUAL_SEARCH_PUBLIC_ENABLED:-false}
+      VISUAL_SEARCH_GATEWAY_TOKEN: ${VISUAL_SEARCH_GATEWAY_TOKEN:-}
+      SEARCH_API_BASE_URL: http://search-service:8090
+      SEARCH_SERVICE_INTERNAL_TOKEN: ${SEARCH_SERVICE_INTERNAL_TOKEN:-}
       CATALOG_IMAGE_STORAGE_DIRECTORY: /var/lib/catalog/images
       CATALOG_EVENTS_ENABLED: ${CATALOG_EVENTS_ENABLED:-false}
       CATALOG_FLYWAY_ENABLED: ${CATALOG_FLYWAY_ENABLED:-false}
@@ -230,6 +244,9 @@ services:
       GATEWAY_RATE_LIMIT_PER_MINUTE: ${GATEWAY_RATE_LIMIT_PER_MINUTE:-120}
       GATEWAY_RATE_LIMIT_BURST: ${GATEWAY_RATE_LIMIT_BURST:-30}
       GATEWAY_CORS_ALLOWED_ORIGINS: ${GATEWAY_CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001}
+      GATEWAY_VISUAL_SEARCH_COHORT_ENABLED: ${GATEWAY_VISUAL_SEARCH_COHORT_ENABLED:-false}
+      GATEWAY_VISUAL_SEARCH_COHORT_USERS: ${GATEWAY_VISUAL_SEARCH_COHORT_USERS:-}
+      VISUAL_SEARCH_GATEWAY_TOKEN: ${VISUAL_SEARCH_GATEWAY_TOKEN:-}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-dev-only-access-secret-change-me-please-32-bytes-min}
       JWT_PREVIOUS_ACCESS_SECRET: ${JWT_PREVIOUS_ACCESS_SECRET:-}
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318

@@ -90,9 +90,7 @@ public class PublicCatalogRepository {
                 .query(Long.class).single();
     }
 
-    public List<Map<String, Object>> products(String query, String categorySlug, String brandSlug,
-                                               int limit, int offset) {
-        return jdbc.sql("""
+    private static final String PRODUCT_CARD_SQL = """
                 select p.id,p.name,p.slug,p.description,p.status,p.attributes,
                        b.id brand_id,b.name brand_name,c.id category_id,c.name category_name,
                        (select i.secure_url from product_images i where i.product_id=p.id
@@ -104,6 +102,11 @@ public class PublicCatalogRepository {
                        (select coalesce(sum(v.stock_quantity-v.reserved_quantity),0) from product_variants v
                          where v.product_id=p.id and v.status='ACTIVE') available_quantity
                   from products p left join categories c on c.id=p.category_id left join brands b on b.id=p.brand_id
+                """;
+
+    public List<Map<String, Object>> products(String query, String categorySlug, String brandSlug,
+                                               int limit, int offset) {
+        return jdbc.sql(PRODUCT_CARD_SQL + """
                  where p.status='ACTIVE'
                    and (:query='' or lower(p.name) like lower(:queryLike) or lower(coalesce(p.description,'')) like lower(:queryLike))
                    and (:category='' or c.slug=:category) and (:brand='' or b.slug=:brand)
@@ -112,6 +115,32 @@ public class PublicCatalogRepository {
                 .param("category", clean(categorySlug)).param("brand", clean(brandSlug))
                 .param("limit", limit).param("offset", offset)
                 .query((rs, row) -> productListItem(rs)).list();
+    }
+
+    public Map<UUID, Map<String, Object>> visualSearchProducts(List<UUID> productIds) {
+        Map<UUID, Map<String, Object>> cards = new LinkedHashMap<>();
+        if (!productIds.isEmpty()) {
+            jdbc.sql(PRODUCT_CARD_SQL + " where p.status='ACTIVE' and p.id in (:ids)")
+                    .param("ids", productIds).query((rs, row) -> productListItem(rs)).list()
+                    .forEach(card -> cards.put((UUID) card.get("id"), card));
+        }
+        return cards;
+    }
+
+    public record VisualSearchImage(UUID productId, String url) {}
+
+    public Map<UUID, VisualSearchImage> visualSearchImages(List<UUID> imageIds) {
+        if (imageIds.isEmpty()) {
+            return Map.of();
+        }
+        return jdbc.sql("select id,product_id,secure_url from product_images where id in (:ids)")
+                .param("ids", imageIds).query(rs -> {
+                    Map<UUID, VisualSearchImage> images = new LinkedHashMap<>();
+                    while (rs.next()) {
+                        images.put(uuid(rs, "id"), new VisualSearchImage(uuid(rs, "product_id"), rs.getString("secure_url")));
+                    }
+                    return images;
+                });
     }
 
     public Optional<Map<String, Object>> product(String slugOrId) {

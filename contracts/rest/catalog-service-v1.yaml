@@ -78,4 +78,14 @@ components:
         id: {type: string, format: uuid}
         url: {type: string}
         publicId: {type: string, nullable: true}
+        assetVersion: {type: string, nullable: true}
+        width: {type: integer, minimum: 1, nullable: true}
+        height: {type: integer, minimum: 1, nullable: true}
+        format: {type: string, nullable: true}
+        bytes: {type: integer, format: int64, minimum: 1, nullable: true}
+        checksum: {type: string, pattern: '^[0-9a-f]{64}$', nullable: true}
+        sourceKind: {type: string, nullable: true}
+        licenseCode: {type: string, nullable: true}
+        sourceUri: {type: string, nullable: true}
+        sourceGroupCode: {type: string, nullable: true}
         sortOrder: {type: integer, minimum: 0}

@@ -64,14 +64,19 @@ if (-not $ImplementationOnly) {
     }
     $report = Get-Content -Raw $reportPath | ConvertFrom-Json
     $config = Get-Content -Raw $configPath | ConvertFrom-Json
-    if ($config.dataset.split -ne 'TEST' -or $config.dataset.status -ne 'FROZEN') {
-        throw "Acceptance dataset must be a frozen TEST split"
+    if ($config.dataset.name -ne 'image-search-test-v3' -or
+        $config.dataset.split -ne 'TEST' -or $config.dataset.status -ne 'FROZEN' -or
+        $config.approval.status -ne 'APPROVED' -or $config.approval.independent -ne $true) {
+        throw "Acceptance requires frozen TEST v3 and independent approval"
     }
     if (-not $report.acceptance.eligible -or -not $report.acceptance.passed) {
         throw "Phase 3 retrieval quality gate failed"
     }
     if ($report.positive.recall.at5 -lt 0.80 -or
         $report.positive.categoryAccuracy.value -lt 0.90 -or
+        $report.unknown.rejectionRate.value -lt 0.80 -or
+        $null -eq $report.acceptance.unresolvedLeakage -or
+        $report.acceptance.unresolvedLeakage -ne 0 -or
         $report.requestFailureRate.value -ne 0 -or
         $report.latencyMs.p95 -gt 3000) {
         throw "Phase 3 locked acceptance thresholds are not satisfied"

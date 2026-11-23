@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     semantic_weight: float = Field(default=1.0, gt=0)
 
     visual_search_enabled: bool = True
+    visual_search_pilot_v4_enabled: bool = False
+    visual_search_auto_region_enabled: bool = False
     visual_embedding_provider: Literal["fake", "voyage", "hugging_face_local"] = "hugging_face_local"
     visual_embedding_model: str = "google/siglip2-base-patch16-224"
     visual_embedding_revision: str = "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2"
@@ -79,6 +81,8 @@ class Settings(BaseSettings):
             raise ValueError("TEXT_EMBEDDING_DIMS must match ai_search.text_embeddings vector(1536)")
         if self.visual_embedding_dims != 768:
             raise ValueError("VISUAL_EMBEDDING_DIMS must match ai_search.image_embeddings vector(768)")
+        if self.visual_search_enabled and self.visual_search_pilot_v4_enabled and self.visual_embedding_provider != "hugging_face_local":
+            raise ValueError("Visual pilot v4 requires the local SigLIP2 provider")
         return self
 
     @property

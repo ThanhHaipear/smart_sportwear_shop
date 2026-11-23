@@ -1,0 +1,15 @@
+{
+  "status": "APPROVED",
+  "independent": true,
+  "reviewer": "Quyền (QuyenNDD)",
+  "reviewedAt": "2026-11-19T22:03:40+07:00",
+  "reviewedAtBasis": "Recorded when approval was relayed by the user; exact review time was not provided.",
+  "bindings": {
+    "samplesSha256": "1374ccc3479f8fc2d78c8bbc9017f4391b838d28cc42acd30203aa29e8e661d7",
+    "labelsSha256": "af456acd2b613d8b9265c968d7618f1f8a13a5720a300fb8495218b03dd17342",
+    "assetListSha256": "6c8b71b5e659e52bc4a74c51ff07dc8e2133bd5381eb4f5bd9a642f2ea840a63",
+    "duplicateReportSha256": "daeb5d897d3bed9d80e621ff0755104fb0037c1ea003bf467a501aba3627e250",
+    "lockedProfileSha256": "0a1aa1c90d370767802bfb9cf8047901f63be57d354bf48b7888151743720b5c"
+  },
+  "confirmationSource": "User relayed Quyen's approval in the project conversation."
+}

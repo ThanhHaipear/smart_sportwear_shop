@@ -734,7 +734,8 @@ def contact_sheets(dataset_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     for group in GROUP_SOURCES:
         samples = [sample for sample in manifest["samples"] if sample["group"] == group]
-        sheet = Image.new("RGB", (5 * 240, 4 * 280), "white")
+        rows = max(4, (len(samples) + 4) // 5)
+        sheet = Image.new("RGB", (5 * 240, rows * 280), "white")
         for index, sample in enumerate(samples):
             with Image.open(dataset_dir / sample["image"]) as source:
                 image = ImageOps.contain(ImageOps.exif_transpose(source).convert("RGB"), (220, 230))

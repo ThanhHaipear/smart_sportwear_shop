@@ -1,0 +1,1112 @@
+{
+  "schemaVersion": 1,
+  "version": "4.1.0",
+  "provider": "Wikimedia Commons",
+  "frozenAt": "2026-11-19T22:32:56+07:00",
+  "items": [
+    {
+      "queryId": "dev4b-001",
+      "group": "tops",
+      "subtype": "tee",
+      "partition": "calibration",
+      "sha256": "f47f6654ef214e72267c6a03f180249d8bfe1112d31e70f2e7a8bd42cf271958",
+      "relevantProductSlugs": [
+        "ao-chay-bo-nam-aero-navy",
+        "ao-tap-bong-da-nam-blaze-red",
+        "ao-tap-bong-da-nu-royal-motion"
+      ],
+      "source": {
+        "pageId": 27466911,
+        "title": "File:Claudio Pizarro 2010-04-23 (1).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Claudio_Pizarro_2010-04-23_(1).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Claudio_Pizarro_2010-04-23_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Claudio_Pizarro_2010-04-23_%281%29.jpg/1280px-Claudio_Pizarro_2010-04-23_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Benjamin Radzun",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Flickr : Training 23.04.2010",
+        "downloadedSha256": "1f7215608e835834cd11a54a0d763fbccefe9211db8a43fdf4b67d98016ad28d"
+      },
+      "cropBox": [
+        225,
+        143,
+        686,
+        593
+      ]
+    },
+    {
+      "queryId": "dev4b-002",
+      "group": "tops",
+      "subtype": "jersey",
+      "partition": "calibration",
+      "sha256": "625b428806e2283311295be2ceb2adfe908f89e54e3fce2fa0ef9503bfb404d7",
+      "relevantProductSlugs": [
+        "ao-dau-argentina-2026-home-jm8396",
+        "ao-dau-bi-2026-home-jm8381",
+        "ao-dau-duc-nu-2026-home-jz4559",
+        "ao-dau-brazil-2026-home-if7054-724",
+        "ao-dau-phap-2026-home-ib5300-480",
+        "ao-dau-anh-2026-home-ib5290-100"
+      ],
+      "source": {
+        "pageId": 7268718,
+        "title": "File:Lula Obama.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Lula_Obama.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Lula_Obama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Lula_Obama.jpg/1280px-Lula_Obama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Ricardo Stuckert",
+        "licenseCode": "CC BY 3.0 br",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/br/deed.en",
+        "attribution": "Agência Brasil",
+        "downloadedSha256": "9788dc6f2a0be8adddd9b99248c11e99e2121dff72a73cc036e9a0f09a916cc0"
+      },
+      "cropBox": [
+        297,
+        280,
+        686,
+        668
+      ]
+    },
+    {
+      "queryId": "dev4b-003",
+      "group": "tops",
+      "subtype": "tee",
+      "partition": "calibration",
+      "sha256": "fdee773cc5cb1b8105188b1ccc38f7fa51d37c0dd673017e8ea7f8adb608cc52",
+      "relevantProductSlugs": [
+        "ao-chay-bo-nam-aero-navy",
+        "ao-tap-bong-da-nam-blaze-red",
+        "ao-tap-bong-da-nu-royal-motion"
+      ],
+      "source": {
+        "pageId": 202741193,
+        "title": "File:A player of FC Islomobod Urgut (Samarkand Region) 09.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:A_player_of_FC_Islomobod_Urgut_(Samarkand_Region)_09.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/ed/A_player_of_FC_Islomobod_Urgut_%28Samarkand_Region%29_09.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/A_player_of_FC_Islomobod_Urgut_%28Samarkand_Region%29_09.jpg/1280px-A_player_of_FC_Islomobod_Urgut_%28Samarkand_Region%29_09.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Umarxon III",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "92f3d36ec80c3c1258dacb45e1b0441b74c20cc43cbe3ea2f9db259e0fbec59a"
+      },
+      "cropBox": [
+        109,
+        287,
+        594,
+        922
+      ]
+    },
+    {
+      "queryId": "dev4b-004",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "calibration",
+      "sha256": "e146af64e3a0bec4c9a5bf2f41ae5a943c1a90df4a4c24daa21502dad7bc202c",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 5998886,
+        "title": "File:Tanpan.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Tanpan.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Tanpan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Tanpan.jpg/1280px-Tanpan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Kuah455405",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "attribution": "Own work",
+        "downloadedSha256": "44db29a09ae67bce792d932c1ccbfe305dffe4030d97b8fd2b5497e4a694ca38"
+      }
+    },
+    {
+      "queryId": "dev4b-005",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "calibration",
+      "sha256": "bd581dced52e1bf8832038c4558ec37c0fb18dc4b28781907990fe52eddad6f2",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 47652951,
+        "title": "File:England Women's Vs USA (18313008609).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:England_Women%27s_Vs_USA_(18313008609).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/45/England_Women%27s_Vs_USA_%2818313008609%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/England_Women%27s_Vs_USA_%2818313008609%29.jpg/1280px-England_Women%27s_Vs_USA_%2818313008609%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "joshjdss",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "England Women's Vs USA",
+        "downloadedSha256": "1e0319aa8d206bfefee1d0acde42d3fb92ec1ad403867a7e7d7cedb05b4c4061"
+      },
+      "cropBox": [
+        594,
+        319,
+        778,
+        561
+      ]
+    },
+    {
+      "queryId": "dev4b-006",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "calibration",
+      "sha256": "0a7f5beaf0b694c8de25c9f593e16538b1af6a5986be7e482525b1c77d8ce656",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 34003179,
+        "title": "File:Brazil and Croatia match at the FIFA World Cup 2014-06-12 (02) crop.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_(02)_crop.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2802%29_crop.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2802%29_crop.jpg/1280px-Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2802%29_crop.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Agência Brasil",
+        "licenseCode": "CC BY 3.0 br",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/br/deed.en",
+        "attribution": "Brasil e Croácia, primeiro jogo da Copa do Mundo de 2014",
+        "downloadedSha256": "18df51550df17d161e028d526c1875260c4416794088227b33fd07c646820b7b"
+      },
+      "cropBox": [
+        51,
+        430,
+        374,
+        696
+      ]
+    },
+    {
+      "queryId": "dev4b-007",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "calibration",
+      "sha256": "754667f5ec2ba72b848446af1650403117302b1dd6a1f511daafbbd404831da0",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 136186880,
+        "title": "File:Presidency University Squad Photo.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Presidency_University_Squad_Photo.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Presidency_University_Squad_Photo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Presidency_University_Squad_Photo.jpg/1280px-Presidency_University_Squad_Photo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "KoustavMishra",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "c5cbcc45ee641681d62f6916ee7845048930aaa62c881cc77a9eda4cbcb5451d"
+      }
+    },
+    {
+      "queryId": "dev4b-008",
+      "group": "uniforms",
+      "subtype": "women-kit",
+      "partition": "calibration",
+      "sha256": "cd98737effb113d97aa88a9c5a47f8d6c2ef59d64369fdef2afe9888acb56a1f",
+      "relevantProductSlugs": [
+        "bo-bong-da-nu-royal-wave",
+        "bo-bong-da-nu-violet-star",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 29744365,
+        "title": "File:20130929 - PSG-Lyon 104.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20130929_-_PSG-Lyon_104.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/1f/20130929_-_PSG-Lyon_104.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/20130929_-_PSG-Lyon_104.jpg/1280px-20130929_-_PSG-Lyon_104.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Pierre-Yves Beaudouin",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Pierre-Yves Beaudouin / Wikimedia Commons",
+        "downloadedSha256": "6692d0c166ac27f7aa29495e5512f4d1b859b3140fbc9e5882f96faa58925a27"
+      }
+    },
+    {
+      "queryId": "dev4b-009",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "calibration",
+      "sha256": "8336ec68b15c7a50a7f658a5f63dccf8780245910ce70cc92b25e551fdef00be",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 88142614,
+        "title": "File:Adam Hložek, U21 CZE-GRE 2019-10-10 (2).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Adam_Hlo%C5%BEek,_U21_CZE-GRE_2019-10-10_(2).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/18/Adam_Hlo%C5%BEek%2C_U21_CZE-GRE_2019-10-10_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Adam_Hlo%C5%BEek%2C_U21_CZE-GRE_2019-10-10_%282%29.jpg/1280px-Adam_Hlo%C5%BEek%2C_U21_CZE-GRE_2019-10-10_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Tadeáš Bednarz",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "83f6c6283f8cb918ba6cd291b6ebbc88f4bd59f271818887832b33787f91607d"
+      }
+    },
+    {
+      "queryId": "dev4b-010",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "calibration",
+      "sha256": "f42846830f17ce450d67267d0b9e43a92c9f9af7c4a659a2fc09fb7fd581f437",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 47608347,
+        "title": "File:Asics GT-2000 NEW YORK.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:Asics_GT-2000_NEW_YORK.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/61/Asics_GT-2000_NEW_YORK.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/Asics_GT-2000_NEW_YORK.JPG/1280px-Asics_GT-2000_NEW_YORK.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Ketchup-j",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "ccf7ca3e7aac7229915eb98e1275e398f74005f1f17803a4da2012d077538676"
+      }
+    },
+    {
+      "queryId": "dev4b-011",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "calibration",
+      "sha256": "296bd6c61eeb980e0adb2c84796e3aa22f4a88a00e0d743b60124fad2eef9529",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 98688894,
+        "title": "File:Asics Gel-Cumulus 22.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Asics_Gel-Cumulus_22.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Asics_Gel-Cumulus_22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Asics_Gel-Cumulus_22.jpg/1280px-Asics_Gel-Cumulus_22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Petar Milošević",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "8166d5af1f5e4f1204decbc7bfd18afe6ccdd75aed0e3fd194a06cbc26fc8943"
+      }
+    },
+    {
+      "queryId": "dev4b-012",
+      "group": "shoes",
+      "subtype": "boots",
+      "partition": "calibration",
+      "sha256": "8d8365969f0e9d9b51ad040ec36ab62e53780e0d13592226c74cdcaf8833a269",
+      "relevantProductSlugs": [
+        "giay-da-bong-nam-turf-shadow",
+        "giay-da-bong-nu-turf-spark"
+      ],
+      "source": {
+        "pageId": 4130641,
+        "title": "File:Golden shoes Michael Johnson.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Golden_shoes_Michael_Johnson.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/25/Golden_shoes_Michael_Johnson.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/Golden_shoes_Michael_Johnson.jpg/1280px-Golden_shoes_Michael_Johnson.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "klew97",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "https://www.flickr.com/photos/klew97/2432909099/?addedcomment=1#comment72157605001562671",
+        "downloadedSha256": "97ac1c3ecdc74701fe14785e3af14bdc49d83d012fb0b25b5f14a9da90847b93"
+      }
+    },
+    {
+      "queryId": "dev4b-013",
+      "group": "accessories",
+      "subtype": "bottle",
+      "partition": "calibration",
+      "sha256": "86685d7f616faf8ceec2cfc01ba469aed1ac1c907c7b37f1fec8caa8429ac0c0",
+      "relevantProductSlugs": [
+        "binh-nuoc-the-thao-black-flow-750ml"
+      ],
+      "source": {
+        "pageId": 170132806,
+        "title": "File:250531 FC 서울 vs 제주 (Lucas Silva) 1.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:250531_FC_%EC%84%9C%EC%9A%B8_vs_%EC%A0%9C%EC%A3%BC_(Lucas_Silva)_1.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/fe/250531_FC_%EC%84%9C%EC%9A%B8_vs_%EC%A0%9C%EC%A3%BC_%28Lucas_Silva%29_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/250531_FC_%EC%84%9C%EC%9A%B8_vs_%EC%A0%9C%EC%A3%BC_%28Lucas_Silva%29_1.jpg/1280px-250531_FC_%EC%84%9C%EC%9A%B8_vs_%EC%A0%9C%EC%A3%BC_%28Lucas_Silva%29_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Explicit",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "3757509c44a90a9bfc7d893cfc82a68fcbbedf2ea1ef45bb6a1f2d5c52eae293"
+      },
+      "cropBox": [
+        254,
+        379,
+        573,
+        942
+      ]
+    },
+    {
+      "queryId": "dev4b-014",
+      "group": "accessories",
+      "subtype": "socks",
+      "partition": "calibration",
+      "sha256": "f728f13e4aaf251f6d5fea3b1e18166d4cccf1166877d82760c7649a5c7f8d8d",
+      "relevantProductSlugs": [
+        "tat-bong-da-white-match"
+      ],
+      "source": {
+        "pageId": 116881671,
+        "title": "File:220410 K리그1 FC 서울 vs 수원 삼성 블루윙즈 (이기제).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:220410_K%EB%A6%AC%EA%B7%B81_FC_%EC%84%9C%EC%9A%B8_vs_%EC%88%98%EC%9B%90_%EC%82%BC%EC%84%B1_%EB%B8%94%EB%A3%A8%EC%9C%99%EC%A6%88_(%EC%9D%B4%EA%B8%B0%EC%A0%9C).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/f9/220410_K%EB%A6%AC%EA%B7%B81_FC_%EC%84%9C%EC%9A%B8_vs_%EC%88%98%EC%9B%90_%EC%82%BC%EC%84%B1_%EB%B8%94%EB%A3%A8%EC%9C%99%EC%A6%88_%28%EC%9D%B4%EA%B8%B0%EC%A0%9C%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/220410_K%EB%A6%AC%EA%B7%B81_FC_%EC%84%9C%EC%9A%B8_vs_%EC%88%98%EC%9B%90_%EC%82%BC%EC%84%B1_%EB%B8%94%EB%A3%A8%EC%9C%99%EC%A6%88_%28%EC%9D%B4%EA%B8%B0%EC%A0%9C%29.jpg/1280px-220410_K%EB%A6%AC%EA%B7%B81_FC_%EC%84%9C%EC%9A%B8_vs_%EC%88%98%EC%9B%90_%EC%82%BC%EC%84%B1_%EB%B8%94%EB%A3%A8%EC%9C%99%EC%A6%88_%28%EC%9D%B4%EA%B8%B0%EC%A0%9C%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Explicit",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "d75b50aa04083d7be454ae434108e9b52926998678acb7d76057b0b5d1d98a16"
+      },
+      "cropBox": [
+        207,
+        860,
+        392,
+        1024
+      ]
+    },
+    {
+      "queryId": "dev4b-015",
+      "group": "accessories",
+      "subtype": "guard",
+      "partition": "calibration",
+      "sha256": "9ce93eb1aba2c67eaaaca0862af364ef1ff1e4d7878037a05d082bdb96f76824",
+      "relevantProductSlugs": [
+        "op-bao-ve-ong-dong-red-guard"
+      ],
+      "source": {
+        "pageId": 50984555,
+        "title": "File:Buster Posey 2013.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Buster_Posey_2013.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Buster_Posey_2013.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Buster_Posey_2013.jpg/1280px-Buster_Posey_2013.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "SD Dirk",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "https://www.flickr.com/photos/dirkhansen/9699162676/in/photostream",
+        "downloadedSha256": "df3058e7e63b4533edc9fcefdef09993ebfc392df9886a244ab3811b76902ce1"
+      },
+      "cropBox": [
+        525,
+        563,
+        805,
+        1014
+      ]
+    },
+    {
+      "queryId": "dev4b-016",
+      "group": "unknown",
+      "subtype": "streetscape",
+      "partition": "calibration",
+      "sha256": "26443e3fb44a3b8f836749eed335cff6dfbfc87270a3695a148ee9ad0757848c",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 92629792,
+        "title": "File:2020 07 25 Petite Alsace.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2020_07_25_Petite_Alsace.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/4a/2020_07_25_Petite_Alsace.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/2020_07_25_Petite_Alsace.jpg/1280px-2020_07_25_Petite_Alsace.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Laurent Cailleaux",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "e6a2e2c43f5f678b085dfae5a24734a7e0a47a7660da97d02b625d67025921d9"
+      }
+    },
+    {
+      "queryId": "dev4b-017",
+      "group": "unknown",
+      "subtype": "mug",
+      "partition": "calibration",
+      "sha256": "950bc1a28a186108eee6b1a947deaff7f83df917b7cc1b1d8efb9ba3e59a181c",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 11791101,
+        "title": "File:Be Bold coffee mug.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Be_Bold_coffee_mug.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Be_Bold_coffee_mug.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Be_Bold_coffee_mug.jpg/1280px-Be_Bold_coffee_mug.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "LiAnna Davis",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "LiAnna Davis",
+        "downloadedSha256": "b9ad35251e7e07b723a21df3e1135b23dc802d478cf0a41a7fff990de2ee3a2b"
+      }
+    },
+    {
+      "queryId": "dev4b-018",
+      "group": "unknown",
+      "subtype": "backpack",
+      "partition": "calibration",
+      "sha256": "04beb0c649191674c529d88fafac9a3fa2093b9505aa514f0849612c644e7ce8",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 17944274,
+        "title": "File:A image of school bags.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:A_image_of_school_bags.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a2/A_image_of_school_bags.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/A_image_of_school_bags.JPG/1280px-A_image_of_school_bags.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Thamizhpparithi Maari",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "5ddeef2bd1adf846ce691ac1d3d52d472bc8b4706011647ac95eb00f93c3bec6"
+      }
+    },
+    {
+      "queryId": "dev4b-019",
+      "group": "tops",
+      "subtype": "tee",
+      "partition": "DEV-check",
+      "sha256": "25c8f93c9b84ca9e5e89bf45fc178d21d4fe861fd6aa10030b999334191486fb",
+      "relevantProductSlugs": [
+        "ao-chay-bo-nam-aero-navy",
+        "ao-tap-bong-da-nam-blaze-red",
+        "ao-tap-bong-da-nu-royal-motion"
+      ],
+      "source": {
+        "pageId": 77432135,
+        "title": "File:Lieke Martens training with Netherlands in 2018.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Lieke_Martens_training_with_Netherlands_in_2018.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/38/Lieke_Martens_training_with_Netherlands_in_2018.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Lieke_Martens_training_with_Netherlands_in_2018.jpg/1280px-Lieke_Martens_training_with_Netherlands_in_2018.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Emma Coolen",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "https://www.flickr.com/photos/160439395@N08/45044855294/in/dateposted/",
+        "downloadedSha256": "9791492e4d1c0d488a5fc2d88bf4fb5794e19d123b5f46d76c906669009a0ce6"
+      },
+      "cropBox": [
+        276,
+        116,
+        645,
+        375
+      ]
+    },
+    {
+      "queryId": "dev4b-020",
+      "group": "tops",
+      "subtype": "jersey",
+      "partition": "DEV-check",
+      "sha256": "3247e7360a5c60a3231fc77a4af53dae84b8465af441d7790a03bc9665799d50",
+      "relevantProductSlugs": [
+        "ao-dau-argentina-2026-home-jm8396",
+        "ao-dau-bi-2026-home-jm8381",
+        "ao-dau-duc-nu-2026-home-jz4559",
+        "ao-dau-brazil-2026-home-if7054-724",
+        "ao-dau-phap-2026-home-ib5300-480",
+        "ao-dau-anh-2026-home-ib5290-100"
+      ],
+      "source": {
+        "pageId": 10893467,
+        "title": "File:2007-Köpcke-Meyer.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2007-K%C3%B6pcke-Meyer.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/92/2007-K%C3%B6pcke-Meyer.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/2007-K%C3%B6pcke-Meyer.jpg/1280px-2007-K%C3%B6pcke-Meyer.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Senator2108",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "0042a1ece59f94df41c2aaf750e9fde877ea256343c0b098c999af9cb275f3f7"
+      },
+      "cropBox": [
+        225,
+        372,
+        1004,
+        969
+      ]
+    },
+    {
+      "queryId": "dev4b-021",
+      "group": "tops",
+      "subtype": "jersey",
+      "partition": "DEV-check",
+      "sha256": "106b65e5ae1a89d6b69ed6bcdcf3d2a89723d619dc1b8966561da22b871ccf41",
+      "relevantProductSlugs": [
+        "ao-dau-argentina-2026-home-jm8396",
+        "ao-dau-bi-2026-home-jm8381",
+        "ao-dau-duc-nu-2026-home-jz4559",
+        "ao-dau-brazil-2026-home-if7054-724",
+        "ao-dau-phap-2026-home-ib5300-480",
+        "ao-dau-anh-2026-home-ib5290-100"
+      ],
+      "source": {
+        "pageId": 29375004,
+        "title": "File:Mauricio Macri con Robert Plant, Huesped de Honor de la Ciudad (8148739753).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Mauricio_Macri_con_Robert_Plant,_Huesped_de_Honor_de_la_Ciudad_(8148739753).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Mauricio_Macri_con_Robert_Plant%2C_Huesped_de_Honor_de_la_Ciudad_%288148739753%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Mauricio_Macri_con_Robert_Plant%2C_Huesped_de_Honor_de_la_Ciudad_%288148739753%29.jpg/1280px-Mauricio_Macri_con_Robert_Plant%2C_Huesped_de_Honor_de_la_Ciudad_%288148739753%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Gobierno de la Ciudad de Buenos Aires from Ciudad Autónoma de Buenos Aires, Argentina",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Mauricio Macri con Robert Plant, Huesped de Honor de la Ciudad",
+        "downloadedSha256": "138948e888afc9fd268ae6f11da9f80f4190b097d59f961b2d07e844e887dc75"
+      },
+      "cropBox": [
+        297,
+        370,
+        850,
+        851
+      ]
+    },
+    {
+      "queryId": "dev4b-022",
+      "group": "tops",
+      "subtype": "jersey",
+      "partition": "DEV-check",
+      "sha256": "3e78235b6aee9111233c555b041bef4a4da26f9fd8204ef875363ada9bd37336",
+      "relevantProductSlugs": [
+        "ao-dau-argentina-2026-home-jm8396",
+        "ao-dau-bi-2026-home-jm8381",
+        "ao-dau-duc-nu-2026-home-jz4559",
+        "ao-dau-brazil-2026-home-if7054-724",
+        "ao-dau-phap-2026-home-ib5300-480",
+        "ao-dau-anh-2026-home-ib5290-100"
+      ],
+      "source": {
+        "pageId": 31002407,
+        "title": "File:Ambassador Philip D. Murphy with a Philip Lahm jersey, 2013.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Ambassador_Philip_D._Murphy_with_a_Philip_Lahm_jersey,_2013.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Ambassador_Philip_D._Murphy_with_a_Philip_Lahm_jersey%2C_2013.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Ambassador_Philip_D._Murphy_with_a_Philip_Lahm_jersey%2C_2013.jpg/1280px-Ambassador_Philip_D._Murphy_with_a_Philip_Lahm_jersey%2C_2013.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "U.S. Consulate General Munich from Germany",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "MUC_townhall Uploaded by indeedous",
+        "downloadedSha256": "4b31054f8fc04aa0a91786b62b2f59218447731b20d3c489dfe76b79d6f71d61"
+      },
+      "cropBox": [
+        301,
+        358,
+        649,
+        1014
+      ]
+    },
+    {
+      "queryId": "dev4b-023",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "DEV-check",
+      "sha256": "8af5d9db61a5392e2a82506cca2532e276e957d90947ecdea087cecedba1934f",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 4435384,
+        "title": "File:Highschoolpingpong.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Highschoolpingpong.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/47/Highschoolpingpong.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Highschoolpingpong.jpg/1280px-Highschoolpingpong.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Denniskwaria",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "Own work",
+        "downloadedSha256": "d725a1b8730ac83eef3872b93498f55a099d0ccd4a6bb15e2f1b6f2afe548abd"
+      },
+      "cropBox": [
+        328,
+        300,
+        594,
+        553
+      ]
+    },
+    {
+      "queryId": "dev4b-024",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "DEV-check",
+      "sha256": "bfaca76160f2b54c8b7b417ecc75898dc62dbd3d45a1c65f64ca2417aec6ebb4",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 36867865,
+        "title": "File:20141118 AUTBRA 5397.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20141118_AUTBRA_5397.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/03/20141118_AUTBRA_5397.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/20141118_AUTBRA_5397.jpg/1280px-20141118_AUTBRA_5397.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Ailura",
+        "licenseCode": "CC BY-SA 3.0 at",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/at/deed.en",
+        "attribution": "Ailura, CC BY-SA 3.0 AT",
+        "downloadedSha256": "ac92c18fa37e9a21a4b598b3f9a5dd37e925b201f0805cd72db8936aa550630c"
+      },
+      "cropBox": [
+        502,
+        286,
+        727,
+        491
+      ]
+    },
+    {
+      "queryId": "dev4b-025",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "DEV-check",
+      "sha256": "69aae029e241dece665b5baf62f67acf96268445a1ebf2c3573609a9fe924f16",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 33361828,
+        "title": "File:Brazil and Croatia match at the FIFA World Cup 2014-06-12 (01).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_(01).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/13/Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2801%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2801%29.jpg/1280px-Brazil_and_Croatia_match_at_the_FIFA_World_Cup_2014-06-12_%2801%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Agência Brasil",
+        "licenseCode": "CC BY 3.0 br",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/br/deed.en",
+        "attribution": "Brasil e Croácia, primeiro jogo da Copa do Mundo de 2014",
+        "downloadedSha256": "05d9f1f981beed92ba6778a3943fb3edf9931cd0e58c58ed423a28817d0f300c"
+      },
+      "cropBox": [
+        420,
+        312,
+        635,
+        482
+      ]
+    },
+    {
+      "queryId": "dev4b-026",
+      "group": "bottoms",
+      "subtype": "shorts",
+      "partition": "DEV-check",
+      "sha256": "fd7928b438e2a7fb1e1bf7b79c1c794e0c4fac2d516ae8ca5bff96c514dc7123",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 50790364,
+        "title": "File:Brasil conquista primeiro ouro olímpico no futebol 1039227-20082016- mg 2774 01.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Brasil_conquista_primeiro_ouro_ol%C3%ADmpico_no_futebol_1039227-20082016-_mg_2774_01.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/97/Brasil_conquista_primeiro_ouro_ol%C3%ADmpico_no_futebol_1039227-20082016-_mg_2774_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Brasil_conquista_primeiro_ouro_ol%C3%ADmpico_no_futebol_1039227-20082016-_mg_2774_01.jpg/1280px-Brasil_conquista_primeiro_ouro_ol%C3%ADmpico_no_futebol_1039227-20082016-_mg_2774_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Fernando Frazão/Agência Brasil",
+        "licenseCode": "CC BY 3.0 br",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/br/deed.en",
+        "attribution": "http://agenciabrasil.ebc.com.br/rio-2016/foto/2016-08/selecao-brasileira-de-futebol-enfrenta-alemanha-0",
+        "downloadedSha256": "1b09ea873d6b72ab137bb47bec4cf77ff14ea10d8c80216fa46f07b1c97ee527"
+      },
+      "cropBox": [
+        625,
+        402,
+        870,
+        682
+      ]
+    },
+    {
+      "queryId": "dev4b-027",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "DEV-check",
+      "sha256": "4e6f9119461ea9d40304775278f73fd02707cb6db76a9361a5af7194a7836251",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 147917488,
+        "title": "File:EPL Legends line-up 2024.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:EPL_Legends_line-up_2024.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/9d/EPL_Legends_line-up_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/EPL_Legends_line-up_2024.jpg/1280px-EPL_Legends_line-up_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Chin Yu Chu",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "https://www.flickr.com/photos/195030826@N02/53689759007/",
+        "downloadedSha256": "d68f699a7aa3895b18cf1890c71d0b2f31ece105b12d168a50237f8822869c14"
+      }
+    },
+    {
+      "queryId": "dev4b-028",
+      "group": "uniforms",
+      "subtype": "women-kit",
+      "partition": "DEV-check",
+      "sha256": "067367b429a10ba7ce06d963b42d692d97bef2abeae1b0aaa6169ef5f4831566",
+      "relevantProductSlugs": [
+        "bo-bong-da-nu-royal-wave",
+        "bo-bong-da-nu-violet-star",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 36290808,
+        "title": "File:20141015 - PSG-Twente - PSG 01.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20141015_-_PSG-Twente_-_PSG_01.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/82/20141015_-_PSG-Twente_-_PSG_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/20141015_-_PSG-Twente_-_PSG_01.jpg/1280px-20141015_-_PSG-Twente_-_PSG_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Pierre-Yves Beaudouin",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Pierre-Yves Beaudouin / Wikimedia Commons",
+        "downloadedSha256": "9182c32fa742a05fe509467fe74a5272aaf67c11756185d1eecc61bca30a4e1b"
+      }
+    },
+    {
+      "queryId": "dev4b-029",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "DEV-check",
+      "sha256": "f03b6cf650fd0c0530cdb4f46ef3f2aeac41f32f3b78dbd85e0e096977ea65c0",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 185508445,
+        "title": "File:Abduvohid Nematov 2.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Abduvohid_Nematov_2.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/21/Abduvohid_Nematov_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Abduvohid_Nematov_2.jpg/1280px-Abduvohid_Nematov_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Umarxon III",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "e91b37e3b9bc81475865390c6335378e96b31f2e48b9d05ba2a2bb4b3f41d323"
+      }
+    },
+    {
+      "queryId": "dev4b-030",
+      "group": "uniforms",
+      "subtype": "men-kit",
+      "partition": "DEV-check",
+      "sha256": "e93c31c9859a09bef117bbeed4bb71ce4db93ccca3ef9a97bb1960d2b05f1991",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 12205609,
+        "title": "File:2010–11 UEFA Europa League - SK Rapid Wien vs F.C. Porto (07).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2010%E2%80%9311_UEFA_Europa_League_-_SK_Rapid_Wien_vs_F.C._Porto_(07).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/03/2010%E2%80%9311_UEFA_Europa_League_-_SK_Rapid_Wien_vs_F.C._Porto_%2807%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/2010%E2%80%9311_UEFA_Europa_League_-_SK_Rapid_Wien_vs_F.C._Porto_%2807%29.jpg/1280px-2010%E2%80%9311_UEFA_Europa_League_-_SK_Rapid_Wien_vs_F.C._Porto_%2807%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Steindy ( talk ) 01:06, 3 December 2010 (UTC)",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "8be6cb378016a0f712173194f2065a7c59a2f85a669200a63881321bcf1cd09a"
+      }
+    },
+    {
+      "queryId": "dev4b-031",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "DEV-check",
+      "sha256": "115f39e105e1e2598684b7ba1068643c569bbabd92412fe1e44e7f611cbd3f0e",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 54842206,
+        "title": "File:Running shoes.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Running_shoes.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Running_shoes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Running_shoes.jpg/1280px-Running_shoes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Tiia Monto",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "ea6dd79db63162f6c4f01685c6fc6c2d3dc44aaa6619ebdf2205091d9441bd31"
+      }
+    },
+    {
+      "queryId": "dev4b-032",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "DEV-check",
+      "sha256": "5ddd4e92e19debf81e9b2697a0fa00b79023c6b6197aefc5b64d49d714eed311",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 155227088,
+        "title": "File:Asics Gel-1130.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Asics_Gel-1130.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/35/Asics_Gel-1130.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Asics_Gel-1130.jpg/1280px-Asics_Gel-1130.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "LeDroider",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "6fbd90a1b1cde3ae15b68b5ec7e84afa67621d08af4993d21def6bbcf90a41cb"
+      }
+    },
+    {
+      "queryId": "dev4b-033",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "DEV-check",
+      "sha256": "3e2d216b8ff51103ae4a96aec7908d5a30b27258d055d88be3badb1767375fc3",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 47411733,
+        "title": "File:4-15 Strong (13918438761).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:4-15_Strong_(13918438761).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/47/4-15_Strong_%2813918438761%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/4-15_Strong_%2813918438761%29.jpg/1280px-4-15_Strong_%2813918438761%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "John Hoey from Framingham, MA, United States",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "4/15 Strong",
+        "downloadedSha256": "492f0cd366f6806f687d8de635632a2bd0b867f71c4f85f610f149177d22f4ca"
+      }
+    },
+    {
+      "queryId": "dev4b-034",
+      "group": "shoes",
+      "subtype": "running-shoes",
+      "partition": "DEV-check",
+      "sha256": "8a5e1f7bfde78da0850c00949db3aa30adf0aa82e66adffe25de2cecef577f10",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 61848033,
+        "title": "File:Aarhus, Denmark (Unsplash t1sTHYjSN10).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Aarhus,_Denmark_(Unsplash_t1sTHYjSN10).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Aarhus%2C_Denmark_%28Unsplash_t1sTHYjSN10%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Aarhus%2C_Denmark_%28Unsplash_t1sTHYjSN10%29.jpg/1280px-Aarhus%2C_Denmark_%28Unsplash_t1sTHYjSN10%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Kristian Olsen kristianegelund",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "https://unsplash.com/photos/t1sTHYjSN10 Image at the Wayback Machine Gallery at the Wayback Machine",
+        "downloadedSha256": "8499703836edcad819c706ef319c82a1dac738c2b0a1ab963c80348b0199eace"
+      }
+    },
+    {
+      "queryId": "dev4b-035",
+      "group": "accessories",
+      "subtype": "bottle",
+      "partition": "DEV-check",
+      "sha256": "5412fed0b2988000ab2e07feb2a4a7da6321599dcb43e8587417af3d57fcbb63",
+      "relevantProductSlugs": [
+        "binh-nuoc-the-thao-black-flow-750ml"
+      ],
+      "source": {
+        "pageId": 97364162,
+        "title": "File:Alonso Wong- “el Legado más importante de los Juegos es la infraestructura” - 49940277786.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Alonso_Wong-_%E2%80%9Cel_Legado_m%C3%A1s_importante_de_los_Juegos_es_la_infraestructura%E2%80%9D_-_49940277786.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/04/Alonso_Wong-_%E2%80%9Cel_Legado_m%C3%A1s_importante_de_los_Juegos_es_la_infraestructura%E2%80%9D_-_49940277786.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Alonso_Wong-_%E2%80%9Cel_Legado_m%C3%A1s_importante_de_los_Juegos_es_la_infraestructura%E2%80%9D_-_49940277786.jpg/1280px-Alonso_Wong-_%E2%80%9Cel_Legado_m%C3%A1s_importante_de_los_Juegos_es_la_infraestructura%E2%80%9D_-_49940277786.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Legado Lima 2019",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "https://www.flickr.com/photos/149051229@N03/49940277786/",
+        "downloadedSha256": "76f4a04acee8f40815ff4803269992150aa49337b1fb75c44d9c7141e2f45ae7"
+      },
+      "cropBox": [
+        563,
+        246,
+        870,
+        553
+      ]
+    },
+    {
+      "queryId": "dev4b-036",
+      "group": "accessories",
+      "subtype": "bottle",
+      "partition": "DEV-check",
+      "sha256": "1f40725133a0d08155d02c56db04e444484027051799ec421a51309c65408526",
+      "relevantProductSlugs": [
+        "binh-nuoc-the-thao-black-flow-750ml"
+      ],
+      "source": {
+        "pageId": 200957858,
+        "title": "File:260905 FC 서울 vs 인천 (Leonardo Acevedo, Leandro Ribeiro).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:260905_FC_%EC%84%9C%EC%9A%B8_vs_%EC%9D%B8%EC%B2%9C_(Leonardo_Acevedo,_Leandro_Ribeiro).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/1d/260905_FC_%EC%84%9C%EC%9A%B8_vs_%EC%9D%B8%EC%B2%9C_%28Leonardo_Acevedo%2C_Leandro_Ribeiro%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/260905_FC_%EC%84%9C%EC%9A%B8_vs_%EC%9D%B8%EC%B2%9C_%28Leonardo_Acevedo%2C_Leandro_Ribeiro%29.jpg/1280px-260905_FC_%EC%84%9C%EC%9A%B8_vs_%EC%9D%B8%EC%B2%9C_%28Leonardo_Acevedo%2C_Leandro_Ribeiro%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Explicit",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "781bda8d08bba93f22b6223a6e695befbb558cbf923d166df5483a625a606898"
+      },
+      "cropBox": [
+        418,
+        492,
+        770,
+        963
+      ]
+    },
+    {
+      "queryId": "dev4b-037",
+      "group": "accessories",
+      "subtype": "bottle",
+      "partition": "DEV-check",
+      "sha256": "9147c9a46c812a20649c0829320e1b317bbed9f3d7a2d8f09eb56406092006ab",
+      "relevantProductSlugs": [
+        "binh-nuoc-the-thao-black-flow-750ml"
+      ],
+      "source": {
+        "pageId": 132962230,
+        "title": "File:2022-08-18 European Championships 2022 – Men's 400 Metres Hurdles by Sandro Halank–025.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2022-08-18_European_Championships_2022_%E2%80%93_Men%27s_400_Metres_Hurdles_by_Sandro_Halank%E2%80%93025.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/97/2022-08-18_European_Championships_2022_%E2%80%93_Men%27s_400_Metres_Hurdles_by_Sandro_Halank%E2%80%93025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/2022-08-18_European_Championships_2022_%E2%80%93_Men%27s_400_Metres_Hurdles_by_Sandro_Halank%E2%80%93025.jpg/1280px-2022-08-18_European_Championships_2022_%E2%80%93_Men%27s_400_Metres_Hurdles_by_Sandro_Halank%E2%80%93025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Sandro Halank, Wikimedia Commons",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Sandro Halank, Wikimedia Commons, CC BY-SA 4.0",
+        "downloadedSha256": "0a0946f8376b5052e2930a76b8b2b3d6ea62c0e79ddcd6feb277624734befced"
+      },
+      "cropBox": [
+        400,
+        336,
+        604,
+        570
+      ]
+    },
+    {
+      "queryId": "dev4b-038",
+      "group": "accessories",
+      "subtype": "bottle",
+      "partition": "DEV-check",
+      "sha256": "e298f21c52c0c4b7d740a043b857089b103283f6da3e48b20331a864bd5c90de",
+      "relevantProductSlugs": [
+        "binh-nuoc-the-thao-black-flow-750ml"
+      ],
+      "source": {
+        "pageId": 193130554,
+        "title": "File:Andreas Fjeld Halvorsen.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Andreas_Fjeld_Halvorsen.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Andreas_Fjeld_Halvorsen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Andreas_Fjeld_Halvorsen.jpg/1280px-Andreas_Fjeld_Halvorsen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Løken",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "c0a84469f39d7e82eb33f381ba293a9e588580d891db11750c0579bdeea3e7f6"
+      },
+      "cropBox": [
+        74,
+        772,
+        210,
+        929
+      ]
+    },
+    {
+      "queryId": "dev4b-039",
+      "group": "unknown",
+      "subtype": "streetscape",
+      "partition": "DEV-check",
+      "sha256": "06ace23a571c20a8cb8115c8efb89c432a10c28b277a785359d5bb84698f0ef3",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 96002170,
+        "title": "File:1IMGA.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:1IMGA.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/62/1IMGA.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/1IMGA.png/1280px-1IMGA.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "GordonEIPH",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "fd9e33158925ca9382f71f78178c2839adccd6e15b8895425e691797c24db883"
+      }
+    },
+    {
+      "queryId": "dev4b-040",
+      "group": "unknown",
+      "subtype": "cityscape",
+      "partition": "DEV-check",
+      "sha256": "7ddcbf8c573926da0dcf8cad73a988da4a095923f6679a156cc3af4e26bc9b66",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 134696058,
+        "title": "File:20080926150DR Freital Panorama nach Norden.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20080926150DR_Freital_Panorama_nach_Norden.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/ac/20080926150DR_Freital_Panorama_nach_Norden.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/20080926150DR_Freital_Panorama_nach_Norden.jpg/1280px-20080926150DR_Freital_Panorama_nach_Norden.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Jörg Blobelt",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "df649e2b6bbb7f531fcfffd2a44886725e5f13508e3040870205e8df5e7480d6"
+      }
+    },
+    {
+      "queryId": "dev4b-041",
+      "group": "unknown",
+      "subtype": "mug",
+      "partition": "DEV-check",
+      "sha256": "527e4d4c9ee134a2a2d18630b1dd75c7ff1156433e4d32f9e0ec83c2d1bcbf1e",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 112782719,
+        "title": "File:AUT — Bundesland Salzburg — Salzburg (Stadt) — Kaffeebecher mit Inschrift “Bitte einen Café mit Schoko-Wodka-Valium-Latte to go” Mattes 2021.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:AUT_%E2%80%94_Bundesland_Salzburg_%E2%80%94_Salzburg_(Stadt)_%E2%80%94_Kaffeebecher_mit_Inschrift_%E2%80%9CBitte_einen_Caf%C3%A9_mit_Schoko-Wodka-Valium-Latte_to_go%E2%80%9D_Mattes_2021.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/78/AUT_%E2%80%94_Bundesland_Salzburg_%E2%80%94_Salzburg_%28Stadt%29_%E2%80%94_Kaffeebecher_mit_Inschrift_%E2%80%9CBitte_einen_Caf%C3%A9_mit_Schoko-Wodka-Valium-Latte_to_go%E2%80%9D_Mattes_2021.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/AUT_%E2%80%94_Bundesland_Salzburg_%E2%80%94_Salzburg_%28Stadt%29_%E2%80%94_Kaffeebecher_mit_Inschrift_%E2%80%9CBitte_einen_Caf%C3%A9_mit_Schoko-Wodka-Valium-Latte_to_go%E2%80%9D_Mattes_2021.jpg/1280px-AUT_%E2%80%94_Bundesland_Salzburg_%E2%80%94_Salzburg_%28Stadt%29_%E2%80%94_Kaffeebecher_mit_Inschrift_%E2%80%9CBitte_einen_Caf%C3%A9_mit_Schoko-Wodka-Valium-Latte_to_go%E2%80%9D_Mattes_2021.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "User:Mateus2019",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "Self-photographed",
+        "downloadedSha256": "5641c1927722a9a89248c74da01e6a2f93faec562880acb05e09d7bb3f1121d4"
+      }
+    },
+    {
+      "queryId": "dev4b-042",
+      "group": "unknown",
+      "subtype": "backpack",
+      "partition": "DEV-check",
+      "sha256": "1db1f8aa80b01a6967af63035d0bf6a2f046631a39d39fb2397f17408264849f",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 62251718,
+        "title": "File:Quechua backpack - B.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Quechua_backpack_-_B.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/73/Quechua_backpack_-_B.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Quechua_backpack_-_B.jpg/1280px-Quechua_backpack_-_B.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Fructibus",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "afae7c65947c553477617927eace6b59df87aa0645fe03d3e40fa4da3dd78c11"
+      }
+    }
+  ]
+}

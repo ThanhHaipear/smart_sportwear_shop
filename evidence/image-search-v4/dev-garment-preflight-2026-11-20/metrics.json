@@ -1,0 +1,91 @@
+{
+  "acceptance": {
+    "eligible": false,
+    "passed": true,
+    "thresholds": {
+      "recallAt5": 0.8,
+      "categoryAccuracy": 0.9,
+      "unknownRejection": 0.8,
+      "requestFailureRate": 0,
+      "p95EndToEndMs": 3000,
+      "unresolvedLeakage": 0
+    },
+    "unresolvedLeakage": 0
+  },
+  "positive": {
+    "count": 20,
+    "recall": {
+      "at5": 0.8625
+    },
+    "categoryAccuracy": {
+      "value": 0.9
+    },
+    "mrrAt5": 0.8891666666666665
+  },
+  "unknown": {
+    "count": 4,
+    "rejectionRate": {
+      "value": 1.0
+    }
+  },
+  "requests": 24,
+  "requestFailureRate": {
+    "count": 0,
+    "value": 0.0
+  },
+  "latencyMs": {
+    "p95": 258.458
+  },
+  "perGroup": {
+    "accessories": {
+      "knownQueries": 4,
+      "unknownQueries": 0,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 1.0
+    },
+    "bottoms": {
+      "knownQueries": 4,
+      "unknownQueries": 0,
+      "recallAt5": 0.8333333333333334,
+      "categoryAccuracy": 0.75,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.8333333333333334
+    },
+    "shoes": {
+      "knownQueries": 4,
+      "unknownQueries": 0,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 1.0
+    },
+    "tops": {
+      "knownQueries": 4,
+      "unknownQueries": 0,
+      "recallAt5": 0.7916666666666667,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.8125
+    },
+    "uniforms": {
+      "knownQueries": 4,
+      "unknownQueries": 0,
+      "recallAt5": 0.6875,
+      "categoryAccuracy": 0.75,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.8
+    },
+    "unknown": {
+      "knownQueries": 0,
+      "unknownQueries": 4,
+      "recallAt5": null,
+      "categoryAccuracy": null,
+      "unknownRejection": 1.0,
+      "meanReciprocalRankAt5": null
+    }
+  },
+  "devParityMatches": 24,
+  "preflightPassed": true
+}

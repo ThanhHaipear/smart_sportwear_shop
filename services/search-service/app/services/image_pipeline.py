@@ -84,9 +84,14 @@ class ImagePipeline:
         self._client = client
         self._dns_resolver = dns_resolver
 
-    async def download_and_normalize(self, image_url: str, public_id: str | None = None) -> NormalizedImage:
-        source = self.source_resolver.resolve(image_url, public_id)
+    async def download_and_normalize(
+        self, image_url: str, public_id: str | None = None, *,
+        asset_version: str | None = None, checksum: str | None = None,
+    ) -> NormalizedImage:
+        source = self.source_resolver.resolve(image_url, public_id, asset_version)
         data, content_type = await self._download(source.download_url)
+        if checksum and hashlib.sha256(data).hexdigest() != checksum:
+            raise ImagePipelineError("Catalog original image checksum does not match")
         return self.normalize(data, content_type)
 
     async def _download(self, initial_url: str) -> tuple[bytes, str | None]:

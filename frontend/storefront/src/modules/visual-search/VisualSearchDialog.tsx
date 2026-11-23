@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Camera, ImagePlus, LoaderCircle, Search, SwitchCamera, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ApiError } from "@/lib/api";
+import { getAccessTokenSubject, onSessionChange } from "@/lib/session";
 import { mapProductListItem } from "@/modules/product/mappers";
 import { ProductCard } from "@/modules/product/components/ProductCard";
 import type { VisualSearchResult } from "@/modules/product/types";
@@ -13,32 +14,27 @@ const MAX_FILE_BYTES = 5 * 1024 * 1024;
 const MAX_RESULTS = 4;
 const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
-async function cropImage(source: string, zoom: number, x: number, y: number): Promise<Blob> {
+async function prepareImage(source: string, zoom: number, x: number, y: number, fullFrame: boolean): Promise<Blob> {
   const image = document.createElement("img");
   image.src = source;
   await image.decode();
   // A compact query image keeps upload and multimodal embedding latency low.
-  const output = 768;
   const canvas = document.createElement("canvas");
-  canvas.width = output;
-  canvas.height = output;
+  const scale = Math.min(1, 1024 / Math.max(image.naturalWidth, image.naturalHeight));
+  canvas.width = fullFrame ? Math.max(1, Math.round(image.naturalWidth * scale)) : 768;
+  canvas.height = fullFrame ? Math.max(1, Math.round(image.naturalHeight * scale)) : 768;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Trình duyệt không hỗ trợ xử lý ảnh.");
 
   const baseSize = Math.min(image.naturalWidth, image.naturalHeight) / zoom;
   const maxLeft = image.naturalWidth - baseSize;
   const maxTop = image.naturalHeight - baseSize;
-  context.drawImage(
-    image,
-    maxLeft * (x / 100),
-    maxTop * (y / 100),
-    baseSize,
-    baseSize,
-    0,
-    0,
-    output,
-    output,
-  );
+  if (fullFrame) {
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  } else {
+    context.drawImage(image, maxLeft * (x / 100), maxTop * (y / 100), baseSize, baseSize,
+      0, 0, canvas.width, canvas.height);
+  }
   return new Promise((resolve, reject) =>
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("Không thể tạo ảnh tìm kiếm."))), "image/jpeg", 0.82),
   );
@@ -62,6 +58,7 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
   const streamRef = useRef<MediaStream | null>(null);
   const requestRef = useRef<AbortController | null>(null);
   const [availability, setAvailability] = useState<"checking" | "available" | "unavailable">("checking");
+  const [autoRegion, setAutoRegion] = useState(false);
   const [open, setOpen] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
   const [cameraStream, setCameraStream] = useState<MediaStream>();
@@ -74,6 +71,7 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
   const [hasSearched, setHasSearched] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
+  const useAutomaticRegion = autoRegion && zoom === 1 && positionX === 50 && positionY === 50;
 
   useEffect(() => () => {
     if (source) URL.revokeObjectURL(source);
@@ -81,13 +79,44 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
     requestRef.current?.abort();
   }, [source]);
   useEffect(() => {
-    const controller = new AbortController();
-    void getVisualSearchStatus(controller.signal)
-      .then((status) => setAvailability(status.enabled && status.available ? "available" : "unavailable"))
-      .catch(() => {
-        if (!controller.signal.aborted) setAvailability("unavailable");
-      });
-    return () => controller.abort();
+    let controller: AbortController;
+    let subject = getAccessTokenSubject();
+    const refresh = () => {
+      controller?.abort();
+      const request = new AbortController();
+      controller = request;
+      setAvailability("checking");
+      void getVisualSearchStatus(request.signal)
+        .then((status) => {
+          if (!request.signal.aborted) {
+            setAutoRegion(status.autoRegion === true);
+            setAvailability(status.enabled && status.available ? "available" : "unavailable");
+          }
+        })
+        .catch(() => {
+          if (!request.signal.aborted) setAvailability("unavailable");
+        });
+    };
+    refresh();
+    const unsubscribe = onSessionChange(() => {
+      const currentSubject = getAccessTokenSubject();
+      if (currentSubject === subject) return;
+      subject = currentSubject;
+      requestRef.current?.abort();
+      requestRef.current = null;
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+      setOpen(false);
+      setSource(undefined);
+      setBusy(false);
+      setCameraOpen(false);
+      setCameraStream(undefined);
+      refresh();
+    });
+    return () => {
+      controller.abort();
+      unsubscribe();
+    };
   }, []);
   useEffect(() => {
     if (videoRef.current && cameraStream) videoRef.current.srcObject = cameraStream;
@@ -213,9 +242,9 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
     setHasSearched(false);
     setError(undefined);
     try {
-      const image = await cropImage(source, zoom, positionX, positionY);
+      const image = await prepareImage(source, zoom, positionX, positionY, useAutomaticRegion);
       if (controller.signal.aborted) return;
-      const searchResults = await searchProductsByImage(image, MAX_RESULTS, controller.signal);
+      const searchResults = await searchProductsByImage(image, MAX_RESULTS, controller.signal, useAutomaticRegion);
       if (controller.signal.aborted) return;
       // Spring owns the final ranking (including the in-stock-first rule).
       setResults(searchResults.slice(0, MAX_RESULTS));
@@ -256,7 +285,9 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
             <header className="mb-6 flex items-start justify-between gap-4">
               <div>
                 <h2 id="visual-search-title" className="text-xl font-semibold text-ivy-dark">Tìm kiếm bằng hình ảnh</h2>
-                <p className="mt-1 text-sm text-ivy-text-muted">Chọn hoặc chụp ảnh, căn sản phẩm vào khung rồi bắt đầu tìm kiếm.</p>
+                <p className="mt-1 text-sm text-ivy-text-muted">{autoRegion
+                  ? "Chọn hoặc chụp ảnh để tự tìm vùng sản phẩm. Bạn cũng có thể căn khung thủ công."
+                  : "Chọn hoặc chụp ảnh, căn sản phẩm vào khung rồi bắt đầu tìm kiếm."}</p>
               </div>
               <button type="button" onClick={closeDialog} className="rounded-full p-2 hover:bg-[#f3f3f3]" aria-label="Đóng"><X className="size-5" /></button>
             </header>
@@ -288,8 +319,8 @@ export function VisualSearchDialog({ trigger }: { trigger?: (open: () => void) =
             ) : !hasSearched ? (
               <div className="grid gap-7 md:grid-cols-[minmax(0,1fr)_300px]">
                 <div className="relative mx-auto aspect-square w-full max-w-[560px] overflow-hidden rounded-xl bg-[#f3f3f3]">
-                  <Image src={source} alt="Ảnh xem trước để tìm kiếm" fill unoptimized className="object-cover" style={{ objectPosition: `${positionX}% ${positionY}%`, transform: `scale(${zoom})` }} />
-                  <div className="pointer-events-none absolute inset-4 rounded-lg border-2 border-white shadow-[0_0_0_999px_rgba(0,0,0,.25)]" aria-hidden="true" />
+                  <Image src={source} alt="Ảnh xem trước để tìm kiếm" fill unoptimized className={useAutomaticRegion ? "object-contain" : "object-cover"} style={{ objectPosition: `${positionX}% ${positionY}%`, transform: `scale(${zoom})` }} />
+                  {!useAutomaticRegion && <div className="pointer-events-none absolute inset-4 rounded-lg border-2 border-white shadow-[0_0_0_999px_rgba(0,0,0,.25)]" aria-hidden="true" />}
                 </div>
                 <div className="flex flex-col justify-center gap-5">
                   <label className="text-sm text-ivy-text">Phóng to <input type="range" min="1" max="3" step="0.05" value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="mt-2 w-full accent-[#221f20]" /></label>

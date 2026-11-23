@@ -1,0 +1,89 @@
+{
+  "acceptance": {
+    "eligible": true,
+    "passed": false,
+    "thresholds": {
+      "recallAt5": 0.8,
+      "categoryAccuracy": 0.9,
+      "unknownRejection": 0.8,
+      "requestFailureRate": 0,
+      "p95EndToEndMs": 3000,
+      "unresolvedLeakage": 0
+    },
+    "unresolvedLeakage": 0
+  },
+  "positive": {
+    "count": 68,
+    "recall": {
+      "at5": 0.8382352941176467
+    },
+    "categoryAccuracy": {
+      "value": 0.8823529411764706
+    },
+    "mrrAt5": 0.8375
+  },
+  "unknown": {
+    "count": 22,
+    "rejectionRate": {
+      "value": 0.7272727272727273
+    }
+  },
+  "requests": 90,
+  "requestFailureRate": {
+    "count": 0,
+    "value": 0.0
+  },
+  "latencyMs": {
+    "p95": 290.794
+  },
+  "perGroup": {
+    "accessories": {
+      "knownQueries": 10,
+      "unknownQueries": 0,
+      "recallAt5": 0.9,
+      "categoryAccuracy": 0.8,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.7833333333333334
+    },
+    "bottoms": {
+      "knownQueries": 15,
+      "unknownQueries": 0,
+      "recallAt5": 0.9666666666666667,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.9
+    },
+    "shoes": {
+      "knownQueries": 17,
+      "unknownQueries": 0,
+      "recallAt5": 0.8823529411764705,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.9313725490196079
+    },
+    "tops": {
+      "knownQueries": 13,
+      "unknownQueries": 0,
+      "recallAt5": 0.8846153846153846,
+      "categoryAccuracy": 0.9230769230769231,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.8294871794871794
+    },
+    "uniforms": {
+      "knownQueries": 13,
+      "unknownQueries": 0,
+      "recallAt5": 0.5384615384615384,
+      "categoryAccuracy": 0.6153846153846154,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.6923076923076923
+    },
+    "unknown": {
+      "knownQueries": 0,
+      "unknownQueries": 22,
+      "recallAt5": null,
+      "categoryAccuracy": null,
+      "unknownRejection": 0.7272727272727273,
+      "meanReciprocalRankAt5": null
+    }
+  }
+}

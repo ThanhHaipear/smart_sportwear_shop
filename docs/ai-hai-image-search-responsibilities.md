@@ -1,9 +1,8 @@
 # Kế hoạch và tiến độ AI của Lê Thanh Hải
 
-> Cập nhật trạng thái hiện hành ngày 15/11/2026. HAI-01 đến HAI-10 bên dưới
-> lưu bằng chứng của pipeline SigLIP2 V2 trước khi hệ thống chuyển sang kiến
-> trúc microservice hợp nhất. Các mục đó không tự động chứng minh pipeline
-> `services/search-service` hiện tại đã được cutover hoặc đủ điều kiện rollout.
+> Cập nhật ngày 19/11/2026. Phần chi tiết HAI-01 đến HAI-10 lưu hồ sơ
+> SigLIP2 V2 trước khi chuyển sang microservice. Bảng tổng quan và HAI-11
+> đến HAI-16 ghi trạng thái của kiến trúc hiện hành.
 
 ## 1. Mục tiêu cuối cùng
 
@@ -53,24 +52,24 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | HAI-07 | Runner và benchmark TEST v2 | `DONE / NO-GO` | P0 | HAI-03, HAI-05, HAI-06 |
 | HAI-08 | Phân tích lỗi và baseline | `DONE` | P1 | HAI-07 |
 | HAI-09 | Hardening và rollback drill lịch sử | `HISTORICAL_DONE`; rollout public `BLOCKED` | P1 | HAI-03, HAI-04 |
-| HAI-10 | Báo cáo tổng kết | `UPDATE REQUIRED` | P1 | HAI-07, HAI-08 |
+| HAI-10 | Báo cáo tổng kết | `UPDATED` với kết quả TEST v4 | P1 | HAI-07, HAI-08 |
 | HAI-11 | Cutover hoàn chỉnh sang `services/search-service` và `ai_search` | `DONE` | P0 | HAI-01, HAI-02 |
-| HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `VERIFY` | P0 | HAI-11 |
-| HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `TODO` | P0 | HAI-11 |
-| HAI-14 | Xây DEV v3 và khóa cấu hình mới | `TODO` | P0 | HAI-11, HAI-12, HAI-13 |
-| HAI-15 | Tạo và chạy TEST v3 độc lập | `BLOCKED` | P0 | HAI-14 |
-| HAI-16 | Rollout public có kiểm soát | `BLOCKED / NO-GO` | P0 | HAI-15 |
+| HAI-12 | Chuẩn hóa metadata ảnh trong Catalog hiện tại | `DONE` | P0 | HAI-11 |
+| HAI-13 | Chứng minh exact cosine, không ANN trong pilot | `DONE` | P0 | HAI-11 |
+| HAI-14 | Xây DEV v3 và khóa cấu hình mới | `DONE / FROZEN` | P0 | HAI-11, HAI-12, HAI-13 |
+| HAI-15 | Tạo và chạy TEST v3 độc lập | `DONE / NO-GO` | P0 | HAI-14 |
+| HAI-16 | Rollout public có kiểm soát | Nghiệm thu local đạt, đã kiểm tra luồng cohort bằng tài khoản mẫu | P0 | HAI-15, TEST v4 |
 
 ## 4. Tài sản đã có và điều kiện tái sử dụng
 
 | Thành phần | Trạng thái | Bằng chứng hiện tại | Việc còn phải làm trên kiến trúc hiện tại |
 |---|---|---|---|
 | Catalog pilot và World Cup | `DONE` | 36 sản phẩm, 178 variant, 81 ảnh; manifest/checksum lịch sử đã khóa | Đối chiếu lại với schema `catalog` hiện tại |
-| Metadata Cloudinary lịch sử | `HISTORICAL_DONE / VERIFY` | Evidence cũ có `public_id`, asset version, URL, checksum và provenance | Catalog hiện chỉ lưu `secure_url`; phải khôi phục metadata hoặc ghi rõ chính sách URL/hash thay thế |
+| Metadata Cloudinary | `DONE` | Catalog V6 có metadata gốc cho 81/81 ảnh; checksum khớp Cloudinary và hồ sơ import | Lưu metadata khi có nguồn xác minh được |
 | Image embeddings hiện hành | `DONE` | HAI-11 backfill tái tạo `81/81 READY`; query thật xác nhận vector khớp SigLIP2 runtime | Giữ model/revision và checksum trong các lần backfill sau |
 | SigLIP2 local | `DONE` | `google/siglip2-base-patch16-224`, revision cố định, 768 chiều, L2-normalize | Giữ đúng revision/preprocessing cho cả document và query |
 | Worker/indexing hiện hành | `DONE` | HAI-11 xác nhận contract, event, retry/DLQ, duplicate, backfill và idempotency trên service mới | Theo dõi production-like soak trước rollout |
-| Exact cosine cũ | `HISTORICAL_DONE` | Hàm exact search trong `ai_retrieval` | `ai_search` đang có HNSW; phải loại mâu thuẫn và lưu `EXPLAIN ANALYZE` |
+| Exact cosine hiện hành | `DONE` | Query plan quét toàn bộ vector READY của sản phẩm ACTIVE. Search V3 đã bỏ HNSW ảnh | Đo lại khi model, cấu hình hoặc quy mô catalog thay đổi |
 | Storefront visual search | `DONE` về UI | Có upload/camera/crop/loading/error/result dialog | Public API đang trả 503; chỉ bật sau TEST v3 |
 | DEV v2.2 / TEST v2 | `DONE / NO-GO` | DEV đạt gate; TEST v2 Recall@5 `73,75%`, category `79%` | Không retune TEST v2; chỉ cải tiến bằng DEV v3 |
 | Voyage | `REFERENCE` | Pipeline lịch sử | Không dùng làm model chuẩn của Hải |
@@ -86,7 +85,7 @@ hoàn thành về code/evidence nhưng toàn bộ tính năng vẫn ở trạng 
 | 5 | Chạy contract/integration/E2E hiện hành | Search, Catalog, Gateway và Storefront cùng pass; public flag vẫn tắt |
 | 6 | HAI-14 xây và tune trên DEV v3 | Khóa model revision, preprocessing, reranking, threshold và candidate limit |
 | 7 | Review/freeze TEST v3 độc lập | Đủ provenance/license, không leakage, có sign-off trước benchmark |
-| 8 | HAI-15 chạy TEST v3 đúng một lần | Recall@5 `>=80%`, category `>=90%`, failure `0%`, p95 `<=3s` |
+| 8 | HAI-15 chạy TEST v3 đúng một lần | Recall@5 `>=80%`, category `>=90%`, unknown rejection `>=80%`, leakage `0`, failure `0%`, p95 `<=3s` |
 | 9 | Cập nhật HAI-10 | Báo cáo phản ánh `ai_search`, TEST v2 và kết quả TEST v3 |
 | 10 | HAI-16 staged rollout | Internal/shadow trước; public chỉ bật khi mọi gate đạt |
 
@@ -372,48 +371,131 @@ backup/rollback và phê duyệt riêng.
 
 ### HAI-12 Chuẩn hóa metadata ảnh hiện tại
 
-**Trạng thái:** `VERIFY`
-
-Catalog hiện persist `secure_url`, `alt_text`, thứ tự và primary flag; index document
-đã trả image ID/URL nhưng `publicId`, asset version, dimensions, checksum và provenance
-vẫn chưa được persist đầy đủ trong schema hiện hành.
+**Trạng thái:** `DONE`
 
 | Xong | ID | Việc cần làm | Điều kiện đạt |
 |---:|---|---|---|
-| [ ] | HAI-12.1 | Audit host/source của 81 ảnh và đối chiếu manifest | Phân biệt Cloudinary, local và nguồn khác; URL hợp lệ |
-| [ ] | HAI-12.2 | Chốt schema metadata | Lưu `public_id`, asset version, dimensions, checksum, provenance khi áp dụng |
-| [ ] | HAI-12.3 | Backfill metadata idempotent | Không thay ảnh hiển thị; report missing/mismatch rõ ràng |
-| [ ] | HAI-12.4 | Bổ sung metadata vào Catalog snapshot | Worker có đủ dữ liệu để tải và xác minh đúng asset |
+| [x] | HAI-12.1 | Audit host/source của 81 ảnh và đối chiếu manifest | 81 URL Cloudinary có version, 81/81 SHA-256 ảnh gốc khớp hồ sơ import |
+| [x] | HAI-12.2 | Chốt schema metadata | Migration Catalog V6 thêm metadata nullable, hỗ trợ ảnh cũ và ảnh chỉ có URL |
+| [x] | HAI-12.3 | Backfill metadata idempotent | PostgreSQL local và Supabase cập nhật 81 rồi 0; 81 ảnh vẫn giữ URL và cờ ảnh chính |
+| [x] | HAI-12.4 | Bổ sung metadata vào Catalog snapshot | Contract v1 bổ sung trường tùy chọn, Search kiểm tra checksum ảnh gốc trước khi chuẩn hóa |
+
+Catalog lưu SHA-256 của ảnh gốc. Search lưu SHA-256 của ảnh sau chuẩn hóa để
+kiểm tra idempotency. Bật lại indexing ảnh cần chạy đối chiếu trước khi phục vụ
+truy vấn. Khi visual search tắt, reindex text/facet giữ nguyên các vector ảnh
+hiện có. Khi indexing ảnh bật, snapshot có danh sách ảnh rỗng vẫn dọn vector cũ.
+
+Ngày 18/11/2026, V6 và backfill được áp dụng trên Supabase trong cùng transaction.
+Kiểm tra sau commit xác nhận 81/81 ảnh đủ metadata. Checksum của 81 vector READY
+trong `ai_search` giữ nguyên. Bằng chứng và thông tin backup nằm tại
+`evidence/image-search-v2/cutover-ai-search/hai-12-catalog-image-metadata-2026-11-18.json`.
+
+Chạy `python scripts/maintenance/backfill-catalog-image-metadata.py` với
+`DATABASE_URL` trỏ đến Catalog PostgreSQL. Dry-run chỉ đọc và kiểm tra ID ảnh,
+ID sản phẩm, URL và các metadata đã lưu. Sau khi có backup và phê duyệt ghi,
+áp dụng Catalog V6 rồi chạy script với `--execute`. Kiểm tra lượt lặp báo
+`updated: 0` và `alreadyComplete: 81`. Nếu phát hiện metadata khác hồ sơ import,
+script dừng trước khi ghi. Khi quay lại bản Catalog cũ, có thể giữ các cột
+nullable của V6. Public visual search tiếp tục tắt trong HAI-12.
 
 ### HAI-13 Xác minh exact cosine trong pilot
 
-**Trạng thái:** `TODO`
-
-`ai_search.image_embeddings` hiện có HNSW index dù kế hoạch gốc yêu cầu exact
-cosine và chưa cần ANN. Không được chỉ dựa vào toán tử `<=>` để kết luận query
-là exact.
+**Trạng thái:** `DONE`
 
 | Xong | ID | Việc cần làm | Điều kiện đạt |
 |---:|---|---|---|
-| [ ] | HAI-13.1 | Lưu `EXPLAIN (ANALYZE, BUFFERS)` trên dữ liệu hiện tại | Xác định rõ sequential exact hay HNSW ANN |
-| [ ] | HAI-13.2 | Thiết kế migration tương thích để không dùng HNSW cho pilot | Có rollback; không xóa vector |
-| [ ] | HAI-13.3 | Benchmark exact cosine | Ranking deterministic, p95 `<=3s`, Recall không bị sai số ANN |
-| [ ] | HAI-13.4 | Khóa tie-break và grouping theo product | Cùng input/config cho cùng thứ tự |
+| [x] | HAI-13.1 | Lưu `EXPLAIN (ANALYZE, BUFFERS)` trên dữ liệu hiện tại | Quét 81 vector READY, dùng `Seq Scan` ở toàn bộ 36 probe |
+| [x] | HAI-13.2 | Thiết kế migration tương thích để không dùng HNSW cho pilot | Search V3 chỉ bỏ HNSW ảnh. Backup có 81 vector và định nghĩa index. README Search có câu lệnh khôi phục |
+| [x] | HAI-13.3 | Benchmark exact cosine | Xếp hạng khớp phép tính vét cạn độc lập ở 36/36 probe. p95 API nội bộ là 822 ms, đạt gate `<=3s` |
+| [x] | HAI-13.4 | Khóa tie-break và grouping theo product | Chọn một ảnh gần nhất mỗi product và phá hòa theo ID. 30/30 truy vấn DEV chạy lặp giữ nguyên thứ tự |
+
+Search V3 được áp dụng trên Supabase ngày 18/11/2026. Checksum và số lượng của
+81 vector ảnh READY giữ nguyên. HNSW của text search vẫn hiện diện. Benchmark
+gọi API Search nội bộ qua HTTP loopback với SigLIP2 CPU và 30 ảnh của DEV v2.2,
+mỗi ảnh hai lần sau một request warmup. Public visual search tiếp tục tắt.
+Xem `evidence/image-search-v2/cutover-ai-search/hai-13-exact-image-search-2026-11-18.json`
+để biết query plan, cấu hình và kết quả latency.
 
 ### HAI-14 DEV v3
 
-**Trạng thái:** `TODO`
+**Trạng thái:** `DONE / FROZEN`
 
 - Không dùng TEST v2 để chọn model, threshold, prompt hoặc reranking.
-- Dùng ảnh DEV mới có provenance, tập trung `accessories`, `tops`, unknown và
-  các failure slice của TEST v2.
+- DEV v3 đã khóa 60 ảnh thật có nguồn và giấy phép. Bộ ảnh có 20 áo,
+  8 phụ kiện, 14 ảnh ngoài catalog, 4 quần, 7 đồng phục và 7 giày.
+- Bộ dữ liệu có 40 ảnh calibration và 20 ảnh DEV-check. Validator đã đối chiếu
+  436 ảnh tham chiếu. Không có trùng SHA-256, Commons page ID hoặc source group.
 - Giữ SigLIP2 pretrained local làm baseline bắt buộc; chưa fine-tune trong pilot.
 - Chỉ thử preprocessing, crop/region, category consensus và catalog coverage trên DEV.
 - Khóa model revision, preprocessing, candidate limit, threshold và ranking trước TEST v3.
 
+Manifest, nhãn và provenance nằm trong `datasets/image-search/dev-v3/`.
+Công cụ `scripts.evaluate_dev_v3` của Search so sánh cấu hình trên cùng snapshot
+81 vector exact cosine. Các cấu hình thử được chọn trên phần calibration.
+
+Cấu hình ứng viên dùng SigLIP2 trên toàn ảnh, candidate limit 20, category
+weight `0.60`, similarity threshold `0.755936` và quy tắc loại ảnh khi xác suất
+`unknown` bằng hoặc lớn hơn xác suất cao nhất của các nhóm có trong catalog.
+Trên calibration, ứng viên đạt Recall@5 **80,65%**, category accuracy **93,55%**
+và unknown rejection **100%**. Trên DEV-check, Recall@5 **78,89%** và category
+accuracy **86,67%** dưới các mốc 80% và 90%. Unknown rejection tăng từ **20%**
+lên **100%** trên năm ảnh unknown của DEV-check.
+
+Giữ cấu hình ở trạng thái ứng viên. Hai lỗi phân nhóm cần xử lý trên DEV là
+áo tập bị xếp vào đồng phục và ốp bảo vệ ống đồng bị xếp dưới giày. Phụ kiện
+hiện thiên về bình nước, với 5/8 ảnh, nên độ bao phủ phụ kiện cần được mở rộng.
+Ở vòng này, cấu hình chưa được chốt cho HAI-15.
+Bằng chứng nằm tại
+`evidence/image-search-v2/cutover-ai-search/hai-14-dev-v3-evaluation-2026-11-18.json`.
+
+#### DEV v3.1 bổ sung
+
+Đã khóa thêm 29 ảnh có nguồn và giấy phép trong
+`datasets/image-search/dev-v3-supplement/`. Có 10 ảnh bổ sung cho calibration và
+19 ảnh kiểm tra mới, gồm 14 ảnh có sản phẩm tương ứng và 5 ảnh ngoài catalog.
+Validator đối chiếu với 496 ảnh tham chiếu, trong đó có toàn bộ DEV v3.0.
+Khoảng cách dHash nhỏ nhất là 13. Manifest và nhãn DEV v3.0 giữ nguyên.
+
+Ứng viên dùng đồng thuận cosine giữa toàn ảnh và các crop sửa cả bốn lỗi phân
+nhóm đã biết của DEV v3.0. Trên 19 ảnh kiểm tra mới, ứng viên đạt Recall@5
+**67,86%**, category accuracy **85,71%** và unknown rejection **40%**. Phụ kiện
+đạt 5/5 về phân nhóm và có sản phẩm đúng trong top 5 ở cả năm ca. Hai điểm yếu
+còn lại là retrieval đúng kiểu áo tập và từ chối ba ảnh ngoài catalog.
+
+Vòng chẩn đoán theo subtype áo trong catalog và các mô tả đồ vật ngoài catalog
+đạt Recall@5 **78,57%**, category accuracy **85,71%** và unknown rejection
+**80%** trên cùng tập kiểm tra. Kết hợp thêm tín hiệu từ crop nâng unknown
+rejection lên 100% nhưng category accuracy giảm còn 71,43%. Hai vòng chẩn đoán
+dùng lại tập kiểm tra DEV v3.1 sau khi đã xem kết quả vòng đầu.
+
+Các ứng viên của v3.1 ở dưới ngưỡng khóa. Kết quả xác định điểm cần cải thiện
+là khả năng khớp ảnh áo tập có người mặc với hai mẫu áo khoác trong catalog. Xem
+`evidence/image-search-v2/cutover-ai-search/hai-14-dev-v3-followup-2026-11-18.json`
+để đối chiếu cấu hình và từng ca.
+
+#### DEV v3.2 mở rộng góc nhìn catalog
+
+Đã tạo bốn ảnh tham chiếu ImageGen cho hai thiết kế pilot Violet Air và Orange
+Pace. Mỗi mẫu có góc chính diện và góc nghiêng cận thân áo. Ảnh tổng hợp chỉ
+được đưa vào snapshot catalog thử nghiệm. Bộ kiểm tra có 20 ảnh Commons độc
+lập với catalog, gồm sáu ảnh áo khoác, chín ảnh đối chứng có sản phẩm tương ứng
+và năm ảnh ngoài catalog. Validator đối chiếu 529 ảnh tham chiếu.
+
+So sánh 81 với 85 vector bằng cùng SigLIP2 revision và cấu hình đã chọn trong
+DEV v3.1. Recall@5 toàn bộ tăng **87,78% → 94,44%**. Recall@5 riêng nhóm áo
+khoác tăng **83,33% → 100%**. Độ chính xác nhóm và unknown rejection đều đạt
+**100%** trên bộ kiểm tra này. Các chỉ số nhóm đối chứng giữ nguyên.
+
+Cấu hình HAI-14 đã khóa tại
+`datasets/image-search/dev-v3-catalog-coverage/locked-profile.json`.
+Snapshot 85 vector được lưu cục bộ. Bằng chứng A/B nằm tại
+`evidence/image-search-v2/cutover-ai-search/hai-14-catalog-coverage-2026-11-18.json`.
+HAI-15 sẽ dùng đúng snapshot và cấu hình đã khóa để đánh giá TEST độc lập.
+Chưa triển khai snapshot lên Supabase hoặc runtime thường trực.
+
 ### HAI-15 TEST v3 độc lập
 
-**Trạng thái:** `BLOCKED` bởi HAI-14
+**Trạng thái:** `DONE / NO-GO`
 
 - Thu thập TEST mới độc lập với catalog, DEV và TEST v1/v2.
 - Kiểm tra license, provenance, SHA-256, near duplicate và source-group leakage.
@@ -423,14 +505,107 @@ là exact.
   failure `0%`, p95 `<=3s`; unknown rejection phải được báo cáo và không thấp
   hơn ngưỡng đã khóa trên DEV.
 
+Ngày 18/11/2026, bộ ứng viên gồm 90 ảnh Wikimedia Commons thuộc đủ sáu nhóm,
+có nhãn và hồ sơ nguồn/giấy phép. Kiểm tra SHA-256, trang nguồn, chuỗi nguồn
+và dHash đã qua với 549 ảnh tham chiếu. Phụ kiện có 10 ảnh, là nhóm ít nhất.
+Ngày 19/11/2026, người dùng chuyển xác nhận duyệt của Quyền (QuyenNDD). Bộ 90
+ảnh được khóa theo đúng checksum trong [hồ sơ duyệt](../datasets/image-search/test-v3/review-approval.json).
+Lần chạy chính thức qua API nội bộ với snapshot cục bộ 85 vector đạt Recall@5
+**83,82%**, 0 lỗi request, 0 ca rò rỉ chưa xử lý và p95 **290,794 ms**. Phân loại
+đúng nhóm **88,24%** và từ chối ảnh ngoài catalog **72,73%** dưới ngưỡng
+**90%** và **80%**. [Báo cáo TEST v3](../evidence/image-search-v3/test-v3-final/final-report.md)
+
+API Search nội bộ qua HTTP loopback đã trả đúng thứ tự top-5 cho 20/20 ảnh
+DEV, với 0 request lỗi và p95 388,847 ms trên snapshot cục bộ 85 vector.
+Kết quả này xác nhận đường chạy benchmark và cấu hình HAI-14 trên DEV.
+[Bằng chứng preflight](../evidence/image-search-v3/hai-15-dev-preflight-2026-11-18/metrics.json)
+
 ### HAI-16 Rollout public
 
-**Trạng thái:** `BLOCKED / NO-GO`
+**Trạng thái:** TEST v4 `PASS`. Đã xác minh luồng Storefront → Gateway → Catalog → Search trên loopback.
 
-Chỉ bắt đầu khi HAI-11 đến HAI-15 hoàn tất. Thứ tự rollout là internal smoke,
+Chỉ bắt đầu rollout khi benchmark độc lập đạt tất cả các ngưỡng nghiệm thu.
+TEST v4 đã đạt các ngưỡng trên snapshot cục bộ 85 vector. Thứ tự rollout là internal smoke,
 shadow, cohort nhỏ, theo dõi quality/latency/error/queue/DLQ, rồi mới mở rộng.
 Rollback bằng feature flag/routing; không xóa vector, dataset hoặc evidence khi
 xảy ra sự cố.
+
+Search kiểm tra 81 vector index theo checksum đã nghiệm thu, ghép 4 vector
+tham chiếu và trả ảnh hiện hành của sản phẩm. Catalog ưu tiên sản phẩm có tồn
+kho, giữ thứ tự Search trong từng nhóm. Kiểm tra trên DB chỉ đọc cho top 5
+khớp **24/24 ảnh DEV**, p95 **748,407 ms**. Kiểm thử trình duyệt trả HTTP 200
+và hiển thị đúng 4 thẻ kết quả. Cờ công khai mặc định tắt. [Bằng chứng tích hợp](../evidence/image-search-v4/visual-pilot-integration-2026-11-20.json)
+
+Ngày 21/11/2026, chạy shadow và rollback bằng các service loopback cô lập
+và Supabase chỉ đọc. Trước khi tắt cờ và sau khi bật lại, cả hai lượt đều
+khớp top-5 cho 24/24 ảnh DEV và có 0 lỗi trên 48 request mỗi lượt. Gateway
+đạt p95 lần lượt 871,061 ms và 854,448 ms. Khi tắt cờ Catalog, API ảnh
+qua Gateway trả 503, trang sản phẩm trả 200 và Search nội bộ vẫn sẵn sàng.
+[Bằng chứng diễn tập](../evidence/image-search-v4/hai-16-local-shadow-rollback-2026-11-21.json) · [Lệnh chạy trên staging](../services/search-service/README.md#shadow-và-rollback-trên-staging)
+
+Cùng ngày, lặp lại shadow và rollback với RabbitMQ Docker riêng, Search worker
+thật và Supabase chỉ đọc. Hai lượt khớp top-5 cho 24/24 ảnh, mỗi lượt 0 lỗi
+trên 48 request. Gateway đạt p95 1.063,756 ms trước rollback và 913,834 ms
+sau phục hồi. Hàng đợi chính có một consumer. Cả năm hàng đợi chính, retry
+và DLQ đều có 0 message ở các điểm đo trước/sau. Fixture riêng xác nhận
+worker đưa lỗi lần đầu vào retry 30 giây và lỗi đã hết lượt thử vào DLQ.
+[Bằng chứng RabbitMQ](../evidence/image-search-v4/hai-16-staging-broker-2026-11-21.json)
+
+Hải xác định môi trường nghiệm thu hiện tại là FE/BE local với Supabase và
+SePay bên ngoài. Đợt nghiệm thu chạy phiên Storefront, Gateway, Catalog,
+Search và RabbitMQ cô lập với Supabase chỉ đọc. Trước và sau rollback, cả
+hai lượt khớp top-5 cho 24/24 ảnh DEV, mỗi lượt 0 lỗi trên 48 request.
+Gateway đạt p95 853,021 ms và 989,035 ms. Trên trình duyệt, ảnh sản phẩm
+trả 4 thẻ và ảnh ngoài catalog trả 0 kết quả ở cả hai lượt. Khi tắt cờ,
+nút tìm ảnh ẩn, API ảnh trả 503 và trang sản phẩm vẫn trả 200. Cả năm
+hàng đợi trống ở các điểm đo và trình duyệt ghi nhận 0 request thanh toán.
+[Bằng chứng nghiệm thu FE/BE](../evidence/image-search-v4/hai-16-local-e2e-acceptance-2026-11-21.json)
+
+Gateway chỉ chuyển hai route tìm ảnh đến Catalog cho tài khoản nằm trong
+danh sách UUID khi bật chế độ cohort. Catalog kiểm tra token riêng của
+Gateway. Storefront cập nhật khả dụng khi đổi tài khoản. Replay DEV đo chất
+lượng trên mẫu đã biết. Monitor lấy p95 và lỗi từ log Gateway, đồng thời
+lấy mẫu queue/DLQ qua RabbitMQ Management. Việc mở cho người dùng thật cần
+danh sách tài khoản được duyệt.
+[Cấu hình cohort và giám sát](../services/search-service/README.md#thử-nghiệm-cho-nhóm-nhỏ)
+
+Trong phiên thử cô lập với tài khoản mẫu, replay DEV khớp 24/24 top-5,
+không có lỗi trên 48 request và p95 qua Gateway 803,954 ms. Cửa sổ quan
+sát 45 giây có hai lượt tìm ảnh thành công, một lượt ngoài danh sách bị
+chặn, p95 Gateway 828 ms và DLQ 0. Sau khi đổi sang tài khoản ngoài danh
+sách, Storefront ẩn tìm ảnh và trang sản phẩm vẫn truy cập được.
+[Bằng chứng cohort mẫu](../evidence/image-search-v4/hai-16-cohort-smoke-2026-11-21.json)
+
+#### DEV v4 sau TEST v3
+
+Đã đo 16 cấu hình trên 50 ảnh calibration và đối chiếu trên 59 ảnh DEV-check
+có sẵn. Đã bổ sung 20 ảnh DEV mới gồm tám bộ bóng đá và mười hai ảnh ngoài
+catalog. Trên ảnh mới, bổ sung cả hai bộ mô tả tăng phân nhóm đúng đồng phục
+từ **5/8 lên 7/8** và tăng từ chối ảnh ngoài catalog từ **7/12 lên 12/12**.
+Trên DEV-check đủ nhóm, cấu hình kết hợp đạt **88,64%** độ chính xác phân nhóm,
+dưới mốc **90%**. Cấu hình DEV v4 đang ở giai đoạn thử nghiệm. Vòng tiếp theo
+cần đối chứng thêm với áo và phụ kiện trên dữ liệu DEV mới.
+[Báo cáo DEV v4](../evidence/image-search-v4/dev-report-2026-11-19.md)
+
+DEV v4.1 đã bổ sung 42 ảnh phủ sáu nhóm, chia 18 ảnh calibration và 24 ảnh
+kiểm tra. Runner chọn tham số trên 68 ảnh calibration, gồm dữ liệu DEV đã có.
+Cấu hình dùng đầy đủ hai bộ mô tả đạt Recall@5 **84,58%**, phân nhóm
+**85,00%** và từ chối ảnh ngoài catalog **4/4** trên bộ kiểm tra mới.
+Cấu hình được chọn từ calibration đạt lần lượt **75,83%**, **70,00%** và
+**3/4**. Chưa khóa cấu hình. Ba lỗi phân nhóm còn lại khi dùng đầy đủ mô tả
+liên quan đến áo tập và quần đùi bóng đá bị nhầm với nhóm trang phục khác.
+[Báo cáo DEV v4.1](../evidence/image-search-v4/dev-balanced-report-2026-11-19.md)
+
+DEV v4.2 ngày 20/11/2026 thử thêm tín hiệu cho áo/quần chụp riêng và các loại phụ kiện.
+Cấu hình được chọn trên 171 ảnh DEV cũ đạt Recall@5 **86,25%**, phân nhóm
+**90%** và từ chối ảnh ngoài catalog **4/4** trên 24 ảnh DEV mới.
+Cấu hình đã khóa cho TEST v4 độc lập. Sau xác nhận duyệt của Dũng, lần chạy
+chính thức trên 100 ảnh đạt Recall@5 **87,92%**, phân nhóm **93,75%**,
+từ chối ảnh ngoài catalog **95%**, 0 lỗi request và p95 **241,561 ms**.
+HAI-16 đã qua benchmark và nghiệm thu FE/BE local, gồm shadow, rollback
+và RabbitMQ. Bước tiếp theo là mở thử nghiệm có kiểm soát cho nhóm nhỏ.
+[Báo cáo DEV v4.2](../evidence/image-search-v4/dev-garment-report-2026-11-20.md) ·
+[Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
 
 ## 7. Artifact phải bàn giao
 
@@ -445,6 +620,8 @@ datasets/
     └── test-v3/             # chỉ tạo sau khi DEV v3 đã khóa
 
 evidence/
+├── image-search-v3/
+│   └── test-v3-final/        # xác nhận, kết quả và báo cáo TEST v3
 └── image-search-v2/
     ├── catalog-pilot-validation.json
     ├── catalog-world-cup-validation.json
@@ -454,13 +631,13 @@ evidence/
     ├── test-v1-final/
     ├── dev-v2.2-locked-2026-11-03/
     ├── test-v2-final/
-    ├── cutover-ai-search/    # HAI-11 đến HAI-13
-    └── test-v3-final/        # chỉ sinh sau sign-off
+    └── cutover-ai-search/    # HAI-11 đến HAI-14
 ```
 
 Binary ảnh lớn có thể nằm ngoài Git. Repository phải giữ manifest, checksum, nguồn, license và hướng dẫn tái tạo hoặc tải lại hợp lệ.
 
-Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-report.md` và đang ở trạng thái cần cập nhật. Báo cáo TEST v1 cấp benchmark vẫn được giữ riêng tại `evidence/image-search-v2/test-v1-final/final-report.md`; TEST v2 ở `evidence/image-search-v2/test-v2-final/` là bằng chứng chất lượng mới nhất đã khóa.
+Báo cáo HAI-10 đã bổ sung kết quả theo kiến trúc hiện hành và liên kết lần chạy
+TEST v3. Kết quả TEST v1 và TEST v2 nằm trong các thư mục evidence tương ứng.
 
 ## 8. Nhật ký thực hiện
 
@@ -505,13 +682,15 @@ Bản báo cáo HAI-10 lịch sử nằm tại `docs/ai-hai-image-search-final-r
 
 - [x] Catalog index-document contract khớp Search client và có integration test.
 - [x] Worker/backfill hiện tại tái tạo idempotent 36 documents, 178 facets và 81 image vectors.
-- [ ] Metadata ảnh/Cloudinary hiện tại được persist hoặc có chính sách thay thế rõ ràng.
-- [ ] Exact cosine được chứng minh bằng query plan; không dùng ANN trong pilot.
-- [ ] Internal API, Catalog/Gateway và Storefront E2E pass trên `ai_search`.
-- [ ] DEV v3 được khóa mà không dùng nhãn TEST v2 để tune.
-- [ ] TEST v3 độc lập đạt Recall@5, category, leakage, failure và latency gate.
-- [ ] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả mới nhất.
-- [ ] Staged rollout và rollback smoke đạt trên môi trường acceptance.
+- [x] Metadata ảnh/Cloudinary của 81 ảnh pilot và World Cup đã được persist và đối chiếu checksum.
+- [x] Exact cosine được chứng minh bằng query plan và phép tính đối chiếu. HNSW ảnh đã được bỏ khỏi pilot.
+- [x] Luồng Search, Catalog, Gateway và Storefront đã qua kiểm tra loopback trên `ai_search`.
+- [x] DEV v3 và cấu hình catalog 85 vector đã khóa trước TEST v3.
+- [x] TEST v4 độc lập đạt các ngưỡng nghiệm thu sau kết quả NO-GO của TEST v3.
+- [x] Báo cáo HAI-10 được cập nhật theo kiến trúc hiện tại và kết quả TEST v4.
+- [x] Shadow, rollback và RabbitMQ/DLQ đạt trên môi trường kiểm tra cục bộ cô lập.
+- [x] Xác minh shadow, RabbitMQ và rollback qua FE/BE local theo cấu hình Hải xác nhận.
+- [ ] Mở thử nghiệm cho nhóm nhỏ và theo dõi chất lượng, độ trễ, lỗi và DLQ.
 
 Không cần fine-tuning hoặc ANN trong pilot. Chỉ xem xét ANN khi `EXPLAIN
 ANALYZE` và benchmark chứng minh exact cosine không đáp ứng latency ở quy mô dữ

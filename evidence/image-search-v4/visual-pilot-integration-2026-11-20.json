@@ -1,0 +1,49 @@
+{
+  "scope": "loopback service instances with read-only database access (DEV queries only)",
+  "checkedAt": "2026-11-20T15:40:36.335908+00:00",
+  "disabledCatalog": {
+    "status": {
+      "status": "DISABLED",
+      "enabled": false,
+      "available": false
+    },
+    "http": 503
+  },
+  "gatewayCatalog": {
+    "status": {
+      "status": "READY",
+      "available": true,
+      "enabled": true
+    },
+    "http": 200,
+    "cards": 4,
+    "expectedTopSlug": "ao-chay-bo-nam-aero-navy",
+    "unknownCards": 0,
+    "invalidImageHttp": 422,
+    "oversizedRequestHttp": 413
+  },
+  "search": {
+    "devParity": 24,
+    "devQueries": 24,
+    "requestFailures": 0,
+    "p95Ms": 748.407,
+    "unauthorizedStatus": 401,
+    "internalRouteViaGateway": 404
+  },
+  "storefront": {
+    "httpStatus": 200,
+    "resultCards": 4,
+    "expectedTopVisible": true,
+    "expectedSlug": "ao-chay-bo-nam-aero-navy"
+  },
+  "catalog": {
+    "verifiedIndexedVectors": 81,
+    "verifiedReferenceVectors": 4,
+    "snapshotChecksum": "71c413098c88688a4248680a291bef5e"
+  },
+  "tests": {
+    "search": 32,
+    "gateway": 15,
+    "catalog": 6
+  }
+}

@@ -34,7 +34,17 @@
     {
       "id": "50000000-0000-0000-0000-000000000001",
       "url": "https://res.cloudinary.com/demo/image/upload/v1/shoe.jpg",
-      "publicId": null,
+      "publicId": "shoe",
+      "assetVersion": "1",
+      "width": 224,
+      "height": 224,
+      "format": "jpg",
+      "bytes": 1024,
+      "checksum": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceKind": "SYNTHETIC",
+      "licenseCode": "AI_GENERATED_PROJECT_USE",
+      "sourceUri": "catalog://demo/shoe.jpg",
+      "sourceGroupCode": "DEMO-SHOE-1",
       "sortOrder": 0
     }
   ]

@@ -1,4 +1,55 @@
-# Báo cáo tổng kết image search V2 (HAI-10)
+# Báo cáo tổng kết tìm kiếm sản phẩm bằng ảnh (HAI-10)
+
+## Cập nhật ngày 21/11/2026
+
+Shadow và rollback HAI-16 đã đạt trong môi trường loopback cô lập với DB chỉ đọc.
+Hai lượt DEV đều khớp top-5 cho 24/24 ảnh và đạt p95 qua Gateway dưới 1 giây.
+Khi rollback, API ảnh trả 503 và trang sản phẩm trả 200.
+[Bằng chứng diễn tập](../evidence/image-search-v4/hai-16-local-shadow-rollback-2026-11-21.json)
+
+Lượt kiểm tra tiếp theo dùng RabbitMQ Docker riêng và Search worker thật.
+Shadow trước rollback và sau phục hồi đều khớp top-5 cho 24/24 ảnh, với p95
+Gateway lần lượt 1.063,756 ms và 913,834 ms. Hàng đợi không tồn đọng tại các
+điểm đo. Worker chuyển fixture lỗi vào retry và DLQ đúng theo số lần thử.
+[Bằng chứng RabbitMQ](../evidence/image-search-v4/hai-16-staging-broker-2026-11-21.json)
+
+Nghiệm thu FE/BE local theo cấu hình Hải xác nhận đã đạt. Trình duyệt hiển
+thị bốn thẻ cho ảnh sản phẩm và báo không tìm thấy cho ảnh ngoài catalog.
+Rollback ẩn nút tìm ảnh, trả HTTP 503 cho API ảnh và vẫn mở được trang
+sản phẩm. Cả hai lượt DEV khớp 24/24 top-5 với 0 lỗi, p95 qua Gateway
+lần lượt 853,021 ms và 989,035 ms. Đợt kiểm tra dùng Supabase chỉ đọc và
+ghi nhận 0 request thanh toán. Bước tiếp theo là thử cho một nhóm nhỏ.
+[Bằng chứng nghiệm thu FE/BE](../evidence/image-search-v4/hai-16-local-e2e-acceptance-2026-11-21.json)
+
+## Cập nhật ngày 20/11/2026
+
+TEST v4 đã đạt toàn bộ ngưỡng nghiệm thu trên 100 ảnh độc lập sau xác nhận
+duyệt của Dũng. Cấu hình DEV v4.2 và snapshot cục bộ 85 vector đạt Recall@5
+**87,92%**, phân nhóm **93,75%**, từ chối ảnh ngoài catalog **95%**, 0 lỗi
+request và p95 **241,561 ms** qua API nội bộ. [Báo cáo TEST v4](../evidence/image-search-v4/test-v4-final/final-report.md)
+
+HAI-16 đã tích hợp cấu hình v4 vào luồng Storefront → Gateway → Catalog → Search
+và xác minh trên loopback với DB chỉ đọc. Shadow là bước tiếp theo của rollout.
+[Bằng chứng tích hợp](../evidence/image-search-v4/visual-pilot-integration-2026-11-20.json)
+
+## Cập nhật ngày 19/11/2026
+
+Pipeline hiện hành nằm trong `services/search-service`. Catalog và Search
+trao đổi snapshot sản phẩm và sự kiện để cập nhật dữ liệu dẫn xuất trong
+`ai_search`. Pilot có 36 sản phẩm, 178 biến thể và 81 ảnh đầy đủ metadata.
+Search dùng SigLIP2 768 chiều và exact cosine, gom theo sản phẩm rồi trả ứng viên
+qua API nội bộ. [Tiến độ HAI-11 đến HAI-14](ai-hai-image-search-responsibilities.md)
+
+TEST v2 trên pipeline trước đó đạt Recall@5 **73,75%** và phân loại đúng nhóm
+**79%**. TEST v3 đánh giá một bộ ảnh độc lập khác, qua API nội bộ với snapshot
+cục bộ 85 vector và cấu hình DEV v3 đã khóa. Sau xác nhận của Quyền, lần chạy
+chính thức đạt Recall@5 **83,82%**, phân loại đúng nhóm **88,24%**, từ chối
+ảnh ngoài catalog **72,73%**, 0 lỗi request và p95 **290,794 ms**. Vì còn hai
+chỉ số dưới ngưỡng, quyết định vẫn là **NO-GO**. Nhóm đồng phục và các ca ảnh
+ngoài catalog trả nhầm kết quả là trọng tâm cho vòng DEV tiếp theo.
+[Báo cáo TEST v2](../evidence/image-search-v2/test-v2-final/final-report.md) · [Báo cáo TEST v3](../evidence/image-search-v3/test-v3-final/final-report.md)
+
+## Hồ sơ V2 và TEST v1 ngày 25/10/2026
 
 **Ngày chốt nội dung:** 25/10/2026  
 **Catalog snapshot:** `image-catalog-v2-2026-10-23`  

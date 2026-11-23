@@ -1,0 +1,2287 @@
+{
+  "schemaVersion": 1,
+  "taskId": "HAI-14",
+  "dataset": [
+    {
+      "identity": {
+        "name": "image-search-dev-v3",
+        "version": "3.0.0",
+        "split": "DEV",
+        "status": "FROZEN",
+        "frozenAt": "2026-11-18T13:58:31.784772+00:00",
+        "catalogSnapshot": {
+          "version": "image-catalog-v2-2026-10-23",
+          "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+        }
+      },
+      "manifestSha256": "77ad7b7924774b7e375039a3100862d041ffccd583ed1a668bc69b1766106095",
+      "labelsSha256": "e119ad512e9380e5bf80fa7bb435f4816762d83c0b39cb5c27c00de726bf4428"
+    },
+    {
+      "identity": {
+        "name": "image-search-dev-v3-supplement",
+        "version": "3.1.0",
+        "split": "DEV",
+        "status": "FROZEN",
+        "frozenAt": "2026-11-18T14:32:02.938038+00:00",
+        "catalogSnapshot": {
+          "version": "image-catalog-v2-2026-10-23",
+          "sha256": "421349750aaa44ef15b16448cf64fd8f34cd08a0f11cd578466f2de9aa3e0de0"
+        }
+      },
+      "manifestSha256": "63aaa95cb69e4fe41d76898612494473a3b4f92dc2de41bd20e0c7ebc9d6a5fb",
+      "labelsSha256": "3191680779f32fb7dfbec2d7f8d750657e41285afef04d877724e041cb3f1c85"
+    }
+  ],
+  "catalog": {
+    "images": 81,
+    "vectorChecksum": "6480a433097bedc41649fac5137342cf"
+  },
+  "model": {
+    "name": "google/siglip2-base-patch16-224",
+    "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+    "dimensions": 768,
+    "preprocessing": "siglip2-autoprocessor-original-v1",
+    "candidateLimit": 20
+  },
+  "runtime": {
+    "device": "cpu",
+    "torch": "2.7.1",
+    "transformers": "4.57.1"
+  },
+  "gates": {
+    "recallAt5": 0.8,
+    "categoryAccuracy": 0.9,
+    "unknownRejection": 0.8
+  },
+  "experiments": {
+    "confusion-pair-consensus": {
+      "evaluatedAt": "2026-11-18T14:33:45.021228+00:00",
+      "gridSize": 2340,
+      "threeViewOfflineP95Ms": 1008.876,
+      "results": {
+        "baseline": {
+          "config": {
+            "view": "full",
+            "categorySource": "siglip2",
+            "categoryWeight": 0.6,
+            "minSimilarity": 0.755936,
+            "unknownRatio": null,
+            "pairMode": "off",
+            "pairBoost": 0.0
+          },
+          "partitions": {
+            "calibration": {
+              "groups": {
+                "tops": 23,
+                "accessories": 11,
+                "unknown": 16,
+                "bottoms": 4,
+                "uniforms": 7,
+                "shoes": 9
+              },
+              "overall": {
+                "knownQueries": 54,
+                "unknownQueries": 16,
+                "recallAt5": 0.7746913580246911,
+                "categoryAccuracy": 0.8703703703703703,
+                "unknownRejection": 0.0625,
+                "meanReciprocalRankAt5": 0.7629629629629631
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 11,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 0.9090909090909091,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.9318181818181818
+                },
+                "bottoms": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.8333333333333333
+                },
+                "shoes": {
+                  "knownQueries": 9,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.9629629629629631,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 23,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.5362318840579711,
+                  "categoryAccuracy": 0.7391304347826086,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.5050724637681159
+                },
+                "uniforms": {
+                  "knownQueries": 7,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.8333333333333333,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 16,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.0625,
+                  "meanReciprocalRankAt5": null
+                }
+              }
+            },
+            "freshDEVCheck": {
+              "groups": {
+                "tops": 4,
+                "accessories": 5,
+                "unknown": 5,
+                "bottoms": 1,
+                "uniforms": 2,
+                "shoes": 2
+              },
+              "overall": {
+                "knownQueries": 14,
+                "unknownQueries": 5,
+                "recallAt5": 0.738095238095238,
+                "categoryAccuracy": 0.7857142857142857,
+                "unknownRejection": 0.0,
+                "meanReciprocalRankAt5": 0.7857142857142857
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 5,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "bottoms": {
+                  "knownQueries": 1,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "shoes": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.16666666666666666,
+                  "categoryAccuracy": 0.25,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.25
+                },
+                "uniforms": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.8333333333333334,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 5,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.0,
+                  "meanReciprocalRankAt5": null
+                }
+              },
+              "queries": [
+                {
+                  "queryId": "dev3s-003",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-004",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-005",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-007",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 0.6666666666666666,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "a1192013-eeb9-4302-80d2-28f5f609857d",
+                    "540290b7-2904-4567-89d1-51e0f49d7e8e",
+                    "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-010",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-011",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-012",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-014",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-015",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-017",
+                  "group": "unknown",
+                  "predictedGroup": "accessories",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-018",
+                  "group": "unknown",
+                  "predictedGroup": "tops",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+                    "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+                    "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-020",
+                  "group": "unknown",
+                  "predictedGroup": "accessories",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-021",
+                  "group": "unknown",
+                  "predictedGroup": "accessories",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-022",
+                  "group": "unknown",
+                  "predictedGroup": "bottoms",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+                    "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+                    "e8f35b34-3eae-4533-923d-616342ba34ac",
+                    "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+                    "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-023",
+                  "group": "bottoms",
+                  "predictedGroup": "bottoms",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+                    "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+                    "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+                    "e8f35b34-3eae-4533-923d-616342ba34ac",
+                    "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-024",
+                  "group": "uniforms",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.8333333333333334,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-025",
+                  "group": "uniforms",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.8333333333333334,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-027",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-029",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+                    "90df2223-3c14-49cf-822f-207603429950",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "priorCandidate": {
+          "config": {
+            "view": "full",
+            "categorySource": "siglip2",
+            "categoryWeight": 0.6,
+            "minSimilarity": 0.755936,
+            "unknownRatio": 1.0,
+            "pairMode": "off",
+            "pairBoost": 0.0
+          },
+          "partitions": {
+            "calibration": {
+              "groups": {
+                "tops": 23,
+                "accessories": 11,
+                "unknown": 16,
+                "bottoms": 4,
+                "uniforms": 7,
+                "shoes": 9
+              },
+              "overall": {
+                "knownQueries": 54,
+                "unknownQueries": 16,
+                "recallAt5": 0.7746913580246911,
+                "categoryAccuracy": 0.8703703703703703,
+                "unknownRejection": 0.9375,
+                "meanReciprocalRankAt5": 0.7629629629629631
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 11,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 0.9090909090909091,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.9318181818181818
+                },
+                "bottoms": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.8333333333333333
+                },
+                "shoes": {
+                  "knownQueries": 9,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.9629629629629631,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 23,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.5362318840579711,
+                  "categoryAccuracy": 0.7391304347826086,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.5050724637681159
+                },
+                "uniforms": {
+                  "knownQueries": 7,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.8333333333333333,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 16,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.9375,
+                  "meanReciprocalRankAt5": null
+                }
+              }
+            },
+            "freshDEVCheck": {
+              "groups": {
+                "tops": 4,
+                "accessories": 5,
+                "unknown": 5,
+                "bottoms": 1,
+                "uniforms": 2,
+                "shoes": 2
+              },
+              "overall": {
+                "knownQueries": 14,
+                "unknownQueries": 5,
+                "recallAt5": 0.738095238095238,
+                "categoryAccuracy": 0.7857142857142857,
+                "unknownRejection": 0.4,
+                "meanReciprocalRankAt5": 0.7857142857142857
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 5,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "bottoms": {
+                  "knownQueries": 1,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "shoes": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.16666666666666666,
+                  "categoryAccuracy": 0.25,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.25
+                },
+                "uniforms": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.8333333333333334,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 5,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.4,
+                  "meanReciprocalRankAt5": null
+                }
+              },
+              "queries": [
+                {
+                  "queryId": "dev3s-003",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-004",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-005",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-007",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 0.6666666666666666,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "a1192013-eeb9-4302-80d2-28f5f609857d",
+                    "540290b7-2904-4567-89d1-51e0f49d7e8e",
+                    "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-010",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-011",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-012",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-014",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-015",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-017",
+                  "group": "unknown",
+                  "predictedGroup": "accessories",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-018",
+                  "group": "unknown",
+                  "predictedGroup": "tops",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+                    "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+                    "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-020",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-021",
+                  "group": "unknown",
+                  "predictedGroup": "accessories",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-022",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-023",
+                  "group": "bottoms",
+                  "predictedGroup": "bottoms",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+                    "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+                    "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+                    "e8f35b34-3eae-4533-923d-616342ba34ac",
+                    "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-024",
+                  "group": "uniforms",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.8333333333333334,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-025",
+                  "group": "uniforms",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.8333333333333334,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-027",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-029",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+                    "90df2223-3c14-49cf-822f-207603429950",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "selected": {
+          "config": {
+            "view": "full",
+            "categorySource": "siglip2",
+            "categoryWeight": 0.6,
+            "minSimilarity": 0.755936,
+            "unknownRatio": 1.0,
+            "pairMode": "retrieval",
+            "pairBoost": 0.75
+          },
+          "partitions": {
+            "calibration": {
+              "groups": {
+                "tops": 23,
+                "accessories": 11,
+                "unknown": 16,
+                "bottoms": 4,
+                "uniforms": 7,
+                "shoes": 9
+              },
+              "overall": {
+                "knownQueries": 54,
+                "unknownQueries": 16,
+                "recallAt5": 0.7932098765432097,
+                "categoryAccuracy": 1.0,
+                "unknownRejection": 0.9375,
+                "meanReciprocalRankAt5": 0.8015432098765433
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 11,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "bottoms": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.8333333333333333
+                },
+                "shoes": {
+                  "knownQueries": 9,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.9629629629629631,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 23,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.5797101449275363,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.5630434782608695
+                },
+                "uniforms": {
+                  "knownQueries": 7,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.8333333333333333,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 16,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.9375,
+                  "meanReciprocalRankAt5": null
+                }
+              }
+            },
+            "freshDEVCheck": {
+              "groups": {
+                "tops": 4,
+                "accessories": 5,
+                "unknown": 5,
+                "bottoms": 1,
+                "uniforms": 2,
+                "shoes": 2
+              },
+              "overall": {
+                "knownQueries": 14,
+                "unknownQueries": 5,
+                "recallAt5": 0.6785714285714286,
+                "categoryAccuracy": 0.8571428571428571,
+                "unknownRejection": 0.4,
+                "meanReciprocalRankAt5": 0.7142857142857143
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 5,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "bottoms": {
+                  "knownQueries": 1,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "shoes": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.16666666666666666,
+                  "categoryAccuracy": 0.75,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.25
+                },
+                "uniforms": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.4166666666666667,
+                  "categoryAccuracy": 0.5,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.5
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 5,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.4,
+                  "meanReciprocalRankAt5": null
+                }
+              },
+              "queries": [
+                {
+                  "queryId": "dev3s-003",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+                    "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+                    "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+                    "773289df-121a-4124-beba-bee575eb3b24"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-004",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+                    "a1192013-eeb9-4302-80d2-28f5f609857d",
+                    "540290b7-2904-4567-89d1-51e0f49d7e8e"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-005",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-007",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 0.6666666666666666,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "a1192013-eeb9-4302-80d2-28f5f609857d",
+                    "540290b7-2904-4567-89d1-51e0f49d7e8e",
+                    "a40c8829-74a7-4fbd-beab-63efcdf6efe1"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-010",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-011",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-012",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-014",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-015",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-017",
+                  "group": "unknown",
+                  "predictedGroup": "accessories",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-018",
+                  "group": "unknown",
+                  "predictedGroup": "tops",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+                    "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+                    "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-020",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-021",
+                  "group": "unknown",
+                  "predictedGroup": "accessories",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-022",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-023",
+                  "group": "bottoms",
+                  "predictedGroup": "bottoms",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+                    "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+                    "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+                    "e8f35b34-3eae-4533-923d-616342ba34ac",
+                    "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-024",
+                  "group": "uniforms",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.8333333333333334,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-025",
+                  "group": "uniforms",
+                  "predictedGroup": "tops",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "540290b7-2904-4567-89d1-51e0f49d7e8e",
+                    "a1192013-eeb9-4302-80d2-28f5f609857d"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-027",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-029",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+                    "90df2223-3c14-49cf-822f-207603429950",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "passed": false
+    },
+    "catalog-subtype-consensus": {
+      "evaluatedAt": "2026-11-18T14:39:12.552331+00:00",
+      "gridSize": 720,
+      "threeViewOfflineP95Ms": 993.208,
+      "results": {
+        "selected": {
+          "config": {
+            "view": "full",
+            "categorySource": "catalog-subtypes",
+            "categoryWeight": 0.35,
+            "minSimilarity": 0.6,
+            "unknownRatio": 1.2,
+            "pairMode": "off",
+            "pairBoost": 0.0,
+            "subtypeWeight": 0.25
+          },
+          "partitions": {
+            "calibration": {
+              "groups": {
+                "tops": 23,
+                "accessories": 11,
+                "unknown": 16,
+                "bottoms": 4,
+                "uniforms": 7,
+                "shoes": 9
+              },
+              "overall": {
+                "knownQueries": 54,
+                "unknownQueries": 16,
+                "recallAt5": 0.8209876543209875,
+                "categoryAccuracy": 0.9259259259259259,
+                "unknownRejection": 0.8125,
+                "meanReciprocalRankAt5": 0.8231481481481481
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 11,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 0.9090909090909091,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.9545454545454546
+                },
+                "bottoms": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.875,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.8333333333333333
+                },
+                "shoes": {
+                  "knownQueries": 9,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.9629629629629631,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 23,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.6811594202898551,
+                  "categoryAccuracy": 0.9130434782608695,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.6572463768115941
+                },
+                "uniforms": {
+                  "knownQueries": 7,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.7857142857142857,
+                  "categoryAccuracy": 0.8571428571428571,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.9285714285714286
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 16,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.8125,
+                  "meanReciprocalRankAt5": null
+                }
+              }
+            },
+            "diagnosticDEVCheck": {
+              "groups": {
+                "tops": 4,
+                "accessories": 5,
+                "unknown": 5,
+                "bottoms": 1,
+                "uniforms": 2,
+                "shoes": 2
+              },
+              "overall": {
+                "knownQueries": 14,
+                "unknownQueries": 5,
+                "recallAt5": 0.7857142857142857,
+                "categoryAccuracy": 0.8571428571428571,
+                "unknownRejection": 0.8,
+                "meanReciprocalRankAt5": 0.8214285714285714
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 5,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "bottoms": {
+                  "knownQueries": 1,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "shoes": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.375,
+                  "categoryAccuracy": 0.5,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.375
+                },
+                "uniforms": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.75,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 5,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.8,
+                  "meanReciprocalRankAt5": null
+                }
+              },
+              "queries": [
+                {
+                  "queryId": "dev3s-003",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+                    "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+                    "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+                    "773289df-121a-4124-beba-bee575eb3b24"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-004",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-005",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.5,
+                  "reciprocalRank": 0.5,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-007",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-010",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-011",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-012",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-014",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-015",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-017",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-018",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-020",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-021",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-022",
+                  "group": "unknown",
+                  "predictedGroup": "bottoms",
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+                    "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+                    "e8f35b34-3eae-4533-923d-616342ba34ac",
+                    "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+                    "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-023",
+                  "group": "bottoms",
+                  "predictedGroup": "bottoms",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+                    "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+                    "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+                    "e8f35b34-3eae-4533-923d-616342ba34ac",
+                    "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-024",
+                  "group": "uniforms",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.8333333333333334,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-025",
+                  "group": "uniforms",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.6666666666666666,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-027",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-029",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+                    "90df2223-3c14-49cf-822f-207603429950",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "passed": false
+    },
+    "combined": {
+      "evaluatedAt": "2026-11-18T14:41:42.176309+00:00",
+      "gridSize": 2160,
+      "threeViewOfflineP95Ms": 800.423,
+      "results": {
+        "selected": {
+          "config": {
+            "view": "full+center",
+            "categorySource": "catalog-subtypes",
+            "categoryWeight": 0.35,
+            "minSimilarity": 0.6,
+            "unknownRatio": 1.0,
+            "pairMode": "retrieval",
+            "pairBoost": 0.3,
+            "subtypeWeight": 0.25
+          },
+          "partitions": {
+            "calibration": {
+              "groups": {
+                "tops": 23,
+                "accessories": 11,
+                "unknown": 16,
+                "bottoms": 4,
+                "uniforms": 7,
+                "shoes": 9
+              },
+              "overall": {
+                "knownQueries": 54,
+                "unknownQueries": 16,
+                "recallAt5": 0.8209876543209875,
+                "categoryAccuracy": 0.9259259259259259,
+                "unknownRejection": 0.9375,
+                "meanReciprocalRankAt5": 0.8308641975308642
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 11,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.9090909090909091,
+                  "categoryAccuracy": 0.9090909090909091,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.9090909090909091
+                },
+                "bottoms": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.875,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.8333333333333333
+                },
+                "shoes": {
+                  "knownQueries": 9,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.9629629629629631,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 23,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.7318840579710146,
+                  "categoryAccuracy": 0.9130434782608695,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.6971014492753622
+                },
+                "uniforms": {
+                  "knownQueries": 7,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.7619047619047619,
+                  "categoryAccuracy": 0.8571428571428571,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.9285714285714286
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 16,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 0.9375,
+                  "meanReciprocalRankAt5": null
+                }
+              }
+            },
+            "diagnosticDEVCheck": {
+              "groups": {
+                "tops": 4,
+                "accessories": 5,
+                "unknown": 5,
+                "bottoms": 1,
+                "uniforms": 2,
+                "shoes": 2
+              },
+              "overall": {
+                "knownQueries": 14,
+                "unknownQueries": 5,
+                "recallAt5": 0.7738095238095237,
+                "categoryAccuracy": 0.7142857142857143,
+                "unknownRejection": 1.0,
+                "meanReciprocalRankAt5": 0.7404761904761904
+              },
+              "perGroup": {
+                "accessories": {
+                  "knownQueries": 5,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "bottoms": {
+                  "knownQueries": 1,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "shoes": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 1.0,
+                  "categoryAccuracy": 1.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 1.0
+                },
+                "tops": {
+                  "knownQueries": 4,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.5,
+                  "categoryAccuracy": 0.5,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.41666666666666663
+                },
+                "uniforms": {
+                  "knownQueries": 2,
+                  "unknownQueries": 0,
+                  "recallAt5": 0.41666666666666663,
+                  "categoryAccuracy": 0.0,
+                  "unknownRejection": null,
+                  "meanReciprocalRankAt5": 0.35
+                },
+                "unknown": {
+                  "knownQueries": 0,
+                  "unknownQueries": 5,
+                  "recallAt5": null,
+                  "categoryAccuracy": null,
+                  "unknownRejection": 1.0,
+                  "meanReciprocalRankAt5": null
+                }
+              },
+              "queries": [
+                {
+                  "queryId": "dev3s-003",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 0.5,
+                  "reciprocalRank": 0.3333333333333333,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+                    "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+                    "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-004",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.0,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-005",
+                  "group": "tops",
+                  "predictedGroup": "uniforms",
+                  "recall": 0.5,
+                  "reciprocalRank": 0.3333333333333333,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "16c5fb26-3d97-425b-ada3-570940ff5296",
+                    "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+                    "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-007",
+                  "group": "tops",
+                  "predictedGroup": "tops",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-010",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-011",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-012",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-014",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-015",
+                  "group": "accessories",
+                  "predictedGroup": "accessories",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "770314ec-4470-4d79-a42c-d779c2ce616c",
+                    "0f192014-452e-44d8-93bb-aacfa55399ab",
+                    "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+                    "192ae5aa-1f59-49ed-a7c4-eecf49c51443"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-017",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-018",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-020",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-021",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-022",
+                  "group": "unknown",
+                  "predictedGroup": null,
+                  "recall": null,
+                  "reciprocalRank": 0.0,
+                  "categoryCorrect": false,
+                  "rejected": true,
+                  "top5ProductIds": []
+                },
+                {
+                  "queryId": "dev3s-023",
+                  "group": "bottoms",
+                  "predictedGroup": "bottoms",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+                    "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+                    "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+                    "e8f35b34-3eae-4533-923d-616342ba34ac",
+                    "5f2e358b-ce0f-4400-ab0b-76aa4a575728"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-024",
+                  "group": "uniforms",
+                  "predictedGroup": "tops",
+                  "recall": 0.6666666666666666,
+                  "reciprocalRank": 0.5,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+                    "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+                    "a32aa095-ad50-496a-88a6-bbbf4705a443",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878",
+                    "e78e2909-2728-4ba1-b5c1-3311e5229c42"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-025",
+                  "group": "uniforms",
+                  "predictedGroup": "tops",
+                  "recall": 0.16666666666666666,
+                  "reciprocalRank": 0.2,
+                  "categoryCorrect": false,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+                    "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+                    "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+                    "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+                    "6a3f7f37-3340-4432-94e9-fd46990a3878"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-027",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed"
+                  ]
+                },
+                {
+                  "queryId": "dev3s-029",
+                  "group": "shoes",
+                  "predictedGroup": "shoes",
+                  "recall": 1.0,
+                  "reciprocalRank": 1.0,
+                  "categoryCorrect": true,
+                  "rejected": false,
+                  "top5ProductIds": [
+                    "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+                    "90df2223-3c14-49cf-822f-207603429950",
+                    "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+                    "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+                    "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "passed": false
+    }
+  },
+  "knownPriorConfusionsCorrected": [
+    "dev3-018",
+    "dev3-019",
+    "dev3-020",
+    "dev3-028"
+  ],
+  "supplementVerification": {
+    "images": 29,
+    "calibration": 10,
+    "freshCheck": 19,
+    "referenceAssets": 496,
+    "minimumMeasuredDHashDistance": 13,
+    "searchTestsPassed": 30
+  },
+  "testV2Use": "Prior data used for leakage checking only during this follow-up",
+  "candidateStatus": "PROVISIONAL_DEV_GATES_FAILED",
+  "eligibleToFreezeForTestV3": false,
+  "runtimeDeployed": false,
+  "publicVisualSearchEnabled": false,
+  "passed": false
+}

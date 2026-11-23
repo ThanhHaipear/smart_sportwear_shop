@@ -12,6 +12,16 @@ class CatalogImage(BaseModel):
     id: UUID
     url: str
     public_id: str | None = Field(default=None, alias="publicId")
+    asset_version: str | None = Field(default=None, alias="assetVersion")
+    width: int | None = Field(default=None, gt=0)
+    height: int | None = Field(default=None, gt=0)
+    format: str | None = None
+    bytes: int | None = Field(default=None, gt=0)
+    checksum: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    source_kind: str | None = Field(default=None, alias="sourceKind")
+    license_code: str | None = Field(default=None, alias="licenseCode")
+    source_uri: str | None = Field(default=None, alias="sourceUri")
+    source_group_code: str | None = Field(default=None, alias="sourceGroupCode")
     sort_order: int = Field(default=0, alias="sortOrder")
 
 

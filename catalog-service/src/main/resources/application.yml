@@ -1,6 +1,10 @@
 spring:
   application:
     name: catalog-service
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
   datasource:
     url: ${CATALOG_DATABASE_URL:jdbc:postgresql://localhost:5432/dunghaiquyen?currentSchema=catalog}
     username: ${CATALOG_DB_USERNAME:catalog_app}
@@ -37,6 +41,11 @@ app:
   internal-token: ${CATALOG_INTERNAL_TOKEN:change-me}
   sales-base-url: ${SALES_API_BASE_URL:http://localhost:8094}
   sales-token: ${SALES_INTERNAL_TOKEN:change-me}
+  visual-search:
+    enabled: ${VISUAL_SEARCH_PUBLIC_ENABLED:false}
+    search-base-url: ${SEARCH_API_BASE_URL:http://localhost:8090}
+    search-token: ${SEARCH_SERVICE_INTERNAL_TOKEN:}
+    gateway-token: ${VISUAL_SEARCH_GATEWAY_TOKEN:}
   image-storage-directory: ${CATALOG_IMAGE_STORAGE_DIRECTORY:./data/catalog-images}
   events:
     enabled: ${CATALOG_EVENTS_ENABLED:false}

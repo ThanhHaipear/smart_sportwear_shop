@@ -1,0 +1,703 @@
+{
+  "schemaVersion": 1,
+  "version": "3.1.0",
+  "provider": "Wikimedia Commons",
+  "frozenAt": "2026-11-18T14:32:02.938038+00:00",
+  "items": [
+    {
+      "queryId": "dev3s-001",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "calibration",
+      "sha256": "9d10f988d273d7d00c94d9884a615c041737c933a0ec31a9764e800ff9e5320d",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "source": {
+        "pageId": 116989094,
+        "title": "File:Bright Osayi-Samuel (2021-22 Süper Lig) - Resim3.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:Bright_Osayi-Samuel_(2021-22_S%C3%BCper_Lig)_-_Resim3.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Bright_Osayi-Samuel_%282021-22_S%C3%BCper_Lig%29_-_Resim3.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Bright_Osayi-Samuel_%282021-22_S%C3%BCper_Lig%29_-_Resim3.png/1280px-Bright_Osayi-Samuel_%282021-22_S%C3%BCper_Lig%29_-_Resim3.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "beIN SPORTS Türkiye",
+        "licenseCode": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "attribution": "beIN SPORTS Türkiye",
+        "downloadedSha256": "b69d2652ddad0b6f230a81b23c883e900584690b4c67a19e6a19e4cfef179237"
+      }
+    },
+    {
+      "queryId": "dev3s-002",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "calibration",
+      "sha256": "7916ec42cd077f7989008a7e2cf34b0a2b0fab2b06b564f907b77abc0c38eb4a",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "source": {
+        "pageId": 23126218,
+        "title": "File:FIFA WC-qualification 2014 - Austria vs. Germany 2012-09-11 - Jérôme Boateng 05.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:FIFA_WC-qualification_2014_-_Austria_vs._Germany_2012-09-11_-_J%C3%A9r%C3%B4me_Boateng_05.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/36/FIFA_WC-qualification_2014_-_Austria_vs._Germany_2012-09-11_-_J%C3%A9r%C3%B4me_Boateng_05.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/FIFA_WC-qualification_2014_-_Austria_vs._Germany_2012-09-11_-_J%C3%A9r%C3%B4me_Boateng_05.JPG/1280px-FIFA_WC-qualification_2014_-_Austria_vs._Germany_2012-09-11_-_J%C3%A9r%C3%B4me_Boateng_05.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Michael Kranewitter",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "08ad0ed0c047c378de029fc16b8f8c64f642f6d1406fdf57e458b015fd439464"
+      }
+    },
+    {
+      "queryId": "dev3s-003",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "ebb02a36c9c41e328046ac1e1fdea39989d7c481b694c0ce29828b5112ba5671",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "source": {
+        "pageId": 113491386,
+        "title": "File:Ersin Destanoğlu (2021-22 Süper Lig) - Resim1.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:Ersin_Destano%C4%9Flu_(2021-22_S%C3%BCper_Lig)_-_Resim1.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/5/50/Ersin_Destano%C4%9Flu_%282021-22_S%C3%BCper_Lig%29_-_Resim1.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Ersin_Destano%C4%9Flu_%282021-22_S%C3%BCper_Lig%29_-_Resim1.png/1280px-Ersin_Destano%C4%9Flu_%282021-22_S%C3%BCper_Lig%29_-_Resim1.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "beIN SPORTS Türkiye",
+        "licenseCode": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "attribution": "beIN SPORTS Türkiye",
+        "downloadedSha256": "6b05203a6e2244255c58a40da6cf9204880c500b9c739aaddaa9053f9b08abc7"
+      }
+    },
+    {
+      "queryId": "dev3s-004",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "c1dbd9ac9fcf4b9431e6e2a7e351e8f797180999c7643e11f89ae5fedcdd10c0",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "cropBox": [
+        108,
+        164,
+        529,
+        655
+      ],
+      "source": {
+        "pageId": 84402962,
+        "title": "File:NagihanAvanaş (27).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:NagihanAvana%C5%9F_(27).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/3b/NagihanAvana%C5%9F_%2827%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/NagihanAvana%C5%9F_%2827%29.jpg/1280px-NagihanAvana%C5%9F_%2827%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "CeeGee",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "383c97d1964d4f616b31ce61b84556b412b072fe6a191628ab7c6064332e7801"
+      }
+    },
+    {
+      "queryId": "dev3s-005",
+      "group": "tops",
+      "subtype": "training-jacket",
+      "partition": "DEV-check",
+      "sha256": "1969fddffb3af7fa611b52880dd0238b942ac92c2c8852ace947d56313371aba",
+      "relevantProductSlugs": [
+        "ao-khoac-chay-bo-nu-violet-air",
+        "ao-gio-chay-bo-nam-orange-pace"
+      ],
+      "cropBox": [
+        82,
+        143,
+        622,
+        696
+      ],
+      "source": {
+        "pageId": 29330015,
+        "title": "File:20131031 FR05 Sabrina Delannoy 8826.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:20131031_FR05_Sabrina_Delannoy_8826.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/30/20131031_FR05_Sabrina_Delannoy_8826.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/20131031_FR05_Sabrina_Delannoy_8826.jpg/1280px-20131031_FR05_Sabrina_Delannoy_8826.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Ailura",
+        "licenseCode": "CC BY-SA 3.0 at",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/at/deed.en",
+        "attribution": "Own work",
+        "downloadedSha256": "f3944a39fbda9069e5778acb6543f0faf1d00c93767a802dceefd8e29752c77b"
+      }
+    },
+    {
+      "queryId": "dev3s-006",
+      "group": "tops",
+      "subtype": "short-sleeved-tee",
+      "partition": "calibration",
+      "sha256": "ec988a56ffeb690b648d8d98258912ef1de7610faba4a3f18d73e1b2e4618a24",
+      "relevantProductSlugs": [
+        "ao-chay-bo-nam-aero-navy",
+        "ao-tap-bong-da-nam-blaze-red",
+        "ao-tap-bong-da-nu-royal-motion"
+      ],
+      "source": {
+        "pageId": 15633932,
+        "title": "File:Andre Schürrle, Germany national football team (06).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Andre_Sch%C3%BCrrle,_Germany_national_football_team_(06).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Andre_Sch%C3%BCrrle%2C_Germany_national_football_team_%2806%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Andre_Sch%C3%BCrrle%2C_Germany_national_football_team_%2806%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "author": "Steindy ( talk ) 13:20, 27 June 2011 (UTC)",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "a1ab9588385f39bd7d1ab803843c629df2d64d3dce831673ec25b519a649c101"
+      }
+    },
+    {
+      "queryId": "dev3s-007",
+      "group": "tops",
+      "subtype": "short-sleeved-tee",
+      "partition": "DEV-check",
+      "sha256": "d8ae912964002a639154c2a12a999c16fe2a6001905dbddf5cb6831aac798dc7",
+      "relevantProductSlugs": [
+        "ao-chay-bo-nam-aero-navy",
+        "ao-tap-bong-da-nam-blaze-red",
+        "ao-tap-bong-da-nu-royal-motion"
+      ],
+      "source": {
+        "pageId": 176347792,
+        "title": "File:Wolf Creek NFH 2022 Reaching for Rainbows Special Needs Derby back of T-shirt.png",
+        "uri": "https://commons.wikimedia.org/wiki/File:Wolf_Creek_NFH_2022_Reaching_for_Rainbows_Special_Needs_Derby_back_of_T-shirt.png",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/13/Wolf_Creek_NFH_2022_Reaching_for_Rainbows_Special_Needs_Derby_back_of_T-shirt.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://upload.wikimedia.org/wikipedia/commons/1/13/Wolf_Creek_NFH_2022_Reaching_for_Rainbows_Special_Needs_Derby_back_of_T-shirt.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "author": "Marsha Hart/USFWS",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "https://www.fws.gov/media/2022-reaching-rainbows-t-shirt",
+        "downloadedSha256": "5845d33359100c7ea68fc3e00111d0cdce7a6f8df7778986205ccdd0e4624ed8"
+      }
+    },
+    {
+      "queryId": "dev3s-008",
+      "group": "accessories",
+      "subtype": "sports-socks",
+      "partition": "calibration",
+      "sha256": "ed99a18696f117cd80f9ed1a6548a54942873fac237f31495a63207ba1dca7ef",
+      "relevantProductSlugs": [
+        "tat-bong-da-white-match"
+      ],
+      "cropBox": [
+        20,
+        364,
+        666,
+        626
+      ],
+      "source": {
+        "pageId": 95643002,
+        "title": "File:Hudson vs Laurel playoffs 2020-10-21 DSC 9804 (50515024841).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Hudson_vs_Laurel_playoffs_2020-10-21_DSC_9804_(50515024841).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/9/99/Hudson_vs_Laurel_playoffs_2020-10-21_DSC_9804_%2850515024841%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Hudson_vs_Laurel_playoffs_2020-10-21_DSC_9804_%2850515024841%29.jpg/1280px-Hudson_vs_Laurel_playoffs_2020-10-21_DSC_9804_%2850515024841%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "K.M. Klemencic from Hudson, Ohio",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "DSC_9804",
+        "downloadedSha256": "00e5a34c6648b3303d2a1391fb029ce95dd65c87bf7f9f036cc8cadc905b94e6"
+      }
+    },
+    {
+      "queryId": "dev3s-009",
+      "group": "accessories",
+      "subtype": "sports-socks",
+      "partition": "calibration",
+      "sha256": "8f59dd1b950fb4174f637bd2fa05470a81e9d92477f9bba9acd14e7d90f6017f",
+      "relevantProductSlugs": [
+        "tat-bong-da-white-match"
+      ],
+      "source": {
+        "pageId": 39913260,
+        "title": "File:Schuluniformen... (14455443088).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Schuluniformen..._(14455443088).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Schuluniformen..._%2814455443088%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Schuluniformen..._%2814455443088%29.jpg/1280px-Schuluniformen..._%2814455443088%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Michael Pollak",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "schuluniformen...",
+        "downloadedSha256": "59152495375bf74e1efbc32cbf3851ac69f2ffd5f000409d1520627453e76526"
+      }
+    },
+    {
+      "queryId": "dev3s-010",
+      "group": "accessories",
+      "subtype": "sports-socks",
+      "partition": "DEV-check",
+      "sha256": "461fd3dd81250c3cf4015636cecdef214de0d3484672ce93045c47f4395f6eea",
+      "relevantProductSlugs": [
+        "tat-bong-da-white-match"
+      ],
+      "cropBox": [
+        271,
+        666,
+        701,
+        1014
+      ],
+      "source": {
+        "pageId": 95960069,
+        "title": "File:Hudson vs WRA 2017-09-26 DSC 2281 (36672762253).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Hudson_vs_WRA_2017-09-26_DSC_2281_(36672762253).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/45/Hudson_vs_WRA_2017-09-26_DSC_2281_%2836672762253%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Hudson_vs_WRA_2017-09-26_DSC_2281_%2836672762253%29.jpg/1280px-Hudson_vs_WRA_2017-09-26_DSC_2281_%2836672762253%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "K.M. Klemencic from Hudson, Ohio",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "DSC_2281",
+        "downloadedSha256": "5b3b34f82cf8aa4b286ea323c6de8e59a278de5bbbf9f17bba232f50f6ba48c8"
+      }
+    },
+    {
+      "queryId": "dev3s-011",
+      "group": "accessories",
+      "subtype": "sports-socks",
+      "partition": "DEV-check",
+      "sha256": "3e41de2bbd2acdb5899305f3ca51feb45e10f51597cbb1b69aed8452c1d21a5b",
+      "relevantProductSlugs": [
+        "tat-bong-da-white-match"
+      ],
+      "cropBox": [
+        164,
+        351,
+        809,
+        673
+      ],
+      "source": {
+        "pageId": 107259118,
+        "title": "File:191208 부산아이파크 승강 PO, 김문환 1.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:191208_%EB%B6%80%EC%82%B0%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC_%EC%8A%B9%EA%B0%95_PO,_%EA%B9%80%EB%AC%B8%ED%99%98_1.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/f/f7/191208_%EB%B6%80%EC%82%B0%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC_%EC%8A%B9%EA%B0%95_PO%2C_%EA%B9%80%EB%AC%B8%ED%99%98_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/191208_%EB%B6%80%EC%82%B0%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC_%EC%8A%B9%EA%B0%95_PO%2C_%EA%B9%80%EB%AC%B8%ED%99%98_1.jpg/1280px-191208_%EB%B6%80%EC%82%B0%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC_%EC%8A%B9%EA%B0%95_PO%2C_%EA%B9%80%EB%AC%B8%ED%99%98_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Nori Picture",
+        "licenseCode": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "attribution": "Tistory",
+        "downloadedSha256": "35643495b254104ed0c698f81a326f9d2ad52806fa6200d33afbaf2f6c03da40"
+      }
+    },
+    {
+      "queryId": "dev3s-012",
+      "group": "accessories",
+      "subtype": "sports-socks",
+      "partition": "DEV-check",
+      "sha256": "3a024a374586500c16de92526c7ea1f0aca79045ed5d7172b8a927c7d20363ae",
+      "relevantProductSlugs": [
+        "tat-bong-da-white-match"
+      ],
+      "cropBox": [
+        20,
+        573,
+        663,
+        1014
+      ],
+      "source": {
+        "pageId": 96188541,
+        "title": "File:Youth softball player fielding 2006-04-01.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Youth_softball_player_fielding_2006-04-01.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Youth_softball_player_fielding_2006-04-01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Youth_softball_player_fielding_2006-04-01.jpg/1280px-Youth_softball_player_fielding_2006-04-01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "KeithJJ on Pixabay",
+        "licenseCode": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "attribution": "https://pixabay.com/photos/softball-player-girl-glove-1565394/",
+        "downloadedSha256": "b8c651bdd702e5b5156581e4f20921aeab9af001225453838f228cd7da1ffada"
+      }
+    },
+    {
+      "queryId": "dev3s-013",
+      "group": "accessories",
+      "subtype": "wrist-sweatband",
+      "partition": "calibration",
+      "sha256": "68cf081747cf936eec551079cbf6d3160d30f2b81946f019fa11871c5fcbe67f",
+      "relevantProductSlugs": [
+        "bang-tay-the-thao-royal-pair"
+      ],
+      "cropBox": [
+        97,
+        563,
+        688,
+        1004
+      ],
+      "source": {
+        "pageId": 9390182,
+        "title": "File:R federer.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:R_federer.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/4/40/R_federer.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/R_federer.jpg/1280px-R_federer.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Esther Lim",
+        "licenseCode": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "originally posted to Flickr as Roger Federer",
+        "downloadedSha256": "fe33afccac54c9c3a9d67fe0181df9e080ecc4e824ad1501b393d82b0718b27f"
+      }
+    },
+    {
+      "queryId": "dev3s-014",
+      "group": "accessories",
+      "subtype": "wrist-sweatband",
+      "partition": "DEV-check",
+      "sha256": "317d0480a2c0b0ed89de0a2c4b7906db15e3eaa290e759d538c90dc1d84c565a",
+      "relevantProductSlugs": [
+        "bang-tay-the-thao-royal-pair"
+      ],
+      "source": {
+        "pageId": 4222834,
+        "title": "File:Schweißband.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Schwei%C3%9Fband.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Schwei%C3%9Fband.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Schwei%C3%9Fband.jpg/1280px-Schwei%C3%9Fband.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "kaʁstn Disk / Cat",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "Own work",
+        "downloadedSha256": "679577da75d72a09a154a655df089b7c9153cc53e826a26020583cde28033238"
+      }
+    },
+    {
+      "queryId": "dev3s-015",
+      "group": "accessories",
+      "subtype": "shin-guard",
+      "partition": "DEV-check",
+      "sha256": "49ef3473609a9a10f84e2d1e19ab67588f68ca4c64e439205e35589b6d094a3a",
+      "relevantProductSlugs": [
+        "op-bao-ve-ong-dong-red-guard"
+      ],
+      "source": {
+        "pageId": 3854542,
+        "title": "File:Shinguard.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Shinguard.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/21/Shinguard.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://upload.wikimedia.org/wikipedia/commons/2/21/Shinguard.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "author": "User:Soh32",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Soh32's file",
+        "downloadedSha256": "aabbffb67e12400229da03d896aed69afb85b0d4f936253ed54fd38bd3ad999a"
+      }
+    },
+    {
+      "queryId": "dev3s-016",
+      "group": "unknown",
+      "subtype": "backpack",
+      "partition": "calibration",
+      "sha256": "a730d2b8cbf8c0887be3f03f844768a1e24a93aa93f4d200097e22aed04ba858",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 23133650,
+        "title": "File:Adidas bag, frong.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Adidas_bag,_frong.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/7/70/Adidas_bag%2C_frong.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Adidas_bag%2C_frong.jpg/1280px-Adidas_bag%2C_frong.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Juandev",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "7afaa630da55b8f16de3651dfce8ecd40afe637870ebca47b481247d63fac161"
+      }
+    },
+    {
+      "queryId": "dev3s-017",
+      "group": "unknown",
+      "subtype": "backpack",
+      "partition": "DEV-check",
+      "sha256": "4be071fa494e892f7c4007b6074ae40716cb92ea1fb44deed64418bd61d30568",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 6007099,
+        "title": "File:Avalanche-airbag-system-03.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Avalanche-airbag-system-03.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Avalanche-airbag-system-03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Avalanche-airbag-system-03.jpg/1280px-Avalanche-airbag-system-03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "User:Nolispanmo",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "30e294e8a0c620e2a0708607f5ede1e636f62d9d53dea34c1eb0f0dff0c60e52"
+      }
+    },
+    {
+      "queryId": "dev3s-018",
+      "group": "unknown",
+      "subtype": "backpack",
+      "partition": "DEV-check",
+      "sha256": "41888a944a184d1e6fdf6aa72faccd3643ec479a0db9849271f2349cf8a91709",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 32791227,
+        "title": "File:GOLDEN LABEL.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:GOLDEN_LABEL.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/2f/GOLDEN_LABEL.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GOLDEN_LABEL.jpg/1280px-GOLDEN_LABEL.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Eastpack",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Eastpack",
+        "downloadedSha256": "2dc528f0b9c93fa75a89926f1b414e558dab5655718afe8cebbb9b96bc115303"
+      }
+    },
+    {
+      "queryId": "dev3s-019",
+      "group": "unknown",
+      "subtype": "computer-accessory",
+      "partition": "calibration",
+      "sha256": "94b529af2e38c61207011bf3518e93217cbdecd68150c068fb45c569e38ee652",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 5403665,
+        "title": "File:2008 Taipei IT Month Day9 Elecom Optical EGG Mouse in Orange.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2008_Taipei_IT_Month_Day9_Elecom_Optical_EGG_Mouse_in_Orange.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/bb/2008_Taipei_IT_Month_Day9_Elecom_Optical_EGG_Mouse_in_Orange.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/2008_Taipei_IT_Month_Day9_Elecom_Optical_EGG_Mouse_in_Orange.jpg/1280px-2008_Taipei_IT_Month_Day9_Elecom_Optical_EGG_Mouse_in_Orange.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Rico Shen",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Rico Shen",
+        "downloadedSha256": "85a5f387db15bfa0b0e8fe181e60f8d38a2fdad1a83e72e3a5391a5485d1babc"
+      }
+    },
+    {
+      "queryId": "dev3s-020",
+      "group": "unknown",
+      "subtype": "computer-accessory",
+      "partition": "DEV-check",
+      "sha256": "aa7972adb6425ef7180e697f5f824742065852bbce9383ca96bfd536545e5423",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 1707265,
+        "title": "File:Ball Mouse semi-inside view.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Ball_Mouse_semi-inside_view.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Ball_Mouse_semi-inside_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Ball_Mouse_semi-inside_view.jpg/1280px-Ball_Mouse_semi-inside_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Grain",
+        "licenseCode": "Public domain",
+        "licenseUrl": "",
+        "attribution": "Unknown source Unknown source",
+        "downloadedSha256": "f5f283fecd72ee5e3657fc5584d1e1e6e1732191a4e12e84dffeec3446cc533d"
+      }
+    },
+    {
+      "queryId": "dev3s-021",
+      "group": "unknown",
+      "subtype": "computer-accessory",
+      "partition": "DEV-check",
+      "sha256": "a72e06cbee7bcc59fb6c2e29b7b10481409c9c2efb049582f06e7281c87e6e66",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 14491855,
+        "title": "File:CeBIT 2011 Samstag PD 61.JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:CeBIT_2011_Samstag_PD_61.JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/12/CeBIT_2011_Samstag_PD_61.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/CeBIT_2011_Samstag_PD_61.JPG/1280px-CeBIT_2011_Samstag_PD_61.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Bin im Garten",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Self-photographed",
+        "downloadedSha256": "49e0dd1302a6db30707a97b9f48857d672daf1624fec820ca347a14ff6d65fcd"
+      }
+    },
+    {
+      "queryId": "dev3s-022",
+      "group": "unknown",
+      "subtype": "umbrella",
+      "partition": "DEV-check",
+      "sha256": "323386b50c101d981913538e73710f2043094d7ca4588695da6c3f14c2c22458",
+      "relevantProductSlugs": [],
+      "source": {
+        "pageId": 32088857,
+        "title": "File:2014-03-02 World of Orient 2014, (076) Regenschirm Umbrella Detail.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:2014-03-02_World_of_Orient_2014,_(076)_Regenschirm_Umbrella_Detail.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/b/be/2014-03-02_World_of_Orient_2014%2C_%28076%29_Regenschirm_Umbrella_Detail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/2014-03-02_World_of_Orient_2014%2C_%28076%29_Regenschirm_Umbrella_Detail.jpg/1280px-2014-03-02_World_of_Orient_2014%2C_%28076%29_Regenschirm_Umbrella_Detail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Foto: Bernd Schwabe",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "attribution": "Own work",
+        "downloadedSha256": "e74d9935eb207d157a425cdf7110c6171dd48fdaf94b114b406a2629f62e5aab"
+      }
+    },
+    {
+      "queryId": "dev3s-023",
+      "group": "bottoms",
+      "subtype": "training-shorts",
+      "partition": "DEV-check",
+      "sha256": "7250f6b2188847e01dafc77926db3a9b4e7389c8de1b185f3662f4629881734f",
+      "relevantProductSlugs": [
+        "quan-short-chay-bo-nam-swift-black",
+        "quan-bong-da-nam-royal-kick",
+        "quan-tap-bong-da-nu-black-drive"
+      ],
+      "source": {
+        "pageId": 919949,
+        "title": "File:Sports shorts.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Sports_shorts.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/09/Sports_shorts.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Sports_shorts.jpg/1280px-Sports_shorts.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "No machine-readable author provided. Jasonz assumed (based on copyright claims).",
+        "licenseCode": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "attribution": "No machine-readable source provided. Own work assumed (based on copyright claims).",
+        "downloadedSha256": "8b6e8ec05183fd59c75bd6c71e7bb91ee1a4b7a35ced2136586e0f8166906c71"
+      }
+    },
+    {
+      "queryId": "dev3s-024",
+      "group": "uniforms",
+      "subtype": "team-kit",
+      "partition": "DEV-check",
+      "sha256": "0eca6b552282f562bd28ec6a17f8fa658a61f00a083522c84b48aac56ca3abf5",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-nu-royal-wave",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nu-violet-star",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 50529287,
+        "title": "File:Alandson Da Silva.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Alandson_Da_Silva.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/3/32/Alandson_Da_Silva.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Alandson_Da_Silva.jpg/1280px-Alandson_Da_Silva.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Amazone21",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "c326a3249f159c1d0ef6c11f2456ee30a823387c39ef56baf30bc75e5f182020"
+      }
+    },
+    {
+      "queryId": "dev3s-025",
+      "group": "uniforms",
+      "subtype": "team-kit",
+      "partition": "DEV-check",
+      "sha256": "4a9f657c177bb8d803691975099d993c12cd9d4607c427e90bcadd7a8479d10f",
+      "relevantProductSlugs": [
+        "bo-bong-da-nam-crimson-unity",
+        "bo-bong-da-nu-royal-wave",
+        "bo-bong-da-uni-forest-line",
+        "bo-bong-da-nam-black-gold",
+        "bo-bong-da-nu-violet-star",
+        "bo-bong-da-uni-orange-pulse"
+      ],
+      "source": {
+        "pageId": 39613753,
+        "title": "File:20130316 IHSA 3A championship game Kyle Davis (3).JPG",
+        "uri": "https://commons.wikimedia.org/wiki/File:20130316_IHSA_3A_championship_game_Kyle_Davis_(3).JPG",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/1/1d/20130316_IHSA_3A_championship_game_Kyle_Davis_%283%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/20130316_IHSA_3A_championship_game_Kyle_Davis_%283%29.JPG/1280px-20130316_IHSA_3A_championship_game_Kyle_Davis_%283%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "TonyTheTiger",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "156038a7ffb656bf1efce30a7c6cbe91d0315a2b511095a705e28e194178dde5"
+      }
+    },
+    {
+      "queryId": "dev3s-026",
+      "group": "shoes",
+      "subtype": "football-cleats",
+      "partition": "calibration",
+      "sha256": "b22331de251f9634b93862ef2aba1cbe1548578c83d174c8d3db080bdf77f8a7",
+      "relevantProductSlugs": [
+        "giay-da-bong-nam-turf-shadow",
+        "giay-da-bong-nu-turf-spark",
+        "giay-futsal-uni-red-court"
+      ],
+      "source": {
+        "pageId": 168355609,
+        "title": "File:Football boots ARTEX Budapest Laslovarga (1).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Football_boots_ARTEX_Budapest_Laslovarga_(1).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Football_boots_ARTEX_Budapest_Laslovarga_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Football_boots_ARTEX_Budapest_Laslovarga_%281%29.jpg/1280px-Football_boots_ARTEX_Budapest_Laslovarga_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Laslovarga",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "e3b0af3328f017194f5ed0b12fb272d73be87829c1a9abff7601c4c994366ad9"
+      }
+    },
+    {
+      "queryId": "dev3s-027",
+      "group": "shoes",
+      "subtype": "football-cleats",
+      "partition": "DEV-check",
+      "sha256": "2addd5a2ef82542f34cded74dcdcc9a5b35cccd3bb352c926445cd0c95f07b64",
+      "relevantProductSlugs": [
+        "giay-da-bong-nam-turf-shadow",
+        "giay-da-bong-nu-turf-spark",
+        "giay-futsal-uni-red-court"
+      ],
+      "source": {
+        "pageId": 146330562,
+        "title": "File:Football boots (3293104040).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Football_boots_(3293104040).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Football_boots_%283293104040%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Football_boots_%283293104040%29.jpg/1280px-Football_boots_%283293104040%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Andy Hay",
+        "licenseCode": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "attribution": "Football boots",
+        "downloadedSha256": "03e424240dab1c2236cc35d6cbf52516acd0266cfe3097cec2866851d9796208"
+      }
+    },
+    {
+      "queryId": "dev3s-028",
+      "group": "shoes",
+      "subtype": "athletic-shoes",
+      "partition": "calibration",
+      "sha256": "190062e832477037c43865b49c134975b86c627e2df79349bd19da51a780c14b",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 70039763,
+        "title": "File:Jack Wolfskin, OutDoor 2018, Friedrichshafen (1X7A0407).jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Jack_Wolfskin,_OutDoor_2018,_Friedrichshafen_(1X7A0407).jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/6/69/Jack_Wolfskin%2C_OutDoor_2018%2C_Friedrichshafen_%281X7A0407%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Jack_Wolfskin%2C_OutDoor_2018%2C_Friedrichshafen_%281X7A0407%29.jpg/1280px-Jack_Wolfskin%2C_OutDoor_2018%2C_Friedrichshafen_%281X7A0407%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Matti Blume",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Own work",
+        "downloadedSha256": "ad6f3b6ce4ad4fddc3728967156bcaf05e854a67deb05c8a16c57321c2269127"
+      }
+    },
+    {
+      "queryId": "dev3s-029",
+      "group": "shoes",
+      "subtype": "athletic-shoes",
+      "partition": "DEV-check",
+      "sha256": "fa4a56340e847007e0e11e3da3e9f61a2d0f9b51969a037ebe27e848ffa99beb",
+      "relevantProductSlugs": [
+        "giay-chay-bo-nam-cobalt-ride",
+        "giay-chay-bo-nu-coral-cloud",
+        "giay-chay-bo-uni-pure-step"
+      ],
+      "source": {
+        "pageId": 60445957,
+        "title": "File:Merrell All Out Crush Light.jpg",
+        "uri": "https://commons.wikimedia.org/wiki/File:Merrell_All_Out_Crush_Light.jpg",
+        "originalUri": "https://upload.wikimedia.org/wikipedia/commons/0/07/Merrell_All_Out_Crush_Light.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "downloadUri": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Merrell_All_Out_Crush_Light.jpg/1280px-Merrell_All_Out_Crush_Light.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "author": "Tiia Monto",
+        "licenseCode": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Tiia Monto",
+        "downloadedSha256": "f655b2d375612220a0427e39f6da54e66e232f0c2708873e389bb1e86ac4bd11"
+      }
+    }
+  ]
+}

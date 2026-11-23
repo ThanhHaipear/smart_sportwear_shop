@@ -46,9 +46,12 @@ class CatalogIndexDocumentContractTest {
                 values(:id,:product,'DEMO-42-BLACK','42','Black',1299000,9,2,'ACTIVE',1,current_timestamp)
                 """).param("id", VARIANT).param("product", PRODUCT).update();
         jdbc.sql("""
-                insert into product_images(id,product_id,secure_url,sort_order,is_primary)
-                values(:id,:product,'https://res.cloudinary.com/demo/image/upload/v1/shoe.jpg',0,true)
-                """).param("id", IMAGE).param("product", PRODUCT).update();
+                insert into product_images(id,product_id,secure_url,sort_order,is_primary,public_id,asset_version,
+                    width,height,asset_format,asset_bytes,checksum,source_kind,license_code,source_uri,source_group_code)
+                values(:id,:product,'https://res.cloudinary.com/demo/image/upload/v1/shoe.jpg',0,true,
+                    'shoe','1',224,224,'jpg',1024,:checksum,'SYNTHETIC','AI_GENERATED_PROJECT_USE',
+                    'catalog://demo/shoe.jpg','DEMO-SHOE-1')
+                """).param("id", IMAGE).param("product", PRODUCT).param("checksum", "a".repeat(64)).update();
 
         Path fixture = Path.of("..", "contracts", "examples", "catalog-index-document-v1.json").normalize();
         String expected = Files.readString(fixture);

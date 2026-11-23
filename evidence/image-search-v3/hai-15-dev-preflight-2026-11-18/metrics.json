@@ -1,0 +1,90 @@
+{
+  "acceptance": {
+    "eligible": false,
+    "passed": true,
+    "thresholds": {
+      "recallAt5": 0.8,
+      "categoryAccuracy": 0.9,
+      "unknownRejection": 0.8,
+      "requestFailureRate": 0,
+      "p95EndToEndMs": 3000,
+      "unresolvedLeakage": 0
+    }
+  },
+  "positive": {
+    "count": 15,
+    "recall": {
+      "at5": 0.9444444444444444
+    },
+    "categoryAccuracy": {
+      "value": 1.0
+    },
+    "mrrAt5": 0.9166666666666666
+  },
+  "unknown": {
+    "count": 5,
+    "rejectionRate": {
+      "value": 1.0
+    }
+  },
+  "requests": 20,
+  "requestFailureRate": {
+    "count": 0,
+    "value": 0.0
+  },
+  "latencyMs": {
+    "p95": 388.847
+  },
+  "perGroup": {
+    "accessories": {
+      "knownQueries": 2,
+      "unknownQueries": 0,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 1.0
+    },
+    "bottoms": {
+      "knownQueries": 2,
+      "unknownQueries": 0,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.75
+    },
+    "shoes": {
+      "knownQueries": 2,
+      "unknownQueries": 0,
+      "recallAt5": 0.8333333333333333,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 0.625
+    },
+    "tops": {
+      "knownQueries": 7,
+      "unknownQueries": 0,
+      "recallAt5": 1.0,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 1.0
+    },
+    "uniforms": {
+      "knownQueries": 2,
+      "unknownQueries": 0,
+      "recallAt5": 0.75,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": null,
+      "meanReciprocalRankAt5": 1.0
+    },
+    "unknown": {
+      "knownQueries": 0,
+      "unknownQueries": 5,
+      "recallAt5": null,
+      "categoryAccuracy": null,
+      "unknownRejection": 1.0,
+      "meanReciprocalRankAt5": null
+    }
+  },
+  "devParityMatches": 20,
+  "preflightPassed": true
+}

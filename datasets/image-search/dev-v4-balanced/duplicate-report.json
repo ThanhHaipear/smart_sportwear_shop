@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "exactDuplicates": 0,
+  "sourceSeriesOverlap": 0,
+  "sourcePageOverlap": 0,
+  "referenceAssetsChecked": 659,
+  "minimumDHashDistance": 7,
+  "accepted": [
+    {
+      "queryId": "dev4b-001",
+      "decision": "ACCEPT",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-003-02.png",
+      "nearestHammingDistance": 17,
+      "dHash64": "eacbab8acc8586e0"
+    },
+    {
+      "queryId": "dev4b-002",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v3/assets/test3-025.jpg",
+      "nearestHammingDistance": 18,
+      "dHash64": "2f2646eead6dcf9e"
+    },
+    {
+      "queryId": "dev4b-003",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-039.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "d213544448782f33"
+    },
+    {
+      "queryId": "dev4b-004",
+      "decision": "ACCEPT",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-004-02.png",
+      "nearestHammingDistance": 13,
+      "dHash64": "6869ccd4acc4e8e9"
+    },
+    {
+      "queryId": "dev4b-005",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v3/assets/test3-029.jpg",
+      "nearestHammingDistance": 16,
+      "dHash64": "53d39792e2620f1f"
+    },
+    {
+      "queryId": "dev4b-006",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v3/assets/dev3-021.jpg",
+      "nearestHammingDistance": 20,
+      "dHash64": "622e84838380c5c2"
+    },
+    {
+      "queryId": "dev4b-007",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v2/assets/test-110.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "181d1f4a52590e46"
+    },
+    {
+      "queryId": "dev4b-008",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v3/assets/dev3-025.jpg",
+      "nearestHammingDistance": 17,
+      "dHash64": "44d46c6229b2320c"
+    },
+    {
+      "queryId": "dev4b-009",
+      "decision": "ACCEPT",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-006-02.png",
+      "nearestHammingDistance": 20,
+      "dHash64": "322899b4bdb1b1e9"
+    },
+    {
+      "queryId": "dev4b-010",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v3/assets/dev3-011.jpg",
+      "nearestHammingDistance": 17,
+      "dHash64": "1351c8a89108950f"
+    },
+    {
+      "queryId": "dev4b-011",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v2/assets/test-114.jpg",
+      "nearestHammingDistance": 18,
+      "dHash64": "ffefe3f3f1d87c07"
+    },
+    {
+      "queryId": "dev4b-012",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v2/assets/test-085.jpg",
+      "nearestHammingDistance": 17,
+      "dHash64": "6493134976766164"
+    },
+    {
+      "queryId": "dev4b-013",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-053.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "cd24222fe686344c"
+    },
+    {
+      "queryId": "dev4b-014",
+      "decision": "ACCEPT",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-TOP-005-02.png",
+      "nearestHammingDistance": 15,
+      "dHash64": "a668f97979797931"
+    },
+    {
+      "queryId": "dev4b-015",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-103.jpg",
+      "nearestHammingDistance": 16,
+      "dHash64": "298bd56dc7e0341e"
+    },
+    {
+      "queryId": "dev4b-016",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-120.jpg",
+      "nearestHammingDistance": 17,
+      "dHash64": "4a27a78e95d74fdf"
+    },
+    {
+      "queryId": "dev4b-017",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v2/assets/dev2-001.jpg",
+      "nearestHammingDistance": 21,
+      "dHash64": "86e19ec76b60c2c2"
+    },
+    {
+      "queryId": "dev4b-018",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v3-supplement/assets/dev3s-004.jpg",
+      "nearestHammingDistance": 22,
+      "dHash64": "f5cb5240b9f6cfc8"
+    },
+    {
+      "queryId": "dev4b-019",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-054.webp",
+      "nearestHammingDistance": 16,
+      "dHash64": "b93d3333b3525316"
+    },
+    {
+      "queryId": "dev4b-020",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v3-supplement/assets/dev3s-012.jpg",
+      "nearestHammingDistance": 16,
+      "dHash64": "a6e6c6cfe3cf991b"
+    },
+    {
+      "queryId": "dev4b-021",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v2/assets/test-015.jpg",
+      "nearestHammingDistance": 21,
+      "dHash64": "2632809e7e61697e"
+    },
+    {
+      "queryId": "dev4b-022",
+      "decision": "ACCEPT",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/germany-jz4559-02.jpg",
+      "nearestHammingDistance": 18,
+      "dHash64": "168670ce4c4d7370"
+    },
+    {
+      "queryId": "dev4b-023",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v2/assets/dev2-054.jpg",
+      "nearestHammingDistance": 18,
+      "dHash64": "8587676b49d959dd"
+    },
+    {
+      "queryId": "dev4b-024",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v3/assets/test3-059.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "a7b3b32202a89c3d"
+    },
+    {
+      "queryId": "dev4b-025",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v2/assets/dev2-002.jpg",
+      "nearestHammingDistance": 17,
+      "dHash64": "4c49c163c3f9f8d2"
+    },
+    {
+      "queryId": "dev4b-026",
+      "decision": "ACCEPT",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/argentina-jm8396-02.jpg",
+      "nearestHammingDistance": 14,
+      "dHash64": "237371616165e793"
+    },
+    {
+      "queryId": "dev4b-027",
+      "decision": "ACCEPT",
+      "nearestAsset": "catalog/pilot-v1/assets/PILOT-BOTTOM-005-01.png",
+      "nearestHammingDistance": 18,
+      "dHash64": "6bbcf4d6d6ccf151"
+    },
+    {
+      "queryId": "dev4b-028",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v3/assets/dev3-037.jpg",
+      "nearestHammingDistance": 18,
+      "dHash64": "b173d186eccec6e0"
+    },
+    {
+      "queryId": "dev4b-029",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v4-focus/assets/dev4f-007.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "1b13130d6c686470"
+    },
+    {
+      "queryId": "dev4b-030",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v2/assets/dev2-015.jpg",
+      "nearestHammingDistance": 18,
+      "dHash64": "785e4031312a27e3"
+    },
+    {
+      "queryId": "dev4b-031",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v1/assets/dev-003.jpg",
+      "nearestHammingDistance": 16,
+      "dHash64": "e0c0b0d8c486f4f8"
+    },
+    {
+      "queryId": "dev4b-032",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-027.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "5a25c51b31bbd063"
+    },
+    {
+      "queryId": "dev4b-033",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v3/assets/test3-040.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "4705e4d293a34f6e"
+    },
+    {
+      "queryId": "dev4b-034",
+      "decision": "ACCEPT",
+      "nearestAsset": "catalog/world-cup-2026-store-staging-v1/assets/france-ib5300-480-04.png",
+      "nearestHammingDistance": 15,
+      "dHash64": "c2d2f0bc696120e0"
+    },
+    {
+      "queryId": "dev4b-035",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-025.jpg",
+      "nearestHammingDistance": 15,
+      "dHash64": "643000019b998989"
+    },
+    {
+      "queryId": "dev4b-036",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-027.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "948420243ab2ccb0"
+    },
+    {
+      "queryId": "dev4b-037",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v3/assets/dev3-024.jpg",
+      "nearestHammingDistance": 20,
+      "dHash64": "42c66160732b8ace"
+    },
+    {
+      "queryId": "dev4b-038",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-033.jpg",
+      "nearestHammingDistance": 19,
+      "dHash64": "9d97868ea6844df0"
+    },
+    {
+      "queryId": "dev4b-039",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v1/assets/test-086.jpg",
+      "nearestHammingDistance": 17,
+      "dHash64": "33f43c3c673763e1"
+    },
+    {
+      "queryId": "dev4b-040",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v2/assets/test-069.jpg",
+      "nearestHammingDistance": 20,
+      "dHash64": "4495808f8b6d2c8d"
+    },
+    {
+      "queryId": "dev4b-041",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/test-v3/assets/test3-055.jpg",
+      "nearestHammingDistance": 16,
+      "dHash64": "d93b270727160ce1"
+    },
+    {
+      "queryId": "dev4b-042",
+      "decision": "ACCEPT",
+      "nearestAsset": "datasets/image-search/dev-v3/assets/dev3-045.jpg",
+      "nearestHammingDistance": 17,
+      "dHash64": "70d4c6ceaac696e8"
+    }
+  ],
+  "unresolved": []
+}

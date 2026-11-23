@@ -1,4 +1,4 @@
-import { getAccessToken } from "@/lib/session";
+import { getAccessTokenSubject } from "@/lib/session";
 
 const LEGACY_SESSION_KEY = "sss_chat_session_id";
 const SESSION_PREFIX = "sss_chat_session_id:";
@@ -19,23 +19,9 @@ export type StoredChatMessage = {
   products?: StoredChatProduct[];
 };
 
-function decodeJwtSubject(token: string | null): string | null {
-  if (!token) return null;
-  try {
-    const encoded = token.split(".")[1];
-    if (!encoded) return null;
-    const normalized = encoded.replace(/-/g, "+").replace(/_/g, "/");
-    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
-    const payload = JSON.parse(atob(padded)) as { sub?: unknown };
-    return typeof payload.sub === "string" && payload.sub.trim() ? payload.sub.trim() : null;
-  } catch {
-    return null;
-  }
-}
-
 export function getChatScope(): string {
   if (typeof window === "undefined") return "guest";
-  const userId = decodeJwtSubject(getAccessToken());
+  const userId = getAccessTokenSubject();
   return userId ? `user:${userId}` : "guest";
 }
 

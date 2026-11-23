@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 1,
+  "dataset": "image-search-dev-v4-focus",
+  "relevanceScale": {
+    "minimum": 0,
+    "maximum": 3,
+    "relevantAtOrAbove": 2
+  },
+  "cases": [
+    {
+      "queryId": "dev4f-001",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "dev4f-002",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "dev4f-003",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "dev4f-004",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+          "productSlug": "bo-bong-da-nam-black-gold",
+          "productName": "Bộ bóng đá nam Black Gold",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+          "productSlug": "bo-bong-da-nam-crimson-unity",
+          "productName": "Bộ bóng đá nam Crimson Unity",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "dev4f-005",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "dev4f-006",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "dev4f-007",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "dev4f-008",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "uniforms",
+      "relevantProducts": [
+        {
+          "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+          "productSlug": "bo-bong-da-nu-royal-wave",
+          "productName": "Bộ bóng đá nữ Royal Wave",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+          "productSlug": "bo-bong-da-nu-violet-star",
+          "productName": "Bộ bóng đá nữ Violet Star",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+          "productSlug": "bo-bong-da-uni-forest-line",
+          "productName": "Bộ bóng đá Uni Forest Line",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        },
+        {
+          "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+          "productSlug": "bo-bong-da-uni-orange-pulse",
+          "productName": "Bộ bóng đá Uni Orange Pulse",
+          "grade": 2,
+          "judgment": "visually compatible subtype substitute"
+        }
+      ]
+    },
+    {
+      "queryId": "dev4f-009",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-010",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-011",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-012",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-013",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-014",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-015",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-016",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-017",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-018",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-019",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    },
+    {
+      "queryId": "dev4f-020",
+      "judgmentStatus": "COMPLETE",
+      "expectedCategory": "unknown",
+      "relevantProducts": []
+    }
+  ]
+}

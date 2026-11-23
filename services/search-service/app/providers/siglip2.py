@@ -8,6 +8,7 @@ from typing import Any, Sequence
 from PIL import Image
 
 from app.config import Settings
+from app.services.visual_regions import image_regions
 
 from .base import EmbeddingResult, EmbeddingUsage
 
@@ -99,8 +100,9 @@ def category_probabilities(
 class Siglip2EmbeddingProvider:
     """Pinned local SigLIP2 query embedder for the V2 image index."""
 
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, *, category_prompts: dict[str, tuple[str, ...]] | None = None) -> None:
         self.settings = settings
+        self._category_prompts = category_prompts
         self._torch: Any | None = None
         self._processor: Any | None = None
         self._model: Any | None = None
@@ -109,6 +111,8 @@ class Siglip2EmbeddingProvider:
     async def prepare(self) -> None:
         """Load the pinned model before the application accepts traffic."""
         await asyncio.to_thread(self._load)
+        if self.settings.visual_search_pilot_v4_enabled and self.settings.visual_search_auto_region_enabled:
+            await asyncio.to_thread(self._category_scores, (0.0,) * SIGLIP2_DIMENSIONS)
 
     async def embed_document(self, image: bytes, text: str | None = None) -> EmbeddingResult:
         return await self.embed_query(image)
@@ -131,6 +135,11 @@ class Siglip2EmbeddingProvider:
 
     async def category_scores(self, image_vector: Sequence[float]) -> dict[str, float]:
         return await asyncio.to_thread(self._category_scores, image_vector)
+
+    async def embed_query_regions(
+        self, image: bytes,
+    ) -> list[tuple[float, ...]]:
+        return await asyncio.to_thread(self._encode_regions, image)
 
     def _load(self) -> None:
         if self._model is not None:
@@ -163,12 +172,8 @@ class Siglip2EmbeddingProvider:
         ).to(device)
         self._model.eval()
 
-    def _encode(self, image_bytes: bytes) -> tuple[tuple[float, ...], int]:
-        self._load()
-        with Image.open(BytesIO(image_bytes)) as source:
-            image = source.convert("RGB")
-            pixels = image.width * image.height
-            inputs = self._processor(images=image, return_tensors="pt")
+    def _image_features(self, images: Image.Image | list[Image.Image]):
+        inputs = self._processor(images=images, return_tensors="pt")
         inputs = {
             key: (
                 value.to(device=self._model.device, dtype=self._model.dtype)
@@ -178,13 +183,30 @@ class Siglip2EmbeddingProvider:
             for key, value in inputs.items()
         }
         with self._torch.inference_mode():
-            features = self._model.get_image_features(**inputs)
-        return l2_normalize(features[0].float().cpu().tolist(), SIGLIP2_DIMENSIONS), pixels
+            return self._model.get_image_features(**inputs).float().cpu().tolist()
+
+    def _encode(self, image_bytes: bytes) -> tuple[tuple[float, ...], int]:
+        self._load()
+        with Image.open(BytesIO(image_bytes)) as source:
+            image = source.convert("RGB")
+            pixels = image.width * image.height
+            features = self._image_features(image)
+        return l2_normalize(features[0], SIGLIP2_DIMENSIONS), pixels
+
+    def _encode_regions(self, image_bytes: bytes) -> list[tuple[float, ...]]:
+        self._load()
+        with Image.open(BytesIO(image_bytes)) as source:
+            regions = image_regions(source.convert("RGB"))
+        return (
+            [l2_normalize(vector, SIGLIP2_DIMENSIONS) for vector in self._image_features(regions)]
+            if regions else []
+        )
 
     def _category_scores(self, image_vector: Sequence[float]) -> dict[str, float]:
         self._load()
         if self._category_prototypes is None:
-            prompts = [prompt for group in CATEGORY_PROMPTS.values() for prompt in group]
+            bank = self._category_prompts if self._category_prompts is not None else CATEGORY_PROMPTS
+            prompts = [prompt for group in bank.values() for prompt in group]
             inputs = self._processor(
                 text=prompts,
                 padding="max_length",
@@ -198,7 +220,7 @@ class Siglip2EmbeddingProvider:
             normalized = [l2_normalize(row, SIGLIP2_DIMENSIONS) for row in features]
             prototypes: dict[str, tuple[float, ...]] = {}
             offset = 0
-            for category, category_prompts in CATEGORY_PROMPTS.items():
+            for category, category_prompts in bank.items():
                 rows = normalized[offset:offset + len(category_prompts)]
                 offset += len(category_prompts)
                 mean = [sum(row[index] for row in rows) / len(rows) for index in range(SIGLIP2_DIMENSIONS)]

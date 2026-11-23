@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "taskId": "HAI-14",
+  "status": "FROZEN_FOR_HAI15",
+  "frozenAt": "2026-11-18T15:02:39.795366+00:00",
+  "scope": "Local experimental snapshot for independent TEST v3",
+  "model": {
+    "name": "google/siglip2-base-patch16-224",
+    "revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+    "dimensions": 768,
+    "preprocessing": "siglip2-autoprocessor-original-v1",
+    "torch": "2.7.1",
+    "transformers": "4.57.1"
+  },
+  "profile": {
+    "view": "full",
+    "categorySource": "catalog-subtypes",
+    "categoryWeight": 0.35,
+    "minSimilarity": 0.6,
+    "unknownRatio": 1.2,
+    "pairMode": "off",
+    "pairBoost": 0.0,
+    "subtypeWeight": 0.25
+  },
+  "candidateLimit": 20,
+  "queryNormalization": {
+    "exifTranspose": true,
+    "colorMode": "RGB",
+    "maxWidth": 1024,
+    "maxHeight": 1024,
+    "jpegQuality": 88
+  },
+  "ranking": {
+    "distance": "exact cosine",
+    "imageWithinProduct": "maximum cosine, then image ID",
+    "finalTies": "product ID then image ID"
+  },
+  "semanticInputs": {
+    "promptBankCanonicalSha256": "24e13edd33750b39ac361c3713951a119c2399a3c52b993babf853b2851dc605",
+    "catalogTopSubtypesCanonicalSha256": "3a59760fc7fb00fef08de0c59b8e1cf4c2b73833b4d637a5bfd920ff021dcf3d"
+  },
+  "catalog": {
+    "baseVectorCount": 81,
+    "baseChecksum": "6480a433097bedc41649fac5137342cf",
+    "snapshotVectorCount": 85,
+    "snapshotChecksum": "71c413098c88688a4248680a291bef5e",
+    "snapshotLocalPath": "assets/snapshots/catalog-85.json",
+    "snapshotFileSha256": "0d7ba8972df1e2d3562bdfb963034f0edd939873f5ae8be10d24e4476bfc2e87",
+    "addedReferences": [
+      {
+        "imageId": "b96a2bc0-a6ff-5f93-804b-3ca63e81f4aa",
+        "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image": "assets/reference/violet-front.png",
+        "sha256": "668cc2224a0bc6bbd04633e94aa64fe1074085256c3b25a80f90976c661b84aa",
+        "embeddingSha256": "e0d20da45ac29cb9c4b67f5f863f188a4fe056dc1d7f93e7dc6db16ac49f716e"
+      },
+      {
+        "imageId": "9e2e20a3-a92d-5253-b1a1-072842fe9da9",
+        "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+        "image": "assets/reference/violet-side.png",
+        "sha256": "57e14a0fe74dd152aaa04f3949de30f55efdb616220698c01b2c6d2eada7c223",
+        "embeddingSha256": "019ec811fbc174abcb8a45e73f43106645ebbad26bbbdae7ed7131651886f41b"
+      },
+      {
+        "imageId": "444e2a60-e354-5dae-a640-daf0431801aa",
+        "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image": "assets/reference/orange-front.png",
+        "sha256": "885e3c10829f3f5465dec7873ec3348add2b974fedb29b1a9aefc8f57f0b29e9",
+        "embeddingSha256": "61bdfbd66c59d46baa0cab41933db42b201ad80167c7019ab0fe753459ba4e23"
+      },
+      {
+        "imageId": "f73da8b5-bc51-50d2-b3e2-c4a98c94414f",
+        "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+        "image": "assets/reference/orange-side.png",
+        "sha256": "3b7dc8a72ef5f44f0ce32fb3445fc1116fb67492c0b388e11b62fd06eee894f7",
+        "embeddingSha256": "fb432b310aae2fcf1248eb3ce1ce7fb72ce1ab29241bf6f1a10c0e7baf4873dc"
+      }
+    ],
+    "referenceInventorySha256": "b90d6872140a2692ecbd1eb184616761994c936b7766f41fb6d8c24327b5f2c3",
+    "imagegenPromptsSha256": "31dd3793530ab55932f989b785e1149b75d9e3d82be7c453e7fac3526e07809d"
+  },
+  "devCheck": {
+    "manifestSha256": "d550e51988ce5ebe955288fa1cc1e9c990b3af991e2827cbfb3a81df584d7b2b",
+    "labelsSha256": "6f7ef6a9326e1b332f3ab2a5eb7e1eaa8982763a7aa922f9e1a6196d0cf589c0",
+    "evidence": "evidence/image-search-v2/cutover-ai-search/hai-14-catalog-coverage-2026-11-18.json",
+    "evidenceSha256": "d8454959bd6a93ae92368f09a2c6fd42b785af8b12354756253b7b76b19003a3",
+    "metrics": {
+      "knownQueries": 15,
+      "unknownQueries": 5,
+      "recallAt5": 0.9444444444444444,
+      "categoryAccuracy": 1.0,
+      "unknownRejection": 1.0,
+      "meanReciprocalRankAt5": 0.9166666666666666
+    }
+  },
+  "independentTestGates": {
+    "recallAt5": 0.8,
+    "categoryAccuracy": 0.9,
+    "unknownRejection": 0.8,
+    "requestFailureRate": 0,
+    "p95EndToEndMs": 3000,
+    "unresolvedLeakage": 0
+  },
+  "publicVisualSearchEnabled": false
+}

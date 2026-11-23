@@ -11,7 +11,7 @@ codebase contains no SQL against catalog-owned tables.
 python -m venv .venv
 .\.venv\Scripts\pip install -r requirements-test.txt
 Copy-Item .env.example .env
-.\.venv\Scripts\python -m uvicorn app.main:app --port 8090
+.\.venv\Scripts\python run.py
 .\.venv\Scripts\python -m app.worker
 ```
 
@@ -23,14 +23,148 @@ backend and this service.
 
 - `POST /internal/v1/search`: canonical JSON text/hybrid search API.
 - `POST /internal/v1/search/image`: canonical multipart image search API.
+- `GET /internal/v1/search/image/status`: availability of the evaluated v4 pilot.
 - `GET /health/live`, `GET /health/ready`, `GET /metrics`.
 
 All search endpoints require `X-Internal-Service-Token`. Query images are never
 persisted.
 
-Image results use the locked DEV v2.2 category-consensus weight and similarity
+The default image profile uses the locked DEV v2.2 category-consensus weight and similarity
 threshold. Changing either value requires a new DEV/independent TEST cycle; do
 not retune against TEST v2.
+
+## TEST v4 pilot
+
+Set `SEARCH_ENABLED=true`, `VISUAL_SEARCH_ENABLED=true`,
+`VISUAL_SEARCH_PILOT_V4_ENABLED=true` and `VISUAL_EMBEDDING_DEVICE=cpu` in the
+isolated pilot deployment. Install `requirements-embeddings.txt` and make the
+pinned SigLIP2 revision available in the model cache. For Compose, build Search
+with `SEARCH_INSTALL_LOCAL_EMBEDDINGS=true`.
+
+The Search API validates the active image index against the evaluated 81 base
+vectors and adds four pinned references from the experiment. The references
+participate in ranking and matched images come from the indexed catalog.
+A catalog mismatch makes the pilot unavailable.
+
+Set `VISUAL_SEARCH_PUBLIC_ENABLED=true` on Catalog in the isolated environment
+to test through Storefront. Catalog uses `SEARCH_API_BASE_URL` and the same
+`SEARCH_SERVICE_INTERNAL_TOKEN` as Search. It resolves the returned image and
+product IDs against the current catalog before serving the cards. With the
+Catalog flag off, its public POST returns 503.
+
+[TEST v4 acceptance](../../evidence/image-search-v4/test-v4-final/final-report.md)
+
+For an opt-in DEV preview, set `VISUAL_SEARCH_AUTO_REGION_ENABLED=true` on Search.
+Catalog advertises the capability only when the v4 pilot is available. Storefront
+sends the full frame when the user leaves the crop controls at their defaults.
+If the full frame returns no results, Search batches up to five overlapping
+regions through the same SigLIP2 model and accepts a region only above the
+rescue threshold. Manual cropping continues to use the v4 request path.
+In-flight region inference is limited to one batch per Search process.
+When the top accessory matches a specific type and that type scores at least
+1.5 times the next accessory type, automatic search shows only the matching
+type. Ambiguous images keep the original ranking.
+
+The DEV evaluation kept the full-image ranking whenever it was nonempty.
+On two sets of 24 original photos, Recall@5 changed from 57.50% to 62.50%
+on the calibration set and stayed at 56.25% on the comparison set.
+All eight out-of-catalog photos were rejected. CPU p95 was about 1.23 seconds
+before HTTP and database overhead. Replacing nonempty full-image rankings
+with the highest regional score regressed on the comparison set.
+[DEV evidence](../../evidence/image-search-v4/auto-region-dev-2026-11-22.json)
+
+### Shadow và rollback trên staging
+
+Triển khai Search và Catalog với các cờ pilot ở trên trong môi trường staging
+cô lập. Trỏ `HAI_SHADOW_GATEWAY_URL` và `HAI_SHADOW_SEARCH_URL` đến hai endpoint
+staging. Đặt `HAI_SHADOW_SEARCH_TOKEN` thành token nội bộ của Search. Cấu hình
+`HAI_SHADOW_RABBIT_URL`, `HAI_SHADOW_RABBIT_USER` và
+`HAI_SHADOW_RABBIT_PASSWORD` cho RabbitMQ Management trên mạng nội bộ.
+`HAI_SHADOW_RABBIT_VHOST` mặc định là `/`.
+
+Chạy từ `services/search-service`. Shadow gửi 24 ảnh DEV đã khóa, so thứ tự
+top-5 tại Search, kiểm tra kết quả Catalog qua Gateway và đo p95. Báo cáo ghi
+độ sâu và số consumer của hàng đợi chính, retry và DLQ trước và sau.
+
+```powershell
+python -m scripts.verify_visual_shadow --scope staging --mode shadow --output ../../evidence/image-search-v4/staging-shadow.json
+```
+
+Tắt `VISUAL_SEARCH_PUBLIC_ENABLED` trên Catalog staging rồi triển khai lại
+Catalog. Xác minh Gateway trả 503 khi tải ảnh, trong khi trang sản phẩm và
+Search nội bộ vẫn hoạt động. Bật lại cờ trên staging và chạy shadow lần nữa
+để xác nhận phục hồi. Dùng tên evidence khác cho lần phục hồi.
+
+```powershell
+python -m scripts.verify_visual_shadow --scope staging --mode rollback --output ../../evidence/image-search-v4/staging-rollback.json
+```
+
+`--scope local` dùng cho diễn tập qua loopback. Báo cáo local ghi rõ khi thiếu
+RabbitMQ. Chạy staging và kiểm tra backlog chưa xử lý trước khi mở cohort.
+
+### Thử nghiệm cho nhóm nhỏ
+
+Đặt `GATEWAY_VISUAL_SEARCH_COHORT_ENABLED=true` và điền UUID các tài khoản
+được duyệt vào `GATEWAY_VISUAL_SEARCH_COHORT_USERS`, phân cách bằng dấu phẩy.
+Đặt cùng một `VISUAL_SEARCH_GATEWAY_TOKEN` ngẫu nhiên tối thiểu 32 ký tự
+cho Gateway và Catalog. Với launcher Windows, dùng tệp cấu hình local
+`.env.phase10.local`. Gateway phải dùng khóa JWT riêng đang được Identity
+dùng để ký token truy cập. Danh sách trống sẽ từ chối mọi tài khoản.
+
+Chỉ mở Storefront và Gateway cho nhóm thử. Để Catalog và Search trong mạng
+nội bộ. Bật các cờ v4 ở phần trên rồi khởi động lại service áp dụng cấu hình.
+Kiểm tra một tài khoản có trong danh sách, một tài khoản ngoài danh sách và
+phiên ẩn danh. Khi cần đóng, tắt `VISUAL_SEARCH_PUBLIC_ENABLED` trên Catalog.
+
+Dùng token đăng nhập của tài khoản được phép trong
+`HAI_SHADOW_GATEWAY_ACCESS_TOKEN` để chạy `verify_visual_shadow` với bộ DEV đã
+khóa. Đo sổ tay phản hồi chất lượng trên ảnh người dùng theo số ca hữu ích và
+số ca nhầm, cùng nhóm sản phẩm kỳ vọng. Replay DEV và phản hồi người dùng
+là hai phép đo khác nhau.
+
+Chạy monitor từ `services/search-service` sau khi kết thúc replay DEV để
+thống kê riêng lượt thật của nhóm. Đặt các biến RabbitMQ Management như
+phần shadow. Ví dụ chạy cửa sổ một giờ, lấy mẫu hàng đợi mỗi 15 giây.
+
+```powershell
+python -m scripts.monitor_visual_cohort --gateway-log ../../logs/local/gateway.log --seconds 3600 --interval 15 --output ../../evidence/image-search-v4/cohort-window.json
+```
+
+Báo cáo có số lượt thành viên, mã HTTP, p95, lượt ngoài danh sách bị chặn,
+consumer và độ sâu DLQ. Giữ cohort ở quy mô hiện tại khi chưa đủ lượt đánh
+giá. Tạm dừng khi có lỗi request, p95 trên 3 giây, DLQ có message hoặc worker
+mất consumer. Kết quả vận hành đạt vẫn cần được đối chiếu với phản hồi chất
+lượng trước khi mở rộng.
+
+## Exact image search pilot
+
+The image query scores all READY vectors for ACTIVE products before ranking.
+It takes the closest image per product, using image ID for ties, then uses
+product ID and image ID to order tied product scores. The final reranker uses
+the same product/image tie-break. V3 drops only the HNSW index on the image
+table. Deploy V3 with the migration role after backing up the image table or
+capturing its current index definition.
+
+Use a Search PostgreSQL DSN in `DATABASE_URL` and run from this service
+directory. Omitting the manifest runs only the read-only SQL checks. With a
+DEV manifest, the script starts a loopback-only Search API and measures two
+requests per selected query after one warmup. The SigLIP2 revision must already
+be in the local cache.
+
+```powershell
+python -m scripts.verify_exact_image_search ../../datasets/image-search/dev-v2/manifest.json --output exact-search-report.json
+```
+
+To restore the index for a release that requires it, use the migration role
+and allow time for index creation to lock the image table. Restoring this index
+leaves the current pilot query exact.
+
+```sql
+set role search_owner;
+create index if not exists idx_ai_search_image_embedding
+    on ai_search.image_embeddings using hnsw (embedding extensions.vector_cosine_ops);
+reset role;
+```
 
 ## Backfill and rollback
 
