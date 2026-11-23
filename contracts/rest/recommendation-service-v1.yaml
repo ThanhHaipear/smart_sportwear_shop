@@ -48,7 +48,7 @@ paths:
             schema: { $ref: '#/components/schemas/BrowserInteractionEvent' }
       responses:
         '202': { description: Accepted or already processed }
-        '422': { description: Event type, data source, identity or metadata not accepted from browsers }
+        '422': { description: 'Event type, data source, identity or metadata not accepted from browsers; dataSource=REAL while INTERACTION_REAL_ENABLED=false' }
         '429': { description: Rate limit exceeded (counted per event, per identity and per IP) }
   /api/v1/recommendations/interactions/batch:
     post:
@@ -156,7 +156,10 @@ components:
         variantId: { type: [string, 'null'], format: uuid }
         requestId: { type: [string, 'null'], format: uuid, description: Required for RECOMMENDATION_* events }
         source: { type: string, minLength: 1, maxLength: 50 }
-        dataSource: { type: string, enum: [REAL, DEMO] }
+        dataSource:
+          type: string
+          enum: [REAL, DEMO]
+          description: REAL is rejected (422) unless the service runs with INTERACTION_REAL_ENABLED=true (default false, see docs/recommendation-retention-proposal.md)
         metadata: { type: object, maxProperties: 5 }
       allOf:
         - if: { properties: { eventType: { enum: [VIEW, WISHLIST] } } }
