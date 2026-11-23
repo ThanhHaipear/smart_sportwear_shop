@@ -12,14 +12,15 @@ from app.repository import MemoryRepository
 from app.schemas import ProductSnapshot
 
 
-def settings():
+def settings(**overrides):
+    # Most contract tests post REAL events; the REAL gate itself is tested with interaction_real_enabled=False.
     return Settings(recommendation_enabled=True, recommendation_database_url="postgresql://unused",
-                    recommendation_internal_token="test-token")
+                    recommendation_internal_token="test-token", **({"interaction_real_enabled": True} | overrides))
 
 
-def client(repo=None, limiter=None):
+def client(repo=None, limiter=None, **setting_overrides):
     app = create_app()
-    app.dependency_overrides[get_settings] = settings
+    app.dependency_overrides[get_settings] = lambda: settings(**setting_overrides)
     app.dependency_overrides[repository] = lambda: repo or MemoryRepository()
     app.dependency_overrides[catalog_client] = FakeCatalog
     shared_limiter = limiter or InteractionRateLimiter(per_identity=1000, per_ip=1000)

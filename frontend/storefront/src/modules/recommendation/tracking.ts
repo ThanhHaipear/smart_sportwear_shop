@@ -28,7 +28,10 @@ export interface InteractionInput {
 const ANONYMOUS_ID_KEY = "sss_anonymous_id";
 const VIEW_KEY_PREFIX = "sss_viewed:";
 const VIEW_THROTTLE_MS = 10 * 60 * 1000;
-const DATA_SOURCE = process.env.NEXT_PUBLIC_INTERACTION_DATA_SOURCE === "DEMO" ? "DEMO" : "REAL";
+// DEMO by default: REAL behaviour is collected only when explicitly enabled, after the retention and
+// anonymisation rules of O01 are in place (review R4, docs/recommendation-retention-proposal.md). The
+// recommendation-service also rejects REAL events unless INTERACTION_REAL_ENABLED=true.
+const DATA_SOURCE = process.env.NEXT_PUBLIC_INTERACTION_DATA_SOURCE === "REAL" ? "REAL" : "DEMO";
 const TRACKING_ENABLED = process.env.NEXT_PUBLIC_INTERACTION_TRACKING !== "false";
 
 function newId(): string {

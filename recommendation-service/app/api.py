@@ -43,16 +43,18 @@ def user_ref(x_user_id: str | None) -> str | None:
 
 @router.post("/api/v1/recommendations/interactions", status_code=202, tags=["interactions"])
 def record_interaction(body: InteractionEvent, repo=Depends(repository), limiter=Depends(interaction_limiter),
+                       settings: Settings = Depends(get_settings),
                        x_user_id: str | None = Header(default=None, alias="X-User-Id"),
                        x_forwarded_for: str | None = Header(default=None, alias="X-Forwarded-For")):
     """Public browser endpoint. Identity comes only from the Gateway-verified JWT header."""
-    event = sanitize_browser_interaction(body, x_user_id, datetime.now(timezone.utc))
+    event = sanitize_browser_interaction(body, x_user_id, datetime.now(timezone.utc), settings.interaction_real_enabled)
     limiter.check(event, client_ip(x_forwarded_for))
     return {"accepted": repo.save_interaction(event), "eventId": str(event.event_id)}
 
 
 @router.post("/api/v1/recommendations/interactions/batch", status_code=202, tags=["interactions"])
 def record_interaction_batch(body: InteractionBatch, repo=Depends(repository), limiter=Depends(interaction_limiter),
+                             settings: Settings = Depends(get_settings),
                              x_user_id: str | None = Header(default=None, alias="X-User-Id"),
                              x_forwarded_for: str | None = Header(default=None, alias="X-Forwarded-For")):
     """Up to 10 events from one browser in a single request and DB transaction.
@@ -60,7 +62,7 @@ def record_interaction_batch(body: InteractionBatch, repo=Depends(repository), l
     Same rules as the single endpoint; the whole batch is rejected if any event is invalid,
     and the rate limit is charged per event.
     """
-    events = sanitize_browser_batch(body.events, x_user_id, datetime.now(timezone.utc))
+    events = sanitize_browser_batch(body.events, x_user_id, datetime.now(timezone.utc), settings.interaction_real_enabled)
     limiter.check(events, client_ip(x_forwarded_for))
     accepted = repo.save_interactions(events)
     return {"accepted": accepted, "duplicates": len(events) - accepted,

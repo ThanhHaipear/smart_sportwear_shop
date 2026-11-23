@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     # Public interaction endpoint limits (sliding 60 s window, per API process).
     interaction_rate_limit_per_identity: int = Field(default=60, ge=1)
     interaction_rate_limit_per_ip: int = Field(default=300, ge=1)
+    # Accept dataSource=REAL from browsers. Off until retention/anonymisation (O01) is approved and running:
+    # docs/recommendation-retention-proposal.md. DEMO events are always accepted.
+    interaction_real_enabled: bool = False
     catalog_api_url: str = "http://127.0.0.1:8092"
     catalog_service_token: str = ""
     catalog_request_timeout_seconds: float = Field(default=5, gt=0, le=30)

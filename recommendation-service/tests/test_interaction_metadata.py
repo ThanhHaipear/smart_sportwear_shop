@@ -100,3 +100,17 @@ def test_batch_with_one_bad_metadata_writes_nothing():
     assert response.status_code == 422
     assert "invalid metadata" in response.json()["detail"]
     assert repo.interactions == []
+
+
+def test_real_events_are_rejected_until_enabled(url):
+    """Until retention is in place (docs/recommendation-retention-proposal.md) only DEMO is collected."""
+    repo = MemoryRepository(); http = client(repo, interaction_real_enabled=False)
+    response = post(http, url, browser_event(dataSource="REAL"))
+    assert response.status_code == 422 and "INTERACTION_REAL_ENABLED" in response.json()["detail"]
+    assert post(http, url, browser_event(dataSource="DEMO")).status_code == 202
+    assert [event.data_source for event in repo.interactions] == ["DEMO"]
+
+
+def test_real_is_off_by_default():
+    from app.config import Settings
+    assert Settings().interaction_real_enabled is False

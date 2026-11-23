@@ -101,11 +101,13 @@ def sanitize_metadata(event_type: str, metadata: dict) -> dict:
 
 
 def sanitize_browser_interaction(event: InteractionEvent, verified_user_id: str | None,
-                                 received_at: datetime) -> InteractionEvent:
+                                 received_at: datetime, accept_real: bool = True) -> InteractionEvent:
     if event.event_type not in BROWSER_EVENT_TYPES:
         raise _reject(f"eventType {event.event_type} is not accepted from browsers")
     if event.data_source not in BROWSER_DATA_SOURCES:
         raise _reject("dataSource must be REAL or DEMO")
+    if event.data_source == "REAL" and not accept_real:
+        raise _reject("REAL interactions are not collected yet (INTERACTION_REAL_ENABLED=false); send DEMO")
     if event.event_type in PRODUCT_EVENT_TYPES and event.product_id is None:
         raise _reject(f"productId is required for {event.event_type}")
     if event.event_type in REQUEST_EVENT_TYPES and event.request_id is None:
@@ -128,7 +130,7 @@ MAX_BATCH_EVENTS = 10
 
 
 def sanitize_browser_batch(events: list[InteractionEvent], verified_user_id: str | None,
-                           received_at: datetime) -> list[InteractionEvent]:
+                           received_at: datetime, accept_real: bool = True) -> list[InteractionEvent]:
     """Validate a batch all-or-nothing: one invalid event rejects the whole batch.
 
     A batch must come from a single browser (same anonymousId) so it is charged to one identity
@@ -140,7 +142,7 @@ def sanitize_browser_batch(events: list[InteractionEvent], verified_user_id: str
         raise _reject("eventId must be unique within a batch")
     if len({event.anonymous_id for event in events}) != 1:
         raise _reject("all events in a batch must share the same anonymousId")
-    return [sanitize_browser_interaction(event, verified_user_id, received_at) for event in events]
+    return [sanitize_browser_interaction(event, verified_user_id, received_at, accept_real) for event in events]
 
 
 class SlidingWindowLimiter:
