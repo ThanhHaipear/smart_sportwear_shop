@@ -1,0 +1,64 @@
+erDiagram
+    search_documents {
+        uuid product_id PK
+        bigint source_version
+        varchar status
+        varchar name
+        text document_text
+        char document_hash
+        uuid category_id
+        varchar category_slug
+        uuid brand_id
+        varchar brand_slug
+        varchar product_type
+        varchar gender
+        text_array sport_codes
+        jsonb attributes
+        tsvector search_vector
+    }
+    variant_facets {
+        uuid variant_id PK
+        uuid product_id FK
+        varchar sku
+        varchar size_code
+        varchar color_code
+        varchar color_family
+        numeric price
+        int available_quantity
+        varchar status
+        bigint source_version
+    }
+    text_embeddings {
+        uuid product_id PK
+        char document_hash
+        varchar model
+        vector_1536 embedding
+        varchar status
+    }
+    image_embeddings {
+        uuid image_id PK
+        uuid product_id FK
+        text image_url
+        char image_hash
+        varchar model
+        vector_768 embedding
+        varchar status
+    }
+    processed_events {
+        varchar consumer_name PK
+        uuid event_id PK
+        bigint aggregate_version
+        timestamptz processed_at
+    }
+    indexing_jobs {
+        uuid id PK
+        varchar job_type
+        varchar status
+        int total_count
+        int success_count
+        int failed_count
+        jsonb error_summary
+    }
+    search_documents ||--o{ variant_facets : "SKU để lọc"
+    search_documents ||--o| text_embeddings : "vector văn bản"
+    search_documents ||--o{ image_embeddings : "vector ảnh"

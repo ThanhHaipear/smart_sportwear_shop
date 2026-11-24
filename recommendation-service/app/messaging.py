@@ -3,7 +3,9 @@ import logging
 import aio_pika
 from aio_pika import DeliveryMode, Message
 
+from app.catalog import HttpCatalogClient
 from app.config import Settings
+from app.enrichment import EventEnricher
 from app.repository import PostgresRepository
 from app.schemas import IntegrationEvent, InteractionEvent
 
@@ -14,6 +16,7 @@ class RecommendationConsumer:
     def __init__(self, settings: Settings):
         self.settings = settings
         self.repository = PostgresRepository(settings.recommendation_database_url)
+        self.enricher = EventEnricher(HttpCatalogClient(settings), self.repository)
         self.connection = None
         self.channel = None
 
@@ -31,7 +34,9 @@ class RecommendationConsumer:
             if event.event_type == "INTERACTION_RECORDED":
                 self.repository.save_interaction(InteractionEvent.model_validate_json(raw))
             else:
-                self.repository.apply_event(event)
+                # Catalog/Sales events are thin; resolve them against Catalog first.
+                # A Catalog outage raises and routes the message to the retry queues.
+                self.repository.apply_event(self.enricher.enrich(event))
             await message.ack()
         except Exception as error:
             headers = dict(message.headers or {})

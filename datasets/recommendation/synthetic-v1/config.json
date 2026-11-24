@@ -1,0 +1,68 @@
+{
+  "version": "synthetic-v1",
+  "seed": 20261117,
+  "catalogSnapshot": "evidence/recommendation/catalog-snapshot-20261117.json",
+  "catalogProductsSha256": "3651c353f8e75706ce020a1687751c42e4552e99a8833b75db2fa806602316f4",
+  "t0": "2026-09-01T00:00:00Z",
+  "weeks": 8,
+  "users": {
+    "count": 500,
+    "newcomerShare": 0.15,
+    "sessionsPoissonMean": 5,
+    "minSessions": 1
+  },
+  "personas": {
+    "sport": {"RUNNING": 0.5, "FOOTBALL": 0.5},
+    "gender": {"MEN": 0.5, "WOMEN": 0.5},
+    "budget": {
+      "LOW": {"share": 0.3, "maxPrice": 600000},
+      "MID": {"share": 0.5, "maxPrice": 1500000},
+      "HIGH": {"share": 0.2, "maxPrice": null}
+    },
+    "brandLoyalShare": 0.4,
+    "brandLoyalBoost": 2.0
+  },
+  "affinity": {
+    "sportMismatch": 0.1,
+    "genderMismatch": 0.05,
+    "overBudget": 0.2
+  },
+  "popularity": {
+    "logNormalSigma": 0.6
+  },
+  "session": {
+    "noiseRate": 0.25,
+    "extraViewsPoissonMean": 2,
+    "addToCartProb": 0.3,
+    "noiseAddToCartProb": 0.1,
+    "wishlistProb": 0.05,
+    "complementProb": 0.5,
+    "complementAddToCartProb": 0.8,
+    "purchaseProb": 0.55,
+    "secondsBetweenEvents": {"min": 20, "max": 180}
+  },
+  "complements": {
+    "SPORTS_SHOES": ["SPORTS_ACCESSORY"],
+    "SPORTS_TOP": ["SPORTS_BOTTOM"],
+    "SPORTS_BOTTOM": ["SPORTS_TOP", "SPORTS_SHOES"],
+    "SPORTS_UNIFORM": ["SPORTS_SHOES", "SPORTS_ACCESSORY"],
+    "SPORTS_ACCESSORY": []
+  },
+  "newArrivals": {
+    "launchDay": 49,
+    "slugs": [
+      "ao-dau-duc-nu-2026-home-jz4559",
+      "ao-dau-anh-2026-home-ib5290-100",
+      "ao-dau-brazil-2026-home-if7054-724",
+      "ao-dau-phap-2026-home-ib5300-480",
+      "ao-dau-argentina-2026-home-jm8396",
+      "ao-dau-bi-2026-home-jm8381",
+      "ao-chay-bo-dai-tay-uni-cloud",
+      "quan-jogger-the-thao-uni-motion",
+      "giay-futsal-uni-red-court",
+      "bo-bong-da-uni-orange-pulse",
+      "tat-bong-da-white-match",
+      "binh-nuoc-the-thao-black-flow-750ml"
+    ]
+  }
+}

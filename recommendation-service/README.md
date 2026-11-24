@@ -20,5 +20,14 @@ and worker. Rebuild a model with `python scripts/rebuild_model.py association-v1
 Public routes include product/cart recommendations and interaction ingestion. Internal
 event, rebuild, and evaluation routes require `X-Internal-Service-Token`.
 
+Migrations are plain SQL files applied in order with the migration role (V1, V2, V3). V3 adds the
+offline metric columns to `evaluation_runs` and must be applied **before** deploying code that writes
+them: follow `docs/recommendation-migration-v3-runbook.md`. Rehearse on a local scratch PostgreSQL with
+`python scripts/verify_migration_v3.py --admin-url <local DSN>`; check a live schema read-only with
+`--check-only <DSN>`.
+
+Browser interactions with `dataSource=REAL` are rejected unless `INTERACTION_REAL_ENABLED=true`; keep it
+off until the retention proposal (`docs/recommendation-retention-proposal.md`) is in place.
+
 Rollback is route-only: disable the feature flag and use the popularity/empty fallback.
 Keep the schema and event queue for replay; do not delete derived data during rollback.

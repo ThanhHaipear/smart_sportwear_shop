@@ -10,12 +10,19 @@ class ProductSnapshot(BaseModel):
     name: str
     slug: str
     thumbnailUrl: str | None = None
+    # Storefront ProductListItem reads `thumbnail`; keep both names for compatibility.
+    thumbnail: str | None = None
+    productType: str | None = None
     minPrice: float | None = None
     maxPrice: float | None = None
     availableQuantity: int = 0
     status: str = "ACTIVE"
     categoryId: UUID | None = None
     brandId: UUID | None = None
+    # Content-based features (docs/recommendation-design.md 5.4). Catalog currently returns them empty.
+    gender: str | None = None
+    sportCodes: list[str] = Field(default_factory=list)
+    colorFamilies: list[str] = Field(default_factory=list)
 
 
 class RecommendationItem(BaseModel):
@@ -66,6 +73,13 @@ class InteractionEvent(BaseModel):
         return self
 
 
+class InteractionBatch(BaseModel):
+    """Several browser events sent in one request (e.g. all impressions of one recommendation list)."""
+    model_config = ConfigDict(extra="forbid")
+    # The upper bound is enforced in app.interactions so the API returns a clear 422 message.
+    events: list[InteractionEvent] = Field(min_length=1, max_length=50)
+
+
 class IntegrationEvent(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
     event_id: UUID = Field(alias="eventId")
@@ -94,4 +108,12 @@ class EvaluationResult(BaseModel):
     k: int
     precisionAtK: float
     recallAtK: float
+    # Added in migration V3 (phase 9); None for results computed before.
+    hitRateAtK: float | None = None
+    ndcgAtK: float | None = None
+    coverageAtK: float | None = None
+    task: str | None = None
+    segment: str | None = None
+    caseCount: int | None = None
+    reportSha256: str | None = None
     evaluatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

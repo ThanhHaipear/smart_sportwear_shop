@@ -1,0 +1,142 @@
+erDiagram
+    categories {
+        uuid id PK
+    }
+    brands {
+        uuid id PK
+    }
+    products {
+        uuid id PK
+        uuid category_id FK
+        uuid brand_id FK
+        varchar name
+        varchar slug UK
+        text description
+        jsonb attributes
+        varchar status
+        bigint version
+    }
+    product_variants {
+        uuid id PK
+        uuid product_id FK
+        varchar sku UK
+        varchar size_label
+        varchar color_label
+        numeric price
+        numeric compare_at_price
+        int stock_quantity
+        int reserved_quantity
+        int reorder_point
+        varchar status
+        bigint version
+    }
+    product_images {
+        uuid id PK
+        uuid product_id FK
+        uuid variant_id FK
+        text secure_url
+        varchar alt_text
+        int sort_order
+        boolean is_primary
+    }
+    product_sports {
+        uuid product_id PK
+        uuid sport_id PK
+    }
+    product_materials {
+        uuid product_id PK
+        uuid material_id PK
+        numeric percentage
+    }
+    inventory_reservations {
+        uuid id PK
+        uuid order_ref
+        varchar idempotency_key UK
+        varchar status
+        timestamptz expires_at
+    }
+    inventory_reservation_items {
+        uuid reservation_id PK
+        uuid variant_id PK
+        int quantity
+    }
+    inventory_transactions {
+        uuid id PK
+        uuid variant_id FK
+        varchar transaction_type
+        int quantity
+        int before_stock_quantity
+        int after_stock_quantity
+        uuid order_ref
+        uuid actor_ref
+        varchar idempotency_key UK
+    }
+    wishlists {
+        uuid id PK
+        uuid user_ref UK
+    }
+    wishlist_items {
+        uuid wishlist_id PK
+        uuid product_id PK
+    }
+    product_reviews {
+        uuid id PK
+        uuid product_id FK
+        uuid user_ref
+        uuid order_item_ref
+        int rating
+        varchar title
+        varchar status
+    }
+    promotions {
+        uuid id PK
+        varchar name
+        varchar slug UK
+        varchar type
+        varchar scope
+        varchar status
+    }
+    promotion_products {
+        uuid promotion_id PK
+        uuid product_id PK
+    }
+    catalog_datasets {
+        uuid id PK
+        varchar name
+        varchar version
+        char manifest_checksum
+        varchar status
+    }
+    catalog_dataset_items {
+        uuid dataset_id PK
+        uuid product_id PK
+        varchar source_record_id
+        char normalized_checksum
+    }
+    integration_outbox {
+        uuid id PK
+        varchar event_type
+        varchar aggregate_type
+        uuid aggregate_id
+        bigint aggregate_version
+        jsonb payload
+        varchar status
+    }
+    categories ||--o{ products : "phân loại"
+    brands ||--o{ products : "thương hiệu"
+    products ||--o{ product_variants : "SKU"
+    products ||--o{ product_images : "ảnh"
+    product_variants |o--o{ product_images : "ảnh riêng SKU"
+    products ||--o{ product_sports : ""
+    products ||--o{ product_materials : ""
+    product_variants ||--o{ inventory_transactions : "sổ kho"
+    inventory_reservations ||--|{ inventory_reservation_items : "giữ hàng"
+    product_variants ||--o{ inventory_reservation_items : ""
+    wishlists ||--o{ wishlist_items : ""
+    products ||--o{ wishlist_items : ""
+    products ||--o{ product_reviews : "đánh giá"
+    promotions ||--o{ promotion_products : ""
+    products ||--o{ promotion_products : ""
+    catalog_datasets ||--o{ catalog_dataset_items : ""
+    products ||--o{ catalog_dataset_items : ""
+    products ||..o{ integration_outbox : "trigger ghi sự kiện"

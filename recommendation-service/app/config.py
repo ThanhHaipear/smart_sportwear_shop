@@ -13,8 +13,19 @@ class Settings(BaseSettings):
     recommendation_database_url: str = ""
     recommendation_internal_token: str = ""
     recommendation_fallback_mode: Literal["POPULAR", "EMPTY"] = "POPULAR"
+    # Content layer between association rules and popularity; COMPLEMENT was chosen on DEV (phase 7).
+    recommendation_content_mode: Literal["OFF", "SIMILAR", "COMPLEMENT"] = "COMPLEMENT"
     recommendation_default_limit: int = Field(default=8, ge=1, le=20)
     recommendation_max_limit: int = Field(default=20, ge=1, le=100)
+    # Public interaction endpoint limits (sliding 60 s window, per API process).
+    interaction_rate_limit_per_identity: int = Field(default=60, ge=1)
+    interaction_rate_limit_per_ip: int = Field(default=300, ge=1)
+    # Accept dataSource=REAL from browsers. Off until retention/anonymisation (O01) is approved and running:
+    # docs/recommendation-retention-proposal.md. DEMO events are always accepted.
+    interaction_real_enabled: bool = False
+    catalog_api_url: str = "http://127.0.0.1:8092"
+    catalog_service_token: str = ""
+    catalog_request_timeout_seconds: float = Field(default=5, gt=0, le=30)
     rabbitmq_url: str = "amqp://visual_search:change-me@localhost:5672/"
     rabbitmq_consumer_queue: str = "recommendation.events"
     rabbitmq_retry_queues: str = "recommendation.events.retry.30s,recommendation.events.retry.5m,recommendation.events.retry.1h"

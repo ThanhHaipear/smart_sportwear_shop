@@ -1,0 +1,16 @@
+# Review R1 smoke test override, used by scripts/compose_smoke_r1.py. Paths are relative to the repo root
+# (the directory of the first compose file). Real chatbot + recommendation images, scratch DB, catalog stub.
+services:
+  recommendation-service:
+    environment:
+      RECOMMENDATION_ENABLED: ${SMOKE_RECOMMENDATION_ENABLED:-true}
+      RECOMMENDATION_DATABASE_URL: ${SMOKE_RECOMMENDATION_DATABASE_URL:?set by compose_smoke_r1.py}
+      RECOMMENDATION_INTERNAL_TOKEN: smoke-token
+    extra_hosts: ["host.docker.internal:host-gateway"]
+  catalog-stub:
+    image: python:3.11-slim
+    command: ["python", "/stub/catalog_stub.py"]
+    volumes: ["./recommendation-service/scripts/compose_smoke/catalog_stub.py:/stub/catalog_stub.py:ro"]
+    networks:
+      default:
+        aliases: [catalog-service]

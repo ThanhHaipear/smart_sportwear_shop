@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    participant KH as Khách (Storefront)
+    participant AD as Admin
+    participant SA as Sales :8094
+    participant BK as SePay
+
+    KH->>SA: POST /api/v1/returns (orderId, items, reason)
+    SA->>SA: Đơn phải DELIVERED và còn trong hạn return_eligible_until (nếu có)
+    SA->>SA: Số lượng trả ≤ quantity − return_pending − returned
+    SA->>SA: INSERT returns (REQUESTED), return_items, tăng return_pending_quantity
+    AD->>SA: PATCH /admin/returns/{id}/status APPROVED | REJECTED
+    AD->>SA: PATCH /admin/returns/{id}/status RECEIVED + kết quả từng dòng<br/>(condition_status, REFUND/REJECT, refund_amount)
+    SA->>SA: Chuyển return_pending → returned_quantity
+    AD->>SA: POST /admin/returns/{id}/refund
+    SA->>SA: INSERT refunds (MANUAL, PENDING), số tiền = tổng refund_amount
+    alt Admin chuyển khoản tay
+        AD->>SA: POST /admin/refunds/{id}/manual-confirmation (mã giao dịch)
+    else SePay ghi nhận chuyển khoản chiều ra có mã RFD...
+        BK->>SA: webhook transferType = out → khớp refund theo mã và số tiền
+    end
+    SA->>SA: refund COMPLETED → payment_status PARTIALLY_REFUNDED / REFUNDED,<br/>returns REFUNDED, outbox sales.refund.completed.v1

@@ -2,6 +2,7 @@ import { apiFetch } from "@/lib/api";
 import { endpoints } from "@/lib/endpoints";
 import type { BannerSlide } from "@/components/marketing/types";
 import type { ActivePromotion, Banner, ProductDetail, ProductListItem } from "@/modules/product/types";
+import { emptyList, sourceKeyOf } from "@/modules/recommendation/pinning";
 
 type ProductQuery = Record<string, string | number | boolean | undefined>;
 
@@ -56,20 +57,62 @@ export async function fetchProductDetail(slug: string): Promise<ProductDetail | 
 }
 
 type RecommendationResponse = {
+  requestId?: string;
+  modelVersion?: string;
   type: string;
-  items: Array<{ product: ProductListItem }>;
+  items: Array<{ product: ProductListItem; algorithm?: string }>;
 };
 
-// "Frequently bought together" (association-rules engine). Returns the recommended
-// products for a given product; empty on any error so the section just hides.
-export async function fetchFrequentlyBoughtTogether(productId: string): Promise<ProductListItem[]> {
+export interface RecommendationResult {
+  // sourceKeyOf(the product IDs this list was requested for); a block only shows it for those sources.
+  sourceKey: string;
+  // Identifies this served list; impression/click events must carry it to measure CTR per model.
+  requestId: string | null;
+  modelVersion: string | null;
+  items: Array<{ product: ProductListItem; algorithm: string | null }>;
+}
+
+// "Frequently bought together" (association rules + popularity fallback). Empty on any
+// error so the section just hides.
+export async function fetchFrequentlyBoughtTogether(productId: string): Promise<RecommendationResult> {
+  const sourceKey = sourceKeyOf([productId]);
   try {
     const result = await apiFetch<RecommendationResponse>(endpoints.frequentlyBoughtTogether(productId), {
       cache: "no-store"
     });
-    return (result.data?.items ?? []).map((item) => item.product).filter(Boolean);
+    return {
+      sourceKey,
+      requestId: result.data?.requestId ?? null,
+      modelVersion: result.data?.modelVersion ?? null,
+      items: (result.data?.items ?? [])
+        .filter((item) => item?.product)
+        .map((item) => ({ product: item.product, algorithm: item.algorithm ?? null })),
+    };
   } catch {
-    return [];
+    return emptyList(sourceKey);
+  }
+}
+
+// Recommendations for the whole cart (association rules -> content -> popularity). Empty on any error.
+export async function fetchCartRecommendations(productIds: string[], limit = 4): Promise<RecommendationResult> {
+  const sourceKey = sourceKeyOf(productIds);
+  if (productIds.length === 0) return emptyList(sourceKey);
+  try {
+    const result = await apiFetch<RecommendationResponse>(endpoints.cartRecommendations, {
+      method: "POST",
+      body: JSON.stringify({ sourceProductIds: productIds, limit }),
+      cache: "no-store"
+    });
+    return {
+      sourceKey,
+      requestId: result.data?.requestId ?? null,
+      modelVersion: result.data?.modelVersion ?? null,
+      items: (result.data?.items ?? [])
+        .filter((item) => item?.product)
+        .map((item) => ({ product: item.product, algorithm: item.algorithm ?? null })),
+    };
+  } catch {
+    return emptyList(sourceKey);
   }
 }
 

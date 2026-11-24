@@ -1,0 +1,28 @@
+erDiagram
+    chat_sessions {
+        varchar id PK
+        varchar user_id
+        varchar channel
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    chat_messages {
+        bigint id PK
+        varchar session_id FK
+        varchar user_id
+        varchar role
+        text content
+        varchar intent
+        timestamptz created_at
+    }
+    retrieval_logs {
+        bigint id PK
+        varchar session_id
+        text query
+        jsonb candidate_product_ids
+        varchar search_mode
+        int latency_ms
+        timestamptz created_at
+    }
+    chat_sessions ||--o{ chat_messages : "tin nhắn"
+    chat_sessions ||..o{ retrieval_logs : "lượt tìm sản phẩm"

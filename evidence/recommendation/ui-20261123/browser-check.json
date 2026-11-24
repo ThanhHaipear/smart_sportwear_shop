@@ -1,0 +1,16 @@
+{
+  "review": "R2 (browser) and R6 (UI evidence)",
+  "ranAt": "2026-11-23T09:38:00Z",
+  "commit": "aceca7c9",
+  "setup": "start-all-local (Supabase runtime DSNs), storefront next dev, Playwright Chromium 1366x900, guest cart, dataSource DEMO",
+  "steps": [
+    {"step": "Product detail /sanpham/giay-chay-bo-nam-cobalt-ride", "result": "'Thường mua cùng nhau' shows 4 products; impressions sent as one batch (HTTP 202)", "screenshot": "01-product-detail-fbt.png",
+     "note": "Content quality limited: Catalog stores no sport/gender attributes, so a running shoe is paired with football jerseys (known limitation)"},
+    {"step": "Cart A = 3 products (Uni Pure Step, Cobalt Ride, England jersey)", "result": "'Có thể bạn cũng cần' shown; 4 impressions source=CART_RECOMMENDATION with 3 source products", "screenshot": "02-cart-A-three-products.png"},
+    {"step": "Remove the jersey -> cart B = 2 products; B's /recommendations/cart response delayed 8 s by Playwright route", "result": "At +3 s the block is hidden: A's list is not shown and no impression is sent", "screenshot": "03-cart-B-loading.png"},
+    {"step": "B's response delivered (requestId c26dfada-7dd8-4d18-ae30-e54ce96ba46f)", "result": "B's list shown; all 4 impressions carry requestId c26dfada... with 2 source products", "screenshot": "04-cart-B-loaded.png"},
+    {"step": "Increase Cobalt Ride quantity 1 -> 2", "result": "No new /recommendations/cart request, same list, no new impression"},
+    {"step": "Click the first recommended card", "result": "RECOMMENDATION_CLICK with requestId c26dfada... (B), source CART_RECOMMENDATION, then navigation to the product"}
+  ],
+  "notInScope": "Chatbot related mode could not be shown in the browser: search_products returned nothing for 'giày Cobalt Ride' and the chatbot LLM call fails (AsyncMessages.stream() got an unexpected keyword argument 'temperature'). Chatbot -> recommendation-service wiring is covered by r1-compose-smoke-20261123.json."
+}

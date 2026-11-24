@@ -9,6 +9,7 @@ import { getCart, removeCartItem, updateCartItem } from "@/modules/cart/api";
 import { NO_IMAGE } from "@/modules/ui/placeholder";
 import type { CartResponse } from "@/modules/cart/types";
 import { saveCheckoutSelection } from "@/modules/checkout/selection";
+import { CartRecommendations } from "@/modules/recommendation/CartRecommendations";
 
 export function CartPageClient() {
   const [cart, setCart] = useState<CartResponse | null>(null);
@@ -224,6 +225,9 @@ export function CartPageClient() {
             </div>
           </aside>
         </div>
+        {cart && cart.items.length > 0 ? (
+          <CartRecommendations productIds={cart.items.map((item) => item.productId)} />
+        ) : null}
       </div>
     </main>
   );

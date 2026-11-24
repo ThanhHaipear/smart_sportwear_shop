@@ -1,0 +1,1093 @@
+{
+  "exportedAt": "2026-11-17T06:32:11+00:00",
+  "source": "catalog-service /internal/v1/products/{id}/index-document",
+  "attributeManifests": [
+    "../catalog/pilot-v1/manifest.json",
+    "../catalog/world-cup-2026-store-staging-v1/manifest.json"
+  ],
+  "productCount": 36,
+  "productsMissingAttributes": [],
+  "productsSha256": "3651c353f8e75706ce020a1687751c42e4552e99a8833b75db2fa806602316f4",
+  "products": [
+    {
+      "productId": "0f192014-452e-44d8-93bb-aacfa55399ab",
+      "slug": "binh-nuoc-the-thao-black-flow-750ml",
+      "name": "Bình nước thể thao Black Flow 750ml",
+      "status": "ACTIVE",
+      "productType": "SPORTS_ACCESSORY",
+      "category": "phu-kien-the-thao",
+      "brand": "nike",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "BLACK"
+      ],
+      "minPrice": 219000.0,
+      "maxPrice": 219000.0,
+      "availableQuantity": 29,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "1624d2e1-047a-4e36-aa9b-d2266a468ade",
+      "slug": "ao-tap-bong-da-nu-royal-motion",
+      "name": "Áo tập bóng đá nữ Royal Motion",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "nike",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "BLUE"
+      ],
+      "minPrice": 459000.0,
+      "maxPrice": 459000.0,
+      "availableQuantity": 80,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "16c5fb26-3d97-425b-ada3-570940ff5296",
+      "slug": "bo-bong-da-nu-royal-wave",
+      "name": "Bộ bóng đá nữ Royal Wave",
+      "status": "ACTIVE",
+      "productType": "SPORTS_UNIFORM",
+      "category": "dong-phuc-the-thao",
+      "brand": "adidas",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "BLUE"
+      ],
+      "minPrice": 699000.0,
+      "maxPrice": 699000.0,
+      "availableQuantity": 70,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "192ae5aa-1f59-49ed-a7c4-eecf49c51443",
+      "slug": "quan-legging-chay-bo-nu-navy-flex",
+      "name": "Quần legging chạy bộ nữ Navy Flex",
+      "status": "ACTIVE",
+      "productType": "SPORTS_BOTTOM",
+      "category": "quan-the-thao",
+      "brand": "adidas",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "NAVY"
+      ],
+      "minPrice": 529000.0,
+      "maxPrice": 529000.0,
+      "availableQuantity": 70,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "2da4e727-c52a-4adf-b3bf-0cdb9d42a6e4",
+      "slug": "quan-jogger-the-thao-uni-motion",
+      "name": "Quần jogger thể thao Uni Motion",
+      "status": "ACTIVE",
+      "productType": "SPORTS_BOTTOM",
+      "category": "quan-the-thao",
+      "brand": "nike",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "GRAY"
+      ],
+      "minPrice": 549000.0,
+      "maxPrice": 549000.0,
+      "availableQuantity": 84,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "36f7387d-1f6e-42cb-b284-0dd6cf6d04b5",
+      "slug": "giay-chay-bo-nu-coral-cloud",
+      "name": "Giày chạy bộ nữ Coral Cloud",
+      "status": "ACTIVE",
+      "productType": "SPORTS_SHOES",
+      "category": "giay-the-thao",
+      "brand": "adidas",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "PINK"
+      ],
+      "minPrice": 1399000.0,
+      "maxPrice": 1399000.0,
+      "availableQuantity": 60,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "53c4d001-b18c-4f1b-ae73-b4f8a0dc1b9b",
+      "slug": "ao-dau-duc-nu-2026-home-jz4559",
+      "name": "Germany Women 2026 Home Jersey",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "adidas",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "WHITE"
+      ],
+      "minPrice": 2290000.0,
+      "maxPrice": 2290000.0,
+      "availableQuantity": 40,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "world-cup-2026-store-staging-v1/manifest.json@1.0.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "540290b7-2904-4567-89d1-51e0f49d7e8e",
+      "slug": "ao-chay-bo-dai-tay-uni-cloud",
+      "name": "Áo chạy bộ dài tay Uni Cloud",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "nike",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "WHITE"
+      ],
+      "minPrice": 499000.0,
+      "maxPrice": 499000.0,
+      "availableQuantity": 84,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "57d9cced-fa73-46d7-b3f8-771b4818f78d",
+      "slug": "ao-chay-bo-nam-aero-navy",
+      "name": "Áo chạy bộ nam Aero Navy",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "nike",
+      "gender": "MEN",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "NAVY"
+      ],
+      "minPrice": 429000.0,
+      "maxPrice": 429000.0,
+      "availableQuantity": 80,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "5ea045bb-cdea-48b9-a72e-b72a2aa8324c",
+      "slug": "ao-tap-bong-da-nam-blaze-red",
+      "name": "Áo tập bóng đá nam Blaze Red",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "adidas",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "RED"
+      ],
+      "minPrice": 459000.0,
+      "maxPrice": 459000.0,
+      "availableQuantity": 90,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "5f2e358b-ce0f-4400-ab0b-76aa4a575728",
+      "slug": "quan-track-chay-bo-uni-forest",
+      "name": "Quần track chạy bộ Uni Forest",
+      "status": "ACTIVE",
+      "productType": "SPORTS_BOTTOM",
+      "category": "quan-the-thao",
+      "brand": "adidas",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "GREEN"
+      ],
+      "minPrice": 599000.0,
+      "maxPrice": 599000.0,
+      "availableQuantity": 72,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "6097e7d9-4f3f-4378-9cae-da3626da0b47",
+      "slug": "ao-dau-anh-2026-home-ib5290-100",
+      "name": "England 2026 Stadium Home Jersey",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "nike",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "WHITE"
+      ],
+      "minPrice": 2490000.0,
+      "maxPrice": 2490000.0,
+      "availableQuantity": 40,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "world-cup-2026-store-staging-v1/manifest.json@1.0.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "6107cf10-7312-43fd-92b0-f41eaec1dfed",
+      "slug": "giay-chay-bo-nam-cobalt-ride",
+      "name": "Giày chạy bộ nam Cobalt Ride",
+      "status": "ACTIVE",
+      "productType": "SPORTS_SHOES",
+      "category": "giay-the-thao",
+      "brand": "nike",
+      "gender": "MEN",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "BLUE"
+      ],
+      "minPrice": 1399000.0,
+      "maxPrice": 1399000.0,
+      "availableQuantity": 60,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "653fed24-05ef-4cdf-bd91-47bce61c5f46",
+      "slug": "ao-dau-brazil-2026-home-if7054-724",
+      "name": "Brazil 2026 Stadium Home Jersey",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "nike",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "YELLOW"
+      ],
+      "minPrice": 2490000.0,
+      "maxPrice": 2490000.0,
+      "availableQuantity": 40,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "world-cup-2026-store-staging-v1/manifest.json@1.0.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "6a3f7f37-3340-4432-94e9-fd46990a3878",
+      "slug": "bo-bong-da-uni-forest-line",
+      "name": "Bộ bóng đá Uni Forest Line",
+      "status": "ACTIVE",
+      "productType": "SPORTS_UNIFORM",
+      "category": "dong-phuc-the-thao",
+      "brand": "nike",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "GREEN"
+      ],
+      "minPrice": 729000.0,
+      "maxPrice": 729000.0,
+      "availableQuantity": 72,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "6fcb00e0-cee9-410f-9c3d-9094769ce3bc",
+      "slug": "giay-futsal-uni-red-court",
+      "name": "Giày futsal Uni Red Court",
+      "status": "ACTIVE",
+      "productType": "SPORTS_SHOES",
+      "category": "giay-the-thao",
+      "brand": "adidas",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "RED"
+      ],
+      "minPrice": 1099000.0,
+      "maxPrice": 1099000.0,
+      "availableQuantity": 70,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "73c01f88-cb97-48bb-83c4-ffdc20ad36db",
+      "slug": "bang-tay-the-thao-royal-pair",
+      "name": "Băng tay thể thao Royal Pair",
+      "status": "ACTIVE",
+      "productType": "SPORTS_ACCESSORY",
+      "category": "phu-kien-the-thao",
+      "brand": "adidas",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "BLUE"
+      ],
+      "minPrice": 129000.0,
+      "maxPrice": 129000.0,
+      "availableQuantity": 35,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "770314ec-4470-4d79-a42c-d779c2ce616c",
+      "slug": "tat-bong-da-white-match",
+      "name": "Tất bóng đá White Match",
+      "status": "ACTIVE",
+      "productType": "SPORTS_ACCESSORY",
+      "category": "phu-kien-the-thao",
+      "brand": "nike",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "WHITE"
+      ],
+      "minPrice": 159000.0,
+      "maxPrice": 159000.0,
+      "availableQuantity": 31,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "773289df-121a-4124-beba-bee575eb3b24",
+      "slug": "ao-dau-phap-2026-home-ib5300-480",
+      "name": "France 2026 Stadium Home Jersey",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "nike",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "BLUE"
+      ],
+      "minPrice": 2490000.0,
+      "maxPrice": 2490000.0,
+      "availableQuantity": 40,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "world-cup-2026-store-staging-v1/manifest.json@1.0.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "7d5358ac-bc24-4c8e-b3a0-52523f3d390a",
+      "slug": "giay-da-bong-nu-turf-spark",
+      "name": "Giày đá bóng nữ Turf Spark",
+      "status": "ACTIVE",
+      "productType": "SPORTS_SHOES",
+      "category": "giay-the-thao",
+      "brand": "nike",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "YELLOW"
+      ],
+      "minPrice": 1199000.0,
+      "maxPrice": 1199000.0,
+      "availableQuantity": 60,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "7d83ab87-7e59-4cd8-8ab7-0e0fa40e75cb",
+      "slug": "ao-dau-argentina-2026-home-jm8396",
+      "name": "Argentina 2026 Home Jersey",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "adidas",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "WHITE"
+      ],
+      "minPrice": 2490000.0,
+      "maxPrice": 2490000.0,
+      "availableQuantity": 40,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "world-cup-2026-store-staging-v1/manifest.json@1.0.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "7eacefe4-eaea-47c6-a6b8-4e9b4bbc33cc",
+      "slug": "ao-giu-nhiet-bong-da-uni-core",
+      "name": "Áo giữ nhiệt bóng đá Uni Core",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "adidas",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "BLACK"
+      ],
+      "minPrice": 579000.0,
+      "maxPrice": 579000.0,
+      "availableQuantity": 72,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "8659098d-5dcb-4a94-9ed8-ed8f8345288e",
+      "slug": "ao-dau-bi-2026-home-jm8381",
+      "name": "Belgium 2026 Home Jersey",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "adidas",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "RED"
+      ],
+      "minPrice": 2290000.0,
+      "maxPrice": 2290000.0,
+      "availableQuantity": 40,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "world-cup-2026-store-staging-v1/manifest.json@1.0.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "90df2223-3c14-49cf-822f-207603429950",
+      "slug": "giay-chay-bo-uni-pure-step",
+      "name": "Giày chạy bộ Uni Pure Step",
+      "status": "ACTIVE",
+      "productType": "SPORTS_SHOES",
+      "category": "giay-the-thao",
+      "brand": "nike",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "WHITE"
+      ],
+      "minPrice": 1499000.0,
+      "maxPrice": 1499000.0,
+      "availableQuantity": 63,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "a1192013-eeb9-4302-80d2-28f5f609857d",
+      "slug": "ao-tank-chay-bo-nu-coral-flow",
+      "name": "Áo tank chạy bộ nữ Coral Flow",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "adidas",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "PINK"
+      ],
+      "minPrice": 389000.0,
+      "maxPrice": 389000.0,
+      "availableQuantity": 70,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "a32aa095-ad50-496a-88a6-bbbf4705a443",
+      "slug": "bo-bong-da-nam-crimson-unity",
+      "name": "Bộ bóng đá nam Crimson Unity",
+      "status": "ACTIVE",
+      "productType": "SPORTS_UNIFORM",
+      "category": "dong-phuc-the-thao",
+      "brand": "nike",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "RED"
+      ],
+      "minPrice": 699000.0,
+      "maxPrice": 699000.0,
+      "availableQuantity": 70,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "a40c8829-74a7-4fbd-beab-63efcdf6efe1",
+      "slug": "ao-gio-chay-bo-nam-orange-pace",
+      "name": "Áo gió chạy bộ nam Orange Pace",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "adidas",
+      "gender": "MEN",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "ORANGE"
+      ],
+      "minPrice": 789000.0,
+      "maxPrice": 789000.0,
+      "availableQuantity": 50,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "aa1c42f1-880b-46c2-ae7c-e8b4fe7fa98c",
+      "slug": "giay-da-bong-nam-turf-shadow",
+      "name": "Giày đá bóng nam Turf Shadow",
+      "status": "ACTIVE",
+      "productType": "SPORTS_SHOES",
+      "category": "giay-the-thao",
+      "brand": "adidas",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "BLACK"
+      ],
+      "minPrice": 1199000.0,
+      "maxPrice": 1199000.0,
+      "availableQuantity": 60,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "b1a7503f-6fc8-4a0a-adfe-68ae337c13e6",
+      "slug": "ao-khoac-chay-bo-nu-violet-air",
+      "name": "Áo khoác chạy bộ nữ Violet Air",
+      "status": "ACTIVE",
+      "productType": "SPORTS_TOP",
+      "category": "ao-the-thao",
+      "brand": "nike",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "PURPLE"
+      ],
+      "minPrice": 749000.0,
+      "maxPrice": 749000.0,
+      "availableQuantity": 50,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "b5da50aa-e125-4d69-9993-78c3bf3b9774",
+      "slug": "bo-bong-da-nu-violet-star",
+      "name": "Bộ bóng đá nữ Violet Star",
+      "status": "ACTIVE",
+      "productType": "SPORTS_UNIFORM",
+      "category": "dong-phuc-the-thao",
+      "brand": "nike",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "PURPLE"
+      ],
+      "minPrice": 729000.0,
+      "maxPrice": 729000.0,
+      "availableQuantity": 60,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "bb20a716-cc78-46bb-8e88-27e4520dbf05",
+      "slug": "bo-bong-da-uni-orange-pulse",
+      "name": "Bộ bóng đá Uni Orange Pulse",
+      "status": "ACTIVE",
+      "productType": "SPORTS_UNIFORM",
+      "category": "dong-phuc-the-thao",
+      "brand": "adidas",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "ORANGE"
+      ],
+      "minPrice": 729000.0,
+      "maxPrice": 729000.0,
+      "availableQuantity": 72,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "c440bf6a-164d-4471-9df2-ed9e96bf1a16",
+      "slug": "op-bao-ve-ong-dong-red-guard",
+      "name": "Ốp bảo vệ ống đồng Red Guard",
+      "status": "ACTIVE",
+      "productType": "SPORTS_ACCESSORY",
+      "category": "phu-kien-the-thao",
+      "brand": "adidas",
+      "gender": "UNISEX",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "RED"
+      ],
+      "minPrice": 249000.0,
+      "maxPrice": 249000.0,
+      "availableQuantity": 28,
+      "sourceVersion": 3,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "cab1d97c-88c8-4f4e-8de7-2b7d575197b7",
+      "slug": "quan-tap-bong-da-nu-black-drive",
+      "name": "Quần tập bóng đá nữ Black Drive",
+      "status": "ACTIVE",
+      "productType": "SPORTS_BOTTOM",
+      "category": "quan-the-thao",
+      "brand": "nike",
+      "gender": "WOMEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "BLACK"
+      ],
+      "minPrice": 349000.0,
+      "maxPrice": 349000.0,
+      "availableQuantity": 80,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "e1ff261b-cd2c-4c81-9fc3-c10c1d3c5bdc",
+      "slug": "quan-bong-da-nam-royal-kick",
+      "name": "Quần bóng đá nam Royal Kick",
+      "status": "ACTIVE",
+      "productType": "SPORTS_BOTTOM",
+      "category": "quan-the-thao",
+      "brand": "adidas",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "BLUE"
+      ],
+      "minPrice": 329000.0,
+      "maxPrice": 329000.0,
+      "availableQuantity": 90,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "e78e2909-2728-4ba1-b5c1-3311e5229c42",
+      "slug": "bo-bong-da-nam-black-gold",
+      "name": "Bộ bóng đá nam Black Gold",
+      "status": "ACTIVE",
+      "productType": "SPORTS_UNIFORM",
+      "category": "dong-phuc-the-thao",
+      "brand": "adidas",
+      "gender": "MEN",
+      "sportCodes": [
+        "FOOTBALL"
+      ],
+      "colorFamilies": [
+        "BLACK"
+      ],
+      "minPrice": 759000.0,
+      "maxPrice": 759000.0,
+      "availableQuantity": 60,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    },
+    {
+      "productId": "e8f35b34-3eae-4533-923d-616342ba34ac",
+      "slug": "quan-short-chay-bo-nam-swift-black",
+      "name": "Quần short chạy bộ nam Swift Black",
+      "status": "ACTIVE",
+      "productType": "SPORTS_BOTTOM",
+      "category": "quan-the-thao",
+      "brand": "nike",
+      "gender": "MEN",
+      "sportCodes": [
+        "RUNNING"
+      ],
+      "colorFamilies": [
+        "BLACK"
+      ],
+      "minPrice": 359000.0,
+      "maxPrice": 359000.0,
+      "availableQuantity": 90,
+      "sourceVersion": 1,
+      "attributeSource": {
+        "catalog": true,
+        "manifest": "pilot-v1/manifest.json@1.1.0",
+        "filledFromManifest": [
+          "productType",
+          "gender",
+          "sportCodes",
+          "colorFamilies"
+        ]
+      }
+    }
+  ]
+}

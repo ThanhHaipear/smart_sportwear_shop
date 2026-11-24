@@ -15,6 +15,7 @@ import { addWishlistItem } from "@/modules/account/api";
 import { addCartItem } from "@/modules/cart/api";
 import { saveBuyNowSelection } from "@/modules/checkout/selection";
 import type { ProductVariant } from "@/modules/product/types";
+import { trackInteraction } from "@/modules/recommendation/tracking";
 
 export interface ProductColor {
   id: string;
@@ -196,6 +197,13 @@ export function ProductPurchasePanel({
         router.push("/thanh-toan");
       } else {
         await addCartItem(selectedVariant.id, quantity);
+        trackInteraction({
+          eventType: "ADD_TO_CART",
+          productId,
+          variantId: selectedVariant.id,
+          source: "PRODUCT_DETAIL",
+          metadata: { quantity },
+        });
         emitSessionChange();
         setMessage("Đã thêm sản phẩm vào giỏ hàng.");
         toast.success("Đã thêm sản phẩm vào giỏ hàng.");
@@ -220,6 +228,7 @@ export function ProductPurchasePanel({
     setError(null);
     try {
       await addWishlistItem(productId);
+      trackInteraction({ eventType: "WISHLIST", productId, source: "PRODUCT_DETAIL" });
       emitSessionChange();
       setMessage("Đã thêm sản phẩm vào danh sách yêu thích.");
       toast.success("Đã thêm vào danh sách yêu thích.");

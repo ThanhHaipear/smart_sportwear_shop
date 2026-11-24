@@ -2,13 +2,13 @@ import argparse
 
 from app.config import get_settings
 from app.repository import PostgresRepository
-from app.service import RecommendationService
+from app.service import DEFAULT_MIN_CONFIDENCE, DEFAULT_MIN_SUPPORT, RecommendationService
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("model_version")
-parser.add_argument("--min-support", type=float, default=.01)
-parser.add_argument("--min-confidence", type=float, default=.1)
+parser.add_argument("--min-support", type=float, default=DEFAULT_MIN_SUPPORT)
+parser.add_argument("--min-confidence", type=float, default=DEFAULT_MIN_CONFIDENCE)
 parser.add_argument("--min-lift", type=float, default=1.0)
 args = parser.parse_args()
 settings = get_settings()

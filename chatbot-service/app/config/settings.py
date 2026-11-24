@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     CATALOG_SERVICE_TOKEN: str = ""
     CATALOG_API_TIMEOUT_SECONDS: float = 5.0
     BACKEND_API_BASE_URL: str = "http://localhost:8085"
+    # recommendation-service public API (layered hybrid); "related" mode falls back to Catalog if it fails.
+    RECOMMENDATION_API_BASE_URL: str = "http://localhost:8091"
+    RECOMMENDATION_API_TIMEOUT_SECONDS: float = 3.0
     JWT_ACCESS_SECRET: str = ""
     REDIS_URL: str = "redis://localhost:6379"
     SESSION_TTL_SECONDS: int = 3600          # Phase 9: Redis session TTL

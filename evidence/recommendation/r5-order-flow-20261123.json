@@ -1,0 +1,68 @@
+{
+  "review": "R5",
+  "commit": "b10eff1d",
+  "ranAt": "2026-11-23T09:20:05Z",
+  "scope": "RabbitMQ (repo definitions) -> real worker -> scratch PostgreSQL; Sales relay not included",
+  "passed": true,
+  "checks": [
+    {
+      "check": "1 order.created is routable to recommendation.events",
+      "passed": true
+    },
+    {
+      "check": "2 basket holds product ids resolved from variant ids; purchase_count +1",
+      "passed": true,
+      "basket": [
+        "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+      ],
+      "variantsSent": [
+        "f0fd346b-f69d-4209-b51c-cf052fc3017f",
+        "52fbba6b-b061-45c5-81aa-69a09939fad0"
+      ]
+    },
+    {
+      "check": "3 replaying the same event creates no duplicate basket or count",
+      "passed": true
+    },
+    {
+      "check": "4 same order with a new eventId creates no duplicate basket or count",
+      "passed": true
+    },
+    {
+      "check": "5 two sizes of the same product collapse to one product id",
+      "passed": true,
+      "basket": [
+        "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "cccccccc-cccc-4ccc-8ccc-cccccccccccc"
+      ]
+    },
+    {
+      "check": "6 rebuild mines rules from the delivered baskets; shoe -> sock is served",
+      "passed": true,
+      "rules": 6,
+      "top": [
+        [
+          "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+          "ASSOCIATION_RULE"
+        ],
+        [
+          "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "ASSOCIATION_RULE"
+        ]
+      ]
+    },
+    {
+      "check": "7 nothing left in recommendation queues, retries or DLQ",
+      "passed": true,
+      "queues": {
+        "recommendation.events.retry.5m": 0,
+        "recommendation.events.dlq": 0,
+        "recommendation.events.retry.1h": 0,
+        "recommendation.events": 0,
+        "recommendation.events.retry.30s": 0
+      }
+    }
+  ]
+}

@@ -136,6 +136,11 @@ function Get-ManagedLocalProcess {
         return $null
     }
     if ($savedStartTimeUtc) {
+        # A reused PID can belong to a process we may not inspect (StartTime is $null): not ours.
+        if (-not $process.StartTime) {
+            Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue
+            return $null
+        }
         $difference = [Math]::Abs(($process.StartTime.ToUniversalTime() - $savedStartTimeUtc.ToUniversalTime()).TotalSeconds)
         if ($difference -gt 2) {
             Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue

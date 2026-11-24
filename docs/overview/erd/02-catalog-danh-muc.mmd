@@ -1,0 +1,69 @@
+erDiagram
+    categories {
+        uuid id PK
+        uuid parent_id FK
+        varchar code UK
+        varchar name
+        varchar slug UK
+        varchar status
+        int sort_order
+    }
+    brands {
+        uuid id PK
+        varchar code UK
+        varchar name
+        varchar slug UK
+        varchar status
+    }
+    size_systems {
+        uuid id PK
+        varchar code UK
+        varchar name
+        varchar status
+    }
+    sizes {
+        uuid id PK
+        uuid size_system_id FK
+        varchar code
+        varchar display_name
+        int sort_order
+    }
+    product_types {
+        uuid id PK
+        varchar code UK
+        varchar name
+        uuid default_size_system_id FK
+        varchar status
+    }
+    colors {
+        uuid id PK
+        varchar code UK
+        varchar name
+        varchar family_code
+        char hex_value
+        varchar status
+    }
+    sports {
+        uuid id PK
+        varchar code UK
+        varchar name
+        varchar status
+    }
+    use_cases {
+        uuid id PK
+        varchar code UK
+        varchar name
+    }
+    materials {
+        uuid id PK
+        varchar code UK
+        varchar name
+    }
+    technologies {
+        uuid id PK
+        varchar code UK
+        varchar name
+    }
+    categories ||--o{ categories : "danh mục con"
+    size_systems ||--o{ sizes : "gồm các size"
+    size_systems ||--o{ product_types : "hệ size mặc định"

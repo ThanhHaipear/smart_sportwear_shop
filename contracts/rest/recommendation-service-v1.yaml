@@ -45,9 +45,45 @@ paths:
         required: true
         content:
           application/json:
-            schema: { type: object, additionalProperties: true }
+            schema: { $ref: '#/components/schemas/BrowserInteractionEvent' }
       responses:
         '202': { description: Accepted or already processed }
+        '422': { description: 'Event type, data source, identity or metadata not accepted from browsers; dataSource=REAL while INTERACTION_REAL_ENABLED=false' }
+        '429': { description: Rate limit exceeded (counted per event, per identity and per IP) }
+  /api/v1/recommendations/interactions/batch:
+    post:
+      summary: Record up to 10 interaction events from one browser in a single request
+      description: >
+        All-or-nothing validation; every event must share the same anonymousId and have a unique
+        eventId. Events are stored idempotently in one transaction. The rate limit is charged per event.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [events]
+              additionalProperties: false
+              properties:
+                events:
+                  type: array
+                  minItems: 1
+                  maxItems: 10
+                  items: { $ref: '#/components/schemas/BrowserInteractionEvent' }
+      responses:
+        '202':
+          description: Batch stored; duplicates are counted but not stored again
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [accepted, duplicates, eventIds]
+                properties:
+                  accepted: { type: integer, minimum: 0 }
+                  duplicates: { type: integer, minimum: 0 }
+                  eventIds: { type: array, items: { type: string, format: uuid } }
+        '422': { description: Invalid batch (any invalid event rejects the whole batch) }
+        '429': { description: Rate limit exceeded }
   /internal/v1/events:
     post:
       summary: Apply a versioned integration event idempotently
@@ -98,3 +134,66 @@ components:
         type: { type: string }
         modelVersion: { type: string }
         items: { type: array, items: { $ref: '#/components/schemas/RecommendationItem' } }
+    BrowserInteractionEvent:
+      type: object
+      description: >
+        Event sent by the storefront. userRef is ignored (taken from the Gateway-verified X-User-Id) and
+        occurredAt is replaced by the server receive time. metadata is limited to an allow-list per eventType
+        (review R4, data minimisation per O01): unknown fields or wrong types reject the event with 422, and
+        reject the whole batch on the batch endpoint. Null metadata values are not stored.
+      required: [eventId, eventType, eventVersion, occurredAt, traceId, source, dataSource]
+      properties:
+        eventId: { type: string, format: uuid }
+        eventType:
+          type: string
+          enum: [VIEW, ADD_TO_CART, WISHLIST, SEARCH_IMPRESSION, SEARCH_CLICK,
+                 RECOMMENDATION_IMPRESSION, RECOMMENDATION_CLICK]
+        eventVersion: { type: integer }
+        occurredAt: { type: string, format: date-time }
+        traceId: { type: string, minLength: 1, maxLength: 128 }
+        anonymousId: { type: [string, 'null'], pattern: '^[A-Za-z0-9._:-]{8,100}$' }
+        productId: { type: [string, 'null'], format: uuid }
+        variantId: { type: [string, 'null'], format: uuid }
+        requestId: { type: [string, 'null'], format: uuid, description: Required for RECOMMENDATION_* events }
+        source: { type: string, minLength: 1, maxLength: 50 }
+        dataSource:
+          type: string
+          enum: [REAL, DEMO]
+          description: REAL is rejected (422) unless the service runs with INTERACTION_REAL_ENABLED=true (default false, see docs/recommendation-retention-proposal.md)
+        metadata: { type: object, maxProperties: 5 }
+      allOf:
+        - if: { properties: { eventType: { enum: [VIEW, WISHLIST] } } }
+          then: { properties: { metadata: { $ref: '#/components/schemas/NoMetadata' } } }
+        - if: { properties: { eventType: { const: ADD_TO_CART } } }
+          then: { properties: { metadata: { $ref: '#/components/schemas/AddToCartMetadata' } } }
+        - if: { properties: { eventType: { enum: [SEARCH_IMPRESSION, SEARCH_CLICK] } } }
+          then: { properties: { metadata: { $ref: '#/components/schemas/PositionMetadata' } } }
+        - if: { properties: { eventType: { enum: [RECOMMENDATION_IMPRESSION, RECOMMENDATION_CLICK] } } }
+          then: { properties: { metadata: { $ref: '#/components/schemas/RecommendationFeedbackMetadata' } } }
+    NoMetadata:
+      type: object
+      additionalProperties: false
+    PositionMetadata:
+      type: object
+      additionalProperties: false
+      properties:
+        position: { type: [integer, 'null'], minimum: 0, maximum: 99 }
+    AddToCartMetadata:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity: { type: [integer, 'null'], minimum: 1, maximum: 99 }
+    RecommendationFeedbackMetadata:
+      type: object
+      additionalProperties: false
+      description: Send sourceProductId (detail page) or sourceProductIds (cart), not both.
+      properties:
+        position: { type: [integer, 'null'], minimum: 0, maximum: 99 }
+        algorithm: { type: [string, 'null'], enum: [ASSOCIATION_RULE, SIMILAR_CONTENT, POPULARITY, null] }
+        modelVersion: { type: [string, 'null'], minLength: 1, maxLength: 50 }
+        sourceProductId: { type: [string, 'null'], format: uuid }
+        sourceProductIds:
+          type: [array, 'null']
+          minItems: 1
+          maxItems: 50
+          items: { type: string, format: uuid }

@@ -1,0 +1,123 @@
+{
+  "migration": "V3__extend_evaluation_runs.sql",
+  "postgres": "17.10",
+  "commit": "8aa6ea7f",
+  "ranAt": "2026-11-23T08:48:14Z",
+  "passed": true,
+  "checks": [
+    {
+      "check": "clean: V1->V2->V3 creates all seven columns and the constraint",
+      "passed": true,
+      "detail": {
+        "tableExists": true,
+        "v3ColumnsPresent": [
+          "case_count",
+          "coverage_at_k",
+          "hit_rate_at_k",
+          "ndcg_at_k",
+          "report_sha256",
+          "segment",
+          "task"
+        ],
+        "v3ColumnsMissing": [],
+        "v3ColumnsWrongType": [],
+        "rangeConstraint": true,
+        "v3Applied": true
+      }
+    },
+    {
+      "check": "clean: runtime role writes through POST /internal/v1/evaluations",
+      "passed": true,
+      "detail": {
+        "status": 200,
+        "storedRow": {
+          "precision": 0.25,
+          "recall": 0.5,
+          "hitRate": 0.5,
+          "ndcg": 0.5,
+          "caseCount": 2
+        }
+      }
+    },
+    {
+      "check": "upgrade: NEW app on V2 schema fails to write (apply V3 before deploying)",
+      "passed": true,
+      "detail": {
+        "status": "error",
+        "error": "UndefinedColumn",
+        "message": "column \"hit_rate_at_k\" of relation \"evaluation_runs\" does not exist"
+      }
+    },
+    {
+      "check": "upgrade: V3 applied twice, seven columns and constraint present",
+      "passed": true,
+      "detail": {
+        "tableExists": true,
+        "v3ColumnsPresent": [
+          "case_count",
+          "coverage_at_k",
+          "hit_rate_at_k",
+          "ndcg_at_k",
+          "report_sha256",
+          "segment",
+          "task"
+        ],
+        "v3ColumnsMissing": [],
+        "v3ColumnsWrongType": [],
+        "rangeConstraint": true,
+        "v3Applied": true
+      }
+    },
+    {
+      "check": "upgrade: pre-V3 evaluation rows unchanged",
+      "passed": true,
+      "detail": {
+        "rows": 2
+      }
+    },
+    {
+      "check": "upgrade: new columns are NULL on pre-V3 rows",
+      "passed": true
+    },
+    {
+      "check": "upgrade: row counts of every table unchanged",
+      "passed": true,
+      "detail": {
+        "catalog_products": 1,
+        "user_interactions": 1,
+        "order_baskets": 0,
+        "association_rules": 0,
+        "processed_events": 0,
+        "recommendation_models": 0,
+        "evaluation_runs": 2
+      }
+    },
+    {
+      "check": "upgrade: runtime role writes through POST /internal/v1/evaluations",
+      "passed": true,
+      "detail": {
+        "status": 200,
+        "storedRow": {
+          "precision": 0.25,
+          "recall": 0.5,
+          "hitRate": 0.5,
+          "ndcg": 0.5,
+          "caseCount": 2
+        }
+      }
+    },
+    {
+      "check": "rollback: OLD app still writes on V3 schema (no schema rollback needed)",
+      "passed": true
+    },
+    {
+      "check": "upgrade: range constraint rejects ndcg_at_k = 1.5",
+      "passed": true
+    },
+    {
+      "check": "upgrade: permission probe (runtime writes own schema, cannot write public)",
+      "passed": true,
+      "detail": "recommendation_app write/deny permission probe passed"
+    }
+  ]
+}
