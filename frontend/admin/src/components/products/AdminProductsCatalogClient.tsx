@@ -31,6 +31,7 @@ import type { AdminProduct } from "@/modules/product-management/products";
 
 const PRODUCTS_PER_PAGE = 15;
 const PRODUCT_THUMB_FALLBACK = NO_IMAGE;
+const PUBLIC_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "";
 const PRODUCT_IMAGE_IDEAL_WIDTH = 1200;
 const PRODUCT_IMAGE_IDEAL_HEIGHT = 1800;
 const PRODUCT_IMAGE_MIN_WIDTH = 800;
@@ -410,10 +411,11 @@ const ProductImageCard = memo(function ProductImageCard({
   onDelete: () => void;
   onSetPrimary: () => void;
 }) {
+  const imageUrl = normalizeImageUrl(image.imageUrl, NO_IMAGE);
   return (
     <article className={`admin-image-card${image.isPrimary ? " is-primary" : ""}`}>
       <Image
-        src={normalizeImageUrl(image.imageUrl, NO_IMAGE)}
+        src={imageUrl.startsWith("/api/v1/catalog-images/") ? `${PUBLIC_API_BASE}${imageUrl}` : imageUrl}
         alt={image.altText ?? productName}
         width={320}
         height={320}
@@ -936,8 +938,7 @@ export function AdminProductsCatalogClient({
     const failedIds = new Set<string>();
     let uploadedCount = 0;
 
-    // Deliberately sequential: Cloudinary uploads stay bounded and each successful
-    // DB insert independently emits its PRODUCT_IMAGE_CREATED outbox event.
+    // Each successful upload saves and queues its own Catalog change.
     for (let index = 0; index < queue.length; index += 1) {
       const item = queue[index];
       setUploadForm((current) => ({
@@ -977,7 +978,7 @@ export function AdminProductsCatalogClient({
       setMessage(
         failedIds.size
           ? `Đã upload ${uploadedCount}/${queue.length} ảnh. ${failedIds.size} ảnh lỗi được giữ lại để thử lại.`
-          : `Đã upload tuần tự ${uploadedCount} ảnh. Embedding đang được xử lý trong hàng đợi.`
+           : `Đã lưu ${uploadedCount} ảnh. Kết quả tìm bằng ảnh sẽ cập nhật sau khi lập chỉ mục.`
       );
     } catch (error) {
       setMessage(`Đã upload ${uploadedCount} ảnh nhưng chưa tải lại được thư viện ảnh. ${extractError(error, "Hãy tải lại trang.")}`);

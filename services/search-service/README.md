@@ -41,10 +41,18 @@ isolated pilot deployment. Install `requirements-embeddings.txt` and make the
 pinned SigLIP2 revision available in the model cache. For Compose, build Search
 with `SEARCH_INSTALL_LOCAL_EMBEDDINGS=true`.
 
-The Search API validates the active image index against the evaluated 81 base
-vectors and adds four pinned references from the experiment. The references
-participate in ranking and matched images come from the indexed catalog.
-A catalog mismatch makes the pilot unavailable.
+Search applies the evaluated ranking profile to live, READY vectors for active
+products. The experiment's four reference vectors participate only while their
+products still have indexed catalog images in the same product group.
+
+Enable `CATALOG_EVENTS_ENABLED=true` on Catalog and run RabbitMQ and
+`search-worker` with `SEARCH_ENABLED=true` and `VISUAL_SEARCH_ENABLED=true`.
+Adding or removing an image in Admin records a product reindex in the Catalog
+transaction. The outbox relay publishes after commit. The worker loads local
+uploads from the configured Catalog service and warms up SigLIP2 before
+consuming messages. A new active product is
+eligible for similar-image results as soon as its vector is READY. The target
+is one minute from saving the image with a healthy worker and queue.
 
 Set `VISUAL_SEARCH_PUBLIC_ENABLED=true` on Catalog in the isolated environment
 to test through Storefront. Catalog uses `SEARCH_API_BASE_URL` and the same

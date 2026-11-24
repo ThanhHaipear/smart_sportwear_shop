@@ -1,13 +1,15 @@
+import { catalogImageUrl } from "@/lib/image";
 import type { Product, ProductDetail, ProductListItem } from "@/modules/product/types";
 import { NO_IMAGE } from "@/modules/ui/placeholder";
 
 export function mapProductListItem(p: ProductListItem): Product {
+  const image = catalogImageUrl(p.thumbnail ?? NO_IMAGE);
   return {
     id: p.id,
     name: p.name,
     href: `/sanpham/${p.slug}`,
-    image: p.thumbnail ?? NO_IMAGE,
-    hoverImage: p.thumbnail ?? NO_IMAGE,
+    image,
+    hoverImage: image,
     price: p.salePrice ?? p.minPrice,
     oldPrice: p.compareAtPrice,
     discountPercent: p.discountPercent,
@@ -33,7 +35,7 @@ export function mapProductDetail(p: ProductDetail): {
   relatedProducts: ReturnType<typeof mapProductListItem>[];
 } {
   const sortedImages = [...p.images].sort((a, b) => a.sortOrder - b.sortOrder);
-  const images = sortedImages.map((img) => ({ url: img.imageUrl, color: img.color ?? null }));
+  const images = sortedImages.map((img) => ({ url: catalogImageUrl(img.imageUrl), color: img.color ?? null }));
 
   // Distinct colors in first-seen order; each swatch uses that color's own first image.
   const colorLabels: string[] = [];
@@ -44,7 +46,7 @@ export function mapProductDetail(p: ProductDetail): {
     const swatch = sortedImages.find((img) => img.color === label) ?? sortedImages[idx];
     return {
       id: label,
-      image: swatch?.imageUrl ?? NO_IMAGE,
+      image: catalogImageUrl(swatch?.imageUrl ?? NO_IMAGE),
       label,
       active: idx === 0,
     };

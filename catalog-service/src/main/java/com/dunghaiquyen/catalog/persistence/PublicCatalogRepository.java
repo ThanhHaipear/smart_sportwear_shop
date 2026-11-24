@@ -233,9 +233,39 @@ public class PublicCatalogRepository {
             """)
             .param("size",body.get("size")).param("color",body.get("color")).param("price",body.get("price")).param("compare",body.get("compareAtPrice")).param("status",body.get("status")).param("id",id).update();return variant(id);}
     private Map<String,Object> variant(UUID id){return jdbc.sql("select id,sku,size_label,color_label,price,compare_at_price,stock_quantity-reserved_quantity available_quantity,status from product_variants where id=:id").param("id",id).query((rs,row)->map("id",uuid(rs,"id"),"sku",rs.getString("sku"),"size",rs.getString("size_label"),"color",rs.getString("color_label"),"price",rs.getBigDecimal("price"),"compareAtPrice",rs.getBigDecimal("compare_at_price"),"availableQuantity",rs.getInt("available_quantity"),"status",rs.getString("status"))).single();}
-    @Transactional public Map<String,Object> addImage(UUID productId,Map<String,Object> body){UUID id=UUID.randomUUID();boolean primary=Boolean.TRUE.equals(body.get("isPrimary"));if(primary)jdbc.sql("update product_images set is_primary=false where product_id=:product").param("product",productId).update();jdbc.sql("insert into product_images(id,product_id,secure_url,alt_text,sort_order,is_primary) values(:id,:product,:url,:alt,:sort,:primary)")
-            .param("id",id).param("product",productId).param("url",body.get("imageUrl")).param("alt",body.get("altText")).param("sort",number(body.get("sortOrder"),0)).param("primary",primary).update();return image(id);}
-    @Transactional public List<Map<String,Object>> deleteImage(UUID productId,UUID imageId){jdbc.sql("delete from product_images where id=:id and product_id=:product").param("id",imageId).param("product",productId).update();return images(productId);}
+    @Transactional
+    public Map<String, Object> addImage(UUID productId, Map<String, Object> body) {
+        UUID id = UUID.randomUUID();
+        boolean primary = Boolean.TRUE.equals(body.get("isPrimary"));
+        if (primary) {
+            jdbc.sql("update product_images set is_primary=false where product_id=:product")
+                    .param("product", productId).update();
+        }
+        jdbc.sql("""
+                insert into product_images(id,product_id,secure_url,alt_text,sort_order,is_primary)
+                values(:id,:product,:url,:alt,:sort,:primary)
+                """).param("id", id).param("product", productId).param("url", body.get("imageUrl"))
+                .param("alt", body.get("altText")).param("sort", number(body.get("sortOrder"), 0))
+                .param("primary", primary).update();
+        requestImageReindex(productId);
+        return image(id);
+    }
+
+    @Transactional
+    public List<Map<String, Object>> deleteImage(UUID productId, UUID imageId) {
+        int deleted = jdbc.sql("delete from product_images where id=:id and product_id=:product")
+                .param("id", imageId).param("product", productId).update();
+        if (deleted > 0) {
+            requestImageReindex(productId);
+        }
+        return images(productId);
+    }
+
+    private void requestImageReindex(UUID productId) {
+        // The Catalog product trigger writes the reindex event in this transaction.
+        jdbc.sql("update products set version=version+1,updated_at=current_timestamp where id=:id")
+                .param("id", productId).update();
+    }
     @Transactional public List<Map<String,Object>> primaryImage(UUID productId,UUID imageId){jdbc.sql("update product_images set is_primary=(id=:id) where product_id=:product").param("id",imageId).param("product",productId).update();return images(productId);}
     private Map<String,Object> image(UUID id){return jdbc.sql("select id,secure_url,alt_text,is_primary,sort_order from product_images where id=:id").param("id",id).query((rs,row)->map("id",uuid(rs,"id"),"imageUrl",rs.getString("secure_url"),"publicId",null,"altText",rs.getString("alt_text"),"color",null,"isPrimary",rs.getBoolean("is_primary"),"sortOrder",rs.getInt("sort_order"))).single();}
 

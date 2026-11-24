@@ -1,13 +1,51 @@
 import asyncio
 import hashlib
+import io
 from unittest.mock import AsyncMock, Mock
 
+import httpx
 import pytest
+from PIL import Image
 
 from app.config import Settings
 
 from app.services.errors import ImagePipelineError
 from app.services.image_pipeline import ImagePipeline
+
+
+def test_catalog_upload_is_loaded_from_the_configured_catalog():
+    image_path = "/api/v1/catalog-images/50000000-0000-0000-0000-000000000001.png"
+    image = io.BytesIO()
+    Image.new("RGB", (16, 16), "blue").save(image, format="PNG")
+
+    def respond(request):
+        assert str(request.url) == f"http://catalog-service:8092{image_path}"
+        return httpx.Response(200, headers={"Content-Type": "image/png"}, content=image.getvalue())
+
+    async def download():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:
+            pipeline = ImagePipeline(Settings(catalog_api_url="http://catalog-service:8092"), client)
+            return await pipeline.download_and_normalize(image_path)
+
+    result = asyncio.run(download())
+    assert result.original_format == "PNG"
+    assert result.width == 16
+
+
+def test_catalog_upload_does_not_follow_redirects():
+    image_path = "/api/v1/catalog-images/50000000-0000-0000-0000-000000000001.png"
+
+    def respond(request):
+        assert request.url.host == "catalog-service"
+        return httpx.Response(302, headers={"Location": "http://example.test/elsewhere.png"})
+
+    async def download():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(respond), follow_redirects=True) as client:
+            pipeline = ImagePipeline(Settings(catalog_api_url="http://catalog-service:8092"), client)
+            return await pipeline.download_and_normalize(image_path)
+
+    with pytest.raises(ImagePipelineError, match="returned a redirect"):
+        asyncio.run(download())
 
 
 def response_with_peer(address: str) -> Mock:

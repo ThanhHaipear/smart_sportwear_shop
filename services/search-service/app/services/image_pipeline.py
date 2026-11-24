@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import io
+import re
 import socket
 from dataclasses import dataclass
 from ipaddress import ip_address
@@ -19,6 +20,9 @@ Resolver = Callable[[str], Awaitable[set[str]]]
 SUPPORTED_FORMATS = {"JPEG", "PNG", "WEBP"}
 SUPPORTED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp"}
 FORMAT_CONTENT_TYPES = {"JPEG": "image/jpeg", "PNG": "image/png", "WEBP": "image/webp"}
+CATALOG_UPLOAD_PATH = re.compile(
+    r"/api/v1/catalog-images/[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}\.(?:jpg|png|webp)"
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -88,13 +92,17 @@ class ImagePipeline:
         self, image_url: str, public_id: str | None = None, *,
         asset_version: str | None = None, checksum: str | None = None,
     ) -> NormalizedImage:
-        source = self.source_resolver.resolve(image_url, public_id, asset_version)
-        data, content_type = await self._download(source.download_url)
+        if CATALOG_UPLOAD_PATH.fullmatch(image_url):
+            url = self.settings.catalog_api_url.rstrip("/") + image_url
+            data, content_type = await self._download(url, catalog_upload=True)
+        else:
+            source = self.source_resolver.resolve(image_url, public_id, asset_version)
+            data, content_type = await self._download(source.download_url)
         if checksum and hashlib.sha256(data).hexdigest() != checksum:
             raise ImagePipelineError("Catalog original image checksum does not match")
         return self.normalize(data, content_type)
 
-    async def _download(self, initial_url: str) -> tuple[bytes, str | None]:
+    async def _download(self, initial_url: str, *, catalog_upload: bool = False) -> tuple[bytes, str | None]:
         client = self._client or httpx.AsyncClient(
             timeout=self.settings.catalog_download_timeout_seconds,
             follow_redirects=False,
@@ -103,17 +111,22 @@ class ImagePipeline:
         url = initial_url
         try:
             for redirect_count in range(self.settings.catalog_download_max_redirects + 1):
-                self.source_resolver.validate_redirect(url)
-                host = urlsplit(url).hostname or ""
+                if not catalog_upload:
+                    self.source_resolver.validate_redirect(url)
+                    host = urlsplit(url).hostname or ""
+                    try:
+                        resolved = await self._dns_resolver(host)
+                    except ImagePipelineError:
+                        raise
+                    except OSError as exc:
+                        raise ImageDownloadError("Catalog image DNS resolution failed") from exc
                 try:
-                    resolved = await self._dns_resolver(host)
-                except ImagePipelineError:
-                    raise
-                except (OSError, socket.gaierror) as exc:
-                    raise ImageDownloadError("Catalog image DNS resolution failed") from exc
-                try:
-                    async with client.stream("GET", url, headers={"Accept": "image/jpeg,image/png,image/webp"}) as response:
+                    async with client.stream(
+                        "GET", url, headers={"Accept": "image/jpeg,image/png,image/webp"}, follow_redirects=False,
+                    ) as response:
                         if response.status_code in {301, 302, 303, 307, 308}:
+                            if catalog_upload:
+                                raise ImagePipelineError("Catalog upload endpoint returned a redirect")
                             if redirect_count >= self.settings.catalog_download_max_redirects:
                                 raise ImagePipelineError("Catalog image exceeded redirect limit")
                             location = response.headers.get("location")
@@ -127,7 +140,8 @@ class ImagePipeline:
                             raise ImageDownloadError(f"Catalog image upstream returned HTTP {response.status_code}")
                         if response.status_code != 200:
                             raise ImagePipelineError(f"Catalog image returned HTTP {response.status_code}")
-                        self._validate_peer(response, resolved)
+                        if not catalog_upload:
+                            self._validate_peer(response, resolved)
                         content_type = response.headers.get("content-type", "").split(";", 1)[0].lower()
                         if content_type and content_type not in SUPPORTED_CONTENT_TYPES:
                             raise ImagePipelineError("Catalog response is not a supported image MIME type")

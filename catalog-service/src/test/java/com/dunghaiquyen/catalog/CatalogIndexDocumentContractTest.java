@@ -1,11 +1,14 @@
 package com.dunghaiquyen.catalog;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.dunghaiquyen.catalog.persistence.PublicCatalogRepository;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,29 @@ class CatalogIndexDocumentContractTest {
 
     @Autowired MockMvc mvc;
     @Autowired JdbcClient jdbc;
+    @Autowired PublicCatalogRepository products;
+
+    @Test void addingAndRemovingAnImageAdvancesTheCatalogSnapshot() {
+        jdbc.sql("""
+                insert into products(id,name,slug,status,description,version)
+                values(:id,'Demo','demo','ACTIVE','',1)
+                """).param("id", PRODUCT).update();
+
+        var image = products.addImage(PRODUCT, Map.of("imageUrl", "/api/v1/catalog-images/" + IMAGE + ".jpg"));
+        UUID imageId = (UUID) image.get("id");
+        assertThat(imageId).isNotNull();
+        assertThat(productVersion()).isEqualTo(2);
+
+        assertThat(products.deleteImage(PRODUCT, imageId)).isEmpty();
+        assertThat(productVersion()).isEqualTo(3);
+
+        products.deleteImage(PRODUCT, imageId);
+        assertThat(productVersion()).isEqualTo(3);
+    }
+
+    private long productVersion() {
+        return jdbc.sql("select version from products where id=:id").param("id", PRODUCT).query(Long.class).single();
+    }
 
     @Test void catalogResponseMatchesSharedSearchContract() throws Exception {
         jdbc.sql("insert into categories(id,name,slug) values(:id,'Giày bóng đá','giay-bong-da')")
