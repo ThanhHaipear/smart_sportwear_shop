@@ -32,7 +32,12 @@ class RecommendationConsumer:
             raw = message.body.decode("utf-8")
             event = IntegrationEvent.model_validate_json(raw)
             if event.event_type == "INTERACTION_RECORDED":
-                self.repository.save_interaction(InteractionEvent.model_validate_json(raw))
+                interaction = InteractionEvent.model_validate_json(raw)
+                if interaction.data_source == "REAL" and self.settings.interaction_real_enabled:
+                    self.repository.save_interaction(interaction)
+                elif (interaction.data_source == "DEMO" and self.settings.interaction_demo_enabled
+                      and interaction.anonymous_id):
+                    self.repository.save_interaction(interaction.model_copy(update={"user_ref": None}))
             else:
                 # Catalog/Sales events are thin; resolve them against Catalog first.
                 # A Catalog outage raises and routes the message to the retry queues.

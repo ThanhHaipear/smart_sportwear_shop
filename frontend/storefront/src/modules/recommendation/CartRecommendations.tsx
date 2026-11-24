@@ -41,7 +41,6 @@ export function CartRecommendations({ productIds }: { productIds: string[] }) {
       source="CART_RECOMMENDATION"
       responseSourceKey={result.sourceKey}
       requestId={result.requestId}
-      modelVersion={result.modelVersion}
       items={items}
     />
   );

@@ -162,7 +162,9 @@ class PostgresRepository:
             if event.product:
                 self._upsert_product(connection, event.product, event.source_version)
             if event.order_id and event.items:
-                stored = connection.execute("insert into order_baskets(order_id,user_ref,product_ids,occurred_at) values(%s,%s,%s,%s) on conflict(order_id) do nothing returning order_id", (event.order_id,event.user_ref,list(set(event.items)),event.occurred_at)).fetchone()
+                # Association rules use product IDs and timing. Leaving user_ref unset also prevents a
+                # replay of an old Sales event from restoring a removed account link.
+                stored = connection.execute("insert into order_baskets(order_id,product_ids,occurred_at) values(%s,%s,%s) on conflict(order_id) do nothing returning order_id", (event.order_id,list(set(event.items)),event.occurred_at)).fetchone()
                 # Count each order once even if Sales republishes it under a new event ID.
                 if stored:
                     connection.execute("update catalog_products set purchase_count=purchase_count+1 where product_id=any(%s)", (list(set(event.items)),))

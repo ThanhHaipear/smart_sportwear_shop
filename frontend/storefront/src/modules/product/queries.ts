@@ -58,7 +58,6 @@ export async function fetchProductDetail(slug: string): Promise<ProductDetail | 
 
 type RecommendationResponse = {
   requestId?: string;
-  modelVersion?: string;
   type: string;
   items: Array<{ product: ProductListItem; algorithm?: string }>;
 };
@@ -68,7 +67,6 @@ export interface RecommendationResult {
   sourceKey: string;
   // Identifies this served list; impression/click events must carry it to measure CTR per model.
   requestId: string | null;
-  modelVersion: string | null;
   items: Array<{ product: ProductListItem; algorithm: string | null }>;
 }
 
@@ -83,7 +81,6 @@ export async function fetchFrequentlyBoughtTogether(productId: string): Promise<
     return {
       sourceKey,
       requestId: result.data?.requestId ?? null,
-      modelVersion: result.data?.modelVersion ?? null,
       items: (result.data?.items ?? [])
         .filter((item) => item?.product)
         .map((item) => ({ product: item.product, algorithm: item.algorithm ?? null })),
@@ -106,7 +103,6 @@ export async function fetchCartRecommendations(productIds: string[], limit = 4):
     return {
       sourceKey,
       requestId: result.data?.requestId ?? null,
-      modelVersion: result.data?.modelVersion ?? null,
       items: (result.data?.items ?? [])
         .filter((item) => item?.product)
         .map((item) => ({ product: item.product, algorithm: item.algorithm ?? null })),

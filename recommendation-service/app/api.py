@@ -26,14 +26,14 @@ def product_recommendations(product_id: UUID, limit: int | None = Query(default=
                             x_user_id: str | None = Header(default=None, alias="X-User-Id")):
     # X-User-Id is set by the Gateway after JWT verification; it is only logged, never echoed back.
     return engine.recommend({product_id}, resolved_limit(limit, settings), "FREQUENTLY_BOUGHT_TOGETHER",
-                            user_ref(x_user_id))
+                            user_ref(x_user_id) if settings.interaction_real_enabled else None)
 
 
 @router.post("/api/v1/recommendations/cart", response_model=RecommendationResponse, tags=["recommendations"])
 def cart_recommendations(body: CartRecommendationRequest, engine=Depends(service), settings: Settings = Depends(get_settings),
                          x_user_id: str | None = Header(default=None, alias="X-User-Id")):
     return engine.recommend(set(body.sourceProductIds), resolved_limit(body.limit, settings), "CART_RECOMMENDATION",
-                            user_ref(x_user_id))
+                            user_ref(x_user_id) if settings.interaction_real_enabled else None)
 
 
 def user_ref(x_user_id: str | None) -> str | None:
@@ -47,7 +47,9 @@ def record_interaction(body: InteractionEvent, repo=Depends(repository), limiter
                        x_user_id: str | None = Header(default=None, alias="X-User-Id"),
                        x_forwarded_for: str | None = Header(default=None, alias="X-Forwarded-For")):
     """Public browser endpoint. Identity comes only from the Gateway-verified JWT header."""
-    event = sanitize_browser_interaction(body, x_user_id, datetime.now(timezone.utc), settings.interaction_real_enabled)
+    event = sanitize_browser_interaction(body, x_user_id, datetime.now(timezone.utc),
+                                         accept_real=settings.interaction_real_enabled,
+                                         accept_demo=settings.interaction_demo_enabled)
     limiter.check(event, client_ip(x_forwarded_for))
     return {"accepted": repo.save_interaction(event), "eventId": str(event.event_id)}
 
@@ -62,7 +64,9 @@ def record_interaction_batch(body: InteractionBatch, repo=Depends(repository), l
     Same rules as the single endpoint; the whole batch is rejected if any event is invalid,
     and the rate limit is charged per event.
     """
-    events = sanitize_browser_batch(body.events, x_user_id, datetime.now(timezone.utc), settings.interaction_real_enabled)
+    events = sanitize_browser_batch(body.events, x_user_id, datetime.now(timezone.utc),
+                                    accept_real=settings.interaction_real_enabled,
+                                    accept_demo=settings.interaction_demo_enabled)
     limiter.check(events, client_ip(x_forwarded_for))
     accepted = repo.save_interactions(events)
     return {"accepted": accepted, "duplicates": len(events) - accepted,

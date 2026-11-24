@@ -97,17 +97,21 @@ def sanitize_metadata(event_type: str, metadata: dict) -> dict:
         problems = "; ".join(f"{'.'.join(str(p) for p in e['loc']) or 'metadata'}: {e['msg']}"
                              for e in error.errors(include_url=False))
         raise _reject(f"invalid metadata for {event_type}: {problems}") from None
-    return parsed.model_dump(exclude_none=True)
+    # Older storefront bundles can still send modelVersion. Only the server's
+    # recommendation_requests row is authoritative for model attribution.
+    return parsed.model_dump(exclude_none=True, exclude={"modelVersion"})
 
 
 def sanitize_browser_interaction(event: InteractionEvent, verified_user_id: str | None,
-                                 received_at: datetime, accept_real: bool = True) -> InteractionEvent:
+                                 received_at: datetime, *, accept_real: bool, accept_demo: bool) -> InteractionEvent:
     if event.event_type not in BROWSER_EVENT_TYPES:
         raise _reject(f"eventType {event.event_type} is not accepted from browsers")
     if event.data_source not in BROWSER_DATA_SOURCES:
         raise _reject("dataSource must be REAL or DEMO")
     if event.data_source == "REAL" and not accept_real:
-        raise _reject("REAL interactions are not collected yet (INTERACTION_REAL_ENABLED=false); send DEMO")
+        raise _reject("REAL interaction collection is disabled (INTERACTION_REAL_ENABLED=false)")
+    if event.data_source == "DEMO" and not accept_demo:
+        raise _reject("DEMO interaction collection is disabled (INTERACTION_DEMO_ENABLED=false)")
     if event.event_type in PRODUCT_EVENT_TYPES and event.product_id is None:
         raise _reject(f"productId is required for {event.event_type}")
     if event.event_type in REQUEST_EVENT_TYPES and event.request_id is None:
@@ -118,7 +122,8 @@ def sanitize_browser_interaction(event: InteractionEvent, verified_user_id: str 
         raise _reject(f"metadata must not exceed {MAX_METADATA_BYTES} bytes")
     metadata = sanitize_metadata(event.event_type, event.metadata)
 
-    user_ref = verified_user_id if verified_user_id and UUID_PATTERN.fullmatch(verified_user_id) else None
+    user_ref = (verified_user_id if event.data_source == "REAL" and verified_user_id
+                and UUID_PATTERN.fullmatch(verified_user_id) else None)
     if user_ref is None and not event.anonymous_id:
         raise _reject("anonymousId is required when the request is not authenticated")
     # Never trust a browser-supplied userRef; use server time so temporal splits are not
@@ -130,7 +135,7 @@ MAX_BATCH_EVENTS = 10
 
 
 def sanitize_browser_batch(events: list[InteractionEvent], verified_user_id: str | None,
-                           received_at: datetime, accept_real: bool = True) -> list[InteractionEvent]:
+                           received_at: datetime, *, accept_real: bool, accept_demo: bool) -> list[InteractionEvent]:
     """Validate a batch all-or-nothing: one invalid event rejects the whole batch.
 
     A batch must come from a single browser (same anonymousId) so it is charged to one identity
@@ -142,7 +147,8 @@ def sanitize_browser_batch(events: list[InteractionEvent], verified_user_id: str
         raise _reject("eventId must be unique within a batch")
     if len({event.anonymous_id for event in events}) != 1:
         raise _reject("all events in a batch must share the same anonymousId")
-    return [sanitize_browser_interaction(event, verified_user_id, received_at, accept_real) for event in events]
+    return [sanitize_browser_interaction(event, verified_user_id, received_at,
+                                        accept_real=accept_real, accept_demo=accept_demo) for event in events]
 
 
 class SlidingWindowLimiter:

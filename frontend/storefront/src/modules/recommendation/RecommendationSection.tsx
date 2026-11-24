@@ -19,7 +19,6 @@ interface RecommendationSectionProps {
   // sourceKeyOf(the product IDs the list below was requested for). A list for other sources is ignored.
   responseSourceKey: string;
   requestId: string | null;
-  modelVersion: string | null;
   items: RecommendedProduct[];
 }
 
@@ -32,14 +31,14 @@ interface RecommendationSectionProps {
 // A list requested for other sources (e.g. the previous cart, still loading the new one) is never
 // shown or tracked; see pinning.ts.
 export function RecommendationSection({
-  title, sourceProductIds, source = "PRODUCT_DETAIL_FBT", responseSourceKey, requestId, modelVersion, items,
+  title, sourceProductIds, source = "PRODUCT_DETAIL_FBT", responseSourceKey, requestId, items,
 }: RecommendationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const reportedFor = useRef<string | null>(null);
   const sourceKey = sourceKeyOf(sourceProductIds);
-  const incoming: ServedList<RecommendedProduct> = { sourceKey: responseSourceKey, requestId, modelVersion, items };
+  const incoming: ServedList<RecommendedProduct> = { sourceKey: responseSourceKey, requestId, items };
   const [pinned, setPinned] = useState<ServedList<RecommendedProduct>>(() => nextPinned(
-    { sourceKey: "\u0000", requestId: null, modelVersion: null, items: [] }, sourceKey, incoming));
+    { sourceKey: "\u0000", requestId: null, items: [] }, sourceKey, incoming));
   // Derived state (adjusting state while rendering): nextPinned returns the same object when nothing changes.
   const next = nextPinned(pinned, sourceKey, incoming);
   if (next !== pinned) {
@@ -61,7 +60,7 @@ export function RecommendationSection({
           productId: item.product.id,
           requestId: shownRequestId,
           source,
-          metadata: { position, algorithm: item.algorithm, modelVersion: pinned.modelVersion,
+          metadata: { position, algorithm: item.algorithm,
                       ...sourceMetadata(pinned.sourceKey) },
         })),
       );
@@ -81,7 +80,7 @@ export function RecommendationSection({
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, [shown, shownRequestId, pinned.modelVersion, pinned.sourceKey, source]);
+  }, [shown, shownRequestId, pinned.sourceKey, source]);
 
   if (shown.length === 0) return null;
 
@@ -102,7 +101,7 @@ export function RecommendationSection({
                 productId: item.product.id,
                 requestId: shownRequestId,
                 source,
-                metadata: { position, algorithm: item.algorithm, modelVersion: pinned.modelVersion,
+                metadata: { position, algorithm: item.algorithm,
                             ...sourceMetadata(pinned.sourceKey) },
               });
             }}

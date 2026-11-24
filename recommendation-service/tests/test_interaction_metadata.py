@@ -42,7 +42,7 @@ def test_storefront_payloads_are_stored(url):
     for event in events:
         assert post(http, url, event).status_code == 202
     stored = [event.metadata for event in repo.interactions]
-    assert stored[0] == {"position": 0, "algorithm": "ASSOCIATION_RULE", "modelVersion": "rules-v3",
+    assert stored[0] == {"position": 0, "algorithm": "ASSOCIATION_RULE",
                          "sourceProductId": events[0]["metadata"]["sourceProductId"]}
     assert stored[1] == {"position": 3, "sourceProductIds": cart}  # nulls are not stored
     assert stored[2] == {"quantity": 2}
@@ -102,15 +102,39 @@ def test_batch_with_one_bad_metadata_writes_nothing():
     assert repo.interactions == []
 
 
-def test_real_events_are_rejected_until_enabled(url):
-    """Until retention is in place (docs/recommendation-retention-proposal.md) only DEMO is collected."""
-    repo = MemoryRepository(); http = client(repo, interaction_real_enabled=False)
-    response = post(http, url, browser_event(dataSource="REAL"))
-    assert response.status_code == 422 and "INTERACTION_REAL_ENABLED" in response.json()["detail"]
-    assert post(http, url, browser_event(dataSource="DEMO")).status_code == 202
-    assert [event.data_source for event in repo.interactions] == ["DEMO"]
+@pytest.mark.parametrize("data_source", ["REAL", "DEMO"])
+def test_browser_collection_is_disabled_by_default(url, data_source):
+    repo = MemoryRepository()
+    http = client(repo, interaction_real_enabled=False)
+    response = post(http, url, browser_event(dataSource=data_source))
+    assert response.status_code == 422
+    assert f"INTERACTION_{data_source}_ENABLED" in response.json()["detail"]
+    assert repo.interactions == []
 
 
-def test_real_is_off_by_default():
+def test_demo_opt_in_does_not_store_the_account_id(url):
+    repo = MemoryRepository()
+    http = client(repo, interaction_real_enabled=False, interaction_demo_enabled=True)
+    event = browser_event(dataSource="DEMO")
+    body = event if url == SINGLE_URL else {"events": [event]}
+    assert http.post(url, json=body, headers={"X-User-Id": str(uuid4())}).status_code == 202
+    assert repo.interactions[0].user_ref is None
+    assert repo.interactions[0].anonymous_id == event["anonymousId"]
+
+
+def test_tracking_flags_are_off_by_default():
     from app.config import Settings
-    assert Settings().interaction_real_enabled is False
+    settings = Settings(_env_file=None)
+    assert settings.interaction_real_enabled is False
+    assert settings.interaction_demo_enabled is False
+
+
+def test_recommendation_requests_omit_account_when_real_tracking_is_off():
+    repo = MemoryRepository()
+    http = client(repo, interaction_real_enabled=False)
+    product_id, user_id = str(uuid4()), str(uuid4())
+    headers = {"X-User-Id": user_id}
+    assert http.get(f"/api/v1/recommendations/products/{product_id}", headers=headers).status_code == 200
+    assert http.post("/api/v1/recommendations/cart", headers=headers,
+                     json={"sourceProductIds": [product_id]}).status_code == 200
+    assert [entry["userRef"] for entry in repo.request_log] == [None, None]

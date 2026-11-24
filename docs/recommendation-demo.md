@@ -2,7 +2,7 @@
 
 Mục tiêu: cho hội đồng thấy luồng **xem sản phẩm → thấy gợi ý → bấm → hệ thống ghi lại**, và mỗi gợi ý ghi rõ tầng (luật kết hợp, content, popularity) đã sinh ra nó.
 
-> **Lưu ý dữ liệu.** Demo ghi vào Supabase dùng chung. `user_interactions` là bảng **chỉ thêm** (append-only, có trigger chặn sửa/xóa), nên sự kiện demo không xóa được. Storefront gửi `DEMO` theo mặc định (từ 23/11), tách khỏi dữ liệu thật (`REAL`, hiện bị service từ chối khi `INTERACTION_REAL_ENABLED=false`) và dữ liệu đánh giá (`SYNTHETIC`, vốn chỉ nằm trong file).
+> Tracking mặc định tắt. Bật `DEMO` chỉ trên môi trường demo riêng. Event `DEMO` dùng mã trình duyệt giả danh và không lưu ID tài khoản. Giữ `INTERACTION_REAL_ENABLED=false` cho đến khi quy trình retention và xóa liên kết tài khoản được vận hành.
 
 ## 0. Dữ liệu live và kết quả offline
 
@@ -19,8 +19,8 @@ Không trình bày số liệu offline như thể đo trên website, và ngượ
 
 ## 1. Chuẩn bị (một lần)
 
-1. Storefront gửi `DEMO` theo mặc định; không đặt `NEXT_PUBLIC_INTERACTION_DATA_SOURCE=REAL` khi demo.
-2. `RECOMMENDATION_ENABLED=true` và `RECOMMENDATION_CONTENT_MODE=COMPLEMENT` (mặc định) cho recommendation-service.
+1. Đặt `NEXT_PUBLIC_INTERACTION_TRACKING=true` và `NEXT_PUBLIC_INTERACTION_DATA_SOURCE=DEMO` cho Storefront demo, rồi khởi động lại dev server hoặc build lại.
+2. Đặt `RECOMMENDATION_ENABLED=true`, `INTERACTION_DEMO_ENABLED=true` và `RECOMMENDATION_CONTENT_MODE=COMPLEMENT` cho Recommendation service của demo.
 3. (Nếu muốn tầng luật kết hợp có dữ liệu) cần có đơn hàng trong `order_baskets`, rồi chạy:
    ```
    python scripts/rebuild_model.py association-demo

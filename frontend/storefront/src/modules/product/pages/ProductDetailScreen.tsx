@@ -51,7 +51,6 @@ export async function ProductDetailScreen({
           sourceProductIds={[product.id]}
           responseSourceKey={recommendation.sourceKey}
           requestId={recommendation.requestId}
-          modelVersion={recommendation.modelVersion}
           items={boughtTogether}
         />
         {product.relatedProducts.length > 0 && (

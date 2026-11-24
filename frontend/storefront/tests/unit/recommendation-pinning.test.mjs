@@ -8,7 +8,7 @@ import { emptyList, nextPinned, sourceKeyOf } from "../../src/modules/recommenda
 const A = sourceKeyOf(["shoe", "sock"]);
 const B = sourceKeyOf(["jersey", "shorts"]);
 
-const served = (sourceKey, requestId) => ({ sourceKey, requestId, modelVersion: "m1", items: [`${requestId}-item`] });
+const served = (sourceKey, requestId) => ({ sourceKey, requestId, items: [`${requestId}-item`] });
 
 // Mirrors CartRecommendations + RecommendationSection: `latest` is the last response the cart component
 // stored; `render` is what the section derives on each render (the derived-state loop settles in one step).

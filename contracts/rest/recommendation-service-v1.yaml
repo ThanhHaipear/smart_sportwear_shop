@@ -48,7 +48,7 @@ paths:
             schema: { $ref: '#/components/schemas/BrowserInteractionEvent' }
       responses:
         '202': { description: Accepted or already processed }
-        '422': { description: 'Event type, data source, identity or metadata not accepted from browsers; dataSource=REAL while INTERACTION_REAL_ENABLED=false' }
+        '422': { description: 'Invalid interaction or its data source is disabled by service configuration.' }
         '429': { description: Rate limit exceeded (counted per event, per identity and per IP) }
   /api/v1/recommendations/interactions/batch:
     post:
@@ -137,7 +137,8 @@ components:
     BrowserInteractionEvent:
       type: object
       description: >
-        Event sent by the storefront. userRef is ignored (taken from the Gateway-verified X-User-Id) and
+        Event sent by the storefront. REAL uses the Gateway-verified X-User-Id, when present. DEMO requires
+        anonymousId and never stores an account ID. Browser-supplied userRef is ignored and
         occurredAt is replaced by the server receive time. metadata is limited to an allow-list per eventType
         (review R4, data minimisation per O01): unknown fields or wrong types reject the event with 422, and
         reject the whole batch on the batch endpoint. Null metadata values are not stored.
@@ -159,7 +160,7 @@ components:
         dataSource:
           type: string
           enum: [REAL, DEMO]
-          description: REAL is rejected (422) unless the service runs with INTERACTION_REAL_ENABLED=true (default false, see docs/recommendation-retention-proposal.md)
+          description: Each source is disabled by default. Enable DEMO with INTERACTION_DEMO_ENABLED or REAL with INTERACTION_REAL_ENABLED.
         metadata: { type: object, maxProperties: 5 }
       allOf:
         - if: { properties: { eventType: { enum: [VIEW, WISHLIST] } } }
@@ -190,7 +191,7 @@ components:
       properties:
         position: { type: [integer, 'null'], minimum: 0, maximum: 99 }
         algorithm: { type: [string, 'null'], enum: [ASSOCIATION_RULE, SIMILAR_CONTENT, POPULARITY, null] }
-        modelVersion: { type: [string, 'null'], minLength: 1, maxLength: 50 }
+        modelVersion: { type: [string, 'null'], minLength: 1, maxLength: 50, deprecated: true, description: Accepted for older clients and discarded. Join requestId to the server-side recommendation request for attribution. }
         sourceProductId: { type: [string, 'null'], format: uuid }
         sourceProductIds:
           type: [array, 'null']

@@ -9,7 +9,6 @@ export interface ServedList<T> {
   // Canonical key of the source product IDs the request was made with (see sourceKeyOf).
   sourceKey: string;
   requestId: string | null;
-  modelVersion: string | null;
   items: T[];
 }
 
@@ -20,7 +19,7 @@ export function sourceKeyOf(productIds: readonly string[]): string {
 }
 
 export function emptyList<T>(sourceKey: string): ServedList<T> {
-  return { sourceKey, requestId: null, modelVersion: null, items: [] };
+  return { sourceKey, requestId: null, items: [] };
 }
 
 // Next pinned list given the current sources and the list just received from props.

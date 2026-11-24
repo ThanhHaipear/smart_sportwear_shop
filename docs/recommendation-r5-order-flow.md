@@ -33,16 +33,20 @@
 
 ### 3.1. Sales: chỉ ghi `PUBLISHED` khi RabbitMQ xác nhận (phối hợp Sales)
 
+Sales relay hiện chờ publisher confirm. `order.created` bị trả về do thiếu route sẽ vào `RETRY` hoặc `FAILED`. Các topic Sales chưa có subscriber vẫn yêu cầu broker ACK và có thể được đánh dấu `PUBLISHED` khi chưa có binding, giữ hành vi của các topic đó.
+
 - Sales đã bật `publisher-confirm-type: correlated` (`sales-service/src/main/resources/application.yml:24`) nhưng relay **không chờ** confirm. Cần thêm `publisher-returns: true` (và `template.mandatory: true` để tin không định tuyến được bị trả về).
 - Làm giống `CatalogOutboxRelay`, vốn đã đúng: gửi kèm `CorrelationData`, chờ `correlation.getFuture().get(5s)`, chỉ ghi `PUBLISHED` khi `isAck()` và `getReturned() == null`. Nack, return hoặc hết thời gian chờ thì dùng nhánh `RETRY`/`FAILED` đã có.
 
 ### 3.2. Hạ tầng: cố định tên node RabbitMQ (phối hợp người phụ trách hạ tầng và Hải)
 
-- Thêm `hostname: rabbitmq` cho service `rabbitmq` trong `docker-compose.yml`, để tạo lại container vẫn dùng chung một node.
+- Compose hỗ trợ `RABBITMQ_HOSTNAME`. Với volume mới có thể đặt `RABBITMQ_HOSTNAME=rabbitmq` để tên node ổn định khi tạo lại container.
 - Lưu ý khi đổi: lần đầu đổi sẽ thành node mới (thêm một thư mục node nữa). Trước khi đổi, cần xử lý các tin còn tồn ở node hiện tại, và quyết định có cứu 569 tin Search ở node cũ hay chỉ reindex lại.
-- Mình **không** tự sửa điểm này vì nó ảnh hưởng hàng đợi Search.
+- Với volume hiện có, xác nhận node đang dùng, sao lưu và kiểm tra hàng đợi trước khi chọn hostname. Giá trị mặc định giữ cách đặt tên hiện tại.
 
 ### 3.3. Backfill đơn cũ (phối hợp Sales)
+
+Từ `sales-service`, dùng `python scripts/backfill_order_created.py --order-id <UUID>` với `SALES_MAINTENANCE_DATABASE_URL` để xem kế hoạch chỉ đọc. Lặp `--order-id` cho các đơn đã chốt. Sau khi kiểm tra relay/binding, thêm `--execute` để ghi. Chỉ thêm `--replay` cho sự kiện đã được xác nhận cần gửi lại, hoặc `--include-cancelled` nếu nhóm đã chốt phạm vi gồm đơn hủy. Replay giữ nguyên ID sự kiện và Recommendation tiếp tục chống trùng theo ID đơn hàng.
 
 | Mục | Đề xuất |
 |---|---|
