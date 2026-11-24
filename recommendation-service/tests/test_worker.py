@@ -4,12 +4,15 @@ from unittest.mock import AsyncMock, Mock
 from uuid import uuid4
 
 import pytest
+from aiormq.abc import DeliveredMessage
+from pamqp.commands import Basic
 
 from app import worker
+from app import messaging
 from app.config import Settings
 from app.messaging import RecommendationConsumer
 from app.repository import MemoryRepository
-from tests.test_contracts import browser_event
+from tests.test_contracts import browser_event, envelope
 
 
 class FlakyConsumer:
@@ -51,3 +54,33 @@ def test_worker_honors_interaction_flags(source, demo_enabled, stored):
     assert len(consumer.repository.interactions) == stored
     if stored:
         assert consumer.repository.interactions[0].user_ref is None
+
+
+@pytest.mark.parametrize("dead_letter", [False, True], ids=["retry", "dlq"])
+@pytest.mark.parametrize("confirmed", [False, True], ids=["no-route", "ack"])
+def test_worker_settles_original_only_after_confirmed_forward(monkeypatch, dead_letter, confirmed):
+    monkeypatch.setattr(messaging, "REQUEUE_DELAY_SECONDS", 0)
+    settings = Settings(catalog_service_token="test-token")
+    consumer = RecommendationConsumer(settings)
+    consumer.enricher = Mock()
+    consumer.enricher.enrich.side_effect = RuntimeError("Catalog is unavailable")
+    target = settings.rabbitmq_dlq if dead_letter else settings.retry_queues[0]
+    result = Basic.Ack(delivery_tag=1) if confirmed else DeliveredMessage(
+        Basic.Return(reply_code=312, reply_text="NO_ROUTE", exchange="", routing_key=target),
+        Mock(), b"", Mock())
+    publish = AsyncMock(return_value=result)
+    consumer.channel = Mock(default_exchange=Mock(publish=publish))
+    message = Mock(body=json.dumps(envelope("ORDER_CREATED")).encode(), correlation_id="integration-test",
+                   headers={"x-recommendation-retry-count": len(settings.retry_queues)} if dead_letter else {},
+                   ack=AsyncMock(), nack=AsyncMock())
+
+    asyncio.run(consumer.process(message))
+
+    assert publish.await_args.kwargs["routing_key"] == target
+    assert publish.await_args.kwargs["mandatory"] is True
+    if confirmed:
+        message.ack.assert_awaited_once()
+        message.nack.assert_not_awaited()
+    else:
+        message.ack.assert_not_awaited()
+        message.nack.assert_awaited_once_with(requeue=True)

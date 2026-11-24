@@ -60,8 +60,7 @@ export function RecommendationSection({
           productId: item.product.id,
           requestId: shownRequestId,
           source,
-          metadata: { position, algorithm: item.algorithm,
-                      ...sourceMetadata(pinned.sourceKey) },
+          metadata: { position, algorithm: item.algorithm },
         })),
       );
     };
@@ -80,7 +79,7 @@ export function RecommendationSection({
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, [shown, shownRequestId, pinned.sourceKey, source]);
+  }, [shown, shownRequestId, source]);
 
   if (shown.length === 0) return null;
 
@@ -101,8 +100,7 @@ export function RecommendationSection({
                 productId: item.product.id,
                 requestId: shownRequestId,
                 source,
-                metadata: { position, algorithm: item.algorithm,
-                            ...sourceMetadata(pinned.sourceKey) },
+                metadata: { position, algorithm: item.algorithm },
               });
             }}
           >
@@ -112,10 +110,4 @@ export function RecommendationSection({
       </div>
     </section>
   );
-}
-
-// The detail page keeps the original single-id key so earlier events stay comparable.
-function sourceMetadata(sourceKey: string): Record<string, string | string[]> {
-  const ids = sourceKey ? sourceKey.split(",") : [];
-  return ids.length === 1 ? { sourceProductId: ids[0] } : { sourceProductIds: ids };
 }

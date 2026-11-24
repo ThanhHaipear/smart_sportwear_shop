@@ -187,14 +187,15 @@ components:
     RecommendationFeedbackMetadata:
       type: object
       additionalProperties: false
-      description: Send sourceProductId (detail page) or sourceProductIds (cart), not both.
+      description: The server-side recommendation request provides the source products through requestId. Older clients may send one of the deprecated source fields.
       properties:
         position: { type: [integer, 'null'], minimum: 0, maximum: 99 }
         algorithm: { type: [string, 'null'], enum: [ASSOCIATION_RULE, SIMILAR_CONTENT, POPULARITY, null] }
         modelVersion: { type: [string, 'null'], minLength: 1, maxLength: 50, deprecated: true, description: Accepted for older clients and discarded. Join requestId to the server-side recommendation request for attribution. }
-        sourceProductId: { type: [string, 'null'], format: uuid }
+        sourceProductId: { type: [string, 'null'], format: uuid, deprecated: true }
         sourceProductIds:
           type: [array, 'null']
+          deprecated: true
           minItems: 1
           maxItems: 50
           items: { type: string, format: uuid }

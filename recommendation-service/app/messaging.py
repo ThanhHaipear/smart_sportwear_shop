@@ -1,7 +1,9 @@
+import asyncio
 import logging
 
 import aio_pika
 from aio_pika import DeliveryMode, Message
+from pamqp.commands import Basic
 
 from app.catalog import HttpCatalogClient
 from app.config import Settings
@@ -10,6 +12,8 @@ from app.repository import PostgresRepository
 from app.schemas import IntegrationEvent, InteractionEvent
 
 logger = logging.getLogger(__name__)
+REQUEUE_DELAY_SECONDS = 1
+PUBLISH_TIMEOUT_SECONDS = 5
 
 
 class RecommendationConsumer:
@@ -22,7 +26,7 @@ class RecommendationConsumer:
 
     async def run(self):
         self.connection = await aio_pika.connect_robust(self.settings.rabbitmq_url)
-        self.channel = await self.connection.channel()
+        self.channel = await self.connection.channel(publisher_confirms=True, on_return_raises=True)
         await self.channel.set_qos(prefetch_count=self.settings.rabbitmq_prefetch_count)
         queue = await self.channel.declare_queue(self.settings.rabbitmq_consumer_queue, passive=True)
         await queue.consume(self.process, no_ack=False)
@@ -42,7 +46,6 @@ class RecommendationConsumer:
                 # Catalog/Sales events are thin; resolve them against Catalog first.
                 # A Catalog outage raises and routes the message to the retry queues.
                 self.repository.apply_event(self.enricher.enrich(event))
-            await message.ack()
         except Exception as error:
             headers = dict(message.headers or {})
             attempt = int(headers.get("x-recommendation-retry-count", 0))
@@ -52,8 +55,18 @@ class RecommendationConsumer:
             else:
                 target = self.settings.rabbitmq_dlq
                 headers["x-recommendation-error-type"] = type(error).__name__
-            await self.channel.default_exchange.publish(Message(body=message.body, headers=headers,
-                delivery_mode=DeliveryMode.PERSISTENT, content_type="application/json",
-                correlation_id=message.correlation_id), routing_key=target, mandatory=True)
+            try:
+                confirmation = await self.channel.default_exchange.publish(
+                    Message(body=message.body, headers=headers, delivery_mode=DeliveryMode.PERSISTENT,
+                            content_type="application/json", correlation_id=message.correlation_id),
+                    routing_key=target, mandatory=True, timeout=PUBLISH_TIMEOUT_SECONDS)
+                if not isinstance(confirmation, Basic.Ack):
+                    raise RuntimeError("Retry publication was not confirmed")
+            except Exception as failure:
+                logger.warning("Recommendation retry publication to %s failed (%s); requeueing original",
+                               target, type(failure).__name__)
+                await asyncio.sleep(REQUEUE_DELAY_SECONDS)
+                await message.nack(requeue=True)
+                return
             logger.warning("Recommendation event routed to %s: %s", target, type(error).__name__)
-            await message.ack()
+        await message.ack()

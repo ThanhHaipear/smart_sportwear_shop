@@ -24,6 +24,7 @@ def main() -> None:
         parser.error("RECOMMENDATION_MAINTENANCE_DATABASE_URL is required")
 
     with psycopg.connect(database_url, row_factory=dict_row) as connection:
+        connection.isolation_level = psycopg.IsolationLevel.READ_COMMITTED
         connection.execute("set local role recommendation_owner")
         if args.expire:
             counts = connection.execute("select * from recommendation.expire_recommendation_data(%s)",

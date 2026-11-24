@@ -114,6 +114,8 @@ class PostgresRepository:
     @contextmanager
     def connection(self):
         with psycopg.connect(self.database_url, options="-c search_path=recommendation,public") as connection:
+            # V5 checks the erasure marker after taking the per-account lock.
+            connection.isolation_level = psycopg.IsolationLevel.READ_COMMITTED
             yield connection
     def ping(self):
         try:

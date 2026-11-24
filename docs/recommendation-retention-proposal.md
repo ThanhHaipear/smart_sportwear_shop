@@ -1,16 +1,17 @@
 # Đề xuất: giữ dữ liệu và ẩn danh interaction của Recommendation
 
-> V4 và lệnh bảo trì đã có trong repo. Triển khai Supabase và lịch chạy vẫn cần phê duyệt theo O03. Identity chưa phát sự kiện xóa tài khoản, nên hiện dùng lệnh vận hành cho yêu cầu đã được xác minh.
+> V4, V5 và lệnh bảo trì đã có trong repo. Triển khai Supabase và lịch chạy vẫn cần phê duyệt theo O03. Identity chưa phát sự kiện xóa tài khoản, nên hiện dùng lệnh vận hành cho yêu cầu đã được xác minh.
 > **Người soạn:** Quyền. **Cần phối hợp:** người phụ trách DB (trigger, role, job), người phụ trách Identity (sự kiện xóa tài khoản).
 > **Điều kiện bật:** giữ `INTERACTION_REAL_ENABLED=false` đến khi migration, lịch retention hằng ngày và quy trình xóa liên kết tài khoản đã được xác minh. `INTERACTION_DEMO_ENABLED` cũng mặc định tắt và chỉ dùng trong môi trường demo.
 
-## Vận hành V4
+## Vận hành V4 và V5
 
-1. Người được phân công áp dụng V3 rồi V4 bằng migration role theo O03. Kiểm thử bằng PostgreSQL cô lập trước khi áp dụng lên Supabase.
+1. Người được phân công áp dụng V3, V4 rồi V5 bằng migration role theo O03. Kiểm thử bằng PostgreSQL cô lập trước khi áp dụng lên Supabase.
 2. Cấp `RECOMMENDATION_MAINTENANCE_DATABASE_URL` cho tiến trình bảo trì bằng credential có thể `SET ROLE recommendation_owner`. Runtime `recommendation_app` chỉ phục vụ ứng dụng. Lệnh bảo trì trả số dòng theo bảng.
 3. Chạy thử `python scripts/retention.py --expire` từ `recommendation-service`. Lệnh mặc định rollback. Đặt lịch hằng ngày với `--expire --execute`. Khi kết quả chạm giới hạn batch, chạy lại đến khi lượng xử lý thấp hơn giới hạn.
 4. Với yêu cầu xóa tài khoản đã xác minh, chạy `python scripts/retention.py --erase-account <UUID>` để kiểm tra số dòng, rồi chạy lại với `--execute`. Hoàn tất trong bảy ngày. Lệnh xử lý các hàng liên kết trực tiếp với tài khoản và giữ giỏ đã gỡ định danh để tính luật kết hợp.
 5. V4 giữ `processed_events` để replay không tạo bản ghi trùng. Nếu cần quay lại code cũ, giữ schema đã áp dụng. Dữ liệu hết hạn đã xóa cần restore point nếu phải khôi phục.
+6. V5 ghi một digest của UUID tài khoản trong schema Recommendation để chặn việc gắn lại tài khoản từ access token còn hạn hoặc sự kiện đến muộn. Runtime role không được đọc bảng digest. Giữ digest khi hệ thống còn có thể nhận replay cho UUID đó. Với tài khoản đã xử lý trước V5, chạy lại lệnh đã phê duyệt để ghi nhận digest trước khi bật `REAL`.
 
 ## 1. Yêu cầu từ O01 (`docs/database-implementation-plan.md`)
 

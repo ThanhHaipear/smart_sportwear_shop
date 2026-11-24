@@ -28,9 +28,10 @@ them: follow `docs/recommendation-migration-v3-runbook.md`. Rehearse on a local 
 
 Browser interaction collection defaults to disabled. Set `INTERACTION_DEMO_ENABLED=true` only in the
 isolated demo environment and explicitly enable tracking in its storefront build. Keep
-`INTERACTION_REAL_ENABLED=false` until V4 and the retention and account-erasure procedures are in
-operation. Use [the retention runbook](../docs/recommendation-retention-proposal.md) for V4 and the
-maintenance command. Attribute events by joining `request_id` to the server's recommendation request.
+`INTERACTION_REAL_ENABLED=false` until V4, V5 and the retention and account-erasure procedures are in
+operation. Use [the retention runbook](../docs/recommendation-retention-proposal.md) for the migrations and the
+maintenance command. Obtain the served model and source product IDs by joining `request_id` to
+`recommendation_requests`.
 
 Rollback is route-only: disable the feature flag and use the popularity/empty fallback.
 Keep the schema and event queue for replay; do not delete derived data during rollback.

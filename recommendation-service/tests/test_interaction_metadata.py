@@ -5,6 +5,7 @@ import pytest
 
 from app.interactions import BROWSER_EVENT_TYPES, allowed_metadata_fields
 from app.repository import MemoryRepository
+from app.schemas import ProductSnapshot
 from tests.test_contracts import BATCH_URL, browser_event, client
 
 SINGLE_URL = "/api/v1/recommendations/interactions"
@@ -138,3 +139,21 @@ def test_recommendation_requests_omit_account_when_real_tracking_is_off():
     assert http.post("/api/v1/recommendations/cart", headers=headers,
                      json={"sourceProductIds": [product_id]}).status_code == 200
     assert [entry["userRef"] for entry in repo.request_log] == [None, None]
+
+
+def test_full_size_cart_tracks_feedback_using_only_the_served_request_id(url):
+    repo = MemoryRepository()
+    product_id = uuid4()
+    repo.product_by_id[product_id] = ProductSnapshot(id=product_id, name="Popular", slug="popular",
+                                                      availableQuantity=1)
+    http = client(repo, interaction_demo_enabled=True)
+    sources = [str(uuid4()) for _ in range(100)]
+    response = http.post("/api/v1/recommendations/cart", json={"sourceProductIds": sources, "limit": 4})
+    assert response.status_code == 200
+    request_id = response.json()["requestId"]
+    for event_type in ("RECOMMENDATION_IMPRESSION", "RECOMMENDATION_CLICK"):
+        event = browser_event(event_type, requestId=request_id, productId=str(product_id),
+                              dataSource="DEMO", metadata={"position": 0, "algorithm": "POPULARITY"})
+        assert post(http, url, event).status_code == 202
+    assert all(str(event.request_id) == request_id for event in repo.interactions)
+    assert {str(source) for source in repo.responses[0].sourceProductIds} == set(sources)
